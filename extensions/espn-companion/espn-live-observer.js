@@ -5,11 +5,12 @@
   if (!root || !root.addEventListener || !root.postMessage || !observer.install) return;
   if (root.__warRoomEspnLiveObserverV2) return;
   root.__warRoomEspnLiveObserverV2 = true;
-  observer.install(root);
+  if (observer.install(root)) root.__warRoomEspnLiveObserverActiveVersion = observer.runtimeVersion;
 })(typeof window !== 'undefined' ? window : null, function(capture) {
   'use strict';
 
   var CHANNEL = 'WAR_ROOM_ESPN_LIVE_OBSERVATION';
+  var RUNTIME_VERSION = '3';
   var installed = false;
   var reactTimer = null;
   var lastReactSignature = '';
@@ -237,6 +238,7 @@
   }
 
   return {
+    runtimeVersion:RUNTIME_VERSION,
     install:install,
     relevantUrl:relevantUrl,
     inspectText:inspectText,

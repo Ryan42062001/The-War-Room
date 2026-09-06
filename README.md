@@ -4,7 +4,7 @@ The War Room is the fantasy draft tool I wanted beside me during an ESPN draft: 
 
 It is built for redraft PPR leagues. FantasyPros expert consensus rankings establish player value, while ESPN board rank and ADP help estimate whether a player is likely to make it back. The recommendation engine keeps those jobs separate—market behavior can change the timing of a pick, but it does not rewrite the player rankings.
 
-[Open The War Room](https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/)
+[Open The War Room](https://ryan42062001.github.io/The-War-Room/)
 
 ## What it does
 

@@ -17,7 +17,7 @@ The extension does **not** read or store ESPN passwords, cookies, authentication
 5. Open The War Room from either:
    - `http://127.0.0.1:8765/`
    - `http://localhost:8765/`
-   - `https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/`
+   - `https://ryan42062001.github.io/The-War-Room/`
 6. Open an ESPN fantasy-football mock or live draft in another Chrome tab.
 7. Open the extension popup. Confirm that both ESPN and The War Room show as connected.
 8. Press **Rescan ESPN** after the draft room finishes loading.
