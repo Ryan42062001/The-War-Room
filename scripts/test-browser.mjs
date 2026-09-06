@@ -241,6 +241,97 @@ assert.equal(atomicDeleteFailure.state, 'important-state');
 assert.deepEqual(atomicDeleteFailure.registry, ['draft-a', 'draft-b']);
 assert.equal(atomicDeleteFailure.active, 'draft-a');
 
+const transitionSaveFailure = await persistencePage.evaluate(() => {
+  localStorage.clear();
+  const sessions = [
+    {id:'draft-a', name:'Draft A', createdAt:'2026-09-06T00:00:00.000Z'},
+    {id:'draft-b', name:'Draft B', createdAt:'2026-09-06T00:00:01.000Z'}
+  ];
+  localStorage.setItem(DRAFT_SESSION_REGISTRY_KEY, JSON.stringify(sessions));
+  localStorage.setItem(ACTIVE_DRAFT_SESSION_KEY, 'draft-a');
+  activeDraftSessionId = 'draft-a';
+  clearDraftStateFromBoard();
+  renderDraftSessionSelector(sessions);
+  const beforeTeams = LEAGUE_SIZE;
+  const originalSaveState = saveState;
+  saveState = function() { return false; };
+  let switchResult = null;
+  let createResult = null;
+  let selectResult = null;
+  let snapshotResult = null;
+  try {
+    switchResult = switchDraftSession('draft-b');
+    createResult = createNewDraftSession({id:'draft-c', name:'Draft C'});
+    selectResult = selectEspnDraftSession('2026:111:room-a');
+    snapshotResult = applyEspnDraftSnapshot({
+      draftKey:'2026:111:room-b',
+      config:{teams:12, draftSlot:2, rounds:18},
+      picks:[{overallPick:1, playerName:"Ja'Marr Chase", position:'WR', teamSlot:1}]
+    });
+  } finally {
+    saveState = originalSaveState;
+  }
+  return {
+    switchResult,
+    createResult,
+    selectResult,
+    snapshotResult,
+    active:activeDraftSessionId,
+    storedActive:localStorage.getItem(ACTIVE_DRAFT_SESSION_KEY),
+    registry:JSON.parse(localStorage.getItem(DRAFT_SESSION_REGISTRY_KEY) || '[]').map(session => session.id),
+    teams:LEAGUE_SIZE,
+    beforeTeams,
+    drafted:document.querySelectorAll('tr.drafted-mine,tr.drafted-other').length
+  };
+});
+assert.equal(transitionSaveFailure.switchResult, false);
+assert.equal(transitionSaveFailure.createResult, null);
+assert.equal(transitionSaveFailure.selectResult, false);
+assert.equal(transitionSaveFailure.snapshotResult, null);
+assert.equal(transitionSaveFailure.active, 'draft-a');
+assert.equal(transitionSaveFailure.storedActive, 'draft-a');
+assert.deepEqual(transitionSaveFailure.registry, ['draft-a', 'draft-b']);
+assert.equal(transitionSaveFailure.teams, transitionSaveFailure.beforeTeams);
+assert.equal(transitionSaveFailure.drafted, 0);
+
+const newSessionRollbackFailure = await persistencePage.evaluate(() => {
+  localStorage.clear();
+  const sessions = [
+    {id:'draft-a', name:'Draft A', createdAt:'2026-09-06T00:00:00.000Z'}
+  ];
+  localStorage.setItem(DRAFT_SESSION_REGISTRY_KEY, JSON.stringify(sessions));
+  localStorage.setItem(ACTIVE_DRAFT_SESSION_KEY, 'draft-a');
+  activeDraftSessionId = 'draft-a';
+  clearDraftStateFromBoard();
+  renderDraftSessionSelector(sessions);
+  const originalSaveState = saveState;
+  let saveCalls = 0;
+  saveState = function() {
+    saveCalls += 1;
+    return saveCalls === 1;
+  };
+  let result = null;
+  try {
+    result = createNewDraftSession({id:'draft-c', name:'Draft C'});
+  } finally {
+    saveState = originalSaveState;
+  }
+  return {
+    result,
+    saveCalls,
+    active:activeDraftSessionId,
+    storedActive:localStorage.getItem(ACTIVE_DRAFT_SESSION_KEY),
+    registry:JSON.parse(localStorage.getItem(DRAFT_SESSION_REGISTRY_KEY) || '[]').map(session => session.id),
+    newState:localStorage.getItem(getDraftSessionStateKey('draft-c'))
+  };
+});
+assert.equal(newSessionRollbackFailure.result, null);
+assert.equal(newSessionRollbackFailure.saveCalls, 2);
+assert.equal(newSessionRollbackFailure.active, 'draft-a');
+assert.equal(newSessionRollbackFailure.storedActive, 'draft-a');
+assert.deepEqual(newSessionRollbackFailure.registry, ['draft-a']);
+assert.equal(newSessionRollbackFailure.newState, null);
+
 assert.deepEqual(persistenceErrors, []);
 await persistenceContext.close();
 

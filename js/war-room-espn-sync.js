@@ -228,7 +228,10 @@ function sanitizeEspnDraftSnapshot(snapshot, settings) {
 
 function applyEspnDraftSnapshot(snapshot) {
   if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot)) return null;
-  if (snapshot.draftKey) selectEspnDraftSession(snapshot.draftKey);
+  if (snapshot.draftKey && !selectEspnDraftSession(snapshot.draftKey)) {
+    updateEspnSyncStatus('error', 'ESPN sync paused · current draft could not be saved safely');
+    return null;
+  }
   if (snapshot.config) applyEspnSyncSettings(snapshot.config);
   var settings = getEspnSyncSettings();
   var sanitizedSnapshot = sanitizeEspnDraftSnapshot(snapshot, settings);
@@ -939,9 +942,17 @@ function switchDraftSession(id) {
   if (!safeId || !sessions.some(function(session) { return session.id === safeId; })) return false;
   if (safeId === activeDraftSessionId) return true;
   resetDeleteDraftButton();
-  saveState();
+  if (!saveState()) {
+    var saveFailedAnnouncer = document.getElementById('draft-action-announcer');
+    if (saveFailedAnnouncer) saveFailedAnnouncer.textContent = 'Draft switch paused because the current draft could not be saved.';
+    return false;
+  }
+  if (!writeDraftStorageValue(ACTIVE_DRAFT_SESSION_KEY, safeId)) {
+    var activationFailedAnnouncer = document.getElementById('draft-action-announcer');
+    if (activationFailedAnnouncer) activationFailedAnnouncer.textContent = 'Draft switch paused because browser storage is unavailable.';
+    return false;
+  }
   activeDraftSessionId = safeId;
-  writeDraftStorageValue(ACTIVE_DRAFT_SESSION_KEY, safeId);
   clearDraftStateFromBoard();
   loadState();
   renderDraftSessionSelector(sessions);
@@ -964,8 +975,14 @@ function createUniqueDraftSessionId(baseId, sessions) {
 function createNewDraftSession(options) {
   options = options || {};
   resetDeleteDraftButton();
-  saveState();
+  if (!saveState()) {
+    var saveFailedAnnouncer = document.getElementById('draft-action-announcer');
+    if (saveFailedAnnouncer) saveFailedAnnouncer.textContent = 'New draft paused because the current draft could not be saved.';
+    return null;
+  }
+  var previousId = activeDraftSessionId;
   var sessions = readDraftSessionRegistry();
+  var previousSessions = sessions.slice();
   var requestedId = normalizeDraftSessionId(options.id);
   var safeDraftKey = normalizeDraftKey(options.draftKey);
   if (requestedId && safeDraftKey) {
@@ -973,8 +990,7 @@ function createNewDraftSession(options) {
       return session.id === requestedId && session.draftKey === safeDraftKey;
     });
     if (existingExact) {
-      switchDraftSession(existingExact.id);
-      return existingExact.id;
+      return switchDraftSession(existingExact.id) ? existingExact.id : null;
     }
   }
   var id = createUniqueDraftSessionId(requestedId || ('draft-' + Date.now().toString(36)), sessions);
@@ -985,12 +1001,34 @@ function createNewDraftSession(options) {
     draftKey:safeDraftKey
   });
   if (!writeDraftSessionRegistry(sessions)) return null;
+  if (!writeDraftStorageValue(ACTIVE_DRAFT_SESSION_KEY, id)) {
+    writeDraftSessionRegistry(previousSessions);
+    var activationFailedAnnouncer = document.getElementById('draft-action-announcer');
+    if (activationFailedAnnouncer) activationFailedAnnouncer.textContent = 'New draft paused because browser storage is unavailable.';
+    return null;
+  }
   activeDraftSessionId = id;
-  writeDraftStorageValue(ACTIVE_DRAFT_SESSION_KEY, id);
   clearDraftStateFromBoard();
   renderDraftSessionSelector(sessions);
   triggerAllBoardUpdates();
-  saveState();
+  if (!saveState()) {
+    removeDraftStorageValue(getDraftSessionStateKey(id));
+    removeDraftStorageValue(getDraftSessionFinalKey(id));
+    removeDraftSessionRecoveryBackups(id);
+    var registryRestored = writeDraftSessionRegistry(previousSessions);
+    var activeRestored = previousId ? writeDraftStorageValue(ACTIVE_DRAFT_SESSION_KEY, previousId) : true;
+    activeDraftSessionId = previousId;
+    clearDraftStateFromBoard();
+    loadState();
+    renderDraftSessionSelector(previousSessions);
+    var rollbackAnnouncer = document.getElementById('draft-action-announcer');
+    if (rollbackAnnouncer) {
+      rollbackAnnouncer.textContent = registryRestored && activeRestored
+        ? 'New draft was rolled back because it could not be saved.'
+        : 'New draft could not be saved; browser storage also blocked a complete rollback.';
+    }
+    return null;
+  }
   return id;
 }
 
@@ -1067,12 +1105,14 @@ function deleteActiveDraftSession() {
 }
 
 function selectEspnDraftSession(draftKey) {
-  var safeKey = String(draftKey || '').trim().slice(0, 120);
-  if (!safeKey) return;
+  var safeKey = normalizeDraftKey(draftKey);
+  if (!safeKey) return false;
   var sessions = readDraftSessionRegistry();
   var match = sessions.find(function(session) { return session.draftKey === safeKey; });
   var id = match ? match.id : createNewDraftSession({id:'espn-' + canonicalExpertPlayerName(safeKey), name:'ESPN Draft', draftKey:safeKey});
-  if (id !== activeDraftSessionId) switchDraftSession(id);
+  if (!id) return false;
+  if (id !== activeDraftSessionId) return switchDraftSession(id);
+  return true;
 }
 
 function saveState(){
