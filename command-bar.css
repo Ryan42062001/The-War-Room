@@ -1,0 +1,425 @@
+/* =========================================================
+   DRAFT COMMAND BAR
+   Waiting = situational awareness. On the Clock = decision first.
+   ========================================================= */
+
+#draft-command-bar { display: none; }
+
+body[data-board-view="position"] #draft-command-bar {
+  --command-border: rgba(122,139,126,.30);
+  --command-surface: rgba(18,22,21,.96);
+  display: grid;
+  grid-template-columns: minmax(150px,.72fr) minmax(300px,1.7fr) minmax(330px,1.25fr) auto;
+  align-items: stretch;
+  gap: 0;
+  margin: 0 0 7px;
+  overflow: hidden;
+  border: 1px solid var(--command-border);
+  border-radius: 10px;
+  background:
+    linear-gradient(120deg, rgba(90,160,116,.055), transparent 32%),
+    var(--command-surface);
+  box-shadow: 0 10px 28px rgba(0,0,0,.20);
+}
+
+@media (min-width: 769px) {
+  body[data-board-view="position"] #draft-command-bar {
+    position: sticky;
+    top: 7px;
+    z-index: 68;
+    backdrop-filter: blur(12px);
+  }
+}
+
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) #pick-counter-box,
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) #recommended-pick-box,
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) #board-pressure-widget {
+  display: none;
+}
+
+body[data-board-view="position"].command-details-open #pick-counter-box,
+body[data-board-view="position"].command-details-open #recommended-pick-box,
+body[data-board-view="position"].command-details-open #board-pressure-widget {
+  display: block;
+}
+
+.draft-command-status,
+.draft-command-recommendation,
+.draft-command-pressure-wrap,
+.draft-command-actions {
+  min-width: 0;
+  padding: 8px 10px;
+}
+
+.draft-command-status,
+.draft-command-recommendation,
+.draft-command-pressure-wrap {
+  border-right: 1px solid rgba(255,255,255,.065);
+}
+
+.draft-command-status {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.draft-command-mode,
+.draft-command-eyebrow {
+  color: #9ba8a0;
+  font-size: .47rem;
+  font-weight: 900;
+  letter-spacing: .105em;
+}
+
+.draft-command-mode {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.draft-command-mode i {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #6b8172;
+  box-shadow: 0 0 0 3px rgba(107,129,114,.11);
+}
+
+.draft-command-status > strong {
+  overflow: hidden;
+  color: #eef1ef;
+  font-size: .76rem;
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.draft-command-status > small {
+  color: #87928c;
+  font-size: .51rem;
+  line-height: 1.1;
+}
+
+.draft-command-recommendation {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  background: linear-gradient(90deg, rgba(240,199,94,.035), transparent 70%);
+}
+
+.draft-command-player-line {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  min-width: 0;
+}
+
+.draft-command-player-line > strong {
+  overflow: hidden;
+  color: #f3f0e7;
+  font-size: .84rem;
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.draft-command-player-line > span {
+  flex: 0 0 auto;
+  color: #f0c75e;
+  font-size: .53rem;
+  font-weight: 950;
+  letter-spacing: .06em;
+}
+
+.draft-command-reason {
+  overflow: hidden;
+  color: #9ea7a2;
+  font-size: .50rem;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.draft-command-pressure-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.draft-command-pressure-list {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 4px;
+}
+
+.draft-command-pressure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 26px;
+  padding: 3px 5px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 6px;
+  color: #c9d0cc;
+  background: rgba(255,255,255,.025);
+  cursor: pointer;
+}
+
+.draft-command-pressure:hover,
+.draft-command-pressure:focus-visible {
+  border-color: currentColor;
+  outline: none;
+}
+
+.draft-command-pressure b {
+  font-size: .53rem;
+  letter-spacing: .025em;
+}
+
+.draft-command-pressure span {
+  overflow: hidden;
+  font-size: .42rem;
+  font-weight: 850;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.draft-command-pressure.is-safe {
+  color: #75ca95;
+  background: rgba(87,207,136,.05);
+}
+
+.draft-command-pressure.is-watch {
+  color: #e5c451;
+  background: rgba(229,196,81,.055);
+}
+
+.draft-command-pressure.is-closing {
+  color: #f4a252;
+  background: rgba(245,158,66,.06);
+}
+
+.draft-command-pressure.is-critical {
+  color: #f07d77;
+  border-color: rgba(240,107,101,.24);
+  background: rgba(240,107,101,.075);
+}
+
+.draft-command-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+.draft-command-action {
+  min-width: 58px;
+  padding: 5px 7px;
+  border: 1px solid rgba(255,255,255,.105);
+  border-radius: 6px;
+  color: #b7c1bb;
+  background: rgba(255,255,255,.035);
+  font-size: .48rem;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.draft-command-action:hover,
+.draft-command-action:focus-visible {
+  border-color: rgba(240,199,94,.5);
+  color: #f2d47f;
+  outline: none;
+}
+
+/* Waiting remains calm; only the last two picks add urgency. */
+#draft-command-bar.is-waiting .draft-command-mode {
+  color: #8fb69c;
+}
+
+#draft-command-bar.is-waiting .draft-command-mode i {
+  background: #68b983;
+  box-shadow: 0 0 0 3px rgba(104,185,131,.11);
+}
+
+#draft-command-bar.is-near {
+  --command-border: rgba(245,158,66,.42);
+  background:
+    linear-gradient(120deg, rgba(245,158,66,.07), transparent 30%),
+    var(--command-surface);
+}
+
+#draft-command-bar.is-near .draft-command-mode {
+  color: #f1b16b;
+}
+
+#draft-command-bar.is-near .draft-command-mode i {
+  background: #f59e42;
+  box-shadow: 0 0 0 3px rgba(245,158,66,.13);
+}
+
+/* On the clock moves the recommendation to the foreground. */
+#draft-command-bar.is-on-clock {
+  --command-border: rgba(240,199,94,.58);
+  grid-template-columns: minmax(165px,.75fr) minmax(370px,1.9fr) minmax(310px,1.15fr) auto;
+  background:
+    linear-gradient(105deg, rgba(240,199,94,.105), rgba(240,199,94,.018) 38%, transparent 65%),
+    #151a18;
+  box-shadow: 0 12px 32px rgba(0,0,0,.28), inset 4px 0 0 rgba(240,199,94,.72);
+}
+
+#draft-command-bar.is-on-clock .draft-command-mode {
+  color: #f4d77e;
+}
+
+#draft-command-bar.is-on-clock .draft-command-mode i {
+  background: #f0c75e;
+  box-shadow: 0 0 0 4px rgba(240,199,94,.13);
+}
+
+#draft-command-bar.is-on-clock .draft-command-player-line > strong {
+  color: #fff4c9;
+  font-size: 1.02rem;
+}
+
+#draft-command-bar.is-on-clock .draft-command-recommendation {
+  background: linear-gradient(90deg, rgba(240,199,94,.075), transparent 76%);
+}
+
+.draft-command-alternatives {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  margin-top: 3px;
+}
+
+.draft-command-alternatives > span {
+  color: #7f8983;
+  font-size: .42rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.draft-command-alternatives > b {
+  overflow: hidden;
+  color: #bac2bd;
+  font-size: .49rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.draft-command-alternatives small {
+  margin-right: 3px;
+  color: #7f8983;
+  font-size: .40rem;
+  font-weight: 900;
+}
+
+#draft-command-bar.is-complete {
+  opacity: .82;
+}
+
+#draft-command-bar.is-complete .draft-command-mode i {
+  background: #8f9a94;
+}
+
+@media (max-width: 1080px) and (min-width: 769px) {
+  body[data-board-view="position"] #draft-command-bar {
+    grid-template-columns: minmax(135px,.65fr) minmax(260px,1.4fr) minmax(275px,1.15fr) auto;
+  }
+
+  .draft-command-pressure span {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  body[data-board-view="position"] #draft-command-bar,
+  body[data-board-view="position"] #draft-command-bar.is-on-clock {
+    position: static;
+    grid-template-columns: 108px minmax(0,1fr) auto;
+    border-radius: 8px;
+  }
+
+  .draft-command-status,
+  .draft-command-recommendation,
+  .draft-command-actions {
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+
+  .draft-command-status,
+  .draft-command-recommendation,
+  .draft-command-actions {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+
+  .draft-command-recommendation {
+    border-right: 1px solid rgba(255,255,255,.065);
+  }
+
+  .draft-command-pressure-wrap {
+    grid-column: 1 / -1;
+    border-right: 0;
+    padding: 6px 7px 7px;
+  }
+
+  .draft-command-pressure-list {
+    grid-template-columns: repeat(4,minmax(72px,1fr));
+  }
+
+  .draft-command-player-line > strong,
+  #draft-command-bar.is-on-clock .draft-command-player-line > strong {
+    font-size: .76rem;
+  }
+
+  .draft-command-status > strong {
+    font-size: .66rem;
+  }
+
+  .draft-command-actions {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .draft-command-action {
+    min-width: 48px;
+    padding: 4px 5px;
+    font-size: .44rem;
+  }
+
+  .draft-command-alternatives {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .draft-command-reason {
+    display: none;
+  }
+
+  .draft-command-pressure span {
+    font-size: .39rem;
+  }
+
+  .draft-command-pressure-list {
+    gap: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .draft-command-pressure,
+  .draft-command-action {
+    scroll-behavior: auto;
+    transition: none;
+  }
+}
