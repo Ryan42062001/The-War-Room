@@ -32,6 +32,33 @@ const startup = await page.evaluate(() => ({
 }));
 assert.deepEqual(startup, {dataset:717, espnBoard:300, espnRankedRows:300, rows:717, controls:0, duplicates:0});
 
+const boundedSyncSnapshot = await page.evaluate(() => {
+  const huge = Array.from({length:5000}, (_, index) => ({playerName:'Player ' + index}));
+  const sanitized = WarRoomEspnSync.sanitizeSnapshot({
+    picks: huge,
+    unavailablePlayers: huge,
+    marketAdp: huge,
+    expectedCompleted: 99999,
+    marketUpdatedAt: 'x'.repeat(200)
+  });
+  return {
+    picks:sanitized.picks.length,
+    unavailable:sanitized.unavailablePlayers.length,
+    market:sanitized.marketAdp.length,
+    expected:sanitized.expectedCompleted,
+    updatedAtLength:sanitized.marketUpdatedAt.length,
+    invalid:WarRoomEspnSync.applySnapshot([])
+  };
+});
+assert.deepEqual(boundedSyncSnapshot, {
+  picks:160,
+  unavailable:1000,
+  market:1000,
+  expected:160,
+  updatedAtLength:80,
+  invalid:null
+});
+
 const persistenceContext = await browser.newContext();
 const persistencePage = await persistenceContext.newPage({viewport:{width:1280,height:900}});
 const persistenceErrors = [];

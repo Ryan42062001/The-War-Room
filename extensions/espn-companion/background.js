@@ -483,25 +483,31 @@ function statusSnapshot() {
   };
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function isTrustedWarRoomSender(sender, message) {
+  var rawUrl = String(
+    sender && sender.tab && sender.tab.url ||
+    sender && sender.url ||
+    message && message.url ||
+    ''
+  );
+  if (!rawUrl) return false;
+  try {
+    var parsed = new URL(rawUrl);
+    if (parsed.protocol === 'http:' && (parsed.hostname === '127.0.0.1' || parsed.hostname === 'localhost')) {
+      return true;
+    }
+    if (parsed.protocol !== 'https:' || parsed.hostname !== 'ryan42062001.github.io') return false;
+    return parsed.pathname === '/Fantasy-Draft-Cheat-Sheet-2026' ||
+      parsed.pathname.indexOf('/Fantasy-Draft-Cheat-Sheet-2026/') === 0;
+  } catch (error) {
+    return false;
+  }
+}
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   ready.then(function() {
     if (!message || !message.type) return null;
+    if (String(message.type).indexOf('WAR_ROOM_') === 0 && !isTrustedWarRoomSender(sender, message)) return null;
 
     if (message.type === 'ESPN_CONTENT_READY') {
       var newDraft = activateDraft(message.url);

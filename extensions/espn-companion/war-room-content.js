@@ -12,8 +12,40 @@
     } catch (error) {}
   }
 
+  function targetOrigin() {
+    return window.location.origin && window.location.origin !== 'null'
+      ? window.location.origin
+      : '*';
+  }
+
+  function sanitizeSettings(value) {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+    var teams = Number(value.teams);
+    var draftSlot = Number(value.draftSlot);
+    var rounds = Number(value.rounds);
+    if (!Number.isInteger(teams) || teams < 2 || teams > 20) return null;
+    if (!Number.isInteger(draftSlot) || draftSlot < 1 || draftSlot > teams) return null;
+    if (!Number.isInteger(rounds) || rounds < 1 || rounds > 30) return null;
+    return {teams:teams, draftSlot:draftSlot, rounds:rounds, totalPicks:teams * rounds};
+  }
+
+  function sanitizeAckResult(value) {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+    var clampCount = function(input) {
+      var number = Math.trunc(Number(input) || 0);
+      return Math.max(0, Math.min(600, number));
+    };
+    return {
+      captured: clampCount(value.captured),
+      applied: clampCount(value.applied),
+      unmatched: Array.isArray(value.unmatched) ? value.unmatched.slice(0, 600).map(function() { return null; }) : [],
+      unavailableApplied: clampCount(value.unavailableApplied),
+      latestPick: clampCount(value.latestPick)
+    };
+  }
+
   function postToWarRoom(message) {
-    window.postMessage(Object.assign({channel: CHANNEL}, message), '*');
+    window.postMessage(Object.assign({channel: CHANNEL}, message), targetOrigin());
   }
 
   chrome.runtime.onMessage.addListener(function(message) {
@@ -32,21 +64,31 @@
   });
 
   window.addEventListener('message', function(event) {
-    if (event.source !== window || !event.data || event.data.channel !== CHANNEL) return;
+    var expectedOrigin = window.location.origin;
+    if (
+      event.source !== window ||
+      (expectedOrigin !== 'null' && event.origin !== expectedOrigin) ||
+      !event.data ||
+      typeof event.data !== 'object' ||
+      Array.isArray(event.data) ||
+      event.data.channel !== CHANNEL
+    ) return;
     if (event.data.type === 'SYNC_ACK') {
       sendRuntime({
         type: 'WAR_ROOM_ACK',
-        result: event.data.result,
-        settings: event.data.settings,
-        requiredExtensionVersion: event.data.requiredExtensionVersion,
+        result: sanitizeAckResult(event.data.result),
+        settings: sanitizeSettings(event.data.settings),
+        requiredExtensionVersion: String(event.data.requiredExtensionVersion || '').slice(0, 20),
         url: location.href
       });
     }
     if (event.data.type === 'SETTINGS_UPDATE') {
+      var settings = sanitizeSettings(event.data.settings);
+      if (!settings) return;
       sendRuntime({
         type: 'WAR_ROOM_SETTINGS_UPDATE',
-        config: event.data.settings,
-        requiredExtensionVersion: event.data.requiredExtensionVersion,
+        config: settings,
+        requiredExtensionVersion: String(event.data.requiredExtensionVersion || '').slice(0, 20),
         url: location.href
       });
     }

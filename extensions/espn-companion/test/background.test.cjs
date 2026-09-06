@@ -379,7 +379,7 @@ test('a passive War Room acknowledgment cannot clear captured picks or overwrite
     result: {captured: 1, applied: 1, unmatched: []},
     settings: {teams: 10, draftSlot: 1, rounds: 16},
     requiredExtensionVersion: '0.8.2'
-  }, {tab: {id: 44}}, () => {});
+  }, {tab: {id: 44, url: 'https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/'}}, () => {});
   await new Promise(resolve => setTimeout(resolve, 0));
 
   assert.equal(context.state.config.teams, 12);
@@ -406,12 +406,12 @@ test('late acknowledgments cannot lower applied progress and a trailing snapshot
   context.chrome.tabs.sendMessage = async () => { deliveries++; };
   const listener = context.listeners.message[0];
 
-  listener({type: 'WAR_ROOM_ACK', result: {captured: 192, applied: 192, unmatched: []}}, {tab: {id: 44}}, () => {});
+  listener({type: 'WAR_ROOM_ACK', result: {captured: 192, applied: 192, unmatched: []}}, {tab: {id: 44, url: 'https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/'}}, () => {});
   await new Promise(resolve => setTimeout(resolve, 0));
   assert.equal(context.state.warRoom.applied, 192);
   assert.equal(context.state.warRoom.acknowledgedCaptured, 192);
 
-  listener({type: 'WAR_ROOM_ACK', result: {captured: 133, applied: 133, unmatched: []}}, {tab: {id: 44}}, () => {});
+  listener({type: 'WAR_ROOM_ACK', result: {captured: 133, applied: 133, unmatched: []}}, {tab: {id: 44, url: 'https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/'}}, () => {});
   await new Promise(resolve => setTimeout(resolve, 0));
   assert.equal(context.state.warRoom.applied, 192);
   assert.equal(context.state.warRoom.acknowledgedCaptured, 192);
@@ -419,13 +419,13 @@ test('late acknowledgments cannot lower applied progress and a trailing snapshot
 
   context.state.warRoom.applied = 133;
   context.state.warRoom.acknowledgedCaptured = 133;
-  listener({type: 'WAR_ROOM_ACK', result: {captured: 133, applied: 133, unmatched: []}}, {tab: {id: 44}}, () => {});
+  listener({type: 'WAR_ROOM_ACK', result: {captured: 133, applied: 133, unmatched: []}}, {tab: {id: 44, url: 'https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/'}}, () => {});
   await new Promise(resolve => setTimeout(resolve, 0));
   await new Promise(resolve => setTimeout(resolve, 0));
   assert.equal(deliveries, 1);
   assert.equal(context.state.warRoom.lastRetryCaptured, 192);
 
-  listener({type: 'WAR_ROOM_ACK', result: {captured: 133, applied: 133, unmatched: []}}, {tab: {id: 44}}, () => {});
+  listener({type: 'WAR_ROOM_ACK', result: {captured: 133, applied: 133, unmatched: []}}, {tab: {id: 44, url: 'https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/'}}, () => {});
   await new Promise(resolve => setTimeout(resolve, 0));
   assert.equal(deliveries, 1);
 });
@@ -443,7 +443,7 @@ test('an explicit War Room settings update becomes authoritative and preserves s
     type: 'WAR_ROOM_SETTINGS_UPDATE',
     config: {teams: 12, draftSlot: 11, rounds: 18},
     requiredExtensionVersion: '0.8.8'
-  }, {tab: {id: 44}}, () => {});
+  }, {tab: {id: 44, url: 'https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/'}}, () => {});
   await new Promise(resolve => setTimeout(resolve, 0));
   await new Promise(resolve => setTimeout(resolve, 0));
 
@@ -451,4 +451,21 @@ test('an explicit War Room settings update becomes authoritative and preserves s
   assert.equal(context.state.config.rounds, 18);
   assert.equal(context.getPicks().length, 1);
   assert.equal(context.state.warRoom.requiredExtensionVersion, '0.8.8');
+});
+
+
+test('rejects WAR_ROOM runtime messages from non-War Room tabs', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  const before = JSON.parse(JSON.stringify(context.state.config));
+  context.listeners.message[0]({
+    type: 'WAR_ROOM_SETTINGS_UPDATE',
+    config: {teams: 20, draftSlot: 20, rounds: 30},
+    url: 'https://example.com/not-war-room'
+  }, {tab: {id: 999, url: 'https://example.com/not-war-room'}}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.state.config.teams, before.teams);
+  assert.equal(context.state.config.draftSlot, before.draftSlot);
+  assert.equal(context.state.config.rounds, before.rounds);
+  assert.equal(context.state.warRoom.connected, false);
 });
