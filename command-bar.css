@@ -12,7 +12,7 @@ body[data-board-view="position"] #draft-command-bar {
   grid-template-columns: minmax(150px,.72fr) minmax(300px,1.7fr) minmax(330px,1.25fr) auto;
   align-items: stretch;
   gap: 0;
-  margin: 0 0 7px;
+  margin: 0 0 5px;
   overflow: hidden;
   border: 1px solid var(--command-border);
   border-radius: 10px;
@@ -31,10 +31,70 @@ body[data-board-view="position"] #draft-command-bar {
   }
 }
 
+/* Position Tiers uses the command bar as the primary surface. Keep the
+   existing recommendation explanation as one thin interactive strip so the
+   user can still inspect the full reasoning without opening all Intel. */
 body[data-board-view="position"].command-bar-ready:not(.command-details-open) #pick-counter-box,
-body[data-board-view="position"].command-bar-ready:not(.command-details-open) #recommended-pick-box,
 body[data-board-view="position"].command-bar-ready:not(.command-details-open) #board-pressure-widget {
   display: none;
+}
+
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) #recommended-pick-box {
+  display: block;
+  margin: 0 0 7px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) #recommended-pick-box > .widget-title {
+  display: none;
+}
+
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) #recommended-pick-text {
+  padding: 0;
+}
+
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) #recommended-pick-text > .recommendation-card {
+  border: 1px solid rgba(240,199,94,.13);
+  border-radius: 7px;
+  background: rgba(18,22,21,.66);
+  box-shadow: none;
+}
+
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) .recommendation-card-summary {
+  grid-template-columns: auto minmax(0,1fr);
+  gap: 7px;
+  min-height: 28px;
+  padding: 5px 8px;
+}
+
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) .recommendation-card-summary::before {
+  content: "WHY";
+  color: #d5b760;
+  font-size: .43rem;
+  font-weight: 950;
+  letter-spacing: .08em;
+}
+
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) .recommendation-card-summary > .recommendation-action,
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) .recommendation-card-summary > .recommendation-player,
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) .recommendation-card-summary > .recommendation-confidence,
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) .recommendation-card-summary > .recommendation-chevron {
+  display: none;
+}
+
+body[data-board-view="position"].command-bar-ready:not(.command-details-open) .recommendation-card-summary > .recommendation-one-line {
+  display: block;
+  grid-column: 2;
+  margin: 0;
+  overflow: hidden;
+  color: #9ca69f;
+  font-size: .48rem;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 body[data-board-view="position"].command-details-open #pick-counter-box,
@@ -399,6 +459,10 @@ body[data-board-view="position"].command-details-open #board-pressure-widget {
 
   .draft-command-alternatives {
     display: none;
+  }
+
+  body[data-board-view="position"].command-bar-ready:not(.command-details-open) .recommendation-card-summary > .recommendation-one-line {
+    font-size: .45rem;
   }
 }
 
