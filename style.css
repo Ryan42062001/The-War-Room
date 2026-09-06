@@ -2,12 +2,23 @@
 
 /* =========================================================
    POSITION TIERS — DENSITY PASS
-   Keep the same information architecture, but reduce repeated
-   chrome and increase the amount of draftable information visible.
+   Preserve the #80 information architecture while making the
+   live draft surface faster to scan and less vertically wasteful.
    ========================================================= */
 
+body[data-board-view="position"] main {
+  max-width: 1320px;
+  padding-top: 9px;
+}
+
+body[data-board-view="position"] #pick-counter-box,
+body[data-board-view="position"] #recommended-pick-box,
+body[data-board-view="position"] #board-pressure-widget {
+  margin-bottom: 9px;
+}
+
 body[data-board-view="position"] #position-board {
-  margin-top: 8px;
+  margin-top: 7px;
 }
 
 .position-board-header {
@@ -83,8 +94,9 @@ button.position-decision-card:focus-visible {
   background: rgba(255,182,18,.045);
 }
 
-.position-tier-grid {
-  gap: 6px;
+.position-tier-grid,
+.position-endgame-grid {
+  gap: 7px;
 }
 
 .position-column {
@@ -105,7 +117,7 @@ button.position-decision-card:focus-visible {
 }
 
 .position-column-title > strong {
-  max-width: 150px;
+  max-width: 170px;
   font-size: .54rem;
   font-weight: 800;
 }
@@ -223,10 +235,6 @@ button.position-decision-card:focus-visible {
   font-size: .52rem;
 }
 
-.position-endgame-grid {
-  gap: 6px;
-}
-
 .position-column-compact .position-player-card {
   min-height: 35px;
 }
@@ -238,6 +246,10 @@ button.position-decision-card:focus-visible {
 }
 
 @media (max-width: 1080px) and (min-width: 769px) {
+  body[data-board-view="position"] main {
+    max-width: 100%;
+  }
+
   .position-decision-strip {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -249,13 +261,14 @@ button.position-decision-card:focus-visible {
   .position-decision-card:nth-child(-n+3) {
     border-bottom: 1px solid #30353c;
   }
-
-  .position-tier-grid {
-    gap: 7px;
-  }
 }
 
 @media (max-width: 768px) {
+  body[data-board-view="position"] main {
+    max-width: 100%;
+    padding-top: 8px;
+  }
+
   body[data-board-view="position"] #position-board {
     margin-top: 6px;
   }
