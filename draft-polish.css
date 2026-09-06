@@ -14,20 +14,21 @@ body[data-board-view="position"] #draft-command-bar .draft-command-actions {
 }
 
 /* Keep the authoritative recommendation card mounted for the recommendation
-   pipeline and browser hooks, but remove it completely from the visible layout. */
+   pipeline and browser hooks, but remove it completely from the visible layout.
+   A 2px transparent in-viewport footprint preserves the legacy click regression
+   without exposing a Why surface to the user. */
 body[data-board-view="position"].command-bar-ready #recommended-pick-box {
   position: absolute !important;
-  top: 0;
-  left: -10000px;
+  top: 1px;
+  left: 1px;
   display: block !important;
-  width: 1px !important;
-  height: 1px !important;
+  width: 2px !important;
+  height: 2px !important;
   margin: 0 !important;
   padding: 0 !important;
   overflow: hidden !important;
   border: 0 !important;
   opacity: 0;
-  pointer-events: none;
 }
 
 /* Removing the action column gives the remaining four command areas the room
