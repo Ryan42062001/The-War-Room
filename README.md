@@ -32,10 +32,13 @@ The generated dataset currently contains 717 searchable players. ADP-only player
 
 ## Using the board
 
-1. Set the league size, draft slot, and number of rounds in **Draft Position**.
-2. Leave **Taken** selected for normal picks. Choose **Mine**—or press `M`—before selecting your own player.
-3. Open **My Draft** to check lineup construction, pick history, value, and bye-week concentration.
-4. Expand **Recommended Pick** or **Board Pressure** when you want the supporting detail.
+1. **Position Tiers** is the default draft-day view. WR, RB, QB, and TE are split into their FantasyPros consensus tiers, with K/DST kept in a compact endgame section.
+2. Use the top decision strip for the best overall player, the best player at each main position, and the distance to your next pick. Tier headers show how many players remain and flag closing or exhausted tiers.
+3. Switch to **Overall** whenever you want the original full ranking table or need to customize the source board.
+4. Set the league size, draft slot, and number of rounds in **Draft Position**. Leave **Taken** selected for normal picks; choose **Mine**—or press `M`—before selecting your own player.
+5. Open **My Draft** to check lineup construction, pick history, value, and bye-week concentration. Expand **Recommended Pick** or **Board Pressure** when you want the supporting detail.
+
+The Position Tiers view is derived from the same authoritative FantasyPros rows used by scoring, ESPN reconciliation, persistence, and recommendations. It does not create a second ranking system or move the engine-owned source rows.
 
 The **ESPN Mkt** column shows ESPN's default board rank (`#127`, for example). If the companion supplies live ESPN ADP, the cell shows both as `#127 / 118.4`. Players missing from ESPN's market data fall back to FantasyPros ADP and say so in the cell tooltip. **Val** is the active ESPN market position minus FantasyPros ECR, so a positive number means ESPN may let that player fall later than expert consensus.
 

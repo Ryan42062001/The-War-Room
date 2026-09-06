@@ -383,6 +383,11 @@ function updateFantasyProsRowDataAttributes(
   );
 
   row.setAttribute(
+    'data-team',
+    player.team || 'FA'
+  );
+
+  row.setAttribute(
     'data-bye',
     player.bye || ''
   );
@@ -891,6 +896,7 @@ function build2026ExpertBoardStructure() {
   invalidateDraftRowCaches();
   getCachedDraftRows();
   _draftRowsByCanonicalNameCache = indexDraftRowsByExpertName();
+  if (typeof invalidatePositionTierBoard === 'function') invalidatePositionTierBoard();
 
 
   if (
@@ -1409,6 +1415,7 @@ function updateCustomBoardUi() {
 function toggleEditMode(){
   var isEditing = document.body.classList.toggle('edit-mode');
   var btn = document.getElementById('editRanksBtn');
+  if (isEditing && typeof setBoardView === 'function') setBoardView('overall', {persist:false});
 
   if(btn){
     btn.innerHTML = isEditing
@@ -3414,12 +3421,17 @@ function applyFilters() {
     updateTierFilterExpansion('');
     updateNextPickMarker();
     refreshDraftRowAccessibility();
+    if (typeof updatePositionTierBoard === 'function') updatePositionTierBoard();
     return;
   }
 
   var rows = document.querySelectorAll('tr.draftrow:not(.hidden-row)');
   rows.forEach(function(row) {
-    var name = (row.getAttribute('data-name') || row.innerText || '').toLowerCase();
+    var name = [
+      row.getAttribute('data-name') || '',
+      row.getAttribute('data-display-name') || '',
+      row.getAttribute('data-team') || ''
+    ].join(' ').toLowerCase();
     if (name.indexOf(q) !== -1) {
       searchMatches.push(row);
     }
@@ -3440,6 +3452,7 @@ function applyFilters() {
   updateTierFilterExpansion(q);
   updateNextPickMarker();
   refreshDraftRowAccessibility(searchMatches[0] || null);
+  if (typeof updatePositionTierBoard === 'function') updatePositionTierBoard();
 }
 
 function navigateSearch(direction) {
@@ -3470,6 +3483,11 @@ function scrollToCurrentMatch() {
   }
 
   if (!targetRow) return;
+
+  if (typeof isPositionBoardView === 'function' && isPositionBoardView() &&
+      typeof focusPositionBoardPlayer === 'function' && focusPositionBoardPlayer(targetRow)) {
+    return;
+  }
 
   searchMatches.forEach(function(row) {
     row.classList.remove('search-highlight');
@@ -3535,6 +3553,7 @@ function initApp() {
   loadState();
   renderAutoDraftTeamToggles();
   refreshDraftRowAccessibility();
+  if (typeof initializeBoardView === 'function') initializeBoardView();
 
 }
 

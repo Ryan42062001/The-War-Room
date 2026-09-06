@@ -460,6 +460,7 @@ function setDraftMarkMode(mode) {
     button.setAttribute('aria-pressed', active ? 'true' : 'false');
   });
   refreshDraftRowAccessibility();
+  if (typeof updatePositionTierBoard === 'function') updatePositionTierBoard();
 }
 
 function shouldIgnoreDraftMarkShortcut(event) {
