@@ -6,12 +6,25 @@
  * initialization, preserving the original monolith's hoisting behavior.
  */
 
+function loadDraftAwareness() {
+  if (document.querySelector('script[data-war-room-draft-awareness]')) return;
+
+  var awareness = document.createElement('script');
+  awareness.src = 'js/war-room-draft-awareness.js?v=20260906-1';
+  awareness.setAttribute('data-war-room-draft-awareness', 'true');
+  document.head.appendChild(awareness);
+}
+
 function loadDraftCommandFixes() {
-  if (document.querySelector('script[data-war-room-command-fixes]')) return;
+  if (document.querySelector('script[data-war-room-command-fixes]')) {
+    loadDraftAwareness();
+    return;
+  }
 
   var fixes = document.createElement('script');
   fixes.src = 'js/war-room-command-bar-fixes.js?v=20260906-1';
   fixes.setAttribute('data-war-room-command-fixes', 'true');
+  fixes.onload = loadDraftAwareness;
   document.head.appendChild(fixes);
 }
 
