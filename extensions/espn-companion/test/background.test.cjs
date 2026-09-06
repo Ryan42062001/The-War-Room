@@ -675,6 +675,55 @@ test('stale draft messages are rejected after the owner tab navigates to a non-d
   assert.equal(context.state.espn.lastIgnoredDraftReason, 'route-mismatch');
 });
 
+
+test('draft-scoped ESPN messages with a missing message URL cannot mutate the active ledger', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  const listener = context.listeners.message[0];
+  const draftUrl = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026';
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', url: draftUrl, topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Good Player', position: 'WR'}], unavailablePlayers: []
+  }, {tab: {id: 11, url: draftUrl}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.state.draftKey, '2026:111');
+  assert.equal(context.getPicks()[0].playerName, 'Good Player');
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Bad Missing URL Player', position: 'RB'}], unavailablePlayers: []
+  }, {tab: {id: 11, url: draftUrl}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+
+  assert.equal(context.state.draftKey, '2026:111');
+  assert.equal(context.getPicks()[0].playerName, 'Good Player');
+  assert.equal(context.state.espn.lastIgnoredDraftReason, 'missing-draft-key');
+});
+
+test('draft-scoped ESPN messages with a malformed message URL cannot mutate the active ledger', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  const listener = context.listeners.message[0];
+  const draftUrl = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026';
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', url: draftUrl, topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Good Player', position: 'WR'}], unavailablePlayers: []
+  }, {tab: {id: 11, url: draftUrl}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+
+  listener({
+    type: 'ESPN_LIVE_OBSERVATIONS', url: 'not a valid url', source: 'websocket',
+    observations: [{overallPick: 1, playerId: '999', playerName: 'Bad Malformed URL Player', position: 'RB'}]
+  }, {tab: {id: 11, url: draftUrl}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+
+  assert.equal(context.state.draftKey, '2026:111');
+  assert.equal(context.getPicks()[0].playerName, 'Good Player');
+  assert.equal(context.state.espn.lastIgnoredDraftReason, 'missing-draft-key');
+});
+
 test('ESPN content reader scopes async requests and dedupe signatures to their initiating draft route', () => {
   const source = fs.readFileSync(path.resolve(__dirname, '..', 'espn-content.js'), 'utf8');
   assert.ok(source.includes("function captureRouteKey(url)"));

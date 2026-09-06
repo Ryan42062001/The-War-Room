@@ -422,7 +422,11 @@ function rejectEspnDraftSender(tabId, nextKey, reason) {
 function acceptEspnDraftSender(sender, message) {
   var tabId = espnSenderTabId(sender);
   var nextKey = draftKeyFromUrl(message && message.url);
-  if (tabId == null || !nextKey) return true;
+  // Messages without a browser tab can only come from the extension itself.
+  // Real ESPN content-script messages must identify the draft route they belong to
+  // so malformed or stale payloads cannot mutate whichever ledger is currently active.
+  if (tabId == null) return true;
+  if (!nextKey) return rejectEspnDraftSender(tabId, null, 'missing-draft-key');
   var senderUrl = String(sender && sender.tab && sender.tab.url || '');
   if (senderUrl) {
     var senderKey = draftKeyFromUrl(senderUrl);
