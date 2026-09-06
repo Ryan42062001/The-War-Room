@@ -84,3 +84,21 @@ test('observer source is read-only and installs all three network hooks plus bou
   assert.match(source, /setInterval\(function\(\) \{ scanReact/);
   assert.doesNotMatch(source, /nativeFetch\.apply\([^;]*method\s*:\s*['"](?:POST|PUT|DELETE)|nativeSend\.apply\([^;]*pick/i);
 });
+
+
+test('conflict metadata retains a same-confidence challenger for duplicate repair', () => {
+  const first = capture.reconcileObservation(null, {
+    overallPick:183, playerName:'Jerry Jeudy', position:'WR', source:'dom'
+  }).entry;
+  const result = capture.reconcileObservation(first, {
+    overallPick:183, playerName:'Correct Pick 183', position:'RB', source:'dom'
+  });
+  assert.equal(result.entry.playerName, 'Jerry Jeudy');
+  assert.equal(result.conflict.incomingName, 'Correct Pick 183');
+  assert.equal(result.conflict.incomingPosition, 'RB');
+  assert.equal(result.conflict.incomingSource, 'dom');
+  assert.equal(capture.samePlayer(
+    {playerName:'Jerry Jeudy', position:'WR'},
+    {playerName:'Jerry Jeudy', position:'WR'}
+  ), true);
+});

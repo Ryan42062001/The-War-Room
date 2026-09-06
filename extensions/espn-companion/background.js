@@ -170,6 +170,7 @@ function storageGet() {
       state.unresolvedPlayerIdsByPick,
       sanitizeStoredUnresolvedMap(stored.unresolvedPlayerIdsByPick, totalPicks)
     );
+    repairDuplicatePlayerAssignments();
   });
 }
 
@@ -280,6 +281,132 @@ function getPicks() {
         teamSlot: snakeTeamSlot(pick.overallPick, state.config.teams)
       });
     });
+}
+
+
+function ledgerPlayersMatch(left, right) {
+  if (!left || !right) return false;
+  if (liveCapture && typeof liveCapture.samePlayer === 'function') {
+    return liveCapture.samePlayer(left, right);
+  }
+  var leftId = left.playerId || left.espnPlayerId;
+  var rightId = right.playerId || right.espnPlayerId;
+  if (leftId && rightId && String(leftId) !== String(rightId)) return false;
+  var leftName = String(left.playerName || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  var rightName = String(right.playerName || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  if (!leftName || leftName !== rightName) return false;
+  var leftPosition = String(left.position || '').toUpperCase();
+  var rightPosition = String(right.position || '').toUpperCase();
+  return !leftPosition || !rightPosition || leftPosition === rightPosition;
+}
+
+function conflictIncomingPick(conflict, overallPick, fallbackSource) {
+  if (!conflict || !conflict.incomingName) return null;
+  var source = String(conflict.incomingSource || fallbackSource || 'dom').slice(0, 20);
+  var playerId = conflict.incomingPlayerId == null ? null : String(conflict.incomingPlayerId).slice(0, 40);
+  return {
+    overallPick: Number(overallPick),
+    playerName: String(conflict.incomingName).slice(0, 100),
+    position: String(conflict.incomingPosition || '').slice(0, 4),
+    teamId: conflict.incomingTeamId == null ? null : String(conflict.incomingTeamId).slice(0, 40),
+    isMine: typeof conflict.incomingIsMine === 'boolean' ? conflict.incomingIsMine : null,
+    round: Number(conflict.incomingRound) || null,
+    roundPick: Number(conflict.incomingRoundPick) || null,
+    source: source,
+    method: source.slice(0, 12),
+    playerId: playerId,
+    espnPlayerId: playerId,
+    observedAt: conflict.observedAt || new Date().toISOString()
+  };
+}
+
+function recordDuplicatePlayerRepair(pickNumber, duplicatePickNumber, previous, replacement) {
+  var repairs = Array.isArray(state.espn.duplicatePlayerRepairs)
+    ? state.espn.duplicatePlayerRepairs.slice(-19)
+    : [];
+  repairs.push({
+    overallPick: Number(pickNumber),
+    duplicatePick: Number(duplicatePickNumber),
+    replacedName: String(previous && previous.playerName || '').slice(0, 100),
+    replacementName: String(replacement && replacement.playerName || '').slice(0, 100),
+    repairedAt: new Date().toISOString()
+  });
+  state.espn.duplicatePlayerRepairs = repairs;
+}
+
+function repairDuplicatePlayerAssignments() {
+  var totalPicks = Math.max(1, Number(state.config.teams) * Number(state.config.rounds));
+  var repairs = 0;
+  var safety = 0;
+
+  while (safety++ < totalPicks) {
+    var keys = Object.keys(state.picksByNumber || {})
+      .filter(function(key) { return Number.isInteger(Number(key)); })
+      .sort(function(a, b) { return Number(a) - Number(b); });
+    var repairedThisPass = false;
+
+    outer:
+    for (var leftIndex = 0; leftIndex < keys.length; leftIndex++) {
+      for (var rightIndex = leftIndex + 1; rightIndex < keys.length; rightIndex++) {
+        var leftKey = keys[leftIndex];
+        var rightKey = keys[rightIndex];
+        var left = state.picksByNumber[leftKey];
+        var right = state.picksByNumber[rightKey];
+        if (!ledgerPlayersMatch(left, right)) continue;
+
+        var candidates = [
+          {key:leftKey, entry:left, otherKey:rightKey},
+          {key:rightKey, entry:right, otherKey:leftKey}
+        ];
+        for (var candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
+          var candidate = candidates[candidateIndex];
+          var conflict = state.conflictsByPick && state.conflictsByPick[candidate.key];
+          var challenger = conflictIncomingPick(conflict, candidate.key, candidate.entry && candidate.entry.source);
+          if (!challenger || ledgerPlayersMatch(challenger, candidate.entry)) continue;
+
+          var challengerConfidence = liveCapture && typeof liveCapture.sourceConfidence === 'function'
+            ? liveCapture.sourceConfidence(challenger.source)
+            : 40;
+          var currentConfidence = liveCapture && typeof liveCapture.sourceConfidence === 'function'
+            ? liveCapture.sourceConfidence(candidate.entry && candidate.entry.source)
+            : 40;
+          if (challengerConfidence < currentConfidence) continue;
+
+          var collidesElsewhere = keys.some(function(key) {
+            return key !== candidate.key && ledgerPlayersMatch(state.picksByNumber[key], challenger);
+          });
+          if (collidesElsewhere) continue;
+
+          var sources = Array.from(new Set(
+            (candidate.entry.confirmedSources || [candidate.entry.source])
+              .concat(challenger.source)
+              .filter(Boolean)
+          ));
+          var replacement = Object.assign({}, candidate.entry, challenger, {
+            confirmedSources: sources,
+            firstSeenAt: candidate.entry.firstSeenAt || challenger.observedAt,
+            lastSeenAt: challenger.observedAt,
+            conflicting: false,
+            conflict: null,
+            repairedDuplicatePlayer: true
+          });
+          state.picksByNumber[candidate.key] = replacement;
+          delete state.conflictsByPick[candidate.key];
+          recordDuplicatePlayerRepair(candidate.key, candidate.otherKey, candidate.entry, replacement);
+          repairs++;
+          repairedThisPass = true;
+          break outer;
+        }
+      }
+    }
+
+    if (!repairedThisPass) break;
+  }
+
+  if (state.espn.liveCapture && typeof state.espn.liveCapture === 'object') {
+    state.espn.liveCapture.conflicts = Object.keys(state.conflictsByPick || {}).length;
+  }
+  return repairs;
 }
 
 function unavailablePlayerKey(player) {
@@ -547,6 +674,7 @@ function mergePicks(picks) {
     state.picksByNumber[String(overallPick)] = entry;
     if (reconciled.conflict) state.conflictsByPick[String(overallPick)] = reconciled.conflict;
   });
+  repairDuplicatePlayerAssignments();
   state.ledgerTeams = Number(state.config.teams);
   state.espn.captured = getPicks().length;
 }
@@ -593,6 +721,7 @@ function resetEspnDraftProgress() {
   state.espn.screenFrames = {};
   state.espn.apiPickFields = [];
   state.espn.liveCapture = {sources:{}, counters:{}, observations:0, candidates:0, latestPick:0};
+  state.espn.duplicatePlayerRepairs = [];
   state.conflictsByPick = {};
   state.unresolvedPlayerIdsByPick = {};
 }
