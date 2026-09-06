@@ -107,8 +107,10 @@ The project already has working logic around:
 Autosave/load architecture was previously fixed so the authoritative dataset rebuilds the board structure BEFORE `loadState()` restores drafted/taken state. Saved legacy board ordering should not override the authoritative expert/FantasyPros order.
 
 ## Current code organization
-- `index.html` contains the UI and eight tier containers, but no static player rows; `script.js` constructs the authoritative board before `loadState()`.
-- `script.js` contains production board, persistence, recommendation, and live-state logic.
+- `index.html` contains the UI and eight tier containers, but no static player rows; ordered classic scripts under `js/` construct the authoritative board before `loadState()`.
+- `js/war-room-ui.js`, `js/war-room-espn-sync.js`, `js/war-room-rankings.js`, `js/war-room-draft-state.js`, `js/war-room-scoring.js`, and `js/war-room-recommendations.js` contain production logic in dependency order.
+- `script.js` is intentionally a tiny final bootstrap so initialization runs only after every production module has loaded.
+- `scripts/validate-production-modules.mjs` protects module order, module-size limits, and the bootstrap boundary in CI.
 - `developer-tools.js` contains regression tests and draft simulations and is loaded on demand from the console; developer controls are intentionally hidden from the draft-day UI.
 - Normal scoring diagnostics are quiet by default. Set `DEBUG_DRAFT_SCORING = true` when detailed console traces are needed.
 - Board construction indexes existing rows once by canonical name and appends players in tier-level document fragments; preserve this batched path when changing initialization.
