@@ -1861,7 +1861,8 @@ function getRecommendationAuditSummary() {
 function getRecommendationAuditPortfolioSummary() {
   var drafts = readDraftSessionRegistry().map(function(session) {
     try {
-      var payload = JSON.parse(localStorage.getItem(getDraftSessionStateKey(session.id)) || 'null');
+      var storedDraft = readDraftSessionPayload(session.id);
+      var payload = storedDraft.payload;
       if (!payload) return null;
       var totalPicks = Math.max(2, Number(payload.teams) || 10) * Math.max(1, Number(payload.rounds) || 16);
       var numberedPicks = Object.keys(payload.draftMeta || {}).filter(function(name) {
@@ -1939,7 +1940,8 @@ function buildRecommendationAuditExport() {
     summary: portfolio,
     drafts: readDraftSessionRegistry().map(function(session) {
       try {
-        var payload = JSON.parse(localStorage.getItem(getDraftSessionStateKey(session.id)) || 'null');
+        var storedDraft = readDraftSessionPayload(session.id);
+        var payload = storedDraft.payload;
         if (!payload) return null;
         return {
           id: session.id,

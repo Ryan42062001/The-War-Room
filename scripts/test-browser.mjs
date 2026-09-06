@@ -31,6 +31,192 @@ const startup = await page.evaluate(() => ({
   duplicates: FANTASYPROS_2026_DATASET.length - new Set(FANTASYPROS_2026_DATASET.map(p => canonicalExpertPlayerName(p.name))).size
 }));
 assert.deepEqual(startup, {dataset:717, espnBoard:300, espnRankedRows:300, rows:717, controls:0, duplicates:0});
+
+const persistenceContext = await browser.newContext();
+const persistencePage = await persistenceContext.newPage({viewport:{width:1280,height:900}});
+const persistenceErrors = [];
+persistencePage.on('console', msg => { if (msg.type() === 'error') persistenceErrors.push(msg.text()); });
+persistencePage.on('pageerror', error => persistenceErrors.push(error.message));
+await persistencePage.goto(appUrl, {waitUntil:'load'});
+await persistencePage.waitForSelector('tr.draftrow');
+
+await persistencePage.evaluate(() => {
+  localStorage.setItem('war-room-draft-sessions-v1', '{not-json');
+  localStorage.setItem('draft-state-v1', JSON.stringify({
+    version:2, savedAt:'legacy-test', teams:10, slot:1, rounds:16,
+    recommendationAudit:[], autoDraftTeamSlots:[], state:{}, draftMeta:{}, order:[]
+  }));
+});
+await persistencePage.reload({waitUntil:'load'});
+await persistencePage.waitForSelector('tr.draftrow');
+const corruptRegistryRecovery = await persistencePage.evaluate(() => ({
+  sessions: JSON.parse(localStorage.getItem('war-room-draft-sessions-v1') || '[]'),
+  active: localStorage.getItem('war-room-active-draft-session-v1'),
+  backup: Array.from({length:localStorage.length}, (_, index) => localStorage.key(index))
+    .find(key => key && key.startsWith('war-room-draft-sessions-v1:corrupt-backup:')) || null
+}));
+assert.equal(corruptRegistryRecovery.sessions.length, 1);
+assert.equal(corruptRegistryRecovery.sessions[0].id, 'legacy');
+assert.equal(corruptRegistryRecovery.active, 'legacy');
+assert.ok(corruptRegistryRecovery.backup);
+
+await persistencePage.evaluate(() => {
+  const state = {
+    version:2,
+    savedAt:'<img src=x onerror=alert(1)>',
+    teams:999,
+    slot:-3,
+    rounds:99,
+    recommendationAudit:Array.from({length:250}, () => ({resolved:false})),
+    autoDraftTeamSlots:[2, 999, '3'],
+    state:{"ja'marr chase":'mine', 'puka nacua':'invalid'},
+    draftMeta:{"ja'marr chase":{pick:9999, teamSlot:999, source:'invalid', espnPlayerId:'x'.repeat(100)}},
+    order:'not-an-array'
+  };
+  localStorage.setItem('war-room-draft-sessions-v1', JSON.stringify([
+    null,
+    {},
+    {id:'  good  ', name:'  Good   Draft  ', createdAt:'2026-09-06T00:00:00.000Z'},
+    {id:'good', name:'Duplicate'}
+  ]));
+  localStorage.setItem('war-room-active-draft-session-v1', 'ghost');
+  localStorage.setItem('draft-state-v1:good', JSON.stringify(state));
+});
+await persistencePage.reload({waitUntil:'load'});
+await persistencePage.waitForSelector('tr.draftrow');
+const normalizedPersistence = await persistencePage.evaluate(() => {
+  const chase = findDraftRowByExpertName("Ja'Marr Chase");
+  const registry = JSON.parse(localStorage.getItem('war-room-draft-sessions-v1') || '[]');
+  const before = activeDraftSessionId;
+  const phantomSwitch = switchDraftSession('missing-session');
+  const diagElement = document.createElement('div');
+  diagElement.id = 'storage-diag';
+  document.body.appendChild(diagElement);
+  loadState();
+  const diagText = diagElement.textContent;
+  const diagImages = diagElement.querySelectorAll('img').length;
+  diagElement.remove();
+  return {
+    registry,
+    active: activeDraftSessionId,
+    activeBeforePhantom: before,
+    phantomSwitch,
+    teams:Number(document.getElementById('pcTeams').value),
+    slot:Number(document.getElementById('pcSlot').value),
+    rounds:Number(document.getElementById('pcRounds').value),
+    mine:chase.classList.contains('drafted-mine'),
+    pick:chase.getAttribute('data-pick'),
+    teamSlot:chase.getAttribute('data-team-slot'),
+    espnPlayerIdLength:(chase.getAttribute('data-espn-player-id') || '').length,
+    auditLength:recommendationAudit.length,
+    autoDraft:autoDraftTeamSlots.slice(),
+    diag:diagText,
+    diagImages:diagImages
+  };
+});
+assert.deepEqual(normalizedPersistence.registry.map(session => [session.id, session.name]), [['good', 'Good Draft']]);
+assert.equal(normalizedPersistence.active, 'good');
+assert.equal(normalizedPersistence.activeBeforePhantom, 'good');
+assert.equal(normalizedPersistence.phantomSwitch, false);
+assert.equal(normalizedPersistence.teams, 20);
+assert.equal(normalizedPersistence.slot, 1);
+assert.equal(normalizedPersistence.rounds, 30);
+assert.equal(normalizedPersistence.mine, true);
+assert.equal(normalizedPersistence.pick, null);
+assert.equal(normalizedPersistence.teamSlot, null);
+assert.equal(normalizedPersistence.espnPlayerIdLength, 40);
+assert.equal(normalizedPersistence.auditLength, 200);
+assert.deepEqual(normalizedPersistence.autoDraft, [2,3]);
+assert.ok(normalizedPersistence.diag.includes('<img src=x onerror=alert(1)>'));
+assert.equal(normalizedPersistence.diagImages, 0);
+
+await persistencePage.evaluate(() => {
+  localStorage.setItem('draft-state-v1:good', '[]');
+});
+await persistencePage.reload({waitUntil:'load'});
+await persistencePage.waitForSelector('tr.draftrow');
+const corruptDraftRecovery = await persistencePage.evaluate(() => ({
+  original:localStorage.getItem('draft-state-v1:good'),
+  backup:Array.from({length:localStorage.length}, (_, index) => localStorage.key(index))
+    .find(key => key && key.startsWith('draft-state-v1:good:corrupt-backup:')) || null,
+  drafted:document.querySelectorAll('tr.drafted-mine,tr.drafted-other').length
+}));
+assert.equal(corruptDraftRecovery.original, null);
+assert.ok(corruptDraftRecovery.backup);
+assert.equal(corruptDraftRecovery.drafted, 0);
+assert.ok(corruptDraftRecovery.backup.startsWith('draft-state-v1:good:corrupt-backup:'));
+
+const storageFailureStartup = await persistencePage.evaluate(() => {
+  localStorage.clear();
+  const originalSetItem = Storage.prototype.setItem;
+  Storage.prototype.setItem = function() {
+    throw new DOMException('Injected storage failure', 'QuotaExceededError');
+  };
+  let error = null;
+  try {
+    initializeDraftSessions();
+  } catch (caught) {
+    error = caught && caught.message;
+  } finally {
+    Storage.prototype.setItem = originalSetItem;
+  }
+  return {
+    error,
+    active:activeDraftSessionId,
+    options:Array.from(document.querySelectorAll('#draftSessionSelect option')).map(option => option.value)
+  };
+});
+assert.equal(storageFailureStartup.error, null);
+assert.equal(storageFailureStartup.active, 'legacy');
+assert.deepEqual(storageFailureStartup.options, ['legacy']);
+
+const atomicDeleteFailure = await persistencePage.evaluate(() => {
+  localStorage.clear();
+  const sessions = [
+    {id:'draft-a', name:'Draft A', createdAt:'2026-09-06T00:00:00.000Z'},
+    {id:'draft-b', name:'Draft B', createdAt:'2026-09-06T00:00:01.000Z'}
+  ];
+  localStorage.setItem(DRAFT_SESSION_REGISTRY_KEY, JSON.stringify(sessions));
+  localStorage.setItem(ACTIVE_DRAFT_SESSION_KEY, 'draft-a');
+  localStorage.setItem(getDraftSessionStateKey('draft-a'), 'important-state');
+  activeDraftSessionId = 'draft-a';
+  renderDraftSessionSelector(sessions);
+  deleteDraftArmed = true;
+
+  const originalSetItem = Storage.prototype.setItem;
+  Storage.prototype.setItem = function(key, value) {
+    if (String(key) === DRAFT_SESSION_REGISTRY_KEY) {
+      throw new DOMException('Injected registry failure', 'QuotaExceededError');
+    }
+    return originalSetItem.call(this, key, value);
+  };
+  let result = null;
+  let error = null;
+  try {
+    result = deleteActiveDraftSession();
+  } catch (caught) {
+    error = caught && caught.message;
+  } finally {
+    Storage.prototype.setItem = originalSetItem;
+  }
+
+  return {
+    error,
+    result,
+    state:localStorage.getItem(getDraftSessionStateKey('draft-a')),
+    registry:JSON.parse(localStorage.getItem(DRAFT_SESSION_REGISTRY_KEY) || '[]').map(session => session.id),
+    active:activeDraftSessionId
+  };
+});
+assert.equal(atomicDeleteFailure.error, null);
+assert.equal(atomicDeleteFailure.result, false);
+assert.equal(atomicDeleteFailure.state, 'important-state');
+assert.deepEqual(atomicDeleteFailure.registry, ['draft-a', 'draft-b']);
+assert.equal(atomicDeleteFailure.active, 'draft-a');
+
+assert.deepEqual(persistenceErrors, []);
+await persistenceContext.close();
+
 const recommendationCard = page.locator('.recommendation-card');
 assert.equal(await recommendationCard.getAttribute('open'), null);
 assert.equal(await page.locator('.recommendation-card-summary .recommendation-player b').count(), 1);
