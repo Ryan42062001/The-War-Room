@@ -147,6 +147,73 @@ test('startup preserves and normalizes a valid stored companion ledger', async (
   assert.equal(context.state.marketAdpByName['market player'].adp, 12.5);
 });
 
+test('storage writes retry transient failures and persist the captured snapshot', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  let attempts = 0;
+  let saved = null;
+  context.chrome.storage.local.set = async payload => {
+    attempts += 1;
+    if (attempts < 3) throw new Error('transient storage failure');
+    saved = payload.warRoomEspnCompanionStateV2;
+  };
+  context.state.picksByNumber = {
+    '1': {overallPick: 1, playerName: 'Persisted Player', position: 'WR'}
+  };
+
+  await context.storageSave();
+  assert.equal(attempts, 3);
+  assert.equal(saved.picksByNumber['1'].playerName, 'Persisted Player');
+  assert.equal(context.state.espn.storageWriteError, null);
+  assert.equal(context.state.espn.storageWritePending, 0);
+});
+
+test('persistent storage failures are surfaced after bounded retries', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  let attempts = 0;
+  context.chrome.storage.local.set = async () => {
+    attempts += 1;
+    throw new Error('storage unavailable');
+  };
+
+  await assert.rejects(context.storageSave(), /storage unavailable/);
+  assert.equal(attempts, 3);
+  assert.match(context.state.espn.storageWriteError, /storage unavailable/);
+  assert.equal(context.state.espn.storageWritePending, 0);
+  assert.ok(context.state.espn.storageWriteFailedAt);
+});
+
+test('storage writes are serialized so later snapshots cannot overtake earlier writes', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  const writes = [];
+  let releaseFirst = null;
+  context.chrome.storage.local.set = payload => new Promise(resolve => {
+    writes.push(JSON.parse(JSON.stringify(payload.warRoomEspnCompanionStateV2)));
+    if (writes.length === 1) releaseFirst = resolve;
+    else resolve();
+  });
+
+  context.state.picksByNumber = {
+    '1': {overallPick: 1, playerName: 'First Snapshot', position: 'WR'}
+  };
+  const first = context.storageSave();
+  await new Promise(resolve => setTimeout(resolve, 0));
+
+  context.state.picksByNumber['2'] = {overallPick: 2, playerName: 'Second Snapshot', position: 'RB'};
+  const second = context.storageSave();
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(writes.length, 1);
+
+  releaseFirst();
+  await Promise.all([first, second]);
+  assert.equal(writes.length, 2);
+  assert.equal(Object.keys(writes[0].picksByNumber).length, 1);
+  assert.equal(Object.keys(writes[1].picksByNumber).length, 2);
+  assert.equal(writes[1].picksByNumber['2'].playerName, 'Second Snapshot');
+});
+
 test('changing team count clears picks parsed with the prior draft math', async () => {
   const context = loadBackground(null);
   await context.ready;
