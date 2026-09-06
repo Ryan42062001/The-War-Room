@@ -8,12 +8,15 @@ var RETIRED_FANTASYPROS_KEY_STORAGE = 'warRoomFantasyProsApiKeyV1';
 var WAR_ROOM_URLS = [
   'http://127.0.0.1/*',
   'http://localhost/*',
-  'https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/*'
+  'https://ryan42062001.github.io/The-War-Room/*'
 ];
 var ESPN_URLS = [
   'https://fantasy.espn.com/*',
   'https://www.espn.com/fantasy/*'
 ];
+var ESPN_MAIN_WORLD_VERSIONS = {liveObserver: '3', pageBridge: '2'};
+var ESPN_MAIN_WORLD_REFRESH_DETAIL =
+  'ESPN Sync · extension updated — refresh the ESPN draft tab once. Saved picks are preserved.';
 
 function getExtensionVersion() {
   return chrome.runtime.getManifest().version;
@@ -351,8 +354,102 @@ function ensureEspnReader(tab, force) {
 
 function ensureReadersInOpenEspnTabs(force) {
   return queryTabs(ESPN_URLS).then(function(tabs) {
-    return Promise.all(tabs.map(function(tab) { return ensureEspnReader(tab, force); }));
+    return Promise.all(tabs.map(function(tab) {
+      return ensureEspnReader(tab, force).then(function() {
+        return probeEspnMainWorld(tab).then(function(versions) {
+          return updateEspnMainWorldHealth(tab, versions);
+        });
+      });
+    }));
   });
+}
+
+function probeEspnMainWorld(tab) {
+  if (!tab || tab.id == null || !looksLikeEspnDraftUrl(tab.url)) return Promise.resolve(null);
+  return chrome.scripting.executeScript({
+    target: {tabId: tab.id},
+    world: 'MAIN',
+    func: function() {
+      return {
+        liveObserver: globalThis.__warRoomEspnLiveObserverActiveVersion || null,
+        pageBridge: globalThis.__warRoomEspnPageBridgeActiveVersion || null
+      };
+    }
+  }).then(function(results) {
+    var value = Array.isArray(results) && results[0] && results[0].result;
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+    return {
+      liveObserver: value.liveObserver == null ? null : String(value.liveObserver).slice(0, 20),
+      pageBridge: value.pageBridge == null ? null : String(value.pageBridge).slice(0, 20)
+    };
+  }).catch(function() {
+    return null;
+  });
+}
+
+function espnMainWorldVersionsAreCurrent(versions) {
+  return Boolean(versions &&
+    versions.liveObserver === ESPN_MAIN_WORLD_VERSIONS.liveObserver &&
+    versions.pageBridge === ESPN_MAIN_WORLD_VERSIONS.pageBridge);
+}
+
+function broadcastWarRoomStatus(status, detail) {
+  var message = {
+    type: 'WAR_ROOM_STATUS',
+    status: status,
+    detail: detail,
+    extensionVersion: getExtensionVersion()
+  };
+  return queryTabs(WAR_ROOM_URLS).then(function(tabs) {
+    return Promise.all(tabs.map(function(tab) {
+      return deliverWarRoomSnapshot(tab, message);
+    }));
+  }).catch(function() { return []; });
+}
+
+function updateEspnMainWorldHealth(tab, versions) {
+  if (!tab || tab.id == null || !looksLikeEspnDraftUrl(tab.url) || !versions) {
+    return Promise.resolve(false);
+  }
+  var tabId = Number(tab.id);
+  if (!Number.isInteger(tabId) || tabId < 0) return Promise.resolve(false);
+  if (activeEspnDraftTabId != null && tabId !== activeEspnDraftTabId) return Promise.resolve(false);
+
+  var checkedAt = new Date().toISOString();
+  var current = espnMainWorldVersionsAreCurrent(versions);
+  var previousObserver = state.espn.mainWorldLiveObserverVersion == null
+    ? null
+    : String(state.espn.mainWorldLiveObserverVersion);
+  var previousBridge = state.espn.mainWorldPageBridgeVersion == null
+    ? null
+    : String(state.espn.mainWorldPageBridgeVersion);
+  state.espn.mainWorldCheckedAt = checkedAt;
+  state.espn.mainWorldLiveObserverVersion = versions.liveObserver;
+  state.espn.mainWorldPageBridgeVersion = versions.pageBridge;
+
+  if (!current) {
+    var changed = !state.espn.mainWorldReloadRequired ||
+      previousObserver !== versions.liveObserver || previousBridge !== versions.pageBridge;
+    state.espn.mainWorldReloadRequired = true;
+    state.espn.mainWorldReloadTabId = tabId;
+    state.espn.mainWorldReloadReason = 'stale-main-world-capture';
+    if (!state.espn.mainWorldReloadDetectedAt) state.espn.mainWorldReloadDetectedAt = checkedAt;
+    return changed
+      ? broadcastWarRoomStatus('error', ESPN_MAIN_WORLD_REFRESH_DETAIL).then(function() { return true; })
+      : Promise.resolve(false);
+  }
+
+  var recovered = Boolean(state.espn.mainWorldReloadRequired);
+  state.espn.mainWorldReloadRequired = false;
+  state.espn.mainWorldReloadTabId = null;
+  state.espn.mainWorldReloadReason = null;
+  state.espn.mainWorldReloadDetectedAt = null;
+  if (recovered) state.espn.mainWorldRecoveredAt = checkedAt;
+  if (!recovered) return Promise.resolve(false);
+  return broadcastWarRoomStatus(
+    state.espn.draftPage ? 'connected' : 'scanning',
+    state.espn.draftPage ? 'ESPN Sync · ' + getPicks().length + ' picks' : 'ESPN companion connected'
+  ).then(function() { return true; });
 }
 
 function broadcastWarRoom(force) {
@@ -747,8 +844,8 @@ function isTrustedWarRoomSender(sender, message) {
       return true;
     }
     if (parsed.protocol !== 'https:' || parsed.hostname !== 'ryan42062001.github.io') return false;
-    return parsed.pathname === '/Fantasy-Draft-Cheat-Sheet-2026' ||
-      parsed.pathname.indexOf('/Fantasy-Draft-Cheat-Sheet-2026/') === 0;
+    return parsed.pathname === '/The-War-Room' ||
+      parsed.pathname.indexOf('/The-War-Room/') === 0;
   } catch (error) {
     return false;
   }
@@ -775,8 +872,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       state.espn.connected = true;
       state.espn.lastSeenAt = new Date().toISOString();
       state.espn.lastUrl = message.url || state.espn.lastUrl || null;
-      if (sender.tab) sendTabQuiet(sender.tab.id, {type: 'COMPANION_CONFIG', config: state.config});
-      return storageSave();
+      var contentReadyTab = sender && sender.tab ? sender.tab : null;
+      if (contentReadyTab) sendTabQuiet(contentReadyTab.id, {type: 'COMPANION_CONFIG', config: state.config});
+      return probeEspnMainWorld(contentReadyTab)
+        .then(function(versions) { return updateEspnMainWorldHealth(contentReadyTab, versions); })
+        .then(storageSave);
     }
 
     if (message.type === 'ESPN_HEARTBEAT') {
@@ -979,12 +1079,15 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       state.warRoom.connected = true;
       state.warRoom.lastSeenAt = new Date().toISOString();
       if (sender.tab) {
+        var mainWorldReloadRequired = Boolean(state.espn.mainWorldReloadRequired);
         sendTabQuiet(sender.tab.id, {
           type: 'WAR_ROOM_STATUS',
-          status: state.espn.draftPage ? 'connected' : 'scanning',
-          detail: state.espn.draftPage
-            ? 'ESPN Sync · ' + getPicks().length + ' picks'
-            : 'ESPN companion connected',
+          status: mainWorldReloadRequired ? 'error' : (state.espn.draftPage ? 'connected' : 'scanning'),
+          detail: mainWorldReloadRequired
+            ? ESPN_MAIN_WORLD_REFRESH_DETAIL
+            : (state.espn.draftPage
+              ? 'ESPN Sync · ' + getPicks().length + ' picks'
+              : 'ESPN companion connected'),
           extensionVersion: getExtensionVersion()
         });
         sendTabQuiet(sender.tab.id, {

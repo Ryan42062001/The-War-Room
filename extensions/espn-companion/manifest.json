@@ -13,7 +13,7 @@
     "https://www.espn.com/fantasy/*",
     "http://127.0.0.1/*",
     "http://localhost/*",
-    "https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/*"
+    "https://ryan42062001.github.io/The-War-Room/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -57,7 +57,7 @@
       "matches": [
         "http://127.0.0.1/*",
         "http://localhost/*",
-        "https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/*"
+        "https://ryan42062001.github.io/The-War-Room/*"
       ],
       "js": [
         "war-room-content.js"

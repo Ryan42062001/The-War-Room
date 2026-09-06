@@ -6,6 +6,7 @@
   if (!root || !root.addEventListener || !root.postMessage) return;
   if (root.__warRoomEspnPageBridgeV1) return;
   root.__warRoomEspnPageBridgeV1 = true;
+  root.__warRoomEspnPageBridgeActiveVersion = bridge.runtimeVersion;
 
   root.addEventListener('message', function(event) {
     var message = event && event.data;
@@ -48,6 +49,8 @@
 })(typeof window !== 'undefined' ? window : null, function() {
   'use strict';
 
+  var RUNTIME_VERSION = '2';
+
   function isAllowedApiUrl(value) {
     try {
       var url = new URL(String(value || ''));
@@ -65,5 +68,5 @@
     return headers;
   }
 
-  return {isAllowedApiUrl: isAllowedApiUrl, buildHeaders: buildHeaders};
+  return {runtimeVersion: RUNTIME_VERSION, isAllowedApiUrl: isAllowedApiUrl, buildHeaders: buildHeaders};
 });

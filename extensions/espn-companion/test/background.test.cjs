@@ -26,12 +26,12 @@ function loadBackground(storedState, overrides = {}) {
       onStartup: {addListener: listener => listeners.startup.push(listener)}
     },
     tabs: {
-      query: async () => [],
-      sendMessage: async () => {},
+      query: overrides.tabsQuery || (async () => []),
+      sendMessage: overrides.sendMessage || (async () => {}),
       onRemoved: {addListener: listener => listeners.removed.push(listener)},
       onActivated: {addListener: listener => listeners.activated.push(listener)}
     },
-    scripting: {executeScript: async () => {}}
+    scripting: {executeScript: overrides.executeScript || (async () => [])}
   };
   const context = vm.createContext({
     chrome, console, Date, Promise, Object, Number, String, Boolean, Math, URL,
@@ -145,6 +145,104 @@ test('startup preserves and normalizes a valid stored companion ledger', async (
   assert.equal(context.getUnavailablePlayers().length, 1);
   assert.equal(Object.keys(context.state.marketAdpByName).length, 1);
   assert.equal(context.state.marketAdpByName['market player'].adp, 12.5);
+});
+
+
+test('extension update preserves picks and flags stale MAIN-world capture until ESPN refresh', async () => {
+  const draftUrl = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026&teamId=1';
+  const warRoomUrl = 'https://ryan42062001.github.io/The-War-Room/';
+  const sent = [];
+  const context = loadBackground({
+    config: {teams: 10, draftSlot: 1, rounds: 16},
+    draftKey: '2026:111',
+    ledgerTeams: 10,
+    picksByNumber: {'1': {overallPick: 1, playerName: 'Preserved Player', position: 'WR'}},
+    espn: {captured: 1, draftPage: true}
+  }, {
+    tabsQuery: async query => {
+      const urls = Array.isArray(query && query.url) ? query.url : [];
+      if (urls.some(value => String(value).includes('fantasy.espn.com'))) {
+        return [{id: 11, url: draftUrl, active: true, lastAccessed: 100}];
+      }
+      if (urls.some(value => String(value).includes('ryan42062001.github.io'))) {
+        return [{id: 22, url: warRoomUrl}];
+      }
+      return [];
+    },
+    sendMessage: async (tabId, message) => { sent.push({tabId, message}); },
+    executeScript: async details => details && details.func
+      ? [{result: {liveObserver: null, pageBridge: null}}]
+      : []
+  });
+  await context.ready;
+  context.listeners.message[0](
+    {type: 'ESPN_CONTENT_READY', url: draftUrl},
+    {tab: {id: 11, url: draftUrl}},
+    () => {}
+  );
+  await new Promise(resolve => setTimeout(resolve, 10));
+
+  assert.equal(context.getPicks().length, 1);
+  assert.equal(context.getPicks()[0].playerName, 'Preserved Player');
+  assert.equal(context.state.espn.mainWorldReloadRequired, true);
+  assert.equal(context.state.espn.mainWorldReloadReason, 'stale-main-world-capture');
+  assert.ok(sent.some(entry =>
+    entry.tabId === 22 &&
+    entry.message && entry.message.type === 'WAR_ROOM_STATUS' &&
+    entry.message.status === 'error' &&
+    /refresh the ESPN draft tab once/i.test(entry.message.detail)
+  ));
+});
+
+test('fresh ESPN page clears extension-update warning when MAIN-world versions match', async () => {
+  const draftUrl = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026&teamId=1';
+  const warRoomUrl = 'https://ryan42062001.github.io/The-War-Room/';
+  const sent = [];
+  const context = loadBackground({
+    config: {teams: 10, draftSlot: 1, rounds: 16},
+    draftKey: '2026:111',
+    ledgerTeams: 10,
+    picksByNumber: {'1': {overallPick: 1, playerName: 'Preserved Player', position: 'WR'}},
+    espn: {
+      captured: 1,
+      draftPage: true,
+      mainWorldReloadRequired: true,
+      mainWorldReloadReason: 'stale-main-world-capture',
+      mainWorldReloadDetectedAt: '2026-09-06T12:00:00.000Z'
+    }
+  }, {
+    tabsQuery: async query => {
+      const urls = Array.isArray(query && query.url) ? query.url : [];
+      if (urls.some(value => String(value).includes('fantasy.espn.com'))) {
+        return [{id: 11, url: draftUrl, active: true, lastAccessed: 100}];
+      }
+      if (urls.some(value => String(value).includes('ryan42062001.github.io'))) {
+        return [{id: 22, url: warRoomUrl}];
+      }
+      return [];
+    },
+    sendMessage: async (tabId, message) => { sent.push({tabId, message}); },
+    executeScript: async details => details && details.func
+      ? [{result: {liveObserver: '3', pageBridge: '2'}}]
+      : []
+  });
+  await context.ready;
+  context.listeners.message[0](
+    {type: 'ESPN_CONTENT_READY', url: draftUrl},
+    {tab: {id: 11, url: draftUrl}},
+    () => {}
+  );
+  await new Promise(resolve => setTimeout(resolve, 10));
+
+  assert.equal(context.state.espn.mainWorldReloadRequired, false);
+  assert.equal(context.state.espn.mainWorldReloadReason, null);
+  assert.ok(context.state.espn.mainWorldRecoveredAt);
+  assert.ok(sent.some(entry =>
+    entry.tabId === 22 &&
+    entry.message && entry.message.type === 'WAR_ROOM_STATUS' &&
+    entry.message.status === 'connected' &&
+    /1 picks/.test(entry.message.detail)
+  ));
 });
 
 test('storage writes retry transient failures and persist the captured snapshot', async () => {
@@ -571,7 +669,7 @@ test('a passive War Room acknowledgment cannot clear captured picks or overwrite
     result: {captured: 1, applied: 1, unmatched: []},
     settings: {teams: 10, draftSlot: 1, rounds: 16},
     requiredExtensionVersion: '0.8.2'
-  }, {tab: {id: 44, url: 'https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/'}}, () => {});
+  }, {tab: {id: 44, url: 'https://ryan42062001.github.io/The-War-Room/'}}, () => {});
   await new Promise(resolve => setTimeout(resolve, 0));
 
   assert.equal(context.state.config.teams, 12);
@@ -598,12 +696,12 @@ test('late acknowledgments cannot lower applied progress and a trailing snapshot
   context.chrome.tabs.sendMessage = async () => { deliveries++; };
   const listener = context.listeners.message[0];
 
-  listener({type: 'WAR_ROOM_ACK', result: {captured: 192, applied: 192, unmatched: []}}, {tab: {id: 44, url: 'https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/'}}, () => {});
+  listener({type: 'WAR_ROOM_ACK', result: {captured: 192, applied: 192, unmatched: []}}, {tab: {id: 44, url: 'https://ryan42062001.github.io/The-War-Room/'}}, () => {});
   await new Promise(resolve => setTimeout(resolve, 0));
   assert.equal(context.state.warRoom.applied, 192);
   assert.equal(context.state.warRoom.acknowledgedCaptured, 192);
 
-  listener({type: 'WAR_ROOM_ACK', result: {captured: 133, applied: 133, unmatched: []}}, {tab: {id: 44, url: 'https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/'}}, () => {});
+  listener({type: 'WAR_ROOM_ACK', result: {captured: 133, applied: 133, unmatched: []}}, {tab: {id: 44, url: 'https://ryan42062001.github.io/The-War-Room/'}}, () => {});
   await new Promise(resolve => setTimeout(resolve, 0));
   assert.equal(context.state.warRoom.applied, 192);
   assert.equal(context.state.warRoom.acknowledgedCaptured, 192);
@@ -611,13 +709,13 @@ test('late acknowledgments cannot lower applied progress and a trailing snapshot
 
   context.state.warRoom.applied = 133;
   context.state.warRoom.acknowledgedCaptured = 133;
-  listener({type: 'WAR_ROOM_ACK', result: {captured: 133, applied: 133, unmatched: []}}, {tab: {id: 44, url: 'https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/'}}, () => {});
+  listener({type: 'WAR_ROOM_ACK', result: {captured: 133, applied: 133, unmatched: []}}, {tab: {id: 44, url: 'https://ryan42062001.github.io/The-War-Room/'}}, () => {});
   await new Promise(resolve => setTimeout(resolve, 0));
   await new Promise(resolve => setTimeout(resolve, 0));
   assert.equal(deliveries, 1);
   assert.equal(context.state.warRoom.lastRetryCaptured, 192);
 
-  listener({type: 'WAR_ROOM_ACK', result: {captured: 133, applied: 133, unmatched: []}}, {tab: {id: 44, url: 'https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/'}}, () => {});
+  listener({type: 'WAR_ROOM_ACK', result: {captured: 133, applied: 133, unmatched: []}}, {tab: {id: 44, url: 'https://ryan42062001.github.io/The-War-Room/'}}, () => {});
   await new Promise(resolve => setTimeout(resolve, 0));
   assert.equal(deliveries, 1);
 });
@@ -635,7 +733,7 @@ test('an explicit War Room settings update becomes authoritative and preserves s
     type: 'WAR_ROOM_SETTINGS_UPDATE',
     config: {teams: 12, draftSlot: 11, rounds: 18},
     requiredExtensionVersion: '0.8.8'
-  }, {tab: {id: 44, url: 'https://ryan42062001.github.io/Fantasy-Draft-Cheat-Sheet-2026/'}}, () => {});
+  }, {tab: {id: 44, url: 'https://ryan42062001.github.io/The-War-Room/'}}, () => {});
   await new Promise(resolve => setTimeout(resolve, 0));
   await new Promise(resolve => setTimeout(resolve, 0));
 
