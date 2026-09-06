@@ -113,6 +113,53 @@ test('opening a different ESPN draft clears the previous mock ledger', async () 
   assert.equal(context.state.espn.expectedCompleted, 0);
 });
 
+test('same league draft rooms have distinct keys while team selection stays in the same room', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  const roomA = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026&draftId=room-a&teamId=1';
+  const roomASameDraftOtherTeam = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026&draftId=room-a&teamId=9';
+  const roomB = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026&draftId=room-b&teamId=1';
+
+  assert.equal(context.draftKeyFromUrl(roomA), context.draftKeyFromUrl(roomASameDraftOtherTeam));
+  assert.notEqual(context.draftKeyFromUrl(roomA), context.draftKeyFromUrl(roomB));
+});
+
+test('opening a different room for the same league clears the previous ledger', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  const roomA = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026&draftId=room-a';
+  const roomB = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026&draftId=room-b';
+  context.state.draftKey = context.draftKeyFromUrl(roomA);
+  context.state.picksByNumber = {'1': {overallPick: 1, playerName: 'Old Room Player', position: 'WR'}};
+
+  assert.equal(context.activateDraft(roomB), true);
+  assert.notEqual(context.state.draftKey, context.draftKeyFromUrl(roomA));
+  assert.equal(context.getPicks().length, 0);
+});
+
+test('same tab stale messages are rejected across different rooms in the same league', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  const listener = context.listeners.message[0];
+  const roomA = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026&draftId=room-a';
+  const roomB = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026&draftId=room-b';
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', url: roomB, topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Room B Player', position: 'RB'}], unavailablePlayers: []
+  }, {tab: {id: 11, url: roomB}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.getPicks()[0].playerName, 'Room B Player');
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', url: roomA, topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Stale Room A Player', position: 'WR'}], unavailablePlayers: []
+  }, {tab: {id: 11, url: roomB}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.getPicks()[0].playerName, 'Room B Player');
+  assert.equal(context.state.espn.lastIgnoredDraftReason, 'route-mismatch');
+});
+
 test('public mock pages receive a stable draft key without a league id', async () => {
   const context = loadBackground(null);
   await context.ready;
