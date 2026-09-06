@@ -24,9 +24,14 @@ jobs:
         run: node scripts/split-war-room.mjs
       - name: Commit generated modules
         run: |
+          # GitHub Apps cannot update workflow files without the separate
+          # workflows permission. CI cleanup is committed later through the
+          # repository connector, so keep this one-time generated commit to
+          # production/documentation files only.
+          git restore .github/workflows/ci.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add script.js js index.html package.json README.md AGENTS.md .github/workflows/ci.yml scripts/validate-production-modules.mjs
+          git add script.js js index.html package.json README.md AGENTS.md scripts/validate-production-modules.mjs
           if git diff --cached --quiet; then
             echo "No generated changes."
             exit 0
