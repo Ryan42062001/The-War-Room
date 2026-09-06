@@ -337,6 +337,11 @@
             readAttributes(candidate),
             link && link.getAttribute ? link.getAttribute('href') : ''
           );
+          var configuredTotalPicks = Number(options.teams) * Number(options.rounds);
+          if (parsed && Number.isInteger(configuredTotalPicks) && configuredTotalPicks > 0 &&
+              parsed.overallPick > configuredTotalPicks) {
+            parsed = null;
+          }
           if (parsed && !byPick.has(parsed.overallPick)) {
             byPick.set(parsed.overallPick, parsed);
             break;

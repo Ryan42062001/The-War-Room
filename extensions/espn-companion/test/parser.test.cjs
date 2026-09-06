@@ -199,3 +199,20 @@ test('detects an explicitly drafted player row without inventing pick ownership'
   const players = parser.scanDraftedPlayerLabels({querySelectorAll: () => [node]});
   assert.deepEqual(players, [{playerName: 'Jalen Coker', position: 'WR', espnPlayerId: null}]);
 });
+
+
+test('screen scan ignores pick numbers beyond the configured draft size', () => {
+  const node = {
+    innerText: 'Pick 225\nJerry Jeudy\nCLE WR',
+    textContent: '',
+    parentElement: null,
+    attributes: [],
+    getAttribute: () => null,
+    closest: () => ({}),
+    matches: () => false,
+    querySelector: () => null
+  };
+  const document = {querySelectorAll: () => [node]};
+  const result = parser.scanDocumentDetailed(document, {teams: 14, rounds: 16});
+  assert.equal(result.picks.length, 0);
+});

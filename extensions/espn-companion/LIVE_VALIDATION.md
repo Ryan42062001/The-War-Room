@@ -6,7 +6,7 @@ ESPN's mock clock is 30 seconds. Make the user-slot pick before it expires. A ti
 
 ## Structured live-capture full mock
 
-1. Reload extension version 0.9.13 and refresh ESPN plus The War Room before entering the draft room. Loading before the draft starts is important because WebSocket observation begins at document start.
+1. Reload extension version 0.9.14 and refresh ESPN plus The War Room before entering the draft room. Loading before the draft starts is important because WebSocket observation begins at document start.
 2. Start a mock with the same teams, slot, and rounds configured in the popup.
 3. Confirm the popup says `Draft detected · Live capture` after the first completed pick and that either Structured page state or Network observation is active.
 4. At picks 1, 10, the first turn, midpoint, your final pick, and draft end, record copied diagnostics.
@@ -25,7 +25,7 @@ ESPN's mock clock is 30 seconds. Make the user-slot pick before it expires. A ti
 ## Live-person public mock comparison
 
 1. Join a disposable public snake PPR mock that contains at least one other live manager; do not use a real league draft.
-2. Keep Companion 0.9.13, ESPN, and The War Room open with matching teams, slot, and rounds.
+2. Keep Companion 0.9.14, ESPN, and The War Room open with matching teams, slot, and rounds.
 3. Copy diagnostics before pick one, after the first completed pick, near pick 10, and after the draft. Make each user pick before ESPN's 30-second timeout.
 4. Record the `Capture method`, structured/network/fallback source status, confirmed/conflict/unresolved-ID counts, plus REST resolved/raw/unresolved and HTTP/transport.
 5. Confirm the acknowledged snapshot size catches up to Captured. A smaller late acknowledgment must never lower Applied, and one forced resend should close a trailing acknowledgment.
@@ -47,3 +47,8 @@ Record the date, ESPN mock URL identifiers (league and season only), teams/slot/
 - Completion: `Draft complete · 192 picks` rendered and the final report opened
 
 Result: Board/Pick History fallback is live-validated. Structured live capture remains open and must not be reported as passed.
+
+
+## 2026-09-06 14-team v0.9.13 completion finding
+
+A 14-team, slot-11, 16-round ESPN mock reached all 224 numbered picks with no missing pick numbers. The Companion delivered a complete 224-pick ledger, but the War Room applied 223 because a noisy DOM observation had assigned Jerry Jeudy to pick 183 before his real selection at pick 199. The earlier pick also held a same-confidence conflict challenger. Version 0.9.14 adds deterministic duplicate-player repair: when a duplicated player blocks a later real pick, an earlier conflicted assignment may be replaced only by its recorded same-or-higher-confidence challenger, and only when that challenger does not collide with any other ledger player. The structured ESPN draft-detail feed remained empty throughout the live mock and returned 404 after the room closed, so visible Pick History remains the proven live authority for this mock format.

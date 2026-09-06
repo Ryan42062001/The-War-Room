@@ -7,7 +7,7 @@
    ========================================================= */
 
 var ESPN_SYNC_CHANNEL = 'the-war-room:espn-sync:v1';
-var ESPN_COMPANION_MIN_VERSION = '0.9.13';
+var ESPN_COMPANION_MIN_VERSION = '0.9.14';
 var ESPN_SYNC_MAX_PICKS = 600;
 var ESPN_SYNC_MAX_BOARD_PLAYERS = 1000;
 var espnSyncLastSignature = null;

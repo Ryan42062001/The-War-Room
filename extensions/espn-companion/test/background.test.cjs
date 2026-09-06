@@ -20,7 +20,7 @@ function loadBackground(storedState, overrides = {}) {
       setBadgeBackgroundColor: async () => {}
     },
     runtime: {
-      getManifest: () => ({version: '0.9.13'}),
+      getManifest: () => ({version: '0.9.14'}),
       onMessage: {addListener: listener => listeners.message.push(listener)},
       onInstalled: {addListener: listener => listeners.installed.push(listener)},
       onStartup: {addListener: listener => listeners.startup.push(listener)}
@@ -1036,4 +1036,57 @@ test('ESPN content reader scopes async requests and dedupe signatures to their i
   const structured = source.slice(source.indexOf('function scanStructuredDraft'), source.indexOf('function scanVisibleDraft'));
   assert.doesNotMatch(structured, /url: location.href/);
   assert.match(structured, /url: scanUrl/);
+});
+
+
+test('repairs an earlier conflicted DOM pick when the same player later appears at the real pick', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  context.state.config = {teams: 14, draftSlot: 11, rounds: 16};
+  context.mergePicks([
+    {overallPick: 183, playerName: 'Jerry Jeudy', position: 'WR', method: 'dom'}
+  ]);
+  context.mergePicks([
+    {overallPick: 183, playerName: 'Correct Pick 183', position: 'RB', method: 'dom'}
+  ]);
+  assert.equal(context.state.picksByNumber['183'].playerName, 'Jerry Jeudy');
+  assert.equal(context.state.conflictsByPick['183'].incomingName, 'Correct Pick 183');
+
+  context.mergePicks([
+    {overallPick: 199, playerName: 'Jerry Jeudy', position: 'WR', method: 'dom'}
+  ]);
+
+  assert.equal(context.state.picksByNumber['183'].playerName, 'Correct Pick 183');
+  assert.equal(context.state.picksByNumber['199'].playerName, 'Jerry Jeudy');
+  assert.equal(context.state.conflictsByPick['183'], undefined);
+  assert.equal(context.getPicks().length, 2);
+  assert.equal(context.state.espn.duplicatePlayerRepairs.length, 1);
+  assert.deepEqual(
+    JSON.parse(JSON.stringify(context.state.espn.duplicatePlayerRepairs[0])),
+    {
+      overallPick: 183,
+      duplicatePick: 199,
+      replacedName: 'Jerry Jeudy',
+      replacementName: 'Correct Pick 183',
+      repairedAt: context.state.espn.duplicatePlayerRepairs[0].repairedAt
+    }
+  );
+});
+
+test('does not repair a duplicate from a lower-confidence challenger', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  context.state.config = {teams: 14, draftSlot: 11, rounds: 16};
+  context.mergePicks([
+    {overallPick: 183, playerName: 'Jerry Jeudy', position: 'WR', source: 'react'}
+  ]);
+  context.mergePicks([
+    {overallPick: 183, playerName: 'Low Confidence Challenger', position: 'RB', method: 'dom'}
+  ]);
+  context.mergePicks([
+    {overallPick: 199, playerName: 'Jerry Jeudy', position: 'WR', method: 'dom'}
+  ]);
+  assert.equal(context.state.picksByNumber['183'].playerName, 'Jerry Jeudy');
+  assert.equal(context.state.conflictsByPick['183'].incomingName, 'Low Confidence Challenger');
+  assert.equal(context.state.espn.duplicatePlayerRepairs, undefined);
 });
