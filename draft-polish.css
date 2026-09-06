@@ -8,30 +8,10 @@
    summary. Keep the older detailed widgets and Why/Intel controls out of the
    Position Tiers flow so the live-draft surface stays focused. */
 body[data-board-view="position"].command-bar-ready #pick-counter-box,
+body[data-board-view="position"].command-bar-ready #recommended-pick-box,
 body[data-board-view="position"].command-bar-ready #board-pressure-widget,
 body[data-board-view="position"] #draft-command-bar .draft-command-actions {
   display: none !important;
-}
-
-/* Keep the authoritative recommendation card mounted for the recommendation
-   pipeline and browser hooks, but remove it completely from the visible layout.
-   A 2px transparent footprint at the viewport edge preserves the legacy click
-   regression without exposing a Why surface to the user. */
-body[data-board-view="position"].command-bar-ready #recommended-pick-box {
-  position: fixed !important;
-  top: auto !important;
-  right: auto !important;
-  bottom: 1px !important;
-  left: 1px !important;
-  z-index: 9999;
-  display: block !important;
-  width: 2px !important;
-  height: 2px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-  border: 0 !important;
-  opacity: 0;
 }
 
 /* Removing the action column gives the remaining four command areas the room
