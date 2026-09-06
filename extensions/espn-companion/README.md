@@ -4,7 +4,7 @@ Manifest V3 Chrome extension that passively observes ESPN fantasy-football draft
 
 ## Current status
 
-Version 0.9.12 observes structured data ESPN's own page receives through WebSocket, fetch, XHR, EventSource, and bounded React-state inspection. A unified ledger reconciles those observations by overall pick and ESPN player ID. ESPN's REST draft-detail response is retained as a snapshot/recovery source, and visible Pick History/Board parsing remains the final fallback. This architecture is implemented and replay-tested, but structured live capture still requires a disposable live-mock validation before it should be relied on for a real draft.
+Version 0.9.13 observes structured data ESPN's own page receives through WebSocket, fetch, XHR, EventSource, and bounded React-state inspection. A unified ledger reconciles those observations by overall pick and ESPN player ID. ESPN's REST draft-detail response is retained as a snapshot/recovery source, and visible Pick History/Board parsing remains the final fallback. This architecture is implemented and replay-tested, but structured live capture still requires a disposable live-mock validation before it should be relied on for a real draft.
 
 The extension does **not** read or store ESPN passwords, cookies, authentication headers, or tokens. Page observers are read-only: they do not create draft actions, alter ESPN payloads, or make duplicate live-data requests. Only normalized pick candidates and sanitized structural telemetry cross into extension storage.
 
