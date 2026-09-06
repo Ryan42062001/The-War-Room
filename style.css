@@ -314,3 +314,272 @@ button.position-decision-card:focus-visible {
     min-width: 56px;
   }
 }
+
+/* =========================================================
+   POSITION TIERS — SEMANTIC COLOR SYSTEM
+   Position = identity, tier = quality, urgency = time pressure.
+   Color reinforces existing text labels; it never replaces them.
+   ========================================================= */
+
+body[data-board-view="position"] {
+  --war-gold: #f0c75e;
+  --war-gold-rgb: 240,199,94;
+  --pos-wr: #55a7ff;
+  --pos-wr-rgb: 85,167,255;
+  --pos-rb: #57cf88;
+  --pos-rb-rgb: 87,207,136;
+  --pos-qb: #ab8cff;
+  --pos-qb-rgb: 171,140,255;
+  --pos-te: #ff9e52;
+  --pos-te-rgb: 255,158,82;
+  --pos-k: #dfb854;
+  --pos-k-rgb: 223,184,84;
+  --pos-dst: #9aa8b8;
+  --pos-dst-rgb: 154,168,184;
+  --urgency-watch: #e5c451;
+  --urgency-closing: #f59e42;
+  --urgency-critical: #f06b65;
+}
+
+/* Position identity: headers, pills, player ranks and decision ribbon. */
+.position-column[data-position="WR"] { --pos-accent: var(--pos-wr); --pos-rgb: var(--pos-wr-rgb); }
+.position-column[data-position="RB"] { --pos-accent: var(--pos-rb); --pos-rgb: var(--pos-rb-rgb); }
+.position-column[data-position="QB"] { --pos-accent: var(--pos-qb); --pos-rgb: var(--pos-qb-rgb); }
+.position-column[data-position="TE"] { --pos-accent: var(--pos-te); --pos-rgb: var(--pos-te-rgb); }
+.position-column[data-position="K"] { --pos-accent: var(--pos-k); --pos-rgb: var(--pos-k-rgb); }
+.position-column[data-position="DST"] { --pos-accent: var(--pos-dst); --pos-rgb: var(--pos-dst-rgb); }
+
+.position-column-header {
+  border-top: 2px solid var(--pos-accent, #66707b);
+  background:
+    linear-gradient(135deg, rgba(var(--pos-rgb, 102,112,123),.16), rgba(var(--pos-rgb, 102,112,123),.035) 58%),
+    linear-gradient(145deg, #25292f, #1a1d21);
+}
+
+.position-column-header .pos-pill {
+  border: 1px solid rgba(var(--pos-rgb, 102,112,123),.7);
+  background: rgba(var(--pos-rgb, 102,112,123),.17);
+  color: var(--pos-accent, #d7dce2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+.position-column-title > strong {
+  color: #e6e9ec;
+}
+
+.position-column-count {
+  color: rgba(var(--pos-rgb, 154,168,184),.82);
+}
+
+.position-player-card[data-position="WR"] { --player-accent: var(--pos-wr); --player-rgb: var(--pos-wr-rgb); }
+.position-player-card[data-position="RB"] { --player-accent: var(--pos-rb); --player-rgb: var(--pos-rb-rgb); }
+.position-player-card[data-position="QB"] { --player-accent: var(--pos-qb); --player-rgb: var(--pos-qb-rgb); }
+.position-player-card[data-position="TE"] { --player-accent: var(--pos-te); --player-rgb: var(--pos-te-rgb); }
+.position-player-card[data-position="K"] { --player-accent: var(--pos-k); --player-rgb: var(--pos-k-rgb); }
+.position-player-card[data-position="DST"] { --player-accent: var(--pos-dst); --player-rgb: var(--pos-dst-rgb); }
+
+.position-player-card:not(.is-drafted) {
+  border-left-color: rgba(var(--player-rgb, 154,168,184),.3);
+}
+
+.position-player-card:not(.is-drafted) .position-player-rank strong {
+  color: var(--player-accent, #c8ccd0);
+}
+
+.position-player-card:not(.is-drafted):hover,
+.position-player-card:not(.is-drafted):focus-visible {
+  border-left-color: var(--player-accent, #707985);
+  background:
+    linear-gradient(90deg, rgba(var(--player-rgb, 154,168,184),.09), transparent 42%),
+    #23272d;
+}
+
+.position-decision-card:nth-child(1) {
+  box-shadow: inset 0 2px 0 var(--war-gold);
+  background: rgba(var(--war-gold-rgb),.035);
+}
+.position-decision-card:nth-child(2) {
+  box-shadow: inset 0 2px 0 var(--pos-wr);
+  background: rgba(var(--pos-wr-rgb),.035);
+}
+.position-decision-card:nth-child(3) {
+  box-shadow: inset 0 2px 0 var(--pos-rb);
+  background: rgba(var(--pos-rb-rgb),.035);
+}
+.position-decision-card:nth-child(4) {
+  box-shadow: inset 0 2px 0 var(--pos-qb);
+  background: rgba(var(--pos-qb-rgb),.035);
+}
+.position-decision-card:nth-child(5) {
+  box-shadow: inset 0 2px 0 var(--pos-te);
+  background: rgba(var(--pos-te-rgb),.035);
+}
+.position-decision-card:nth-child(6) {
+  box-shadow: inset 0 2px 0 var(--war-gold);
+  background: rgba(var(--war-gold-rgb),.055);
+}
+
+.position-decision-card:nth-child(1) > span,
+.position-decision-card:nth-child(1) > strong,
+.position-decision-card:nth-child(6) > span,
+.position-decision-card:nth-child(6) > strong { color: #f6d986; }
+.position-decision-card:nth-child(2) > span { color: var(--pos-wr); }
+.position-decision-card:nth-child(3) > span { color: var(--pos-rb); }
+.position-decision-card:nth-child(4) > span { color: var(--pos-qb); }
+.position-decision-card:nth-child(5) > span { color: var(--pos-te); }
+
+/* Tier identity: each quality band gets a stable accent across all positions. */
+.position-tier-block[data-tier="ELITE"] { --tier-accent: #f3cc66; --tier-rgb: 243,204,102; }
+.position-tier-block[data-tier="PREMIUM"] { --tier-accent: #45d4c4; --tier-rgb: 69,212,196; }
+.position-tier-block[data-tier="CORE"] { --tier-accent: #61aaff; --tier-rgb: 97,170,255; }
+.position-tier-block[data-tier="VALUE"] { --tier-accent: #69ca8e; --tier-rgb: 105,202,142; }
+.position-tier-block[data-tier="UPSIDE"] { --tier-accent: #bc95ff; --tier-rgb: 188,149,255; }
+.position-tier-block[data-tier="DEPTH"] { --tier-accent: #d99d65; --tier-rgb: 217,157,101; }
+.position-tier-block[data-tier="LATE"] { --tier-accent: #9ca9b7; --tier-rgb: 156,169,183; }
+.position-tier-block[data-tier="DEEP"] { --tier-accent: #747f8c; --tier-rgb: 116,127,140; }
+
+.position-tier-block > summary {
+  border-left: 3px solid var(--tier-accent, #69737e);
+  background:
+    linear-gradient(90deg, rgba(var(--tier-rgb, 105,115,126),.12), rgba(var(--tier-rgb, 105,115,126),.025) 46%),
+    #1a1d21;
+}
+
+.position-tier-block > summary > strong {
+  color: var(--tier-accent, #d8dade);
+}
+
+.position-tier-block[open] > summary {
+  background:
+    linear-gradient(90deg, rgba(var(--tier-rgb, 105,115,126),.16), rgba(var(--tier-rgb, 105,115,126),.035) 50%),
+    #1b1e22;
+}
+
+.position-tier-block.is-exhausted > summary {
+  border-left-color: rgba(var(--tier-rgb, 105,115,126),.35);
+  background: #15171a;
+}
+
+.position-tier-block.is-exhausted > summary > strong {
+  color: rgba(var(--tier-rgb, 105,115,126),.58);
+}
+
+.position-tier-cliff {
+  border-top-color: rgba(var(--tier-rgb, 240,199,94),.2);
+  background: linear-gradient(90deg, rgba(var(--tier-rgb, 240,199,94),.04), transparent);
+  color: rgba(var(--tier-rgb, 240,199,94),.72);
+}
+
+/* Urgency: count and right-edge signal get progressively warmer as a tier closes. */
+.position-tier-block[data-available="3"] > summary,
+.position-tier-block[data-available="4"] > summary {
+  box-shadow: inset -2px 0 0 var(--urgency-watch);
+}
+
+.position-tier-block[data-available="2"] > summary {
+  box-shadow: inset -3px 0 0 var(--urgency-closing);
+}
+
+.position-tier-block[data-available="1"] > summary {
+  box-shadow: inset -4px 0 0 var(--urgency-critical);
+}
+
+.position-tier-block[data-available="3"] > summary > span,
+.position-tier-block[data-available="4"] > summary > span { color: #e7cf78; }
+.position-tier-block[data-available="2"] > summary > span { color: #ffc078; }
+.position-tier-block[data-available="1"] > summary > span { color: #ff9893; font-weight: 950; }
+
+.position-tier-block[data-available="1"] > summary > span::before,
+.position-tier-block[data-available="2"] > summary > span::before,
+.position-tier-block[data-available="3"] > summary > span::before,
+.position-tier-block[data-available="4"] > summary > span::before {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 4px;
+  border-radius: 50%;
+  vertical-align: 1px;
+  content: "";
+}
+
+.position-tier-block[data-available="3"] > summary > span::before,
+.position-tier-block[data-available="4"] > summary > span::before { background: var(--urgency-watch); }
+.position-tier-block[data-available="2"] > summary > span::before { background: var(--urgency-closing); }
+.position-tier-block[data-available="1"] > summary > span::before { background: var(--urgency-critical); }
+
+.position-tier-block[data-available="2"] .position-tier-cliff {
+  border-top-color: rgba(245,158,66,.3);
+  background: rgba(245,158,66,.045);
+  color: #dca16a;
+}
+
+.position-tier-block[data-available="1"] .position-tier-cliff {
+  border-top-color: rgba(240,107,101,.34);
+  background: rgba(240,107,101,.05);
+  color: #df8a86;
+}
+
+/* Recommendation: one focal card, position-coded without overpowering the board. */
+body[data-board-view="position"] #recommended-pick-box {
+  border-color: rgba(var(--war-gold-rgb),.5);
+  background:
+    linear-gradient(135deg, rgba(var(--war-gold-rgb),.07), transparent 42%),
+    #173028;
+  box-shadow: inset 3px 0 0 rgba(var(--war-gold-rgb),.7);
+}
+
+body[data-board-view="position"] .recommendation-card {
+  --rec-accent: var(--war-gold);
+  --rec-rgb: var(--war-gold-rgb);
+  border-color: rgba(var(--rec-rgb),.32);
+  background: rgba(var(--rec-rgb),.035);
+}
+
+body[data-board-view="position"] .recommendation-card:has(.pos-WR) { --rec-accent: var(--pos-wr); --rec-rgb: var(--pos-wr-rgb); }
+body[data-board-view="position"] .recommendation-card:has(.pos-RB) { --rec-accent: var(--pos-rb); --rec-rgb: var(--pos-rb-rgb); }
+body[data-board-view="position"] .recommendation-card:has(.pos-QB) { --rec-accent: var(--pos-qb); --rec-rgb: var(--pos-qb-rgb); }
+body[data-board-view="position"] .recommendation-card:has(.pos-TE) { --rec-accent: var(--pos-te); --rec-rgb: var(--pos-te-rgb); }
+body[data-board-view="position"] .recommendation-card:has(.pos-K) { --rec-accent: var(--pos-k); --rec-rgb: var(--pos-k-rgb); }
+body[data-board-view="position"] .recommendation-card:has(.pos-DST) { --rec-accent: var(--pos-dst); --rec-rgb: var(--pos-dst-rgb); }
+
+body[data-board-view="position"] .recommendation-card-summary {
+  box-shadow: inset 3px 0 0 var(--rec-accent);
+  background: linear-gradient(90deg, rgba(var(--rec-rgb),.095), transparent 55%);
+}
+
+/* Draft status overrides identity only when status is the more important signal. */
+.position-player-card.is-mine {
+  border-left-color: #70d596;
+  box-shadow: inset 3px 0 0 rgba(112,213,150,.7);
+}
+
+.position-player-card.is-mine .position-player-rank strong {
+  color: #9be4b5;
+}
+
+.position-player-card.is-taken {
+  filter: saturate(.55);
+}
+
+.position-player-card.search-highlight {
+  filter: none;
+}
+
+@media (max-width: 768px) {
+  .position-column-header {
+    border-top-width: 3px;
+  }
+
+  .position-tier-block > summary {
+    border-left-width: 3px;
+  }
+
+  .position-decision-card:nth-child(1),
+  .position-decision-card:nth-child(2),
+  .position-decision-card:nth-child(3),
+  .position-decision-card:nth-child(4),
+  .position-decision-card:nth-child(5),
+  .position-decision-card:nth-child(6) {
+    box-shadow: inset 0 2px 0 currentColor;
+  }
+}
