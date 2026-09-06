@@ -597,11 +597,13 @@ const recommendationRender = await page.evaluate(() => {
 });
 assert.equal(recommendationRender.sameCard, true);
 assert.equal(recommendationRender.stayedOpen, true);
+assert.ok(recommendationRender.totalMs < 1000, `Recommendation render regression: ${recommendationRender.totalMs.toFixed(1)}ms`);
 
 const first = page.locator('tr.draftrow').first();
 const t0 = performance.now();
 await first.click();
 const markingMs = performance.now() - t0;
+assert.ok(markingMs < 2000, `Draft marking regression: ${markingMs.toFixed(1)}ms`);
 assert.equal(await first.evaluate(row => row.classList.contains('drafted-other')), true);
 await first.click();
 assert.equal(await first.evaluate(row => row.classList.contains('drafted-other')), false);
