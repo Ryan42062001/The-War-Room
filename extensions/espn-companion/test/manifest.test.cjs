@@ -38,6 +38,14 @@ test('War Room bridge forwards explicit website draft-setting edits', () => {
   assert.match(script, /WAR_ROOM_SETTINGS_UPDATE/);
 });
 
+test('War Room bridge uses same-origin delivery and validates bounded page messages', () => {
+  const script = fs.readFileSync(path.join(root, 'war-room-content.js'), 'utf8');
+  assert.match(script, /window.location.origin/);
+  assert.match(script, /sanitizeSettings/);
+  assert.match(script, /sanitizeAckResult/);
+  assert.doesNotMatch(script, /postMessage(Object.assign({channel: CHANNEL}, message), '*')/);
+});
+
 test('War Room bridge forwards an explicit ESPN rankings refresh request', () => {
   const script = fs.readFileSync(path.join(root, 'war-room-content.js'), 'utf8');
   assert.match(script, /RANKINGS_REFRESH_REQUEST/);

@@ -8,6 +8,8 @@
 
 var ESPN_SYNC_CHANNEL = 'the-war-room:espn-sync:v1';
 var ESPN_COMPANION_MIN_VERSION = '0.9.12';
+var ESPN_SYNC_MAX_PICKS = 600;
+var ESPN_SYNC_MAX_BOARD_PLAYERS = 1000;
 var espnSyncLastSignature = null;
 var latestEspnSyncResult = null;
 var espnSettingsEditedAt = 0;
@@ -200,16 +202,40 @@ function publishEspnSyncAck(result) {
   }, targetOrigin);
 }
 
+function sanitizeEspnDraftSnapshot(snapshot, settings) {
+  if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot)) return null;
+  settings = settings || getEspnSyncSettings();
+  var totalPicks = Math.max(1, Math.min(
+    ESPN_SYNC_MAX_PICKS,
+    Math.trunc(Number(settings.totalPicks) || 1)
+  ));
+  var expectedCompleted = Math.trunc(Number(snapshot.expectedCompleted) || 0);
+  expectedCompleted = Math.max(0, Math.min(totalPicks, expectedCompleted));
+  return {
+    picks: Array.isArray(snapshot.picks) ? snapshot.picks.slice(0, totalPicks) : [],
+    unavailablePlayers: Array.isArray(snapshot.unavailablePlayers)
+      ? snapshot.unavailablePlayers.slice(0, ESPN_SYNC_MAX_BOARD_PLAYERS)
+      : [],
+    marketAdp: Array.isArray(snapshot.marketAdp)
+      ? snapshot.marketAdp.slice(0, ESPN_SYNC_MAX_BOARD_PLAYERS)
+      : [],
+    expectedCompleted: expectedCompleted,
+    marketUpdatedAt: snapshot.marketUpdatedAt == null
+      ? null
+      : String(snapshot.marketUpdatedAt).slice(0, 80)
+  };
+}
+
 function applyEspnDraftSnapshot(snapshot) {
-  snapshot = snapshot || {};
+  if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot)) return null;
   if (snapshot.draftKey) selectEspnDraftSession(snapshot.draftKey);
   if (snapshot.config) applyEspnSyncSettings(snapshot.config);
   var settings = getEspnSyncSettings();
-  var incoming = Array.isArray(snapshot.picks) ? snapshot.picks : [];
-  var incomingUnavailable = Array.isArray(snapshot.unavailablePlayers)
-    ? snapshot.unavailablePlayers
-    : [];
-  var incomingMarketAdp = Array.isArray(snapshot.marketAdp) ? snapshot.marketAdp : [];
+  var sanitizedSnapshot = sanitizeEspnDraftSnapshot(snapshot, settings);
+  if (!sanitizedSnapshot) return null;
+  var incoming = sanitizedSnapshot.picks;
+  var incomingUnavailable = sanitizedSnapshot.unavailablePlayers;
+  var incomingMarketAdp = sanitizedSnapshot.marketAdp;
   incomingMarketAdp.forEach(function(player) {
     var row = findDraftRowByExpertName(player && player.playerName);
     var espnAdp = Number(player && player.adp);
@@ -235,7 +261,7 @@ function applyEspnDraftSnapshot(snapshot) {
   });
   latestEspnSyncMeta = {
     draftComplete: Boolean(snapshot.draftComplete),
-    expectedCompleted: Number(snapshot.expectedCompleted) || 0,
+    expectedCompleted: sanitizedSnapshot.expectedCompleted,
     numberedPicks: picks.length,
     marketAdpCount: incomingMarketAdp.filter(function(player) {
       return Boolean(findDraftRowByExpertName(player && player.playerName)) && Number(player && player.adp) > 0;
@@ -243,7 +269,7 @@ function applyEspnDraftSnapshot(snapshot) {
     marketRankCount: incomingMarketAdp.filter(function(player) {
       return Boolean(findDraftRowByExpertName(player && player.playerName)) && Number(player && player.rank) > 0;
     }).length,
-    marketUpdatedAt: snapshot.marketUpdatedAt || null
+    marketUpdatedAt: sanitizedSnapshot.marketUpdatedAt
   };
   window.latestEspnSyncMeta = latestEspnSyncMeta;
   var signature = JSON.stringify({
@@ -372,7 +398,15 @@ function applyEspnDraftSnapshot(snapshot) {
 }
 
 window.addEventListener('message', function(event) {
-  if (event.source !== window || !event.data || event.data.channel !== ESPN_SYNC_CHANNEL) return;
+  var expectedOrigin = window.location.origin;
+  if (
+    event.source !== window ||
+    (expectedOrigin !== 'null' && event.origin !== expectedOrigin) ||
+    !event.data ||
+    typeof event.data !== 'object' ||
+    Array.isArray(event.data) ||
+    event.data.channel !== ESPN_SYNC_CHANNEL
+  ) return;
 
   if (event.data.type === 'EXTENSION_STATUS') {
     var installedVersion = String(event.data.extensionVersion || '').trim();
@@ -396,7 +430,12 @@ window.addEventListener('message', function(event) {
     publishEspnSyncAck(latestEspnSyncResult);
   }
 
-  if (event.data.type === 'PICKS_SNAPSHOT') {
+  if (
+    event.data.type === 'PICKS_SNAPSHOT' &&
+    event.data.snapshot &&
+    typeof event.data.snapshot === 'object' &&
+    !Array.isArray(event.data.snapshot)
+  ) {
     applyEspnDraftSnapshot(event.data.snapshot);
   }
 });
@@ -405,6 +444,7 @@ window.WarRoomEspnSync = {
   version: 1,
   applySnapshot: applyEspnDraftSnapshot,
   applySettings: applyEspnSyncSettings,
+  sanitizeSnapshot: function(snapshot) { return sanitizeEspnDraftSnapshot(snapshot, getEspnSyncSettings()); },
   resolvePlayer: resolveEspnDraftRow,
   settings: getEspnSyncSettings
 };
