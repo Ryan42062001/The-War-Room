@@ -288,18 +288,27 @@ function draftKeyFromUrl(url) {
     var parsed = new URL(String(url || ''));
     var leagueId = parsed.searchParams.get('leagueId');
     var seasonId = parsed.searchParams.get('seasonId');
-    if (/^\d+$/.test(String(leagueId || ''))) {
-      return String(seasonId || 'unknown') + ':' + String(leagueId);
-    }
-    var roomId = parsed.searchParams.get('draftId') || parsed.searchParams.get('mockDraftId') ||
-      parsed.searchParams.get('roomId');
-    var identity = roomId || parsed.hostname + parsed.pathname;
+    var roomType = parsed.searchParams.get('draftId') ? 'draftId' :
+      parsed.searchParams.get('mockDraftId') ? 'mockDraftId' :
+      parsed.searchParams.get('roomId') ? 'roomId' : null;
+    var roomId = roomType ? parsed.searchParams.get(roomType) : null;
+    var leagueKey = /^\d+$/.test(String(leagueId || ''))
+      ? String(seasonId || 'unknown') + ':' + String(leagueId)
+      : null;
+    if (leagueKey && !roomId) return leagueKey;
+
+    var identity = roomId
+      ? String(roomType) + '=' + String(roomId)
+      : parsed.hostname + parsed.pathname;
     var hash = 2166136261;
     for (var index = 0; index < identity.length; index++) {
       hash ^= identity.charCodeAt(index);
       hash = Math.imul(hash, 16777619);
     }
-    return 'page:' + String(seasonId || 'unknown') + ':' + (hash >>> 0).toString(36);
+    var hashedIdentity = (hash >>> 0).toString(36);
+    return leagueKey
+      ? leagueKey + ':room:' + hashedIdentity
+      : 'page:' + String(seasonId || 'unknown') + ':' + hashedIdentity;
   } catch (error) {
     return null;
   }
