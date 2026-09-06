@@ -52,7 +52,6 @@ try {
     drafted: document.querySelectorAll('tr.draftrow.drafted-mine, tr.draftrow.drafted-other').length,
     targetCount: WarRoomDraftAwareness.getTargets().length,
     starredCards: document.querySelectorAll('.position-player-card.is-targeted').length,
-    storageKey: 'war-room-targets-v1:' + activeDraftSessionId,
     stored: JSON.parse(localStorage.getItem('war-room-targets-v1:' + activeDraftSessionId) || '[]').length
   }));
   assert.equal(targetState.drafted, 0, 'targeting must not mark players drafted');
@@ -123,6 +122,12 @@ try {
       .find(candidate => Number(candidate.getAttribute('data-available')) >= 5);
     if (!block) return {skipped:true};
     const position = block.closest('.position-column')?.getAttribute('data-position') || '';
+    const extraRow = [...document.querySelectorAll('tr.draftrow')]
+      .find(row => getDraftRowStatus(row) === 'available' && !row.hasAttribute('data-pick'));
+    if (!extraRow) return {skipped:true};
+    extraRow.classList.add('drafted-other');
+    extraRow.setAttribute('data-pick', '7');
+    extraRow.setAttribute('data-team-slot', '7');
     block.setAttribute('data-available', '2');
     WarRoomDraftAwareness.evaluateNow();
     return {skipped:false, position, alerts:WarRoomDraftAwareness.getAlerts()};
@@ -137,7 +142,7 @@ try {
   assert.equal(mobileOverflow, 0, 'draft awareness must not create mobile page overflow');
 
   assert.deepEqual(errors, []);
-  console.log('Draft awareness regression valid: target queue is session-scoped/non-destructive, star and T controls work, target losses surface in What Changed, and mobile stays contained.');
+  console.log('Draft awareness regression valid: target queue is session-scoped/non-destructive, star and T controls work, target losses surface in What Changed, pressure transitions alert, and mobile stays contained.');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));
