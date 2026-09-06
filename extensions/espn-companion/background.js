@@ -33,6 +33,9 @@ var state = {
 };
 
 var activeEspnDraftTabId = null;
+var storageWriteChain = Promise.resolve();
+var storageWriteSerial = 0;
+var STORAGE_WRITE_ATTEMPTS = 3;
 
 function isStoredRecord(value) {
   return Boolean(value && typeof value === 'object' && !Array.isArray(value));
@@ -152,10 +155,70 @@ function storageGet() {
   });
 }
 
-function storageSave() {
+function buildStorageSnapshot() {
+  var snapshot = JSON.parse(JSON.stringify(state));
+  if (snapshot.espn && typeof snapshot.espn === 'object') {
+    delete snapshot.espn.storageWriteError;
+    delete snapshot.espn.storageWriteFailedAt;
+    delete snapshot.espn.storageWriteFailures;
+    delete snapshot.espn.storageWritePending;
+    delete snapshot.espn.lastStorageWriteAt;
+    delete snapshot.espn.lastStorageWriteSerial;
+  }
+  return snapshot;
+}
+
+function waitForStorageRetry(attempt) {
+  var delays = [0, 25, 100];
+  var delay = delays[Math.min(attempt, delays.length - 1)];
+  return new Promise(function(resolve) { setTimeout(resolve, delay); });
+}
+
+function writeStorageSnapshot(snapshot, attempt) {
   var payload = {};
-  payload[STORAGE_KEY] = state;
-  return chrome.storage.local.set(payload).then(updateActionBadge);
+  payload[STORAGE_KEY] = snapshot;
+  return chrome.storage.local.set(payload).catch(function(error) {
+    if (attempt + 1 >= STORAGE_WRITE_ATTEMPTS) throw error;
+    return waitForStorageRetry(attempt).then(function() {
+      return writeStorageSnapshot(snapshot, attempt + 1);
+    });
+  });
+}
+
+function updateStorageFailureBadge() {
+  return Promise.all([
+    chrome.action.setBadgeText({text: '!'}),
+    chrome.action.setBadgeBackgroundColor({color: '#b3261e'})
+  ]).catch(function() {});
+}
+
+function storageSave() {
+  var snapshot = buildStorageSnapshot();
+  var serial = ++storageWriteSerial;
+  state.espn.storageWritePending = (Number(state.espn.storageWritePending) || 0) + 1;
+
+  var operation = storageWriteChain
+    .catch(function() {})
+    .then(function() { return writeStorageSnapshot(snapshot, 0); })
+    .then(function() {
+      state.espn.storageWriteError = null;
+      state.espn.storageWriteFailedAt = null;
+      state.espn.lastStorageWriteAt = new Date().toISOString();
+      state.espn.lastStorageWriteSerial = serial;
+      return updateActionBadge();
+    })
+    .catch(function(error) {
+      state.espn.storageWriteError = error && error.message ? error.message : String(error);
+      state.espn.storageWriteFailedAt = new Date().toISOString();
+      state.espn.storageWriteFailures = (Number(state.espn.storageWriteFailures) || 0) + 1;
+      return updateStorageFailureBadge().then(function() { throw error; });
+    })
+    .finally(function() {
+      state.espn.storageWritePending = Math.max(0, (Number(state.espn.storageWritePending) || 1) - 1);
+    });
+
+  storageWriteChain = operation.catch(function() {});
+  return operation;
 }
 
 function updateActionBadge() {
