@@ -34,35 +34,121 @@ var state = {
 
 var activeEspnDraftTabId = null;
 
+function isStoredRecord(value) {
+  return Boolean(value && typeof value === 'object' && !Array.isArray(value));
+}
+
+function clampStoredInteger(value, min, max, fallback) {
+  var parsed = Number(value);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.max(min, Math.min(max, Math.trunc(parsed)));
+}
+
+function sanitizeStoredConfig(config) {
+  config = isStoredRecord(config) ? config : {};
+  var teams = clampStoredInteger(config.teams, 2, 20, 10);
+  return {
+    teams: teams,
+    draftSlot: clampStoredInteger(config.draftSlot, 1, teams, 1),
+    rounds: clampStoredInteger(config.rounds, 1, 30, 16)
+  };
+}
+
+function sanitizeStoredDraftKey(value) {
+  if (typeof value !== 'string') return null;
+  var key = value.trim();
+  return key && key.length <= 200 ? key : null;
+}
+
+function storedValues(value, limit) {
+  if (!isStoredRecord(value)) return [];
+  return Object.keys(value).slice(0, limit).map(function(key) { return value[key]; });
+}
+
+function sanitizeStoredConflictMap(value, totalPicks) {
+  var source = isStoredRecord(value) ? value : {};
+  var result = {};
+  Object.keys(source).slice(0, totalPicks).forEach(function(key) {
+    var pick = Number(key);
+    if (!Number.isInteger(pick) || pick < 1 || pick > totalPicks) return;
+    if (!isStoredRecord(source[key])) return;
+    result[String(pick)] = source[key];
+  });
+  return result;
+}
+
+function sanitizeStoredUnresolvedMap(value, totalPicks) {
+  var source = isStoredRecord(value) ? value : {};
+  var result = {};
+  Object.keys(source).slice(0, totalPicks).forEach(function(key) {
+    var pick = Number(key);
+    if (!Number.isInteger(pick) || pick < 1 || pick > totalPicks) return;
+    var playerId = source[key] == null ? '' : String(source[key]).trim();
+    if (!playerId) return;
+    result[String(pick)] = playerId.slice(0, 40);
+  });
+  return result;
+}
+
+function restoreStoredMarketAdp(value) {
+  state.marketAdpByName = {};
+  storedValues(value, 2000).forEach(function(player) {
+    if (!isStoredRecord(player)) return;
+    var name = String(player.playerName || '').trim();
+    var adp = Number(player.adp);
+    var rank = Number(player.rank);
+    if (!name || ((!Number.isFinite(adp) || adp <= 0) && (!Number.isFinite(rank) || rank <= 0))) return;
+    state.marketAdpByName[name.toLowerCase()] = {
+      playerName: name.slice(0, 100),
+      position: String(player.position || '').slice(0, 4),
+      adp: Number.isFinite(adp) && adp > 0 && adp <= 500 ? adp : null,
+      rank: Number.isFinite(rank) && rank > 0 && rank <= 2000 ? rank : null
+    };
+  });
+}
+
 function storageGet() {
   return chrome.storage.local.get(STORAGE_KEY).then(function(result) {
     var stored = result && result[STORAGE_KEY];
-    if (stored && typeof stored === 'object') {
-      state = Object.assign({}, state, stored);
-      state.config = Object.assign({teams: 10, draftSlot: 1, rounds: 16}, stored.config || {});
-      state.draftKey = stored.draftKey || null;
-      state.picksByNumber = Object.assign({}, stored.picksByNumber || {});
-      state.conflictsByPick = Object.assign({}, stored.conflictsByPick || {});
-      state.unresolvedPlayerIdsByPick = Object.assign({}, stored.unresolvedPlayerIdsByPick || {});
-      state.unavailablePlayersByKey = Object.assign({}, stored.unavailablePlayersByKey || {});
-      state.marketAdpByName = Object.assign({}, stored.marketAdpByName || {});
-      state.ledgerTeams = Number(stored.ledgerTeams) || null;
-      state.espn = Object.assign({}, state.espn, stored.espn || {});
-      state.warRoom = Object.assign({}, state.warRoom, stored.warRoom || {});
+    if (!isStoredRecord(stored)) return;
 
-      // Pick numbers parsed from R#/P# notation depend on league size. Older
-      // ledgers did not record which team count produced them, so discard them
-      // once rather than risk replaying incorrectly numbered selections.
-      if (!state.draftKey || state.ledgerTeams !== Number(state.config.teams)) {
-        state.picksByNumber = {};
-        state.conflictsByPick = {};
-        state.unresolvedPlayerIdsByPick = {};
-        state.unavailablePlayersByKey = {};
-        state.ledgerTeams = Number(state.config.teams);
-        state.espn.captured = 0;
-        state.espn.visibleCaptured = 0;
-      }
+    state.config = sanitizeStoredConfig(stored.config);
+    state.draftKey = sanitizeStoredDraftKey(stored.draftKey);
+    var storedLedgerTeams = Number(stored.ledgerTeams);
+    state.ledgerTeams = Number.isInteger(storedLedgerTeams) && storedLedgerTeams >= 2 && storedLedgerTeams <= 20
+      ? storedLedgerTeams
+      : null;
+    state.espn = Object.assign({}, state.espn, isStoredRecord(stored.espn) ? stored.espn : {});
+    state.warRoom = Object.assign({}, state.warRoom, isStoredRecord(stored.warRoom) ? stored.warRoom : {});
+    state.picksByNumber = {};
+    state.conflictsByPick = {};
+    state.unresolvedPlayerIdsByPick = {};
+    state.unavailablePlayersByKey = {};
+    restoreStoredMarketAdp(stored.marketAdpByName);
+
+    // Pick numbers parsed from R#/P# notation depend on league size. Older or
+    // corrupt ledgers without matching provenance are discarded rather than
+    // replayed with the wrong snake-draft math.
+    if (!state.draftKey || state.ledgerTeams !== Number(state.config.teams)) {
+      state.ledgerTeams = Number(state.config.teams);
+      state.espn.captured = 0;
+      state.espn.visibleCaptured = 0;
+      return;
     }
+
+    var totalPicks = state.config.teams * state.config.rounds;
+    mergePicks(storedValues(stored.picksByNumber, totalPicks));
+    mergeUnavailablePlayers(storedValues(stored.unavailablePlayersByKey, 2000));
+    state.conflictsByPick = Object.assign(
+      {},
+      state.conflictsByPick,
+      sanitizeStoredConflictMap(stored.conflictsByPick, totalPicks)
+    );
+    state.unresolvedPlayerIdsByPick = Object.assign(
+      {},
+      state.unresolvedPlayerIdsByPick,
+      sanitizeStoredUnresolvedMap(stored.unresolvedPlayerIdsByPick, totalPicks)
+    );
   });
 }
 

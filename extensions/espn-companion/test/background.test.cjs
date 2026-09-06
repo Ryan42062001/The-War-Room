@@ -70,6 +70,83 @@ test('discards a legacy pick ledger whose league-size provenance is unknown', as
   assert.equal(context.state.ledgerTeams, 12);
 });
 
+test('startup sanitizes corrupt stored settings and discards incompatible ledger state', async () => {
+  const context = loadBackground({
+    config: {teams: 999, draftSlot: -40, rounds: 999},
+    draftKey: '2026:111',
+    ledgerTeams: 999,
+    picksByNumber: {'1': {overallPick: 1, playerName: 'Should Not Restore', position: 'WR'}},
+    conflictsByPick: ['bad'],
+    unresolvedPlayerIdsByPick: 'bad',
+    unavailablePlayersByKey: ['bad'],
+    marketAdpByName: 'bad',
+    espn: {captured: 1, visibleCaptured: 1}
+  });
+  await context.ready;
+  assert.equal(context.state.config.teams, 20);
+  assert.equal(context.state.config.draftSlot, 1);
+  assert.equal(context.state.config.rounds, 30);
+  assert.equal(context.state.ledgerTeams, 20);
+  assert.equal(context.getPicks().length, 0);
+  assert.equal(context.state.espn.captured, 0);
+  assert.equal(context.state.espn.visibleCaptured, 0);
+  assert.equal(Object.keys(context.state.marketAdpByName).length, 0);
+});
+
+test('startup rejects malformed stored map shapes without breaking a valid league config', async () => {
+  const context = loadBackground({
+    config: {teams: 12, draftSlot: 11, rounds: 16},
+    draftKey: '2026:111',
+    ledgerTeams: 12,
+    picksByNumber: ['not', 'a', 'pick-map'],
+    conflictsByPick: 'bad',
+    unresolvedPlayerIdsByPick: ['bad'],
+    unavailablePlayersByKey: 'bad',
+    marketAdpByName: ['bad'],
+    espn: 'bad',
+    warRoom: ['bad']
+  });
+  await context.ready;
+  assert.equal(context.state.config.teams, 12);
+  assert.equal(context.state.config.draftSlot, 11);
+  assert.equal(context.state.config.rounds, 16);
+  assert.equal(context.getPicks().length, 0);
+  assert.equal(Object.keys(context.state.unavailablePlayersByKey).length, 0);
+  assert.equal(Object.keys(context.state.marketAdpByName).length, 0);
+});
+
+test('startup preserves and normalizes a valid stored companion ledger', async () => {
+  const context = loadBackground({
+    config: {teams: 12, draftSlot: 11, rounds: 16},
+    draftKey: '2026:111',
+    ledgerTeams: 12,
+    picksByNumber: {
+      '1': {overallPick: 1, playerName: 'Justin Jefferson', position: 'WR', playerId: '123', source: 'websocket'},
+      '999': {overallPick: 999, playerName: 'Out Of Range', position: 'RB'}
+    },
+    unavailablePlayersByKey: {
+      one: {playerName: 'Unavailable Player', position: 'RB', espnPlayerId: '44'},
+      bad: {playerName: '', position: 'WR'}
+    },
+    marketAdpByName: {
+      one: {playerName: 'Market Player', position: 'WR', adp: 12.5, rank: 14},
+      bad: {playerName: 'Bad Market Player', position: 'WR', adp: -1, rank: -1}
+    },
+    espn: {captured: 1}
+  });
+  await context.ready;
+  assert.equal(context.state.config.teams, 12);
+  assert.equal(context.state.config.draftSlot, 11);
+  assert.equal(context.state.config.rounds, 16);
+  assert.equal(context.getPicks().length, 1);
+  assert.equal(context.getPicks()[0].playerName, 'Justin Jefferson');
+  assert.equal(context.getPicks()[0].teamSlot, 1);
+  assert.equal(context.state.espn.captured, 1);
+  assert.equal(context.getUnavailablePlayers().length, 1);
+  assert.equal(Object.keys(context.state.marketAdpByName).length, 1);
+  assert.equal(context.state.marketAdpByName['market player'].adp, 12.5);
+});
+
 test('changing team count clears picks parsed with the prior draft math', async () => {
   const context = loadBackground(null);
   await context.ready;
