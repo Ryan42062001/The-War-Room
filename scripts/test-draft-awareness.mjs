@@ -118,8 +118,13 @@ try {
   const pressureResult = await page.evaluate(() => {
     WarRoomDraftAwareness.clearAlerts();
     WarRoomDraftAwareness.resetBaseline();
-    const block = [...document.querySelectorAll('.position-tier-block')]
-      .find(candidate => Number(candidate.getAttribute('data-available')) >= 5);
+    const activeBlocks = [...document.querySelectorAll('.position-column')].map(column => {
+      return [...column.querySelectorAll('.position-tier-block')].find(candidate => {
+        const available = Number(candidate.getAttribute('data-available'));
+        return !candidate.classList.contains('is-exhausted') && Number.isFinite(available) && available > 0;
+      }) || null;
+    }).filter(Boolean);
+    const block = activeBlocks.find(candidate => Number(candidate.getAttribute('data-available')) >= 5);
     if (!block) return {skipped:true};
     const position = block.closest('.position-column')?.getAttribute('data-position') || '';
     const extraRow = [...document.querySelectorAll('tr.draftrow')]
