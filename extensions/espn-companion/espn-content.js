@@ -19,6 +19,13 @@
   var marketScanAt = 0;
   var marketScanInFlight = null;
   var pageRequestSequence = 0;
+  var activeCaptureRouteKey = null;
+  var captureGeneration = 0;
+  var apiScanRouteKey = null;
+  var apiScanGeneration = 0;
+  var lastApiRouteKey = null;
+  var marketScanRouteKey = null;
+  var marketScanGeneration = 0;
   var topFrame = false;
   try { topFrame = window.top === window; } catch (error) {}
 
@@ -27,6 +34,40 @@
       var response = chrome.runtime.sendMessage(message);
       if (response && typeof response.catch === 'function') response.catch(function() {});
     } catch (error) {}
+  }
+
+  function captureRouteKey(url) {
+    try {
+      var parsed = new URL(String(url || ''));
+      var relevant = ['seasonId', 'leagueId', 'teamId', 'draftId', 'mockDraftId', 'roomId'];
+      var identity = relevant.map(function(name) {
+        var value = parsed.searchParams.get(name);
+        return value == null || value === '' ? null : name + '=' + value;
+      }).filter(Boolean);
+      return parsed.origin + parsed.pathname + (identity.length ? '?' + identity.join('&') : '');
+    } catch (error) {
+      return String(url || '');
+    }
+  }
+
+  function syncCaptureRoute(routeKey) {
+    if (routeKey !== activeCaptureRouteKey) {
+      activeCaptureRouteKey = routeKey;
+      captureGeneration += 1;
+      lastSignature = '';
+      lastApiSignature = '';
+      lastApiAvailable = false;
+      lastApiScanAt = 0;
+      lastApiRouteKey = null;
+      marketScanAt = 0;
+    }
+    return captureGeneration;
+  }
+
+  function captureRouteIsCurrent(routeKey, generation) {
+    return routeKey === activeCaptureRouteKey &&
+      generation === captureGeneration &&
+      routeKey === captureRouteKey(location.href);
   }
 
   function enrichLiveCandidates(candidates) {
@@ -136,28 +177,45 @@
 
   function scanStructuredDraft(force) {
     if (!topFrame || !isDraftPage()) return Promise.resolve(false);
-    var context = api.parseLeagueContext(location.href);
+    var scanUrl = location.href;
+    var scanKey = captureRouteKey(scanUrl);
+    var scanGeneration = syncCaptureRoute(scanKey);
+    var context = api.parseLeagueContext(scanUrl);
     if (!context) return Promise.resolve(false);
     var now = Date.now();
-    if (!force && (apiScanInFlight || now - lastApiScanAt < 1800)) {
-      return apiScanInFlight || Promise.resolve(lastApiAvailable);
+    if (!force && apiScanInFlight && apiScanRouteKey === scanKey && apiScanGeneration === scanGeneration) {
+      return apiScanInFlight;
+    }
+    if (!force && lastApiRouteKey === scanKey && now - lastApiScanAt < 1800) {
+      return Promise.resolve(lastApiAvailable);
     }
 
     lastApiScanAt = now;
+    lastApiRouteKey = scanKey;
     var directory = parser.scanPlayerDirectory ? parser.scanPlayerDirectory(document) : {};
     var draftShape = parser.detectDraftShape ? parser.detectDraftShape(document, config) : {};
     var draftOptions = {draftComplete: Boolean(draftShape.draftComplete)};
-    if ((force || Date.now() - marketScanAt > 300000) && !marketScanInFlight) {
+    if ((force || Date.now() - marketScanAt > 300000 || marketScanRouteKey !== scanKey) &&
+        (!marketScanInFlight || marketScanRouteKey !== scanKey || marketScanGeneration !== scanGeneration)) {
       marketScanAt = Date.now();
-      marketScanInFlight = requestStructuredJson(api.buildPlayerLookupUrl(context), {
+      marketScanRouteKey = scanKey;
+      marketScanGeneration = scanGeneration;
+      var marketPromise = requestStructuredJson(api.buildPlayerLookupUrl(context), {
         'X-Fantasy-Filter': JSON.stringify(api.buildMarketFilter())
       }).then(function(response) {
+        if (!captureRouteIsCurrent(scanKey, scanGeneration)) return;
         var marketAdp = api.extractMarketAdp(response.payload);
-        if (marketAdp.length) send({type: 'ESPN_MARKET_ADP', players: marketAdp, url: location.href});
-      }).catch(function() {}).finally(function() { marketScanInFlight = null; });
+        if (marketAdp.length) send({type: 'ESPN_MARKET_ADP', players: marketAdp, url: scanUrl});
+      }).catch(function() {}).finally(function() {
+        if (marketScanRouteKey === scanKey && marketScanGeneration === scanGeneration) {
+          marketScanInFlight = null;
+          marketScanRouteKey = null;
+        }
+      });
+      marketScanInFlight = marketPromise;
     }
 
-    apiScanInFlight = requestStructuredJson(api.buildDraftDetailUrl(context)).then(function(response) {
+    var scanPromise = requestStructuredJson(api.buildDraftDetailUrl(context)).then(function(response) {
       var telemetry = {
         httpStatus: response.httpStatus,
         role: response.role,
@@ -194,6 +252,7 @@
         };
       });
     }).then(function(resolved) {
+      if (!captureRouteIsCurrent(scanKey, scanGeneration)) return false;
       var snapshot = resolved.snapshot;
       var shape = parser.detectDraftShape ? parser.detectDraftShape(document, config) : {};
       var feedAssessment = api.assessStructuredFeed(
@@ -223,7 +282,7 @@
           unresolved: snapshot.unresolved,
           pickFields: snapshot.pickFields,
           complete: effectiveComplete,
-          url: location.href
+          url: scanUrl
         });
       }
       send({
@@ -247,29 +306,39 @@
             ? 'Structured feed is behind (' + snapshot.rawCount + ' of ' + expectedCompleted +
               ' completed picks); using visible Pick History.'
             : resolved.lookupError || null,
-        url: location.href
+        url: scanUrl
       });
       // A partial structured feed remains useful, but the visible table must
       // still run so it can supply names for only the unresolved pick slots.
       lastApiAvailable = effectiveComplete;
       return effectiveComplete;
     }).catch(function(error) {
+      if (!captureRouteIsCurrent(scanKey, scanGeneration)) return false;
       send({
         type: 'ESPN_API_STATUS',
         available: false,
         transport: 'none',
         error: error && error.message ? error.message : String(error),
-        url: location.href
+        url: scanUrl
       });
       lastApiAvailable = false;
       return false;
     }).finally(function() {
-      apiScanInFlight = null;
+      if (apiScanRouteKey === scanKey && apiScanGeneration === scanGeneration) {
+        apiScanInFlight = null;
+        apiScanRouteKey = null;
+      }
     });
-    return apiScanInFlight;
+    apiScanInFlight = scanPromise;
+    apiScanRouteKey = scanKey;
+    apiScanGeneration = scanGeneration;
+    return scanPromise;
   }
 
   function scanVisibleDraft(force) {
+    var scanUrl = location.href;
+    var scanKey = captureRouteKey(scanUrl);
+    syncCaptureRoute(scanKey);
     var scanResult = parser.scanDocumentDetailed
       ? parser.scanDocumentDetailed(document, config)
       : {picks: parser.scanDocument(document, config), candidateCount: 0, rejectedCount: 0, scannedNodeCount: 0, parseFailureSamples: []};
@@ -278,7 +347,7 @@
       ? parser.scanDraftedPlayerLabels(document)
       : [];
     var shape = parser.detectDraftShape ? parser.detectDraftShape(document, config) : {};
-    var signature = JSON.stringify({picks: picks, unavailablePlayers: unavailablePlayers});
+    var signature = scanKey + '|' + JSON.stringify({picks: picks, unavailablePlayers: unavailablePlayers});
     if (force || signature !== lastSignature) {
       lastSignature = signature;
       send({
@@ -313,6 +382,7 @@
 
   function scan(force) {
     scanTimer = null;
+    syncCaptureRoute(captureRouteKey(location.href));
     if (!isDraftPage()) {
       send({type: 'ESPN_HEARTBEAT', draftPage: false, topFrame: topFrame, url: location.href});
       return;

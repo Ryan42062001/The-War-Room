@@ -570,3 +570,73 @@ test('removing the active ESPN draft tab releases ownership for another draft ta
   assert.equal(context.state.draftKey, '2026:222');
   assert.equal(context.getPicks()[0].playerName, 'Draft B Player');
 });
+
+
+test('same ESPN tab cannot apply a stale message from its previous draft route', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  const listener = context.listeners.message[0];
+  const urlA = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026';
+  const urlB = 'https://fantasy.espn.com/football/draft?leagueId=222&seasonId=2026';
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', url: urlA, topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Draft A Player', position: 'WR'}], unavailablePlayers: []
+  }, {tab: {id: 11, url: urlA}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.state.draftKey, '2026:111');
+  assert.equal(context.getPicks()[0].playerName, 'Draft A Player');
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', url: urlA, topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Stale Draft A Player', position: 'RB'}], unavailablePlayers: []
+  }, {tab: {id: 11, url: urlB}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.state.draftKey, '2026:111');
+  assert.equal(context.getPicks()[0].playerName, 'Draft A Player');
+  assert.equal(context.state.espn.lastIgnoredDraftReason, 'route-mismatch');
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', url: urlB, topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Draft B Player', position: 'RB'}], unavailablePlayers: []
+  }, {tab: {id: 11, url: urlB}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.state.draftKey, '2026:222');
+  assert.equal(context.getPicks()[0].playerName, 'Draft B Player');
+});
+
+test('stale draft messages are rejected after the owner tab navigates to a non-draft ESPN page', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  const listener = context.listeners.message[0];
+  const draftUrl = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026';
+  const teamUrl = 'https://fantasy.espn.com/football/team?leagueId=111&seasonId=2026';
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', url: draftUrl, topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Good Player', position: 'WR'}], unavailablePlayers: []
+  }, {tab: {id: 11, url: draftUrl}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+
+  listener({
+    type: 'ESPN_API_STATUS', url: draftUrl, available: false, error: 'late request'
+  }, {tab: {id: 11, url: teamUrl}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.state.draftKey, '2026:111');
+  assert.equal(context.getPicks()[0].playerName, 'Good Player');
+  assert.equal(context.state.espn.lastIgnoredDraftReason, 'route-mismatch');
+});
+
+test('ESPN content reader scopes async requests and dedupe signatures to their initiating draft route', () => {
+  const source = fs.readFileSync(path.resolve(__dirname, '..', 'espn-content.js'), 'utf8');
+  assert.ok(source.includes("function captureRouteKey(url)"));
+  assert.ok(source.includes("function captureRouteIsCurrent(routeKey, generation)"));
+  assert.match(source, /apiScanRouteKey === scanKey/);
+  assert.match(source, /lastApiRouteKey === scanKey/);
+  assert.ok(source.includes("var signature = scanKey + '|' + JSON.stringify"));
+  assert.ok(source.includes("if (!captureRouteIsCurrent(scanKey, scanGeneration)) return false;"));
+  const structured = source.slice(source.indexOf('function scanStructuredDraft'), source.indexOf('function scanVisibleDraft'));
+  assert.doesNotMatch(structured, /url: location.href/);
+  assert.match(structured, /url: scanUrl/);
+});

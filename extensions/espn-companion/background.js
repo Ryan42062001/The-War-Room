@@ -401,17 +401,29 @@ function isDraftScopedEspnMessage(message) {
   ].indexOf(type) >= 0;
 }
 
+function rejectEspnDraftSender(tabId, nextKey, reason) {
+  state.espn.ignoredDraftTabMessages = (Number(state.espn.ignoredDraftTabMessages) || 0) + 1;
+  state.espn.lastIgnoredDraftTabId = tabId;
+  state.espn.lastIgnoredDraftKey = nextKey;
+  state.espn.lastIgnoredDraftReason = reason || 'inactive-tab';
+  state.espn.lastIgnoredDraftAt = new Date().toISOString();
+  return false;
+}
+
 function acceptEspnDraftSender(sender, message) {
   var tabId = espnSenderTabId(sender);
   var nextKey = draftKeyFromUrl(message && message.url);
   if (tabId == null || !nextKey) return true;
+  var senderUrl = String(sender && sender.tab && sender.tab.url || '');
+  if (senderUrl) {
+    var senderKey = draftKeyFromUrl(senderUrl);
+    if (!looksLikeEspnDraftUrl(senderUrl) || (senderKey && senderKey !== nextKey)) {
+      return rejectEspnDraftSender(tabId, nextKey, 'route-mismatch');
+    }
+  }
   if (activeEspnDraftTabId == null) setActiveEspnDraftTab(tabId);
   if (tabId === activeEspnDraftTabId) return true;
-  state.espn.ignoredDraftTabMessages = (Number(state.espn.ignoredDraftTabMessages) || 0) + 1;
-  state.espn.lastIgnoredDraftTabId = tabId;
-  state.espn.lastIgnoredDraftKey = nextKey;
-  state.espn.lastIgnoredDraftAt = new Date().toISOString();
-  return false;
+  return rejectEspnDraftSender(tabId, nextKey, 'inactive-tab');
 }
 
 ready = ready.then(syncActiveEspnDraftTabFromOpenTabs).catch(function() {});
