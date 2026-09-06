@@ -79,7 +79,8 @@ The test suite checks JavaScript syntax, the protected FantasyPros dataset basel
 ```text
 index.html                         Page structure and draft-day controls
 style.css                         Responsive interface and visual system
-script.js                         Board, state, scoring, and recommendation logic
+js/                               Production UI, sync, ranking, state, scoring, and recommendation modules
+script.js                         Small production bootstrap loaded after js/ modules
 war-room-config.js                League and recommendation configuration
 fantasypros-2026-data.js          Generated browser dataset
 developer-tools.js                Simulations and regression diagnostics
