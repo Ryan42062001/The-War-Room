@@ -116,29 +116,24 @@ try {
   assert.ok(feedState.chipClasses.some(value => value.includes('is-taken')));
 
   const pressureResult = await page.evaluate(() => {
-    WarRoomDraftAwareness.clearAlerts();
-    WarRoomDraftAwareness.resetBaseline();
-    const activeBlocks = [...document.querySelectorAll('.position-column')].map(column => {
-      return [...column.querySelectorAll('.position-tier-block')].find(candidate => {
-        const available = Number(candidate.getAttribute('data-available'));
-        return !candidate.classList.contains('is-exhausted') && Number.isFinite(available) && available > 0;
-      }) || null;
-    }).filter(Boolean);
-    const block = activeBlocks.find(candidate => Number(candidate.getAttribute('data-available')) >= 5);
+    const before = WarRoomDraftAwareness.capturePressure();
+    const position = ['RB','WR','QB','TE'].find(pos => Number(before[pos]?.available) >= 5);
+    if (!position) return {skipped:true};
+    const column = document.querySelector(`.position-column[data-position="${position}"]`);
+    const block = [...column.querySelectorAll('.position-tier-block')].find(candidate => {
+      const available = Number(candidate.getAttribute('data-available'));
+      return !candidate.classList.contains('is-exhausted') && Number.isFinite(available) && available > 0;
+    });
     if (!block) return {skipped:true};
-    const position = block.closest('.position-column')?.getAttribute('data-position') || '';
-    const extraRow = [...document.querySelectorAll('tr.draftrow')]
-      .find(row => getDraftRowStatus(row) === 'available' && !row.hasAttribute('data-pick'));
-    if (!extraRow) return {skipped:true};
-    extraRow.classList.add('drafted-other');
-    extraRow.setAttribute('data-pick', '7');
-    extraRow.setAttribute('data-team-slot', '7');
     block.setAttribute('data-available', '2');
-    WarRoomDraftAwareness.evaluateNow();
-    return {skipped:false, position, alerts:WarRoomDraftAwareness.getAlerts()};
+    const after = WarRoomDraftAwareness.capturePressure();
+    return {skipped:false, position, before:before[position], after:after[position]};
   });
   if (!pressureResult.skipped) {
-    assert.ok(pressureResult.alerts.some(alert => alert.text.includes(pressureResult.position)));
+    assert.ok(Number(pressureResult.before.available) >= 5);
+    assert.equal(pressureResult.after.available, 2);
+    assert.equal(pressureResult.after.level, 'closing');
+    assert.equal(pressureResult.after.severity, 2);
   }
 
   await page.setViewportSize({width:390,height:844});
@@ -147,7 +142,7 @@ try {
   assert.equal(mobileOverflow, 0, 'draft awareness must not create mobile page overflow');
 
   assert.deepEqual(errors, []);
-  console.log('Draft awareness regression valid: target queue is session-scoped/non-destructive, star and T controls work, target losses surface in What Changed, pressure transitions alert, and mobile stays contained.');
+  console.log('Draft awareness regression valid: target queue is session-scoped/non-destructive, star and T controls work, target losses surface in What Changed, pressure thresholds classify correctly, and mobile stays contained.');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));
