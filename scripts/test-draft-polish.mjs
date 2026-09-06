@@ -70,6 +70,8 @@ try {
     const heading = document.querySelector('.draft-awareness-changes .draft-awareness-heading > span');
     const actions = document.querySelector('.draft-command-actions');
     const recommendationBox = document.getElementById('recommended-pick-box');
+    const recommendationStyle = recommendationBox ? getComputedStyle(recommendationBox) : null;
+    const recommendationRect = recommendationBox ? recommendationBox.getBoundingClientRect() : null;
     return {
       mineOpacity: Number(mineStyle.opacity),
       takenOpacity: Number(takenStyle.opacity),
@@ -77,7 +79,9 @@ try {
       headingText: heading?.textContent.trim() || '',
       headingSize: parseFloat(getComputedStyle(heading).fontSize),
       actionsDisplay: actions ? getComputedStyle(actions).display : 'none',
-      recommendationDisplay: recommendationBox ? getComputedStyle(recommendationBox).display : 'none'
+      recommendationOpacity: recommendationStyle ? Number(recommendationStyle.opacity) : 0,
+      recommendationLeft: recommendationRect ? recommendationRect.left : -10000,
+      recommendationWidth: recommendationRect ? recommendationRect.width : 0
     };
   }, keys);
 
@@ -87,7 +91,9 @@ try {
   assert.equal(state.headingText, 'SINCE YOUR PICK');
   assert.ok(state.headingSize >= 8.5, `Since Your Pick should be more readable, got ${state.headingSize}px`);
   assert.equal(state.actionsDisplay, 'none', 'Why/Intel action section should be hidden');
-  assert.equal(state.recommendationDisplay, 'none', 'legacy Why recommendation strip should be hidden');
+  assert.equal(state.recommendationOpacity, 0, 'legacy recommendation strip should not be visible');
+  assert.ok(state.recommendationLeft < -9000, 'legacy recommendation hook should stay off-screen');
+  assert.ok(state.recommendationWidth <= 1.1, 'legacy recommendation hook should not occupy layout space');
 
   assert.deepEqual(errors, []);
   console.log('Draft polish regression valid: Mine is green/full-opacity, Taken stays muted, Since Your Pick is larger, and Why/Intel surfaces are removed.');
