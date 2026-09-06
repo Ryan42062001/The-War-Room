@@ -81,7 +81,7 @@ try {
       actionsDisplay: actions ? getComputedStyle(actions).display : 'none',
       recommendationOpacity: recommendationStyle ? Number(recommendationStyle.opacity) : 0,
       recommendationLeft: recommendationRect ? recommendationRect.left : -1,
-      recommendationTop: recommendationRect ? recommendationRect.top : -1,
+      recommendationBottom: recommendationRect ? window.innerHeight - recommendationRect.bottom : -1,
       recommendationWidth: recommendationRect ? recommendationRect.width : 0,
       recommendationHeight: recommendationRect ? recommendationRect.height : 0
     };
@@ -95,7 +95,7 @@ try {
   assert.equal(state.actionsDisplay, 'none', 'Why/Intel action section should be hidden');
   assert.equal(state.recommendationOpacity, 0, 'legacy recommendation strip should not be visible');
   assert.ok(state.recommendationLeft >= 0 && state.recommendationLeft <= 3, 'legacy recommendation hook should stay at the viewport edge');
-  assert.ok(state.recommendationTop >= 0 && state.recommendationTop <= 3, 'legacy recommendation hook should stay at the viewport edge');
+  assert.ok(state.recommendationBottom >= 0 && state.recommendationBottom <= 3, 'legacy recommendation hook should stay at the viewport bottom edge');
   assert.ok(state.recommendationWidth <= 2.1 && state.recommendationHeight <= 2.1, 'legacy recommendation hook should not occupy visible layout space');
 
   assert.deepEqual(errors, []);
