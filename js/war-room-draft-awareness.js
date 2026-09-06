@@ -267,11 +267,19 @@
         star.setAttribute('aria-hidden', 'true');
         card.appendChild(star);
       }
-      star.setAttribute('data-target-key', key);
+
+      if (star.getAttribute('data-target-key') !== key) {
+        star.setAttribute('data-target-key', key);
+      }
+
       var targeted = isTargetKey(key);
-      star.textContent = targeted ? '★' : '☆';
-      star.title = targeted ? 'Remove from Targets' : 'Add to Targets';
-      card.classList.toggle('is-targeted', targeted);
+      var nextText = targeted ? '★' : '☆';
+      var nextTitle = targeted ? 'Remove from Targets' : 'Add to Targets';
+      if (star.textContent !== nextText) star.textContent = nextText;
+      if (star.title !== nextTitle) star.title = nextTitle;
+      if (card.classList.contains('is-targeted') !== targeted) {
+        card.classList.toggle('is-targeted', targeted);
+      }
     });
   }
 
@@ -545,7 +553,6 @@
 
     var grid = document.getElementById('position-tier-grid');
     if (grid) observer.observe(grid, {
-      childList:true,
       subtree:true,
       attributes:true,
       attributeFilter:['data-available', 'data-status']
