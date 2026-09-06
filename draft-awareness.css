@@ -181,38 +181,56 @@ body[data-board-view="position"] #draft-awareness-strip {
 .draft-change-item.is-critical { color: #ef8a85; background: rgba(240,107,101,.07); }
 .draft-change-item.is-critical i { background: #ef6b65; }
 
-/* Target affordance lives inside the existing player-card button. It stays
-   visually quiet until hover/focus or until the player is actually targeted. */
+/* Target affordance lives inside the existing player-card button. Keep the
+   control visible at rest so target discovery never depends on hover. */
 .position-player-card {
   position: relative;
+  padding-right: 28px;
 }
 
 .draft-target-star {
   position: absolute;
-  top: 2px;
-  right: 3px;
+  top: 50%;
+  right: 4px;
   z-index: 4;
-  min-width: 14px;
-  padding: 1px 2px;
-  border-radius: 4px;
-  color: #8d9992;
-  font-size: .57rem;
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+  border: 1px solid rgba(240,199,94,.22);
+  border-radius: 5px;
+  color: #cbd3ce;
+  background: rgba(10,13,12,.72);
+  box-shadow: 0 1px 5px rgba(0,0,0,.24);
+  font-size: .78rem;
   line-height: 1;
   text-align: center;
-  opacity: .18;
+  opacity: .82;
   cursor: pointer;
   user-select: none;
+  transition: opacity .12s ease, border-color .12s ease, background .12s ease, color .12s ease, transform .12s ease;
 }
 
 .position-player-card:hover .draft-target-star,
 .position-player-card:focus-visible .draft-target-star,
+.draft-target-star:hover,
 .position-player-card.is-targeted .draft-target-star {
   opacity: 1;
 }
 
-.position-player-card.is-targeted .draft-target-star {
+.draft-target-star:hover {
+  border-color: rgba(240,199,94,.58);
   color: #f0c75e;
-  background: rgba(240,199,94,.08);
+  background: rgba(240,199,94,.09);
+  transform: translateY(-50%) scale(1.06);
+}
+
+.position-player-card.is-targeted .draft-target-star {
+  border-color: rgba(240,199,94,.62);
+  color: #f0c75e;
+  background: rgba(240,199,94,.12);
 }
 
 .position-player-card.is-targeted {
@@ -272,13 +290,23 @@ body[data-draft-command-mode="on-clock"] .draft-awareness-heading > span {
     font-size: .46rem;
   }
 
+  .position-player-card {
+    padding-right: 30px;
+  }
+
   .draft-target-star {
-    opacity: .48;
+    width: 22px;
+    height: 22px;
+    right: 3px;
+    font-size: .82rem;
+    opacity: .94;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .draft-target-chip {
+  .draft-target-chip,
+  .draft-target-star {
+    transition: none;
     scroll-behavior: auto;
   }
 }
