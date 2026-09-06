@@ -226,6 +226,7 @@ Latest ranking refresh (2026-08-24):
 - Rebuilt 380 Top-20 + 140 broad-ECR fallback + 197 ADP-only players = 717 total, with zero duplicate canonical names.
 
 ## Draft-day cleanup and reliability
+- [x] Make a derived Position Tiers command board the default draft-day view, preserving the authoritative overall source table for engine logic and customization
 - [x] Replace stale tier copy with neutral FantasyPros semantic-tier descriptions and live player counts
 - [x] Keep custom-board editing opt-in and create rank controls only while editing
 - [x] Add explicit Taken/Mine marking mode with Taken default, one-shot Mine, toggle-to-clear, keyboard support, autosave, and ESPN compatibility

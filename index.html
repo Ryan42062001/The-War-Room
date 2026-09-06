@@ -7,9 +7,9 @@
 <meta name="theme-color" content="#111214">
 <link rel="icon" href="./favicon.ico" type="image/x-icon">
 <title>The War Room | 2026 Fantasy Draft</title>
-<link rel="stylesheet" href="style.css?v=20260824-3">
+<link rel="stylesheet" href="style.css?v=20260906-2">
 </head>
-<body>
+<body data-board-view="position">
 
 <header>
   <div class="header-inner">
@@ -35,6 +35,10 @@
 </header>
 
 <div class="toolbar">
+  <div class="board-view-toggle" role="group" aria-label="Board view">
+    <button type="button" class="board-view-btn active" id="positionBoardViewBtn" data-board-view="position" aria-pressed="true" onclick="setBoardView('position')">Position Tiers</button>
+    <button type="button" class="board-view-btn" id="overallBoardViewBtn" data-board-view="overall" aria-pressed="false" onclick="setBoardView('overall')">Overall</button>
+  </div>
   <label class="sr-only" for="searchBox">Search players or teams</label>
   <input type="text" id="searchBox" placeholder="Search player or team..." autocomplete="off">
   <button class="filterbtn active" data-pos="ALL" onclick="setPosFilter('ALL',this)">ALL</button>
@@ -65,7 +69,7 @@
   <span id="draft-action-announcer" class="sr-only" aria-live="polite"></span>
 </div>
 
-<div class="nav" aria-label="Jump to board tier">
+<div class="nav" id="tier-nav" aria-label="Jump to board tier">
   <button type="button" onclick="jumpTo('tier-Sp')">ELITE</button>
   <button type="button" onclick="jumpTo('tier-S')">PREMIUM</button>
   <button type="button" onclick="jumpTo('tier-A')">CORE</button>
@@ -211,6 +215,21 @@
   <!-- Regression tools remain available from the console but are not part of the draft-day UI. -->
   <pre id="developer-test-results" hidden aria-hidden="true"></pre>
 
+  <section id="position-board" class="position-board" aria-labelledby="position-board-title">
+    <div class="position-board-header">
+      <div>
+        <div class="summary-eyebrow">FAST DRAFT BOARD</div>
+        <h2 id="position-board-title">Position Tiers</h2>
+      </div>
+      <p>FantasyPros consensus tiers split by position. Click a player to use the current Taken/Mine marking mode.</p>
+    </div>
+    <div id="position-decision-strip" class="position-decision-strip" aria-label="Best available by position"></div>
+    <div id="position-tier-grid" class="position-tier-grid"></div>
+    <section id="position-endgame-section" class="position-endgame-section" aria-label="Kicker and defense endgame">
+      <div class="position-endgame-heading">Endgame · K / DST</div>
+      <div id="position-endgame-grid" class="position-endgame-grid"></div>
+    </section>
+  </section>
 
     <div class="table-wrap" id="big-board-wrap" style="max-height:none;">
     <table class="rt" id="big-table">
@@ -385,9 +404,9 @@
 <script src="fantasypros-2026-data.js?v=20260824-1"></script>
 <script src="espn-2026-board-data.js?v=20260824-1"></script>
 <script src="war-room-config.js?v=20260822-2"></script>
-<script src="js/war-room-ui.js?v=20260906-1"></script>
-<script src="js/war-room-espn-sync.js?v=20260906-1"></script>
-<script src="js/war-room-rankings.js?v=20260906-1"></script>
+<script src="js/war-room-ui.js?v=20260906-2"></script>
+<script src="js/war-room-espn-sync.js?v=20260906-2"></script>
+<script src="js/war-room-rankings.js?v=20260906-2"></script>
 <script src="js/war-room-draft-state.js?v=20260906-1"></script>
 <script src="js/war-room-scoring.js?v=20260906-1"></script>
 <script src="js/war-room-recommendations.js?v=20260906-1"></script>

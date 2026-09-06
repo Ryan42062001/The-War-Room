@@ -8008,7 +8008,7 @@ function updateTierFilterExpansion(query) {
 
 function setPosFilter(pos, btn){
   currentPosFilter = pos;
-  document.querySelectorAll('.filterbtn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.filterbtn[data-pos]').forEach(function(b){ b.classList.remove('active'); });
   if(btn) btn.classList.add('active');
   applyFilters();
 }
@@ -8065,6 +8065,521 @@ function updateDraftDayDashboard(liveState, scarcityState){
   container.innerHTML = html;
 }
 
+var BOARD_VIEW_STORAGE_KEY = 'war-room-board-view-v1';
+var POSITION_BOARD_PRIMARY_POSITIONS = ['WR', 'RB', 'QB', 'TE'];
+var POSITION_BOARD_ENDGAME_POSITIONS = ['K', 'DST'];
+var POSITION_BOARD_TIERS = ['ELITE', 'PREMIUM', 'CORE', 'VALUE', 'UPSIDE', 'DEPTH', 'LATE', 'DEEP'];
+var boardViewMode = 'position';
+var positionBoardReady = false;
+var positionBoardCardByKey = new Map();
+
+function setPositionBoardText(element, value) {
+  if (!element) return;
+  var next = value == null ? '' : String(value);
+  if (element.textContent !== next) element.textContent = next;
+}
+
+function getPositionBoardRowKey(row) {
+  if (!row) return '';
+  return canonicalExpertPlayerName(
+    row.getAttribute('data-display-name') || row.getAttribute('data-name') || ''
+  );
+}
+
+function getPositionBoardTier(row) {
+  if (!row) return 'DEEP';
+  var group = row.closest && row.closest('tbody.tier-group');
+  var tier = group && group.getAttribute('data-tier-name');
+  return tier || row.getAttribute('data-semantic-tier') || row.getAttribute('data-consensus-tier') || 'DEEP';
+}
+
+function getPositionBoardTeam(row) {
+  if (!row) return '';
+  var stored = row.getAttribute('data-team');
+  if (stored) return stored;
+  var teamCell = row.children && row.children[3];
+  return teamCell ? String(teamCell.textContent || '').trim().split(/\s+/)[0] : '';
+}
+
+function getPositionBoardRankValue(row) {
+  var ecr = getDraftRowNumber(row, 'data-ecr');
+  if (ecr != null) return ecr;
+  var boardRank = getDraftRowNumber(row, 'data-board-rank');
+  return boardRank == null ? 99999 : boardRank;
+}
+
+function isPositionBoardView() {
+  return boardViewMode === 'position';
+}
+
+function readBoardViewPreference() {
+  try {
+    return localStorage.getItem(BOARD_VIEW_STORAGE_KEY) === 'overall' ? 'overall' : 'position';
+  } catch (error) {
+    return 'position';
+  }
+}
+
+function persistBoardViewPreference(view) {
+  try {
+    localStorage.setItem(BOARD_VIEW_STORAGE_KEY, view);
+  } catch (error) {}
+}
+
+function setBoardView(view, options) {
+  options = options || {};
+  boardViewMode = view === 'overall' ? 'overall' : 'position';
+  document.body.setAttribute('data-board-view', boardViewMode);
+
+  document.querySelectorAll('.board-view-btn').forEach(function(button) {
+    var active = button.getAttribute('data-board-view') === boardViewMode;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', active ? 'true' : 'false');
+  });
+
+  if (options.persist !== false) persistBoardViewPreference(boardViewMode);
+
+  if (boardViewMode === 'position') {
+    rebuildPositionTierBoard();
+  } else if (typeof applyFilters === 'function') {
+    applyFilters();
+  }
+}
+
+function initializeBoardView() {
+  setBoardView(readBoardViewPreference(), {persist: false});
+}
+
+function invalidatePositionTierBoard() {
+  positionBoardReady = false;
+}
+
+function createPositionBoardPlayerCard(row) {
+  var card = document.createElement('button');
+  card.type = 'button';
+  card.className = 'position-player-card';
+  card.setAttribute('data-player-key', getPositionBoardRowKey(row));
+  card.setAttribute('data-position', row.getAttribute('data-pos') || '');
+  card.setAttribute('data-tier', getPositionBoardTier(row));
+  card.setAttribute('data-search-text', [
+    row.getAttribute('data-display-name') || row.getAttribute('data-name') || '',
+    getPositionBoardTeam(row),
+    row.getAttribute('data-pos') || ''
+  ].join(' ').toLowerCase());
+
+  var rank = document.createElement('span');
+  rank.className = 'position-player-rank';
+  var rankValue = document.createElement('strong');
+  rankValue.setAttribute('data-role', 'rank');
+  var rankLabel = document.createElement('small');
+  rankLabel.setAttribute('data-role', 'rank-label');
+  rank.appendChild(rankValue);
+  rank.appendChild(rankLabel);
+
+  var identity = document.createElement('span');
+  identity.className = 'position-player-identity';
+  var name = document.createElement('strong');
+  name.setAttribute('data-role', 'name');
+  name.textContent = getDraftRowDisplayName(row);
+  var meta = document.createElement('small');
+  meta.setAttribute('data-role', 'meta');
+  identity.appendChild(name);
+  identity.appendChild(meta);
+
+  var trailing = document.createElement('span');
+  trailing.className = 'position-player-trailing';
+  var market = document.createElement('small');
+  market.setAttribute('data-role', 'market');
+  var value = document.createElement('b');
+  value.setAttribute('data-role', 'value');
+  var status = document.createElement('em');
+  status.setAttribute('data-role', 'status');
+  trailing.appendChild(market);
+  trailing.appendChild(value);
+  trailing.appendChild(status);
+
+  card.appendChild(rank);
+  card.appendChild(identity);
+  card.appendChild(trailing);
+  card.addEventListener('click', function() {
+    if (typeof toggleDraft === 'function') toggleDraft(row);
+  });
+
+  return card;
+}
+
+function createPositionBoardColumn(position, rows, compact) {
+  var column = document.createElement('section');
+  column.className = 'position-column' + (compact ? ' position-column-compact' : '');
+  column.setAttribute('data-position', position);
+
+  var header = document.createElement('div');
+  header.className = 'position-column-header';
+  var title = document.createElement('div');
+  title.className = 'position-column-title';
+  var pill = document.createElement('span');
+  pill.className = 'pos-pill pos-' + position;
+  pill.textContent = position;
+  var best = document.createElement('strong');
+  best.setAttribute('data-role', 'position-best');
+  title.appendChild(pill);
+  title.appendChild(best);
+  var count = document.createElement('span');
+  count.className = 'position-column-count';
+  count.setAttribute('data-role', 'column-count');
+  header.appendChild(title);
+  header.appendChild(count);
+  column.appendChild(header);
+
+  var groups = POSITION_BOARD_TIERS.map(function(tier) {
+    return {
+      tier: tier,
+      rows: rows.filter(function(row) { return getPositionBoardTier(row) === tier; })
+    };
+  }).filter(function(group) { return group.rows.length > 0; });
+
+  groups.forEach(function(group, index) {
+    var details = document.createElement('details');
+    details.className = 'position-tier-block';
+    details.setAttribute('data-position', position);
+    details.setAttribute('data-tier', group.tier);
+    details.open = group.tier !== 'LATE' && group.tier !== 'DEEP';
+
+    var summary = document.createElement('summary');
+    var tierName = document.createElement('strong');
+    tierName.textContent = group.tier;
+    var tierCount = document.createElement('span');
+    tierCount.setAttribute('data-role', 'tier-count');
+    summary.appendChild(tierName);
+    summary.appendChild(tierCount);
+    details.appendChild(summary);
+
+    var body = document.createElement('div');
+    body.className = 'position-tier-players';
+    group.rows.forEach(function(row) {
+      var card = createPositionBoardPlayerCard(row);
+      body.appendChild(card);
+      positionBoardCardByKey.set(getPositionBoardRowKey(row), {card: card, row: row});
+    });
+    details.appendChild(body);
+
+    if (index < groups.length - 1) {
+      var cliff = document.createElement('div');
+      cliff.className = 'position-tier-cliff';
+      cliff.textContent = 'Tier cliff → ' + groups[index + 1].tier;
+      details.appendChild(cliff);
+    }
+
+    column.appendChild(details);
+  });
+
+  return column;
+}
+
+function rebuildPositionTierBoard() {
+  var primaryGrid = document.getElementById('position-tier-grid');
+  var endgameGrid = document.getElementById('position-endgame-grid');
+  if (!primaryGrid || !endgameGrid || typeof getCachedDraftRows !== 'function') return;
+
+  var rows = getCachedDraftRows();
+  positionBoardCardByKey = new Map();
+  primaryGrid.replaceChildren();
+  endgameGrid.replaceChildren();
+
+  POSITION_BOARD_PRIMARY_POSITIONS.forEach(function(position) {
+    var positionRows = rows.filter(function(row) {
+      return row.getAttribute('data-pos') === position;
+    });
+    primaryGrid.appendChild(createPositionBoardColumn(position, positionRows, false));
+  });
+
+  POSITION_BOARD_ENDGAME_POSITIONS.forEach(function(position) {
+    var positionRows = rows.filter(function(row) {
+      return row.getAttribute('data-pos') === position;
+    });
+    endgameGrid.appendChild(createPositionBoardColumn(position, positionRows, true));
+  });
+
+  positionBoardReady = true;
+  updatePositionTierBoard({skipStructureCheck: true});
+}
+
+function updatePositionPlayerCard(card, row) {
+  if (!card || !row) return;
+  var status = getDraftRowStatus(row);
+  var ecr = getDraftRowNumber(row, 'data-ecr');
+  var boardRank = getDraftRowNumber(row, 'data-board-rank');
+  var espnRank = getDraftRowNumber(row, 'data-espn-rank');
+  var espnAdp = getDraftRowNumber(row, 'data-espn-adp');
+  var fantasyProsAdp = getDraftRowNumber(row, 'data-adp');
+  var posRank = getDraftRowNumber(row, 'data-pos-rank');
+  var team = getPositionBoardTeam(row) || 'FA';
+  var position = row.getAttribute('data-pos') || '';
+  var tier = getPositionBoardTier(row);
+
+  card.classList.toggle('is-drafted', status !== 'available');
+  card.classList.toggle('is-mine', status === 'mine');
+  card.classList.toggle('is-taken', status === 'taken');
+  card.setAttribute('data-status', status);
+
+  var rankText = ecr != null ? '#' + Math.round(ecr) : boardRank != null ? '#' + Math.round(boardRank) : '—';
+  setPositionBoardText(card.querySelector('[data-role="rank"]'), rankText);
+  setPositionBoardText(card.querySelector('[data-role="rank-label"]'), ecr != null ? 'ECR' : 'BOARD');
+  setPositionBoardText(
+    card.querySelector('[data-role="meta"]'),
+    team + (posRank != null ? ' · ' + position + Math.round(posRank) : ' · ' + position)
+  );
+
+  var marketText = 'Market —';
+  if (espnRank != null && espnAdp != null) {
+    marketText = 'ESPN #' + Math.round(espnRank) + ' · ' + espnAdp.toFixed(1);
+  } else if (espnRank != null) {
+    marketText = 'ESPN #' + Math.round(espnRank);
+  } else if (espnAdp != null) {
+    marketText = 'ESPN ' + espnAdp.toFixed(1);
+  } else if (fantasyProsAdp != null) {
+    marketText = 'ADP ' + fantasyProsAdp.toFixed(1);
+  }
+  setPositionBoardText(card.querySelector('[data-role="market"]'), marketText);
+
+  var sourceValue = row.children && row.children[5] ? String(row.children[5].textContent || '').trim() : '';
+  setPositionBoardText(card.querySelector('[data-role="value"]'), sourceValue && sourceValue !== '—' ? 'Value ' + sourceValue : '');
+  setPositionBoardText(
+    card.querySelector('[data-role="status"]'),
+    status === 'mine' ? 'MINE' : status === 'taken' ? 'TAKEN' : ''
+  );
+
+  var action = status === draftMarkMode
+    ? 'clear this status'
+    : 'mark as ' + (draftMarkMode === 'mine' ? 'Mine' : 'Taken');
+  card.setAttribute(
+    'aria-label',
+    [getDraftRowDisplayName(row), position, tier, status, 'Press Enter to ' + action].join('. ')
+  );
+}
+
+function updatePositionTierBlock(block) {
+  if (!block) return;
+  var cards = Array.prototype.slice.call(block.querySelectorAll('.position-player-card'));
+  var available = cards.filter(function(card) { return card.getAttribute('data-status') === 'available'; }).length;
+  var drafted = cards.length - available;
+  var previous = block.hasAttribute('data-available') ? Number(block.getAttribute('data-available')) : null;
+  var tier = block.getAttribute('data-tier') || '';
+
+  block.classList.toggle('is-exhausted', available === 0);
+  block.classList.toggle('is-closing', available > 0 && available <= 2);
+  setPositionBoardText(
+    block.querySelector('[data-role="tier-count"]'),
+    available === 0
+      ? 'EXHAUSTED · ' + drafted + ' drafted'
+      : available + ' left' + (drafted ? ' · ' + drafted + ' drafted' : '')
+  );
+
+  if (previous == null) {
+    block.open = available > 0 && tier !== 'LATE' && tier !== 'DEEP';
+  } else if (previous > 0 && available === 0) {
+    block.open = false;
+  } else if (previous === 0 && available > 0) {
+    block.open = true;
+  }
+  block.setAttribute('data-available', String(available));
+}
+
+function updatePositionColumnState(column) {
+  if (!column) return;
+  var entries = Array.prototype.slice.call(column.querySelectorAll('.position-player-card')).map(function(card) {
+    return positionBoardCardByKey.get(card.getAttribute('data-player-key')) || null;
+  }).filter(Boolean);
+  var availableEntries = entries.filter(function(entry) {
+    return getDraftRowStatus(entry.row) === 'available';
+  }).sort(function(left, right) {
+    return getPositionBoardRankValue(left.row) - getPositionBoardRankValue(right.row);
+  });
+
+  setPositionBoardText(
+    column.querySelector('[data-role="column-count"]'),
+    availableEntries.length + ' available'
+  );
+  setPositionBoardText(
+    column.querySelector('[data-role="position-best"]'),
+    availableEntries.length ? 'Best · ' + getDraftRowDisplayName(availableEntries[0].row) : 'No players left'
+  );
+
+  var firstLiveBlock = Array.prototype.slice.call(column.querySelectorAll('.position-tier-block')).find(function(block) {
+    return Number(block.getAttribute('data-available')) > 0;
+  });
+  if (firstLiveBlock && (firstLiveBlock.getAttribute('data-tier') === 'LATE' || firstLiveBlock.getAttribute('data-tier') === 'DEEP') &&
+      firstLiveBlock.getAttribute('data-auto-opened') !== 'true') {
+    firstLiveBlock.open = true;
+    firstLiveBlock.setAttribute('data-auto-opened', 'true');
+  }
+}
+
+function applyPositionBoardFilters() {
+  var board = document.getElementById('position-board');
+  if (!board) return;
+  var searchInput = document.getElementById('searchBox');
+  var query = searchInput ? String(searchInput.value || '').toLowerCase().trim() : '';
+  var filter = typeof currentPosFilter === 'undefined' ? 'ALL' : currentPosFilter;
+  board.setAttribute('data-position-filter', filter || 'ALL');
+
+  document.querySelectorAll('.position-player-card').forEach(function(card) {
+    var matchesSearch = query.length < 2 || String(card.getAttribute('data-search-text') || '').indexOf(query) >= 0;
+    card.hidden = !matchesSearch;
+  });
+
+  document.querySelectorAll('.position-tier-block').forEach(function(block) {
+    var hasVisibleCard = Array.prototype.some.call(
+      block.querySelectorAll('.position-player-card'),
+      function(card) { return !card.hidden; }
+    );
+    block.hidden = query.length >= 2 && !hasVisibleCard;
+    if (query.length >= 2 && hasVisibleCard) block.open = true;
+  });
+
+  document.querySelectorAll('.position-column').forEach(function(column) {
+    var position = column.getAttribute('data-position');
+    var positionMatch = filter === 'ALL' || filter === position;
+    var searchMatch = query.length < 2 || Array.prototype.some.call(
+      column.querySelectorAll('.position-player-card'),
+      function(card) { return !card.hidden; }
+    );
+    column.hidden = !positionMatch || !searchMatch;
+  });
+
+  var primaryGrid = document.getElementById('position-tier-grid');
+  var endgameSection = document.getElementById('position-endgame-section');
+  if (primaryGrid) primaryGrid.hidden = filter === 'K' || filter === 'DST';
+  if (endgameSection) {
+    endgameSection.hidden = !(filter === 'ALL' || filter === 'K' || filter === 'DST') ||
+      !Array.prototype.some.call(endgameSection.querySelectorAll('.position-column'), function(column) { return !column.hidden; });
+  }
+}
+
+function createPositionDecisionCard(label, row, availableRows) {
+  var card = document.createElement(row ? 'button' : 'div');
+  if (row) card.type = 'button';
+  card.className = 'position-decision-card';
+  var eyebrow = document.createElement('span');
+  eyebrow.textContent = label;
+  var name = document.createElement('strong');
+  var detail = document.createElement('small');
+  card.appendChild(eyebrow);
+  card.appendChild(name);
+  card.appendChild(detail);
+
+  if (!row) {
+    name.textContent = 'None';
+    detail.textContent = 'No available player';
+    return card;
+  }
+
+  var ecr = getDraftRowNumber(row, 'data-ecr');
+  var boardRank = getDraftRowNumber(row, 'data-board-rank');
+  var tier = getPositionBoardTier(row);
+  var position = row.getAttribute('data-pos') || '';
+  var tierRemaining = availableRows.filter(function(candidate) {
+    return candidate.getAttribute('data-pos') === position && getPositionBoardTier(candidate) === tier;
+  }).length;
+  name.textContent = getDraftRowDisplayName(row);
+  detail.textContent = (ecr != null ? 'ECR #' + Math.round(ecr) : 'Board #' + Math.round(boardRank || 0)) +
+    ' · ' + tier + ' · ' + tierRemaining + ' left';
+  card.addEventListener('click', function() { focusPositionBoardPlayer(row); });
+  card.setAttribute('aria-label', label + ': ' + getDraftRowDisplayName(row) + '. Jump to player.');
+  return card;
+}
+
+function updatePositionDecisionStrip() {
+  var strip = document.getElementById('position-decision-strip');
+  if (!strip || typeof getCachedDraftRows !== 'function') return;
+  var availableRows = getCachedDraftRows().filter(function(row) {
+    return getDraftRowStatus(row) === 'available';
+  });
+  var ranked = availableRows.slice().sort(function(left, right) {
+    return getPositionBoardRankValue(left) - getPositionBoardRankValue(right);
+  });
+
+  strip.replaceChildren();
+  strip.appendChild(createPositionDecisionCard('BEST OVERALL', ranked[0] || null, availableRows));
+  POSITION_BOARD_PRIMARY_POSITIONS.forEach(function(position) {
+    var best = ranked.find(function(row) { return row.getAttribute('data-pos') === position; }) || null;
+    strip.appendChild(createPositionDecisionCard(position, best, availableRows));
+  });
+
+  var nextCard = document.createElement('div');
+  nextCard.className = 'position-decision-card position-next-pick-card';
+  var label = document.createElement('span');
+  label.textContent = 'NEXT PICK';
+  var value = document.createElement('strong');
+  var detail = document.createElement('small');
+  var currentPick = getCompletedDraftPickCount() + 1;
+  var nextPick = getMyPickNumbers().find(function(pick) { return pick >= currentPick; });
+  if (nextPick == null) {
+    value.textContent = 'DONE';
+    detail.textContent = 'No picks remaining';
+  } else if (nextPick === currentPick) {
+    value.textContent = 'ON THE CLOCK';
+    detail.textContent = 'Pick #' + nextPick;
+  } else {
+    var away = nextPick - currentPick;
+    value.textContent = '#' + nextPick;
+    detail.textContent = away + ' pick' + (away === 1 ? '' : 's') + ' away';
+  }
+  nextCard.appendChild(label);
+  nextCard.appendChild(value);
+  nextCard.appendChild(detail);
+  strip.appendChild(nextCard);
+}
+
+function updatePositionTierBoard(options) {
+  options = options || {};
+  if (!isPositionBoardView()) return;
+  var board = document.getElementById('position-board');
+  if (!board || typeof getCachedDraftRows !== 'function') return;
+  var rows = getCachedDraftRows();
+
+  if (!options.skipStructureCheck) {
+    var first = rows[0];
+    var firstEntry = first ? positionBoardCardByKey.get(getPositionBoardRowKey(first)) : null;
+    if (!positionBoardReady || positionBoardCardByKey.size !== rows.length || (first && (!firstEntry || firstEntry.row !== first))) {
+      rebuildPositionTierBoard();
+      return;
+    }
+  }
+
+  positionBoardCardByKey.forEach(function(entry) {
+    updatePositionPlayerCard(entry.card, entry.row);
+  });
+  document.querySelectorAll('.position-tier-block').forEach(updatePositionTierBlock);
+  document.querySelectorAll('.position-column').forEach(updatePositionColumnState);
+  applyPositionBoardFilters();
+  updatePositionDecisionStrip();
+}
+
+function focusPositionBoardPlayer(row) {
+  if (!isPositionBoardView() || !row) return false;
+  var position = row.getAttribute('data-pos') || '';
+  if (typeof currentPosFilter !== 'undefined' && currentPosFilter !== 'ALL' && currentPosFilter !== position && typeof setPosFilter === 'function') {
+    setPosFilter(position, document.querySelector('.filterbtn[data-pos="' + position + '"]'));
+  }
+
+  var entry = positionBoardCardByKey.get(getPositionBoardRowKey(row));
+  if (!entry || !entry.card || !document.body.contains(entry.card)) return false;
+  var card = entry.card;
+  var block = card.closest('.position-tier-block');
+  if (block) block.open = true;
+  document.querySelectorAll('.position-player-card.search-highlight').forEach(function(candidate) {
+    candidate.classList.remove('search-highlight');
+  });
+  card.hidden = false;
+  card.classList.add('search-highlight');
+  card.scrollIntoView({behavior: 'smooth', block: 'center'});
+  card.focus({preventScroll: true});
+  setTimeout(function() { card.classList.remove('search-highlight'); }, 2500);
+  return true;
+}
+
+
 var _draftIntelligenceTimer = null;
 
 function publishBoardUpdateTimings(timings) {
@@ -8092,6 +8607,7 @@ function triggerAllBoardUpdates(options) {
   timedUpdate('bestAvailable', updateBestAvailable);
   timedUpdate('pickCounter', updatePickCounter);
   timedUpdate('marketValues', refreshDynamicMarketValueCells);
+  timedUpdate('positionBoard', updatePositionTierBoard);
   timedUpdate('nextPickDisplay', updateNextPickDisplay);
   timedUpdate('nextPickMarker', updateNextPickMarker);
   timedUpdate('roundMarkers', addRoundMarkers);

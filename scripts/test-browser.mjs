@@ -19,7 +19,7 @@ const errors = [];
 page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
 page.on('pageerror', error => errors.push(error.message));
 await page.goto(appUrl, {waitUntil:'load'});
-await page.waitForSelector('tr.draftrow');
+await page.waitForSelector('tr.draftrow', {state:'attached'});
 await page.waitForSelector('.recommendation-card');
 
 const startup = await page.evaluate(() => ({
@@ -31,6 +31,67 @@ const startup = await page.evaluate(() => ({
   duplicates: FANTASYPROS_2026_DATASET.length - new Set(FANTASYPROS_2026_DATASET.map(p => canonicalExpertPlayerName(p.name))).size
 }));
 assert.deepEqual(startup, {dataset:717, espnBoard:300, espnRankedRows:300, rows:717, controls:0, duplicates:0});
+
+await page.waitForSelector('.position-player-card');
+const positionTierBoard = await page.evaluate(() => ({
+  view: document.body.getAttribute('data-board-view'),
+  primary: [...document.querySelectorAll('#position-tier-grid > .position-column')].map(column => column.getAttribute('data-position')),
+  endgame: [...document.querySelectorAll('#position-endgame-grid > .position-column')].map(column => column.getAttribute('data-position')),
+  cards: document.querySelectorAll('.position-player-card').length,
+  decisions: document.querySelectorAll('#position-decision-strip .position-decision-card').length,
+  positionDisplay: getComputedStyle(document.getElementById('position-board')).display,
+  overallDisplay: getComputedStyle(document.getElementById('big-board-wrap')).display
+}));
+assert.deepEqual(positionTierBoard.primary, ['WR','RB','QB','TE']);
+assert.deepEqual(positionTierBoard.endgame, ['K','DST']);
+assert.equal(positionTierBoard.view, 'position');
+assert.equal(positionTierBoard.cards, 717);
+assert.equal(positionTierBoard.decisions, 6);
+assert.notEqual(positionTierBoard.positionDisplay, 'none');
+assert.equal(positionTierBoard.overallDisplay, 'none');
+
+const positionTierProxy = await page.evaluate(() => {
+  const row = findDraftRowByExpertName("Ja'Marr Chase");
+  const card = positionBoardCardByKey.get(getPositionBoardRowKey(row)).card;
+  card.click();
+  const taken = {row:row.classList.contains('drafted-other'), card:card.getAttribute('data-status')};
+  card.click();
+  const cleared = {row:!row.classList.contains('drafted-other') && !row.classList.contains('drafted-mine'), card:card.getAttribute('data-status')};
+  return {taken, cleared};
+});
+assert.deepEqual(positionTierProxy, {taken:{row:true,card:'taken'}, cleared:{row:true,card:'available'}});
+
+const boardViewToggle = await page.evaluate(() => {
+  setBoardView('overall', {persist:false});
+  const overall = {
+    view:document.body.getAttribute('data-board-view'),
+    position:getComputedStyle(document.getElementById('position-board')).display,
+    source:getComputedStyle(document.getElementById('big-board-wrap')).display
+  };
+  setBoardView('position', {persist:false});
+  const position = {
+    view:document.body.getAttribute('data-board-view'),
+    position:getComputedStyle(document.getElementById('position-board')).display,
+    source:getComputedStyle(document.getElementById('big-board-wrap')).display
+  };
+  return {overall, position};
+});
+assert.equal(boardViewToggle.overall.view, 'overall');
+assert.equal(boardViewToggle.overall.position, 'none');
+assert.notEqual(boardViewToggle.overall.source, 'none');
+assert.equal(boardViewToggle.position.view, 'position');
+assert.notEqual(boardViewToggle.position.position, 'none');
+assert.equal(boardViewToggle.position.source, 'none');
+
+const positionTierFilter = await page.evaluate(() => {
+  setPosFilter('WR', document.querySelector('.filterbtn[data-pos="WR"]'));
+  const visible = [...document.querySelectorAll('.position-column')].filter(column => !column.hidden).map(column => column.getAttribute('data-position'));
+  const endgameHidden = document.getElementById('position-endgame-section').hidden;
+  setPosFilter('ALL', document.querySelector('.filterbtn[data-pos="ALL"]'));
+  return {visible, endgameHidden};
+});
+assert.deepEqual(positionTierFilter.visible, ['WR']);
+assert.equal(positionTierFilter.endgameHidden, true);
 
 const boundedSyncSnapshot = await page.evaluate(() => {
   const huge = Array.from({length:5000}, (_, index) => ({playerName:'Player ' + index}));
@@ -65,7 +126,7 @@ const persistenceErrors = [];
 persistencePage.on('console', msg => { if (msg.type() === 'error') persistenceErrors.push(msg.text()); });
 persistencePage.on('pageerror', error => persistenceErrors.push(error.message));
 await persistencePage.goto(appUrl, {waitUntil:'load'});
-await persistencePage.waitForSelector('tr.draftrow');
+await persistencePage.waitForSelector('tr.draftrow', {state:'attached'});
 
 await persistencePage.evaluate(() => {
   localStorage.setItem('war-room-draft-sessions-v1', '{not-json');
@@ -75,7 +136,7 @@ await persistencePage.evaluate(() => {
   }));
 });
 await persistencePage.reload({waitUntil:'load'});
-await persistencePage.waitForSelector('tr.draftrow');
+await persistencePage.waitForSelector('tr.draftrow', {state:'attached'});
 const corruptRegistryRecovery = await persistencePage.evaluate(() => ({
   sessions: JSON.parse(localStorage.getItem('war-room-draft-sessions-v1') || '[]'),
   active: localStorage.getItem('war-room-active-draft-session-v1'),
@@ -110,7 +171,7 @@ await persistencePage.evaluate(() => {
   localStorage.setItem('draft-state-v1:good', JSON.stringify(state));
 });
 await persistencePage.reload({waitUntil:'load'});
-await persistencePage.waitForSelector('tr.draftrow');
+await persistencePage.waitForSelector('tr.draftrow', {state:'attached'});
 const normalizedPersistence = await persistencePage.evaluate(() => {
   const chase = findDraftRowByExpertName("Ja'Marr Chase");
   const registry = JSON.parse(localStorage.getItem('war-room-draft-sessions-v1') || '[]');
@@ -161,7 +222,7 @@ await persistencePage.evaluate(() => {
   localStorage.setItem('draft-state-v1:good', '[]');
 });
 await persistencePage.reload({waitUntil:'load'});
-await persistencePage.waitForSelector('tr.draftrow');
+await persistencePage.waitForSelector('tr.draftrow', {state:'attached'});
 const corruptDraftRecovery = await persistencePage.evaluate(() => ({
   original:localStorage.getItem('draft-state-v1:good'),
   backup:Array.from({length:localStorage.length}, (_, index) => localStorage.key(index))
@@ -599,6 +660,7 @@ assert.equal(recommendationRender.sameCard, true);
 assert.equal(recommendationRender.stayedOpen, true);
 assert.ok(recommendationRender.totalMs < 1000, `Recommendation render regression: ${recommendationRender.totalMs.toFixed(1)}ms`);
 
+await page.evaluate(() => setBoardView('overall', {persist:false}));
 const first = page.locator('tr.draftrow').first();
 const t0 = performance.now();
 await first.click();
@@ -618,6 +680,7 @@ assert.equal(await page.getByRole('button', {name:'Taken', exact:true}).getAttri
 await page.getByPlaceholder('Search player or team...').fill('m');
 assert.equal(await page.getByRole('button', {name:'Taken', exact:true}).getAttribute('aria-pressed'), 'true');
 await page.getByPlaceholder('Search player or team...').fill('');
+await page.evaluate(() => setBoardView('position', {persist:false}));
 
 const sessionBefore = await page.locator('#draftSessionSelect option').count();
 await page.getByRole('button', {name:'New Draft'}).click();

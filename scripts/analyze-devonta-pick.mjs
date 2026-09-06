@@ -18,7 +18,7 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const browser = await chromium.launch({headless:true, executablePath:process.env.CHROME_PATH});
 const page = await browser.newPage({viewport:{width:1280,height:900}});
 await page.goto(`http://127.0.0.1:${server.address().port}/`, {waitUntil:'load'});
-await page.waitForSelector('tr.draftrow');
+await page.waitForSelector('tr.draftrow', {state:'attached'});
 
 const result = await page.evaluate(() => {
   const picks = [
