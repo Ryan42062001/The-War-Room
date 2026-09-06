@@ -241,6 +241,160 @@ assert.equal(atomicDeleteFailure.state, 'important-state');
 assert.deepEqual(atomicDeleteFailure.registry, ['draft-a', 'draft-b']);
 assert.equal(atomicDeleteFailure.active, 'draft-a');
 
+const unsavedTransitionBlock = await persistencePage.evaluate(() => {
+  localStorage.clear();
+  const sessions = [
+    {id:'draft-a', name:'Draft A', createdAt:'2026-09-06T00:00:00.000Z'},
+    {id:'draft-b', name:'Draft B', createdAt:'2026-09-06T00:00:01.000Z', draftKey:'espn-room-b'}
+  ];
+  const stateA = {
+    version:2, savedAt:'transition-test', teams:10, slot:1, rounds:16,
+    recommendationAudit:[], autoDraftTeamSlots:[], state:{}, draftMeta:{}, order:[]
+  };
+  localStorage.setItem(DRAFT_SESSION_REGISTRY_KEY, JSON.stringify(sessions));
+  localStorage.setItem(ACTIVE_DRAFT_SESSION_KEY, 'draft-a');
+  localStorage.setItem(getDraftSessionStateKey('draft-a'), JSON.stringify(stateA));
+  activeDraftSessionId = 'draft-a';
+  clearDraftStateFromBoard();
+  renderDraftSessionSelector(sessions);
+
+  const beforeTeams = LEAGUE_SIZE;
+  const beforeRounds = TOTAL_ROUNDS;
+  const beforeSlot = MY_DRAFT_SLOT;
+  const originalSaveState = saveState;
+  saveState = function() { return false; };
+
+  let switchResult;
+  let createResult;
+  let selectResult;
+  let snapshotResult;
+  try {
+    switchResult = switchDraftSession('draft-b');
+    createResult = createNewDraftSession({id:'draft-c', name:'Draft C'});
+    selectResult = selectEspnDraftSession('espn-room-b');
+    snapshotResult = applyEspnDraftSnapshot({
+      draftKey:'espn-room-c',
+      config:{teams:12, rounds:18, draftSlot:4},
+      force:true,
+      picks:[{overallPick:1, playerName:"Ja'Marr Chase", position:'WR', teamSlot:4}]
+    });
+  } finally {
+    saveState = originalSaveState;
+  }
+
+  return {
+    switchResult,
+    createResult,
+    selectResult,
+    snapshotResult,
+    active:activeDraftSessionId,
+    activeStored:localStorage.getItem(ACTIVE_DRAFT_SESSION_KEY),
+    registry:JSON.parse(localStorage.getItem(DRAFT_SESSION_REGISTRY_KEY) || '[]').map(session => session.id),
+    teams:LEAGUE_SIZE,
+    rounds:TOTAL_ROUNDS,
+    slot:MY_DRAFT_SLOT,
+    beforeTeams,
+    beforeRounds,
+    beforeSlot,
+    espnDrafted:document.querySelectorAll('tr.draftrow[data-sync-source="espn"]').length,
+    status:(document.getElementById('espn-sync-status') || {}).textContent || ''
+  };
+});
+assert.equal(unsavedTransitionBlock.switchResult, false);
+assert.equal(unsavedTransitionBlock.createResult, null);
+assert.equal(unsavedTransitionBlock.selectResult, false);
+assert.equal(unsavedTransitionBlock.snapshotResult, null);
+assert.equal(unsavedTransitionBlock.active, 'draft-a');
+assert.equal(unsavedTransitionBlock.activeStored, 'draft-a');
+assert.deepEqual(unsavedTransitionBlock.registry, ['draft-a', 'draft-b']);
+assert.equal(unsavedTransitionBlock.teams, unsavedTransitionBlock.beforeTeams);
+assert.equal(unsavedTransitionBlock.rounds, unsavedTransitionBlock.beforeRounds);
+assert.equal(unsavedTransitionBlock.slot, unsavedTransitionBlock.beforeSlot);
+assert.equal(unsavedTransitionBlock.espnDrafted, 0);
+assert.ok(unsavedTransitionBlock.status.includes('ESPN sync paused'));
+
+const newSessionRollback = await persistencePage.evaluate(() => {
+  localStorage.clear();
+  const sessions = [{id:'draft-a', name:'Draft A', createdAt:'2026-09-06T00:00:00.000Z'}];
+  const stateA = {
+    version:2, savedAt:'rollback-test', teams:10, slot:1, rounds:16,
+    recommendationAudit:[], autoDraftTeamSlots:[], state:{}, draftMeta:{}, order:[]
+  };
+  localStorage.setItem(DRAFT_SESSION_REGISTRY_KEY, JSON.stringify(sessions));
+  localStorage.setItem(ACTIVE_DRAFT_SESSION_KEY, 'draft-a');
+  localStorage.setItem(getDraftSessionStateKey('draft-a'), JSON.stringify(stateA));
+  activeDraftSessionId = 'draft-a';
+  clearDraftStateFromBoard();
+  loadState();
+  renderDraftSessionSelector(sessions);
+
+  const originalSaveState = saveState;
+  let calls = 0;
+  saveState = function() {
+    calls++;
+    return calls === 1;
+  };
+
+  let result;
+  try {
+    result = createNewDraftSession({id:'draft-new', name:'Draft New'});
+  } finally {
+    saveState = originalSaveState;
+  }
+
+  return {
+    result,
+    calls,
+    active:activeDraftSessionId,
+    activeStored:localStorage.getItem(ACTIVE_DRAFT_SESSION_KEY),
+    registry:JSON.parse(localStorage.getItem(DRAFT_SESSION_REGISTRY_KEY) || '[]').map(session => session.id),
+    newState:localStorage.getItem(getDraftSessionStateKey('draft-new'))
+  };
+});
+assert.equal(newSessionRollback.result, null);
+assert.equal(newSessionRollback.calls, 2);
+assert.equal(newSessionRollback.active, 'draft-a');
+assert.equal(newSessionRollback.activeStored, 'draft-a');
+assert.deepEqual(newSessionRollback.registry, ['draft-a']);
+assert.equal(newSessionRollback.newState, null);
+
+const activeSessionWriteFailure = await persistencePage.evaluate(() => {
+  localStorage.clear();
+  const sessions = [
+    {id:'draft-a', name:'Draft A', createdAt:'2026-09-06T00:00:00.000Z'},
+    {id:'draft-b', name:'Draft B', createdAt:'2026-09-06T00:00:01.000Z'}
+  ];
+  localStorage.setItem(DRAFT_SESSION_REGISTRY_KEY, JSON.stringify(sessions));
+  localStorage.setItem(ACTIVE_DRAFT_SESSION_KEY, 'draft-a');
+  activeDraftSessionId = 'draft-a';
+  clearDraftStateFromBoard();
+  renderDraftSessionSelector(sessions);
+
+  const originalSetItem = Storage.prototype.setItem;
+  Storage.prototype.setItem = function(key, value) {
+    if (String(key) === ACTIVE_DRAFT_SESSION_KEY) {
+      throw new DOMException('Injected active-session failure', 'QuotaExceededError');
+    }
+    return originalSetItem.call(this, key, value);
+  };
+
+  let result;
+  try {
+    result = switchDraftSession('draft-b');
+  } finally {
+    Storage.prototype.setItem = originalSetItem;
+  }
+
+  return {
+    result,
+    active:activeDraftSessionId,
+    activeStored:localStorage.getItem(ACTIVE_DRAFT_SESSION_KEY)
+  };
+});
+assert.equal(activeSessionWriteFailure.result, false);
+assert.equal(activeSessionWriteFailure.active, 'draft-a');
+assert.equal(activeSessionWriteFailure.activeStored, 'draft-a');
+
 assert.deepEqual(persistenceErrors, []);
 await persistenceContext.close();
 
