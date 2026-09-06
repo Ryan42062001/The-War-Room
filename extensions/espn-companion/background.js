@@ -39,6 +39,9 @@ var activeEspnDraftTabId = null;
 var storageWriteChain = Promise.resolve();
 var storageWriteSerial = 0;
 var STORAGE_WRITE_ATTEMPTS = 3;
+var MAX_TRACKED_UNAVAILABLE_PLAYERS = 2000;
+var MAX_TRACKED_MARKET_ADP_PLAYERS = 2000;
+var MAX_STORED_DIAGNOSTIC_BYTES = 128 * 1024;
 
 function isStoredRecord(value) {
   return Boolean(value && typeof value === 'object' && !Array.isArray(value));
@@ -71,6 +74,18 @@ function storedValues(value, limit) {
   return Object.keys(value).slice(0, limit).map(function(key) { return value[key]; });
 }
 
+function sanitizeStoredDiagnostics(value) {
+  if (!isStoredRecord(value)) return {};
+  try {
+    var serialized = JSON.stringify(value);
+    if (serialized.length > MAX_STORED_DIAGNOSTIC_BYTES) return {};
+    var parsed = JSON.parse(serialized);
+    return isStoredRecord(parsed) ? parsed : {};
+  } catch (error) {
+    return {};
+  }
+}
+
 function sanitizeStoredConflictMap(value, totalPicks) {
   var source = isStoredRecord(value) ? value : {};
   var result = {};
@@ -98,7 +113,7 @@ function sanitizeStoredUnresolvedMap(value, totalPicks) {
 
 function restoreStoredMarketAdp(value) {
   state.marketAdpByName = {};
-  storedValues(value, 2000).forEach(function(player) {
+  storedValues(value, MAX_TRACKED_MARKET_ADP_PLAYERS).forEach(function(player) {
     if (!isStoredRecord(player)) return;
     var name = String(player.playerName || '').trim();
     var adp = Number(player.adp);
@@ -124,8 +139,8 @@ function storageGet() {
     state.ledgerTeams = Number.isInteger(storedLedgerTeams) && storedLedgerTeams >= 2 && storedLedgerTeams <= 20
       ? storedLedgerTeams
       : null;
-    state.espn = Object.assign({}, state.espn, isStoredRecord(stored.espn) ? stored.espn : {});
-    state.warRoom = Object.assign({}, state.warRoom, isStoredRecord(stored.warRoom) ? stored.warRoom : {});
+    state.espn = Object.assign({}, state.espn, sanitizeStoredDiagnostics(stored.espn));
+    state.warRoom = Object.assign({}, state.warRoom, sanitizeStoredDiagnostics(stored.warRoom));
     state.picksByNumber = {};
     state.conflictsByPick = {};
     state.unresolvedPlayerIdsByPick = {};
@@ -144,7 +159,7 @@ function storageGet() {
 
     var totalPicks = state.config.teams * state.config.rounds;
     mergePicks(storedValues(stored.picksByNumber, totalPicks));
-    mergeUnavailablePlayers(storedValues(stored.unavailablePlayersByKey, 2000));
+    mergeUnavailablePlayers(storedValues(stored.unavailablePlayersByKey, MAX_TRACKED_UNAVAILABLE_PLAYERS));
     state.conflictsByPick = Object.assign(
       {},
       state.conflictsByPick,
@@ -160,6 +175,8 @@ function storageGet() {
 
 function buildStorageSnapshot() {
   var snapshot = JSON.parse(JSON.stringify(state));
+  snapshot.espn = sanitizeStoredDiagnostics(snapshot.espn);
+  snapshot.warRoom = sanitizeStoredDiagnostics(snapshot.warRoom);
   if (snapshot.espn && typeof snapshot.espn === 'object') {
     delete snapshot.espn.storageWriteError;
     delete snapshot.espn.storageWriteFailedAt;
@@ -273,7 +290,8 @@ function unavailablePlayerKey(player) {
 }
 
 function mergeUnavailablePlayers(players) {
-  (Array.isArray(players) ? players : []).forEach(function(player) {
+  var count = Object.keys(state.unavailablePlayersByKey || {}).length;
+  (Array.isArray(players) ? players : []).slice(0, MAX_TRACKED_UNAVAILABLE_PLAYERS).forEach(function(player) {
     var playerName = String(player && player.playerName || '').trim();
     var position = String(player && player.position || '').toUpperCase();
     if (!playerName || ['QB', 'RB', 'WR', 'TE', 'K', 'DST'].indexOf(position) < 0) return;
@@ -282,12 +300,16 @@ function mergeUnavailablePlayers(players) {
       position: position,
       espnPlayerId: player.espnPlayerId == null ? null : String(player.espnPlayerId).slice(0, 40)
     };
-    state.unavailablePlayersByKey[unavailablePlayerKey(normalized)] = normalized;
+    var key = unavailablePlayerKey(normalized);
+    var exists = Object.prototype.hasOwnProperty.call(state.unavailablePlayersByKey, key);
+    if (!exists && count >= MAX_TRACKED_UNAVAILABLE_PLAYERS) return;
+    if (!exists) count++;
+    state.unavailablePlayersByKey[key] = normalized;
   });
 }
 
 function getUnavailablePlayers() {
-  return Object.keys(state.unavailablePlayersByKey || {}).map(function(key) {
+  return Object.keys(state.unavailablePlayersByKey || {}).slice(0, MAX_TRACKED_UNAVAILABLE_PLAYERS).map(function(key) {
     return state.unavailablePlayersByKey[key];
   }).filter(Boolean);
 }
@@ -1058,19 +1080,24 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     }
 
     if (message.type === 'ESPN_MARKET_ADP') {
-      (Array.isArray(message.players) ? message.players : []).slice(0, 2000).forEach(function(player) {
+      var marketCount = Object.keys(state.marketAdpByName || {}).length;
+      (Array.isArray(message.players) ? message.players : []).slice(0, MAX_TRACKED_MARKET_ADP_PLAYERS).forEach(function(player) {
         var name = String(player && player.playerName || '').trim();
         var adp = Number(player && player.adp);
         var rank = Number(player && player.rank);
         if (!name || ((!Number.isFinite(adp) || adp <= 0) && (!Number.isFinite(rank) || rank <= 0))) return;
-        state.marketAdpByName[name.toLowerCase()] = {
+        var key = name.toLowerCase();
+        var exists = Object.prototype.hasOwnProperty.call(state.marketAdpByName, key);
+        if (!exists && marketCount >= MAX_TRACKED_MARKET_ADP_PLAYERS) return;
+        if (!exists) marketCount++;
+        state.marketAdpByName[key] = {
           playerName: name.slice(0, 100),
           position: String(player.position || '').slice(0, 4),
           adp: Number.isFinite(adp) && adp > 0 && adp <= 500 ? adp : null,
           rank: Number.isFinite(rank) && rank > 0 && rank <= 2000 ? rank : null
         };
       });
-      state.espn.marketAdpCount = Object.keys(state.marketAdpByName).length;
+      state.espn.marketAdpCount = marketCount;
       state.espn.marketAdpAt = new Date().toISOString();
       return storageSave().then(function() { return broadcastWarRoom(true); });
     }

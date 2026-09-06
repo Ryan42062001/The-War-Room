@@ -312,6 +312,65 @@ test('storage writes are serialized so later snapshots cannot overtake earlier w
   assert.equal(writes[1].picksByNumber['2'].playerName, 'Second Snapshot');
 });
 
+
+
+test('startup drops oversized persisted diagnostic objects while preserving core ledger state', async () => {
+  const context = loadBackground({
+    config: {teams: 10, draftSlot: 1, rounds: 16},
+    draftKey: '2026:111',
+    ledgerTeams: 10,
+    picksByNumber: {'1': {overallPick: 1, playerName: 'Preserved Pick', position: 'WR'}},
+    espn: {captured: 1, oversized: 'x'.repeat(140000)},
+    warRoom: {connected: true, oversized: 'y'.repeat(140000)}
+  });
+  await context.ready;
+  assert.equal(context.getPicks().length, 1);
+  assert.equal(context.getPicks()[0].playerName, 'Preserved Pick');
+  assert.equal('oversized' in context.state.espn, false);
+  assert.equal('oversized' in context.state.warRoom, false);
+  assert.equal(context.state.espn.captured, 1);
+});
+
+test('live unavailable-player accumulation is globally bounded and existing entries remain updateable', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  context.mergeUnavailablePlayers(Array.from({length: 2500}, (_, index) => ({
+    playerName: 'Unavailable ' + index,
+    position: 'WR',
+    espnPlayerId: String(index)
+  })));
+  assert.equal(context.getUnavailablePlayers().length, 2000);
+  context.mergeUnavailablePlayers([{playerName: 'Unavailable 0', position: 'WR', espnPlayerId: 'updated'}]);
+  assert.equal(context.getUnavailablePlayers().length, 2000);
+  assert.equal(context.state.unavailablePlayersByKey['unavailable 0|WR'].espnPlayerId, 'updated');
+});
+
+test('live ESPN market accumulation is globally bounded and existing entries remain updateable', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  const draftUrl = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026&teamId=1';
+  context.listeners.message[0]({
+    type: 'ESPN_MARKET_ADP',
+    url: draftUrl,
+    players: Array.from({length: 2500}, (_, index) => ({
+      playerName: 'Market ' + index,
+      position: 'RB',
+      adp: (index % 500) + 1,
+      rank: index + 1
+    }))
+  }, {tab: {id: 11, url: draftUrl}, frameId: 0}, () => {});
+  await context.storageWriteChain;
+  assert.equal(Object.keys(context.state.marketAdpByName).length, 2000);
+  context.listeners.message[0]({
+    type: 'ESPN_MARKET_ADP',
+    url: draftUrl,
+    players: [{playerName: 'Market 0', position: 'RB', adp: 99.5, rank: 99}]
+  }, {tab: {id: 11, url: draftUrl}, frameId: 0}, () => {});
+  await context.storageWriteChain;
+  assert.equal(Object.keys(context.state.marketAdpByName).length, 2000);
+  assert.equal(context.state.marketAdpByName['market 0'].adp, 99.5);
+});
+
 test('changing team count clears picks parsed with the prior draft math', async () => {
   const context = loadBackground(null);
   await context.ready;
