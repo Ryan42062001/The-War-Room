@@ -494,7 +494,7 @@
     var ownPickAdded = next.mine > baseline.mine;
     if (ownPickAdded) {
       clearAlerts();
-    } else if (next.completed > baseline.completed) {
+    } else if (next.completed > 0 || baseline.completed > 0) {
       compareTargetChanges(baseline.targets, next.targets);
       comparePressureChanges(baseline.pressure, next.pressure);
     }
