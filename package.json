@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "test": "npm run test:release && npm run test:modules && npm run test:syntax && npm run test:dataset && npm run test:extension && npm run test:browser && npm run test:live-mock-fixtures",
-    "test:syntax": "node --check script.js && node --check js/war-room-ui.js && node --check js/war-room-espn-sync.js && node --check js/war-room-rankings.js && node --check js/war-room-draft-state.js && node --check js/war-room-scoring.js && node --check js/war-room-recommendations.js && node --check developer-tools.js && node --check fantasypros-2026-data.js && node --check war-room-config.js",
+    "test:syntax": "node --check script.js && node --check js/war-room-command-bar.js && node --check js/war-room-ui.js && node --check js/war-room-espn-sync.js && node --check js/war-room-rankings.js && node --check js/war-room-draft-state.js && node --check js/war-room-scoring.js && node --check js/war-room-recommendations.js && node --check developer-tools.js && node --check fantasypros-2026-data.js && node --check war-room-config.js",
     "test:dataset": "node scripts/validate-fantasypros-baseline.mjs",
     "test:extension": "npm --prefix extensions/espn-companion test",
     "test:browser": "node scripts/test-browser.mjs",
