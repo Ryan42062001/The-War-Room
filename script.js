@@ -6,6 +6,15 @@
  * initialization, preserving the original monolith's hoisting behavior.
  */
 
+function loadDraftCommandFixes() {
+  if (document.querySelector('script[data-war-room-command-fixes]')) return;
+
+  var fixes = document.createElement('script');
+  fixes.src = 'js/war-room-command-bar-fixes.js?v=20260906-1';
+  fixes.setAttribute('data-war-room-command-fixes', 'true');
+  document.head.appendChild(fixes);
+}
+
 function loadDraftCommandPresentation() {
   if (document.querySelector('script[data-war-room-command-bar]')) return;
 
@@ -16,6 +25,7 @@ function loadDraftCommandPresentation() {
     if (typeof window.initDraftCommandBar === 'function') {
       window.initDraftCommandBar();
     }
+    loadDraftCommandFixes();
   };
   document.head.appendChild(script);
 }
