@@ -1,0 +1,284 @@
+/* =========================================================
+   DRAFT AWARENESS — TARGETS + WHAT CHANGED
+   ========================================================= */
+
+#draft-awareness-strip { display: none; }
+
+body[data-board-view="position"] #draft-awareness-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, .95fr);
+  gap: 0;
+  margin: 0 0 6px;
+  overflow: hidden;
+  border: 1px solid rgba(122,139,126,.22);
+  border-radius: 8px;
+  background: rgba(16,20,19,.84);
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
+}
+
+.draft-awareness-targets,
+.draft-awareness-changes {
+  min-width: 0;
+  padding: 6px 8px;
+}
+
+.draft-awareness-targets {
+  border-right: 1px solid rgba(255,255,255,.06);
+}
+
+.draft-awareness-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  margin-bottom: 4px;
+}
+
+.draft-awareness-heading > span {
+  color: #aeb8b2;
+  font-size: .44rem;
+  font-weight: 950;
+  letter-spacing: .09em;
+  white-space: nowrap;
+}
+
+.draft-awareness-heading > small {
+  overflow: hidden;
+  color: #69756e;
+  font-size: .40rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.draft-target-list,
+.draft-change-list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.draft-target-list {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.draft-target-list::-webkit-scrollbar { display: none; }
+
+.draft-target-chip {
+  display: inline-grid;
+  grid-template-columns: auto minmax(0,1fr);
+  grid-template-rows: auto auto;
+  column-gap: 4px;
+  min-width: 0;
+  max-width: 175px;
+  padding: 4px 6px;
+  border: 1px solid rgba(240,199,94,.18);
+  border-radius: 6px;
+  color: #d7ddd9;
+  background: rgba(240,199,94,.035);
+  text-align: left;
+  cursor: pointer;
+}
+
+.draft-target-chip:hover,
+.draft-target-chip:focus-visible {
+  border-color: rgba(240,199,94,.52);
+  outline: none;
+  background: rgba(240,199,94,.07);
+}
+
+.draft-target-chip > span {
+  grid-row: 1 / 3;
+  align-self: center;
+  color: #f0c75e;
+  font-size: .62rem;
+  line-height: 1;
+}
+
+.draft-target-chip > strong {
+  overflow: hidden;
+  font-size: .49rem;
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.draft-target-chip > small {
+  color: #7f8a84;
+  font-size: .38rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.draft-target-chip.is-mine {
+  border-color: rgba(100,195,132,.28);
+  color: #9fddb4;
+  background: rgba(100,195,132,.045);
+}
+
+.draft-target-chip.is-taken,
+.draft-target-chip.is-missing {
+  opacity: .48;
+  filter: saturate(.55);
+}
+
+.draft-target-chip.is-taken > strong {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.draft-target-more {
+  flex: 0 0 auto;
+  color: #7f8a84;
+  font-size: .44rem;
+  font-weight: 900;
+}
+
+.draft-awareness-empty {
+  overflow: hidden;
+  color: #68736d;
+  font-size: .43rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.draft-change-list {
+  overflow: hidden;
+}
+
+.draft-change-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 3px 5px;
+  border-radius: 5px;
+  color: #aeb7b2;
+  background: rgba(255,255,255,.025);
+  font-size: .42rem;
+  font-weight: 760;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.draft-change-item i {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #718078;
+}
+
+.draft-change-item.is-success { color: #8fd4a0; background: rgba(95,168,124,.06); }
+.draft-change-item.is-success i { background: #68b983; }
+.draft-change-item.is-watch { color: #e5c451; background: rgba(229,196,81,.055); }
+.draft-change-item.is-watch i { background: #e5c451; }
+.draft-change-item.is-closing { color: #f2ad67; background: rgba(245,158,66,.06); }
+.draft-change-item.is-closing i { background: #f59e42; }
+.draft-change-item.is-critical { color: #ef8a85; background: rgba(240,107,101,.07); }
+.draft-change-item.is-critical i { background: #ef6b65; }
+
+/* Target affordance lives inside the existing player-card button. It stays
+   visually quiet until hover/focus or until the player is actually targeted. */
+.position-player-card {
+  position: relative;
+}
+
+.draft-target-star {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  z-index: 4;
+  min-width: 14px;
+  padding: 1px 2px;
+  border-radius: 4px;
+  color: #8d9992;
+  font-size: .57rem;
+  line-height: 1;
+  text-align: center;
+  opacity: .18;
+  cursor: pointer;
+  user-select: none;
+}
+
+.position-player-card:hover .draft-target-star,
+.position-player-card:focus-visible .draft-target-star,
+.position-player-card.is-targeted .draft-target-star {
+  opacity: 1;
+}
+
+.position-player-card.is-targeted .draft-target-star {
+  color: #f0c75e;
+  background: rgba(240,199,94,.08);
+}
+
+.position-player-card.is-targeted {
+  box-shadow:
+    inset 2px 0 0 rgba(240,199,94,.62),
+    0 0 0 1px rgba(240,199,94,.08);
+}
+
+body[data-draft-command-mode="on-clock"] #draft-awareness-strip {
+  border-color: rgba(240,199,94,.28);
+  background:
+    linear-gradient(90deg, rgba(240,199,94,.035), transparent 40%),
+    rgba(16,20,19,.9);
+}
+
+body[data-draft-command-mode="on-clock"] .draft-awareness-heading > span {
+  color: #d9c27d;
+}
+
+@media (max-width: 900px) {
+  body[data-board-view="position"] #draft-awareness-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .draft-awareness-targets {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+
+  .draft-change-list {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .draft-change-list::-webkit-scrollbar { display: none; }
+
+  .draft-change-item {
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .draft-awareness-targets,
+  .draft-awareness-changes {
+    padding: 5px 6px;
+  }
+
+  .draft-awareness-heading > small {
+    display: none;
+  }
+
+  .draft-target-chip {
+    max-width: 145px;
+  }
+
+  .draft-target-chip > strong {
+    font-size: .46rem;
+  }
+
+  .draft-target-star {
+    opacity: .48;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .draft-target-chip {
+    scroll-behavior: auto;
+  }
+}
