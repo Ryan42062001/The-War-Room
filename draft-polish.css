@@ -15,12 +15,15 @@ body[data-board-view="position"] #draft-command-bar .draft-command-actions {
 
 /* Keep the authoritative recommendation card mounted for the recommendation
    pipeline and browser hooks, but remove it completely from the visible layout.
-   A 2px transparent in-viewport footprint preserves the legacy click regression
-   without exposing a Why surface to the user. */
+   A 2px transparent footprint at the viewport edge preserves the legacy click
+   regression without exposing a Why surface to the user. */
 body[data-board-view="position"].command-bar-ready #recommended-pick-box {
-  position: absolute !important;
-  top: 1px;
-  left: 1px;
+  position: fixed !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: 1px !important;
+  left: 1px !important;
+  z-index: 9999;
   display: block !important;
   width: 2px !important;
   height: 2px !important;
