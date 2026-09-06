@@ -275,8 +275,6 @@ function applyEspnDraftSnapshot(snapshot) {
     row.removeAttribute('data-sync-method');
     row.removeAttribute('data-sync-source');
     row.removeAttribute('data-espn-player-id');
-    row.removeAttribute('data-team-id');
-    row.removeAttribute('data-sync-method');
   });
 
   var applied = 0;
@@ -624,39 +622,260 @@ function resetBoard(){
 function getDraftSessionStateKey(id) { return AUTOSAVE_KEY + ':' + String(id || activeDraftSessionId); }
 function getDraftSessionFinalKey(id) { return FINAL_SUMMARY_SHOWN_KEY + ':' + String(id || activeDraftSessionId); }
 
-function readDraftSessionRegistry() {
+function readDraftStorageValue(key) {
   try {
-    var parsed = JSON.parse(localStorage.getItem(DRAFT_SESSION_REGISTRY_KEY) || '[]');
-    return Array.isArray(parsed) ? parsed : [];
-  } catch (error) { return []; }
+    return localStorage.getItem(key);
+  } catch (error) {
+    console.warn('War Room storage read failed for ' + key + ':', error);
+    return null;
+  }
+}
+
+function writeDraftStorageValue(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch (error) {
+    console.warn('War Room storage write failed for ' + key + ':', error);
+    return false;
+  }
+}
+
+function removeDraftStorageValue(key) {
+  try {
+    localStorage.removeItem(key);
+    return true;
+  } catch (error) {
+    console.warn('War Room storage removal failed for ' + key + ':', error);
+    return false;
+  }
+}
+
+function isDraftStorageObject(value) {
+  return Boolean(value && typeof value === 'object' && !Array.isArray(value));
+}
+
+function normalizeDraftSessionId(value) {
+  return String(value == null ? '' : value)
+    .replace(/[\u0000-\u001f\u007f]/g, '')
+    .trim()
+    .slice(0, 120);
+}
+
+function normalizeDraftSessionName(value, fallback) {
+  var name = String(value == null ? '' : value)
+    .replace(/[\u0000-\u001f\u007f]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 80);
+  return name || fallback || 'Draft';
+}
+
+function normalizeDraftKey(value) {
+  var key = String(value == null ? '' : value)
+    .replace(/[\u0000-\u001f\u007f]/g, '')
+    .trim()
+    .slice(0, 120);
+  return key || null;
+}
+
+function normalizeDraftSessionRegistry(value) {
+  if (!Array.isArray(value)) return [];
+  var seen = new Set();
+  var normalized = [];
+  value.slice(0, 100).forEach(function(session, index) {
+    if (!isDraftStorageObject(session)) return;
+    var id = normalizeDraftSessionId(session.id);
+    if (!id || seen.has(id)) return;
+    seen.add(id);
+    normalized.push({
+      id: id,
+      name: normalizeDraftSessionName(session.name, 'Draft ' + (normalized.length + 1)),
+      createdAt: String(session.createdAt || '').slice(0, 40) || new Date().toISOString(),
+      draftKey: normalizeDraftKey(session.draftKey)
+    });
+  });
+  return normalized;
+}
+
+function quarantineCorruptStorageValue(key, raw) {
+  if (raw == null) return null;
+  var backupKey = key + ':corrupt-backup:' + Date.now().toString(36);
+  try {
+    localStorage.setItem(backupKey, String(raw));
+    localStorage.removeItem(key);
+    console.warn('Corrupt War Room storage was isolated at ' + backupKey + '.');
+    return backupKey;
+  } catch (error) {
+    console.warn('Corrupt War Room storage could not be isolated safely:', error);
+    return null;
+  }
+}
+
+function clampDraftStorageInteger(value, minimum, maximum, fallback) {
+  var number = Number(value);
+  if (!Number.isFinite(number)) number = Number(fallback);
+  if (!Number.isFinite(number)) number = minimum;
+  return Math.max(minimum, Math.min(maximum, Math.trunc(number)));
+}
+
+function normalizeSavedDraftPayload(payload) {
+  if (!isDraftStorageObject(payload)) return null;
+
+  var teams = clampDraftStorageInteger(payload.teams, 2, 20, LEAGUE_SIZE || 10);
+  var slot = clampDraftStorageInteger(payload.slot, 1, teams, Math.min(MY_DRAFT_SLOT || 1, teams));
+  var rounds = clampDraftStorageInteger(payload.rounds, 1, 30, TOTAL_ROUNDS || 16);
+  var totalPicks = teams * rounds;
+  var state = {};
+  var draftMeta = {};
+
+  if (isDraftStorageObject(payload.state)) {
+    Object.keys(payload.state).slice(0, 2000).forEach(function(rawName) {
+      var name = String(rawName || '').trim().slice(0, 120);
+      var status = payload.state[rawName];
+      if (name && (status === 'mine' || status === 'taken')) state[name] = status;
+    });
+  }
+
+  if (isDraftStorageObject(payload.draftMeta)) {
+    Object.keys(payload.draftMeta).slice(0, 2000).forEach(function(rawName) {
+      var name = String(rawName || '').trim().slice(0, 120);
+      var metadata = payload.draftMeta[rawName];
+      if (!name || !state[name] || !isDraftStorageObject(metadata)) return;
+      var pick = Number(metadata.pick);
+      var teamSlot = Number(metadata.teamSlot);
+      var source = metadata.source === 'espn' ? 'espn' : null;
+      var espnPlayerId = metadata.espnPlayerId == null ? null : String(metadata.espnPlayerId).slice(0, 40);
+      pick = Number.isInteger(pick) && pick >= 1 && pick <= totalPicks ? pick : null;
+      teamSlot = Number.isInteger(teamSlot) && teamSlot >= 1 && teamSlot <= teams ? teamSlot : null;
+      if (pick || teamSlot || source || espnPlayerId) {
+        draftMeta[name] = {pick:pick, teamSlot:teamSlot, source:source, espnPlayerId:espnPlayerId};
+      }
+    });
+  }
+
+  var allowedTiers = new Set(['Sp', 'S', 'A', 'B', 'C', 'D', 'E', 'F']);
+  var order = Array.isArray(payload.order)
+    ? payload.order.slice(0, 2000).map(function(item) {
+        if (!isDraftStorageObject(item)) return null;
+        var name = String(item.n || '').trim().slice(0, 120);
+        var tier = String(item.t || '').trim();
+        return name && allowedTiers.has(tier) ? {n:name, t:tier} : null;
+      }).filter(Boolean)
+    : [];
+
+  return {
+    version: 2,
+    savedAt: typeof payload.savedAt === 'string' ? payload.savedAt.slice(0, 80) : '',
+    datasetSnapshotDate: typeof payload.datasetSnapshotDate === 'string' ? payload.datasetSnapshotDate.slice(0, 40) : null,
+    customBoard: Boolean(payload.customBoard),
+    teams: teams,
+    slot: slot,
+    rounds: rounds,
+    recommendationAudit: Array.isArray(payload.recommendationAudit)
+      ? payload.recommendationAudit.filter(isDraftStorageObject).slice(-200)
+      : [],
+    autoDraftTeamSlots: Array.isArray(payload.autoDraftTeamSlots) ? payload.autoDraftTeamSlots.slice(0, 20) : [],
+    state: state,
+    draftMeta: draftMeta,
+    order: order
+  };
+}
+
+function readDraftSessionPayload(id) {
+  var key = getDraftSessionStateKey(id);
+  var raw = null;
+  try {
+    raw = localStorage.getItem(key);
+  } catch (error) {
+    console.warn('War Room saved draft storage is unavailable:', error);
+    return {status:'storage-error', payload:null, backupKey:null};
+  }
+  if (!raw) return {status:'missing', payload:null, backupKey:null};
+
+  var parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (error) {
+    return {status:'corrupt', payload:null, backupKey:quarantineCorruptStorageValue(key, raw)};
+  }
+
+  var payload = normalizeSavedDraftPayload(parsed);
+  if (!payload) {
+    return {status:'corrupt', payload:null, backupKey:quarantineCorruptStorageValue(key, raw)};
+  }
+  return {status:'ok', payload:payload, backupKey:null};
+}
+
+function removeDraftSessionRecoveryBackups(id) {
+  var prefix = getDraftSessionStateKey(id) + ':corrupt-backup:';
+  try {
+    for (var index = localStorage.length - 1; index >= 0; index--) {
+      var key = localStorage.key(index);
+      if (key && key.indexOf(prefix) === 0) localStorage.removeItem(key);
+    }
+  } catch (error) {
+    console.warn('Draft recovery backups could not be cleaned up:', error);
+  }
+}
+
+function readDraftSessionRegistry() {
+  var raw = null;
+  try {
+    raw = localStorage.getItem(DRAFT_SESSION_REGISTRY_KEY);
+    if (!raw) return [];
+    var parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      quarantineCorruptStorageValue(DRAFT_SESSION_REGISTRY_KEY, raw);
+      return [];
+    }
+    var normalized = normalizeDraftSessionRegistry(parsed);
+    if (JSON.stringify(normalized) !== JSON.stringify(parsed)) writeDraftSessionRegistry(normalized);
+    return normalized;
+  } catch (error) {
+    if (raw != null) quarantineCorruptStorageValue(DRAFT_SESSION_REGISTRY_KEY, raw);
+    return [];
+  }
 }
 
 function writeDraftSessionRegistry(sessions) {
-  localStorage.setItem(DRAFT_SESSION_REGISTRY_KEY, JSON.stringify(sessions));
+  var normalized = normalizeDraftSessionRegistry(sessions);
+  try {
+    localStorage.setItem(DRAFT_SESSION_REGISTRY_KEY, JSON.stringify(normalized));
+    return true;
+  } catch (error) {
+    console.warn('Draft session registry save failed', error);
+    return false;
+  }
 }
 
 function initializeDraftSessions() {
   var sessions = readDraftSessionRegistry();
   if (!sessions.length) {
-    var legacyState = localStorage.getItem(AUTOSAVE_KEY);
+    var legacyState = readDraftStorageValue(AUTOSAVE_KEY);
     activeDraftSessionId = 'legacy';
     sessions = [{id:'legacy', name:legacyState ? 'Imported Draft' : 'Draft 1', createdAt:new Date().toISOString()}];
-    if (legacyState) localStorage.setItem(getDraftSessionStateKey('legacy'), legacyState);
-    if (localStorage.getItem(FINAL_SUMMARY_SHOWN_KEY) === '1') localStorage.setItem(getDraftSessionFinalKey('legacy'), '1');
+    if (legacyState) writeDraftStorageValue(getDraftSessionStateKey('legacy'), legacyState);
+    if (readDraftStorageValue(FINAL_SUMMARY_SHOWN_KEY) === '1') {
+      writeDraftStorageValue(getDraftSessionFinalKey('legacy'), '1');
+    }
     writeDraftSessionRegistry(sessions);
   } else {
-    activeDraftSessionId = localStorage.getItem(ACTIVE_DRAFT_SESSION_KEY) || sessions[0].id;
+    activeDraftSessionId = normalizeDraftSessionId(readDraftStorageValue(ACTIVE_DRAFT_SESSION_KEY)) || sessions[0].id;
     if (!sessions.some(function(session) { return session.id === activeDraftSessionId; })) activeDraftSessionId = sessions[0].id;
   }
-  localStorage.setItem(ACTIVE_DRAFT_SESSION_KEY, activeDraftSessionId);
-  renderDraftSessionSelector();
+  writeDraftStorageValue(ACTIVE_DRAFT_SESSION_KEY, activeDraftSessionId);
+  renderDraftSessionSelector(sessions);
 }
 
-function renderDraftSessionSelector() {
+function renderDraftSessionSelector(sessionsOverride) {
   var select = document.getElementById('draftSessionSelect');
   if (!select) return;
   select.innerHTML = '';
-  readDraftSessionRegistry().forEach(function(session) {
+  var sessions = Array.isArray(sessionsOverride)
+    ? normalizeDraftSessionRegistry(sessionsOverride)
+    : readDraftSessionRegistry();
+  sessions.forEach(function(session) {
     var option = document.createElement('option');
     option.value = session.id;
     option.textContent = session.name;
@@ -675,31 +894,61 @@ function clearDraftStateFromBoard() {
 }
 
 function switchDraftSession(id) {
-  if (!id || id === activeDraftSessionId) return;
+  var safeId = normalizeDraftSessionId(id);
+  var sessions = readDraftSessionRegistry();
+  if (!safeId || !sessions.some(function(session) { return session.id === safeId; })) return false;
+  if (safeId === activeDraftSessionId) return true;
   resetDeleteDraftButton();
   saveState();
-  activeDraftSessionId = id;
-  localStorage.setItem(ACTIVE_DRAFT_SESSION_KEY, id);
+  activeDraftSessionId = safeId;
+  writeDraftStorageValue(ACTIVE_DRAFT_SESSION_KEY, safeId);
   clearDraftStateFromBoard();
   loadState();
-  renderDraftSessionSelector();
+  renderDraftSessionSelector(sessions);
+  return true;
+}
+
+function createUniqueDraftSessionId(baseId, sessions) {
+  var safeBase = normalizeDraftSessionId(baseId) || ('draft-' + Date.now().toString(36));
+  var existingIds = new Set((sessions || []).map(function(session) { return session.id; }));
+  if (!existingIds.has(safeBase)) return safeBase;
+  var suffix = 2;
+  var candidate = safeBase;
+  do {
+    candidate = normalizeDraftSessionId(safeBase.slice(0, 110) + '-' + suffix);
+    suffix++;
+  } while (existingIds.has(candidate));
+  return candidate;
 }
 
 function createNewDraftSession(options) {
   options = options || {};
   resetDeleteDraftButton();
   saveState();
-  var id = options.id || ('draft-' + Date.now().toString(36));
   var sessions = readDraftSessionRegistry();
-  var existing = sessions.find(function(session) { return session.id === id; });
-  if (!existing) {
-    sessions.push({id:id, name:options.name || ('Draft ' + (sessions.length + 1)), createdAt:new Date().toISOString(), draftKey:options.draftKey || null});
-    writeDraftSessionRegistry(sessions);
+  var requestedId = normalizeDraftSessionId(options.id);
+  var safeDraftKey = normalizeDraftKey(options.draftKey);
+  if (requestedId && safeDraftKey) {
+    var existingExact = sessions.find(function(session) {
+      return session.id === requestedId && session.draftKey === safeDraftKey;
+    });
+    if (existingExact) {
+      switchDraftSession(existingExact.id);
+      return existingExact.id;
+    }
   }
+  var id = createUniqueDraftSessionId(requestedId || ('draft-' + Date.now().toString(36)), sessions);
+  sessions.push({
+    id:id,
+    name:normalizeDraftSessionName(options.name, 'Draft ' + (sessions.length + 1)),
+    createdAt:new Date().toISOString(),
+    draftKey:safeDraftKey
+  });
+  if (!writeDraftSessionRegistry(sessions)) return null;
   activeDraftSessionId = id;
-  localStorage.setItem(ACTIVE_DRAFT_SESSION_KEY, id);
+  writeDraftStorageValue(ACTIVE_DRAFT_SESSION_KEY, id);
   clearDraftStateFromBoard();
-  renderDraftSessionSelector();
+  renderDraftSessionSelector(sessions);
   triggerAllBoardUpdates();
   saveState();
   return id;
@@ -740,28 +989,41 @@ function deleteActiveDraftSession() {
   }
   var deletedId = activeSession.id;
   var remainingSessions = sessions.filter(function(session) { return session.id !== deletedId; });
-  localStorage.removeItem(getDraftSessionStateKey(deletedId));
-  localStorage.removeItem(getDraftSessionFinalKey(deletedId));
 
   if (!remainingSessions.length) {
     var replacementId = 'draft-' + Date.now().toString(36);
     remainingSessions.push({id:replacementId, name:'Draft 1', createdAt:new Date().toISOString()});
   }
-  writeDraftSessionRegistry(remainingSessions);
-  activeDraftSessionId = remainingSessions[0].id;
-  localStorage.setItem(ACTIVE_DRAFT_SESSION_KEY, activeDraftSessionId);
 
-  var replacementState = localStorage.getItem(getDraftSessionStateKey(activeDraftSessionId));
-  if (replacementState) localStorage.setItem(AUTOSAVE_KEY, replacementState);
-  else localStorage.removeItem(AUTOSAVE_KEY);
+  /* Commit the registry first. If browser storage rejects the write, abort
+   * without deleting the draft payload so a quota/privacy failure cannot
+   * strand a listed session with its data already removed. */
+  if (!writeDraftSessionRegistry(remainingSessions)) {
+    resetDeleteDraftButton();
+    var failedAnnouncer = document.getElementById('draft-action-announcer');
+    if (failedAnnouncer) failedAnnouncer.textContent = activeSession.name + ' could not be deleted because browser storage is unavailable.';
+    return false;
+  }
+
+  removeDraftStorageValue(getDraftSessionStateKey(deletedId));
+  removeDraftStorageValue(getDraftSessionFinalKey(deletedId));
+  removeDraftSessionRecoveryBackups(deletedId);
+
+  activeDraftSessionId = remainingSessions[0].id;
+  writeDraftStorageValue(ACTIVE_DRAFT_SESSION_KEY, activeDraftSessionId);
+
+  var replacementState = readDraftStorageValue(getDraftSessionStateKey(activeDraftSessionId));
+  if (replacementState) writeDraftStorageValue(AUTOSAVE_KEY, replacementState);
+  else removeDraftStorageValue(AUTOSAVE_KEY);
 
   resetDeleteDraftButton();
   closeFinalDraftSummary();
   clearDraftStateFromBoard();
   loadState();
-  renderDraftSessionSelector();
+  renderDraftSessionSelector(remainingSessions);
   var announcer = document.getElementById('draft-action-announcer');
   if (announcer) announcer.textContent = activeSession.name + ' deleted. ' + remainingSessions[0].name + ' is now active.';
+  return true;
 }
 
 function selectEspnDraftSession(draftKey) {
@@ -897,9 +1159,9 @@ function loadState(){
   
   try{
     if(enabled){
-      var raw = localStorage.getItem(getDraftSessionStateKey());
-      if(raw){
-        var payload = JSON.parse(raw);
+      var storedDraft = readDraftSessionPayload();
+      if(storedDraft.status === 'ok'){
+        var payload = storedDraft.payload;
         var pcTeams = document.getElementById('pcTeams'); if(payload.teams && pcTeams) pcTeams.value = payload.teams;
         var pcSlot = document.getElementById('pcSlot'); if(payload.slot && pcSlot) pcSlot.value = payload.slot;
         var pcRounds = document.getElementById('pcRounds'); if(payload.rounds && pcRounds) pcRounds.value = payload.rounds;
@@ -946,9 +1208,15 @@ function loadState(){
             if(metadata && metadata.espnPlayerId) row.setAttribute('data-espn-player-id', String(metadata.espnPlayerId));
           });
         }
-        if(diagEl) diagEl.innerHTML = 'Autosave: restored backup from '+(payload.savedAt||'previous session');
+        if(diagEl) diagEl.textContent = 'Autosave: restored backup from ' + (payload.savedAt || 'previous session');
+      } else if (storedDraft.status === 'corrupt') {
+        if(diagEl) diagEl.textContent = storedDraft.backupKey
+          ? 'Autosave: corrupt draft ignored; recovery copy preserved.'
+          : 'Autosave: corrupt draft ignored; recovery copy could not be written.';
+      } else if (storedDraft.status === 'storage-error') {
+        if(diagEl) diagEl.textContent = 'Autosave storage is unavailable.';
       } else {
-        if(diagEl) diagEl.innerHTML = 'Autosave: No prior backup found.';
+        if(diagEl) diagEl.textContent = 'Autosave: No prior backup found.';
       }
     } else {
       if(diagEl) diagEl.innerHTML = 'Autosave is disabled.';
