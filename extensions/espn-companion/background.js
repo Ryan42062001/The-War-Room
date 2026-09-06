@@ -32,6 +32,8 @@ var state = {
   warRoom: {connected: false, applied: 0, unmatched: 0, lastSeenAt: null}
 };
 
+var activeEspnDraftTabId = null;
+
 function storageGet() {
   return chrome.storage.local.get(STORAGE_KEY).then(function(result) {
     var stored = result && result[STORAGE_KEY];
@@ -340,6 +342,80 @@ function recordScreenFrame(sender, message) {
   };
 }
 
+function espnSenderTabId(sender) {
+  var tabId = sender && sender.tab ? Number(sender.tab.id) : NaN;
+  return Number.isInteger(tabId) && tabId >= 0 ? tabId : null;
+}
+
+function looksLikeEspnDraftUrl(url) {
+  try {
+    var parsed = new URL(String(url || ''));
+    if (parsed.protocol !== 'https:') return false;
+    if (parsed.hostname !== 'fantasy.espn.com' && parsed.hostname !== 'www.espn.com') return false;
+    return /draft/i.test(parsed.pathname + parsed.search);
+  } catch (error) {
+    return false;
+  }
+}
+
+function setActiveEspnDraftTab(tabId) {
+  if (tabId == null || tabId === '') {
+    activeEspnDraftTabId = null;
+    return activeEspnDraftTabId;
+  }
+  var normalized = Number(tabId);
+  activeEspnDraftTabId = Number.isInteger(normalized) && normalized >= 0 ? normalized : null;
+  return activeEspnDraftTabId;
+}
+
+function syncActiveEspnDraftTabFromOpenTabs() {
+  return queryTabs(ESPN_URLS).then(function(tabs) {
+    var draftTabs = (Array.isArray(tabs) ? tabs : []).filter(function(tab) {
+      return tab && Number.isInteger(Number(tab.id)) && looksLikeEspnDraftUrl(tab.url);
+    });
+    if (!draftTabs.length) return setActiveEspnDraftTab(null);
+    var preferred = draftTabs.find(function(tab) { return Boolean(tab.active); });
+    if (!preferred && state.draftKey) {
+      preferred = draftTabs.find(function(tab) { return draftKeyFromUrl(tab.url) === state.draftKey; });
+    }
+    if (!preferred) {
+      preferred = draftTabs.slice().sort(function(a, b) {
+        return Number(b.lastAccessed) - Number(a.lastAccessed);
+      })[0];
+    }
+    return setActiveEspnDraftTab(preferred && preferred.id);
+  }).catch(function() {
+    return activeEspnDraftTabId;
+  });
+}
+
+function isDraftScopedEspnMessage(message) {
+  var type = String(message && message.type || '');
+  if (type === 'ESPN_HEARTBEAT') return Boolean(message && message.draftPage);
+  return [
+    'ESPN_PICKS_FOUND',
+    'ESPN_LIVE_OBSERVATIONS',
+    'ESPN_STRUCTURED_PICKS',
+    'ESPN_API_STATUS',
+    'ESPN_MARKET_ADP'
+  ].indexOf(type) >= 0;
+}
+
+function acceptEspnDraftSender(sender, message) {
+  var tabId = espnSenderTabId(sender);
+  var nextKey = draftKeyFromUrl(message && message.url);
+  if (tabId == null || !nextKey) return true;
+  if (activeEspnDraftTabId == null) setActiveEspnDraftTab(tabId);
+  if (tabId === activeEspnDraftTabId) return true;
+  state.espn.ignoredDraftTabMessages = (Number(state.espn.ignoredDraftTabMessages) || 0) + 1;
+  state.espn.lastIgnoredDraftTabId = tabId;
+  state.espn.lastIgnoredDraftKey = nextKey;
+  state.espn.lastIgnoredDraftAt = new Date().toISOString();
+  return false;
+}
+
+ready = ready.then(syncActiveEspnDraftTabFromOpenTabs).catch(function() {});
+
 function activateDraft(url) {
   var nextKey = draftKeyFromUrl(url);
   if (!nextKey) return false;
@@ -509,15 +585,24 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (!message || !message.type) return null;
     if (String(message.type).indexOf('WAR_ROOM_') === 0 && !isTrustedWarRoomSender(sender, message)) return null;
 
+    var messageType = String(message.type);
+    if (messageType.indexOf('ESPN_') === 0) {
+      if (messageType === 'ESPN_HEARTBEAT' && message.topFrame && message.draftPage === false) {
+        var leavingTabId = espnSenderTabId(sender);
+        if (activeEspnDraftTabId != null && leavingTabId != null && leavingTabId !== activeEspnDraftTabId) return null;
+        if (leavingTabId != null && leavingTabId === activeEspnDraftTabId) setActiveEspnDraftTab(null);
+      } else if (isDraftScopedEspnMessage(message)) {
+        if (!acceptEspnDraftSender(sender, message)) return storageSave();
+        activateDraft(message.url);
+      }
+    }
+
     if (message.type === 'ESPN_CONTENT_READY') {
-      var newDraft = activateDraft(message.url);
       state.espn.connected = true;
       state.espn.lastSeenAt = new Date().toISOString();
       state.espn.lastUrl = message.url || state.espn.lastUrl || null;
       if (sender.tab) sendTabQuiet(sender.tab.id, {type: 'COMPANION_CONFIG', config: state.config});
-      return storageSave().then(function() {
-        return newDraft ? broadcastWarRoom(true) : null;
-      });
+      return storageSave();
     }
 
     if (message.type === 'ESPN_HEARTBEAT') {
@@ -569,7 +654,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     }
 
     if (message.type === 'ESPN_PICKS_FOUND') {
-      activateDraft(message.url);
       recordScreenFrame(sender, message);
       mergeUnavailablePlayers(message.unavailablePlayers);
       if (liveCaptureIsFresh()) {
@@ -593,7 +677,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     }
 
     if (message.type === 'ESPN_LIVE_OBSERVATIONS') {
-      activateDraft(message.url);
       var observations = Array.isArray(message.observations) ? message.observations.slice(0, 500) : [];
       mergePicks(observations);
       var source = String(message.source || 'network').slice(0, 20);
@@ -627,7 +710,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     }
 
     if (message.type === 'ESPN_STRUCTURED_PICKS') {
-      activateDraft(message.url);
       reconcileStructuredPicks(
         message.picks,
         message.rawPickNumbers,
@@ -839,7 +921,19 @@ chrome.runtime.onStartup.addListener(function() {
   }).catch(function() {});
 });
 
-chrome.tabs.onRemoved.addListener(function() {
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+  ready.then(function() {
+    return queryTabs(ESPN_URLS);
+  }).then(function(tabs) {
+    var activated = (Array.isArray(tabs) ? tabs : []).find(function(tab) {
+      return tab && Number(tab.id) === Number(activeInfo && activeInfo.tabId);
+    });
+    if (activated && looksLikeEspnDraftUrl(activated.url)) setActiveEspnDraftTab(activated.id);
+  }).catch(function() {});
+});
+
+chrome.tabs.onRemoved.addListener(function(tabId) {
+  if (activeEspnDraftTabId != null && Number(tabId) === activeEspnDraftTabId) setActiveEspnDraftTab(null);
   ready.then(function() {
     return Promise.all([queryTabs(ESPN_URLS), queryTabs(WAR_ROOM_URLS)]);
   }).then(function(results) {

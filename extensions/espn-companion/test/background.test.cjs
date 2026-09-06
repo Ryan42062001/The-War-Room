@@ -5,7 +5,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 function loadBackground(storedState, overrides = {}) {
-  const listeners = {message: [], installed: [], startup: [], removed: []};
+  const listeners = {message: [], installed: [], startup: [], removed: [], activated: []};
   const removedStorageKeys = [];
   const chrome = {
     storage: {
@@ -28,7 +28,8 @@ function loadBackground(storedState, overrides = {}) {
     tabs: {
       query: async () => [],
       sendMessage: async () => {},
-      onRemoved: {addListener: listener => listeners.removed.push(listener)}
+      onRemoved: {addListener: listener => listeners.removed.push(listener)},
+      onActivated: {addListener: listener => listeners.activated.push(listener)}
     },
     scripting: {executeScript: async () => {}}
   };
@@ -468,4 +469,104 @@ test('rejects WAR_ROOM runtime messages from non-War Room tabs', async () => {
   assert.equal(context.state.config.draftSlot, before.draftSlot);
   assert.equal(context.state.config.rounds, before.rounds);
   assert.equal(context.state.warRoom.connected, false);
+});
+
+
+test('non-draft ESPN content ready cannot replace an active draft ledger', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  context.state.draftKey = '2026:111';
+  context.state.ledgerTeams = 10;
+  context.state.picksByNumber = {
+    '1': {overallPick: 1, playerName: 'Active Draft Player', position: 'WR'}
+  };
+  const nonDraftUrl = 'https://fantasy.espn.com/football/team?leagueId=999&seasonId=2026';
+  context.listeners.message[0](
+    {type: 'ESPN_CONTENT_READY', url: nonDraftUrl},
+    {tab: {id: 99, url: nonDraftUrl}},
+    () => {}
+  );
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.state.draftKey, '2026:111');
+  assert.equal(context.getPicks().length, 1);
+  assert.equal(context.getPicks()[0].playerName, 'Active Draft Player');
+});
+
+test('a second ESPN draft tab cannot replace the active ledger until the user activates it', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  const listener = context.listeners.message[0];
+  const urlA = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026';
+  const urlB = 'https://fantasy.espn.com/football/draft?leagueId=222&seasonId=2026';
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', url: urlA, topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Draft A Player', position: 'WR'}],
+    unavailablePlayers: []
+  }, {tab: {id: 11, url: urlA}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.state.draftKey, '2026:111');
+  assert.equal(context.getPicks()[0].playerName, 'Draft A Player');
+  assert.equal(context.activeEspnDraftTabId, 11);
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', url: urlB, topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Draft B Player', position: 'RB'}],
+    unavailablePlayers: []
+  }, {tab: {id: 22, url: urlB}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.state.draftKey, '2026:111');
+  assert.equal(context.getPicks()[0].playerName, 'Draft A Player');
+  assert.equal(context.state.espn.ignoredDraftTabMessages, 1);
+
+  context.chrome.tabs.query = async () => [
+    {id: 11, url: urlA, active: false, lastAccessed: 1},
+    {id: 22, url: urlB, active: true, lastAccessed: 2}
+  ];
+  context.listeners.activated[0]({tabId: 22});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.activeEspnDraftTabId, 22);
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', url: urlB, topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Draft B Player', position: 'RB'}],
+    unavailablePlayers: []
+  }, {tab: {id: 22, url: urlB}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.state.draftKey, '2026:222');
+  assert.equal(context.getPicks().length, 1);
+  assert.equal(context.getPicks()[0].playerName, 'Draft B Player');
+});
+
+test('removing the active ESPN draft tab releases ownership for another draft tab', async () => {
+  const context = loadBackground(null);
+  await context.ready;
+  const listener = context.listeners.message[0];
+  const urlA = 'https://fantasy.espn.com/football/draft?leagueId=111&seasonId=2026';
+  const urlB = 'https://fantasy.espn.com/football/draft?leagueId=222&seasonId=2026';
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', url: urlA, topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Draft A Player', position: 'WR'}], unavailablePlayers: []
+  }, {tab: {id: 11, url: urlA}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.activeEspnDraftTabId, 11);
+
+  context.chrome.tabs.query = async () => [];
+  context.listeners.removed[0](11);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.activeEspnDraftTabId, null);
+
+  listener({
+    type: 'ESPN_PICKS_FOUND', url: urlB, topFrame: true,
+    picks: [{overallPick: 1, playerName: 'Draft B Player', position: 'RB'}], unavailablePlayers: []
+  }, {tab: {id: 22, url: urlB}, frameId: 0}, () => {});
+  await new Promise(resolve => setTimeout(resolve, 0));
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(context.activeEspnDraftTabId, 22);
+  assert.equal(context.state.draftKey, '2026:222');
+  assert.equal(context.getPicks()[0].playerName, 'Draft B Player');
 });
