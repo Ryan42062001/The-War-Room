@@ -2,7 +2,7 @@
  * The War Room production bootstrap.
  * Production logic lives in ordered classic scripts under js/.
  */
-var WAR_ROOM_BOOTSTRAP_VERSION = '20260907-2';
+var WAR_ROOM_BOOTSTRAP_VERSION = '20260907-3';
 
 function reportWarRoomEnhancementFailure(label) {
   document.body.setAttribute('data-war-room-degraded', 'true');
@@ -63,7 +63,12 @@ function loadWarRoomHardening() {
 }
 function startWarRoomCore() { runAppInitialization(); loadWarRoomHardening(); }
 function bootWarRoom() {
-  loadOptionalScript('js/war-room-scoring-corrections.js?v=20260907-1', 'data-war-room-scoring-corrections', 'scoring corrections', startWarRoomCore);
+  if (!window.WarRoomCanonicalScoring || !window.WarRoomCanonicalRecommendations) {
+    console.error('War Room canonical scoring correctness failed to load; core initialization blocked.');
+    reportWarRoomEnhancementFailure('canonical scoring engine');
+    return;
+  }
+  startWarRoomCore();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootWarRoom, {once:true});
 else bootWarRoom();
