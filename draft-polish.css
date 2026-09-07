@@ -24,12 +24,12 @@ body[data-board-view="position"] #draft-command-bar.is-on-clock {
   grid-template-columns: minmax(195px,.75fr) minmax(370px,1.55fr) minmax(300px,1.08fr) minmax(205px,.72fr);
 }
 
-/* Other teams' picks stay compressed and muted. Your own players remain fully
-   visible with a positive green status treatment instead of looking unavailable. */
-body[data-board-view="position"] .position-player-card.is-drafted.is-mine {
+/* Other teams' picks stay compressed and muted. Mine is the authoritative
+   positive state, whether or not the card also carries the drafted class. */
+body[data-board-view="position"] .position-player-card.is-mine {
   min-height: 30px;
-  opacity: 1;
-  filter: none;
+  opacity: 1 !important;
+  filter: none !important;
   border-color: rgba(104,201,143,.72) !important;
   border-left-color: #70d596 !important;
   background:
@@ -40,21 +40,21 @@ body[data-board-view="position"] .position-player-card.is-drafted.is-mine {
     inset 0 0 0 1px rgba(112,213,150,.10);
 }
 
-body[data-board-view="position"] .position-player-card.is-drafted.is-mine .position-player-rank strong,
-body[data-board-view="position"] .position-player-card.is-drafted.is-mine .position-player-identity strong {
+body[data-board-view="position"] .position-player-card.is-mine .position-player-rank strong,
+body[data-board-view="position"] .position-player-card.is-mine .position-player-identity strong {
   color: #c4f0d3;
   opacity: 1;
 }
 
-body[data-board-view="position"] .position-player-card.is-drafted.is-mine .position-player-rank small,
-body[data-board-view="position"] .position-player-card.is-drafted.is-mine .position-player-identity small,
-body[data-board-view="position"] .position-player-card.is-drafted.is-mine .position-player-trailing small,
-body[data-board-view="position"] .position-player-card.is-drafted.is-mine .position-player-trailing b {
+body[data-board-view="position"] .position-player-card.is-mine .position-player-rank small,
+body[data-board-view="position"] .position-player-card.is-mine .position-player-identity small,
+body[data-board-view="position"] .position-player-card.is-mine .position-player-trailing small,
+body[data-board-view="position"] .position-player-card.is-mine .position-player-trailing b {
   color: #8fd4a7;
   opacity: 1;
 }
 
-body[data-board-view="position"] .position-player-card.is-drafted.is-mine .position-player-trailing em {
+body[data-board-view="position"] .position-player-card.is-mine .position-player-trailing em {
   border: 1px solid rgba(112,213,150,.28);
   color: #b8e9c9;
   background: rgba(87,207,136,.10);
@@ -81,7 +81,7 @@ body[data-board-view="position"] .position-player-card.is-drafted.is-mine .posit
     grid-template-columns: 112px minmax(0,1fr);
   }
 
-  body[data-board-view="position"] .position-player-card.is-drafted.is-mine {
+  body[data-board-view="position"] .position-player-card.is-mine {
     min-height: 34px;
   }
 
