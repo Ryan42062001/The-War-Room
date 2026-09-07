@@ -60,12 +60,12 @@ body[data-board-view="position"] .position-player-card.is-mine .position-player-
   background: rgba(87,207,136,.10);
 }
 
-/* This label is a key waiting-state orientation cue; make it readable without
-   increasing the height of the rest of the compact feed. */
+/* This label is a key waiting-state orientation cue, so keep it comfortably
+   readable even while the rest of the awareness strip stays compact. */
 .draft-awareness-changes .draft-awareness-heading > span {
   color: #c6cfca;
-  font-size: .56rem;
-  letter-spacing: .075em;
+  font-size: .75rem;
+  letter-spacing: .065em;
 }
 
 @media (max-width: 1180px) and (min-width: 901px) {
@@ -86,6 +86,6 @@ body[data-board-view="position"] .position-player-card.is-mine .position-player-
   }
 
   .draft-awareness-changes .draft-awareness-heading > span {
-    font-size: .54rem;
+    font-size: .70rem;
   }
 }
