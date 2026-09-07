@@ -5,6 +5,23 @@
   var CHANNEL = 'the-war-room:espn-sync:v1';
   var EXTENSION_VERSION = chrome.runtime.getManifest().version;
 
+  function isTrustedWarRoomPage() {
+    try {
+      var locationUrl = new URL(window.location.href);
+      var localHost = locationUrl.hostname === '127.0.0.1' || locationUrl.hostname === 'localhost';
+      var productionHost = locationUrl.protocol === 'https:' &&
+        locationUrl.hostname === 'ryan42062001.github.io' &&
+        (locationUrl.pathname === '/The-War-Room' || locationUrl.pathname.indexOf('/The-War-Room/') === 0);
+      var localDev = locationUrl.protocol === 'http:' && localHost && locationUrl.port === '8765';
+      var marker = document.body && document.body.getAttribute('data-war-room-app');
+      return Boolean((productionHost || localDev) && marker === 'the-war-room');
+    } catch (error) {
+      return false;
+    }
+  }
+
+  if (!isTrustedWarRoomPage()) return;
+
   function sendRuntime(message) {
     try {
       var response = chrome.runtime.sendMessage(message);

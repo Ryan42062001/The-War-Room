@@ -2,6 +2,37 @@
  * The War Room production bootstrap.
  * Production logic lives in ordered classic scripts under js/.
  */
+var WAR_ROOM_BOOTSTRAP_VERSION = '20260907-2';
+
+function reportWarRoomEnhancementFailure(label) {
+  document.body.setAttribute('data-war-room-degraded', 'true');
+  var badges = document.querySelector('.header-badges');
+  if (!badges) return;
+  var badge = document.getElementById('war-room-degraded-status') || document.createElement('div');
+  badge.id = 'war-room-degraded-status';
+  badge.className = 'espn-sync-status espn-sync-status-error';
+  badge.setAttribute('aria-live', 'polite');
+  badge.hidden = false;
+  badge.textContent = 'Draft UI degraded · ' + label + ' unavailable';
+  if (!badge.parentNode) badges.appendChild(badge);
+}
+
+function loadOptionalScript(src, marker, label, next, onLoad) {
+  if (document.querySelector('script[' + marker + ']')) return next();
+  var script = document.createElement('script');
+  script.src = src;
+  script.setAttribute(marker, 'true');
+  script.onload = function() {
+    try { if (onLoad) onLoad(); } catch (error) { reportWarRoomEnhancementFailure(label); }
+    next();
+  };
+  script.onerror = function() {
+    console.warn('War Room enhancement failed to load:', src);
+    reportWarRoomEnhancementFailure(label);
+    next();
+  };
+  document.head.appendChild(script);
+}
 
 function loadDraftPolishStyles() {
   if (document.getElementById('war-room-draft-polish-styles')) return;
@@ -9,64 +40,27 @@ function loadDraftPolishStyles() {
   link.id = 'war-room-draft-polish-styles';
   link.rel = 'stylesheet';
   link.href = 'draft-polish.css?v=20260907-1';
+  link.onerror = function() { reportWarRoomEnhancementFailure('draft polish'); };
   document.head.appendChild(link);
 }
 
 function loadAwarenessLiveSync() {
-  if (document.querySelector('script[data-war-room-awareness-live-sync]')) {
-    loadDraftPolishStyles();
-    return;
-  }
-  var sync = document.createElement('script');
-  sync.src = 'js/war-room-awareness-live-sync.js?v=20260907-1';
-  sync.setAttribute('data-war-room-awareness-live-sync', 'true');
-  sync.onload = loadDraftPolishStyles;
-  document.head.appendChild(sync);
+  loadOptionalScript('js/war-room-awareness-live-sync.js?v=20260907-1', 'data-war-room-awareness-live-sync', 'live awareness', loadDraftPolishStyles);
 }
-
 function loadDraftAwareness() {
-  if (document.querySelector('script[data-war-room-draft-awareness]')) {
-    loadAwarenessLiveSync();
-    return;
-  }
-  var awareness = document.createElement('script');
-  awareness.src = 'js/war-room-draft-awareness.js?v=20260906-1';
-  awareness.setAttribute('data-war-room-draft-awareness', 'true');
-  awareness.onload = loadAwarenessLiveSync;
-  document.head.appendChild(awareness);
+  loadOptionalScript('js/war-room-draft-awareness.js?v=20260906-1', 'data-war-room-draft-awareness', 'draft awareness', loadAwarenessLiveSync);
 }
-
 function loadDraftCommandFixes() {
-  if (document.querySelector('script[data-war-room-command-fixes]')) {
-    loadDraftAwareness();
-    return;
-  }
-  var fixes = document.createElement('script');
-  fixes.src = 'js/war-room-command-bar-fixes.js?v=20260906-1';
-  fixes.setAttribute('data-war-room-command-fixes', 'true');
-  fixes.onload = loadDraftAwareness;
-  document.head.appendChild(fixes);
+  loadOptionalScript('js/war-room-command-bar-fixes.js?v=20260906-1', 'data-war-room-command-fixes', 'command fixes', loadDraftAwareness);
 }
-
 function loadDraftCommandPresentation() {
-  if (document.querySelector('script[data-war-room-command-bar]')) return;
-  var script = document.createElement('script');
-  script.src = 'js/war-room-command-bar.js?v=20260906-1';
-  script.setAttribute('data-war-room-command-bar', 'true');
-  script.onload = function() {
+  loadOptionalScript('js/war-room-command-bar.js?v=20260906-1', 'data-war-room-command-bar', 'command bar', loadDraftCommandFixes, function() {
     if (typeof window.initDraftCommandBar === 'function') window.initDraftCommandBar();
-    loadDraftCommandFixes();
-  };
-  document.head.appendChild(script);
+  });
 }
-
-function bootWarRoom() {
-  runAppInitialization();
-  loadDraftCommandPresentation();
+function loadWarRoomHardening() {
+  loadOptionalScript('js/war-room-hardening.js?v=' + WAR_ROOM_BOOTSTRAP_VERSION, 'data-war-room-hardening', 'hardening layer', loadDraftCommandPresentation);
 }
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', bootWarRoom, { once: true });
-} else {
-  bootWarRoom();
-}
+function bootWarRoom() { runAppInitialization(); loadWarRoomHardening(); }
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootWarRoom, {once:true});
+else bootWarRoom();
