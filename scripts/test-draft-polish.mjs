@@ -107,12 +107,12 @@ try {
   assert.doesNotMatch(state.takenBorder, /112, 213, 150/, 'Taken player should not use the Mine green accent');
   assert.notEqual(state.mineBackground, state.takenBackground, 'Mine and Taken should remain visually distinct');
   assert.equal(state.headingText, 'SINCE YOUR PICK');
-  assert.ok(state.headingSize >= 8.5, `Since Your Pick should be more readable, got ${state.headingSize}px`);
+  assert.ok(state.headingSize >= 11.5, `Since Your Pick should stay clearly readable, got ${state.headingSize}px`);
   assert.equal(state.actionsDisplay, 'none', 'Why/Intel action section should be hidden');
   assert.equal(state.recommendationDisplay, 'none', 'legacy recommendation strip should be removed from the visible layout');
 
   assert.deepEqual(errors, []);
-  console.log('Draft polish regression valid: Mine is green/full-opacity and distinct from Taken, Since Your Pick is larger, and Why/Intel surfaces are removed.');
+  console.log('Draft polish regression valid: Mine is green/full-opacity and distinct from Taken, Since Your Pick is clearly readable, and Why/Intel surfaces are removed.');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));
