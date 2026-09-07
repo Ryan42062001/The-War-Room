@@ -139,8 +139,51 @@ try {
   assert.equal(guardResult.after, guardResult.before);
   assert.equal(guardResult.draftedCount, 4);
 
+  const pressureSetup = await page.evaluate(() => {
+    clearDraftStateFromBoard();
+    triggerAllBoardUpdates({deferIntelligence:true});
+
+    const positions = ['RB','WR','QB','TE'];
+    for (const position of positions) {
+      const column = document.querySelector(`.position-column[data-position="${position}"]`);
+      if (!column) continue;
+      const blocks = [...column.querySelectorAll('.position-tier-block')];
+      const active = blocks.find(block =>
+        [...block.querySelectorAll('.position-player-card')]
+          .filter(card => card.getAttribute('data-status') === 'available').length > 0
+      );
+      if (!active) continue;
+      const availableCards = [...active.querySelectorAll('.position-player-card')]
+        .filter(card => card.getAttribute('data-status') === 'available');
+      if (availableCards.length < 2) continue;
+
+      availableCards.slice(2).forEach(card => card.setAttribute('data-status', 'taken'));
+      active.setAttribute('data-available', '4');
+      active.classList.remove('is-exhausted');
+      refreshDraftCommandBar();
+      return {position, tier:active.getAttribute('data-tier') || ''};
+    }
+    return null;
+  });
+
+  assert.ok(pressureSetup, 'expected at least one active tier with two live players');
+  await page.waitForFunction(position => {
+    const button = document.querySelector(`.draft-command-pressure[data-command-position="${position}"]`);
+    return button?.querySelector('span')?.textContent.trim() === '2 · CLOSING';
+  }, pressureSetup.position);
+
+  const pressureState = await page.evaluate(position => {
+    const button = document.querySelector(`.draft-command-pressure[data-command-position="${position}"]`);
+    return {
+      text: button?.querySelector('span')?.textContent.trim() || '',
+      className: button?.className || ''
+    };
+  }, pressureSetup.position);
+  assert.equal(pressureState.text, '2 · CLOSING', 'Board Pressure must count live available cards instead of stale cached tier totals');
+  assert.match(pressureState.className, /is-closing/);
+
   assert.deepEqual(errors, []);
-  console.log('Command bar regression valid: settings visible, Waiting/On-the-Clock distinct, draft state preserved, ESPN session takeover blocked.');
+  console.log('Command bar regression valid: settings visible, Waiting/On-the-Clock distinct, draft state preserved, ESPN session takeover blocked, and pressure counts live tier cards instead of stale cached totals.');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));
