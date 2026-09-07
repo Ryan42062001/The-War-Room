@@ -11,4 +11,29 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npm test
+      - name: Release guard
+        run: npm run test:release
+      - name: Module architecture
+        run: npm run test:modules
+      - name: Syntax
+        run: npm run test:syntax
+      - name: Dataset
+        run: npm run test:dataset
+      - name: Extension
+        run: npm run test:extension
+      - name: Canonical browser suite
+        run: npm run test:browser
+      - name: Hardening
+        run: npm run test:hardening
+      - name: Command bar
+        run: npm run test:command-bar
+      - name: Draft awareness
+        run: npm run test:draft-awareness
+      - name: Awareness live sync
+        run: npm run test:awareness-live-sync
+      - name: Draft polish
+        run: npm run test:draft-polish
+      - name: Scoring corrections
+        run: npm run test:scoring-corrections
+      - name: Live mock fixtures
+        run: npm run test:live-mock-fixtures
