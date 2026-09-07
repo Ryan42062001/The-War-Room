@@ -6,7 +6,9 @@ const ordered = [
   "js/war-room-rankings.js",
   "js/war-room-draft-state.js",
   "js/war-room-scoring.js",
-  "js/war-room-recommendations.js"
+  "js/war-room-scoring-canonical.js",
+  "js/war-room-recommendations.js",
+  "js/war-room-recommendations-canonical.js"
 ];
 const bootstrap = 'script.js';
 const index = fs.readFileSync('index.html', 'utf8');
