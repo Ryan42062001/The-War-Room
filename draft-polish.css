@@ -30,8 +30,8 @@ body[data-board-view="position"] .position-player-card.is-drafted.is-mine {
   min-height: 30px;
   opacity: 1;
   filter: none;
-  border-color: rgba(104,201,143,.72);
-  border-left-color: #70d596;
+  border-color: rgba(104,201,143,.72) !important;
+  border-left-color: #70d596 !important;
   background:
     linear-gradient(90deg, rgba(87,207,136,.20), rgba(87,207,136,.07) 58%, rgba(87,207,136,.025)),
     #1b2520 !important;
