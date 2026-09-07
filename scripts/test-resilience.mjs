@@ -14,7 +14,8 @@ const serviceWorkerSource = fs.readFileSync(path.join(root, 'service-worker.js')
 const bootstrapVersion = bootstrapSource.match(/WAR_ROOM_BOOTSTRAP_VERSION\s*=\s*'([^']+)'/)?.[1];
 assert.ok(bootstrapVersion, 'bootstrap version is required');
 assert.ok(indexSource.includes(`script.js?v=${bootstrapVersion}`), 'index bootstrap query must match WAR_ROOM_BOOTSTRAP_VERSION');
-assert.match(bootstrapSource, /js\/war-room-resilience\.js\?v=/);
+assert.match(indexSource, /js\/war-room-resilience\.js\?v=20260907-1/);
+assert.doesNotMatch(bootstrapSource, /war-room-resilience/);
 assert.match(resilienceSource, /the-war-room-backup/);
 assert.match(resilienceSource, /replaceWarRoomStorage/);
 assert.match(resilienceSource, /navigator\.serviceWorker\.register\('service-worker\.js'/);
