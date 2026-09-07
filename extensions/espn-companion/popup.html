@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The War Room ESPN Companion</title>
+  <title>The War Room ESPN Live Sync</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <header>
     <span aria-hidden="true">&#127944;</span>
-    <div><small>THE WAR ROOM</small><h1>ESPN Companion</h1><span id="extension-version" class="version-label">Version…</span></div>
+    <div><small>THE WAR ROOM</small><h1>ESPN Live Sync</h1><span id="extension-version" class="version-label">Version…</span></div>
   </header>
 
   <main>
@@ -18,26 +18,39 @@
       <div><span id="war-room-dot" class="dot"></span><small>War Room</small><strong id="war-room-status">Checking…</strong></div>
     </section>
 
-    <section class="counts">
-      <div><small>Captured</small><strong id="captured-count">0</strong></div>
-      <div><small>Applied</small><strong id="applied-count">0</strong></div>
-      <div><small>Unmatched</small><strong id="unmatched-count">0</strong></div>
-      <p id="mine-audit" class="mine-audit">No picks assigned to your slot yet.</p>
+    <section id="sync-health" class="sync-health" aria-live="polite">
+      <small class="sync-eyebrow">SYNC STATUS</small>
+      <strong id="sync-health-title">ESPN Live Sync · Checking…</strong>
+      <p id="message" class="message">Checking ESPN and War Room connections…</p>
+      <p id="sync-recovery-note" class="sync-recovery-note" hidden></p>
     </section>
 
-    <section class="direct-diagnostics" aria-live="polite">
-      <h2>Live capture</h2>
-      <div class="capture-grid">
-        <span>Structured page state</span><strong id="structured-status">Inactive</strong>
-        <span>Network observation</span><strong id="network-status">Inactive</strong>
-        <span>Board fallback</span><strong id="fallback-status">Inactive</strong>
-        <span>Confirmed picks</span><strong id="confirmed-status">0</strong>
+    <details class="technical-details">
+      <summary>Technical details</summary>
+      <div class="technical-details-body">
+        <section class="counts">
+          <div><small>Captured</small><strong id="captured-count">0</strong></div>
+          <div><small>Applied</small><strong id="applied-count">0</strong></div>
+          <div><small>Unmatched</small><strong id="unmatched-count">0</strong></div>
+          <p id="mine-audit" class="mine-audit">No picks assigned to your slot yet.</p>
+        </section>
+
+        <section class="direct-diagnostics" aria-live="polite">
+          <h2>Source diagnostics</h2>
+          <div class="capture-grid">
+            <span>Structured page state</span><strong id="structured-status">Inactive</strong>
+            <span>Network observation</span><strong id="network-status">Inactive</strong>
+            <span>Board fallback</span><strong id="fallback-status">Inactive</strong>
+            <span>Confirmed picks</span><strong id="confirmed-status">0</strong>
+            <span>Conflicts</span><strong id="conflict-status">0</strong>
+          </div>
+          <p id="direct-status">Checking ESPN's read-only capture sources…</p>
+          <p id="version-warning" class="version-warning" hidden></p>
+          <button id="copy-diagnostics" class="copy-diagnostics">Copy diagnostics</button>
+          <button id="reset-trace" class="copy-diagnostics">Reset trace</button>
+        </section>
       </div>
-      <p id="direct-status">Checking ESPN's read-only capture sources…</p>
-      <p id="version-warning" class="version-warning" hidden></p>
-      <button id="copy-diagnostics" class="copy-diagnostics">Copy diagnostics</button>
-      <button id="reset-trace" class="copy-diagnostics">Reset trace</button>
-    </section>
+    </details>
 
     <section>
       <h2>Snake draft settings</h2>
@@ -56,12 +69,12 @@
     </section>
 
     <button id="open-tab" class="open-tab">Open controls in a tab</button>
-
-    <p id="message" class="message">Open both the ESPN draft room and The War Room in this browser.</p>
   </main>
   <script src="espn-observability.js"></script>
   <script src="espn-forensic-core.js"></script>
+  <script src="sync-presentation.js"></script>
   <script src="popup.js"></script>
+  <script src="popup-trust-ux.js"></script>
   <script src="popup-forensics.js"></script>
   <script src="popup-click-provenance.js"></script>
 </body>

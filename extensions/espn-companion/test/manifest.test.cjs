@@ -12,14 +12,33 @@ test('uses Manifest V3 with a service worker', () => {
   assert.equal(manifest.version, '0.9.14');
 });
 
-test('popup exposes version and copyable connection diagnostics', () => {
+test('popup prioritizes ESPN Live Sync trust while retaining technical diagnostics', () => {
   const html = fs.readFileSync(path.join(root, 'popup.html'), 'utf8');
   const script = fs.readFileSync(path.join(root, 'popup.js'), 'utf8');
+  const trust = fs.readFileSync(path.join(root, 'popup-trust-ux.js'), 'utf8');
+  const presentation = fs.readFileSync(path.join(root, 'sync-presentation.js'), 'utf8');
+  assert.match(html, /<h1>ESPN Live Sync<\/h1>/);
+  assert.match(html, /id="sync-health"/);
+  assert.match(html, /id="sync-health-title"/);
+  assert.match(html, /<details class="technical-details">/);
   assert.match(html, /id="extension-version"/);
   assert.match(html, /id="version-warning"/);
   assert.match(html, /id="copy-diagnostics"/);
+  assert.match(html, /id="reset-trace"/);
+  assert.match(html, /id="conflict-status"/);
+  assert.match(html, /src="sync-presentation\.js"/);
+  assert.match(html, /src="popup-trust-ux\.js"/);
+  assert.match(html, /src="popup-click-provenance\.js"/);
   assert.doesNotMatch(html, /fantasypros-key|FantasyPros rankings API/);
   assert.doesNotMatch(script, /SAVE_FANTASYPROS_KEY|REFRESH_FANTASYPROS_RANKINGS/);
+  assert.match(presentation, /ESPN Live Sync · Caught up/);
+  assert.match(presentation, /ESPN Live Sync · Catching up/);
+  assert.match(presentation, /ESPN Live Sync · Needs attention/);
+  assert.match(presentation, /hasRichAckContract/);
+  assert.match(presentation, /numberedAccepted/);
+  assert.match(presentation, /unresolved/);
+  assert.match(trust, /Draft connected/);
+  assert.doesNotMatch(trust, /WebSocket|EventSource|REST snapshot|Hybrid recovery|Board fallback/);
   assert.match(script, /Captured\/applied\/unmatched/);
   assert.match(script, /API available\/complete/);
   assert.match(script, /Missing numbered picks/);
@@ -43,6 +62,10 @@ test('War Room bridge uses same-origin delivery and validates bounded page messa
   assert.match(script, /window.location.origin/);
   assert.match(script, /sanitizeSettings/);
   assert.match(script, /sanitizeAckResult/);
+  assert.match(script, /numberedAccepted/);
+  assert.match(script, /canonicalApplied/);
+  assert.match(script, /externalAccepted/);
+  assert.match(script, /unresolved/);
   assert.doesNotMatch(script, /postMessage(Object.assign({channel: CHANNEL}, message), '*')/);
 });
 
@@ -56,6 +79,11 @@ test('War Room bridge requires the real app identity and local development port'
     'http://127.0.0.1:8765/*',
     'http://localhost:8765/*',
     'https://ryan42062001.github.io/The-War-Room*'
+  ]);
+  assert.deepEqual(warRoomScript.js, [
+    'war-room-content.js',
+    'sync-presentation.js',
+    'war-room-sync-trust-ui.js'
   ]);
 });
 
@@ -98,6 +126,7 @@ test('read-only live observer runs in the page main world at document start', ()
   assert.equal(observer.world, 'MAIN');
   assert.equal(observer.run_at, 'document_start');
   assert.equal(observer.js.indexOf('espn-live-capture.js') < observer.js.indexOf('espn-live-observer.js'), true);
+  assert.equal(observer.js.indexOf('espn-click-provenance.js') < observer.js.indexOf('espn-live-observer.js'), true);
 });
 
 test('live observer decodes binary WebSocket frames and observes event streams', () => {

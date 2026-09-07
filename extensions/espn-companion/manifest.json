@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "The War Room — ESPN Draft Companion",
+  "name": "The War Room — ESPN Live Sync",
   "version": "0.9.14",
-  "description": "Syncs ESPN fantasy football draft picks directly into The War Room.",
+  "description": "Keeps The War Room synchronized with ESPN fantasy football draft picks.",
   "permissions": [
     "storage",
     "scripting"
@@ -19,7 +19,7 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "The War Room ESPN Companion",
+    "default_title": "The War Room — ESPN Live Sync",
     "default_popup": "popup.html"
   },
   "content_scripts": [
@@ -83,7 +83,9 @@
         "https://ryan42062001.github.io/The-War-Room*"
       ],
       "js": [
-        "war-room-content.js"
+        "war-room-content.js",
+        "sync-presentation.js",
+        "war-room-sync-trust-ui.js"
       ],
       "run_at": "document_idle"
     }
