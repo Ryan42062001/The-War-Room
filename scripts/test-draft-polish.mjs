@@ -26,7 +26,7 @@ try {
   await page.goto(appUrl, {waitUntil:'load'});
   await page.waitForSelector('tr.draftrow', {state:'attached'});
   await page.waitForSelector('.position-player-card', {state:'attached'});
-  await page.waitForSelector('#war-room-draft-polish-styles');
+  await page.waitForSelector('#war-room-draft-polish-styles', {state:'attached'});
   await page.waitForFunction(() => typeof WarRoomDraftAwareness === 'object');
 
   await page.evaluate(() => clearDraftStateFromBoard());
