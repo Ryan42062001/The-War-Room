@@ -59,6 +59,11 @@
         "http://localhost/*",
         "https://ryan42062001.github.io/The-War-Room/*"
       ],
+      "include_globs": [
+        "http://127.0.0.1:8765/*",
+        "http://localhost:8765/*",
+        "https://ryan42062001.github.io/The-War-Room*"
+      ],
       "js": [
         "war-room-content.js"
       ],
