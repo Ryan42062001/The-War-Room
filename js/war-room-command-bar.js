@@ -118,19 +118,31 @@
     return alternatives;
   }
 
+  function getLiveTierAvailable(block) {
+    if (!block) return 0;
+    var cards = Array.prototype.slice.call(block.querySelectorAll('.position-player-card'));
+    if (cards.length) {
+      return cards.filter(function(card) {
+        return card.getAttribute('data-status') === 'available';
+      }).length;
+    }
+
+    var cached = parseInt(block.getAttribute('data-available'), 10);
+    return Number.isFinite(cached) ? cached : 0;
+  }
+
   function getPositionPressure(position) {
     var column = document.querySelector('.position-column[data-position="' + position + '"]');
     if (!column) return { position: position, level: 'safe', label: 'SAFE', tier: '', available: null };
 
     var blocks = Array.prototype.slice.call(column.querySelectorAll('.position-tier-block'));
     var active = blocks.find(function(block) {
-      var available = parseInt(block.getAttribute('data-available'), 10);
-      return !block.classList.contains('is-exhausted') && Number.isFinite(available) && available > 0;
+      return getLiveTierAvailable(block) > 0;
     });
 
     if (!active) return { position: position, level: 'critical', label: 'EMPTY', tier: '', available: 0 };
 
-    var available = parseInt(active.getAttribute('data-available'), 10);
+    var available = getLiveTierAvailable(active);
     var tier = active.getAttribute('data-tier') || '';
     var level = 'safe';
     var label = 'SAFE';
