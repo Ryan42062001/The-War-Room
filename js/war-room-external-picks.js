@@ -170,13 +170,11 @@ function resolveExternalPickCandidateRow(pick) {
   return resolveEspnDraftRow(pick && pick.playerName, pick && pick.position);
 }
 
-function isCompanionAuthoritySnapshot(snapshot, sanitizedSnapshot) {
-  if (!snapshot || typeof snapshot !== 'object') return false;
-  if (Number(snapshot.version) === 1) return true;
-  if (snapshot.draftKey) return true;
-  if (snapshot.extensionVersion) return true;
-  if (snapshot.draftComplete) return true;
-  return Number(sanitizedSnapshot && sanitizedSnapshot.expectedCompleted) > 0;
+function isCompanionAuthoritySnapshot(snapshot) {
+  if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot)) return false;
+  return Number(snapshot.version) === 1 &&
+    typeof snapshot.extensionVersion === 'string' && snapshot.extensionVersion.trim().length > 0 &&
+    typeof snapshot.draftKey === 'string' && snapshot.draftKey.trim().length > 0;
 }
 
 function classifyEspnSnapshotPicks(snapshot) {
