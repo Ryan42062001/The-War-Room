@@ -9,7 +9,7 @@ const extensionPath = path.join(root, 'extensions', 'espn-companion');
 const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'war-room-popup-'));
 
 const context = await chromium.launchPersistentContext(userDataDir, {
-  headless: true,
+  headless: false,
   args: [
     `--disable-extensions-except=${extensionPath}`,
     `--load-extension=${extensionPath}`
