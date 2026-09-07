@@ -1,0 +1,91 @@
+/* =========================================================
+   DRAFT POLISH — SIMPLE LIVE-DRAFT PRESENTATION
+   Keep the concise command surface, make Mine unmistakable,
+   and improve awareness-feed readability.
+   ========================================================= */
+
+/* The command bar already contains the useful recommendation and pressure
+   summary. Keep the older detailed widgets and Why/Intel controls out of the
+   Position Tiers flow so the live-draft surface stays focused. */
+body[data-board-view="position"].command-bar-ready #pick-counter-box,
+body[data-board-view="position"].command-bar-ready #recommended-pick-box,
+body[data-board-view="position"].command-bar-ready #board-pressure-widget,
+body[data-board-view="position"] #draft-command-bar .draft-command-actions {
+  display: none !important;
+}
+
+/* Removing the action column gives the remaining four command areas the room
+   they need: status, recommendation, pressure, and always-visible setup. */
+body[data-board-view="position"] #draft-command-bar {
+  grid-template-columns: minmax(150px,.68fr) minmax(300px,1.45fr) minmax(300px,1.15fr) minmax(205px,.78fr);
+}
+
+body[data-board-view="position"] #draft-command-bar.is-on-clock {
+  grid-template-columns: minmax(195px,.75fr) minmax(370px,1.55fr) minmax(300px,1.08fr) minmax(205px,.72fr);
+}
+
+/* Other teams' picks stay compressed and muted. Mine is the authoritative
+   positive state, whether or not the card also carries the drafted class. */
+body[data-board-view="position"] .position-player-card.is-mine {
+  min-height: 30px;
+  opacity: 1 !important;
+  filter: none !important;
+  border-color: rgba(104,201,143,.72) !important;
+  border-left-color: #70d596 !important;
+  background:
+    linear-gradient(90deg, rgba(87,207,136,.20), rgba(87,207,136,.07) 58%, rgba(87,207,136,.025)),
+    #1b2520 !important;
+  box-shadow:
+    inset 3px 0 0 rgba(112,213,150,.92),
+    inset 0 0 0 1px rgba(112,213,150,.10);
+}
+
+body[data-board-view="position"] .position-player-card.is-mine .position-player-rank strong,
+body[data-board-view="position"] .position-player-card.is-mine .position-player-identity strong {
+  color: #c4f0d3;
+  opacity: 1;
+}
+
+body[data-board-view="position"] .position-player-card.is-mine .position-player-rank small,
+body[data-board-view="position"] .position-player-card.is-mine .position-player-identity small,
+body[data-board-view="position"] .position-player-card.is-mine .position-player-trailing small,
+body[data-board-view="position"] .position-player-card.is-mine .position-player-trailing b {
+  color: #8fd4a7;
+  opacity: 1;
+}
+
+body[data-board-view="position"] .position-player-card.is-mine .position-player-trailing em {
+  border: 1px solid rgba(112,213,150,.28);
+  color: #b8e9c9;
+  background: rgba(87,207,136,.10);
+}
+
+/* This label is a key waiting-state orientation cue; make it readable without
+   increasing the height of the rest of the compact feed. */
+.draft-awareness-changes .draft-awareness-heading > span {
+  color: #c6cfca;
+  font-size: .56rem;
+  letter-spacing: .075em;
+}
+
+@media (max-width: 1180px) and (min-width: 901px) {
+  body[data-board-view="position"] #draft-command-bar,
+  body[data-board-view="position"] #draft-command-bar.is-on-clock {
+    grid-template-columns: minmax(140px,.65fr) minmax(250px,1.25fr) minmax(245px,1fr) minmax(190px,.75fr);
+  }
+}
+
+@media (max-width: 768px) {
+  body[data-board-view="position"] #draft-command-bar,
+  body[data-board-view="position"] #draft-command-bar.is-on-clock {
+    grid-template-columns: 112px minmax(0,1fr);
+  }
+
+  body[data-board-view="position"] .position-player-card.is-mine {
+    min-height: 34px;
+  }
+
+  .draft-awareness-changes .draft-awareness-heading > span {
+    font-size: .54rem;
+  }
+}
