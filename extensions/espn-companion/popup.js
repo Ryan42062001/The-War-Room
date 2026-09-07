@@ -191,6 +191,9 @@ function buildDiagnostics(status, trace, delta) {
   var espn = status.espn || {};
   var warRoom = status.warRoom || {};
   var picks = Array.isArray(status.picks) ? status.picks : [];
+  var liveCapture = espn.liveCapture || {};
+  var liveSources = liveCapture.sources || {};
+  var fallbackActive = espn.method === 'dom' || Number(espn.visibleCandidates) > 0;
   var expectedCompleted = Number(espn.expectedCompleted) || 0;
   var capturedNumbers = new Set(picks.map(function(pick) { return Number(pick.overallPick); }));
   var missingNumbers = [];
@@ -221,8 +224,22 @@ function buildDiagnostics(status, trace, delta) {
     'Missing numbered picks: ' + (missingNumbers.length ? missingNumbers.slice(0, 80).join(',') + (missingNumbers.length > 80 ? '…' : '') : 'none'),
     'Screen frames: ' + (frameSummary || 'none reported'),
     'Unique candidates/unresolved-or-duplicate: ' + (Number(espn.visibleCandidates) || 0) + '/' + (Number(espn.visibleRejected) || 0),
+    'Live sources active: react=' + Boolean(liveSources.react && liveSources.react.active) +
+      ', websocket=' + Boolean(liveSources.websocket && liveSources.websocket.active) +
+      ', fetch=' + Boolean(liveSources.fetch && liveSources.fetch.active) +
+      ', xhr=' + Boolean(liveSources.xhr && liveSources.xhr.active) +
+      ', eventsource=' + Boolean(liveSources.eventsource && liveSources.eventsource.active) +
+      ', board=' + fallbackActive,
+    'Ledger confirmed/conflicts/unresolved IDs: ' + picks.length + '/' +
+      (Number(liveCapture.conflicts) || 0) + '/' + (Number(liveCapture.unresolvedPlayerIds) || 0),
+    'API available/complete: ' + Boolean(espn.apiAvailable) + '/' + Boolean(espn.apiComplete),
     'API HTTP/transport/role: ' + (espn.apiHttpStatus || espn.lastApiAttemptHttpStatus || 'none') + '/' +
       (espn.apiTransport || 'none') + '/' + (espn.apiRole || 'none'),
+    'API last successful/status: ' + (espn.lastSuccessfulApiAt || 'none') + '/' +
+      (espn.lastSuccessfulApiHttpStatus || 'none') + ' · ' +
+      (Number(espn.lastSuccessfulApiResolved) || 0) + ' resolved',
+    'API resolved/raw/unresolved: ' + (Number(espn.apiResolved) || 0) + '/' +
+      (Number(espn.apiRawCount) || 0) + '/' + (Number(espn.apiUnresolved) || 0),
     'API scheduled/open slots: ' + (Number(espn.apiScheduledCount) || 0) + '/' + (Number(espn.apiOpenSlots) || 0),
     'Acknowledgment lag: ' + Math.max(0, picks.length - (Number(warRoom.applied) || 0)) + ' pick(s)'
   ];
