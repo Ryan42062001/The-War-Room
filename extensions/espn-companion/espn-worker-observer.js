@@ -48,6 +48,19 @@
     return {count:Array.isArray(candidates) ? candidates.length : 0, latestPick:latestPick};
   }
 
+  function recordForensicBoundary(root, source, data, result) {
+    if (!root || typeof root.__warRoomEspnForensicRecord !== 'function') return;
+    var core = root.WarRoomEspnForensicCore;
+    var fingerprint = core && typeof core.structureFingerprint === 'function'
+      ? core.structureFingerprint(data, {source:source})
+      : null;
+    root.__warRoomEspnForensicRecord('worker-message', source, {
+      candidates:Math.max(0, Number(result && result.count) || 0),
+      latestPick:Math.max(0, Number(result && result.latestPick) || 0),
+      fingerprint:fingerprint
+    });
+  }
+
   function observeEmitter(root, emitter, source, capture) {
     if (!emitter || typeof emitter.addEventListener !== 'function') return;
     emitter.addEventListener('message', function(event) {
@@ -56,6 +69,7 @@
       if (shared) trace.sharedWorkerMessages++;
       else trace.workerMessages++;
       var result = parseCandidateCount(capture, event && event.data, source);
+      recordForensicBoundary(root, source, event && event.data, result);
       if (result.count > 0) {
         if (shared) {
           trace.sharedWorkerCandidateMessages++;
@@ -112,6 +126,7 @@
     runtimeVersion:RUNTIME_VERSION,
     emptyTrace:emptyTrace,
     parseCandidateCount:parseCandidateCount,
+    recordForensicBoundary:recordForensicBoundary,
     observeEmitter:observeEmitter,
     wrapWorker:wrapWorker,
     wrapSharedWorker:wrapSharedWorker,
