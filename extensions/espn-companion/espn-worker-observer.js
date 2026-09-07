@@ -3,9 +3,11 @@
   var api = factory();
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (!root || !root.addEventListener) return;
-  api.install(root, root.WarRoomEspnLiveCapture);
+  if (api.install(root, root.WarRoomEspnLiveCapture)) root.__warRoomEspnWorkerObserverActiveVersion = api.runtimeVersion;
 })(typeof globalThis !== 'undefined' ? globalThis : null, function() {
   'use strict';
+
+  var RUNTIME_VERSION = '1';
 
   function emptyTrace() {
     return {
@@ -107,6 +109,7 @@
   }
 
   return {
+    runtimeVersion:RUNTIME_VERSION,
     emptyTrace:emptyTrace,
     parseCandidateCount:parseCandidateCount,
     observeEmitter:observeEmitter,
