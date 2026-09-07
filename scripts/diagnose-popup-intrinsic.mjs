@@ -28,58 +28,53 @@ try {
   const extensionId = new URL(worker.url()).host;
   console.log('[diagnostic] extension-id', extensionId);
 
-  let openResult;
-  try {
-    openResult = await worker.evaluate(async () => {
-      try {
-        await chrome.action.openPopup();
-        return {ok:true};
-      } catch (error) {
-        return {ok:false, message:String(error && error.message || error)};
-      }
-    });
-  } catch (error) {
-    openResult = {ok:false, message:String(error && error.message || error)};
-  }
+  const browser = context.browser();
+  const browserSession = await browser.newBrowserCDPSession();
+  const targetEvents = [];
+  browserSession.on('Target.targetCreated', event => {
+    if (event.targetInfo?.url?.includes(extensionId) || event.targetInfo?.url?.includes('popup.html')) {
+      targetEvents.push({event:'created', info:event.targetInfo});
+      console.log('[diagnostic] target-created', JSON.stringify(event.targetInfo));
+    }
+  });
+  browserSession.on('Target.targetInfoChanged', event => {
+    if (event.targetInfo?.url?.includes(extensionId) || event.targetInfo?.url?.includes('popup.html')) {
+      targetEvents.push({event:'changed', info:event.targetInfo});
+      console.log('[diagnostic] target-changed', JSON.stringify(event.targetInfo));
+    }
+  });
+  await browserSession.send('Target.setDiscoverTargets', {discover:true});
+
+  const openResult = await worker.evaluate(async () => {
+    try {
+      await chrome.action.openPopup();
+      return {ok:true};
+    } catch (error) {
+      return {ok:false, message:String(error && error.message || error)};
+    }
+  });
   console.log('[diagnostic] openPopup', openResult);
 
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  const pages = context.pages();
-  console.log('[diagnostic] pages', pages.map(page => page.url()));
-  const popup = pages.find(page => page.url() === `chrome-extension://${extensionId}/popup.html`);
-  if (popup) {
-    await popup.waitForLoadState('domcontentloaded');
-    const metrics = await popup.evaluate(() => {
-      const body = document.body;
-      const header = document.querySelector('header');
-      const main = document.querySelector('main');
-      return {
-        innerWidth: window.innerWidth,
-        outerWidth: window.outerWidth,
-        documentWidth: document.documentElement.scrollWidth,
-        bodyWidth: body.getBoundingClientRect().width,
-        headerWidth: header?.getBoundingClientRect().width || 0,
-        mainWidth: main?.getBoundingClientRect().width || 0,
-        bodyCssWidth: getComputedStyle(body).width,
-        htmlMaxWidth: getComputedStyle(document.documentElement).maxWidth,
-        bodyMaxWidth: getComputedStyle(body).maxWidth,
-        headerText: document.querySelector('h1')?.textContent || ''
-      };
-    });
-    console.log('[diagnostic] action-popup-metrics', JSON.stringify(metrics));
-  } else {
-    const page = await context.newPage();
-    await page.goto(`chrome-extension://${extensionId}/popup.html`, {waitUntil:'load'});
-    const metrics = await page.evaluate(() => ({
-      viewport:window.innerWidth,
-      bodyWidth:document.body.getBoundingClientRect().width,
-      bodyCssWidth:getComputedStyle(document.body).width,
-      htmlMaxWidth:getComputedStyle(document.documentElement).maxWidth,
-      bodyMaxWidth:getComputedStyle(document.body).maxWidth,
-      headerText:document.querySelector('h1')?.textContent || ''
-    }));
-    console.log('[diagnostic] direct-popup-page-metrics', JSON.stringify(metrics));
+  for (let attempt = 0; attempt < 10; attempt += 1) {
+    const targets = await browserSession.send('Target.getTargets');
+    const extensionTargets = targets.targetInfos.filter(info => info.url.includes(extensionId) || info.url.includes('popup.html'));
+    if (extensionTargets.length) console.log('[diagnostic] targets', attempt, JSON.stringify(extensionTargets));
+    await new Promise(resolve => setTimeout(resolve, 100));
   }
+  console.log('[diagnostic] target-events-count', targetEvents.length);
+  console.log('[diagnostic] pages', context.pages().map(page => page.url()));
+
+  const page = await context.newPage();
+  await page.goto(`chrome-extension://${extensionId}/popup.html`, {waitUntil:'load'});
+  const metrics = await page.evaluate(() => ({
+    viewport:window.innerWidth,
+    bodyWidth:document.body.getBoundingClientRect().width,
+    bodyCssWidth:getComputedStyle(document.body).width,
+    htmlMaxWidth:getComputedStyle(document.documentElement).maxWidth,
+    bodyMaxWidth:getComputedStyle(document.body).maxWidth,
+    headerText:document.querySelector('h1')?.textContent || ''
+  }));
+  console.log('[diagnostic] direct-popup-page-metrics', JSON.stringify(metrics));
 } finally {
   await context.close();
   fs.rmSync(userDataDir, {recursive:true, force:true});
