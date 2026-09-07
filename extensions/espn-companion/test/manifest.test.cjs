@@ -46,6 +46,19 @@ test('War Room bridge uses same-origin delivery and validates bounded page messa
   assert.doesNotMatch(script, /postMessage(Object.assign({channel: CHANNEL}, message), '*')/);
 });
 
+test('War Room bridge requires the real app identity and local development port', () => {
+  const script = fs.readFileSync(path.join(root, 'war-room-content.js'), 'utf8');
+  const warRoomScript = manifest.content_scripts.find(entry => entry.js.includes('war-room-content.js'));
+  assert.match(script, /data-war-room-app/);
+  assert.match(script, /locationUrl\.port === '8765'/);
+  assert.match(script, /marker === 'the-war-room'/);
+  assert.deepEqual(warRoomScript.include_globs, [
+    'http://127.0.0.1:8765/*',
+    'http://localhost:8765/*',
+    'https://ryan42062001.github.io/The-War-Room*'
+  ]);
+});
+
 test('War Room bridge forwards an explicit ESPN rankings refresh request', () => {
   const script = fs.readFileSync(path.join(root, 'war-room-content.js'), 'utf8');
   assert.match(script, /RANKINGS_REFRESH_REQUEST/);
