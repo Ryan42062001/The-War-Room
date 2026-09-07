@@ -52,3 +52,20 @@ Result: Board/Pick History fallback is live-validated. Structured live capture r
 ## 2026-09-06 14-team v0.9.13 completion finding
 
 A 14-team, slot-11, 16-round ESPN mock reached all 224 numbered picks with no missing pick numbers. The Companion delivered a complete 224-pick ledger, but the War Room applied 223 because a noisy DOM observation had assigned Jerry Jeudy to pick 183 before his real selection at pick 199. The earlier pick also held a same-confidence conflict challenger. Version 0.9.14 adds deterministic duplicate-player repair: when a duplicated player blocks a later real pick, an earlier conflicted assignment may be replaced only by its recorded same-or-higher-confidence challenger, and only when that challenger does not collide with any other ledger player. The structured ESPN draft-detail feed remained empty throughout the live mock and returned 404 after the room closed, so visible Pick History remains the proven live authority for this mock format.
+
+## 2026-09-07 — Wave 3 18-team forensic mock
+
+A disposable 18-team, 16-round ESPN mock completed all 288 picks under the Wave 3 forensic procedure.
+
+- Draft size: 18 × 16 = 288 picks.
+- Visible Pick History / DOM authority reached 288/288 numbered picks.
+- Structured WebSocket candidate count remained 0 during the observed run.
+- Worker and SharedWorker candidate/message evidence relevant to pick recovery remained 0.
+- REST `mDraftDetail` remained empty during the draft and became HTTP 404 / unavailable after completion.
+- The controlled screen recording repeatedly showed `Players → Pick History → Players` while the browser URL/route stayed unchanged.
+- The forensic timeline repeatedly classified the Pick History navigation click as `untrusted`, followed by `mounted-hidden → mounted-visible`, `players → pick-history`, and a synthetic return toward Players. The user's mouse and keyboard were not responsible during the controlled interval.
+- `event.isTrusted === false` establishes that the navigation click was script-generated; this run did **not** identify whether the caller was Companion code, ESPN page code, an ESPN/library component, or another injected script.
+- The transitions were repeated during automatic synchronization rather than appearing as a single rare recovery action. The 2026-09-07 evidence does not by itself prove a fixed timer, ledger-lag threshold, or specific source-lag trigger.
+- Kene Nwangwu at pick #280 was identified as an off-board War Room application case even though Pick History/DOM reached the complete draft. A manual **Rescan ESPN** did not heal that application mismatch.
+
+Result: visible Pick History remains the proven live source for this 18-team mock format. The synthetic navigation behavior is real and repeated, but caller attribution remains open until caller-provenance instrumentation is exercised in another disposable live run.
