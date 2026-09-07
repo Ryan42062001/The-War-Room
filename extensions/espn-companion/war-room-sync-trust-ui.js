@@ -25,16 +25,33 @@
     return root.document && root.document.getElementById('espn-sync-status');
   }
 
+  function fullLabel(presentation) {
+    return presentation.label.replace(/^ESPN Live Sync/, 'ESPN Sync');
+  }
+
   function setBadgeText(badge, presentation) {
     badge.textContent = '';
     var full = root.document.createElement('span');
     full.className = 'espn-sync-label-full';
-    full.textContent = presentation.label.replace(/^ESPN Live Sync/, 'ESPN Sync');
+    full.textContent = fullLabel(presentation);
     var compact = root.document.createElement('span');
     compact.className = 'espn-sync-label-compact';
     compact.textContent = presentation.compactLabel;
     badge.appendChild(full);
     badge.appendChild(compact);
+  }
+
+  function badgeMatchesPresentation(badge, presentation) {
+    var shouldHide = !presentation.visible || presentation.key === 'complete';
+    if (badge.hidden !== shouldHide) return false;
+    if (shouldHide) return true;
+    var full = badge.querySelector('.espn-sync-label-full');
+    var compact = badge.querySelector('.espn-sync-label-compact');
+    return Boolean(
+      full && compact &&
+      full.textContent === fullLabel(presentation) &&
+      compact.textContent === presentation.compactLabel
+    );
   }
 
   function renderPresentation(presentation) {
@@ -83,9 +100,7 @@
     if (!badge || observer || typeof root.MutationObserver !== 'function') return;
     observer = new root.MutationObserver(function() {
       if (!lastPresentation) return;
-      var expected = root.innerWidth <= 600 ? lastPresentation.compactLabel : lastPresentation.label.replace(/^ESPN Live Sync/, 'ESPN Sync');
-      if (badge.hidden !== (!lastPresentation.visible || lastPresentation.key === 'complete') ||
-          (!badge.hidden && badge.textContent.trim() !== expected)) {
+      if (!badgeMatchesPresentation(badge, lastPresentation)) {
         renderPresentation(lastPresentation);
       }
     });
