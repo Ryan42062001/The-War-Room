@@ -27,6 +27,10 @@ try {
   await page.waitForSelector('tr.draftrow', {state:'attached'});
   await page.waitForSelector('.position-player-card', {state:'attached'});
   await page.waitForSelector('#war-room-draft-polish-styles', {state:'attached'});
+  await page.waitForFunction(() => {
+    const link = document.getElementById('war-room-draft-polish-styles');
+    return Boolean(link && link.sheet);
+  });
   await page.waitForFunction(() => typeof WarRoomDraftAwareness === 'object');
 
   await page.evaluate(() => clearDraftStateFromBoard());
@@ -60,6 +64,13 @@ try {
   await page.waitForFunction(({mine, taken}) => {
     return document.querySelector(`.position-player-card[data-player-key="${mine}"].is-mine`) &&
       document.querySelector(`.position-player-card[data-player-key="${taken}"].is-drafted`);
+  }, keys);
+
+  await page.waitForFunction(({mine}) => {
+    const card = document.querySelector(`.position-player-card[data-player-key="${mine}"].is-mine`);
+    if (!card) return false;
+    const style = getComputedStyle(card);
+    return style.borderLeftColor.includes('112, 213, 150') && Number(style.opacity) === 1;
   }, keys);
 
   const state = await page.evaluate(({mine, taken}) => {
