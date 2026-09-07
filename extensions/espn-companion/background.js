@@ -1,7 +1,8 @@
 'use strict';
 
-if (typeof importScripts === 'function') importScripts('espn-live-capture.js');
+if (typeof importScripts === 'function') importScripts('espn-live-capture.js', 'espn-observability.js');
 var liveCapture = globalThis.WarRoomEspnLiveCapture;
+var observability = globalThis.WarRoomEspnObservability;
 
 var STORAGE_KEY = 'warRoomEspnCompanionStateV2';
 var RETIRED_FANTASYPROS_KEY_STORAGE = 'warRoomFantasyProsApiKeyV1';
@@ -14,7 +15,7 @@ var ESPN_URLS = [
   'https://fantasy.espn.com/*',
   'https://www.espn.com/fantasy/*'
 ];
-var ESPN_MAIN_WORLD_VERSIONS = {liveObserver: '3', pageBridge: '2'};
+var ESPN_MAIN_WORLD_VERSIONS = {liveObserver: '3', pageBridge: '2', workerObserver: observability ? '1' : null};
 var ESPN_MAIN_WORLD_REFRESH_DETAIL =
   'ESPN Sync · extension updated — refresh the ESPN draft tab once. Saved picks are preserved.';
 
@@ -74,13 +75,44 @@ function storedValues(value, limit) {
   return Object.keys(value).slice(0, limit).map(function(key) { return value[key]; });
 }
 
+function scrubStoredDiagnosticValue(value, key) {
+  key = String(key || '');
+  if (key === 'parseFailureSamples') return [];
+  if (typeof value === 'string') {
+    if (/^(lastUrl|urlPath|sourceDetail)$/i.test(key) && observability) {
+      return observability.safeRoute(value);
+    }
+    if (/draftKey/i.test(key) && observability) {
+      return observability.anonymizeIdentifier(value);
+    }
+    if (/(?:error|detail)$/i.test(key) && observability) {
+      return observability.redactKnownSecrets(value).slice(0, 500);
+    }
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return value.slice(0, 2000).map(function(item) {
+      return scrubStoredDiagnosticValue(item, key);
+    });
+  }
+  if (isStoredRecord(value)) {
+    var output = {};
+    Object.keys(value).slice(0, 2000).forEach(function(childKey) {
+      output[childKey] = scrubStoredDiagnosticValue(value[childKey], childKey);
+    });
+    return output;
+  }
+  return value;
+}
+
 function sanitizeStoredDiagnostics(value) {
   if (!isStoredRecord(value)) return {};
   try {
     var serialized = JSON.stringify(value);
     if (serialized.length > MAX_STORED_DIAGNOSTIC_BYTES) return {};
     var parsed = JSON.parse(serialized);
-    return isStoredRecord(parsed) ? parsed : {};
+    if (!isStoredRecord(parsed)) return {};
+    return scrubStoredDiagnosticValue(parsed, 'root');
   } catch (error) {
     return {};
   }
@@ -484,7 +516,7 @@ function injectEspnReader(tab) {
   if (!tab || !tab.id) return Promise.resolve();
   return chrome.scripting.executeScript({
     target: {tabId: tab.id, allFrames: true},
-    files: ['espn-live-capture.js', 'espn-live-observer.js', 'espn-page-bridge.js'],
+    files: ['espn-live-capture.js', 'espn-observability.js', 'espn-worker-observer.js', 'espn-live-observer.js', 'espn-page-bridge.js'],
     world: 'MAIN',
     injectImmediately: true
   }).catch(function() {}).then(function() { return chrome.scripting.executeScript({
@@ -521,7 +553,8 @@ function probeEspnMainWorld(tab) {
     func: function() {
       return {
         liveObserver: globalThis.__warRoomEspnLiveObserverActiveVersion || null,
-        pageBridge: globalThis.__warRoomEspnPageBridgeActiveVersion || null
+        pageBridge: globalThis.__warRoomEspnPageBridgeActiveVersion || null,
+        workerObserver: globalThis.__warRoomEspnWorkerObserverActiveVersion || null
       };
     }
   }).then(function(results) {
@@ -529,7 +562,8 @@ function probeEspnMainWorld(tab) {
     if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
     return {
       liveObserver: value.liveObserver == null ? null : String(value.liveObserver).slice(0, 20),
-      pageBridge: value.pageBridge == null ? null : String(value.pageBridge).slice(0, 20)
+      pageBridge: value.pageBridge == null ? null : String(value.pageBridge).slice(0, 20),
+      workerObserver: value.workerObserver == null ? null : String(value.workerObserver).slice(0, 20)
     };
   }).catch(function() {
     return null;
@@ -539,7 +573,8 @@ function probeEspnMainWorld(tab) {
 function espnMainWorldVersionsAreCurrent(versions) {
   return Boolean(versions &&
     versions.liveObserver === ESPN_MAIN_WORLD_VERSIONS.liveObserver &&
-    versions.pageBridge === ESPN_MAIN_WORLD_VERSIONS.pageBridge);
+    versions.pageBridge === ESPN_MAIN_WORLD_VERSIONS.pageBridge &&
+    versions.workerObserver === ESPN_MAIN_WORLD_VERSIONS.workerObserver);
 }
 
 function broadcastWarRoomStatus(status, detail) {
@@ -572,13 +607,18 @@ function updateEspnMainWorldHealth(tab, versions) {
   var previousBridge = state.espn.mainWorldPageBridgeVersion == null
     ? null
     : String(state.espn.mainWorldPageBridgeVersion);
+  var previousWorker = state.espn.mainWorldWorkerObserverVersion == null
+    ? null
+    : String(state.espn.mainWorldWorkerObserverVersion);
   state.espn.mainWorldCheckedAt = checkedAt;
   state.espn.mainWorldLiveObserverVersion = versions.liveObserver;
   state.espn.mainWorldPageBridgeVersion = versions.pageBridge;
+  state.espn.mainWorldWorkerObserverVersion = versions.workerObserver;
 
   if (!current) {
     var changed = !state.espn.mainWorldReloadRequired ||
-      previousObserver !== versions.liveObserver || previousBridge !== versions.pageBridge;
+      previousObserver !== versions.liveObserver || previousBridge !== versions.pageBridge ||
+      previousWorker !== versions.workerObserver;
     state.espn.mainWorldReloadRequired = true;
     state.espn.mainWorldReloadTabId = tabId;
     state.espn.mainWorldReloadReason = 'stale-main-world-capture';

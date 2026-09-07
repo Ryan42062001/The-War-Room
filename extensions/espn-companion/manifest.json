@@ -30,6 +30,8 @@
       ],
       "js": [
         "espn-live-capture.js",
+        "espn-observability.js",
+        "espn-worker-observer.js",
         "espn-live-observer.js",
         "espn-page-bridge.js"
       ],

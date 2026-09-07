@@ -31,7 +31,10 @@
   function safeUrl(value) {
     try {
       var parsed = new URL(String(value || ''), 'https://fantasy.espn.com');
-      return parsed.hostname + parsed.pathname.slice(0, 240);
+      var pathname = String(parsed.pathname || '')
+        .replace(/(\/leagues?\/)\d+/ig, '$1:league')
+        .replace(/(\/league\/)(?:[A-Za-z0-9_-]{5,})/ig, '$1:league');
+      return parsed.hostname + pathname.slice(0, 240);
     } catch (error) { return ''; }
   }
 
