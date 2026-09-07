@@ -17,7 +17,7 @@
       '#espn-sync-status[data-sync-state="unavailable"]{opacity:.72}' +
       '#espn-sync-status[data-sync-state="catchingUp"],#espn-sync-status[data-sync-state="finalizing"]{opacity:.92}' +
       '#espn-sync-status .espn-sync-label-compact{display:none}' +
-      '@media(max-width:600px){#espn-sync-status .espn-sync-label-full{display:none}#espn-sync-status .espn-sync-label-compact{display:inline}}';
+      '@media(max-width:768px){#espn-sync-status .espn-sync-label-full{display:none}#espn-sync-status .espn-sync-label-compact{display:inline}}';
     root.document.head.appendChild(style);
   }
 
