@@ -329,13 +329,22 @@
       offlineState.error = 'service workers unsupported';
       return Promise.resolve(offlineState);
     }
-    return navigator.serviceWorker.register('service-worker.js', {scope: './'}).then(function(registration) {
+    return fetch('service-worker.js', {cache: 'no-store'}).then(function(response) {
+      var contentType = response.headers.get('content-type') || '';
+      if (!response.ok || !/(?:java|ecma)script/i.test(contentType)) {
+        offlineState.error = 'worker script MIME type unavailable';
+        renderSystemCheck();
+        return null;
+      }
+      return navigator.serviceWorker.register('service-worker.js', {scope: './'});
+    }).then(function(registration) {
+      if (!registration) return offlineState;
       offlineState.registered = true;
       offlineState.controlled = Boolean(navigator.serviceWorker.controller);
       if (registration.waiting && navigator.serviceWorker.controller) registration.waiting.postMessage({type: 'SKIP_WAITING'});
       return navigator.serviceWorker.ready;
     }).then(function() {
-      offlineState.registered = true;
+      if (!offlineState.registered) return offlineState;
       offlineState.controlled = Boolean(navigator.serviceWorker.controller);
       renderSystemCheck();
       return offlineState;
