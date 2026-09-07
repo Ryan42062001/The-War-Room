@@ -61,6 +61,9 @@ function loadDraftCommandPresentation() {
 function loadWarRoomHardening() {
   loadOptionalScript('js/war-room-hardening.js?v=' + WAR_ROOM_BOOTSTRAP_VERSION, 'data-war-room-hardening', 'hardening layer', loadDraftCommandPresentation);
 }
-function bootWarRoom() { runAppInitialization(); loadWarRoomHardening(); }
+function startWarRoomCore() { runAppInitialization(); loadWarRoomHardening(); }
+function bootWarRoom() {
+  loadOptionalScript('js/war-room-scoring-corrections.js?v=20260907-1', 'data-war-room-scoring-corrections', 'scoring corrections', startWarRoomCore);
+}
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootWarRoom, {once:true});
 else bootWarRoom();
