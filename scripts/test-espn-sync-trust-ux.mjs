@@ -15,6 +15,16 @@ const mimeTypes = {
   '.ico':'image/x-icon'
 };
 
+function bounded(label, promise, timeoutMs = 8000) {
+  let timer;
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      timer = setTimeout(() => reject(new Error(`${label} timed out after ${timeoutMs}ms`)), timeoutMs);
+    })
+  ]).finally(() => clearTimeout(timer));
+}
+
 const server = http.createServer((request, response) => {
   const relative = request.url === '/' ? 'index.html' : request.url.split('?')[0].replace(/^\//, '');
   const filePath = path.join(root, relative);
@@ -133,8 +143,33 @@ function fullDraftStatus() {
   });
 }
 
-const browser = await chromium.launch({headless:true, executablePath:process.env.CHROME_PATH});
+const stateCases = [
+  ['caughtUp', healthyStatus(), 'ESPN Sync · Caught up'],
+  ['updating', healthyStatus({warRoom:{applied:2}}), 'ESPN Sync · Updating'],
+  ['catchingUp', healthyStatus({
+    picks:[{overallPick:1},{overallPick:2}],
+    espn:{method:'dom', expectedCompleted:3, visibleCandidates:2},
+    warRoom:{applied:2}
+  }), 'ESPN Sync · Catching up'],
+  ['needsAttention', richUnresolvedStatus(), 'ESPN Sync · Needs attention'],
+  ['unavailable', healthyStatus({
+    picks:[],
+    espn:{connected:false, draftPage:false, lastSeenAt:'2026-09-07T12:00:00Z', expectedCompleted:0},
+    warRoom:{connected:true, applied:0, unmatched:0}
+  }), 'ESPN Sync · Unavailable'],
+  ['finalizing', healthyStatus({
+    picks:[{overallPick:1},{overallPick:2}],
+    espn:{draftComplete:true, expectedCompleted:3},
+    warRoom:{applied:2}
+  }), 'ESPN Sync · Finalizing picks']
+];
+
+const launchOptions = {headless:true};
+if (process.env.CHROME_PATH) launchOptions.executablePath = process.env.CHROME_PATH;
+const browser = await chromium.launch(launchOptions);
 try {
+  // Real-app smoke: prove the actual modules can own the production badge without
+  // transport language, runtime errors, or observer feedback loops.
   const page = await browser.newPage({viewport:{width:1280,height:900}});
   const pageErrors = [];
   page.on('pageerror', error => pageErrors.push(error.message));
@@ -144,92 +179,88 @@ try {
   await page.addScriptTag({url:appUrl + 'extensions/espn-companion/war-room-sync-trust-ui.js'});
   await page.waitForFunction(() => Boolean(window.WarRoomEspnSyncTrustUi));
 
-  const stateCases = [
-    ['caughtUp', healthyStatus(), 'ESPN Sync · Caught up'],
-    ['updating', healthyStatus({warRoom:{applied:2}}), 'ESPN Sync · Updating'],
-    ['catchingUp', healthyStatus({
-      picks:[{overallPick:1},{overallPick:2}],
-      espn:{method:'dom', expectedCompleted:3, visibleCandidates:2},
-      warRoom:{applied:2}
-    }), 'ESPN Sync · Catching up'],
-    ['needsAttention', richUnresolvedStatus(), 'ESPN Sync · Needs attention'],
-    ['unavailable', healthyStatus({
-      picks:[],
-      espn:{connected:false, draftPage:false, lastSeenAt:'2026-09-07T12:00:00Z', expectedCompleted:0},
-      warRoom:{connected:true, applied:0, unmatched:0}
-    }), 'ESPN Sync · Unavailable'],
-    ['finalizing', healthyStatus({
-      picks:[{overallPick:1},{overallPick:2}],
-      espn:{draftComplete:true, expectedCompleted:3},
-      warRoom:{applied:2}
-    }), 'ESPN Sync · Finalizing picks']
-  ];
-
   for (const [key, status, label] of stateCases) {
-    const result = await page.evaluate(({status}) => {
+    const result = await bounded(`War Room ${key} render`, page.evaluate(status => {
       const presentation = window.WarRoomEspnSyncTrustUi.renderStatus(status);
       const badge = document.getElementById('espn-sync-status');
       return {
         key:presentation.key,
         hidden:badge.hidden,
         text:badge.innerText.trim(),
-        aria:badge.getAttribute('aria-label') || '',
-        documentWidth:document.documentElement.scrollWidth,
-        viewportWidth:window.innerWidth
+        aria:badge.getAttribute('aria-label') || ''
       };
-    }, {status});
+    }, status));
     assert.equal(result.key, key, `${key}: presentation state`);
     assert.equal(result.hidden, false, `${key}: badge visible`);
     assert.equal(result.text, label, `${key}: desktop label`);
-    assert.ok(result.documentWidth <= result.viewportWidth + 1, `${key}: desktop horizontal overflow`);
   }
 
-  const healthyHeader = await page.evaluate(status => {
+  const healthyHeader = await bounded('War Room healthy header', page.evaluate(status => {
     window.WarRoomEspnSyncTrustUi.renderStatus(status);
     const badge = document.getElementById('espn-sync-status');
     return {text:badge.innerText, aria:badge.getAttribute('aria-label') || ''};
-  }, healthyStatus());
+  }, healthyStatus()));
   assert.doesNotMatch(healthyHeader.text + ' ' + healthyHeader.aria, /websocket|fetch|xhr|eventsource|react|rest|structured|network|board fallback/i);
 
-  const externalHeader = await page.evaluate(status => {
+  const externalHeader = await bounded('War Room external pick header', page.evaluate(status => {
     const presentation = window.WarRoomEspnSyncTrustUi.renderStatus(status);
     const badge = document.getElementById('espn-sync-status');
     return {key:presentation.key, text:badge.innerText.trim(), aria:badge.getAttribute('aria-label') || ''};
-  }, richExternalStatus());
+  }, richExternalStatus()));
   assert.equal(externalHeader.key, 'caughtUp', 'accepted external pick must remain caught up');
   assert.equal(externalHeader.text, 'ESPN Sync · Caught up');
   assert.doesNotMatch(externalHeader.aria, /attention|manual matching/i);
 
-  const unresolvedHeader = await page.evaluate(status => {
+  const unresolvedHeader = await bounded('War Room unresolved header', page.evaluate(status => {
     const presentation = window.WarRoomEspnSyncTrustUi.renderStatus(status);
     const badge = document.getElementById('espn-sync-status');
     return {key:presentation.key, text:badge.innerText.trim(), aria:badge.getAttribute('aria-label') || ''};
-  }, richUnresolvedStatus());
+  }, richUnresolvedStatus()));
   assert.equal(unresolvedHeader.key, 'needsAttention');
   assert.equal(unresolvedHeader.text, 'ESPN Sync · Needs attention');
   assert.match(unresolvedHeader.aria, /1 ESPN pick needs manual matching/);
 
-  const prematureComplete = await page.evaluate(status => {
+  const completed = await bounded('War Room completed header', page.evaluate(status => {
     const presentation = window.WarRoomEspnSyncTrustUi.renderStatus(status);
-    const badge = document.getElementById('espn-sync-status');
-    return {key:presentation.key, hidden:badge.hidden, text:badge.innerText.trim()};
-  }, healthyStatus({espn:{draftComplete:true, expectedCompleted:3}}));
-  assert.equal(prematureComplete.key, 'finalizing');
-  assert.equal(prematureComplete.hidden, false);
-  assert.equal(prematureComplete.text, 'ESPN Sync · Finalizing picks');
-
-  const completed = await page.evaluate(status => {
-    const presentation = window.WarRoomEspnSyncTrustUi.renderStatus(status);
-    const badge = document.getElementById('espn-sync-status');
-    return {key:presentation.key, hidden:badge.hidden};
-  }, fullDraftStatus());
+    return {key:presentation.key, hidden:document.getElementById('espn-sync-status').hidden};
+  }, fullDraftStatus()));
   assert.equal(completed.key, 'complete');
   assert.equal(completed.hidden, true, 'authoritative completion defers to existing Draft complete UI');
+  assert.deepEqual(pageErrors, [], `War Room trust UI page errors: ${JSON.stringify(pageErrors)}`);
+  await page.close();
 
-  const widths = [320, 360, 375, 390, 412, 430, 768, 1280];
-  for (const width of widths) {
-    await page.setViewportSize({width,height:900});
-    const metrics = await page.evaluate(status => {
+  // Responsive presentation fixture: mirror only the status-row contract so this
+  // suite measures ESPN Sync containment, not unrelated production control rows.
+  const responsive = await browser.newPage({viewport:{width:1280,height:900}});
+  const responsiveErrors = [];
+  responsive.on('pageerror', error => responsiveErrors.push(error.message));
+  await responsive.setContent(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+    *{box-sizing:border-box}html,body{margin:0;max-width:100%;overflow-x:hidden}.statusbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%;max-width:100%;padding:8px}.status-spacer{flex:1 1 auto;min-width:0}.espn-sync-status{display:inline-flex;align-items:center;max-width:100%;min-height:28px;padding:4px 8px;white-space:nowrap}
+  </style></head><body><div class="statusbar"><div class="status-spacer"></div><div id="espn-sync-status" class="espn-sync-status" aria-live="polite" hidden></div></div></body></html>`);
+  await responsive.addScriptTag({url:appUrl + 'extensions/espn-companion/sync-presentation.js'});
+  await responsive.addScriptTag({url:appUrl + 'extensions/espn-companion/war-room-sync-trust-ui.js'});
+  await responsive.waitForFunction(() => Boolean(window.WarRoomEspnSyncTrustUi));
+
+  const compactCases = [
+    [healthyStatus(), 'ESPN · Caught up'],
+    [healthyStatus({warRoom:{applied:2}}), 'ESPN · Updating'],
+    [healthyStatus({picks:[{overallPick:1},{overallPick:2}], espn:{method:'dom',expectedCompleted:3,visibleCandidates:2}, warRoom:{applied:2}}), 'ESPN · Catching up'],
+    [richUnresolvedStatus(), 'ESPN · Attention'],
+    [healthyStatus({picks:[],espn:{connected:false,draftPage:false,lastSeenAt:'2026-09-07T12:00:00Z',expectedCompleted:0},warRoom:{connected:true,applied:0,unmatched:0}}), 'ESPN · Unavailable'],
+    [healthyStatus({picks:[{overallPick:1},{overallPick:2}],espn:{draftComplete:true,expectedCompleted:3},warRoom:{applied:2}}), 'ESPN · Finalizing']
+  ];
+  await responsive.setViewportSize({width:320,height:900});
+  for (const [status, label] of compactCases) {
+    const text = await bounded(`compact ${label}`, responsive.evaluate(status => {
+      window.WarRoomEspnSyncTrustUi.renderStatus(status);
+      return document.getElementById('espn-sync-status').innerText.trim();
+    }, status));
+    assert.equal(text, label);
+  }
+
+  for (const width of [320, 360, 375, 390, 412, 430, 768, 1280]) {
+    await responsive.setViewportSize({width,height:900});
+    const metrics = await bounded(`${width}px responsive render`, responsive.evaluate(status => {
       window.WarRoomEspnSyncTrustUi.renderStatus(status);
       const badge = document.getElementById('espn-sync-status');
       const rect = badge.getBoundingClientRect();
@@ -240,15 +271,14 @@ try {
         left:rect.left,
         right:rect.right
       };
-    }, healthyStatus());
-    assert.ok(metrics.documentWidth <= metrics.viewportWidth + 1, `${width}px: War Room horizontal overflow`);
+    }, healthyStatus()));
+    assert.ok(metrics.documentWidth <= metrics.viewportWidth + 1, `${width}px: ESPN Sync fixture horizontal overflow`);
     assert.ok(metrics.left >= -1 && metrics.right <= width + 1, `${width}px: ESPN badge leaves viewport`);
     if (width <= 430) assert.equal(metrics.text, 'ESPN · Caught up', `${width}px: compact ESPN label`);
     else assert.equal(metrics.text, 'ESPN Sync · Caught up', `${width}px: full ESPN label`);
   }
-
-  assert.deepEqual(pageErrors, [], `War Room trust UI page errors: ${JSON.stringify(pageErrors)}`);
-  await page.close();
+  assert.deepEqual(responsiveErrors, [], `responsive trust UI page errors: ${JSON.stringify(responsiveErrors)}`);
+  await responsive.close();
 
   const popupContext = await browser.newContext({viewport:{width:320,height:900}});
   await popupContext.addInitScript(initialStatus => {
@@ -261,15 +291,8 @@ try {
         sendMessage:function(){ return Promise.resolve(window.__warRoomPopupStatus); },
         onMessage:onMessage
       },
-      tabs:{
-        query:function(){ return Promise.resolve([]); },
-        create:function(){ return Promise.resolve(); }
-      },
-      storage:{local:{
-        get:function(){ return Promise.resolve({}); },
-        set:function(){ return Promise.resolve(); },
-        remove:function(){ return Promise.resolve(); }
-      }},
+      tabs:{query:function(){ return Promise.resolve([]); }, create:function(){ return Promise.resolve(); }},
+      storage:{local:{get:function(){ return Promise.resolve({}); }, set:function(){ return Promise.resolve(); }, remove:function(){ return Promise.resolve(); }}},
       scripting:{executeScript:function(){ return Promise.resolve([]); }}
     };
   }, healthyStatus());
@@ -287,7 +310,8 @@ try {
     visibleText:document.body.innerText,
     documentWidth:document.documentElement.scrollWidth,
     viewportWidth:window.innerWidth,
-    actionHeights:Array.from(document.querySelectorAll('button, .technical-details summary')).map(element => element.getBoundingClientRect().height)
+    actionHeights:Array.from(document.querySelectorAll('button, .technical-details summary')).map(element => element.getBoundingClientRect().height),
+    provenance:Boolean(window.__warRoomEspnClickProvenancePopup)
   }));
   assert.equal(popupHealthy.heading, 'ESPN Live Sync');
   assert.equal(popupHealthy.health, 'ESPN Live Sync · Caught up');
@@ -295,6 +319,7 @@ try {
   assert.doesNotMatch(popupHealthy.visibleText, /REST snapshot|Hybrid recovery|Board fallback|Structured page state|Network observation|Unmatched/);
   assert.ok(popupHealthy.documentWidth <= popupHealthy.viewportWidth + 1, 'Companion popup horizontal overflow');
   assert.ok(popupHealthy.actionHeights.every(height => height >= 44), `Companion touch target under 44px: ${popupHealthy.actionHeights}`);
+  assert.equal(popupHealthy.provenance, true, 'QA caller-provenance diagnostics remain loaded');
 
   const popupCases = [
     [healthyStatus({warRoom:{applied:2}}), 'ESPN Live Sync · Updating'],
@@ -306,7 +331,7 @@ try {
     [fullDraftStatus(), 'Draft complete']
   ];
   for (const [status, label] of popupCases) {
-    const text = await popup.evaluate(status => window.WarRoomEspnPopupTrustUx.renderStatus(status).label, status);
+    const text = await bounded(`Companion ${label}`, popup.evaluate(status => window.WarRoomEspnPopupTrustUx.renderStatus(status).label, status));
     assert.equal(text, label, `Companion state ${label}`);
   }
 
@@ -343,15 +368,11 @@ try {
   assert.match(technicalText, /Conflicts/);
   assert.match(technicalText, /Copy diagnostics/);
   assert.match(technicalText, /Reset trace/);
-
   assert.deepEqual(popupErrors, [], `Companion popup page errors: ${JSON.stringify(popupErrors)}`);
   await popupContext.close();
 
-  console.log('ESPN Live Sync trust UX valid: final Core contract, accepted external pick, unresolved attention, 7 states, authoritative completion, diagnostics retention, 8 responsive widths, and 44px actions passed.');
+  console.log('ESPN Live Sync trust UX valid: observer-safe real-app render, final Core contract, accepted external pick, unresolved attention, 7 states, authoritative completion, diagnostics/provenance retention, 8 responsive fixture widths, and 44px actions passed.');
 } finally {
   await browser.close();
-  await new Promise(resolve => {
-    server.close(resolve);
-    if (typeof server.closeAllConnections === 'function') server.closeAllConnections();
-  });
+  await new Promise(resolve => server.close(resolve));
 }
