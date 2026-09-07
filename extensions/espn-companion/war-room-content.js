@@ -52,10 +52,20 @@
       var number = Math.trunc(Number(input) || 0);
       return Math.max(0, Math.min(600, number));
     };
+    var applied = clampCount(value.applied);
+    var unmatched = Array.isArray(value.unmatched) ? value.unmatched.slice(0, 600).map(function() { return null; }) : [];
+    var unresolvedCount = Array.isArray(value.unresolved)
+      ? value.unresolved.length
+      : clampCount(value.unresolved);
     return {
       captured: clampCount(value.captured),
-      applied: clampCount(value.applied),
-      unmatched: Array.isArray(value.unmatched) ? value.unmatched.slice(0, 600).map(function() { return null; }) : [],
+      applied: applied,
+      numberedAccepted: clampCount(value.numberedAccepted == null ? applied : value.numberedAccepted),
+      canonicalApplied: clampCount(value.canonicalApplied == null ? applied : value.canonicalApplied),
+      externalAccepted: clampCount(value.externalAccepted),
+      unresolved: clampCount(unresolvedCount),
+      rejected: clampCount(value.rejected),
+      unmatched: unmatched,
       unavailableApplied: clampCount(value.unavailableApplied),
       latestPick: clampCount(value.latestPick)
     };

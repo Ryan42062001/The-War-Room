@@ -2,7 +2,8 @@
  * The War Room production bootstrap.
  * Production logic lives in ordered classic scripts under js/.
  */
-var WAR_ROOM_BOOTSTRAP_VERSION = '20260907-3';
+var WAR_ROOM_BOOTSTRAP_VERSION = '20260907-4';
+var WAR_ROOM_EXTERNAL_PICK_MODULE = 'js/war-room-external-picks.js?v=20260907-1';
 
 function reportWarRoomEnhancementFailure(label) {
   document.body.setAttribute('data-war-room-degraded', 'true');
@@ -62,13 +63,37 @@ function loadWarRoomHardening() {
   loadOptionalScript('js/war-room-hardening.js?v=' + WAR_ROOM_BOOTSTRAP_VERSION, 'data-war-room-hardening', 'hardening layer', loadDraftCommandPresentation);
 }
 function startWarRoomCore() { runAppInitialization(); loadWarRoomHardening(); }
+
+function loadRequiredExternalPickState() {
+  if (window.WarRoomEspnExternalPicks && window.WarRoomEspnExternalPicks.version === 1) {
+    startWarRoomCore();
+    return;
+  }
+  var script = document.createElement('script');
+  script.src = WAR_ROOM_EXTERNAL_PICK_MODULE;
+  script.setAttribute('data-war-room-external-picks', 'true');
+  script.onload = function() {
+    if (!window.WarRoomEspnExternalPicks || window.WarRoomEspnExternalPicks.version !== 1) {
+      console.error('War Room external ESPN pick state loaded without its required runtime contract.');
+      reportWarRoomEnhancementFailure('ESPN external-pick state');
+      return;
+    }
+    startWarRoomCore();
+  };
+  script.onerror = function() {
+    console.error('War Room external ESPN pick state failed to load; core initialization blocked.');
+    reportWarRoomEnhancementFailure('ESPN external-pick state');
+  };
+  document.head.appendChild(script);
+}
+
 function bootWarRoom() {
   if (!window.WarRoomCanonicalScoring || !window.WarRoomCanonicalRecommendations) {
     console.error('War Room canonical scoring correctness failed to load; core initialization blocked.');
     reportWarRoomEnhancementFailure('canonical scoring engine');
     return;
   }
-  startWarRoomCore();
+  loadRequiredExternalPickState();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootWarRoom, {once:true});
 else bootWarRoom();
