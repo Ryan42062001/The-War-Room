@@ -262,6 +262,26 @@ function applyEspnDraftSnapshot(snapshot) {
   var picks = Array.from(picksByNumber.values()).sort(function(a, b) {
     return a.overallPick - b.overallPick;
   });
+  var existingEspnPickNumbers = Array.prototype.slice.call(
+    document.querySelectorAll('tr.draftrow[data-sync-source="espn"][data-pick]')
+  ).map(function(row) {
+    return Number(row.getAttribute('data-pick'));
+  }).filter(function(pick) {
+    return Number.isInteger(pick) && pick > 0;
+  });
+  var existingEspnLatestPick = existingEspnPickNumbers.reduce(function(maximum, pick) {
+    return Math.max(maximum, pick);
+  }, 0);
+  var incomingLatestPick = picks.length ? picks[picks.length - 1].overallPick : 0;
+  var staleProgressSnapshot = !snapshot.force && existingEspnPickNumbers.length > 0 && (
+    picks.length < existingEspnPickNumbers.length ||
+    incomingLatestPick < existingEspnLatestPick
+  );
+  if (staleProgressSnapshot) {
+    publishEspnSyncAck(latestEspnSyncResult);
+    return latestEspnSyncResult;
+  }
+
   latestEspnSyncMeta = {
     draftComplete: Boolean(snapshot.draftComplete),
     expectedCompleted: sanitizedSnapshot.expectedCompleted,
