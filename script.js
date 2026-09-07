@@ -2,7 +2,7 @@
  * The War Room production bootstrap.
  * Production logic lives in ordered classic scripts under js/.
  */
-var WAR_ROOM_BOOTSTRAP_VERSION = '20260907-3';
+var WAR_ROOM_BOOTSTRAP_VERSION = '20260907-2';
 
 function reportWarRoomEnhancementFailure(label) {
   document.body.setAttribute('data-war-room-degraded', 'true');
@@ -58,11 +58,8 @@ function loadDraftCommandPresentation() {
     if (typeof window.initDraftCommandBar === 'function') window.initDraftCommandBar();
   });
 }
-function loadWarRoomResilience() {
-  loadOptionalScript('js/war-room-resilience.js?v=' + WAR_ROOM_BOOTSTRAP_VERSION, 'data-war-room-resilience', 'resilience layer', loadDraftCommandPresentation);
-}
 function loadWarRoomHardening() {
-  loadOptionalScript('js/war-room-hardening.js?v=' + WAR_ROOM_BOOTSTRAP_VERSION, 'data-war-room-hardening', 'hardening layer', loadWarRoomResilience);
+  loadOptionalScript('js/war-room-hardening.js?v=' + WAR_ROOM_BOOTSTRAP_VERSION, 'data-war-room-hardening', 'hardening layer', loadDraftCommandPresentation);
 }
 function bootWarRoom() { runAppInitialization(); loadWarRoomHardening(); }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootWarRoom, {once:true});
