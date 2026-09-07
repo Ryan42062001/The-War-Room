@@ -33,6 +33,7 @@
         "espn-observability.js",
         "espn-forensic-core.js",
         "espn-forensic-observer.js",
+        "espn-click-provenance.js",
         "espn-worker-observer.js",
         "espn-live-observer.js",
         "espn-page-bridge.js"
