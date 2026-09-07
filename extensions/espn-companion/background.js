@@ -15,7 +15,7 @@ var ESPN_URLS = [
   'https://fantasy.espn.com/*',
   'https://www.espn.com/fantasy/*'
 ];
-var ESPN_MAIN_WORLD_VERSIONS = {liveObserver: '3', pageBridge: '2', workerObserver: '1'};
+var ESPN_MAIN_WORLD_VERSIONS = {liveObserver: '3', pageBridge: '2', workerObserver: observability ? '1' : null};
 var ESPN_MAIN_WORLD_REFRESH_DETAIL =
   'ESPN Sync · extension updated — refresh the ESPN draft tab once. Saved picks are preserved.';
 
