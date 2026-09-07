@@ -72,8 +72,14 @@ try {
     const recommendationBox = document.getElementById('recommended-pick-box');
     return {
       mineOpacity: Number(mineStyle.opacity),
-      takenOpacity: Number(takenStyle.opacity),
       mineBorder: mineStyle.borderLeftColor,
+      takenBorder: takenStyle.borderLeftColor,
+      mineBackground: mineStyle.backgroundImage + '|' + mineStyle.backgroundColor,
+      takenBackground: takenStyle.backgroundImage + '|' + takenStyle.backgroundColor,
+      mineStatus: mineCard?.getAttribute('data-status') || '',
+      takenStatus: takenCard?.getAttribute('data-status') || '',
+      mineClass: mineCard?.classList.contains('is-mine') || false,
+      takenClass: takenCard?.classList.contains('is-drafted') || false,
       headingText: heading?.textContent.trim() || '',
       headingSize: parseFloat(getComputedStyle(heading).fontSize),
       actionsDisplay: actions ? getComputedStyle(actions).display : 'none',
@@ -82,15 +88,20 @@ try {
   }, keys);
 
   assert.equal(state.mineOpacity, 1, 'Mine player should stay fully visible');
-  assert.ok(state.takenOpacity <= 0.35, `taken player should remain muted, got ${state.takenOpacity}`);
+  assert.equal(state.mineClass, true, 'Mine player should retain Mine state');
+  assert.equal(state.takenClass, true, 'Other-team player should retain drafted state');
+  assert.equal(state.mineStatus, 'mine');
+  assert.equal(state.takenStatus, 'taken');
   assert.match(state.mineBorder, /112, 213, 150/, 'Mine player should use the green status accent');
+  assert.doesNotMatch(state.takenBorder, /112, 213, 150/, 'Taken player should not use the Mine green accent');
+  assert.notEqual(state.mineBackground, state.takenBackground, 'Mine and Taken should remain visually distinct');
   assert.equal(state.headingText, 'SINCE YOUR PICK');
   assert.ok(state.headingSize >= 8.5, `Since Your Pick should be more readable, got ${state.headingSize}px`);
   assert.equal(state.actionsDisplay, 'none', 'Why/Intel action section should be hidden');
   assert.equal(state.recommendationDisplay, 'none', 'legacy recommendation strip should be removed from the visible layout');
 
   assert.deepEqual(errors, []);
-  console.log('Draft polish regression valid: Mine is green/full-opacity, Taken stays muted, Since Your Pick is larger, and Why/Intel surfaces are removed.');
+  console.log('Draft polish regression valid: Mine is green/full-opacity and distinct from Taken, Since Your Pick is larger, and Why/Intel surfaces are removed.');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));
