@@ -139,7 +139,7 @@ test('diagnostic provenance code cannot navigate, synthesize clicks, or block na
   assert.doesNotMatch(source, /stopPropagation\s*\(|stopImmediatePropagation\s*\(/);
   assert.doesNotMatch(source, /\.click\s*\(/);
   assert.doesNotMatch(source, /\.dispatchEvent\s*\(/);
-  assert.doesNotMatch(source, /location\.(?:assign|replace)\s*\(|location\s*=/);
+  assert.doesNotMatch(source, /(?:window|root|globalThis|document)\.location\s*=|\blocation\.(?:href|hash|pathname|search)\s*=|\blocation\.(?:assign|replace)\s*\(/);
   assert.doesNotMatch(source, /history\.(?:pushState|replaceState)\s*\(/);
   assert.doesNotMatch(source, /new\s+(?:MouseEvent|PointerEvent|KeyboardEvent)\s*\(/);
 });
