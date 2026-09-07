@@ -5,6 +5,9 @@ var latestStatus = null;
 var PACKAGED_WEBSITE_REQUIREMENT = '0.9.14';
 var reportedRequiredVersion = null;
 var requiredVersion = PACKAGED_WEBSITE_REQUIREMENT;
+var observability = globalThis.WarRoomEspnObservability;
+var OBSERVABILITY_BASELINE_KEY = 'warRoomEspnObservabilityBaselineV1';
+var ESPN_TAB_URLS = ['https://fantasy.espn.com/*', 'https://www.espn.com/fantasy/*'];
 
 function compareVersions(left, right) {
   var a = String(left || '').split('.').map(function(part) { return parseInt(part, 10) || 0; });
@@ -60,7 +63,7 @@ function render(status) {
   document.getElementById('applied-count').textContent = Number(warRoom.applied) || 0;
   document.getElementById('unmatched-count').textContent = Number(warRoom.unmatched) || 0;
   var structuredActive = Boolean(liveSources.react && liveSources.react.active);
-  var networkActive = ['websocket','fetch','xhr'].some(function(source) {
+  var networkActive = ['websocket','fetch','xhr','eventsource'].some(function(source) {
     return Boolean(liveSources[source] && liveSources[source].active);
   });
   var fallbackActive = espn.method === 'dom' || Number(espn.visibleCandidates) > 0;
@@ -137,15 +140,57 @@ function render(status) {
   }
 }
 
+function pickDiagnosticEspnTab() {
+  return chrome.tabs.query({url: ESPN_TAB_URLS}).then(function(tabs) {
+    var draftTabs = (Array.isArray(tabs) ? tabs : []).filter(function(tab) {
+      return tab && tab.id != null && /draft/i.test(String(tab.url || ''));
+    });
+    if (!draftTabs.length) return null;
+    return draftTabs.find(function(tab) { return Boolean(tab.active); }) ||
+      draftTabs.slice().sort(function(left, right) {
+        return Number(right.lastAccessed) - Number(left.lastAccessed);
+      })[0];
+  }).catch(function() { return null; });
+}
 
-function buildDiagnostics(status) {
+function probeEspnObservability() {
+  if (!observability || !chrome.scripting || typeof chrome.scripting.executeScript !== 'function') {
+    return Promise.resolve(null);
+  }
+  return pickDiagnosticEspnTab().then(function(tab) {
+    if (!tab || tab.id == null) return null;
+    return chrome.scripting.executeScript({
+      target: {tabId: tab.id},
+      world: 'MAIN',
+      func: function() {
+        var api = globalThis.WarRoomEspnObservability;
+        return api && typeof api.inspectPage === 'function' ? api.inspectPage(globalThis) : null;
+      }
+    }).then(function(results) {
+      var value = Array.isArray(results) && results[0] && results[0].result;
+      return value && typeof value === 'object' ? value : null;
+    }).catch(function() { return null; });
+  });
+}
+
+function readObservabilityBaseline() {
+  return chrome.storage.local.get(OBSERVABILITY_BASELINE_KEY).then(function(result) {
+    var value = result && result[OBSERVABILITY_BASELINE_KEY];
+    return value && typeof value === 'object' && !Array.isArray(value) ? value : null;
+  }).catch(function() { return null; });
+}
+
+function writeObservabilityBaseline(trace) {
+  var value = {};
+  value[OBSERVABILITY_BASELINE_KEY] = observability.baselineFromTrace(trace);
+  return chrome.storage.local.set(value).catch(function() {});
+}
+
+function buildDiagnostics(status, trace, delta) {
   status = status || {};
   var espn = status.espn || {};
   var warRoom = status.warRoom || {};
   var picks = Array.isArray(status.picks) ? status.picks : [];
-  var liveCapture = espn.liveCapture || {};
-  var liveSources = liveCapture.sources || {};
-  var fallbackActive = espn.method === 'dom' || Number(espn.visibleCandidates) > 0;
   var expectedCompleted = Number(espn.expectedCompleted) || 0;
   var capturedNumbers = new Set(picks.map(function(pick) { return Number(pick.overallPick); }));
   var missingNumbers = [];
@@ -158,9 +203,6 @@ function buildDiagnostics(status) {
       ': picks ' + (Number(frame.picks) || 0) + ', candidates ' + (Number(frame.candidates) || 0) +
       ', rejected ' + (Number(frame.rejected) || 0) + ', current ' + (Number(frame.currentPick) || 0);
   }).join(' | ');
-  var parseFailures = Object.keys(espn.screenFrames || {}).reduce(function(samples, key) {
-    return samples.concat((espn.screenFrames[key] && espn.screenFrames[key].parseFailureSamples) || []);
-  }, []).slice(0, 8);
   var lines = [
     'The War Room ESPN Companion diagnostics',
     'Generated: ' + new Date().toISOString(),
@@ -179,34 +221,35 @@ function buildDiagnostics(status) {
     'Missing numbered picks: ' + (missingNumbers.length ? missingNumbers.slice(0, 80).join(',') + (missingNumbers.length > 80 ? '…' : '') : 'none'),
     'Screen frames: ' + (frameSummary || 'none reported'),
     'Unique candidates/unresolved-or-duplicate: ' + (Number(espn.visibleCandidates) || 0) + '/' + (Number(espn.visibleRejected) || 0),
-    'Unparseable row samples: ' + (parseFailures.length ? parseFailures.join(' || ') : 'none'),
-    'Live sources active: react=' + Boolean(liveSources.react && liveSources.react.active) +
-      ', websocket=' + Boolean(liveSources.websocket && liveSources.websocket.active) +
-      ', fetch=' + Boolean(liveSources.fetch && liveSources.fetch.active) +
-      ', xhr=' + Boolean(liveSources.xhr && liveSources.xhr.active) + ', board=' + fallbackActive,
-    'Live source counters: sockets=' + (Number(liveCapture.counters && liveCapture.counters.sockets) || 0) +
-      ', socket messages=' + (Number(liveCapture.counters && liveCapture.counters.socketMessages) || 0) +
-      ', fetch responses=' + (Number(liveCapture.counters && liveCapture.counters.fetchResponses) || 0) +
-      ', xhr responses=' + (Number(liveCapture.counters && liveCapture.counters.xhrResponses) || 0) +
-      ', React scans=' + (Number(liveCapture.counters && liveCapture.counters.reactScans) || 0),
-    'Live observations/candidates/latest: ' + (Number(liveCapture.observations) || 0) + '/' +
-      (Number(liveCapture.candidates) || 0) + '/' + (Number(liveCapture.latestPick) || 0),
-    'Ledger confirmed/conflicts/unresolved IDs: ' + picks.length + '/' +
-      (Number(liveCapture.conflicts) || 0) + '/' + (Number(liveCapture.unresolvedPlayerIds) || 0),
-    'API available/complete: ' + Boolean(espn.apiAvailable) + '/' + Boolean(espn.apiComplete),
-    'API HTTP/transport/role: ' + (espn.apiHttpStatus || 'none') + '/' + (espn.apiTransport || 'none') + '/' + (espn.apiRole || 'none'),
-    'API last successful/status: ' + (espn.lastSuccessfulApiAt || 'none') + '/' +
-      (espn.lastSuccessfulApiHttpStatus || 'none') + ' · ' +
-      (Number(espn.lastSuccessfulApiResolved) || 0) + ' resolved',
-    'API resolved/raw/unresolved: ' + (Number(espn.apiResolved) || 0) + '/' + (Number(espn.apiRawCount) || 0) + '/' + (Number(espn.apiUnresolved) || 0),
-    'ESPN market ADP players: ' + (Number(espn.marketAdpCount) || 0),
+    'API HTTP/transport/role: ' + (espn.apiHttpStatus || espn.lastApiAttemptHttpStatus || 'none') + '/' +
+      (espn.apiTransport || 'none') + '/' + (espn.apiRole || 'none'),
     'API scheduled/open slots: ' + (Number(espn.apiScheduledCount) || 0) + '/' + (Number(espn.apiOpenSlots) || 0),
-    'API pick fields: ' + (Array.isArray(espn.apiPickFields) && espn.apiPickFields.length ? espn.apiPickFields.join(',') : 'none'),
-    'Acknowledgment lag: ' + Math.max(0, picks.length - (Number(warRoom.applied) || 0)) + ' pick(s)',
-    'API error: ' + (espn.apiError || 'none'),
-    'Delivery error: ' + (warRoom.deliveryError || 'none')
+    'Acknowledgment lag: ' + Math.max(0, picks.length - (Number(warRoom.applied) || 0)) + ' pick(s)'
   ];
-  return lines.join('\n');
+  if (observability && trace) lines = lines.concat(observability.formatTraceLines(trace, delta));
+  var apiError = espn.apiError || espn.lastApiAttemptError;
+  if (apiError) lines.push('API error: ' + String(apiError).slice(0, 160));
+  if (warRoom.deliveryError) lines.push('Delivery error: ' + String(warRoom.deliveryError).slice(0, 160));
+  var output = lines.join('\n');
+  return observability ? observability.redactKnownSecrets(output) : output;
+}
+
+function copyText(value) {
+  var copyPromise = navigator.clipboard && navigator.clipboard.writeText
+    ? navigator.clipboard.writeText(value)
+    : Promise.reject(new Error('Clipboard API unavailable'));
+  return copyPromise.catch(function() {
+    var textarea = document.createElement('textarea');
+    textarea.value = value;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    var copied = document.execCommand('copy');
+    textarea.remove();
+    if (!copied) throw new Error('Clipboard fallback failed');
+  });
 }
 
 function refresh() {
@@ -258,35 +301,31 @@ document.getElementById('reset').addEventListener('click', function(event) {
 
 document.getElementById('copy-diagnostics').addEventListener('click', function(event) {
   var button = event.currentTarget;
-  var diagnostics = buildDiagnostics(latestStatus);
-  var copyPromise = navigator.clipboard && navigator.clipboard.writeText
-    ? navigator.clipboard.writeText(diagnostics)
-    : Promise.reject(new Error('Clipboard API unavailable'));
-  copyPromise.catch(function() {
-    var textarea = document.createElement('textarea');
-    textarea.value = diagnostics;
-    textarea.setAttribute('readonly', '');
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    textarea.select();
-    var copied = document.execCommand('copy');
-    textarea.remove();
-    if (!copied) throw new Error('Clipboard fallback failed');
-  }).then(function() {
-    button.textContent = 'Diagnostics copied';
-    setTimeout(function() { button.textContent = 'Copy diagnostics'; }, 1800);
-  }).catch(function() {
-    button.textContent = 'Copy failed';
-    setTimeout(function() { button.textContent = 'Copy diagnostics'; }, 1800);
-  });
+  button.textContent = 'Collecting…';
+  Promise.all([send({type: 'GET_STATUS'}), probeEspnObservability(), readObservabilityBaseline()])
+    .then(function(results) {
+      var status = results[0] || latestStatus || {};
+      var pageProbe = results[1] || {};
+      var previous = results[2];
+      var trace = observability ? observability.buildTraceSnapshot(status, pageProbe) : null;
+      var delta = observability && trace ? observability.diffTrace(previous, trace) : null;
+      var diagnostics = buildDiagnostics(status, trace, delta);
+      return copyText(diagnostics).then(function() {
+        return trace && observability ? writeObservabilityBaseline(trace) : null;
+      });
+    }).then(function() {
+      button.textContent = 'Diagnostics copied';
+      setTimeout(function() { button.textContent = 'Copy diagnostics'; }, 1800);
+    }).catch(function() {
+      button.textContent = 'Copy failed';
+      setTimeout(function() { button.textContent = 'Copy diagnostics'; }, 1800);
+    });
 });
 
 document.getElementById('open-tab').addEventListener('click', function() {
   chrome.tabs.create({url: chrome.runtime.getURL('popup.html')});
   window.close();
 });
-
 
 refresh();
 setInterval(refresh, 1000);
