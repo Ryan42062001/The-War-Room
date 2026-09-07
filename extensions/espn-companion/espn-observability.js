@@ -48,8 +48,8 @@
 
   function redactKnownSecrets(value) {
     var text = String(value == null ? '' : value);
-    text = text.replace(/\b(espn_s2|swid|authorization|cookie|password|session(?:id|token)?|access[_-]?token|refresh[_-]?token)\b\s*[:=]\s*([^\s;&,]+)/ig,
-      function(match, key) { return key + '=[redacted]'; });
+    text = text.replace(/\b(?:espn_s2|swid|authorization|cookie|password|session(?:id|token)?|access[_-]?token|refresh[_-]?token)\b\s*[:=]\s*([^\s;&,]+)/ig,
+      '[redacted-credential]');
     text = text.replace(/https?:\/\/[^\s)]+/ig, function(url) {
       var safe = safeRoute(url);
       return safe ? 'https://' + safe : '[redacted-url]';
