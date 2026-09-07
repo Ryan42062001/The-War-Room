@@ -43,14 +43,24 @@
     return maximum == null ? number : Math.min(maximum, number);
   }
 
+  function redactPath(pathname) {
+    return String(pathname || '')
+      .split(/[?#]/)[0]
+      .replace(/(\/leagues?\/)\d+/ig, '$1:league')
+      .replace(/(\/league\/)(?:[A-Za-z0-9_-]{5,})/ig, '$1:league')
+      .replace(/(leagueId[\/=])\d+/ig, '$1:league');
+  }
+
   function safeRoute(value) {
+    var raw = String(value || '').trim();
+    if (!raw) return '';
+    var alreadySafe = raw.match(/^([A-Za-z0-9.-]+)(\/[^?#]*)?(?:[?#].*)?$/);
+    if (alreadySafe && /(?:^|\.)espn\.com$/i.test(alreadySafe[1])) {
+      return alreadySafe[1].slice(0, 100) + redactPath(alreadySafe[2] || '').slice(0, 240);
+    }
     try {
-      var parsed = new URL(String(value || ''), 'https://fantasy.espn.com');
-      var path = String(parsed.pathname || '')
-        .replace(/(\/leagues?\/)\d+/ig, '$1:league')
-        .replace(/(\/league\/)(?:[A-Za-z0-9_-]{5,})/ig, '$1:league')
-        .replace(/(leagueId[\/=])\d+/ig, '$1:league');
-      return String(parsed.hostname || '').slice(0, 100) + path.slice(0, 240);
+      var parsed = new URL(raw, 'https://fantasy.espn.com');
+      return String(parsed.hostname || '').slice(0, 100) + redactPath(parsed.pathname).slice(0, 240);
     } catch (error) {
       return '';
     }
@@ -273,7 +283,6 @@
       if (event.latestPick != null) parts.push('latest=' + event.latestPick);
       if (event.applied != null) parts.push('applied=' + event.applied);
       if (event.acknowledged != null) parts.push('ack=' + event.acknowledged);
-      if (event.restState) parts.push('rest=' + event.restState);
       if (event.fingerprint) {
         parts.push('fp=' + event.fingerprint.type + ':' + event.fingerprint.schema +
           (event.fingerprint.bytes != null ? ':' + event.fingerprint.bytes + 'b' : ''));
