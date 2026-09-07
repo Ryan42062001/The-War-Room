@@ -13,6 +13,8 @@ const EXTERNAL_NAME = 'Kene Nwangwu';
 const EXTERNAL_POSITION = 'RB';
 const EXTERNAL_PICK = 280;
 const PLAYER_UNIVERSE = 717;
+const COMPANION_VERSION = 'test-companion-1';
+const DRAFT_KEY = 'fixture:espn-offboard';
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(.:)/, '$1')), '..');
 const server = process.env.WAR_ROOM_URL ? null : http.createServer((request, response) => {
@@ -117,15 +119,18 @@ async function configure(page) {
 }
 
 async function applyFullSnapshot(page, picks) {
-  return page.evaluate(({picks, teams, rounds, draftSlot}) => window.WarRoomEspnSync.applySnapshot({
+  return page.evaluate(({picks, teams, rounds, draftSlot, extensionVersion, draftKey}) => window.WarRoomEspnSync.applySnapshot({
     version:1,
+    extensionVersion,
+    draftKey,
     draftComplete:true,
     expectedCompleted:teams * rounds,
     picks,
     unavailablePlayers:[],
     marketAdp:[],
     config:{teams, rounds, draftSlot}
-  }), {picks, teams:TEAMS, rounds:ROUNDS, draftSlot:DRAFT_SLOT});
+  }), {picks, teams:TEAMS, rounds:ROUNDS, draftSlot:DRAFT_SLOT,
+    extensionVersion:COMPANION_VERSION, draftKey:DRAFT_KEY});
 }
 
 async function inspect(page) {
@@ -163,6 +168,30 @@ const browser = await chromium.launch({headless:true});
 try {
   const opponentRun = await openPage(browser);
   await configure(opponentRun.page);
+
+  const bareResult = await opponentRun.page.evaluate(({teams, rounds, draftSlot}) => window.WarRoomEspnSync.applySnapshot({
+    version:1,
+    draftComplete:true,
+    expectedCompleted:1,
+    picks:[{
+      overallPick:1,
+      playerName:'Internal Off Board Fixture',
+      position:'RB',
+      teamSlot:2,
+      isMine:false,
+      method:'structured'
+    }],
+    unavailablePlayers:[],
+    marketAdp:[],
+    config:{teams, rounds, draftSlot}
+  }), {teams:TEAMS, rounds:ROUNDS, draftSlot:DRAFT_SLOT});
+  assert.equal(bareResult.externalAccepted, 0, 'bare/internal snapshot must not gain Companion external-pick authority');
+  assert.equal(bareResult.applied, 0);
+  assert.equal(bareResult.unmatched.length, 1);
+  assert.equal(bareResult.unresolved.length, 1);
+  assert.equal(bareResult.unresolved[0].reason, 'unconfirmed-off-board');
+  assert.equal(await opponentRun.page.evaluate(() => window.WarRoomEspnExternalPicks.getAll().length), 0);
+
   const fixture = await buildFixture(opponentRun.page, false);
   const result = await applyFullSnapshot(opponentRun.page, fixture.picks);
   assert.equal(result.captured, 288);
@@ -211,11 +240,15 @@ try {
   assert.equal(state.external[0].position, 'RB');
   assert.equal(state.external[0].teamSlot, snakeTeamForPick(280));
 
-  const staleResult = await opponentRun.page.evaluate(({picks, teams, rounds, draftSlot}) => window.WarRoomEspnSync.applySnapshot({
+  const staleResult = await opponentRun.page.evaluate(({picks, teams, rounds, draftSlot, extensionVersion, draftKey}) => window.WarRoomEspnSync.applySnapshot({
+    version:1,
+    extensionVersion,
+    draftKey,
     expectedCompleted:287,
     picks:picks.slice(0, 287),
     config:{teams, rounds, draftSlot}
-  }), {picks:fixture.picks, teams:TEAMS, rounds:ROUNDS, draftSlot:DRAFT_SLOT});
+  }), {picks:fixture.picks, teams:TEAMS, rounds:ROUNDS, draftSlot:DRAFT_SLOT,
+    extensionVersion:COMPANION_VERSION, draftKey:DRAFT_KEY});
   assert.equal(staleResult.applied, 288, 'stale smaller snapshot cannot lower accepted progress');
   state = await inspect(opponentRun.page);
   assert.equal(state.completed, 288);
@@ -274,7 +307,7 @@ try {
   assert.deepEqual(mineRun.errors, []);
   await mineRun.context.close();
 
-  console.log('ESPN off-board pick correctness valid: live Kene #280 reproduced, 288/288 accepted, external Mine roster semantics preserved, persistence/correction/stale-snapshot behavior passed.');
+  console.log('ESPN off-board pick correctness valid: bare internal authority rejected; live Kene #280 reproduced; 288/288 accepted; external Mine roster semantics, persistence/correction/stale-snapshot behavior passed.');
 } finally {
   await browser.close();
   if (server) await new Promise(resolve => server.close(resolve));
