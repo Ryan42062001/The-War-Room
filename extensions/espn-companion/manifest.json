@@ -31,6 +31,8 @@
       "js": [
         "espn-live-capture.js",
         "espn-observability.js",
+        "espn-forensic-core.js",
+        "espn-forensic-observer.js",
         "espn-worker-observer.js",
         "espn-live-observer.js",
         "espn-page-bridge.js"
@@ -39,6 +41,19 @@
       "match_about_blank": true,
       "run_at": "document_start",
       "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://fantasy.espn.com/*",
+        "https://www.espn.com/fantasy/*"
+      ],
+      "js": [
+        "espn-forensic-core.js",
+        "espn-forensic-content.js"
+      ],
+      "all_frames": true,
+      "match_about_blank": true,
+      "run_at": "document_start"
     },
     {
       "matches": [
