@@ -350,5 +350,8 @@ try {
   console.log('ESPN Live Sync trust UX valid: final Core contract, accepted external pick, unresolved attention, 7 states, authoritative completion, diagnostics retention, 8 responsive widths, and 44px actions passed.');
 } finally {
   await browser.close();
-  await new Promise(resolve => server.close(resolve));
+  await new Promise(resolve => {
+    server.close(resolve);
+    if (typeof server.closeAllConnections === 'function') server.closeAllConnections();
+  });
 }
