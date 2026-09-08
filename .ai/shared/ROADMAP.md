@@ -1,7 +1,7 @@
 # War Room Roadmap
 
 Status: ACTIVE
-Last updated: 2026-09-07
+Last updated: 2026-09-08
 Owner: Manager / Architect
 
 ## Project priority
@@ -46,60 +46,49 @@ Draft-day reliability over feature count:
 - canonical `.ai/shared/*` state, roadmap, decisions, and workflow established
 - Manager / Builder / Research / Auditor handoff locations established
 - active work mapped to WR Task IDs
-- legacy `AGENTS.md` retained as technical/history context, with `.ai/shared/*` explicitly canonical for project management
+- WR-004 added safe parallel orchestration and activation-plan rules
 
-### ESPN Live Sync reliability work — CLOSEOUT IN PROGRESS
+### ESPN Live Sync reliability / live-validation closeout — COMPLETE
 
-Merged historical work includes:
+Completed work includes:
 
 - observability and forensic timeline
-- off-board ESPN pick correctness
+- layered source handling and live-proven Pick History DOM fallback
+- authoritative off-board ESPN pick correctness
 - trust-focused user-facing sync states
 - popup intrinsic-width regression fix
 - synthetic navigation provenance V1–V3
 - responsive tablet document-overflow fix
 - WR-003 completion-state consistency
+- WR-002 required Level-4 synthetic-navigation attribution validation
 
-## Active milestone: ESPN Live Sync reliability / live-validation closeout
+Closeout evidence:
+- WR-003: COMPLETE / Auditor PASS / merged as `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
+- WR-002: COMPLETE / Level 4 VERIFIED / PASS / no blocking findings
+- WR-002 live sync checkpoint: Captured/Applied/Unmatched `5/5/0`, ACK lag `0`, no missing picks, no conflicts
+- strongest defensible navigation attribution: `other-programmatic / caller=unknown / hash=174uabd`
+- actor identity is not attributed beyond the available sanitized evidence
 
-Milestone status: IN PROGRESS
+The ESPN Live Sync reliability / live-validation closeout milestone is now **COMPLETE**.
 
-### WR-002 — ESPN Synthetic Navigation Attribution Level 4
+## Current milestone
 
-Status: PENDING LIVE VALIDATION
-Next role: Independent Auditor / QA
-Goal: reproduce one automatic Players → Pick History → Players transition on merged provenance V3 and capture the strongest defensible sanitized caller class.
-Required validation: Level 4
-Completion gate:
-- current main/extension loaded
-- one automatic transition captured without manual Pick History activation
-- diagnostics record caller class/script/function/hash when available
-- result documented without overclaiming attribution
+**None assigned.**
 
-### WR-003 — ESPN Completion-State Consistency
-
-Status: COMPLETE
-Implementation PR: #108
-Audit verdict: PASS
-Merge SHA: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
-Result:
-- complete unique configured numbered-pick ledger is terminal completion authority
-- false post-completion UI heartbeat cannot demote completion
-- completion counters remain terminal
-- reset/session and incomplete-draft semantics remain preserved
-- no permission expansion or unrelated production change
-Validation:
-- Level 1 PASS
-- Level 2 PASS
-- Level 3 PASS
-- Level 4 not required for WR-003 by independent audit
-
-## Milestone completion rule
-
-The ESPN Live Sync reliability / live-validation closeout milestone is **not yet complete** because WR-002 remains open at required Level 4 validation.
-
-Do not start a broad new feature wave merely to keep the workflow active. Close WR-002 first, then the Manager should decide whether this milestone is complete based on the resulting evidence.
+No open roadmap milestone remains after the ESPN Live Sync closeout.
 
 ## Next milestone
 
-Not assigned. No new feature milestone should be invented until the active closeout milestone is resolved and the Manager records the outcome.
+**Not assigned.**
+
+The roadmap does not currently contain a legitimate successor milestone. The Manager must not invent feature work merely to keep employees active.
+
+Before activating Builder, Research, or Auditor again, the Manager/user should identify a real project need and define a new WR Task ID or milestone with objective, scope, acceptance criteria, and evidence requirements.
+
+Existing non-blocking observations such as legacy `AGENTS.md` wording, diagnostics capture-source wording, and unresolved synthetic-navigation actor identity do not automatically become the next milestone.
+
+## Parallelism status
+
+No Parallel Work Wave is active.
+
+There are currently no approved independent specialist tasks to run concurrently. All specialist roles may remain IDLE until a legitimate next milestone/task is selected.
