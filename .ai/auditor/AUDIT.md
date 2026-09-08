@@ -1,135 +1,132 @@
-# Independent Audit — WR-003
+# Independent Audit — WR-002
 
-Task ID: WR-003
+Task ID: WR-002
 Role: Independent Auditor / QA
-PR reviewed: #108 — ESPN Completion-State Consistency
-Manager specification: `.ai/manager/WR-003.md`
+Manager specification: `.ai/manager/WR-002.md`
 
-## Verdict
+## Status
 
-PASS
+AWAITING REQUIRED LEVEL-4 LIVE EVIDENCE
 
-## Verified checkpoints
+No PASS / PASS WITH NON-BLOCKING FINDINGS / FAIL verdict is issued yet because the required real/mock-draft observation cannot be performed from the Auditor's current non-interactive environment. Automated/static evidence is intentionally not substituted for Level 4.
 
-- Manager production checkpoint / PR parent: `a6506d5815e6ec9027f71da759fbe607a40b5020`
-- PR #108 audited head: `d9b537ddac665207ab61aed7527d7da986cc4815`
-- Current `main` immediately before recording this audit: `392bcc8cb0756a16f621268012598154c8af2301`
-- PR head parent relationship: the audited PR head descends directly from `a6506d5815e6ec9027f71da759fbe607a40b5020` by the final WR-003 implementation commit.
-- Current `main` is 19 commits ahead of the PR base, but the actual comparison shows those 19 commits change only `.ai/` operating-contract/task/state documentation. There is no production-file overlap with PR #108.
-- GitHub reports PR #108 open, unmerged, clean/mergeable at audit time.
+## Canonical checkpoint verified
 
-The branch is stale numerically but not materially stale for WR-003 production behavior under the Manager's explicit stale-branch rule. No production rebase is required solely for the non-overlapping `.ai/` commits.
+- Repository: `Ryan42062001/The-War-Room`
+- Current `main` before Auditor WR-002 artifact updates: `6a4045e8cb95ef5f1da07669459705cec144a4d0`
+- Current milestone: ESPN Live Sync reliability / live-validation closeout
+- WR-003 / PR #108 is merged and complete.
+- WR-002 is the sole remaining milestone task and explicitly requires Level 4.
 
-## Actual diff reviewed
+## Authoritative WR-002 requirement
 
-PR #108 changes exactly four files:
+The Manager requires one short disposable ESPN mock on the merged provenance V3 implementation. The run must:
 
-1. `extensions/espn-companion/background-entry.js`
-2. `extensions/espn-companion/manifest.json`
-3. `extensions/espn-companion/test/completion-state.test.cjs`
-4. `extensions/espn-companion/test/manifest.test.cjs`
+- load current main locally
+- reset trace
+- remain on Players and not manually open Pick History
+- reproduce at least one automatic Players → Pick History → Players transition if available
+- copy diagnostics immediately after the transition
+- confirm sync correctness during the short run
+- inspect only the sanitized caller class/script/function/hash actually emitted
+- document a bounded no-transition run if no flicker occurs
 
-Production scope is limited to a required service-worker entry wrapper plus the manifest pointer to that entry. The wrapper makes a complete configured numbered-pick ledger terminal completion authority by reasserting `draftComplete` and clamping current/expected progress to the configured total before persistence and normal state exposure.
+A lower validation level does not satisfy this task.
 
-No click-provenance behavior, ESPN navigation, rankings, scoring, recommendations, War Room UI/presentation, capture authority, or browser permissions are changed by this PR.
+## Static/runtime preflight independently verified
 
-## Independent state-transition review
+### Current integrated build
 
-### Complete ledger authority — PASS
+- Companion manifest version: `0.9.14`
+- Manifest V3 service worker: `background-entry.js`
+- permissions remain only `storage` and `scripting`
+- ESPN provenance instrumentation `espn-click-provenance.js` is loaded in MAIN world, all frames, at `document_start`
+- runtime provenance version is `3`
 
-`state.picksByNumber` is keyed by overall pick number and accepted picks are bounded to configured draft slots. Therefore a `getPicks()` result whose length equals `teams * rounds` represents all configured numbered slots occupied once. The WR-003 wrapper treats that condition as terminal authority.
+### V3 attribution contract
 
-### False top-frame heartbeat after completion — PASS
+V3 records only sanitized navigation-event provenance:
 
-The pre-existing heartbeat handler can assign `state.espn.draftComplete = false` for a false top-frame heartbeat. PR #108 wraps persistence so `getPicks()` is evaluated before the state is saved; a complete ledger immediately reasserts terminal completion and prevents the false UI-derived heartbeat from becoming the persisted/reportable state.
+- click: `trusted` or `untrusted`
+- mechanism: `HTMLElement.click`, `dispatchEvent(click)`, `other-programmatic`, or `trusted-user`
+- view: normalized ESPN view class such as `players` or `pick-history`
+- frame: `top` or `child`
+- caller class: `espn-script`, `extension-script`, `other-web-script`, `page-bundle`, `inline-page`, `user-input`, or `unknown`
+- optional sanitized script basename
+- optional sanitized function name
+- bounded stable hash
 
-### Completion counters — PASS
+V3 chooses the first sanitized non-`unknown` frame from the captured stack as the representative caller. The hash is useful for correlating repeated equivalent sanitized stack shapes but is not an actor identity by itself.
 
-When the numbered ledger is complete, the wrapper clamps both `currentPick` and `expectedCompleted` to at least the configured total. They cannot regress below the terminal count through the audited false-heartbeat path.
+The popup appends these events under `Recent synthetic navigation caller provenance` when Copy diagnostics is used.
 
-### Positive early terminal signals — PASS
+## Prior live evidence retained as context, not substituted
 
-When the ledger is incomplete, the wrapper makes no completion-state change. Existing positive ESPN terminal-heartbeat behavior can therefore continue to mark the draft complete before reconciliation finishes.
+The prior Wave 3 disposable 18-team mock directly established that automatic Players → Pick History → Players transitions were real and repeated while user mouse/keyboard were not responsible. The click was `untrusted`, so the transition was script-generated. That run did not identify whether the caller was Companion code, ESPN page code, an ESPN/library component, or another injected script.
 
-### Incomplete/UI-only clearing — PASS
+Prior V2 evidence therefore narrows the question but does not close WR-002. The Manager specifically requires the merged V3 representative-frame behavior to be exercised live.
 
-When the numbered ledger is incomplete, the wrapper returns without mutating completion or counters. Existing top-frame negative heartbeat semantics remain available to clear UI-only/incomplete completion.
+## Required Level-4 evidence capture
 
-### Explicit reset and new-session behavior — PASS
+The Auditor cannot operate the user's local authenticated ESPN mock browser from the current chat environment. The following user-side evidence is required before a WR-002 verdict can be issued.
 
-`RESET_PICKS` clears the ledger and resets ESPN draft progress before persistence. Draft-key/session changes likewise clear the prior ledger and reset progress. Because the ledger is empty after those operations, the wrapper cannot reassert terminal completion. Existing reset/session semantics remain intact.
+### Preflight
 
-### Snapshot / ACK behavior — PASS
+1. On the machine that can run the local unpacked Companion and ESPN, update the repository to current `main` and verify the checkout corresponds to `6a4045e8cb95ef5f1da07669459705cec144a4d0` or a later canonical-main commit that changes only Auditor/Manager documentation. If production code advances, Auditor must refresh before the run.
+2. In Chrome extensions, reload the unpacked extension from `extensions/espn-companion`.
+3. Confirm Companion version `0.9.14`.
+4. Refresh both ESPN and The War Room after the extension reload.
+5. Use a disposable ESPN mock only, with Companion teams/slot/rounds matching the mock.
 
-Normal outbound snapshot construction calls `getPicks()`, so terminal ledger completion is reconciled before normal completion-state delivery. The War Room ACK path also evaluates `getPicks()` before persisting ACK/application progress, preserving terminal state through the required deterministic sequence.
+### Controlled observation
 
-### Service-worker entry / manifest safety — PASS
+1. Keep ESPN on the Players view.
+2. Open the Companion popup and press `Reset trace` once.
+3. Do not manually open Pick History, Board, or another ESPN navigation view during the controlled interval.
+4. Continue the disposable mock. Make required player selections before ESPN's clock expires, then return to a parked-mouse/no-navigation state.
+5. If an automatic Players → Pick History → Players transition occurs, do not interact during the transition.
+6. Immediately after ESPN returns, open the Companion popup and press `Copy diagnostics` once.
+7. Paste the complete copied sanitized diagnostics back into this WR-002 audit chat. A short screen recording centered on the transition, showing the ESPN view/address bar and parked mouse, is preferred if available because it independently strengthens the no-user-navigation observation.
 
-The extension remains Manifest V3 with a classic service worker. `background-entry.js` loads the existing `background.js` through `importScripts`, installs only the completion-state consistency wrapper, and the manifest points the service worker to the new required entry. Existing permissions remain unchanged.
+### Bounded no-transition alternative
 
-## Acceptance criteria evaluation
+If no automatic transition occurs, observe through the first 10 completed mock picks with no manual Pick History activation, then press `Copy diagnostics` once and report explicitly that no automatic transition occurred during that bounded 10-pick interval. This satisfies the Manager's allowed bounded no-transition evidence path; it does not justify inventing a caller classification.
 
-- Task scope matches the approved WR-003 objective: PASS
-- Branch freshness/integration against current `main` evaluated: PASS; current divergence is `.ai/`-only and non-overlapping
-- Deterministic regression proves the pre-fix bug: PASS
-- Deterministic regression proves the post-fix invariant: PASS
-- Complete ledger remains terminal after false top-frame/Rescan heartbeat: PASS
-- Current/expected counters remain terminal: PASS
-- Positive early terminal behavior remains possible: PASS
-- Incomplete/UI-only completion can still clear: PASS
-- Explicit reset/new-session behavior still clears: PASS
-- Outbound snapshot/ACK path remains consistent: PASS
-- No permission expansion: PASS
-- No unrelated production changes: PASS
+## Evidence required from the pasted diagnostics
 
-## Test evidence independently verified
+The Auditor will verify:
 
-### RED — pre-fix regression reproduced in CI
+- current extension/build health
+- `Captured/applied/unmatched`
+- acknowledged snapshot size / ACK progress where present
+- missing picks, conflicts, unresolved counts where present
+- recent forensic view/click sequence
+- `Recent synthetic navigation caller provenance`
+- for each relevant navigation event: click, mechanism, view, frame, caller class, sanitized script, function, and hash
 
-Historical branch push CI:
+## Attribution rules to avoid overclaiming
 
-- War Room CI run #624
-- Run ID: `34174670523`
-- Head SHA: `520c4e53460146f4ff1c58c6bef00514592e650f`
-- Result: FAILURE
-- Exact failing test: `Rescan cannot demote completion when the authoritative numbered ledger is complete`
-- Observed assertion: false completion was returned where terminal `true` was required after the false top-frame Rescan heartbeat
-- Suite at that checkpoint: 157 passed / 1 failed
+- `trusted` / `trusted-user` means real user input for that event and would contaminate an allegedly automatic navigation observation.
+- `untrusted` proves script-generated browser event behavior, but not actor identity by itself.
+- `caller=espn-script` supports a sanitized ESPN-hosted script frame as the representative caller; it does not automatically identify a specific ESPN component or business-level intent.
+- `caller=extension-script` supports extension-script provenance for the representative sanitized frame; the exact high-level extension feature still requires script/function evidence before naming it.
+- `caller=page-bundle` or `inline-page` supports page-runtime provenance but is weaker than a host-specific class.
+- `caller=other-web-script` supports a non-ESPN web script frame, subject to the same sanitized-stack limitation.
+- `caller=unknown` leaves actor attribution unresolved. A repeated non-fallback hash can show repeated stack-shape correlation but cannot name the caller.
+- No single caller line will be treated as complete causation proof without correlation to the automatic view transition and forensic timing.
 
-This is direct evidence that the deterministic regression exposed the intended pre-fix defect rather than merely asserting already-fixed behavior.
+## Current findings
 
-### GREEN — audited final head
+Product defects discovered in this WR-002 session: None.
 
-Final PR-head CI:
+Blocking evidence requirement: the required Level-4 live/mock-draft observation has not yet been obtained because direct interaction with the user's local ESPN browser is unavailable in the current environment.
 
-- War Room CI run #636
-- Run ID: `34175697251`
-- Head SHA: `d9b537ddac665207ab61aed7527d7da986cc4815`
-- Result: SUCCESS
-- Companion suite: 164 / 164 passed
-- Full root `npm test`: PASS
-- Resilience syntax validation: PASS
-- Backup/offline reload validation: PASS
+This is an execution/evidence blocker, not a product failure.
 
-The full root pipeline also passed release/module/syntax checks, 717-player dataset integrity with 0 duplicates, browser/draft-state suites, ESPN synchronization/off-board coverage, scoring correctness, draft invariants, persistence/recovery, recovery failure injection, and live-mock fixtures.
+## Current conclusion
 
-## Validation levels
+WR-002 remains OPEN / PENDING LEVEL-4 EVIDENCE.
 
-- Level 1 — Static correctness: VERIFIED / PASS
-- Level 2 — Automated tests: VERIFIED / PASS
-- Level 3 — Simulated draft behavior: VERIFIED / PASS. The deterministic regression exercises the required complete-ledger → Rescan/false top-frame heartbeat → terminal snapshot/ACK state sequence and the audit separately traced incomplete/reset/session negative paths.
-- Level 4 — Real/mock draft validation: NOT REQUIRED FOR WR-003. The audited change is an internal background-state invariant after numbered picks/heartbeats already exist; it does not change ESPN DOM capture, navigation, source authority, or browser interaction behavior. The Manager specification requires Level 4 only if material browser/live uncertainty remains after Levels 1–3. No such residual uncertainty was identified for this state-consistency task. WR-002 remains the separate live synthetic-navigation attribution task.
+No attribution result is claimed. No final PASS/FAIL is claimed.
 
-## Findings
-
-Blocking findings: None.
-
-Non-blocking findings: None.
-
-No speculative concern was elevated to a finding without evidence of incorrect behavior.
-
-## Conclusion
-
-PR #108 satisfies the authoritative WR-003 requirements at the audited head, with independently verified RED-before-fix evidence, exact-head GREEN CI, correct terminal-ledger state transitions, preserved incomplete/reset/session semantics, no permission expansion, and no unrelated production scope.
-
-PASS
+Once the user supplies the live copied diagnostics (and preferably the short transition recording, if a transition occurs), the Auditor can classify the strongest defensible caller attribution, assess sync correctness, update this audit, and issue the final standardized handoff.
