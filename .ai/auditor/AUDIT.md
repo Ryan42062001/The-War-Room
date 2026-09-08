@@ -4,129 +4,176 @@ Task ID: WR-002
 Role: Independent Auditor / QA
 Manager specification: `.ai/manager/WR-002.md`
 
-## Status
+## Verdict
 
-AWAITING REQUIRED LEVEL-4 LIVE EVIDENCE
+PASS
 
-No PASS / PASS WITH NON-BLOCKING FINDINGS / FAIL verdict is issued yet because the required real/mock-draft observation cannot be performed from the Auditor's current non-interactive environment. Automated/static evidence is intentionally not substituted for Level 4.
+WR-002 achieved its required Level-4 live/mock-draft validation. The strongest defensible live caller classification remains:
+
+`untrusted / other-programmatic / caller=unknown / hash=174uabd`
+
+This proves the observed ESPN navigation clicks were script-generated and repeatedly correlated to the same bounded sanitized stack signature. It does **not** identify ESPN, the Companion extension, or another web script as the actor. No actor attribution is inferred beyond the sanitized diagnostics.
 
 ## Canonical checkpoint verified
 
 - Repository: `Ryan42062001/The-War-Room`
-- Current `main` before Auditor WR-002 artifact updates: `6a4045e8cb95ef5f1da07669459705cec144a4d0`
-- Current milestone: ESPN Live Sync reliability / live-validation closeout
-- WR-003 / PR #108 is merged and complete.
-- WR-002 is the sole remaining milestone task and explicitly requires Level 4.
+- Current `main` immediately before final WR-002 Auditor artifact writes: `8e8f107183b6a2a0cee619d8f4433319f4dd3561`
+- Latest production merge remains WR-003 / PR #108 at `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`.
+- WR-004 workflow changes advanced `main` after the initial WR-002 evidence handoff but did not change Companion production behavior.
+- Manager handoff still identifies WR-002 as the sole unfinished ESPN Live Sync closeout task and directs the Auditor to close it after user-supplied Level-4 evidence.
 
-## Authoritative WR-002 requirement
+## Level-4 environment
 
-The Manager requires one short disposable ESPN mock on the merged provenance V3 implementation. The run must:
+- Disposable ESPN mock draft; not a real league draft.
+- ESPN season: 2026.
+- Draft format visible in the recording: 8 teams, 16 rounds, slot 1.
+- Companion extension: `0.9.14`.
+- War Room required extension version: `0.9.14`.
+- The user performed the documented current-main update / unpacked-extension reload sequence immediately before supplying the run evidence.
+- Current repository production code contains provenance runtime V3 loaded in MAIN world, all ESPN frames, at `document_start`.
 
-- load current main locally
-- reset trace
-- remain on Players and not manually open Pick History
-- reproduce at least one automatic Players → Pick History → Players transition if available
-- copy diagnostics immediately after the transition
-- confirm sync correctness during the short run
-- inspect only the sanitized caller class/script/function/hash actually emitted
-- document a bounded no-transition run if no flicker occurs
+Standalone copied diagnostics do not print the provenance runtime version number, so the archived paste by itself cannot distinguish V2 from V3 solely from a version field. Build identity for this run is therefore established by the controlled update/reload procedure plus the matching current extension version and repository checkpoint, not by a self-identifying V3 line in the copied diagnostic text.
 
-A lower validation level does not satisfy this task.
+This limitation does not change the caller conclusion: the live representative caller remained `unknown`, and the repeated `174uabd` hash is treated only as a correlation signature.
 
-## Static/runtime preflight independently verified
+## Evidence received
 
-### Current integrated build
+The Auditor evaluated both:
 
-- Companion manifest version: `0.9.14`
-- Manifest V3 service worker: `background-entry.js`
-- permissions remain only `storage` and `scripting`
-- ESPN provenance instrumentation `espn-click-provenance.js` is loaded in MAIN world, all frames, at `document_start`
-- runtime provenance version is `3`
+1. complete sanitized Companion diagnostics generated at `2026-09-08T04:01:45.905Z`; and
+2. a 17.23-second screen recording of the live ESPN mock interval.
 
-### V3 attribution contract
+No private league identifier, member identifier, or user/team name is retained in this audit record.
 
-V3 records only sanitized navigation-event provenance:
+## Independent live-video review
 
-- click: `trusted` or `untrusted`
-- mechanism: `HTMLElement.click`, `dispatchEvent(click)`, `other-programmatic`, or `trusted-user`
-- view: normalized ESPN view class such as `players` or `pick-history`
-- frame: `top` or `child`
-- caller class: `espn-script`, `extension-script`, `other-web-script`, `page-bundle`, `inline-page`, `user-input`, or `unknown`
-- optional sanitized script basename
-- optional sanitized function name
-- bounded stable hash
+The recording visibly reproduces automatic ESPN view switching.
 
-V3 chooses the first sanitized non-`unknown` frame from the captured stack as the representative caller. The hash is useful for correlating repeated equivalent sanitized stack shapes but is not an actor identity by itself.
+### First visible cycle
 
-The popup appends these events under `Recent synthetic navigation caller provenance` when Copy diagnostics is used.
+- Around 6.0 seconds, `Players` is active.
+- The user is making a normal draft selection in the player table rather than clicking the Pick History tab.
+- By about 6.5 seconds, `Pick History` is active.
+- By about 7.5 seconds, ESPN has returned to `Players`.
 
-## Prior live evidence retained as context, not substituted
+### Strongest no-manual-navigation cycle
 
-The prior Wave 3 disposable 18-team mock directly established that automatic Players → Pick History → Players transitions were real and repeated while user mouse/keyboard were not responsible. The click was `untrusted`, so the transition was script-generated. That run did not identify whether the caller was Companion code, ESPN page code, an ESPN/library component, or another injected script.
+- Around 15.0 seconds, `Players` is active.
+- Around 16.0 seconds, `Pick History` becomes active while the visible pointer is in browser chrome near the recording control, not on an ESPN navigation tab.
+- Around 17.0 seconds, ESPN returns to `Players` while the pointer remains away from the ESPN navigation tabs.
 
-Prior V2 evidence therefore narrows the question but does not close WR-002. The Manager specifically requires the merged V3 representative-frame behavior to be exercised live.
+This recording independently corroborates the diagnostic claim that at least one Players → Pick History → Players cycle occurred without manual Pick History activation.
 
-## Required Level-4 evidence capture
+## Live synchronization result
 
-The Auditor cannot operate the user's local authenticated ESPN mock browser from the current chat environment. The following user-side evidence is required before a WR-002 verdict can be issued.
+At the copied diagnostic checkpoint:
 
-### Preflight
+- Captured / Applied / Unmatched: `5 / 5 / 0`
+- Acknowledged snapshot size: `5`
+- Acknowledgment lag: `0 pick(s)`
+- Missing numbered picks: `none`
+- Ledger confirmed / conflicts: `5 / 0`
+- Draft complete: `false`, appropriate for the early draft checkpoint
+- Current / expected completed: `6 / 5`, consistent with pick 6 being current while five picks were completed
+- War Room connected: `true`
+- ESPN connected / draft page: `true / true`
 
-1. On the machine that can run the local unpacked Companion and ESPN, update the repository to current `main` and verify the checkout corresponds to `6a4045e8cb95ef5f1da07669459705cec144a4d0` or a later canonical-main commit that changes only Auditor/Manager documentation. If production code advances, Auditor must refresh before the run.
-2. In Chrome extensions, reload the unpacked extension from `extensions/espn-companion`.
-3. Confirm Companion version `0.9.14`.
-4. Refresh both ESPN and The War Room after the extension reload.
-5. Use a disposable ESPN mock only, with Companion teams/slot/rounds matching the mock.
+No synchronization correctness defect is evidenced by this checkpoint.
 
-### Controlled observation
+## Source-authority observation
 
-1. Keep ESPN on the Players view.
-2. Open the Companion popup and press `Reset trace` once.
-3. Do not manually open Pick History, Board, or another ESPN navigation view during the controlled interval.
-4. Continue the disposable mock. Make required player selections before ESPN's clock expires, then return to a parked-mouse/no-navigation state.
-5. If an automatic Players → Pick History → Players transition occurs, do not interact during the transition.
-6. Immediately after ESPN returns, open the Companion popup and press `Copy diagnostics` once.
-7. Paste the complete copied sanitized diagnostics back into this WR-002 audit chat. A short screen recording centered on the transition, showing the ESPN view/address bar and parked mouse, is preferred if available because it independently strengthens the no-user-navigation observation.
+The live diagnostics continue to support the existing layered-source architecture rather than a structured-source-only interpretation:
 
-### Bounded no-transition alternative
+- `Capture method: network` was displayed.
+- Fetch observation was active and reported candidate-shaped data.
+- Structured API returned HTTP 200 but `0` resolved picks and was reported as behind.
+- Pick History DOM was mounted-hidden at copy time and had supplied usable numbered picks.
+- DOM source status showed five latest ledger-eligible pick observations.
+- The diagnostic explicitly stated: structured feed behind; using visible Pick History.
 
-If no automatic transition occurs, observe through the first 10 completed mock picks with no manual Pick History activation, then press `Copy diagnostics` once and report explicitly that no automatic transition occurred during that bounded 10-pick interval. This satisfies the Manager's allowed bounded no-transition evidence path; it does not justify inventing a caller classification.
+This reaffirms the already-known non-blocking diagnostics-wording issue in canonical project state: `Capture method: network` and large fetch candidate counts can be misleading when DOM/Pick History is the actual usable numbered-pick authority. It is not a new WR-002 defect and does not affect the attribution verdict.
 
-## Evidence required from the pasted diagnostics
+## Synthetic navigation provenance
 
-The Auditor will verify:
+The copied diagnostics contain 13 recent navigation-provenance events:
 
-- current extension/build health
-- `Captured/applied/unmatched`
-- acknowledged snapshot size / ACK progress where present
-- missing picks, conflicts, unresolved counts where present
-- recent forensic view/click sequence
-- `Recent synthetic navigation caller provenance`
-- for each relevant navigation event: click, mechanism, view, frame, caller class, sanitized script, function, and hash
+- 12 events are `click=untrusted`, `mechanism=other-programmatic`.
+- Relevant views are repeatedly `pick-history` and `players` in the top frame.
+- Every untrusted event reports `caller=unknown hash=174uabd`.
+- No sanitized script basename or function token is emitted for those unknown events.
+- One separate event is `click=trusted`, `mechanism=trusted-user`, `view=unknown`, `caller=user-input hash=zzpfmb`.
 
-## Attribution rules to avoid overclaiming
+The trusted event is a useful control: the instrumentation can distinguish user input from the automatic navigation events. It does not explain the Pick History transitions because the relevant Pick History/Players navigation events remain separately classified as untrusted/programmatic.
 
-- `trusted` / `trusted-user` means real user input for that event and would contaminate an allegedly automatic navigation observation.
-- `untrusted` proves script-generated browser event behavior, but not actor identity by itself.
-- `caller=espn-script` supports a sanitized ESPN-hosted script frame as the representative caller; it does not automatically identify a specific ESPN component or business-level intent.
-- `caller=extension-script` supports extension-script provenance for the representative sanitized frame; the exact high-level extension feature still requires script/function evidence before naming it.
-- `caller=page-bundle` or `inline-page` supports page-runtime provenance but is weaker than a host-specific class.
-- `caller=other-web-script` supports a non-ESPN web script frame, subject to the same sanitized-stack limitation.
-- `caller=unknown` leaves actor attribution unresolved. A repeated non-fallback hash can show repeated stack-shape correlation but cannot name the caller.
-- No single caller line will be treated as complete causation proof without correlation to the automatic view transition and forensic timing.
+## Forensic timing correlation
 
-## Current findings
+The forensic timeline repeatedly shows the same sequence:
 
-Product defects discovered in this WR-002 session: None.
+1. untrusted navigation click toward Pick History;
+2. Pick History DOM `mounted-hidden → mounted-visible`;
+3. view transition `players → pick-history`;
+4. later untrusted navigation click(s) toward Pick History / Players;
+5. Pick History DOM `mounted-visible → mounted-hidden`;
+6. view transition `pick-history → players`.
 
-Blocking evidence requirement: the required Level-4 live/mock-draft observation has not yet been obtained because direct interaction with the user's local ESPN browser is unavailable in the current environment.
+The screen recording visually corroborates this sequence. The evidence therefore supports real programmatic view switching, not merely a diagnostic artifact.
 
-This is an execution/evidence blocker, not a product failure.
+## Attribution analysis
 
-## Current conclusion
+### Verified
 
-WR-002 remains OPEN / PENDING LEVEL-4 EVIDENCE.
+- The relevant navigation events are not ordinary trusted user clicks.
+- Mechanism classification is `other-programmatic`; no existing wrapped `HTMLElement.click` or `dispatchEvent(click)` provenance was observed for these events.
+- V3 representative caller output for the live events is `unknown`.
+- The same bounded hash `174uabd` repeats across the automatic navigation events.
+- The repeated hash supports correlation to a stable sanitized stack signature.
 
-No attribution result is claimed. No final PASS/FAIL is claimed.
+### Not verified / must not be claimed
 
-Once the user supplies the live copied diagnostics (and preferably the short transition recording, if a transition occurs), the Auditor can classify the strongest defensible caller attribution, assess sync correctness, update this audit, and issue the final standardized handoff.
+- ESPN script responsibility is **not** established.
+- Companion/extension responsibility is **not** established.
+- Another web script, page bundle, or inline-page actor is **not** established.
+- `174uabd` is **not** an actor identifier.
+- The evidence does not identify a specific function, bundle, component, timer, recovery threshold, or business-level intent.
+
+### Strongest defensible caller classification
+
+`script-generated navigation; mechanism=other-programmatic; representative caller=unknown; stable correlation hash=174uabd`
+
+Actor attribution remains unresolved by design of the bounded sanitized stack evidence available in this live run.
+
+## Acceptance criteria
+
+- Current build loaded under the controlled update/reload procedure: PASS
+- Disposable ESPN mock used: PASS
+- Players view used without manual Pick History activation during controlled transition: PASS
+- At least one automatic Players → Pick History → Players transition captured: PASS
+- Copy diagnostics collected after live automatic transitions: PASS
+- Sync correctness checked: PASS — 5/5/0, ACK lag 0, no missing picks, no conflicts
+- Sanitized caller class/script/function/hash inspected: PASS
+- Attribution recorded without overclaiming: PASS
+- New defects separately classified: PASS — no new blocking product defect found
+
+## Validation level
+
+Level 4 — Real/mock draft validation: VERIFIED / PASS.
+
+Lower-level deterministic provenance tests remain useful context, but this verdict is based on the required live disposable ESPN mock evidence and accompanying recording rather than substituting simulation for Level 4.
+
+## Findings
+
+Blocking findings: None.
+
+Non-blocking WR-002 findings: None.
+
+Existing project finding reaffirmed but not created by WR-002: diagnostics can label the overall capture method as `network` while Pick History DOM is the actual ledger-eligible numbered-pick authority.
+
+## Conclusion
+
+WR-002 is complete at its required Level-4 validation level.
+
+The automatic Players → Pick History → Players behavior is live-verified and programmatic. The merged V3 provenance path did not surface a non-unknown representative caller in this run. The correct closeout is therefore not to name an actor, but to record the attribution ceiling accurately:
+
+`other-programmatic / unknown / 174uabd`
+
+PASS
