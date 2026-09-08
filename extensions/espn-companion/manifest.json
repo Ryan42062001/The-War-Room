@@ -16,7 +16,7 @@
     "https://ryan42062001.github.io/The-War-Room/*"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background-entry.js"
   },
   "action": {
     "default_title": "The War Room — ESPN Live Sync",
