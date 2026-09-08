@@ -2,19 +2,18 @@
 
 HANDOFF
 
-Task ID: WR-005
+Task ID: WR-006
 Role: Manager / Architect
 Status: COMPLETE
 
 Verified starting state:
 - Repository: `Ryan42062001/The-War-Room`
-- Canonical `main` at Manager refresh: `bfa2782dba93cdc9cb2dce73d2d9de86fab13f0a`
-- `.ai/auditor/HANDOFF.md`: WR-002 COMPLETE / PASS
-- `.ai/auditor/AUDIT.md`: Level 4 VERIFIED / PASS; no blocking findings
-- WR-002 task spec acceptance criteria were independently compared against the final audit evidence
-- post-WR-004 Auditor commits were independently compared and changed only `.ai/auditor/AUDIT.md` and `.ai/auditor/HANDOFF.md`; no production or canonical shared-state files changed
-- Builder handoff: no active assignment
-- Research handoff: no active assignment
+- Canonical `main` before WR-006 edits: `f4c71410a762cdfd6ab63e92f51caf51237743ea`
+- `.ai/shared/WORKFLOW.md` still defined the third specialist as `Research / Investigation Specialist`
+- `.ai/research/HANDOFF.md` limited the role to research that materially blocked architecture or implementation
+- `.ai/research/` was already the established role-owned directory
+- current milestone: none assigned
+- no Builder, Research/R&D, or Auditor task was active
 
 Current milestone:
 None assigned.
@@ -22,37 +21,32 @@ None assigned.
 Milestone disposition:
 **ESPN Live Sync reliability / live-validation closeout — COMPLETE**
 
-Completion basis:
-- WR-003 is COMPLETE, independently audited PASS, and merged as `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
-- WR-002 is COMPLETE with required Level-4 VERIFIED / PASS and no blocking findings
-- WR-002 controlled live mock captured automatic Players → Pick History → Players navigation while sync remained healthy at 5/5/0, ACK lag 0, no missing numbered picks, and no conflicts
-- strongest defensible WR-002 attribution remains `script-generated / other-programmatic / caller=unknown / hash=174uabd`
-- no unsupported actor attribution is claimed
-
 Work completed:
-- refreshed current repository state and all relevant role handoffs
-- independently reviewed WR-002 Auditor handoff and full audit record
-- verified WR-002 against `.ai/manager/WR-002.md` acceptance criteria
-- verified Auditor artifact-only repository delta from WR-004 checkpoint
-- marked WR-002 COMPLETE in canonical project state
-- closed the ESPN Live Sync reliability / live-validation closeout milestone
-- updated canonical PROJECT_STATE and ROADMAP
-- created `.ai/manager/WR-005.md` for this closeout reconciliation
-- evaluated DECISIONS.md and intentionally left it unchanged because WR-002 adds a validated evidence ceiling, not a new durable architecture/product decision; existing WR-D003 already captures the layered live-sync architecture
-- evaluated next-milestone and parallel-work status
+- created `.ai/manager/WR-006.md`
+- expanded the canonical role from Research / Investigation to **Research & Development (R&D)**
+- preserved existing evidence, repository-ownership, research, and handoff discipline
+- authorized forward-looking product/technical R&D, APIs/data/algorithm/integration evaluation, future architecture evaluation, isolated/disposable experiments and proofs of concept, meaningful product/reliability gap discovery, Roadmap Discovery support, evidence-backed future milestone proposals, and dependency-safe parallel R&D
+- recorded explicit R&D authority limits: no final roadmap selection, no production-code modification without approved implementation assignment, no canonical `.ai/shared/*` mutation, no production merges, and no self-audit of production implementation
+- preserved `.ai/research/` as the R&D role-owned directory and documented that no `.ai/rnd/` tree should be created without a future Manager decision
+- updated `.ai/research/HANDOFF.md` so replacement R&D chats inherit the expanded scope while remaining unassigned
+- updated `.ai/README.md` and ROADMAP role terminology for compatibility
+- updated PROJECT_STATE workflow baseline and task ledger
+- reviewed DECISIONS.md and left it unchanged because this is workflow mechanics, not a durable product/architecture decision
 
 Decisions made:
-- WR-002 evidence satisfies the required Level-4 gate and supports PASS
-- unresolved actor identity is an evidence limitation, not a failed acceptance criterion or automatic remediation task
-- ESPN Live Sync reliability / live-validation closeout is complete
-- the roadmap contains no assigned successor milestone
-- no new milestone, Builder task, Research task, or Auditor task will be invented merely for utilization
-- no Parallel Work Wave is created because no two legitimate independent approved tasks exist
+- R&D may be assigned forward-looking Roadmap Discovery work even when it does not block an active implementation, provided the work is legitimate, evidence-backed, separately tasked, and dependency-safe
+- isolated R&D experiments are not production implementation unless the Manager explicitly promotes them into an approved implementation task
+- the Manager retains final roadmap, architecture, task-assignment, prioritization, canonical shared-state, merge, and integration authority
+- the expanded R&D capability does not itself create an assignment or milestone
+- no Parallel Work Wave is created because there are still no active approved specialist tasks
 
 Files updated:
-- `.ai/manager/WR-005.md`
+- `.ai/manager/WR-006.md`
+- `.ai/shared/WORKFLOW.md`
 - `.ai/shared/PROJECT_STATE.md`
 - `.ai/shared/ROADMAP.md`
+- `.ai/research/HANDOFF.md`
+- `.ai/README.md`
 - `.ai/manager/HANDOFF.md`
 
 Files reviewed but intentionally not changed:
@@ -71,17 +65,17 @@ None assigned in the roadmap.
 
 Dependency / parallelism analysis:
 - Builder: no approved task
-- Research: no approved task
-- Auditor: WR-002 complete; no approved follow-on task
-- Manager: no active implementation/integration task after this reconciliation
+- R&D: broader capability is now authorized, but no approved task currently exists
+- Auditor: no approved task
+- Manager: no active implementation/integration task after this workflow reconciliation
 - dependency classification: no candidate task group exists to classify into a Parallel Work Wave
 - Parallel Work Wave: none
 
 Recommended next role:
-None. All roles may remain IDLE until the user/Manager identifies and approves a real next milestone or task.
+None. All roles may remain IDLE until the Manager/user identifies a legitimate next milestone or explicitly assigns Roadmap Discovery / R&D work.
 
 Exact next action:
-Do not activate specialist work yet. When a legitimate new project need is identified, the Manager should refresh canonical state, define the next milestone/task with a new WR Task ID and acceptance criteria, classify dependencies, and create a Parallel Work Wave only if two or more useful independent assignments actually exist.
+Do not activate specialist work solely because R&D is now broader. When a legitimate project need emerges, the Manager should refresh canonical state, define the new WR Task ID or milestone, decide whether R&D should perform discovery/evaluation first or in parallel, classify dependencies, and create a Parallel Work Wave only when multiple useful independent assignments exist.
 
 Checkpoint / SHA:
-WR-005 began from canonical main `bfa2782dba93cdc9cb2dce73d2d9de86fab13f0a`. Verify current `main` after this handoff commit for the exact final canonical SHA.
+WR-006 began from canonical main `f4c71410a762cdfd6ab63e92f51caf51237743ea`. Verify current `main` after this handoff commit for the exact final canonical SHA.
