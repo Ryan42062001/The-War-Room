@@ -39,6 +39,7 @@ Work completed:
 - explicitly applied the WR-008 active-development threshold
 - documented trigger conditions that would make each deferred candidate worth revisiting
 - wrote full evidence to `.ai/research/ROADMAP_DISCOVERY.md`
+- opened research-only PR #110 for Manager review
 
 Candidate milestone ranking:
 1. WR-007-P1 — ESPN Configuration Preflight / Settings Validation — 26/40 — NEEDS MORE RESEARCH
@@ -104,6 +105,11 @@ Files updated:
 - `.ai/research/ROADMAP_DISCOVERY.md`
 - `.ai/research/HANDOFF.md`
 
+Repository artifact:
+- Research-only PR #110 — `WR-007 Roadmap Discovery findings`
+- https://github.com/Ryan42062001/The-War-Room/pull/110
+- PR is for R&D evidence only; no production behavior is changed
+
 Production files changed: NO
 Canonical `.ai/shared/*` state changed by R&D: NO
 
@@ -121,9 +127,9 @@ Recommended next role:
 Manager / Architect
 
 Exact next action:
-Manager independently reviews `.ai/research/ROADMAP_DISCOVERY.md`, verifies the strongest claims, and chooses among: accept MAINTENANCE / STABLE, request targeted refinement, or select a bounded successor milestone. No production implementation should begin until that Manager decision creates an approved WR task.
+Manager independently reviews `.ai/research/ROADMAP_DISCOVERY.md` and PR #110, verifies the strongest claims, and chooses among: accept MAINTENANCE / STABLE, request targeted refinement, or select a bounded successor milestone. No production implementation should begin until that Manager decision creates an approved WR task.
 
 Checkpoint / SHA:
 - latest observed canonical `main`: `076c05fd09c056c3491a5e9f2c185350f7acf68f`
 - R&D branch: `wr-007-research-roadmap-discovery`
-- evidence commit before this handoff update: `ac3473d750986639efb6b47672ab4c58144ec810`
+- research PR: #110
