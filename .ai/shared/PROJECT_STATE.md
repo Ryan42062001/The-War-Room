@@ -9,21 +9,10 @@ Owner: Manager / Architect
 Repository: `Ryan42062001/The-War-Room`
 Branch: `main`
 
-WR-002 Auditor checkpoint consumed by Manager:
-- canonical main at Manager refresh: `bfa2782dba93cdc9cb2dce73d2d9de86fab13f0a`
-- Auditor WR-002 verdict: PASS
-- Level 4: VERIFIED / PASS
-- blocking findings: none
-- final audit evidence commit: `b01373b0cde98becd928fc710a7929da5fa8d83b`
-- final Auditor handoff checkpoint: `bfa2782dba93cdc9cb2dce73d2d9de86fab13f0a`
-
-Latest production merge checkpoint remains:
-- WR-003 / PR #108 merge SHA: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
-- PR #108 audited head: `d9b537ddac665207ab61aed7527d7da986cc4815`
-- Independent Auditor verdict: PASS
-- exact audited-head War Room CI #636 / run `34175697251`: completed / success
-
-No production code changed during WR-002, WR-005, or WR-006 workflow/state reconciliation.
+Roadmap Discovery assignment starting checkpoint:
+- canonical `main`: `3e5cffb86c3ab6c55803d4f0f6a8a07218b81e0f`
+- latest production merge remains WR-003 / PR #108 at `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
+- no production code changed during WR-002, WR-005, WR-006, or WR-007 Manager assignment/reconciliation
 
 ## Milestone status
 
@@ -33,15 +22,28 @@ Completion basis:
 - WR-002 Synthetic Navigation Attribution Level 4 — COMPLETE / PASS
 - WR-003 ESPN Completion-State Consistency — COMPLETE / PASS / merged
 - all required validation levels for the closeout tasks are satisfied
-- no blocking findings remain for this milestone
+- no blocking findings remain for that milestone
 
 The Level-4 WR-002 result live-verifies automatic Players → Pick History → Players navigation as programmatic while preserving the correct attribution ceiling: `other-programmatic / caller=unknown / hash=174uabd`. The evidence does not identify ESPN, the Companion, or another script actor, and no such attribution is claimed.
 
 ## Current milestone
 
-**None assigned.**
+### Roadmap Discovery — Next Milestone Selection — IN PROGRESS
 
-The roadmap does not currently define a successor milestone. Do not invent a new milestone or specialist task merely to keep workers active. The next milestone requires an explicit Manager/user prioritization decision based on legitimate project needs.
+This is a discovery/selection milestone, not production implementation.
+
+Active task:
+- WR-007 — Roadmap Discovery: Next Milestone Candidate Evaluation
+- assigned role: Research & Development (R&D)
+- objective: identify, compare, rank, and recommend the strongest legitimate next War Room milestone candidates using repository evidence, external research where useful, and bounded non-production R&D
+- production implementation authorized: NO
+- final roadmap selection authority: Manager / Architect
+
+Completion gate:
+- R&D returns 3–5 serious evidence-backed candidates
+- candidates are ranked against explicit user-value, reliability, feasibility, risk, complexity, and validation criteria
+- one recommended milestone and at least one runner-up are justified
+- Manager independently reviews the evidence and selects, rejects, or requests refinement before any production task begins
 
 ## Verified product baseline
 
@@ -52,7 +54,7 @@ The roadmap does not currently define a successor milestone. Do not invent a new
 - Live disposable ESPN mocks have shown Pick History DOM to be the practical usable numbered-pick source when structured feeds are behind or empty.
 - Authoritative ESPN off-board numbered picks are preserved as external picks and count toward draft progress without being inserted into the canonical recommendation pool.
 - A complete unique configured numbered-pick ledger is terminal completion authority in the Companion; a later false UI-derived completion heartbeat cannot demote terminal completion.
-- WR-002 Level-4 evidence confirms sync health in the controlled mock checkpoint at Captured/Applied/Unmatched `5/5/0`, ACK lag `0`, no missing numbered picks, and no ledger conflicts.
+- WR-002 Level-4 evidence confirmed sync health at Captured/Applied/Unmatched `5/5/0`, ACK lag `0`, no missing numbered picks, and no ledger conflicts.
 
 ## Workflow baseline
 
@@ -62,94 +64,74 @@ The roadmap does not currently define a successor milestone. Do not invent a new
 - R&D is authorized for external/technical research, forward-looking product and technical R&D, API/data/algorithm/integration evaluation, isolated proofs of concept, future architecture evaluation, product/reliability gap discovery, Roadmap Discovery support, and evidence-backed future milestone proposals.
 - R&D may run dependency-safe approved work in parallel with current milestone work, but it does not select the roadmap, modify production code without an approved implementation assignment, modify `.ai/shared/*`, merge production work, or audit its own production implementation.
 - `.ai/research/` remains the R&D role-owned directory; no `.ai/rnd/` tree is used.
-- The Manager remains the normal authority for `.ai/shared/*` reconciliation; parallel workers must not independently mutate canonical shared state.
-- `IDLE` is valid and desirable when no useful independent task exists.
+- The Manager remains the normal authority for `.ai/shared/*` reconciliation.
+- `IDLE` is valid when no useful independent task exists.
 
 ## Task state
 
 ### WR-001 — Repository Operating Contract Bootstrap
-
 Role: Manager / Architect
 Status: COMPLETE
 PR: #109
 Merge SHA: `2d9ccb2094776e25babb17c65b69390646853c37`
-Result: canonical `.ai/` workflow/state/task/handoff structure established.
 
 ### WR-002 — ESPN Synthetic Navigation Attribution Level 4
-
 Role: Independent Auditor / QA
 Status: COMPLETE
-Objective: perform Level-4 disposable ESPN mock validation of automatic Players → Pick History → Players navigation and record the strongest defensible sanitized caller classification.
-Required validation level: Level 4
-Validation: VERIFIED / PASS
-Audit verdict: PASS
-Blocking findings: none
-Live sync checkpoint: Captured/Applied/Unmatched `5/5/0`; ACK lag `0`; missing picks none; conflicts `0`
+Validation: Level 4 VERIFIED / PASS
 Final attribution ceiling: `script-generated / other-programmatic / caller=unknown / hash=174uabd`
-Important limitation: actor identity remains unresolved and must not be attributed to ESPN, the Companion, or another script without new evidence.
-Task spec: `.ai/manager/WR-002.md`
-Audit record: `.ai/auditor/AUDIT.md`
 
 ### WR-003 — ESPN Completion-State Consistency
-
 Role: Implementation Engineer → Independent Auditor / QA → Manager integration
 Status: COMPLETE
-Objective: prevent a complete authoritative numbered-pick ledger from being contradicted by a later false UI-derived `draftComplete` heartbeat after Rescan.
-PR: #108 — Keep ESPN completion consistent with complete pick ledger
-Audit: PASS, no findings
+PR: #108
+Audit: PASS
 Merge SHA: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
-Validation: Level 1 PASS; Level 2 PASS; Level 3 PASS; Level 4 not required by independent audit.
 
 ### WR-004 — Parallel Task Orchestration Workflow Upgrade
-
 Role: Manager / Architect
 Status: COMPLETE
-Result: explicit safe-parallelism evaluation, dependency classes, Parallel Work Waves, activation plans, parallel PR safety, and useful-throughput prioritization are canonical workflow requirements.
 
 ### WR-005 — ESPN Live Sync Closeout Reconciliation
-
 Role: Manager / Architect
 Status: COMPLETE
-Objective: consume the final WR-002 Level-4 PASS, reconcile canonical state, and close the ESPN Live Sync reliability / live-validation closeout milestone without inventing downstream work.
 Production behavior changed: NO
 
 ### WR-006 — Research & Development Role Expansion Workflow Update
-
 Role: Manager / Architect
 Status: COMPLETE
-Objective: persist the expanded R&D role, authority boundaries, `.ai/research/` directory compatibility, and Roadmap Discovery / safe-parallel-R&D capabilities.
 Production behavior changed: NO
-New production milestone created: NO
-R&D assignment created: NO
 
-## Recently completed integration history
-
-Historical work completed before adoption of the WR Task-ID operating contract is retained as context rather than retroactively renumbered:
-
-- #101 synthetic click attribution V1
-- #102 authoritative ESPN off-board pick correctness
-- #103 ESPN Live Sync trust UX
-- #104 Companion action-popup intrinsic width regression fix
-- #105 synthetic click attribution V2
-- #106 synthetic click attribution V3
-- #107 War Room tablet responsive overflow fix
+### WR-007 — Roadmap Discovery: Next Milestone Candidate Evaluation
+Role: Research & Development (R&D)
+Status: ASSIGNED / ACTIVE
+Task spec: `.ai/manager/WR-007.md`
+Starting SHA: `3e5cffb86c3ab6c55803d4f0f6a8a07218b81e0f`
+Production implementation authorized: NO
+Expected evidence: `.ai/research/ROADMAP_DISCOVERY.md` and updated `.ai/research/HANDOFF.md`
+Next gate: Manager review and milestone selection
 
 ## Open non-blocking findings
 
 1. **Legacy `AGENTS.md` process wording.** `.ai/shared/*` is canonical; cleanup remains unassigned.
-2. **Diagnostics wording:** `Capture method: network` and large fetch candidate-shaped counts can be misleading when Pick History DOM is the actual ledger-eligible numbered-pick authority. Reaffirmed by WR-002 Level-4 evidence; remains unassigned and non-blocking.
+2. **Diagnostics wording:** `Capture method: network` and large fetch candidate-shaped counts can be misleading when Pick History DOM is the actual ledger-eligible numbered-pick authority. This remains unassigned and non-blocking.
 3. **Synthetic-navigation actor identity remains unknown.** This is the verified attribution ceiling from WR-002, not a blocking defect or automatic trigger for more work.
+
+These observations are inputs to Roadmap Discovery but do not automatically outrank broader product/reliability opportunities.
 
 ## Current workload / parallelism state
 
-No active specialist tasks are assigned.
+Active specialist tasks:
+- R&D — WR-007
+
+Idle specialist roles:
+- Builder — no approved production task
+- Auditor — no approved audit task
 
 Dependency analysis:
-- there is no approved Builder task
-- there is no approved R&D task
-- WR-002 Auditor work is complete
-- no successor milestone is defined
+- WR-007 is INDEPENDENT of Builder and Auditor work
+- there is no second legitimate approved specialist task at this checkpoint
 
-Parallel Work Wave: none. Fewer than two legitimate independent approved tasks exist.
+Parallel Work Wave: none. A wave is not created for a single active specialist task.
 
-R&D's broader authorization does not itself create work. Do not activate specialist work until a real next milestone/task or Roadmap Discovery assignment is prioritized and assigned under the canonical workflow.
+Do not authorize production implementation until the Manager reviews WR-007 evidence and explicitly selects the next milestone/task structure.
