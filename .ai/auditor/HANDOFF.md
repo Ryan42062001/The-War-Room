@@ -2,79 +2,74 @@
 
 HANDOFF
 
-Task ID: WR-003
+Task ID: WR-002
 Role: Independent Auditor / QA
-Status: COMPLETE
-
-Audit verdict: PASS
+Status: BLOCKED — AWAITING REQUIRED LEVEL-4 LIVE EVIDENCE
 
 Verified starting state:
-- Authoritative Manager task: `.ai/manager/WR-003.md`
-- Production checkpoint / PR parent: `a6506d5815e6ec9027f71da759fbe607a40b5020`
-- Current `main` at audit close before Auditor artifact commits: `392bcc8cb0756a16f621268012598154c8af2301`
-- Current `main` was 19 commits beyond the PR base; actual comparison verified those commits changed only `.ai/` documentation/state files and did not overlap WR-003 production files.
+- Authoritative Manager task: `.ai/manager/WR-002.md`
+- Current canonical `main` before Auditor WR-002 artifact updates: `6a4045e8cb95ef5f1da07669459705cec144a4d0`
+- WR-003 is merged and complete.
+- WR-002 is the sole remaining ESPN Live Sync closeout task and requires Level 4 real/mock-draft validation.
+- Companion manifest version on current main: `0.9.14`
+- Provenance runtime version: V3
+- V3 provenance is loaded in MAIN world, all ESPN frames, at `document_start`.
 
-Verified final state:
-- PR #108 head: `d9b537ddac665207ab61aed7527d7da986cc4815`
-- PR #108 is open, unmerged, and clean/mergeable at audit time.
-- Actual PR diff is limited to four files:
-  - `extensions/espn-companion/background-entry.js`
-  - `extensions/espn-companion/manifest.json`
-  - `extensions/espn-companion/test/completion-state.test.cjs`
-  - `extensions/espn-companion/test/manifest.test.cjs`
-- No click-provenance, ESPN navigation, rankings, scoring, recommendations, UI/presentation, capture-authority, or browser-permission changes are present in the audited diff.
-- Auditor evidence record was written to `.ai/auditor/AUDIT.md` in commit `7c7bd5a03979c3fb277b9326aba90b21b816a407` before this handoff update.
+Current milestone:
+ESPN Live Sync reliability / live-validation closeout
 
-PR reviewed:
-- PR #108 — ESPN Completion-State Consistency
-- Audited head: `d9b537ddac665207ab61aed7527d7da986cc4815`
-- Parent/base production checkpoint: `a6506d5815e6ec9027f71da759fbe607a40b5020`
+Work completed:
+- refreshed `.ai/shared/PROJECT_STATE.md`, `.ai/shared/ROADMAP.md`, `.ai/shared/DECISIONS.md`, `.ai/shared/WORKFLOW.md`, `.ai/manager/HANDOFF.md`, `.ai/manager/WR-002.md`, and the prior Auditor handoff
+- verified current canonical main SHA
+- independently verified the integrated Companion manifest/version/permissions and V3 provenance loading path
+- independently reviewed the V3 sanitized caller contract and popup diagnostic formatter
+- confirmed that static/automated evidence cannot satisfy the Manager's Level-4 requirement
+- documented the exact live evidence capture procedure and bounded no-transition alternative in `.ai/auditor/AUDIT.md`
+- did not claim caller attribution without live V3 evidence
 
-Acceptance criteria evaluated:
-- complete unique configured numbered-pick ledger is terminal completion authority — satisfied
-- false top-frame/UI heartbeat after ledger completion cannot demote `draftComplete` — satisfied
-- current/expected counters cannot regress below configured total after terminal ledger completion — satisfied
-- positive ESPN terminal signal may still mark completion before ledger reconciliation finishes — preserved
-- incomplete/UI-only completion may still clear before authoritative ledger completion — preserved
-- explicit reset/new-session still clears completion and ledger — preserved
-- outbound snapshot/War Room ACK terminal consistency — satisfied
-- branch freshness/integration against current main — evaluated; numeric staleness is `.ai/`-only and non-material
-- deterministic RED-before-fix and GREEN-after-fix evidence — independently verified
-- no permission expansion — satisfied
-- no unrelated production changes — satisfied
-
-Validation levels verified:
-- Level 1 — Static correctness: VERIFIED / PASS
-- Level 2 — Automated tests: VERIFIED / PASS
-- Level 3 — Simulated draft behavior: VERIFIED / PASS
-- Level 4 — Real/mock draft validation: NOT REQUIRED FOR WR-003. The change is an internal background-state invariant and does not alter ESPN DOM capture, navigation, source authority, or browser interaction. No material residual live/browser uncertainty was identified after Levels 1–3. WR-002 remains the separate live synthetic-navigation attribution task.
-
-Findings:
-- None.
-
-Blocking findings:
-- None.
-
-Non-blocking findings:
-- None.
-
-Evidence produced:
-- actual Manager WR-003 specification review
-- actual PR #108 diff and changed-file review
-- verified PR/base/head/current-main relationship and non-overlapping `.ai/`-only divergence
-- static state-transition trace for complete ledger, false top-frame heartbeat, incomplete/UI-only behavior, positive early terminal signal, reset, session change, snapshot, persistence, and ACK paths
-- independently verified RED CI: War Room CI #624, run `34174670523`, head `520c4e53460146f4ff1c58c6bef00514592e650f`, target WR-003 test failed with actual `false` vs expected terminal `true`
-- independently verified GREEN CI: War Room CI #636, run `34175697251`, audited head `d9b537ddac665207ab61aed7527d7da986cc4815`, Companion 164/164 passed, full root `npm test` passed, resilience syntax passed, backup/offline reload passed
+Decisions made:
+- no PASS / PASS WITH NON-BLOCKING FINDINGS / FAIL verdict is defensible yet because the required Level-4 observation has not been obtained
+- prior V2/Wave-3 live evidence proves the navigation was script-generated but does not close the V3 representative-caller classification required by WR-002
+- direct authenticated ESPN mock interaction is unavailable in the current Auditor environment, so user-side live evidence is required
+- automated/simulated evidence will not be substituted for the live/mock observation
 
 Files updated:
 - `.ai/auditor/AUDIT.md`
 - `.ai/auditor/HANDOFF.md`
 
+Open findings:
+- No new product defect identified in this session.
+- WR-002 caller attribution remains unresolved pending the required Level-4 run.
+
+Blocking issues:
+- Required evidence blocker: the Auditor cannot directly operate the user's local authenticated ESPN mock browser from this environment.
+- The ESPN Live Sync closeout milestone remains open until the Level-4 evidence is supplied and evaluated.
+
+Required user action / evidence:
+1. Update the local repository to canonical `main`; if production code has advanced beyond `6a4045e8cb95ef5f1da07669459705cec144a4d0`, report the new SHA before running the mock.
+2. Reload the unpacked Companion from `extensions/espn-companion`, confirm version `0.9.14`, then refresh ESPN and The War Room.
+3. Join a disposable ESPN mock with matching teams/slot/rounds.
+4. Stay on Players, press `Reset trace` once, and do not manually open Pick History/Board during the controlled interval.
+5. If an automatic Players → Pick History → Players transition occurs, keep mouse/keyboard off navigation controls during the transition, then immediately press `Copy diagnostics` once after ESPN returns.
+6. Paste the complete copied sanitized diagnostics into this WR-002 chat. If available, also upload a short screen recording centered on the transition with the ESPN view/address bar and parked mouse visible.
+7. If no transition occurs, observe through the first 10 completed mock picks without manual Pick History activation, then Copy diagnostics once and explicitly report that no automatic transition occurred during that bounded interval.
+
+Evidence the Auditor will evaluate:
+- build/version health
+- Captured / Applied / Unmatched
+- acknowledgment/ACK progress
+- missing/conflict/unresolved state
+- forensic Players / Pick History transition timing
+- synthetic navigation click/mechanism
+- caller class, sanitized script, function, and hash
+- whether evidence supports `espn-script`, `extension-script`, `other-web-script`, `page-bundle`, `inline-page`, `user-input`, `unknown`, or only a weaker script-generated conclusion
+
 Recommended next role:
-- Manager / Architect
+Independent Auditor / QA after the user supplies the Level-4 evidence.
 
 Exact next action:
-- Manager should review this independent PASS and may merge PR #108 under the project merge gate. Auditor does not merge production PRs.
+User performs the bounded disposable ESPN mock procedure above and returns the complete copied sanitized diagnostics (plus short transition recording if available). Auditor then completes WR-002, issues the strongest defensible attribution without overclaiming, determines PASS / PASS WITH NON-BLOCKING FINDINGS / FAIL, and updates Auditor artifacts again.
 
 Checkpoint / SHA:
-- Audited production PR checkpoint: `d9b537ddac665207ab61aed7527d7da986cc4815`
+- Canonical production/state checkpoint verified before Auditor artifact writes: `6a4045e8cb95ef5f1da07669459705cec144a4d0`
+- Auditor WR-002 evidence-gate record commit: `196074b85fb1e68f5957a7230a3e15d034f08e35`
