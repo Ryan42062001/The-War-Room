@@ -13,10 +13,12 @@ Canonical project-management sources, in precedence order:
 
 Role folders:
 
-- `.ai/manager/`
-- `.ai/builder/`
-- `.ai/research/`
-- `.ai/auditor/`
+- `.ai/manager/` — Manager / Architect
+- `.ai/builder/` — Implementation Engineer
+- `.ai/research/` — Research & Development (R&D)
+- `.ai/auditor/` — Independent Auditor / QA
+
+The R&D role intentionally continues to use `.ai/research/` for compatibility; do not create a separate `.ai/rnd/` tree unless a future Manager decision requires it.
 
 `AGENTS.md` remains useful technical/history context, but it is **not** the canonical roadmap, project state, workflow, or task ledger. If its older process/roadmap language conflicts with `.ai/shared/*`, the `.ai/shared/*` files win.
 
