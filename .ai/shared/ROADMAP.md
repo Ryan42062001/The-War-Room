@@ -18,7 +18,7 @@ Draft-day reliability over feature count:
 
 ## Completed foundations
 
-### Ranking / dataset authority — COMPLETE
+### Ranking / dataset authority — COMPLETE baseline
 - FantasyPros 2026 PPR ECR established as value/ranking authority
 - ESPN rank/ADP used for timing/market pressure
 - 717-player canonical universe established
@@ -53,22 +53,11 @@ Draft-day reliability over feature count:
 - WR-003 completion-state consistency
 - WR-002 required Level-4 validation
 
-Closeout evidence:
-- WR-003: COMPLETE / Auditor PASS / merged `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
-- WR-002: COMPLETE / Level 4 VERIFIED / PASS / no blocking findings
-
 ### Roadmap Discovery — Next Milestone Selection — COMPLETE
-
-WR-007 R&D evidence:
-- PR #110 merged as `276daacdfa506bf62ccab26deabf3a36af21ba0e`
-- four serious candidates evaluated against user value, reliability leverage, demonstrated need, feasibility, architecture fit, boundedness, delivery safety, and validation tractability
-- R&D recommendation: MAINTENANCE / STABLE
-
-Manager WR-009 disposition:
-- independently reviewed the R&D evidence and spot-checked the repository claims driving the recommendation
-- accepted MAINTENANCE / STABLE
-- no successor production milestone selected
-- no production implementation authorized
+- WR-007 evaluated serious successor candidates
+- R&D recommended MAINTENANCE / STABLE
+- Manager WR-009 accepted maintenance/stable
+- no speculative successor production milestone was created
 
 ## Current project mode
 
@@ -76,9 +65,37 @@ Manager WR-009 disposition:
 
 No active production milestone is assigned.
 
-The project should remain stable rather than create features merely to maintain development activity. Builder, R&D, and Auditor may remain idle until a legitimate trigger justifies new work.
+A legitimate maintenance trigger may activate bounded investigation without reopening production development automatically.
 
-## Reactivation triggers
+## Active maintenance-trigger investigation
+
+### WR-010 — Ranking Accuracy & Automated Ingestion Feasibility — IN PROGRESS
+
+Assigned role: Research & Development (R&D)
+Starting SHA: `2cab85f981e06f5f19bd4a7631a28adf2f7ff351`
+Task spec: `.ai/manager/WR-010.md`
+Production implementation authorization: **NONE**
+
+Trigger:
+The user asked whether the War Room can identify the most accurate publicly available rankings and automatically pull them into the app. This is a materially valuable opportunity and possible seasonal/data-refresh improvement.
+
+Research objectives:
+- identify the strongest historical preseason ranking source/cohort for the War Room's PPR use case
+- compare single expert vs top-N accurate-expert consensus vs weighted approaches vs current broad PPR ECR
+- account explicitly for the fact that FantasyPros Draft Accuracy is measured in Half-PPR while the War Room uses PPR
+- evaluate the official FantasyPros API and any other supported machine-readable routes
+- separate technical feasibility from access/license permission
+- design a fail-closed ingestion/validation/rollback approach without implementing it
+- determine whether any proposed change is materially better than the current ranking baseline
+
+Expected outcomes:
+- READY FOR MANAGER MILESTONE CONSIDERATION
+- R&D ONLY / MORE EVIDENCE NEEDED
+- DO NOT PURSUE
+
+Only Manager may promote WR-010 into a production milestone after evidence review.
+
+## Maintenance reactivation triggers
 
 Active development may be reconsidered when one or more of the following becomes real and sufficiently important:
 - verified defects
@@ -89,24 +106,21 @@ Active development may be reconsidered when one or more of the following becomes
 - seasonal/data updates
 - previously unresolved risks becoming actionable
 
-Triggers do not automatically authorize implementation. Manager must define the scope, Task ID, evidence requirements, dependencies, architecture, validation levels, and parallelism plan first.
+Triggers do not automatically authorize implementation.
 
-## Closest future milestone candidates
+## Closest future milestone candidates retained from WR-007
 
-These are preserved proposals, not active roadmap commitments:
+These remain proposals, not active roadmap commitments:
+1. ESPN Configuration Preflight / Settings Validation
+2. Recommendation Calibration Program
+3. Opponent-Aware Next-Turn Intelligence
+4. League-Aware Draft Profiles
 
-1. **ESPN Configuration Preflight / Settings Validation**
-   - Revisit on a real configuration mismatch or a live-proven stable independent ESPN settings source.
-2. **Recommendation Calibration Program**
-   - Revisit when enough independent completed-draft outcomes exist or a repeatable recommendation defect is observed.
-3. **Opponent-Aware Next-Turn Intelligence**
-   - Revisit on user-reported wait/draft errors or a suitable real/mock held-out calibration corpus.
-4. **League-Aware Draft Profiles**
-   - Revisit on an explicit Standard / Half-PPR / Superflex / keeper / salary-cap / alternate-format requirement.
+WR-010 is a new trigger-driven ranking/data investigation and does not promote any of those proposals.
 
 ## Existing maintenance observations
 
-The following remain non-blocking and do not themselves justify active development:
+Non-blocking:
 - legacy `AGENTS.md` process wording
 - diagnostics capture-source wording when DOM is the actual ledger-eligible source
 - unresolved synthetic-navigation actor identity at the WR-002 evidence ceiling
@@ -116,9 +130,13 @@ The following remain non-blocking and do not themselves justify active developme
 No Parallel Work Wave is active.
 
 Current roles:
-- Manager: IDLE except for trigger evaluation / canonical reconciliation when needed
+- Manager: IDLE after assignment / awaiting evidence
 - Builder: IDLE
-- R&D: IDLE
+- R&D: ACTIVE — WR-010
 - Auditor: IDLE
+
+Dependency classification:
+- WR-010 is INDEPENDENT
+- no second legitimate approved specialist task exists
 
 Do not create parallel work until at least two legitimate independently executable approved tasks exist.
