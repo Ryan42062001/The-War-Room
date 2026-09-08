@@ -23,7 +23,7 @@ Latest production merge checkpoint remains:
 - Independent Auditor verdict: PASS
 - exact audited-head War Room CI #636 / run `34175697251`: completed / success
 
-No production code changed during WR-002 or WR-005 closeout reconciliation.
+No production code changed during WR-002, WR-005, or WR-006 workflow/state reconciliation.
 
 ## Milestone status
 
@@ -58,6 +58,10 @@ The roadmap does not currently define a successor milestone. Do not invent a new
 
 - `.ai/shared/WORKFLOW.md` is canonical for team operation.
 - WR-004 requires explicit dependency classification, safe parallel execution, Parallel Work Waves, activation plans, and parallel PR safety.
+- WR-006 expands the former Research / Investigation role into **Research & Development (R&D)** while preserving evidence and handoff discipline.
+- R&D is authorized for external/technical research, forward-looking product and technical R&D, API/data/algorithm/integration evaluation, isolated proofs of concept, future architecture evaluation, product/reliability gap discovery, Roadmap Discovery support, and evidence-backed future milestone proposals.
+- R&D may run dependency-safe approved work in parallel with current milestone work, but it does not select the roadmap, modify production code without an approved implementation assignment, modify `.ai/shared/*`, merge production work, or audit its own production implementation.
+- `.ai/research/` remains the R&D role-owned directory; no `.ai/rnd/` tree is used.
 - The Manager remains the normal authority for `.ai/shared/*` reconciliation; parallel workers must not independently mutate canonical shared state.
 - `IDLE` is valid and desirable when no useful independent task exists.
 
@@ -109,6 +113,15 @@ Status: COMPLETE
 Objective: consume the final WR-002 Level-4 PASS, reconcile canonical state, and close the ESPN Live Sync reliability / live-validation closeout milestone without inventing downstream work.
 Production behavior changed: NO
 
+### WR-006 — Research & Development Role Expansion Workflow Update
+
+Role: Manager / Architect
+Status: COMPLETE
+Objective: persist the expanded R&D role, authority boundaries, `.ai/research/` directory compatibility, and Roadmap Discovery / safe-parallel-R&D capabilities.
+Production behavior changed: NO
+New production milestone created: NO
+R&D assignment created: NO
+
 ## Recently completed integration history
 
 Historical work completed before adoption of the WR Task-ID operating contract is retained as context rather than retroactively renumbered:
@@ -133,10 +146,10 @@ No active specialist tasks are assigned.
 
 Dependency analysis:
 - there is no approved Builder task
-- there is no approved Research task
+- there is no approved R&D task
 - WR-002 Auditor work is complete
 - no successor milestone is defined
 
 Parallel Work Wave: none. Fewer than two legitimate independent approved tasks exist.
 
-Do not activate specialist work until a real next milestone/task is prioritized and assigned under the canonical workflow.
+R&D's broader authorization does not itself create work. Do not activate specialist work until a real next milestone/task or Roadmap Discovery assignment is prioritized and assigned under the canonical workflow.
