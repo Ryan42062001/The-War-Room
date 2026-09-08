@@ -7,7 +7,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : null, function() {
   'use strict';
 
-  var RUNTIME_VERSION = '1';
+  var RUNTIME_VERSION = '2';
   var DEFAULT_LIMIT = 48;
   var MECHANISMS = ['HTMLElement.click', 'dispatchEvent(click)', 'other-programmatic', 'trusted-user'];
   var CALLER_CLASSES = ['espn-script', 'extension-script', 'other-web-script', 'page-bundle', 'inline-page', 'user-input', 'unknown'];
@@ -217,7 +217,13 @@
     return next.length > limit ? next.slice(next.length - limit) : next;
   }
 
-  function classifyClickEvent(event, pending, now) {
+  function usablePendingProvenance(pending, now) {
+    now = Number(now) || Date.now();
+    if (!pending || !Number.isFinite(Number(pending.at)) || Math.max(0, now - Number(pending.at)) > 500) return false;
+    return pending.mechanism === 'HTMLElement.click' || pending.mechanism === 'dispatchEvent(click)';
+  }
+
+  function classifyClickEvent(event, pending, now, observedCaller) {
     now = Number(now) || Date.now();
     if (event && event.isTrusted === true) {
       return {
@@ -226,8 +232,7 @@
         caller:sanitizeCaller({className:'user-input', hash:stableHash('user-input')})
       };
     }
-    if (pending && Number.isFinite(Number(pending.at)) && Math.max(0, now - Number(pending.at)) <= 500 &&
-        MECHANISMS.indexOf(String(pending.mechanism || '')) >= 0) {
+    if (usablePendingProvenance(pending, now)) {
       return {
         click:'untrusted',
         mechanism:String(pending.mechanism),
@@ -237,7 +242,8 @@
     return {
       click:'untrusted',
       mechanism:'other-programmatic',
-      caller:sanitizeCaller({className:'unknown', hash:stableHash('unknown-programmatic')})
+      caller:observedCaller ? sanitizeCaller(observedCaller) :
+        sanitizeCaller({className:'unknown', hash:stableHash('unknown-programmatic')})
     };
   }
 
@@ -263,8 +269,8 @@
   }
 
   function install(root) {
-    if (!root || !root.document || root.__warRoomEspnClickProvenanceInstalledV1) return false;
-    root.__warRoomEspnClickProvenanceInstalledV1 = true;
+    if (!root || !root.document || root.__warRoomEspnClickProvenanceInstalledV1 || root.__warRoomEspnClickProvenanceInstalledV2) return false;
+    root.__warRoomEspnClickProvenanceInstalledV2 = true;
 
     var startedAt = Date.now();
     var events = [];
@@ -303,8 +309,12 @@
           pendingByTarget.delete(target);
         } catch (error) {}
       }
-      var classified = classifyClickEvent(event, pending, Date.now());
       var now = Date.now();
+      var observedCaller = null;
+      if (event && event.isTrusted !== true && !usablePendingProvenance(pending, now)) {
+        observedCaller = captureCaller();
+      }
+      var classified = classifyClickEvent(event, pending, now, observedCaller);
       events = appendBounded(events, {
         at:now,
         ms:Math.max(0, now - startedAt),
@@ -317,7 +327,7 @@
     }, true);
 
     root.__warRoomEspnClickProvenanceSnapshot = function() {
-      return {version:1, startedAt:startedAt, events:events.slice()};
+      return {version:2, startedAt:startedAt, events:events.slice()};
     };
     root.__warRoomEspnClickProvenanceReset = function() {
       startedAt = Date.now();
@@ -341,6 +351,7 @@
     isRelevantNavigationNode:isRelevantNavigationNode,
     sanitizeEvent:sanitizeEvent,
     appendBounded:appendBounded,
+    usablePendingProvenance:usablePendingProvenance,
     classifyClickEvent:classifyClickEvent,
     wrapPrototypeMethod:wrapPrototypeMethod,
     install:install
