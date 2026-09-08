@@ -2,80 +2,95 @@
 
 HANDOFF
 
-Task ID: WR-006
+Task ID: WR-007
 Role: Manager / Architect
-Status: COMPLETE
+Status: ASSIGNED TO R&D / AWAITING DISCOVERY EVIDENCE
 
 Verified starting state:
 - Repository: `Ryan42062001/The-War-Room`
-- Canonical `main` before WR-006 edits: `f4c71410a762cdfd6ab63e92f51caf51237743ea`
-- `.ai/shared/WORKFLOW.md` still defined the third specialist as `Research / Investigation Specialist`
-- `.ai/research/HANDOFF.md` limited the role to research that materially blocked architecture or implementation
-- `.ai/research/` was already the established role-owned directory
-- current milestone: none assigned
-- no Builder, Research/R&D, or Auditor task was active
+- Canonical `main` at Manager refresh: `3e5cffb86c3ab6c55803d4f0f6a8a07218b81e0f`
+- ESPN Live Sync reliability / live-validation closeout: COMPLETE
+- Current production milestone before this session: none assigned
+- `.ai/shared/ROADMAP.md` explicitly allowed Manager-assigned R&D Roadmap Discovery when evidence-backed exploration would help select the next legitimate milestone
+- `.ai/research/HANDOFF.md` showed no active R&D task before assignment
+- Builder: no active assignment
+- Auditor: no active assignment
 
 Current milestone:
-None assigned.
+**Roadmap Discovery — Next Milestone Selection — IN PROGRESS**
 
-Milestone disposition:
-**ESPN Live Sync reliability / live-validation closeout — COMPLETE**
+Active task:
+**WR-007 — Roadmap Discovery: Next Milestone Candidate Evaluation**
 
-Work completed:
-- created `.ai/manager/WR-006.md`
-- expanded the canonical role from Research / Investigation to **Research & Development (R&D)**
-- preserved existing evidence, repository-ownership, research, and handoff discipline
-- authorized forward-looking product/technical R&D, APIs/data/algorithm/integration evaluation, future architecture evaluation, isolated/disposable experiments and proofs of concept, meaningful product/reliability gap discovery, Roadmap Discovery support, evidence-backed future milestone proposals, and dependency-safe parallel R&D
-- recorded explicit R&D authority limits: no final roadmap selection, no production-code modification without approved implementation assignment, no canonical `.ai/shared/*` mutation, no production merges, and no self-audit of production implementation
-- preserved `.ai/research/` as the R&D role-owned directory and documented that no `.ai/rnd/` tree should be created without a future Manager decision
-- updated `.ai/research/HANDOFF.md` so replacement R&D chats inherit the expanded scope while remaining unassigned
-- updated `.ai/README.md` and ROADMAP role terminology for compatibility
-- updated PROJECT_STATE workflow baseline and task ledger
-- reviewed DECISIONS.md and left it unchanged because this is workflow mechanics, not a durable product/architecture decision
+Assigned role:
+Research & Development (R&D)
+
+Objective:
+Identify, compare, rank, and recommend the strongest legitimate next War Room milestone candidates using actual repository/product evidence, external research where useful, and bounded non-production R&D.
+
+Work completed by Manager:
+- refreshed current canonical project state, roadmap, workflow, Manager handoff, and R&D handoff
+- verified there was no active production milestone and no specialist assignment
+- confirmed WR-006 authorizes explicit Manager-assigned Roadmap Discovery
+- created `.ai/manager/WR-007.md` with objective, verified starting state, evidence requirements, non-goals, acceptance criteria, expected outputs, dependency status, and next gate
+- activated Roadmap Discovery as a discovery/selection milestone rather than a production implementation milestone
+- updated PROJECT_STATE and ROADMAP to mark WR-007 active
+- seeded `.ai/research/HANDOFF.md` with the Manager assignment so replacement R&D chats can recover the task; subsequent R&D evidence/handoff updates remain role-owned
+- explicitly prohibited production implementation during WR-007
+
+Required R&D output:
+- inspect current repository/product/test state sufficiently to avoid rediscovering solved work
+- build an evidence-backed gap/opportunity inventory
+- evaluate 3–5 serious next-milestone candidates
+- rank candidates against explicit user-value, reliability, evidence, feasibility, complexity, integration-risk, and validation criteria
+- recommend one strongest milestone and at least one runner-up
+- provide a bounded Manager-ready milestone outline for the top recommendation
+- identify likely role routing, validation levels, dependencies, non-goals, and safe parallel-work opportunities
+- record rejected/deferred ideas and why
+- write full evidence to `.ai/research/ROADMAP_DISCOVERY.md` and completion handoff to `.ai/research/HANDOFF.md`
+
+Production authorization:
+**NONE.** R&D may inspect, research, compare, and run isolated/disposable non-production experiments only when useful. R&D may not modify production code, canonical `.ai/shared/*`, open/merge production work, or select the final roadmap.
+
+Dependency / parallelism analysis:
+- WR-007 dependency status: INDEPENDENT
+- Builder has no approved task
+- Auditor has no approved task
+- no second legitimate specialist assignment exists
+- Parallel Work Wave: none; one active specialist task does not constitute a wave
 
 Decisions made:
-- R&D may be assigned forward-looking Roadmap Discovery work even when it does not block an active implementation, provided the work is legitimate, evidence-backed, separately tasked, and dependency-safe
-- isolated R&D experiments are not production implementation unless the Manager explicitly promotes them into an approved implementation task
-- the Manager retains final roadmap, architecture, task-assignment, prioritization, canonical shared-state, merge, and integration authority
-- the expanded R&D capability does not itself create an assignment or milestone
-- no Parallel Work Wave is created because there are still no active approved specialist tasks
+- Roadmap Discovery is now the active selection milestone
+- WR-007 is a legitimate R&D assignment because the roadmap has no successor and the project needs evidence-backed prioritization before another implementation wave
+- no production implementation is authorized until Manager reviews completed WR-007 evidence
+- no Builder or Auditor work is invented merely to create parallelism
+- Manager retains final roadmap and architecture authority
 
 Files updated:
-- `.ai/manager/WR-006.md`
-- `.ai/shared/WORKFLOW.md`
+- `.ai/manager/WR-007.md`
 - `.ai/shared/PROJECT_STATE.md`
 - `.ai/shared/ROADMAP.md`
-- `.ai/research/HANDOFF.md`
-- `.ai/README.md`
+- `.ai/research/HANDOFF.md` (assignment seed only)
 - `.ai/manager/HANDOFF.md`
 
 Files reviewed but intentionally not changed:
 - `.ai/shared/DECISIONS.md`
+- `.ai/shared/WORKFLOW.md`
 
-Open non-blocking findings:
+Open findings:
 - legacy `AGENTS.md` process wording remains non-blocking and unassigned
-- diagnostics wording can still misleadingly emphasize `Capture method: network` / fetch candidate counts when Pick History DOM is the actual ledger-eligible numbered-pick authority
-- synthetic-navigation actor identity remains unknown at the verified WR-002 attribution ceiling
+- diagnostics capture-source wording remains non-blocking and unassigned
+- synthetic-navigation actor identity remains at the verified unknown attribution ceiling
+- WR-007 should evaluate these as inputs but not automatically promote them
 
 Blocking issues:
-None.
-
-Next legitimate milestone:
-None assigned in the roadmap.
-
-Dependency / parallelism analysis:
-- Builder: no approved task
-- R&D: broader capability is now authorized, but no approved task currently exists
-- Auditor: no approved task
-- Manager: no active implementation/integration task after this workflow reconciliation
-- dependency classification: no candidate task group exists to classify into a Parallel Work Wave
-- Parallel Work Wave: none
+None for Roadmap Discovery.
 
 Recommended next role:
-None. All roles may remain IDLE until the Manager/user identifies a legitimate next milestone or explicitly assigns Roadmap Discovery / R&D work.
+Research & Development (R&D)
 
 Exact next action:
-Do not activate specialist work solely because R&D is now broader. When a legitimate project need emerges, the Manager should refresh canonical state, define the new WR Task ID or milestone, decide whether R&D should perform discovery/evaluation first or in parallel, classify dependencies, and create a Parallel Work Wave only when multiple useful independent assignments exist.
+R&D refreshes canonical repository state and executes WR-007 from `.ai/manager/WR-007.md`. It should return an evidence-backed ranked shortlist and recommended milestone without changing production code or canonical shared state. Manager then independently reviews the result and decides the next legitimate production milestone/task structure.
 
 Checkpoint / SHA:
-WR-006 began from canonical main `f4c71410a762cdfd6ab63e92f51caf51237743ea`. Verify current `main` after this handoff commit for the exact final canonical SHA.
+WR-007 assignment began from `3e5cffb86c3ab6c55803d4f0f6a8a07218b81e0f`. Verify current `main` after these Manager-owned assignment commits for the exact canonical SHA.
