@@ -40,6 +40,14 @@ Draft-day reliability over feature count:
 - known scoring corrections integrated into required production path
 - fail-closed bootstrap when canonical implementations are absent
 
+### Repository operating contract — COMPLETE
+
+- WR-001 merged through PR #109
+- canonical `.ai/shared/*` state, roadmap, decisions, and workflow established
+- Manager / Builder / Research / Auditor handoff locations established
+- active work mapped to WR Task IDs
+- legacy `AGENTS.md` retained as technical/history context, with `.ai/shared/*` explicitly canonical for project management
+
 ### ESPN Live Sync reliability work — MOSTLY COMPLETE, CLOSEOUT IN PROGRESS
 
 Merged historical work includes:
@@ -52,17 +60,6 @@ Merged historical work includes:
 - responsive tablet document-overflow fix
 
 ## Active milestone: ESPN Live Sync reliability / live-validation closeout
-
-### WR-001 — Repository Operating Contract Bootstrap
-
-Status: IN PROGRESS
-Owner: Manager / Architect
-Goal: establish canonical `.ai/` state/workflow and remove conflicting legacy process guidance.
-Completion gate:
-- canonical shared files exist
-- Manager handoff exists
-- `AGENTS.md` defers to canonical `.ai/` project-management files
-- current open/pending work has Task IDs
 
 ### WR-002 — ESPN Synthetic Navigation Attribution Level 4
 
@@ -80,7 +77,7 @@ Completion gate:
 
 Status: IMPLEMENTATION PR OPEN / AUDIT REQUIRED
 Implementation PR: #108
-Next role after Manager normalization: Independent Auditor / QA
+Next role: Independent Auditor / QA
 Goal: ensure a complete authoritative numbered-pick ledger remains terminal completion authority after Rescan / false UI heartbeat scenarios.
 Required validation:
 - Level 1 diff review
@@ -88,8 +85,9 @@ Required validation:
 - Level 3 deterministic state scenario
 - Level 4 only if Auditor determines browser/live behavior remains materially uncertain
 Merge gate:
-- branch freshness verified
+- current-main relationship verified
 - scope matches WR-003
+- required tests independently verified
 - independent audit returns PASS or PASS WITH NON-BLOCKING FINDINGS
 
 ## Next milestone after live-sync closeout
