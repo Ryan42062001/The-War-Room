@@ -1,13 +1,17 @@
 # War Room Project State
 
 Status: ACTIVE
-Last verified: 2026-09-07
+Last verified: 2026-09-08
 Owner: Manager / Architect
 
 ## Canonical repository checkpoint
 
 Repository: `Ryan42062001/The-War-Room`
 Branch: `main`
+
+Latest verified canonical state before WR-004 workflow edits:
+- `241fe2b4d9c4c9e81709a723f6f20e0d5b4e9a55`
+- commit purpose: WR-002 Level-4 evidence handoff
 
 Latest production merge checkpoint:
 - WR-003 / PR #108 merge SHA: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
@@ -16,7 +20,7 @@ Latest production merge checkpoint:
 - Exact audited-head War Room CI #636 / run `34175697251`: completed / success
 - No blocking or non-blocking audit findings
 
-The Manager merged PR #108 only after independently re-verifying the Task ID, audited head, mergeability, four-file diff scope, exact-head CI, and current-main relationship. Current main had advanced beyond the PR base only through `.ai/` operating-contract and audit documentation, with no production-file overlap.
+The Manager merged PR #108 only after independently re-verifying the Task ID, audited head, mergeability, four-file diff scope, exact-head CI, and current-main relationship.
 
 ## Current milestone
 
@@ -26,7 +30,7 @@ Milestone status: IN PROGRESS
 
 WR-003 is complete. The only remaining milestone task is WR-002 Level-4 synthetic-navigation attribution.
 
-Do not declare this milestone complete until WR-002 is closed at its required validation level.
+WR-002 is currently blocked on user-supplied authenticated ESPN mock evidence, not on Builder implementation or Research findings. Do not declare this milestone complete until WR-002 is closed at its required validation level.
 
 ## Verified product baseline
 
@@ -36,7 +40,14 @@ Do not declare this milestone complete until WR-002 is closed at its required va
 - Companion permissions remain `storage` and `scripting` with the existing narrow ESPN / War Room host permissions.
 - Live disposable ESPN mocks have shown Pick History DOM to be the practical usable numbered-pick source when structured feeds are behind or empty.
 - Authoritative ESPN off-board numbered picks are preserved as external picks and count toward draft progress without being inserted into the canonical recommendation pool.
-- A complete unique configured numbered-pick ledger is now terminal completion authority in the Companion; a later false UI-derived completion heartbeat cannot demote terminal completion.
+- A complete unique configured numbered-pick ledger is terminal completion authority in the Companion; a later false UI-derived completion heartbeat cannot demote terminal completion.
+
+## Workflow baseline
+
+- `.ai/shared/WORKFLOW.md` is canonical for team operation.
+- WR-004 adds explicit safe-parallelism evaluation, dependency classification, Parallel Work Waves, activation plans, and parallel PR safety.
+- The Manager remains the normal authority for `.ai/shared/*` reconciliation; parallel workers must not independently mutate canonical shared state.
+- `IDLE` is valid when no useful independent task exists.
 
 ## Task state
 
@@ -51,10 +62,12 @@ Result: canonical `.ai/` workflow/state/task/handoff structure established.
 ### WR-002 — ESPN Synthetic Navigation Attribution Level 4
 
 Role: Independent Auditor / QA
-Status: PENDING LIVE VALIDATION
+Status: BLOCKED — AWAITING REQUIRED LEVEL-4 LIVE EVIDENCE
 Objective: run one short disposable ESPN mock on the merged provenance V3 implementation and determine the strongest defensible sanitized caller classification for automatic Players → Pick History → Players transitions.
 Required validation level: Level 4.
 Task spec: `.ai/manager/WR-002.md`
+Auditor handoff: `.ai/auditor/HANDOFF.md`
+Current blocker: the Auditor environment cannot directly operate the user's authenticated ESPN mock; user-side diagnostics are required.
 Blocking milestone completion: YES for final attribution closure; NO for already-proven pick synchronization correctness.
 
 ### WR-003 — ESPN Completion-State Consistency
@@ -71,7 +84,16 @@ Validation achieved:
 - Level 1 static correctness: PASS
 - Level 2 automated tests: PASS
 - Level 3 deterministic simulated state behavior: PASS
-- Level 4: not required for WR-003 by independent audit because no material live/browser uncertainty remained for this internal terminal-state invariant
+- Level 4: not required for WR-003 by independent audit
+
+### WR-004 — Parallel Task Orchestration Workflow Upgrade
+
+Role: Manager / Architect
+Status: COMPLETE
+Objective: require explicit dependency classification, safe parallel execution, Parallel Work Waves, activation plans, parallel PR safety, and useful-throughput prioritization.
+Task spec: `.ai/manager/WR-004.md`
+Production behavior changed: NO
+Current-backlog result: no Parallel Work Wave created because WR-002 is the only useful unfinished specialist task; Builder and Research remain legitimately idle.
 
 ## Recently completed integration history
 
@@ -91,6 +113,6 @@ Historical work completed before adoption of the WR Task-ID operating contract i
 2. **Legacy `AGENTS.md` contains historical living-roadmap/process wording.** `.ai/shared/*` is canonical; cleanup remains non-blocking.
 3. **Diagnostics wording remains imperfect:** `Capture method: network` and recurring fetch candidate-shaped counts can be misleading when DOM is the actual usable numbered-pick authority. This is non-blocking and unassigned.
 
-## Merge discipline
+## Merge and parallelism discipline
 
-Do not merge new production behavior solely from worker completion summaries. Apply Task ID, stale-branch, evidence, validation-level, and independent-audit rules from `.ai/shared/WORKFLOW.md`.
+Do not merge new production behavior solely from worker completion summaries. Apply Task ID, stale-branch, evidence, validation-level, independent-audit, dependency-classification, parallel-PR-safety, and activation-plan rules from `.ai/shared/WORKFLOW.md`.
