@@ -12,57 +12,87 @@ Branch: `main`
 Latest production merge remains:
 - WR-003 / PR #108 merge SHA: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
 
-Latest completed discovery integration:
-- WR-007 R&D PR #110 merge SHA: `276daacdfa506bf62ccab26deabf3a36af21ba0e`
-- Roadmap Discovery concluded MAINTENANCE / STABLE and was accepted by Manager in WR-009
+Latest R&D evidence integration:
+- WR-010 / PR #111 merge SHA: `ce2ab0b75fd88549fb8def0509de4b801faa0e1c`
+- reviewed final R&D head: `0344d337ba1197380e39078807505868777c199b`
+- exact-head War Room CI #717 / run `34235561705`: SUCCESS
+- changed files: `.ai/research/RANKING_INGESTION_DISCOVERY.md`, `.ai/research/HANDOFF.md` only
+- production behavior changed: NO
 
 ## Project mode
 
 ### MAINTENANCE / STABLE — ACTIVE
 
-The War Room remains in maintenance/stable mode. No production milestone is active and no production implementation is currently authorized.
+The War Room remains in maintenance/stable mode. No production milestone is active and no production implementation is authorized.
 
-Maintenance/stable permits narrowly scoped trigger-driven investigation when a legitimate opportunity appears. The user has now raised a materially valuable ranking/data opportunity: determine which publicly available preseason rankings are most accurate and whether they can be ingested automatically.
+WR-010 was a legitimate trigger-driven maintenance investigation into ranking accuracy and automated refresh. Manager WR-011 accepted the research evidence but did not promote it into production work because the material-improvement and provider-compatibility gates are unresolved.
 
-## Active maintenance investigation
+## WR-010 disposition
 
-### WR-010 — Ranking Accuracy & Automated Ingestion Feasibility
+### WR-010 — Ranking Accuracy & Automated Ingestion Feasibility — COMPLETE
+
 Role: Research & Development (R&D)
-Status: ASSIGNED / ACTIVE
-Task spec: `.ai/manager/WR-010.md`
-Starting SHA: `2cab85f981e06f5f19bd4a7631a28adf2f7ff351`
-Production implementation authorized: NO
+Outcome: **R&D ONLY / MORE EVIDENCE NEEDED**
+Evidence: `.ai/research/RANKING_INGESTION_DISCOVERY.md`
+Handoff: `.ai/research/HANDOFF.md`
+PR: #111
 
-Objective:
-- determine the strongest evidence-backed ranking source/cohort for the War Room's PPR redraft use case
-- compare single-expert, top-N accurate-expert consensus, recency/accuracy-weighted approaches, and the current FantasyPros PPR ECR baseline
-- evaluate supported automated ingestion routes, especially the official FantasyPros API
-- review access/license constraints separately from technical feasibility
-- propose a fail-closed importer design without modifying production
+Manager disposition:
+- research evidence accepted
+- current production ranking authority retained
+- FantasyPros API not integrated into production
+- no Builder task created
+- no ranking/scoring/recommendation behavior changed
 
-Manager preliminary evidence to be independently verified by R&D:
-- FantasyPros publishes preseason Draft Accuracy and a 2023–2025 multi-year leaderboard
-- public current results identify Jody Smith as the multi-year #1, while 2025 single-year #1 was Seth Miller
-- FantasyPros Draft Accuracy is scored in Half-PPR, so it does not by itself prove a single best PPR expert
-- FantasyPros now advertises an official API with PPR consensus/per-expert rankings, expert filtering, expert metadata, tiers, and player metadata
-- API production/access terms must be checked before any production proposal
+## Ranking authority baseline
 
-## Reactivation trigger classification
+Current production ranking/value authority remains:
+- FantasyPros Top-20 Experts PPR ECR as primary value ordering
+- broader FantasyPros PPR ECR as controlled fallback for deeper ECR-ranked players
+- ESPN rank/ADP as market-timing information only
+- ADP-only depth does not fabricate ECR
 
-WR-010 trigger:
-- materially valuable opportunity
-- possible seasonal/data-refresh improvement
+Repository verification:
+- `scripts/build-fantasypros-2026.mjs` consumes Top-20 ECR, broad ECR fallback, and ADP source files and asserts the established 717-player baseline
+- `scripts/validate-fantasypros-baseline.mjs` SHA-256 hashes source/runtime ranking files and requires explicit baseline acceptance before changed ranking data becomes accepted
 
-This trigger authorizes research only. It does not automatically reopen active production development.
+## WR-010 research findings retained
+
+Strongest future source hypothesis:
+- rolling three-year Top-10 FantasyPros Draft Accuracy cohort
+- use that cohort's current **PPR** consensus / Rank Points, not Half-PPR rankings and not a single analyst
+
+Current production conclusion:
+- material lift over the current Top-20 PPR baseline is UNPROVEN
+- FantasyPros Draft Accuracy is Half-PPR, so it is an expert-selection prior rather than direct proof of PPR ranking superiority
+- current Top-20 production baseline remains the strongest justified authority
+
+Technical automation conclusion:
+- official FantasyPros API is technically capable of filtered PPR consensus/expert/player retrieval
+- browser-direct API integration is rejected because the static client cannot protect credentials
+- preferred future architecture, if permitted and justified: credential-safe maintainer/local fetch -> staged candidate -> fail-closed validation/reconciliation -> explicit promote -> last-known-good fallback
+
+Access/usage conclusion:
+- current FantasyPros documentation advertises personal/non-commercial production API access with paid HOF
+- current published terms also prohibit using API materials/data to build a competing product/service
+- because the War Room is a draft assistant, compatibility for this exact use is NOT VERIFIED and requires provider clarification before production API use
+
+## Evidence gates before future production consideration
+
+1. Provider clarification covering the intended private/personal War Room draft-assistant use and storage/display/redistribution model.
+2. Credential-safe non-production live API completeness test using a user-owned key outside chat/repository.
+3. If lawful historical data is available, independent held-out comparison of current Top-20 vs rolling Top-5/Top-10/broad-ECR alternatives.
+4. Only if favorable: Manager-approved production task plus independent Auditor validation because ranking authority affects scoring/recommendations.
+
+No follow-up task is automatically active. These are reactivation gates, not assignments.
 
 ## Verified product baseline
 
 - Canonical player universe: 717 players, zero canonical duplicates in the established validation baseline.
-- FantasyPros 2026 PPR ECR is the ranking/value authority; ESPN rank/ADP is timing/market information.
+- FantasyPros 2026 PPR ECR remains ranking/value authority; ESPN rank/ADP remains timing/market information.
 - Current production league baseline is PPR / snake with the established starter and bench structure.
-- Ranking source refresh is controlled and current production data is not replaced casually.
 - Companion manifest version remains `0.9.14`.
-- Live ESPN sync/recovery closeout is complete with no blocking findings.
+- Live ESPN sync/recovery closeout remains complete with no blocking findings.
 - Root `npm test` covers release, module, syntax, dataset, Companion, ESPN UX, browser, responsive, off-board, hardening, draft-awareness, scoring, invariant, persistence, recovery, and live-mock surfaces.
 
 ## Workflow baseline
@@ -112,7 +142,17 @@ Outcome: MAINTENANCE / STABLE accepted
 
 ### WR-010 — Ranking Accuracy & Automated Ingestion Feasibility
 Role: Research & Development (R&D)
-Status: ASSIGNED / ACTIVE
+Status: COMPLETE
+PR: #111
+Outcome: R&D ONLY / MORE EVIDENCE NEEDED
+Production behavior changed: NO
+Production rankings changed: NO
+API integrated: NO
+
+### WR-011 — WR-010 Research Disposition / Maintenance Return
+Role: Manager / Architect
+Status: COMPLETE
+Outcome: research accepted; current ranking authority retained; project remains MAINTENANCE / STABLE
 Production behavior changed: NO
 Production implementation authorized: NO
 
@@ -121,22 +161,17 @@ Production implementation authorized: NO
 1. Legacy `AGENTS.md` process wording remains non-blocking; canonical `.ai/shared/*` wins.
 2. Diagnostics can over-emphasize `Capture method: network` / candidate-shaped fetch counts when Pick History DOM is the ledger-eligible source.
 3. Synthetic-navigation actor identity remains unknown at the verified WR-002 attribution ceiling.
-
-These remain maintenance observations and are unrelated to WR-010 unless new evidence changes that assessment.
+4. Ranking automation remains technically promising but blocked on provider compatibility, live completeness, and material-lift evidence before production consideration.
 
 ## Current workload / parallelism state
 
-Active specialist tasks:
-- R&D — WR-010
+Active specialist tasks: none.
 
-Idle specialist roles:
 - Builder — IDLE
+- R&D — IDLE
 - Auditor — IDLE
 
-Dependency analysis:
-- WR-010 is INDEPENDENT of Builder and Auditor work
-- no second legitimate approved task exists
-
+Dependency analysis: no approved executable follow-up task group exists.
 Parallel Work Wave: none.
 
-Do not authorize ranking-source changes, automatic ingestion, scoring changes, or production API integration until Manager reviews completed WR-010 evidence and creates an explicit production task if warranted.
+Do not activate ranking-source changes, automated API ingestion, scoring changes, or production data refresh work until a legitimate new trigger/evidence gate is presented and Manager creates an approved WR task.
