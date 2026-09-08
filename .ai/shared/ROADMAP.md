@@ -1,108 +1,130 @@
 # War Room Roadmap
 
-Status: MAINTENANCE / STABLE
+Status: MAINTENANCE / STABLE — BOUNDED DISCOVERY ACTIVE
 Last updated: 2026-09-08
 Owner: Manager / Architect
 
 ## Project priority
 
-Draft-day reliability over feature count:
+Draft-day reliability and decision efficiency over feature count:
 - recommendations remain trustworthy
 - drafted players never reappear available
 - state is not silently lost or corrupted
 - ESPN failures recover safely
 - persistence is robust
-- app remains fast and mobile-friendly
+- the app remains fast and mobile-friendly
+- the user can identify the next correct draft action quickly
 - regressions are caught before release
 - `main` remains deployable
 
 ## Completed foundations
 
 ### Ranking / dataset authority — COMPLETE baseline
-- FantasyPros 2026 PPR ECR established as value/ranking authority
-- Top-20 Experts PPR ECR is primary, broader ECR is controlled fallback
-- ESPN rank/ADP used for timing/market pressure
-- 717-player canonical universe established
-- zero canonical duplicates in validation baseline
-- authoritative board rebuild before saved-state restoration
-- SHA-256 source/runtime baseline validation requires explicit acceptance for ranking-source changes
+- FantasyPros Top-20 Experts 2026 PPR ECR primary
+- broader FantasyPros PPR ECR controlled fallback
+- ESPN rank/ADP timing/market only
+- 717-player canonical universe with zero canonical duplicates in baseline
+- SHA-256 fail-closed baseline acceptance
 
 ### Draft-state / persistence hardening — COMPLETE
-- state invariants and deterministic draft simulations
-- corruption recovery / backup restore / quota and failure handling
-- offline and reconnect resilience
+- deterministic draft invariants
+- corruption/backup/restore/quota handling
+- offline/reconnect resilience
 - stale ESPN snapshot monotonicity protections
 
 ### Recommendation / scoring correctness — COMPLETE baseline
 - canonical scoring/recommendation modules
-- known scoring corrections integrated into required production path
-- fail-closed bootstrap when canonical implementations are absent
+- known corrections in required production path
+- fail-closed bootstrap
 
 ### Repository operating contract — COMPLETE
-- WR-001 established canonical `.ai/shared/*` state/workflow
-- WR-004 added safe parallel orchestration
-- WR-006 expanded Research into Research & Development (R&D)
-- WR-008 established project maturity / MAINTENANCE-STABLE governance
+- canonical `.ai/shared/*`
+- safe parallel orchestration
+- R&D role expansion
+- MAINTENANCE / STABLE maturity governance
 
 ### ESPN Live Sync reliability / live-validation closeout — COMPLETE
-- observability and forensic timeline
-- layered source handling and live-proven Pick History DOM fallback
-- authoritative off-board ESPN pick correctness
-- trust-focused user-facing sync states
-- popup intrinsic-width regression fix
-- synthetic navigation provenance V1–V3
-- responsive tablet overflow fix
-- WR-003 completion-state consistency
-- WR-002 required Level-4 validation
+- layered sync/recovery
+- observability/forensics
+- off-board pick correctness
+- trust UX
+- completion consistency
+- required Level-4 validation
 
-### Roadmap Discovery — Next Milestone Selection — COMPLETE
-- WR-007 evaluated serious successor candidates
-- R&D recommended MAINTENANCE / STABLE
-- Manager WR-009 accepted maintenance/stable
-- no speculative successor production milestone was created
+### Roadmap Discovery — COMPLETE
+- WR-007 found no justified successor production milestone
+- WR-009 placed project into MAINTENANCE / STABLE
 
 ### Ranking Accuracy & Automated Ingestion Feasibility — R&D COMPLETE
-
-WR-010 evidence:
-- PR #111 merged as `ce2ab0b75fd88549fb8def0509de4b801faa0e1c`
-- R&D outcome: **R&D ONLY / MORE EVIDENCE NEEDED**
-- strongest future source hypothesis: rolling three-year Top-10 FantasyPros Draft Accuracy cohort using the selected experts' current PPR consensus
-- current production decision: retain the existing validated Top-20 FantasyPros PPR ECR baseline
-- official FantasyPros API: technically capable of filtered PPR consensus ingestion
-- direct browser-side API integration: rejected due credential exposure
-- preferred future technical direction: maintainer/local staged fetch with fail-closed validation, explicit promotion, and last-known-good fallback
-- provider compatibility for this draft-assistant use: NOT VERIFIED
-- material accuracy lift over current Top-20 baseline: UNPROVEN
-
-Manager WR-011 disposition:
-- accepted R&D evidence
-- did not promote a production milestone
-- did not change ranking authority
-- did not authorize API integration
-- returned the project to normal MAINTENANCE / STABLE with explicit evidence gates
+- WR-010 / PR #111 evidence accepted by Manager in WR-011
+- current Top-20 PPR ranking authority retained
+- automatic API integration not production-ready
+- ranking automation remains gated on provider compatibility, live completeness, and material-value evidence
 
 ## Current project mode
 
 ### MAINTENANCE / STABLE
 
-No active production milestone or specialist task is assigned.
+No active production milestone is assigned.
 
-The ranking-automation opportunity remains a trigger-driven future path, not an active roadmap commitment.
+A legitimate maintenance trigger may activate bounded research/audit without automatically reopening production development.
 
-## Ranking-automation reactivation gates
+## Active maintenance discovery
 
-A future ranking-ingestion task may be reconsidered when there is new evidence satisfying one or more of these gates:
+### PW-001 — Layout Efficiency Discovery — IN PROGRESS
 
-1. **Provider compatibility** — written/provider-supported clarification that the intended private/personal War Room draft-assistant use and storage/display model is permitted.
-2. **Live API completeness** — credential-safe non-production test demonstrates complete fresh PPR data for the intended expert cohort under the intended access tier.
-3. **Material ranking lift** — lawful independent/held-out evidence shows rolling Top-5/Top-10 or another strategy materially improves on the current Top-20 PPR baseline, or the user explicitly values freshness automation enough to retain the current cohort policy while automating refresh.
-4. **Production promotion** — if gates justify implementation, Manager creates a separate production WR task; independent Auditor validation is required because ranking authority affects scoring/recommendations.
+Trigger:
+The user asked whether the War Room website can be researched for the most efficient possible layout and whether there are evidence-backed improvements worth making.
 
-These gates are not active assignments. No API key should be pasted into chat or committed to the repository.
+Production implementation authorization: **NONE**
+
+#### WR-012 — Layout Efficiency & Information Architecture R&D
+Assigned role: Research & Development (R&D)
+Starting SHA: `8df161ba8c5413b0cc3c11f87041c4ad80046dc0`
+Task spec: `.ai/manager/WR-012.md`
+
+Purpose:
+- research evidence-backed high-density real-time dashboard / draft-assistant layout principles
+- inspect current War Room information architecture and responsive composition
+- measure/estimate scan efficiency and persistent-chrome cost where runtime evidence permits
+- compare desktop/tablet/mobile needs
+- identify and prioritize concrete improvement candidates
+- explicitly allow a `no material change justified` outcome
+
+#### WR-013 — Current Layout Efficiency & Usability Baseline Audit
+Assigned role: Independent Auditor / QA
+Starting SHA: `8df161ba8c5413b0cc3c11f87041c4ad80046dc0`
+Task spec: `.ai/manager/WR-013.md`
+
+Purpose:
+- independently measure actual current-layout efficiency across representative viewports
+- evaluate core draft flows, sticky viewport consumption, interaction counts, target ergonomics, overflow/crowding, and accessibility behavior
+- identify areas already efficient and findings that materially slow or risk draft-day use
+- avoid anchoring on WR-012's recommendations during first-pass evidence gathering
+
+### PW-001 dependency model
+
+WR-012 vs WR-013: **INDEPENDENT** — run simultaneously.
+
+Manager synthesis: **HARD DEPENDENCY** on both completed evidence streams.
+
+Builder implementation: **HARD DEPENDENCY** on Manager synthesis and a separate approved production WR task.
+
+No UI change is authorized merely because either specialist proposes one.
+
+## Current layout evidence already verified by Manager
+
+- `index.html` contains a dense single-page draft command surface: header, search/filter toolbar, status/session/marking controls, tier navigation, command/recommendation/pressure information, Position Tiers/Overall boards, and My Draft.
+- `style-base.css` currently stacks several sticky layers.
+- `style.css` already includes an explicit Position Tiers density pass and a 1320px Position-view main surface.
+- `command-bar-fixes.css` adapts command composition across desktop/tablet/mobile and wraps the status bar <=900px.
+- `scripts/test-responsive-overflow.mjs` tests 13 widths from 320–1280 across both Position and Overall views for zero document horizontal overflow.
+
+These facts justify measured optimization research; they do not themselves prove that the current layout is inefficient.
 
 ## General maintenance reactivation triggers
 
-Active development may also be reconsidered when one or more of the canonical triggers becomes real and sufficiently important:
+Active production development may be reconsidered when one or more becomes real and sufficiently important:
 - verified defects
 - real-world user feedback
 - changed external dependencies
@@ -113,29 +135,29 @@ Active development may also be reconsidered when one or more of the canonical tr
 
 Triggers do not automatically authorize implementation.
 
-## Closest future milestone candidates retained from WR-007
+## Deferred trigger-driven opportunities retained
 
-These remain proposals, not active roadmap commitments:
-1. ESPN Configuration Preflight / Settings Validation
-2. Recommendation Calibration Program
-3. Opponent-Aware Next-Turn Intelligence
-4. League-Aware Draft Profiles
+- ESPN Configuration Preflight / Settings Validation
+- Recommendation Calibration Program
+- Opponent-Aware Next-Turn Intelligence
+- League-Aware Draft Profiles
+- Ranking automation after its evidence gates are satisfied
 
 ## Existing maintenance observations
 
 Non-blocking:
 - legacy `AGENTS.md` process wording
-- diagnostics capture-source wording when DOM is the actual ledger-eligible source
-- unresolved synthetic-navigation actor identity at the WR-002 evidence ceiling
+- diagnostics capture-source wording
+- unresolved synthetic-navigation actor identity at WR-002 evidence ceiling
 
 ## Parallelism status
 
-No Parallel Work Wave is active.
+PARALLEL WORK WAVE: **PW-001**
 
 Current roles:
-- Manager: IDLE except for trigger evaluation / canonical reconciliation when needed
+- Manager: IDLE after assignment / awaiting evidence
 - Builder: IDLE
-- R&D: IDLE
-- Auditor: IDLE
+- R&D: ACTIVE — WR-012
+- Auditor: ACTIVE — WR-013
 
-Do not create parallel work until at least two legitimate independently executable approved tasks exist.
+Do not assign Builder work until Manager synthesizes both discovery streams and explicitly determines that a bounded implementation is justified.
