@@ -2,99 +2,72 @@
 
 HANDOFF
 
-Task ID: WR-002
+Task ID: WR-013
 Role: Independent Auditor / QA
-Status: COMPLETE
+Status: ASSIGNED — ACTIVE
+Parallel Work Wave: PW-001
 
-Audit verdict:
-PASS
+## Current assignment
 
-Verified starting state:
-- Authoritative Manager task: `.ai/manager/WR-002.md`
-- Canonical `main` before final WR-002 Auditor artifact writes: `8e8f107183b6a2a0cee619d8f4433319f4dd3561`
-- Latest production merge remains WR-003 / PR #108 at `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`.
-- WR-004 workflow-only changes advanced `main` during WR-002 but did not alter Companion production behavior.
-- Manager handoff still identifies WR-002 as the sole unfinished ESPN Live Sync closeout task and directs Auditor closure after user-supplied Level-4 evidence.
-- Companion current version: `0.9.14`.
-- Current repository provenance runtime: V3.
+Task: Current Layout Efficiency & Usability Baseline Audit
+Manager task spec: `.ai/manager/WR-013.md`
+Starting SHA: `8df161ba8c5413b0cc3c11f87041c4ad80046dc0`
+Project mode: MAINTENANCE / STABLE
+Production implementation authorization: NONE
 
-Current milestone:
-ESPN Live Sync reliability / live-validation closeout
+## Objective
 
-Work completed:
-- refreshed canonical shared state and latest Manager handoff after WR-004 advanced `main`
-- received complete sanitized Companion diagnostics from a disposable ESPN mock
-- received and independently reviewed a 17.23-second screen recording of the controlled live interval
-- verified live automatic Players → Pick History → Players switching without manual Pick History activation during the strongest recorded cycle
-- correlated the visible transition with the forensic untrusted-navigation timeline
-- verified synchronization health at the copied checkpoint: Captured/Applied/Unmatched `5/5/0`, acknowledged snapshot size `5`, ACK lag `0`, missing numbered picks `none`, ledger conflicts `0`
-- inspected all recent synthetic-navigation provenance events and separated trusted user input from untrusted programmatic navigation
-- recorded the full Level-4 audit in `.ai/auditor/AUDIT.md`
+Independently measure the actual current War Room's draft-day layout efficiency and usability across desktop, tablet, and mobile. Identify verified friction and areas already working well so Manager can distinguish objective problems from subjective redesign preference.
 
-Decisions made:
-- WR-002 satisfies its required Level-4 acceptance criteria
-- strongest defensible live attribution is `script-generated / other-programmatic / caller=unknown / hash=174uabd`
-- `event.isTrusted=false` / `click=untrusted` proves the relevant navigation event is programmatic but does not name the actor
-- repeated `174uabd` is treated only as a stable bounded sanitized-stack correlation signature, not an actor identity
-- no ESPN-script, extension-script, other-web-script, page-bundle, inline-page, function, component, timer, or recovery-trigger attribution is claimed because the sanitized live evidence does not support it
-- the separate `trusted-user / user-input` event demonstrates user input remains distinguishable and does not explain the Pick History navigation events
-- the Manager specification explicitly allows the caller to remain unknown, so unresolved actor identity is not a WR-002 failure
+## Verified starting context
 
-Level-4 environment:
-- disposable ESPN mock, not a real league draft
-- season 2026
-- 8 teams, 16 rounds, slot 1 as visible in the recording
-- Companion `0.9.14`
-- current-main update and unpacked-extension reload procedure performed immediately before the run
-- no private league/member identifier or user/team name retained in Auditor artifacts
+- default board view is Position Tiers
+- page includes several sticky top-level surfaces plus recommendation/pressure/board content
+- Position view already has an explicit density pass
+- command bar has multiple responsive compositions
+- responsive-overflow regression currently checks 13 widths from 320–1280 across Position and Overall views and asserts zero document horizontal overflow
 
-Live diagnostic result:
-- ESPN connected/draft page: `true/true`
-- War Room connected: `true`
-- Captured/Applied/Unmatched: `5/5/0`
-- Acknowledged snapshot size: `5`
-- ACK lag: `0 pick(s)`
-- Missing numbered picks: `none`
-- Ledger confirmed/conflicts: `5/0`
-- Structured API: HTTP 200, `0` resolved picks, reported behind
-- Pick History/DOM supplied the usable numbered-pick ledger observations
-- recent provenance: 12 untrusted `other-programmatic` navigation events with `caller=unknown hash=174uabd`; one separate trusted `trusted-user / user-input` event
+Zero overflow is not sufficient proof of good usability; WR-013 should measure viewport consumption, interaction cost, target ergonomics, information hierarchy, and core-flow efficiency as specified by the Manager task.
 
-Live video result:
-- first visible cycle: Players around 6.0s → Pick History around 6.5s → Players around 7.5s
-- strongest no-manual-navigation cycle: Players around 15.0s → Pick History around 16.0s while pointer is in browser chrome away from ESPN navigation tabs → Players around 17.0s with pointer still away from the navigation tabs
-- recording independently corroborates the diagnostic/forensic programmatic transition sequence
+## Parallel independence
 
-Attribution confidence / limitations:
-- HIGH confidence that automatic view navigation occurred and was not an ordinary trusted user click
-- HIGH confidence that the observed mechanism class is `other-programmatic`
-- HIGH confidence that V3 live representative output remained `unknown` for the relevant events
-- NO defensible confidence for naming ESPN, the Companion, or another script actor
-- copied diagnostics do not print a provenance runtime-version line; build identity is established by the controlled current-main update/reload procedure plus repository/current-extension verification rather than by a self-identifying V3 field in the pasted diagnostic artifact
+R&D is independently executing WR-012.
 
-Validation levels:
-- Required Level 4 — Real/mock draft validation: VERIFIED / PASS
-- Automated/simulated evidence was not substituted for this live requirement
+Do **not** read R&D's final WR-012 recommendation artifact before completing the Auditor first-pass findings. This avoids anchoring and preserves independent evidence.
 
-Files updated:
-- `.ai/auditor/AUDIT.md`
-- `.ai/auditor/HANDOFF.md`
+Dependency status during evidence gathering: INDEPENDENT.
+Manager synthesis after both tasks: HARD DEPENDENCY on both outputs.
 
-Open findings:
-- No blocking WR-002 finding.
-- No new non-blocking WR-002 defect.
-- Existing canonical non-blocking finding was reaffirmed: diagnostics may say `Capture method: network` and show large fetch candidate counts while Pick History DOM is the actual usable numbered-pick authority.
-- Actor identity behind the synthetic navigation remains unresolved; this is an evidence limitation recorded as the final attribution ceiling, not a failed acceptance criterion.
+## Required audit output
 
-Blocking issues:
-- None for WR-002.
+Produce:
+- `.ai/auditor/LAYOUT_AUDIT.md`
+- updated `.ai/auditor/HANDOFF.md`
 
-Recommended next role:
-Manager / Architect
+Cover at minimum:
+- target viewport matrix from 320x700 through 1440x900
+- default/Position/Overall/My Draft/search/filter/marking/settings/session/sync-status flows
+- sticky chrome height and above-fold board visibility where measurable
+- touch/click target ergonomics
+- interaction counts/scan distances where feasible
+- horizontal overflow and intentional internal scrollers
+- breakpoint wrapping/crowding
+- console/page errors during tested flows
+- keyboard/focus observations
+- areas already efficient and worth preserving
+- CRITICAL/HIGH/MEDIUM/LOW findings plus UNVERIFIED items
 
-Exact next action:
-Manager should refresh `.ai/shared/*` and this Auditor handoff, record WR-002 as COMPLETE with Level-4 PASS, and decide whether the ESPN Live Sync reliability / live-validation closeout milestone can now be declared complete. Do not create Builder or Research remediation solely to force actor attribution beyond the sanitized evidence unless the Manager determines that deeper attribution is a new justified task.
+This is discovery QA. A global PASS/FAIL is not required unless a genuine current defect warrants one.
 
-Checkpoint / SHA:
-- Canonical main immediately before final Auditor artifact writes: `8e8f107183b6a2a0cee619d8f4433319f4dd3561`
-- Final WR-002 audit evidence commit: `b01373b0cde98becd928fc710a7929da5fa8d83b`
+## Authority limits
+
+- do not redesign the interface
+- do not implement fixes
+- do not change production HTML/CSS/JS
+- do not change scoring/rankings/recommendations/state/sync behavior
+- do not modify canonical `.ai/shared/*`
+- role-owned audit evidence only
+
+## Exact next action
+
+Refresh canonical state and execute WR-013 exactly as specified in `.ai/manager/WR-013.md`. Measure the current War Room independently, record evidence-backed layout/usability findings, and return control to Manager / Architect without implementing changes.
