@@ -2,200 +2,79 @@
 
 HANDOFF
 
-Task ID: WR-010
+Task ID: WR-012
 Role: Research & Development (R&D)
-Status: COMPLETE — R&D ONLY / MORE EVIDENCE NEEDED
+Status: ASSIGNED — ACTIVE
+Parallel Work Wave: PW-001
 
-## Question investigated
+## Current assignment
 
-Can the War Room identify a materially better preseason ranking source than its current FantasyPros Top-20 PPR ECR baseline and safely automate ranking ingestion without weakening ranking authority, provenance, reliability, access compliance, or the mature production baseline?
+Task: Layout Efficiency & Information Architecture R&D
+Manager task spec: `.ai/manager/WR-012.md`
+Starting SHA: `8df161ba8c5413b0cc3c11f87041c4ad80046dc0`
+Project mode: MAINTENANCE / STABLE
+Production implementation authorization: NONE
 
-## Verified starting state
+## Trigger
 
-- WR-010 starting SHA: `2cab85f981e06f5f19bd4a7631a28adf2f7ff351`
-- project mode: MAINTENANCE / STABLE
-- production ranking/value authority: FantasyPros 2026 PPR ECR
-- ESPN rank/ADP: timing/market signal only
-- production implementation authorization: NONE
-- Builder: IDLE
-- Auditor: IDLE
+The user asked whether the War Room website can be researched for the most efficient layout and whether there are evidence-backed improvements worth making. Manager classified this as a materially valuable usability opportunity suitable for bounded R&D.
 
-## Latest repository state verified
+## Objective
 
-- latest observed canonical `main`: `c365a3e2701d618c2776d8daf1293b81224e854b`
-- R&D branch: `wr-010-research-ranking-ingestion`
-- Research PR: #111 — `WR-010 Ranking accuracy and ingestion R&D findings`
-- PR is research-only; do not treat it as production ranking/API implementation
+Research and evaluate the current War Room layout/information architecture against evidence-backed principles for high-density real-time dashboards and draft-day decision support. Identify the highest-value layout improvements, if any, without changing production code.
 
-## Work completed
+## Verified starting UI context
 
-- traced the current checked-in CSV -> generated 717-player dataset -> SHA-256 baseline acceptance pipeline
-- reviewed the existing validated local Top-20 CSV override and prior fail-closed FantasyPros API retirement
-- reviewed current FantasyPros Draft Accuracy methodology, 2023/2024/2025 results, and recent rolling multi-year leaderboards
-- compared single expert, top-3, top-5, top-10, broad ECR, recency-weighted and accuracy-weighted strategies
-- reviewed current FantasyPros API ranking/expert/player capabilities
-- reviewed current API access/pricing/support and published API Terms
-- proposed a non-production fail-closed importer architecture
-- documented full evidence and URLs in `.ai/research/RANKING_INGESTION_DISCOVERY.md`
+- default board view is Position Tiers
+- current page includes header, search/filter toolbar, status/session/marking controls, tier navigation, command/recommendation/pressure surfaces, Position Tiers/Overall boards, and My Draft
+- several top-level layers are sticky
+- Position view already has a density pass and 1320px main width
+- command-bar composition adapts across desktop/tablet/mobile
+- existing Playwright responsive-overflow regression covers 13 widths from 320–1280 across Position and Overall views
 
-## Historical accuracy findings
+Do not infer that these facts prove the layout is good or bad. Measure/research the actual efficiency question.
 
-VERIFIED FACT:
-- FantasyPros Draft Accuracy is Half-PPR, not Full PPR
-- current 2023–2025 multi-year top 10: Jody Smith, Sean Koerner, Joey Wright, Jeff Ratcliffe, Dave Kluge, Nick Mariano, Jared Smola, Jeff Bell, Kev Wheeler, Chris Raybon
-- 2025 single-year #1 Seth Miller is #28 over 2023–2025, while Jody Smith is #9 in 2025 but #1 over 2023–2025
-- Sean Koerner, Chris Raybon, Jared Smola, Jody Smith and Jeff Ratcliffe appear in the top 10 of all three rolling windows reviewed: 2021–2023, 2022–2024, 2023–2025
+## Parallel independence
 
-STRONG EVIDENCE:
-- a rolling multi-year cohort is a more stable expert-quality prior than a single-season winner
-- consensus reduces reliance on one analyst
-- top-10 has better contributor/stability resilience than top-3/top-5
+WR-013 is running simultaneously under Independent Auditor / QA.
 
-UNKNOWN:
-- no modern held-out/prospective evidence reviewed proves rolling top-10 materially outperforms the War Room's existing accuracy-selected Top-20 PPR baseline
+For the first-pass R&D recommendation, do **not** read WR-013's eventual final findings. This reduces anchoring and gives Manager two independent evidence streams.
 
-## Source strategy result
+Dependency status during evidence gathering: INDEPENDENT.
+Manager synthesis after both tasks: HARD DEPENDENCY on both outputs.
 
-Best future hypothesis:
-**rolling three-year Top-10 Draft Accuracy cohort + current PPR equal-vote FantasyPros consensus / Rank Points**.
+## Required output
 
-Runner-up:
-**rolling three-year Top-5 cohort**.
+Produce:
+- `.ai/research/LAYOUT_EFFICIENCY_DISCOVERY.md`
+- updated `.ai/research/HANDOFF.md`
 
-Current production recommendation:
-**retain the existing Top-20 FantasyPros PPR ECR baseline** until material lift is demonstrated.
+The discovery artifact must include:
+- current-layout inventory
+- external authoritative UX/accessibility research
+- core draft-task hierarchy
+- desktop/tablet/mobile analysis
+- persistent-chrome / above-fold / interaction-efficiency evidence where measurable
+- at least five concrete improvement candidates
+- prioritized top three, or a justified `no material change` conclusion
+- areas that should be preserved
+- expected implementation complexity/regression risk
+- validation plan for any future UI task
 
-Do not use a single #1 expert as sole authority. Do not introduce custom accuracy/recency weighting from ordinal accuracy ranks without a real backtest.
+Recommended outcome must be one of:
+- READY FOR MANAGER SYNTHESIS
+- MORE EVIDENCE NEEDED
+- NO MATERIAL CHANGE JUSTIFIED
 
-## PPR qualification
+## Authority limits
 
-Historical FantasyPros Draft Accuracy is Half-PPR. R&D therefore treats it as an expert-selection prior, not proof of PPR-specific accuracy. If the cohort is ever used, the ranking payload should be the selected experts' current **PPR** rankings.
-
-## Automated-ingestion finding
-
-VERIFIED FACT:
-Current FantasyPros API documentation supports:
-- PPR consensus rankings
-- expert-ID filtering
-- rankings/per-expert data
-- Ranking Experts endpoint
-- canonical player IDs/metadata
-- expert-count/ranking-spread/freshness metadata
-
-Technical feasibility: **YES**.
-
-UNKNOWN:
-R&D did not verify from the current published schema that the rolling multi-year Draft Accuracy leaderboard itself is exposed as a supported machine-readable field. Do not make recurring ranking-page scraping a core production dependency.
-
-Recommended cohort lifecycle if later approved:
-- once-per-offseason Manager-reviewed cohort manifest from the official finalized rolling leaderboard
-- resolve members to official FantasyPros expert IDs
-- use those IDs for filtered current PPR ranking refreshes
-
-## Access / licensing finding
-
-VERIFIED FACT:
-- free API tier is non-production/prototyping
-- paid HOF includes personal/non-commercial production API access
-- redistribution/commercial use has separate requirements
-- API key must remain confidential
-- published support/terms prohibit using API data to build a product/service that competes with FantasyPros
-
-UNRESOLVED:
-The War Room is a draft assistant and FantasyPros offers draft-assistant products. R&D cannot responsibly declare this specific use compatible without provider clarification. R&D also does not assume API-derived ranking payloads may be redistributed through this public repository under a personal-production license.
-
-This is an operational compatibility finding, not legal advice.
-
-## Recommended ingestion architecture if later approved
-
-Do not put an API key in the static browser app or Companion source.
-
-Preferred flow:
-
-`FantasyPros API -> credential-safe local/maintainer fetch -> staged candidate -> fail-closed validation/reconciliation -> explicit promote -> War Room`
-
-Required design properties:
-- reviewed cohort/provenance manifest
-- season/PPR/preseason checks
-- provider freshness gate
-- expected expert identities/minimum healthy cohort gate
-- player-count/position completeness checks
-- duplicate ID/canonical-name checks
-- FantasyPros player-ID-first reconciliation
-- quarantine/report source-only unknowns rather than silently expanding canonical authority
-- preserve broader-ECR and ADP-only depth policy
-- atomic candidate generation; no partial overwrite
-- current dataset/baseline/board/recommendation/invariant validation as appropriate
-- rank-movement/missing-player review report
-- last-known-good fallback
-- explicit promotion initially
-- audit log
-- ESPN market-timing role unchanged
-
-Exact minimum-expert/player thresholds must be derived from live intended-access responses and independently validated; R&D did not invent production constants.
-
-## Experiments performed
-
-None.
-
-Reason:
-A synthetic parser does not resolve the important unknowns: intended-tier API completeness, current expert-ID availability, machine-readable accuracy metadata, provider compatibility, or material accuracy lift. No API key was requested, exposed, or committed.
-
-## Evidence gates before any production task
-
-1. Provider clarification for the intended personal/non-commercial War Room use and storage/display/redistribution model.
-2. Credential-safe non-production live API completeness test with a user-owned key outside chat/repository.
-3. Independent historical/held-out comparison of current Top-20 vs rolling top-5/top-10/broad-ECR/single-expert alternatives if lawful data is obtainable.
-4. Only if favorable: new Manager-approved production task plus independent audit because ranking authority affects scoring/recommendations.
-
-## Outcome
-
-**R&D ONLY / MORE EVIDENCE NEEDED**
-
-Do not modify production rankings.
-Do not integrate an API.
-Do not replace the current validated CSV/local-override path.
-
-## Confidence
-
-- rolling multi-year cohort over single expert: HIGH
-- current API technical feasibility: HIGH
-- rolling top-10 materially better than current Top-20: LOW / UNPROVEN
-- War Room API-use compatibility: LOW / PROVIDER CLARIFICATION REQUIRED
-- fail-closed maintainer-side architecture: HIGH
-
-## Files updated
-
-- `.ai/research/RANKING_INGESTION_DISCOVERY.md`
-- `.ai/research/HANDOFF.md`
-
-Production files changed: NO
-Production rankings changed: NO
-API integrated: NO
-Canonical `.ai/shared/*` changed by R&D: NO
-
-## Blocking issues
-
-None for WR-010 R&D completion.
-Production promotion is blocked on the evidence gates above.
-
-## Recommended next role
-
-Manager / Architect
+- do not modify production HTML/CSS/JS
+- do not modify scoring/rankings/recommendations/state/sync behavior
+- do not modify canonical `.ai/shared/*`
+- do not open a production PR
+- role-owned research evidence only
+- final UI roadmap/architecture/implementation authority remains Manager
 
 ## Exact next action
 
-Manager reviews PR #111 and `.ai/research/RANKING_INGESTION_DISCOVERY.md`, then chooses whether to:
-1. remain in MAINTENANCE / STABLE with the current ranking path;
-2. authorize a narrow follow-up R&D task for provider clarification plus a credential-safe API completeness experiment; or
-3. stop further API work if the unresolved benefit/usage questions do not justify more effort.
-
-Do not assign Builder production integration until permission/completeness and material-value evidence are sufficient.
-
-## Checkpoint / SHA
-
-- starting SHA: `2cab85f981e06f5f19bd4a7631a28adf2f7ff351`
-- latest observed canonical `main`: `c365a3e2701d618c2776d8daf1293b81224e854b`
-- R&D branch: `wr-010-research-ranking-ingestion`
-- full evidence commit: `129be16ffe8a5ad59c1fa6e25912395d9189e043`
-- PR: #111
+Refresh canonical state and execute WR-012 exactly as specified in `.ai/manager/WR-012.md`. Research the most efficient evidence-backed layout for this specific draft-day workflow, inspect the current implementation, and return prioritized findings without implementing them.
