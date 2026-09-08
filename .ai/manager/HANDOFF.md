@@ -2,154 +2,138 @@
 
 HANDOFF
 
-Task ID: WR-011
+Task ID: PW-001 / WR-012 / WR-013
 Role: Manager / Architect
-Status: COMPLETE
+Status: PARALLEL DISCOVERY ASSIGNED / AWAITING EVIDENCE
 
 ## Verified starting state
 
 - Repository: `Ryan42062001/The-War-Room`
-- Canonical `main` before PR #111 merge: `c365a3e2701d618c2776d8daf1293b81224e854b`
+- Canonical `main` before PW-001 assignment: `8df161ba8c5413b0cc3c11f87041c4ad80046dc0`
 - Project mode: MAINTENANCE / STABLE
-- Active specialist task at refresh: WR-010 assigned to R&D
-- PR #111 actual final head: `0344d337ba1197380e39078807505868777c199b`
-- PR #111 base: `main` at `c365a3e2701d618c2776d8daf1293b81224e854b`
-- PR #111: open / mergeable at review time
-- changed files: `.ai/research/RANKING_INGESTION_DISCOVERY.md`, `.ai/research/HANDOFF.md` only
-- exact-head War Room CI #717 / run `34235561705`: completed / success
-- production files changed by R&D: NO
-- production rankings changed by R&D: NO
-- API integrated by R&D: NO
-- canonical `.ai/shared/*` changed by R&D: NO
+- No active production milestone
+- No active specialist task before this trigger
+- Builder: IDLE
+- R&D: IDLE before WR-012
+- Auditor: IDLE before WR-013
+- latest production merge remains WR-003 / PR #108
+- ranking automation WR-010/WR-011 remains closed as research-only / more evidence needed
 
-## Repository/chat discrepancy identified
+## Maintenance trigger
 
-PR #111 body retained an older `R&D HEAD` value (`1db52f02a74a25a0b681c276c970bb94924742c4`). Live GitHub PR metadata showed final head `0344d337ba1197380e39078807505868777c199b`; the final R&D handoff and exact-head CI correspond to the live final head. Manager treated the PR-body value as stale metadata, not as the verified checkpoint.
+The user asked whether the War Room website can be researched for the most efficient layout and whether there are improvements worth making.
 
-## WR-010 R&D outcome
+Manager classification:
+- materially valuable usability opportunity
+- bounded maintenance discovery is justified
+- production implementation is NOT yet justified
 
-**R&D ONLY / MORE EVIDENCE NEEDED**
+## Manager current-layout verification
 
-R&D evidence accepted by Manager.
+Repository evidence reviewed before task assignment:
+- `index.html` shows the current single-page hierarchy: header, board-view/search/position toolbar, status/session/marking/actions, tier navigation, My Draft, draft-position/recommendation/board-pressure surfaces, Position Tiers and Overall board.
+- `style-base.css` uses successive sticky layers for header, toolbar, status bar, and tier navigation.
+- `style.css` already contains a Position Tiers density pass and a 1320px Position-view main surface.
+- `command-bar-fixes.css` adapts command-bar composition across desktop/tablet/mobile and wraps the status bar at <=900px.
+- `scripts/test-responsive-overflow.mjs` tests widths 320, 360, 375, 390, 412, 430, 600, 640, 720, 768, 820, 900, and 1280 across Position/Overall and asserts zero document horizontal overflow.
 
-Key accepted findings:
-- current production authority is already an accuracy-selected FantasyPros Top-20 Experts PPR consensus with broader-ECR fallback
-- single-season accuracy leaders are too volatile to justify one-expert authority
-- rolling multi-year expert quality is the stronger selection prior
-- strongest future source hypothesis is a rolling three-year Top-10 Draft Accuracy cohort using those experts' current PPR consensus / Rank Points
-- no modern held-out/prospective evidence proves that rolling Top-10 materially outperforms the current Top-20 War Room baseline
-- FantasyPros Draft Accuracy is Half-PPR, so it is not direct proof of Full-PPR ranking superiority
-- current FantasyPros API is technically capable of filtered PPR ranking ingestion
-- browser-direct API integration is not acceptable because the static client cannot protect credentials
-- preferred future architecture is credential-safe maintainer/local fetch -> staged candidate -> fail-closed validation/reconciliation -> explicit promote -> last-known-good fallback
-- current published API terms create unresolved compatibility risk because the War Room is a draft assistant and FantasyPros prohibits competing products/services
+Conclusion: the layout has already received intentional density/responsive work, so discovery must measure draft-day efficiency rather than assume a redesign is needed.
 
-## Manager independent verification
+## PARALLEL WORK WAVE: PW-001
 
-Manager independently checked:
-- `scripts/build-fantasypros-2026.mjs` uses Top-20, broad-ECR fallback, and ADP source files and asserts the 717-player baseline
-- `scripts/validate-fantasypros-baseline.mjs` uses SHA-256 source/runtime hashes and explicit baseline acceptance
-- current FantasyPros multi-year accuracy results and Half-PPR methodology
-- current FantasyPros API personal-production/HOF access description
-- current published API non-compete restriction
+### TASK 1
+Task ID: WR-012
+Assigned role: Research & Development (R&D)
+Objective: research the most efficient evidence-backed information architecture/layout for this live draft workflow and produce prioritized War Room improvement candidates.
+Dependency status: INDEPENDENT during evidence gathering.
+Branch / work area: `.ai/research/` evidence only.
+Expected output: `.ai/research/LAYOUT_EFFICIENCY_DISCOVERY.md` and updated R&D handoff.
+Merge/integration considerations: no production merge; Manager compares findings with independent Auditor evidence before deciding anything.
 
-No stronger evidence was found that would justify changing ranking authority or authorizing API production work now.
+### TASK 2
+Task ID: WR-013
+Assigned role: Independent Auditor / QA
+Objective: independently measure actual current layout/usability efficiency across desktop/tablet/mobile and core draft flows.
+Dependency status: INDEPENDENT during evidence gathering.
+Branch / work area: `.ai/auditor/` evidence only; isolated audit scripts/artifacts permitted if necessary, no production behavior changes.
+Expected output: `.ai/auditor/LAYOUT_AUDIT.md` and updated Auditor handoff.
+Merge/integration considerations: Auditor first pass should not be anchored by WR-012 final recommendations.
 
-## PR #111 disposition
+## Dependency analysis
 
-- ACCEPTED as R&D evidence
-- merged at `ce2ab0b75fd88549fb8def0509de4b801faa0e1c`
-- no production behavior changed
+- WR-012 vs WR-013: INDEPENDENT — run simultaneously.
+- Manager synthesis: HARD DEPENDENCY on both completed handoffs.
+- Builder implementation: HARD DEPENDENCY on Manager synthesis and a separate approved production WR task.
 
-## Current project mode
+## Production authorization
 
-**MAINTENANCE / STABLE**
+Production HTML/CSS/JS changes: **NOT AUTHORIZED**.
 
-No active production milestone.
-No active specialist task after WR-011 reconciliation.
+Neither discovery task may change:
+- scoring/recommendation behavior
+- ranking authority
+- draft state/persistence
+- ESPN sync/recovery semantics
+- canonical `.ai/shared/*`
 
-## Ranking authority decision
+## Required synthesis questions after PW-001
 
-Current authority remains unchanged:
-- FantasyPros Top-20 Experts PPR ECR primary
-- broader FantasyPros PPR ECR fallback
-- ESPN rank/ADP market timing only
-
-WR-D001 remains ACTIVE and unchanged.
-
-## Future evidence gates
-
-Before any production ranking-ingestion task:
-1. provider clarification for the intended private/personal War Room draft-assistant use and storage/display/redistribution model
-2. credential-safe non-production live API completeness test using a user-owned key outside chat/repository
-3. if lawful data is obtainable, independent held-out comparison of current Top-20 vs rolling Top-5/Top-10/broad-ECR alternatives
-4. only if favorable: new Manager-approved production task plus independent Auditor validation
-
-These are gates, not active assignments.
+Manager must decide:
+1. Which findings are independently supported by both evidence streams?
+2. Where do R&D and Auditor disagree, and what evidence resolves it?
+3. Which areas are already efficient and should be preserved?
+4. Do any improvements provide enough draft-day speed/usability value to justify production risk?
+5. Can justified improvements be split into a bounded implementation wave with minimal file overlap?
+6. What validation levels are required, including visual/mobile validation?
+7. Is `no material change justified` the correct maturity outcome instead?
 
 ## Work completed by Manager
 
-- refreshed canonical state and role handoffs
-- discovered completed WR-010 branch/PR despite stale `main` R&D assignment state
-- reviewed PR #111 branch evidence and final handoff
-- verified exact PR scope and exact-head CI
-- independently checked the strongest repository and external claims
-- accepted WR-010 outcome
-- merged research-only PR #111
-- created `.ai/manager/WR-011.md`
-- marked WR-010 complete in canonical project state
-- updated roadmap to return to normal MAINTENANCE / STABLE
-- preserved ranking-automation reactivation gates
-- reviewed DECISIONS and left WR-D001 unchanged
-- evaluated parallelism and found no executable approved follow-up task
+- refreshed canonical maintenance state and both role handoffs
+- inspected current UI hierarchy and responsive implementation
+- verified existing density/responsive test baseline
+- classified the user's request as a legitimate maintenance trigger
+- created `.ai/manager/WR-012.md`
+- created `.ai/manager/WR-013.md`
+- created `.ai/manager/PW-001.md`
+- updated canonical PROJECT_STATE and ROADMAP
+- assigned WR-012 to R&D
+- assigned WR-013 to Auditor
+- kept Builder idle
+- explicitly prohibited production implementation during discovery
 
-## Files updated by Manager
+## Files updated
 
-- `.ai/manager/WR-011.md`
+- `.ai/manager/WR-012.md`
+- `.ai/manager/WR-013.md`
+- `.ai/manager/PW-001.md`
 - `.ai/shared/PROJECT_STATE.md`
 - `.ai/shared/ROADMAP.md`
-- `.ai/manager/HANDOFF.md`
-
-## Research evidence merged
-
-- `.ai/research/RANKING_INGESTION_DISCOVERY.md`
 - `.ai/research/HANDOFF.md`
+- `.ai/auditor/HANDOFF.md`
+- `.ai/manager/HANDOFF.md`
 
 ## Files reviewed but intentionally unchanged
 
 - `.ai/shared/DECISIONS.md`
-- production ranking/data/scoring/recommendation files
-
-## Open findings
-
-- FantasyPros API use for this exact War Room draft-assistant purpose requires provider clarification before production
-- intended-access API completeness has not been live-proven with a user-owned key
-- rolling Top-10 material lift over current Top-20 is unproven
-- legacy `AGENTS.md`, diagnostics wording, and synthetic-navigation actor attribution remain unrelated non-blocking maintenance observations
+- `.ai/shared/WORKFLOW.md`
+- production UI files
 
 ## Blocking issues
 
-None for WR-010/WR-011 completion.
+None for evidence gathering.
 
-Production ranking/API work is blocked on the future evidence gates above.
+Production UI work is blocked until both WR-012 and WR-013 complete and Manager performs synthesis.
 
-## Dependency / parallelism analysis
+## Recommended next roles
 
-- Builder: no approved task
-- R&D: WR-010 complete; no executable follow-up assigned
-- Auditor: no approved task
-- candidate task group: none
-- Parallel Work Wave: none
-
-## Recommended next role
-
-None until new evidence makes a ranking-ingestion gate actionable or another legitimate maintenance trigger appears.
+Research & Development (R&D) and Independent Auditor / QA — activate concurrently.
 
 ## Exact next action
 
-Keep operating the War Room with the current validated Top-20 PPR ranking authority. If the user chooses to pursue automated FantasyPros ingestion, the next legitimate step is to obtain provider clarification and/or a user-owned prototype/HOF API key for a credential-safe non-production completeness test; then return to Manager so a bounded R&D task can be created. Do not paste API keys into chat or commit them to the repository.
+Run WR-012 and WR-013 in parallel. Each role refreshes canonical state, completes its independent evidence artifact, and returns control to Manager. Do not activate Builder until Manager reviews both outputs and explicitly creates a production task if justified.
 
 ## Checkpoint / SHA
 
-PR #111 research merge: `ce2ab0b75fd88549fb8def0509de4b801faa0e1c`.
-Verify current `main` after these WR-011 Manager reconciliation commits for the exact canonical SHA.
+PW-001 starting checkpoint: `8df161ba8c5413b0cc3c11f87041c4ad80046dc0`.
+Verify current `main` after Manager assignment commits for the exact canonical SHA.
