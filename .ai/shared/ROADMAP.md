@@ -70,28 +70,48 @@ Closeout evidence:
 - strongest defensible navigation attribution: `other-programmatic / caller=unknown / hash=174uabd`
 - actor identity is not attributed beyond the available sanitized evidence
 
-The ESPN Live Sync reliability / live-validation closeout milestone is now **COMPLETE**.
-
 ## Current milestone
 
-**None assigned.**
+### Roadmap Discovery — Next Milestone Selection — IN PROGRESS
 
-No open roadmap milestone remains after the ESPN Live Sync closeout.
+Purpose:
+Determine the strongest legitimate next War Room milestone before authorizing another production implementation wave.
 
-## Next milestone
+Active task:
+- **WR-007 — Roadmap Discovery: Next Milestone Candidate Evaluation**
+- assigned role: Research & Development (R&D)
+- starting SHA: `3e5cffb86c3ab6c55803d4f0f6a8a07218b81e0f`
+- task spec: `.ai/manager/WR-007.md`
 
-**Not assigned.**
+Required discovery output:
+- 3–5 serious milestone candidates grounded in repository/product evidence
+- explicit ranking criteria covering user value, reliability/correctness impact, evidence strength, feasibility, complexity, dependency/integration risk, and validation burden
+- one recommended milestone and at least one credible runner-up
+- a bounded Manager-ready outline for the recommended milestone, including likely task decomposition, role routing, validation levels, non-goals, and potential safe parallelism
+- rejected/deferred ideas with reasons
 
-The roadmap does not currently contain a legitimate successor milestone. The Manager must not invent feature work merely to keep employees active.
+Production implementation authorization: **NONE** during WR-007.
 
-Before activating Builder, R&D, or Auditor again, the Manager/user should identify a real project need and define a new WR Task ID or milestone with objective, scope, acceptance criteria, and evidence requirements.
+R&D may inspect the repository, use external research where useful, and run isolated/disposable non-production experiments if they materially reduce uncertainty. R&D may not modify production code, canonical `.ai/shared/*` state, select the final roadmap, or begin implementation of a candidate.
 
-R&D may support Roadmap Discovery through an explicit Manager-assigned task when evidence-backed exploration would help identify the next legitimate milestone. The expanded R&D capability does not itself create an assignment.
+Completion gate:
+1. R&D completes WR-007 and writes its role-owned evidence/handoff.
+2. Manager independently reviews the strongest claims and candidate ranking.
+3. Manager selects, rejects, or requests refinement of the proposed next milestone.
+4. Only after Manager selection may production implementation or audit tasks be assigned.
 
-Existing non-blocking observations such as legacy `AGENTS.md` wording, diagnostics capture-source wording, and unresolved synthetic-navigation actor identity do not automatically become the next milestone.
+## Next production milestone
+
+**Not yet selected.**
+
+The next production milestone will be chosen after WR-007 Roadmap Discovery completes. Existing non-blocking observations such as legacy `AGENTS.md` wording, diagnostics capture-source wording, and unresolved synthetic-navigation actor identity are inputs, not automatic priorities.
 
 ## Parallelism status
 
 No Parallel Work Wave is active.
 
-There are currently no approved independent specialist tasks to run concurrently. All specialist roles may remain IDLE until a legitimate next milestone/task is selected.
+Dependency classification:
+- WR-007 vs Builder work: INDEPENDENT in principle, but no approved Builder task exists
+- WR-007 vs Auditor work: INDEPENDENT in principle, but no approved Auditor task exists
+
+Only one legitimate specialist assignment exists, so Builder and Auditor remain IDLE. Do not invent parallel work merely to populate a wave.
