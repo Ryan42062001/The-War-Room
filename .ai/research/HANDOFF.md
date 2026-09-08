@@ -2,134 +2,68 @@
 
 HANDOFF
 
-Task ID: WR-007
+Task ID: WR-010
 Role: Research & Development (R&D)
-Status: COMPLETE — MAINTENANCE / STABLE RECOMMENDED
+Status: ASSIGNED — NOT YET COMPLETED
 
-Question investigated:
-What should happen next for the War Room after the completed ESPN Live Sync reliability / live-validation closeout: a sufficiently valuable successor production milestone, or MAINTENANCE / STABLE mode?
+## Current assignment
 
-Verified starting state:
-- Manager-assigned WR-007 starting SHA: `3e5cffb86c3ab6c55803d4f0f6a8a07218b81e0f`
-- ESPN Live Sync reliability / live-validation closeout: COMPLETE
-- Builder: no active production assignment
-- Auditor: no active audit assignment
-- production implementation authorization for WR-007: NONE
-- WR-008 project-maturity rule is canonical and explicitly permits a no-successor / MAINTENANCE-STABLE outcome
+Task: Ranking Accuracy & Automated Ingestion Feasibility
+Manager task spec: `.ai/manager/WR-010.md`
+Starting SHA: `2cab85f981e06f5f19bd4a7631a28adf2f7ff351`
+Project mode: MAINTENANCE / STABLE
+Production implementation authorization: NONE
 
-Latest repository state verified during this session:
-- latest observed `main`: `076c05fd09c056c3491a5e9f2c185350f7acf68f`
-- compare from WR-007 starting SHA to that `main`: 12 commits; all changed paths were `.ai/` workflow/Manager/research artifacts; no production code changed during discovery
-- latest production merge remains WR-003 / PR #108 at `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
+## Trigger
 
-Evidence sources reviewed:
-- canonical `.ai/shared/PROJECT_STATE.md`, `ROADMAP.md`, `DECISIONS.md`, `WORKFLOW.md`
-- `.ai/manager/HANDOFF.md`, `.ai/manager/WR-007.md`, `.ai/research/HANDOFF.md`
-- `README.md`, `AGENTS.md` as technical/history context, `index.html`, `war-room-config.js`, `js/war-room-draft-state.js`, `js/war-room-scoring.js`, recommendation/ESPN/external-pick search evidence, and `package.json`
-- current official ESPN scoring/roster documentation
-- current FantasyPros ranking-format and Draft Assistant/settings documentation
+The user asked whether the War Room can identify the most accurate publicly available preseason rankings and automatically ingest them. Manager classified this as a legitimate maintenance trigger: materially valuable opportunity / potential seasonal-data-refresh improvement.
 
-Current milestone:
-Roadmap Discovery — Next Milestone Selection
+## Objective
 
-Work completed:
-- inventoried solved product/reliability foundations and remaining capability gaps
-- evaluated four serious future milestone candidates
-- ranked them on draft-day value, reliability leverage, demonstrated need, feasibility, architectural fit, boundedness, delivery safety, and validation tractability
-- explicitly applied the WR-008 active-development threshold
-- documented trigger conditions that would make each deferred candidate worth revisiting
-- wrote full evidence to `.ai/research/ROADMAP_DISCOVERY.md`
-- opened research-only PR #110 for Manager review
+Determine whether there is a materially better, evidence-backed ranking source/cohort than the current production baseline and whether a supported automatic ingestion path can be used safely and permissibly.
 
-Candidate milestone ranking:
-1. WR-007-P1 — ESPN Configuration Preflight / Settings Validation — 26/40 — NEEDS MORE RESEARCH
-2. WR-007-P4 — Recommendation Calibration Program — 25/40 — NEEDS MORE RESEARCH / NO CURRENT TRIGGER
-3. WR-007-P2 — Opponent-Aware Next-Turn Intelligence — 24/40 — NEEDS MORE RESEARCH
-4. WR-007-P3 — League-Aware Draft Profiles — 21/40 — NOT READY / REQUIREMENT MISSING
+Key questions include:
+- who/what is most accurate over multiple preseason draft seasons
+- whether a single expert or an accurate-expert consensus is better suited to the War Room
+- how to account for FantasyPros' Half-PPR accuracy methodology while the War Room uses PPR
+- whether the official FantasyPros API can provide the required PPR rankings/expert filters/player metadata
+- whether access/license terms permit the intended private/personal use
+- how an importer would fail closed and preserve last-known-good ranking authority
 
-Outcome:
-**Recommend MAINTENANCE / STABLE.**
+## Manager preliminary evidence to verify independently
 
-Verified findings:
-- no current blocking product/reliability defect is recorded in canonical state
-- the current production system is broadly regression-protected across ranking/data, ESPN sync, recommendation/scoring, persistence/recovery, responsive behavior, and release checks
-- current recommendation survival logic already uses ESPN board/ADP, picks until next turn, comparable position depth, recent runs, and autodraft exposure
-- per-pick `teamSlot` / `teamId` metadata exists, making opponent-aware R&D technically plausible
-- current league model remains PPR/snake with one fixed starter structure
-- ESPN officially supports broader scoring/roster configurations; FantasyPros currently publishes multiple scoring/superflex ranking modes
-- no current canonical user requirement asks the War Room to support those additional formats
+- FantasyPros publishes current preseason Draft Accuracy and a 2023–2025 multi-year leaderboard.
+- Current public multi-year results put Jody Smith first, with Sean Koerner and Joey Wright immediately behind; 2025 single-year #1 was Seth Miller.
+- FantasyPros Draft Accuracy is based on Half-PPR, not PPR.
+- FantasyPros now advertises an official JSON API with PPR consensus rankings, per-expert rankings, expert metadata/filtering, tiers, and player metadata.
+- API free access is for prototyping; personal production API access is associated with HOF, and published usage restrictions must be reviewed before any production recommendation.
 
-Strong evidence:
-- configuration validation could prevent consequential setup mistakes, but no real mismatch has been observed and a stable independent ESPN settings source was not verified
-- opponent-aware modeling is a credible industry pattern and architecturally feasible, but no independent War Room draft corpus proves prediction lift
-- calibration analysis is a sound future method because audit outcomes already exist, but no systematic current recommendation defect is demonstrated
+Treat these as starting evidence, not accepted conclusions.
 
-Inferences:
-- disturbing the mature scoring/recommendation baseline for speculative intelligence would create more validation risk than current evidence justifies
-- broad league-format expansion would be valuable only after a concrete product requirement appears
+## Required outputs
 
-Unknowns:
-- whether a stable live ESPN source can independently provide full league settings without fragile undocumented assumptions
-- whether opponent roster needs materially improve War Room next-turn prediction on held-out real/mock drafts
-- whether enough independent completed draft outcomes exist for statistically useful recommendation calibration
-- whether the user will need non-PPR / Superflex / keeper / salary-cap / cross-platform support
+Prefer:
+- `.ai/research/RANKING_INGESTION_DISCOVERY.md`
+- updated `.ai/research/HANDOFF.md`
+- optional isolated non-production experiment artifacts under `.ai/research/`
 
-Experiments performed:
-None.
+Return one of:
+- READY FOR MANAGER MILESTONE CONSIDERATION
+- R&D ONLY / MORE EVIDENCE NEEDED
+- DO NOT PURSUE
 
-Reason:
-The decisive uncertainty is product need / real-world decision lift, not basic technical feasibility. A synthetic prototype would not honestly supply the missing user or independent draft evidence.
+## Authority limits
 
-Recommendation:
-Manager should place the project into **MAINTENANCE / STABLE** mode unless independent review identifies stronger evidence than WR-007 found.
+- do not modify production ranking data
+- do not modify scoring/recommendations
+- do not integrate an API into production
+- do not store API keys/tokens in the repository
+- do not modify canonical `.ai/shared/*`
+- do not open a production PR
+- do not assume public visibility equals scraping permission
+- do not assume an API license is compatible without evidence
+- final roadmap/architecture/implementation authority remains Manager
 
-Confidence:
-HIGH.
+## Exact next action
 
-What would change this conclusion:
-- verified production defect
-- real-world user feedback showing repeatable current friction or wrong draft decisions
-- changed ESPN / FantasyPros / Chrome dependency
-- explicit new league/platform/product requirement
-- live-proven stable ESPN settings source plus demonstrated mismatch risk
-- real/mock corpus showing repeatable prediction/recommendation miscalibration
-- seasonal ranking/ADP refresh requirement
-- previously non-blocking risk becoming user-visible/actionable
-
-Risks / limitations:
-- WR-007 did not include a new real ESPN mock or live league session
-- competitor capabilities establish feasibility/market context, not this user's demand
-- no candidate should be promoted from this report without Manager task creation and risk-appropriate Auditor validation
-
-Files updated:
-- `.ai/research/ROADMAP_DISCOVERY.md`
-- `.ai/research/HANDOFF.md`
-
-Repository artifact:
-- Research-only PR #110 — `WR-007 Roadmap Discovery findings`
-- https://github.com/Ryan42062001/The-War-Room/pull/110
-- PR is for R&D evidence only; no production behavior is changed
-
-Production files changed: NO
-Canonical `.ai/shared/*` state changed by R&D: NO
-
-Blocking issues:
-None for completing WR-007.
-
-Proposed dependency / parallelism if Manager accepts maintenance:
-- Builder: IDLE
-- R&D: IDLE
-- Auditor: IDLE
-- no Parallel Work Wave justified
-- future trigger-specific work should be classified independently when it arises
-
-Recommended next role:
-Manager / Architect
-
-Exact next action:
-Manager independently reviews `.ai/research/ROADMAP_DISCOVERY.md` and PR #110, verifies the strongest claims, and chooses among: accept MAINTENANCE / STABLE, request targeted refinement, or select a bounded successor milestone. No production implementation should begin until that Manager decision creates an approved WR task.
-
-Checkpoint / SHA:
-- latest observed canonical `main`: `076c05fd09c056c3491a5e9f2c185350f7acf68f`
-- R&D branch: `wr-007-research-roadmap-discovery`
-- research PR: #110
+Refresh canonical repository state and execute WR-010 exactly as specified in `.ai/manager/WR-010.md`. Produce an evidence-backed ranking-source and automated-ingestion recommendation, then return control to Manager / Architect. Do not implement production changes.
