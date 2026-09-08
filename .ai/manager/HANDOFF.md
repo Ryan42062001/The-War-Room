@@ -2,130 +2,136 @@
 
 HANDOFF
 
-Task ID: WR-009
+Task ID: WR-010
 Role: Manager / Architect
-Status: COMPLETE
+Status: ASSIGNED TO R&D / AWAITING EVIDENCE
 
-Verified starting state:
+## Verified starting state
+
 - Repository: `Ryan42062001/The-War-Room`
-- Canonical `main` before R&D evidence merge: `076c05fd09c056c3491a5e9f2c185350f7acf68f`
-- WR-007 R&D branch head: `a0494f4e10710ae662f1424a64d6f3d236043558`
-- PR #110: open / mergeable at review time, base `main`, changed only `.ai/research/ROADMAP_DISCOVERY.md` and `.ai/research/HANDOFF.md`
-- PR #110 exact-head War Room CI #701 / run `34187916951`: completed / success
-- R&D handoff: WR-007 COMPLETE — MAINTENANCE / STABLE RECOMMENDED
-- production implementation authorization: NONE
+- Canonical `main` before WR-010 assignment: `2cab85f981e06f5f19bd4a7631a28adf2f7ff351`
+- Project mode before assignment: MAINTENANCE / STABLE
+- No active production milestone
+- Current ranking/value authority: FantasyPros 2026 PPR ECR
+- ESPN rank/ADP remains timing/market information
+- Builder: IDLE
+- R&D: IDLE before WR-010
+- Auditor: IDLE
 
-R&D evidence disposition:
-- Manager independently reviewed `.ai/research/ROADMAP_DISCOVERY.md` and `.ai/research/HANDOFF.md`
-- Manager spot-checked the repository claims that materially drive the recommendation:
-  - current production configuration remains PPR / snake with the established starter/bench model
-  - replacement demand in scoring uses the current QB/RB/WR/TE/FLEX structure
-  - ESPN synchronization preserves team-slot/team-id metadata suitable for future opponent-aware research
-  - ranking audit code records `SURVIVED` / `DRAFTED_BEFORE_NEXT` outcomes
-  - root test chain covers the major release, dataset, ESPN, recommendation, persistence, recovery, responsive, and live-mock surfaces
-- no stronger repository evidence was found that would justify immediate active development
+## Maintenance trigger
 
-PR #110 disposition:
-- ACCEPTED as research evidence
-- merged at `276daacdfa506bf62ccab26deabf3a36af21ba0e`
-- production behavior changed: NO
-- canonical `.ai/shared/*` was not modified by R&D
+The user asked whether the War Room can identify the most accurate publicly available rankings and automatically pull them into the War Room.
 
-Current project mode:
-**MAINTENANCE / STABLE**
+Manager classification:
+- materially valuable opportunity
+- possible seasonal/data-refresh improvement
 
-Roadmap Discovery disposition:
-**Roadmap Discovery — Next Milestone Selection — COMPLETE**
+This is sufficient to activate bounded R&D under maintenance governance, but not sufficient to authorize production implementation.
 
-Manager decision:
-Accept the WR-007 recommendation. No successor production milestone is currently justified.
+## Active task
 
-Why:
-- no current verified blocking production defect exists in canonical state
-- no explicit new product requirement is active
-- no changed external dependency currently requires remediation
-- no independent evidence demonstrates enough recommendation/calibration lift to justify high-risk scoring changes
-- four serious future candidates were evaluated and none met the WR-008 demonstrated-need threshold
-- preserving the mature green baseline has higher present value than speculative feature creation
+**WR-010 — Ranking Accuracy & Automated Ingestion Feasibility**
 
-Closest future candidates retained as trigger-driven proposals:
-1. ESPN Configuration Preflight / Settings Validation
-2. Recommendation Calibration Program
-3. Opponent-Aware Next-Turn Intelligence
-4. League-Aware Draft Profiles
+Assigned role:
+Research & Development (R&D)
 
-Reactivation triggers:
-- verified defects
-- real-world user feedback
-- changed external dependencies
-- new product requirements
-- materially valuable opportunities
-- seasonal/data updates
-- previously unresolved risks becoming actionable
+Task spec:
+`.ai/manager/WR-010.md`
 
-Trigger-specific notes:
-- Configuration Preflight: revisit on a real settings mismatch or a live-proven stable independent ESPN settings source
-- Recommendation Calibration: revisit on sufficient independent draft outcomes or a repeatable recommendation error
-- Opponent-Aware Intelligence: revisit on user-reported wait/draft errors or a suitable calibration corpus
-- League-Aware Profiles: revisit on an explicit alternate-format requirement
+Starting SHA:
+`2cab85f981e06f5f19bd4a7631a28adf2f7ff351`
 
-Work completed by Manager:
-- independently reviewed WR-007 R&D evidence
-- verified PR #110 scope, mergeability, exact-head CI, and branch/base checkpoint
-- independently verified key repository claims supporting the maturity decision
-- merged research-only PR #110
-- created `.ai/manager/WR-009.md`
-- marked WR-007 complete
-- closed Roadmap Discovery
-- placed the project into MAINTENANCE / STABLE mode
-- updated canonical PROJECT_STATE and ROADMAP
-- preserved reactivation triggers and deferred candidate map
-- evaluated DECISIONS.md and intentionally left it unchanged because WR-008 already defines the governance rule; WR-009 applies it to current lifecycle state
-- evaluated parallelism and found no legitimate active specialist tasks
+Production implementation authorization:
+**NONE**
 
-Files updated by Manager:
-- `.ai/manager/WR-009.md`
+## Manager preliminary research
+
+Current public evidence indicates:
+- FantasyPros publishes an objective preseason Draft Accuracy competition and multi-year leaderboard.
+- Current 2023–2025 multi-year public results list Jody Smith first, Sean Koerner second, and Joey Wright third.
+- The 2025 single-season draft-accuracy leader was Seth Miller.
+- FantasyPros' Draft Accuracy methodology uses Half-PPR, while the War Room's production value authority is PPR. Therefore the leaderboard cannot be treated as direct proof of one best PPR expert without qualification.
+- FantasyPros now advertises an official API that supports PPR consensus rankings, per-expert rankings, expert filtering, expert metadata, tiers/spread, and player metadata.
+- The API offers free prototyping and paid/premium personal production access, but published terms/access restrictions must be reviewed for compatibility with the intended War Room use case before any production recommendation.
+
+Manager preliminary architecture hypothesis:
+The strongest eventual design may be a multi-year-accuracy-selected PPR expert cohort (rather than one expert), refreshed through a supported API and protected by strict completeness/freshness/provenance/last-known-good gates. This is only a hypothesis for R&D to test.
+
+## Required R&D determination
+
+R&D must decide:
+1. what "most accurate" should mean for a PPR redraft War Room
+2. whether a single expert, top-N accurate-expert consensus, recency-weighted cohort, accuracy-weighted cohort, or current broad ECR is strongest
+3. whether the improvement over the current baseline is material
+4. whether a supported automatic ingestion route exists
+5. whether access/license evidence supports the intended use or requires provider clarification
+6. how a production importer would fail closed and preserve ranking authority
+
+Required recommendation outcome:
+- READY FOR MANAGER MILESTONE CONSIDERATION
+- R&D ONLY / MORE EVIDENCE NEEDED
+- DO NOT PURSUE
+
+## Work completed by Manager
+
+- refreshed current maintenance-state repository checkpoint
+- performed preliminary current web research on FantasyPros accuracy methodology, multi-year leaders, official API capabilities, pricing/access, and usage terms
+- identified the Half-PPR-vs-PPR methodological caveat
+- created `.ai/manager/WR-010.md`
+- activated WR-010 as a maintenance-trigger R&D task
+- updated PROJECT_STATE and ROADMAP without reopening a production milestone
+- seeded `.ai/research/HANDOFF.md`
+- explicitly prohibited production implementation and secret/API-key commits
+- evaluated parallelism
+
+## Dependency / parallelism analysis
+
+WR-010: **INDEPENDENT**
+
+No Builder result is required.
+No Auditor result is required for the research phase.
+No second legitimate approved specialist task exists.
+
+Parallel Work Wave: none.
+
+## Decisions made
+
+- the user's ranking-refresh idea is a legitimate maintenance trigger worth evidence-backed R&D
+- current MAINTENANCE / STABLE project mode remains in force
+- no production ranking authority change is approved
+- no automatic API integration is approved
+- R&D should prefer supported machine-readable sources over brittle scraping when feasible
+- historical accuracy must be judged over multiple seasons and must explicitly account for scoring-format mismatch
+- a single year's #1 expert is not enough evidence to replace consensus authority
+
+## Files updated
+
+- `.ai/manager/WR-010.md`
 - `.ai/shared/PROJECT_STATE.md`
 - `.ai/shared/ROADMAP.md`
+- `.ai/research/HANDOFF.md`
 - `.ai/manager/HANDOFF.md`
 
-Research evidence merged:
-- `.ai/research/ROADMAP_DISCOVERY.md`
-- `.ai/research/HANDOFF.md`
+## Files intentionally unchanged
 
-Files reviewed but intentionally unchanged:
 - `.ai/shared/DECISIONS.md`
-- `.ai/shared/WORKFLOW.md`
+- production ranking/scoring/data files
 
-Production behavior changed:
-NO
+## Blocking issues
 
-Production implementation authorized:
-NO
+None for R&D investigation.
 
-Open non-blocking findings:
-- legacy `AGENTS.md` process wording
-- diagnostics capture-source wording
-- synthetic-navigation actor identity remains unknown at the verified WR-002 ceiling
+Production implementation remains blocked until Manager reviews completed WR-010 evidence and creates a separate approved production task if warranted.
 
-These remain maintenance observations only; they do not activate work absent a legitimate trigger.
+## Recommended next role
 
-Blocking issues:
-None.
+Research & Development (R&D)
 
-Dependency / parallelism analysis:
-- Builder: no approved task
-- R&D: WR-007 complete; no approved follow-on task
-- Auditor: no approved task
-- candidate task group: none
-- Parallel Work Wave: none
+## Exact next action
 
-Recommended next role:
-None. All specialist roles should remain IDLE until a legitimate maintenance/reactivation trigger is presented and Manager converts it into an approved WR task or milestone.
+R&D refreshes canonical state and executes WR-010. It should independently research historical ranking accuracy and PPR relevance, inspect the current ranking import pipeline, evaluate the FantasyPros API and alternative supported sources, assess access/license constraints, and return a production-safe ingestion recommendation without changing production code.
 
-Exact next action:
-Operate the War Room in MAINTENANCE / STABLE mode. Do not activate Builder, R&D, or Auditor merely to maintain activity. On a legitimate trigger, refresh canonical state first, evaluate severity/value/dependencies, define the appropriate WR Task ID, and only then activate the necessary role(s).
+## Checkpoint / SHA
 
-Checkpoint / SHA:
-PR #110 evidence merge: `276daacdfa506bf62ccab26deabf3a36af21ba0e`.
-Verify current `main` after WR-009 Manager reconciliation commits for the exact final canonical SHA.
+WR-010 starting checkpoint: `2cab85f981e06f5f19bd4a7631a28adf2f7ff351`.
+Verify current `main` after these Manager-owned assignment commits for the exact canonical SHA.
