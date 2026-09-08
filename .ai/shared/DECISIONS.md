@@ -42,3 +42,16 @@ RATIONALE: Live disposable ESPN mocks repeatedly showed Pick History DOM produci
 EVIDENCE: Existing Companion architecture, live validation documentation, merged observability/provenance work, and repeated disposable mock results.
 ALTERNATIVES REJECTED: Structured-source-only sync; DOM-only architecture that discards safer passive sources; allowing stale smaller snapshots to regress the ledger.
 REVISIT CONDITION: A stable structured ESPN draft feed is live-proven across target draft formats with equal or better completeness/recovery behavior than the current layered strategy.
+
+---
+
+## DECISION WR-D004
+
+DATE: 2026-09-07
+TASK: WR-003 — ESPN Completion-State Consistency
+STATUS: ACTIVE
+DECISION: A complete unique configured numbered-pick ledger is terminal draft-completion authority. Once all configured numbered slots are present, later false UI-derived completion heartbeats may not demote `draftComplete` or regress completion counters below the configured total. Explicit reset/session changes remain authoritative for clearing terminal state.
+RATIONALE: The numbered ledger is the reconciled source of draft progress. A transient or missing ESPN terminal UI marker after Rescan is weaker evidence than a complete 1..N ledger and must not create contradictory completion state.
+EVIDENCE: PR #108 audited head `d9b537ddac665207ab61aed7527d7da986cc4815`; Independent Auditor PASS in `.ai/auditor/AUDIT.md`; deterministic RED-before-fix CI #624 and GREEN exact-head CI #636; merged as `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`.
+ALTERNATIVES REJECTED: Allow any later UI heartbeat to overwrite completion regardless of ledger state; make UI markers the sole completion authority; prevent explicit reset/session changes from clearing completion.
+REVISIT CONDITION: The numbered-ledger model or configured draft-slot semantics materially change, or new evidence shows the ledger can be complete without representing terminal draft progress.
