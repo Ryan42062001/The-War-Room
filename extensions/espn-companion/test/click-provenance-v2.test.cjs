@@ -119,7 +119,7 @@ test('cached EventTarget.prototype.dispatchEvent bypass recovers observation-tim
     assert.equal(result.nativeReturn, true);
     assert.equal(result.nativeCount, 1);
     assert.equal(result.href, origin + '/');
-    assert.equal(result.snapshot.version, 2);
+    assert.equal(result.snapshot.version, 3);
     assert.equal(result.snapshot.events.length, 1);
     assertRecoveredCaller(result.snapshot.events[0], 'cachedDispatchCaller');
   });

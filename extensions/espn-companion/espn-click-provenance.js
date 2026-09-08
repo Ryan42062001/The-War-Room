@@ -7,7 +7,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : null, function() {
   'use strict';
 
-  var RUNTIME_VERSION = '2';
+  var RUNTIME_VERSION = '3';
   var DEFAULT_LIMIT = 48;
   var MECHANISMS = ['HTMLElement.click', 'dispatchEvent(click)', 'other-programmatic', 'trusted-user'];
   var CALLER_CLASSES = ['espn-script', 'extension-script', 'other-web-script', 'page-bundle', 'inline-page', 'user-input', 'unknown'];
@@ -111,14 +111,20 @@
       sanitized.push({className:location.className, script:location.script, functionName:functionName});
     }
     if (!sanitized.length) return sanitizeCaller({className:'unknown', hash:stableHash('unknown')});
-    var top = sanitized[0];
+    var representative = sanitized[0];
+    for (var representativeIndex = 0; representativeIndex < sanitized.length; representativeIndex++) {
+      if (sanitized[representativeIndex].className !== 'unknown') {
+        representative = sanitized[representativeIndex];
+        break;
+      }
+    }
     var signature = sanitized.map(function(frame) {
       return [frame.className, frame.script || '', frame.functionName || ''].join(':');
     }).join('|');
     return sanitizeCaller({
-      className:top.className,
-      script:top.script,
-      functionName:top.functionName,
+      className:representative.className,
+      script:representative.script,
+      functionName:representative.functionName,
       hash:stableHash(signature)
     });
   }
@@ -269,8 +275,8 @@
   }
 
   function install(root) {
-    if (!root || !root.document || root.__warRoomEspnClickProvenanceInstalledV1 || root.__warRoomEspnClickProvenanceInstalledV2) return false;
-    root.__warRoomEspnClickProvenanceInstalledV2 = true;
+    if (!root || !root.document || root.__warRoomEspnClickProvenanceInstalledV1 || root.__warRoomEspnClickProvenanceInstalledV2 || root.__warRoomEspnClickProvenanceInstalledV3) return false;
+    root.__warRoomEspnClickProvenanceInstalledV3 = true;
 
     var startedAt = Date.now();
     var events = [];
@@ -327,7 +333,7 @@
     }, true);
 
     root.__warRoomEspnClickProvenanceSnapshot = function() {
-      return {version:2, startedAt:startedAt, events:events.slice()};
+      return {version:3, startedAt:startedAt, events:events.slice()};
     };
     root.__warRoomEspnClickProvenanceReset = function() {
       startedAt = Date.now();
