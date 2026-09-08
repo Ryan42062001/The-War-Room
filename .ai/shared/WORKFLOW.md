@@ -1,7 +1,7 @@
 # War Room Team Workflow
 
 Status: ACTIVE
-Last updated: 2026-09-07
+Last updated: 2026-09-08
 Owner: Manager / Architect
 
 This file is the canonical repository workflow for the Fantasy Draft War Room. If older repository guidance conflicts with this file, this file wins unless the Manager explicitly records a newer approved change.
@@ -80,6 +80,99 @@ Use **Implementation Engineer** only after objective, scope, architecture, depen
 Use **Independent Auditor / QA** for changes affecting recommendation logic, draft state, live synchronization, persistence/restoration, ranking/dataset behavior, high-risk shared code, core workflows, or milestone completion.
 
 Research findings do not automatically become architecture. The Manager decides architecture after evaluating evidence.
+
+## Parallel task orchestration
+
+Parallelism is encouraged when it increases useful throughput without creating unsafe dependencies or integration ambiguity. Do not unnecessarily serialize independent work, and do not create speculative work merely to keep workers busy.
+
+Whenever the Manager determines what should happen next, explicitly evaluate whether multiple approved tasks can proceed simultaneously.
+
+A task may run in parallel when all of the following are true:
+
+- it does not depend on the unfinished result of another active task
+- workers will not make conflicting changes to the same production area
+- shared canonical state does not need to change independently in multiple branches
+- each task has its own Task ID and acceptance criteria
+- each worker can produce independently verifiable evidence
+- integration order is manageable
+
+Do not parallelize when any of the following apply:
+
+- Builder needs Research findings before implementation can be designed
+- Auditor needs Builder implementation before an audit can begin
+- two tasks modify the same tightly coupled state or files and would create unsafe integration conflicts
+- one task materially changes the architecture assumed by another
+- completion of one task may make the other unnecessary
+- a milestone decision must occur before downstream work is valid
+
+### Dependency classification
+
+For every group of candidate tasks, the Manager classifies dependencies as:
+
+- **INDEPENDENT** — may run simultaneously
+- **SOFT DEPENDENCY** — may run simultaneously, but one result may influence later integration
+- **HARD DEPENDENCY** — must run sequentially
+
+Prefer parallel execution for INDEPENDENT tasks.
+
+### Parallel Work Waves
+
+When two or more roles can work independently, the Manager creates a Parallel Work Wave using sequential IDs such as:
+
+- `PW-001`
+- `PW-002`
+- `PW-003`
+
+Each wave must record for every active assignment:
+
+- Task ID
+- assigned role
+- objective
+- dependency status
+- branch / work area
+- expected output
+- merge / integration considerations
+
+A Parallel Work Wave coordinates execution only; it does not replace the underlying WR Task IDs or acceptance criteria.
+
+### Parallel PR safety
+
+When several employees work simultaneously:
+
+- give each production task its own branch
+- minimize overlapping files
+- track each task's starting SHA
+- require workers to check target-branch advancement before completion
+- merge in a deliberate order
+- rerun affected tests after meaningful integration changes
+- do not let parallel workers independently update canonical `.ai/shared/*` state
+
+The Manager remains the normal authority for canonical shared-state reconciliation after integration.
+
+### Workload priority
+
+Optimize for maximum useful throughput, not maximum worker utilization.
+
+Multiple workers doing genuinely independent useful work is desirable. Workers doing unnecessary speculative work merely because they are available is not. `IDLE` is a valid and desirable state when no useful independent work exists.
+
+## Parallel activation plan
+
+Every Manager response that determines or reports next work ends with an `ACTIVATE NOW` section covering all four roles:
+
+- Manager: `ACTIVE` or `IDLE`
+- Builder: `ACTIVE — WR-###` or `IDLE`
+- Research: `ACTIVE — WR-###` or `IDLE`
+- Auditor: `ACTIVE — WR-###` or `IDLE`
+
+For every active specialist, include:
+
+- `CHAT:` role name
+- `TASK:` WR Task ID
+- `ACTIVATION MESSAGE:` an exact short message the user can paste into that employee chat
+
+Activation messages should normally be concise because each role must refresh from repository state before acting.
+
+Do not activate a role solely to keep it busy. If a task is blocked on user evidence or another prerequisite, state that explicitly rather than assigning unrelated work.
 
 ## Validation levels
 
