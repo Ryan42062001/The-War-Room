@@ -48,6 +48,7 @@ Draft-day reliability over feature count:
 - active work mapped to WR Task IDs
 - WR-004 added safe parallel orchestration and activation-plan rules
 - WR-006 expanded Research / Investigation into Research & Development (R&D) while retaining `.ai/research/` as the role directory
+- WR-008 added the project-maturity / MAINTENANCE-STABLE rule
 
 ### ESPN Live Sync reliability / live-validation closeout — COMPLETE
 
@@ -75,7 +76,7 @@ Closeout evidence:
 ### Roadmap Discovery — Next Milestone Selection — IN PROGRESS
 
 Purpose:
-Determine the strongest legitimate next War Room milestone before authorizing another production implementation wave.
+Determine whether the War Room has a sufficiently valuable next production milestone before authorizing another implementation wave. A valid discovery outcome is either a justified successor milestone or a justified recommendation to enter **MAINTENANCE / STABLE** mode.
 
 Active task:
 - **WR-007 — Roadmap Discovery: Next Milestone Candidate Evaluation**
@@ -86,8 +87,9 @@ Active task:
 Required discovery output:
 - 3–5 serious milestone candidates grounded in repository/product evidence
 - explicit ranking criteria covering user value, reliability/correctness impact, evidence strength, feasibility, complexity, dependency/integration risk, and validation burden
-- one recommended milestone and at least one credible runner-up
-- a bounded Manager-ready outline for the recommended milestone, including likely task decomposition, role routing, validation levels, non-goals, and potential safe parallelism
+- an explicit determination of whether any candidate clears the active-development threshold
+- if yes: one recommended milestone, at least one credible runner-up, and a bounded Manager-ready outline including task decomposition, role routing, validation levels, non-goals, and potential safe parallelism
+- if no: a MAINTENANCE / STABLE recommendation naming the strongest/closest candidates, why they fall below the threshold now, and what concrete triggers would justify revisiting them
 - rejected/deferred ideas with reasons
 
 Production implementation authorization: **NONE** during WR-007.
@@ -97,14 +99,35 @@ R&D may inspect the repository, use external research where useful, and run isol
 Completion gate:
 1. R&D completes WR-007 and writes its role-owned evidence/handoff.
 2. Manager independently reviews the strongest claims and candidate ranking.
-3. Manager selects, rejects, or requests refinement of the proposed next milestone.
-4. Only after Manager selection may production implementation or audit tasks be assigned.
+3. Manager chooses one of: select a successor milestone, request refinement, or place the project into MAINTENANCE / STABLE mode.
+4. Only a Manager-selected successor may lead to production implementation or audit tasks.
+
+## Project maturity / maintenance rule
+
+Do not create features merely to maintain development activity.
+
+If Roadmap Discovery finds no sufficiently valuable successor, MAINTENANCE / STABLE mode is the preferred outcome rather than a weak milestone.
+
+Active development should resume only when a legitimate trigger becomes sufficiently important, including:
+- verified defects
+- real-world user feedback
+- changed external dependencies
+- new product requirements
+- materially valuable opportunities
+- seasonal/data updates
+- previously unresolved risks becoming actionable
+
+These triggers are inputs to Manager prioritization; they do not automatically authorize implementation.
 
 ## Next production milestone
 
 **Not yet selected.**
 
-The next production milestone will be chosen after WR-007 Roadmap Discovery completes. Existing non-blocking observations such as legacy `AGENTS.md` wording, diagnostics capture-source wording, and unresolved synthetic-navigation actor identity are inputs, not automatic priorities.
+The next production state after WR-007 may be either:
+- a Manager-selected successor milestone; or
+- **MAINTENANCE / STABLE** if no candidate justifies active development.
+
+Existing non-blocking observations such as legacy `AGENTS.md` wording, diagnostics capture-source wording, and unresolved synthetic-navigation actor identity are inputs, not automatic priorities.
 
 ## Parallelism status
 
