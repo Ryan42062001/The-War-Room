@@ -8,41 +8,35 @@ Owner: Manager / Architect
 
 Repository: `Ryan42062001/The-War-Room`
 Branch: `main`
-Verified main SHA after WR-001 merge: `2d9ccb2094776e25babb17c65b69390646853c37`
-Latest merged PR at this checkpoint: #109 — WR-001 Bootstrap canonical team workflow
 
-Validation on this exact post-WR-001 main SHA:
+Latest production merge checkpoint:
+- WR-003 / PR #108 merge SHA: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
+- PR #108 audited head: `d9b537ddac665207ab61aed7527d7da986cc4815`
+- Independent Auditor verdict: PASS
+- Exact audited-head War Room CI #636 / run `34175697251`: completed / success
+- No blocking or non-blocking audit findings
 
-- GitHub Pages #559: completed / success
-- War Room CI #652: in progress at the latest verification point
-
-Previous production checkpoint before documentation bootstrap:
-
-- `a6506d5815e6ec9027f71da759fbe607a40b5020`
-- War Room CI #634: completed / success
-- GitHub Pages #558: completed / success
-
-WR-001 changed repository workflow/state documentation only; no production files changed.
+The Manager merged PR #108 only after independently re-verifying the Task ID, audited head, mergeability, four-file diff scope, exact-head CI, and current-main relationship. Current main had advanced beyond the PR base only through `.ai/` operating-contract and audit documentation, with no production-file overlap.
 
 ## Current milestone
 
 **ESPN Live Sync reliability / live-validation closeout**
 
-The ranking system, draft-state hardening, persistence/recovery hardening, off-board ESPN pick handling, Companion trust UX, popup sizing regression, synthetic-click provenance V1–V3, and tablet document-overflow fix are already merged.
+Milestone status: IN PROGRESS
 
-The milestone is **not complete**. Two identified tasks remain:
+WR-003 is complete. The only remaining milestone task is WR-002 Level-4 synthetic-navigation attribution.
 
-- WR-002 Level-4 synthetic-navigation attribution
-- WR-003 ESPN completion-state consistency audit/integration
+Do not declare this milestone complete until WR-002 is closed at its required validation level.
 
 ## Verified product baseline
 
 - Canonical player universe: 717 players, zero canonical duplicates in the established validation baseline.
 - FantasyPros 2026 PPR ECR is the ranking/value authority; ESPN rank/ADP is timing/market information.
-- Companion manifest version on current production code: `0.9.14`.
-- Companion permissions remain `storage` and `scripting` with narrow ESPN / War Room host permissions.
+- Companion manifest version remains `0.9.14`.
+- Companion permissions remain `storage` and `scripting` with the existing narrow ESPN / War Room host permissions.
 - Live disposable ESPN mocks have shown Pick History DOM to be the practical usable numbered-pick source when structured feeds are behind or empty.
 - Authoritative ESPN off-board numbered picks are preserved as external picks and count toward draft progress without being inserted into the canonical recommendation pool.
+- A complete unique configured numbered-pick ledger is now terminal completion authority in the Companion; a later false UI-derived completion heartbeat cannot demote terminal completion.
 
 ## Task state
 
@@ -50,10 +44,9 @@ The milestone is **not complete**. Two identified tasks remain:
 
 Role: Manager / Architect
 Status: COMPLETE
-Starting SHA: `a6506d5815e6ec9027f71da759fbe607a40b5020`
 PR: #109
 Merge SHA: `2d9ccb2094776e25babb17c65b69390646853c37`
-Result: canonical `.ai/` workflow/state/task/handoff structure is now in the repository.
+Result: canonical `.ai/` workflow/state/task/handoff structure established.
 
 ### WR-002 — ESPN Synthetic Navigation Attribution Level 4
 
@@ -66,29 +59,23 @@ Blocking milestone completion: YES for final attribution closure; NO for already
 
 ### WR-003 — ESPN Completion-State Consistency
 
-Role: Implementation Engineer, then Independent Auditor / QA
-Status: IMPLEMENTATION PR OPEN / AUDIT REQUIRED
+Role: Implementation Engineer → Independent Auditor / QA → Manager integration
+Status: COMPLETE
 Objective: prevent a complete authoritative numbered-pick ledger from being contradicted by a later false UI-derived `draftComplete` heartbeat after Rescan.
 Task spec: `.ai/manager/WR-003.md`
 PR: #108 — Keep ESPN completion consistent with complete pick ledger
-PR head: `d9b537ddac665207ab61aed7527d7da986cc4815`
-PR changed files:
-- `extensions/espn-companion/background-entry.js`
-- `extensions/espn-companion/manifest.json`
-- `extensions/espn-companion/test/completion-state.test.cjs`
-- `extensions/espn-companion/test/manifest.test.cjs`
-
-Stale-branch note:
-- PR #108 was based on production main `a6506d5815e6ec9027f71da759fbe607a40b5020`.
-- Current main advanced only through WR-001 `.ai/` documentation.
-- There is no direct file overlap between WR-001 and PR #108, but Auditor must still evaluate the current-main relationship before recommending merge.
-
-Audit requirement: REQUIRED because WR-003 changes live synchronization state behavior.
-Merge status: BLOCKED pending independent Auditor verdict of PASS or PASS WITH NON-BLOCKING FINDINGS.
+Audited head: `d9b537ddac665207ab61aed7527d7da986cc4815`
+Audit: PASS, no findings
+Merge SHA: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
+Validation achieved:
+- Level 1 static correctness: PASS
+- Level 2 automated tests: PASS
+- Level 3 deterministic simulated state behavior: PASS
+- Level 4: not required for WR-003 by independent audit because no material live/browser uncertainty remained for this internal terminal-state invariant
 
 ## Recently completed integration history
 
-The following work was completed before adoption of the WR Task-ID operating contract and is retained as historical context rather than retroactively renumbered:
+Historical work completed before adoption of the WR Task-ID operating contract is retained as context rather than retroactively renumbered:
 
 - #101 synthetic click attribution V1
 - #102 authoritative ESPN off-board pick correctness
@@ -100,10 +87,9 @@ The following work was completed before adoption of the WR Task-ID operating con
 
 ## Open findings
 
-1. **Synthetic ESPN view flicker caller not yet live-attributed.** V3 is merged; one short Level-4 WR-002 run remains.
-2. **WR-003 / PR #108 requires independent audit before merge.**
-3. **Legacy `AGENTS.md` contains historical living-roadmap/process wording.** `.ai/README.md` and `.ai/shared/WORKFLOW.md` explicitly define `.ai/shared/*` as canonical, so this is now a non-blocking documentation-cleanup item.
-4. **Diagnostics wording remains imperfect:** `Capture method: network` and recurring fetch candidate-shaped counts can be misleading when DOM is the actual usable numbered-pick authority. This is non-blocking and not currently assigned to an implementation task.
+1. **WR-002 remains open.** One short Level-4 disposable ESPN mock is required to close synthetic-navigation attribution.
+2. **Legacy `AGENTS.md` contains historical living-roadmap/process wording.** `.ai/shared/*` is canonical; cleanup remains non-blocking.
+3. **Diagnostics wording remains imperfect:** `Capture method: network` and recurring fetch candidate-shaped counts can be misleading when DOM is the actual usable numbered-pick authority. This is non-blocking and unassigned.
 
 ## Merge discipline
 
