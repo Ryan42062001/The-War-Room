@@ -222,6 +222,12 @@ body[data-board-view="position"] #draft-command-bar.is-on-clock {
   }
 }
 
+@media (max-width: 900px) {
+  .statusbar {
+    flex-wrap: wrap;
+  }
+}
+
 @media (max-width: 768px) {
   body[data-board-view="position"] #draft-command-bar,
   body[data-board-view="position"] #draft-command-bar.is-on-clock {
