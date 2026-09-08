@@ -12,7 +12,7 @@ Branch: `main`
 Roadmap Discovery assignment starting checkpoint:
 - canonical `main`: `3e5cffb86c3ab6c55803d4f0f6a8a07218b81e0f`
 - latest production merge remains WR-003 / PR #108 at `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
-- no production code changed during WR-002, WR-005, WR-006, or WR-007 Manager assignment/reconciliation
+- no production code changed during WR-002, WR-005, WR-006, WR-007 assignment, or WR-008 workflow reconciliation
 
 ## Milestone status
 
@@ -35,15 +35,37 @@ This is a discovery/selection milestone, not production implementation.
 Active task:
 - WR-007 — Roadmap Discovery: Next Milestone Candidate Evaluation
 - assigned role: Research & Development (R&D)
-- objective: identify, compare, rank, and recommend the strongest legitimate next War Room milestone candidates using repository evidence, external research where useful, and bounded non-production R&D
+- objective: identify and rank the strongest legitimate future milestone candidates, then determine whether any candidate is strong enough to justify active development
+- valid outcomes:
+  - recommend a bounded successor milestone for Manager consideration; or
+  - recommend **MAINTENANCE / STABLE** mode if no candidate clears the active-development threshold
 - production implementation authorized: NO
-- final roadmap selection authority: Manager / Architect
+- final roadmap / maintenance decision authority: Manager / Architect
 
 Completion gate:
 - R&D returns 3–5 serious evidence-backed candidates
 - candidates are ranked against explicit user-value, reliability, feasibility, risk, complexity, and validation criteria
-- one recommended milestone and at least one runner-up are justified
-- Manager independently reviews the evidence and selects, rejects, or requests refinement before any production task begins
+- R&D explicitly determines whether any candidate justifies active development
+- if yes, R&D returns a recommended milestone and runner-up with a Manager-ready outline
+- if no, R&D returns a MAINTENANCE / STABLE recommendation with closest candidates and concrete reactivation triggers
+- Manager independently reviews the evidence and selects a successor, requests refinement, or places the project into maintenance/stable mode
+
+## Project maturity rule
+
+WR-008 establishes that project maturity is a valid Roadmap Discovery outcome. The War Room must not create features or milestones merely to preserve development activity.
+
+If Roadmap Discovery does not identify a sufficiently valuable successor, the Manager may place the project into **MAINTENANCE / STABLE** mode.
+
+Maintenance/stable mode means no active production milestone is required by default. Active development resumes only when a legitimate trigger becomes sufficiently important, including:
+- verified defects
+- real-world user feedback
+- changed external dependencies
+- new product requirements
+- materially valuable opportunities
+- seasonal/data updates
+- previously unresolved risks becoming actionable
+
+These triggers require Manager evaluation before implementation; they do not automatically create production work.
 
 ## Verified product baseline
 
@@ -63,6 +85,7 @@ Completion gate:
 - WR-006 expands the former Research / Investigation role into **Research & Development (R&D)** while preserving evidence and handoff discipline.
 - R&D is authorized for external/technical research, forward-looking product and technical R&D, API/data/algorithm/integration evaluation, isolated proofs of concept, future architecture evaluation, product/reliability gap discovery, Roadmap Discovery support, and evidence-backed future milestone proposals.
 - R&D may run dependency-safe approved work in parallel with current milestone work, but it does not select the roadmap, modify production code without an approved implementation assignment, modify `.ai/shared/*`, merge production work, or audit its own production implementation.
+- WR-008 allows Roadmap Discovery to conclude no successor is justified and permits Manager-selected MAINTENANCE / STABLE mode with explicit reactivation triggers.
 - `.ai/research/` remains the R&D role-owned directory; no `.ai/rnd/` tree is used.
 - The Manager remains the normal authority for `.ai/shared/*` reconciliation.
 - `IDLE` is valid when no useful independent task exists.
@@ -109,7 +132,14 @@ Task spec: `.ai/manager/WR-007.md`
 Starting SHA: `3e5cffb86c3ab6c55803d4f0f6a8a07218b81e0f`
 Production implementation authorized: NO
 Expected evidence: `.ai/research/ROADMAP_DISCOVERY.md` and updated `.ai/research/HANDOFF.md`
-Next gate: Manager review and milestone selection
+Next gate: Manager review; successor milestone, refinement, or MAINTENANCE / STABLE decision
+
+### WR-008 — Project Maturity / Maintenance Mode Rule
+Role: Manager / Architect
+Status: COMPLETE
+Objective: make no-successor / maintenance-stable a valid evidence-backed Roadmap Discovery outcome and define reactivation triggers.
+Production behavior changed: NO
+New production milestone created: NO
 
 ## Open non-blocking findings
 
@@ -117,7 +147,7 @@ Next gate: Manager review and milestone selection
 2. **Diagnostics wording:** `Capture method: network` and large fetch candidate-shaped counts can be misleading when Pick History DOM is the actual ledger-eligible numbered-pick authority. This remains unassigned and non-blocking.
 3. **Synthetic-navigation actor identity remains unknown.** This is the verified attribution ceiling from WR-002, not a blocking defect or automatic trigger for more work.
 
-These observations are inputs to Roadmap Discovery but do not automatically outrank broader product/reliability opportunities.
+These observations are inputs to Roadmap Discovery but do not automatically outrank broader product/reliability opportunities or justify active development.
 
 ## Current workload / parallelism state
 
@@ -134,4 +164,4 @@ Dependency analysis:
 
 Parallel Work Wave: none. A wave is not created for a single active specialist task.
 
-Do not authorize production implementation until the Manager reviews WR-007 evidence and explicitly selects the next milestone/task structure.
+Do not authorize production implementation until the Manager reviews WR-007 evidence and explicitly selects the next milestone/task structure. If no candidate justifies active development, MAINTENANCE / STABLE is an acceptable result.
