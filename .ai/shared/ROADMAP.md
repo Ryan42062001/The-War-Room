@@ -44,9 +44,10 @@ Draft-day reliability over feature count:
 
 - WR-001 merged through PR #109
 - canonical `.ai/shared/*` state, roadmap, decisions, and workflow established
-- Manager / Builder / Research / Auditor handoff locations established
+- Manager / Builder / R&D / Auditor handoff locations established
 - active work mapped to WR Task IDs
 - WR-004 added safe parallel orchestration and activation-plan rules
+- WR-006 expanded Research / Investigation into Research & Development (R&D) while retaining `.ai/research/` as the role directory
 
 ### ESPN Live Sync reliability / live-validation closeout — COMPLETE
 
@@ -83,7 +84,9 @@ No open roadmap milestone remains after the ESPN Live Sync closeout.
 
 The roadmap does not currently contain a legitimate successor milestone. The Manager must not invent feature work merely to keep employees active.
 
-Before activating Builder, Research, or Auditor again, the Manager/user should identify a real project need and define a new WR Task ID or milestone with objective, scope, acceptance criteria, and evidence requirements.
+Before activating Builder, R&D, or Auditor again, the Manager/user should identify a real project need and define a new WR Task ID or milestone with objective, scope, acceptance criteria, and evidence requirements.
+
+R&D may support Roadmap Discovery through an explicit Manager-assigned task when evidence-backed exploration would help identify the next legitimate milestone. The expanded R&D capability does not itself create an assignment.
 
 Existing non-blocking observations such as legacy `AGENTS.md` wording, diagnostics capture-source wording, and unresolved synthetic-navigation actor identity do not automatically become the next milestone.
 
