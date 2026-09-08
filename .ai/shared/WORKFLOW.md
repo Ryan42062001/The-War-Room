@@ -10,8 +10,10 @@ This file is the canonical repository workflow for the Fantasy Draft War Room. I
 
 1. **Manager / Architect** — roadmap, requirements, architecture, priorities, task decomposition, acceptance criteria, integration decisions, merge authority, canonical shared state.
 2. **Implementation Engineer** — production implementation, debugging, tests, technical execution, remediation.
-3. **Research / Investigation Specialist** — external APIs, documentation, feasibility, technical uncertainty, difficult investigations.
+3. **Research & Development (R&D)** — external APIs, documentation, feasibility, technical uncertainty, difficult investigations, forward-looking product/technical R&D, isolated experiments/proofs of concept, future architecture evaluation, product/reliability gap discovery, and evidence-backed milestone proposals.
 4. **Independent Auditor / QA** — independent verification, regression analysis, real/mock draft validation, PASS/FAIL decisions.
+
+The R&D role continues to use `.ai/research/` as its role-owned directory. Do not create a separate `.ai/rnd/` tree unless a future Manager decision establishes a compelling compatibility reason.
 
 ## Canonical project files
 
@@ -73,13 +75,35 @@ When resuming project work:
 
 ## Work routing
 
-Use **Research** when external facts or undocumented system behavior materially block architecture or implementation.
+Use **Research & Development (R&D)** when any of the following materially helps the project:
+
+- external facts, documentation, APIs, data sources, or undocumented system behavior must be investigated
+- feasibility or technical uncertainty needs evidence before architecture/implementation is chosen
+- promising future War Room capabilities should be explored
+- algorithms, integrations, data sources, or future architectures need comparison/evaluation
+- a bounded isolated/disposable experiment or proof of concept can reduce uncertainty
+- meaningful product or reliability gaps need evidence-backed characterization
+- Roadmap Discovery needs evidence-backed future milestone proposals
+
+R&D may be assigned forward-looking work even when it does not block the current implementation, provided it is a legitimate Manager-approved task with clear acceptance criteria and does not create unsafe dependencies or production overlap. Dependency-safe R&D may run in parallel with current milestone work.
 
 Use **Implementation Engineer** only after objective, scope, architecture, dependencies, and acceptance criteria are sufficiently settled.
 
 Use **Independent Auditor / QA** for changes affecting recommendation logic, draft state, live synchronization, persistence/restoration, ranking/dataset behavior, high-risk shared code, core workflows, or milestone completion.
 
-Research findings do not automatically become architecture. The Manager decides architecture after evaluating evidence.
+R&D findings and proposals do not automatically become architecture or roadmap commitments. The Manager decides final roadmap, architecture, task assignment, prioritization, and integration after evaluating the evidence.
+
+### R&D authority boundaries
+
+R&D retains the existing evidence, repository-ownership, research, and handoff rules, but it does **not** gain authority to:
+
+- select the final roadmap
+- modify production code without an approved implementation assignment
+- modify canonical `.ai/shared/*` state
+- merge production work
+- audit its own production implementation
+
+R&D experiments and proofs of concept should remain isolated/disposable unless the Manager explicitly promotes the result into an approved implementation task. Experimental evidence may inform architecture or roadmap decisions, but experimental code is not production merely because it works.
 
 ## Parallel task orchestration
 
@@ -98,7 +122,7 @@ A task may run in parallel when all of the following are true:
 
 Do not parallelize when any of the following apply:
 
-- Builder needs Research findings before implementation can be designed
+- Builder needs R&D findings before implementation can be designed
 - Auditor needs Builder implementation before an audit can begin
 - two tasks modify the same tightly coupled state or files and would create unsafe integration conflicts
 - one task materially changes the architecture assumed by another
@@ -161,7 +185,7 @@ Every Manager response that determines or reports next work ends with an `ACTIVA
 
 - Manager: `ACTIVE` or `IDLE`
 - Builder: `ACTIVE — WR-###` or `IDLE`
-- Research: `ACTIVE — WR-###` or `IDLE`
+- R&D: `ACTIVE — WR-###` or `IDLE`
 - Auditor: `ACTIVE — WR-###` or `IDLE`
 
 For every active specialist, include:
