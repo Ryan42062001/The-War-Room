@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE
+Status: MAINTENANCE / STABLE
 Last verified: 2026-09-08
 Owner: Manager / Architect
 
@@ -9,54 +9,59 @@ Owner: Manager / Architect
 Repository: `Ryan42062001/The-War-Room`
 Branch: `main`
 
-Roadmap Discovery assignment starting checkpoint:
-- canonical `main`: `3e5cffb86c3ab6c55803d4f0f6a8a07218b81e0f`
-- latest production merge remains WR-003 / PR #108 at `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
-- no production code changed during WR-002, WR-005, WR-006, WR-007 assignment, or WR-008 workflow reconciliation
+Latest research evidence integration:
+- WR-007 R&D PR #110 merge SHA: `276daacdfa506bf62ccab26deabf3a36af21ba0e`
+- R&D head reviewed: `a0494f4e10710ae662f1424a64d6f3d236043558`
+- exact-head War Room CI #701 / run `34187916951`: completed / success
+- changed files: `.ai/research/ROADMAP_DISCOVERY.md`, `.ai/research/HANDOFF.md` only
+- production behavior changed: NO
 
-## Milestone status
+Latest production merge remains:
+- WR-003 / PR #108 merge SHA: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
 
-### ESPN Live Sync reliability / live-validation closeout — COMPLETE
+## Project mode
 
-Completion basis:
-- WR-002 Synthetic Navigation Attribution Level 4 — COMPLETE / PASS
-- WR-003 ESPN Completion-State Consistency — COMPLETE / PASS / merged
-- all required validation levels for the closeout tasks are satisfied
-- no blocking findings remain for that milestone
+### MAINTENANCE / STABLE — ACTIVE
 
-The Level-4 WR-002 result live-verifies automatic Players → Pick History → Players navigation as programmatic while preserving the correct attribution ceiling: `other-programmatic / caller=unknown / hash=174uabd`. The evidence does not identify ESPN, the Companion, or another script actor, and no such attribution is claimed.
+Manager decision: WR-009 independently reviewed WR-007 Roadmap Discovery and accepted the R&D recommendation that no successor production milestone is currently justified.
 
-## Current milestone
+Decision basis:
+- canonical state contains no current blocking production defect
+- no explicit new product requirement is active
+- no changed external dependency currently requires remediation
+- no independently demonstrated recommendation/calibration failure currently requires scoring changes
+- WR-007 evaluated four serious future candidates and none cleared the WR-008 active-development threshold
+- the current production baseline is mature and broadly regression-protected
 
-### Roadmap Discovery — Next Milestone Selection — IN PROGRESS
+Maintenance/stable means:
+- no active production milestone is required
+- speculative feature development is not used to maintain activity
+- Builder, R&D, and Auditor may remain IDLE when no legitimate task exists
+- known non-blocking observations are not automatically promoted into work
+- current verified production behavior and roadmap history remain preserved
 
-This is a discovery/selection milestone, not production implementation.
+## Roadmap Discovery disposition
 
-Active task:
+### Roadmap Discovery — Next Milestone Selection — COMPLETE
+
+Task:
 - WR-007 — Roadmap Discovery: Next Milestone Candidate Evaluation
-- assigned role: Research & Development (R&D)
-- objective: identify and rank the strongest legitimate future milestone candidates, then determine whether any candidate is strong enough to justify active development
-- valid outcomes:
-  - recommend a bounded successor milestone for Manager consideration; or
-  - recommend **MAINTENANCE / STABLE** mode if no candidate clears the active-development threshold
-- production implementation authorized: NO
-- final roadmap / maintenance decision authority: Manager / Architect
+- Role: Research & Development (R&D)
+- Status: COMPLETE
+- Evidence: `.ai/research/ROADMAP_DISCOVERY.md`
+- Handoff: `.ai/research/HANDOFF.md`
+- PR: #110
+- Outcome: MAINTENANCE / STABLE recommended by R&D and accepted by Manager
 
-Completion gate:
-- R&D returns 3–5 serious evidence-backed candidates
-- candidates are ranked against explicit user-value, reliability, feasibility, risk, complexity, and validation criteria
-- R&D explicitly determines whether any candidate justifies active development
-- if yes, R&D returns a recommended milestone and runner-up with a Manager-ready outline
-- if no, R&D returns a MAINTENANCE / STABLE recommendation with closest candidates and concrete reactivation triggers
-- Manager independently reviews the evidence and selects a successor, requests refinement, or places the project into maintenance/stable mode
+Closest future candidates retained as trigger-driven proposals, not active tasks:
+1. ESPN Configuration Preflight / Settings Validation
+2. Recommendation Calibration Program
+3. Opponent-Aware Next-Turn Intelligence
+4. League-Aware Draft Profiles
 
-## Project maturity rule
+## Reactivation triggers
 
-WR-008 establishes that project maturity is a valid Roadmap Discovery outcome. The War Room must not create features or milestones merely to preserve development activity.
-
-If Roadmap Discovery does not identify a sufficiently valuable successor, the Manager may place the project into **MAINTENANCE / STABLE** mode.
-
-Maintenance/stable mode means no active production milestone is required by default. Active development resumes only when a legitimate trigger becomes sufficiently important, including:
+Active development should resume only when one or more legitimate triggers become real and sufficiently important:
 - verified defects
 - real-world user feedback
 - changed external dependencies
@@ -65,30 +70,35 @@ Maintenance/stable mode means no active production milestone is required by defa
 - seasonal/data updates
 - previously unresolved risks becoming actionable
 
-These triggers require Manager evaluation before implementation; they do not automatically create production work.
+A trigger does not automatically authorize implementation. Manager must still refresh evidence, define a WR Task ID/milestone, classify dependencies, select validation levels, and evaluate safe parallelism.
+
+Proposal-specific revisit conditions from WR-007:
+- Configuration Preflight: real settings mismatch or live-proven stable independent ESPN settings source
+- Recommendation Calibration: sufficient independent completed-draft outcomes or repeatable recommendation error
+- Opponent-Aware Intelligence: user-reported wait/draft errors or a suitable real/mock held-out calibration corpus
+- League-Aware Profiles: explicit Standard / Half-PPR / Superflex / keeper / salary-cap / alternate-format requirement
 
 ## Verified product baseline
 
 - Canonical player universe: 717 players, zero canonical duplicates in the established validation baseline.
 - FantasyPros 2026 PPR ECR is the ranking/value authority; ESPN rank/ADP is timing/market information.
+- Current production league baseline is PPR / snake with the established starter and bench structure.
 - Companion manifest version remains `0.9.14`.
 - Companion permissions remain `storage` and `scripting` with the existing narrow ESPN / War Room host permissions.
-- Live disposable ESPN mocks have shown Pick History DOM to be the practical usable numbered-pick source when structured feeds are behind or empty.
-- Authoritative ESPN off-board numbered picks are preserved as external picks and count toward draft progress without being inserted into the canonical recommendation pool.
-- A complete unique configured numbered-pick ledger is terminal completion authority in the Companion; a later false UI-derived completion heartbeat cannot demote terminal completion.
+- Live disposable ESPN mocks established Pick History DOM as the practical usable numbered-pick source when structured feeds are behind or empty.
+- Authoritative ESPN off-board numbered picks count toward draft progress without being fabricated into the canonical recommendation pool.
+- A complete unique configured numbered-pick ledger is terminal completion authority; later false UI-derived completion heartbeats cannot demote it.
 - WR-002 Level-4 evidence confirmed sync health at Captured/Applied/Unmatched `5/5/0`, ACK lag `0`, no missing numbered picks, and no ledger conflicts.
+- Root `npm test` includes release, module, syntax, dataset, Companion, ESPN UX, browser, responsive, off-board, hardening, draft-awareness, scoring, invariant, persistence, recovery, and live-mock coverage.
 
 ## Workflow baseline
 
 - `.ai/shared/WORKFLOW.md` is canonical for team operation.
-- WR-004 requires explicit dependency classification, safe parallel execution, Parallel Work Waves, activation plans, and parallel PR safety.
-- WR-006 expands the former Research / Investigation role into **Research & Development (R&D)** while preserving evidence and handoff discipline.
-- R&D is authorized for external/technical research, forward-looking product and technical R&D, API/data/algorithm/integration evaluation, isolated proofs of concept, future architecture evaluation, product/reliability gap discovery, Roadmap Discovery support, and evidence-backed future milestone proposals.
-- R&D may run dependency-safe approved work in parallel with current milestone work, but it does not select the roadmap, modify production code without an approved implementation assignment, modify `.ai/shared/*`, merge production work, or audit its own production implementation.
-- WR-008 allows Roadmap Discovery to conclude no successor is justified and permits Manager-selected MAINTENANCE / STABLE mode with explicit reactivation triggers.
-- `.ai/research/` remains the R&D role-owned directory; no `.ai/rnd/` tree is used.
-- The Manager remains the normal authority for `.ai/shared/*` reconciliation.
-- `IDLE` is valid when no useful independent task exists.
+- WR-004 requires dependency classification, safe parallel execution, Parallel Work Waves, activation plans, and parallel PR safety.
+- WR-006 defines Research & Development (R&D) and preserves `.ai/research/` as its role directory.
+- WR-008 defines project maturity and MAINTENANCE / STABLE mode with explicit reactivation triggers.
+- Manager remains the normal authority for `.ai/shared/*`, roadmap selection, architecture, integration, and production task authorization.
+- `IDLE` is valid and desirable when no useful task exists.
 
 ## Task state
 
@@ -118,50 +128,47 @@ Status: COMPLETE
 ### WR-005 — ESPN Live Sync Closeout Reconciliation
 Role: Manager / Architect
 Status: COMPLETE
-Production behavior changed: NO
 
 ### WR-006 — Research & Development Role Expansion Workflow Update
 Role: Manager / Architect
 Status: COMPLETE
-Production behavior changed: NO
 
 ### WR-007 — Roadmap Discovery: Next Milestone Candidate Evaluation
 Role: Research & Development (R&D)
-Status: ASSIGNED / ACTIVE
-Task spec: `.ai/manager/WR-007.md`
-Starting SHA: `3e5cffb86c3ab6c55803d4f0f6a8a07218b81e0f`
-Production implementation authorized: NO
-Expected evidence: `.ai/research/ROADMAP_DISCOVERY.md` and updated `.ai/research/HANDOFF.md`
-Next gate: Manager review; successor milestone, refinement, or MAINTENANCE / STABLE decision
+Status: COMPLETE
+PR: #110
+Outcome: MAINTENANCE / STABLE recommended
+Production behavior changed: NO
 
 ### WR-008 — Project Maturity / Maintenance Mode Rule
 Role: Manager / Architect
 Status: COMPLETE
-Objective: make no-successor / maintenance-stable a valid evidence-backed Roadmap Discovery outcome and define reactivation triggers.
 Production behavior changed: NO
-New production milestone created: NO
+
+### WR-009 — Roadmap Discovery Decision / Maintenance-Stable Transition
+Role: Manager / Architect
+Status: COMPLETE
+Outcome: MAINTENANCE / STABLE accepted
+Production behavior changed: NO
+Production implementation authorized: NO
 
 ## Open non-blocking findings
 
-1. **Legacy `AGENTS.md` process wording.** `.ai/shared/*` is canonical; cleanup remains unassigned.
-2. **Diagnostics wording:** `Capture method: network` and large fetch candidate-shaped counts can be misleading when Pick History DOM is the actual ledger-eligible numbered-pick authority. This remains unassigned and non-blocking.
-3. **Synthetic-navigation actor identity remains unknown.** This is the verified attribution ceiling from WR-002, not a blocking defect or automatic trigger for more work.
+1. Legacy `AGENTS.md` process wording remains non-blocking; canonical `.ai/shared/*` wins.
+2. Diagnostics can over-emphasize `Capture method: network` / candidate-shaped fetch counts when Pick History DOM is the ledger-eligible source.
+3. Synthetic-navigation actor identity remains unknown at the verified WR-002 attribution ceiling.
 
-These observations are inputs to Roadmap Discovery but do not automatically outrank broader product/reliability opportunities or justify active development.
+These are maintenance observations only. Reopen them when a legitimate trigger makes them user-visible or operationally important.
 
 ## Current workload / parallelism state
 
-Active specialist tasks:
-- R&D — WR-007
+Active specialist tasks: none.
 
-Idle specialist roles:
-- Builder — no approved production task
-- Auditor — no approved audit task
+- Builder — IDLE
+- R&D — IDLE
+- Auditor — IDLE
 
-Dependency analysis:
-- WR-007 is INDEPENDENT of Builder and Auditor work
-- there is no second legitimate approved specialist task at this checkpoint
+Dependency analysis: no approved candidate task group exists.
+Parallel Work Wave: none.
 
-Parallel Work Wave: none. A wave is not created for a single active specialist task.
-
-Do not authorize production implementation until the Manager reviews WR-007 evidence and explicitly selects the next milestone/task structure. If no candidate justifies active development, MAINTENANCE / STABLE is an acceptable result.
+Do not activate specialist work until a legitimate maintenance/reactivation trigger is evaluated and converted by Manager into an approved WR task or milestone.
