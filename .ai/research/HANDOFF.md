@@ -13,7 +13,22 @@ Starting SHA: `3e5cffb86c3ab6c55803d4f0f6a8a07218b81e0f`
 Current discovery milestone: Roadmap Discovery — Next Milestone Selection
 
 Objective:
-Identify, compare, rank, and recommend the strongest legitimate next War Room milestone candidates using repository evidence, external research where useful, and bounded non-production R&D.
+Identify and rank the strongest legitimate next War Room milestone candidates using repository evidence, external research where useful, and bounded non-production R&D. Explicitly determine whether any candidate is strong enough to justify active development.
+
+Valid discovery outcomes:
+1. Recommend a bounded successor production milestone, with at least one credible runner-up; or
+2. Recommend **MAINTENANCE / STABLE** mode if no candidate clears the active-development threshold.
+
+If recommending maintenance/stable mode, identify the strongest/closest candidates, explain why they are not worth active development now, and state the concrete evidence or trigger that would justify revisiting them.
+
+Canonical maintenance reactivation triggers include:
+- verified defects
+- real-world user feedback
+- changed external dependencies
+- new product requirements
+- materially valuable opportunities
+- seasonal/data updates
+- previously unresolved risks becoming actionable
 
 Expected role-owned outputs:
 - `.ai/research/ROADMAP_DISCOVERY.md`
@@ -23,7 +38,7 @@ Production implementation authorization: NONE.
 
 R&D may use isolated/disposable experiments only if they materially reduce uncertainty and remain outside production paths. Do not modify production code or canonical `.ai/shared/*` state.
 
-Final roadmap selection remains Manager authority.
+Final roadmap selection or maintenance/stable decision remains Manager authority.
 
 ## Authorized R&D work
 
@@ -52,4 +67,4 @@ Manager-assigned R&D may include:
 
 ## Exact next action
 
-Refresh canonical repository state and execute WR-007 exactly as specified in `.ai/manager/WR-007.md`. Produce the evidence-backed candidate ranking and return the task to Manager / Architect for roadmap selection. Do not begin production implementation of any candidate.
+Refresh canonical repository state and execute the revised WR-007 exactly as specified in `.ai/manager/WR-007.md`. Produce the evidence-backed candidate ranking and return one of the two valid outcomes: a justified successor milestone or a justified MAINTENANCE / STABLE recommendation. Do not begin production implementation of any candidate.
