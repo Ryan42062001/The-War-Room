@@ -105,6 +105,39 @@ R&D retains the existing evidence, repository-ownership, research, and handoff r
 
 R&D experiments and proofs of concept should remain isolated/disposable unless the Manager explicitly promotes the result into an approved implementation task. Experimental evidence may inform architecture or roadmap decisions, but experimental code is not production merely because it works.
 
+## Project maturity and maintenance mode
+
+Roadmap Discovery is allowed to conclude that **no successor production milestone is currently justified**. Do not create features, milestones, experiments, or specialist work merely to maintain development activity.
+
+If the strongest available candidate does not provide enough user value, reliability leverage, evidence strength, or strategic benefit to justify its implementation/validation cost and risk, R&D should say so. In that case it may recommend that the Manager place the project into **MAINTENANCE / STABLE** mode instead of recommending a weak successor milestone.
+
+The Manager retains final authority to select a successor milestone, request more discovery, or enter MAINTENANCE / STABLE mode.
+
+### MAINTENANCE / STABLE mode
+
+In MAINTENANCE / STABLE mode:
+
+- no active production milestone is required
+- Builder, R&D, and Auditor may remain IDLE when no legitimate task exists
+- known non-blocking findings are not automatically promoted into work
+- speculative feature development is not used to keep the workflow active
+- the current verified production baseline, roadmap history, and canonical state remain preserved
+- narrowly scoped maintenance, validation, data refreshes, or investigation may still be assigned when a legitimate trigger exists
+
+Active development should resume only when one or more of these triggers becomes real and sufficiently important:
+
+- verified defects
+- real-world user feedback
+- changed external dependencies
+- new product requirements
+- materially valuable opportunities
+- seasonal/data updates
+- previously unresolved risks becoming actionable
+
+A trigger does not automatically authorize implementation. The Manager still evaluates scope, evidence, dependencies, architecture, validation burden, and parallelism before creating production tasks.
+
+When Roadmap Discovery recommends MAINTENANCE / STABLE mode, the evidence should identify the strongest considered candidates, explain why they did not clear the active-development threshold, and record the concrete reactivation triggers that would justify revisiting them.
+
 ## Parallel task orchestration
 
 Parallelism is encouraged when it increases useful throughput without creating unsafe dependencies or integration ambiguity. Do not unnecessarily serialize independent work, and do not create speculative work merely to keep workers busy.
