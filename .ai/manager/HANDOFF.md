@@ -2,38 +2,59 @@
 
 HANDOFF
 
-Task ID: WR-008
+Task ID: WR-009
 Role: Manager / Architect
 Status: COMPLETE
 
 Verified starting state:
 - Repository: `Ryan42062001/The-War-Room`
-- Canonical `main` before WR-008 edits: `2899b10ae6d621e41bf7db4f5cdc443bb09774bd`
-- Current discovery milestone: Roadmap Discovery — Next Milestone Selection — IN PROGRESS
-- Active specialist task: WR-007 assigned to Research & Development (R&D)
-- WR-007 originally required R&D to recommend a strongest successor milestone and runner-up
-- `.ai/shared/WORKFLOW.md` already prohibited speculative work merely for utilization, but it did not define a formal no-successor / maintenance-stable outcome
-- no production implementation was authorized
-- Builder: no active assignment
-- Auditor: no active assignment
+- Canonical `main` before R&D evidence merge: `076c05fd09c056c3491a5e9f2c185350f7acf68f`
+- WR-007 R&D branch head: `a0494f4e10710ae662f1424a64d6f3d236043558`
+- PR #110: open / mergeable at review time, base `main`, changed only `.ai/research/ROADMAP_DISCOVERY.md` and `.ai/research/HANDOFF.md`
+- PR #110 exact-head War Room CI #701 / run `34187916951`: completed / success
+- R&D handoff: WR-007 COMPLETE — MAINTENANCE / STABLE RECOMMENDED
+- production implementation authorization: NONE
 
-Current milestone:
-**Roadmap Discovery — Next Milestone Selection — IN PROGRESS**
+R&D evidence disposition:
+- Manager independently reviewed `.ai/research/ROADMAP_DISCOVERY.md` and `.ai/research/HANDOFF.md`
+- Manager spot-checked the repository claims that materially drive the recommendation:
+  - current production configuration remains PPR / snake with the established starter/bench model
+  - replacement demand in scoring uses the current QB/RB/WR/TE/FLEX structure
+  - ESPN synchronization preserves team-slot/team-id metadata suitable for future opponent-aware research
+  - ranking audit code records `SURVIVED` / `DRAFTED_BEFORE_NEXT` outcomes
+  - root test chain covers the major release, dataset, ESPN, recommendation, persistence, recovery, responsive, and live-mock surfaces
+- no stronger repository evidence was found that would justify immediate active development
 
-Active task:
-**WR-007 — Roadmap Discovery: Next Milestone Candidate Evaluation**
+PR #110 disposition:
+- ACCEPTED as research evidence
+- merged at `276daacdfa506bf62ccab26deabf3a36af21ba0e`
+- production behavior changed: NO
+- canonical `.ai/shared/*` was not modified by R&D
 
-Assigned role:
-Research & Development (R&D)
+Current project mode:
+**MAINTENANCE / STABLE**
 
-Project maturity rule:
-Roadmap Discovery may conclude that no successor production milestone is currently justified. Do not create features or milestones merely to maintain development activity.
+Roadmap Discovery disposition:
+**Roadmap Discovery — Next Milestone Selection — COMPLETE**
 
-Valid WR-007 outcomes now are:
-1. a justified, bounded successor milestone recommendation with a credible runner-up; or
-2. a justified recommendation that the Manager place the project into **MAINTENANCE / STABLE** mode because no candidate clears the active-development threshold.
+Manager decision:
+Accept the WR-007 recommendation. No successor production milestone is currently justified.
 
-Maintenance/stable reactivation triggers:
+Why:
+- no current verified blocking production defect exists in canonical state
+- no explicit new product requirement is active
+- no changed external dependency currently requires remediation
+- no independent evidence demonstrates enough recommendation/calibration lift to justify high-risk scoring changes
+- four serious future candidates were evaluated and none met the WR-008 demonstrated-need threshold
+- preserving the mature green baseline has higher present value than speculative feature creation
+
+Closest future candidates retained as trigger-driven proposals:
+1. ESPN Configuration Preflight / Settings Validation
+2. Recommendation Calibration Program
+3. Opponent-Aware Next-Turn Intelligence
+4. League-Aware Draft Profiles
+
+Reactivation triggers:
 - verified defects
 - real-world user feedback
 - changed external dependencies
@@ -42,42 +63,39 @@ Maintenance/stable reactivation triggers:
 - seasonal/data updates
 - previously unresolved risks becoming actionable
 
-The presence of a trigger does not automatically authorize production work; Manager still evaluates evidence, scope, dependencies, architecture, validation burden, and parallelism.
+Trigger-specific notes:
+- Configuration Preflight: revisit on a real settings mismatch or a live-proven stable independent ESPN settings source
+- Recommendation Calibration: revisit on sufficient independent draft outcomes or a repeatable recommendation error
+- Opponent-Aware Intelligence: revisit on user-reported wait/draft errors or a suitable calibration corpus
+- League-Aware Profiles: revisit on an explicit alternate-format requirement
 
 Work completed by Manager:
-- created `.ai/manager/WR-008.md`
-- added the project maturity / MAINTENANCE-STABLE rule to canonical `.ai/shared/WORKFLOW.md`
-- revised `.ai/manager/WR-007.md` so R&D is not forced to recommend a successor milestone
-- updated PROJECT_STATE and ROADMAP to record both valid discovery outcomes
-- updated the R&D assignment handoff so replacement R&D chats see the maintenance option and reactivation triggers
-- preserved production implementation authorization as NONE
-- reviewed DECISIONS.md and left it unchanged because this is workflow/governance mechanics, not a durable product architecture decision
+- independently reviewed WR-007 R&D evidence
+- verified PR #110 scope, mergeability, exact-head CI, and branch/base checkpoint
+- independently verified key repository claims supporting the maturity decision
+- merged research-only PR #110
+- created `.ai/manager/WR-009.md`
+- marked WR-007 complete
+- closed Roadmap Discovery
+- placed the project into MAINTENANCE / STABLE mode
+- updated canonical PROJECT_STATE and ROADMAP
+- preserved reactivation triggers and deferred candidate map
+- evaluated DECISIONS.md and intentionally left it unchanged because WR-008 already defines the governance rule; WR-009 applies it to current lifecycle state
+- evaluated parallelism and found no legitimate active specialist tasks
 
-Dependency / parallelism analysis:
-- WR-007 remains INDEPENDENT of Builder and Auditor work
-- Builder has no approved task
-- Auditor has no approved task
-- no second legitimate specialist assignment exists
-- Parallel Work Wave: none
-
-Decisions made:
-- no-successor is a valid Roadmap Discovery conclusion
-- MAINTENANCE / STABLE mode is preferred over a weak milestone when evidence does not justify active development
-- entering maintenance/stable mode requires Manager approval after evidence review; WR-008 itself does not place the project into maintenance
-- active development in maintenance should resume only from legitimate triggers, not worker availability
-- no new production milestone or specialist task was created by WR-008
-
-Files updated:
-- `.ai/manager/WR-008.md`
-- `.ai/shared/WORKFLOW.md`
-- `.ai/manager/WR-007.md`
+Files updated by Manager:
+- `.ai/manager/WR-009.md`
 - `.ai/shared/PROJECT_STATE.md`
 - `.ai/shared/ROADMAP.md`
-- `.ai/research/HANDOFF.md`
 - `.ai/manager/HANDOFF.md`
 
-Files reviewed but intentionally not changed:
+Research evidence merged:
+- `.ai/research/ROADMAP_DISCOVERY.md`
+- `.ai/research/HANDOFF.md`
+
+Files reviewed but intentionally unchanged:
 - `.ai/shared/DECISIONS.md`
+- `.ai/shared/WORKFLOW.md`
 
 Production behavior changed:
 NO
@@ -85,20 +103,29 @@ NO
 Production implementation authorized:
 NO
 
-Open findings:
-- legacy `AGENTS.md` process wording remains non-blocking and unassigned
-- diagnostics capture-source wording remains non-blocking and unassigned
-- synthetic-navigation actor identity remains at the verified unknown attribution ceiling
-- WR-007 should evaluate these as evidence inputs but may conclude none justify active development
+Open non-blocking findings:
+- legacy `AGENTS.md` process wording
+- diagnostics capture-source wording
+- synthetic-navigation actor identity remains unknown at the verified WR-002 ceiling
+
+These remain maintenance observations only; they do not activate work absent a legitimate trigger.
 
 Blocking issues:
-None for Roadmap Discovery.
+None.
+
+Dependency / parallelism analysis:
+- Builder: no approved task
+- R&D: WR-007 complete; no approved follow-on task
+- Auditor: no approved task
+- candidate task group: none
+- Parallel Work Wave: none
 
 Recommended next role:
-Research & Development (R&D)
+None. All specialist roles should remain IDLE until a legitimate maintenance/reactivation trigger is presented and Manager converts it into an approved WR task or milestone.
 
 Exact next action:
-R&D refreshes canonical state and executes the revised WR-007. It must evaluate 3–5 serious candidates and then return either a justified successor milestone recommendation or a justified MAINTENANCE / STABLE recommendation with concrete reactivation triggers. It must not implement production changes. Manager then independently reviews the evidence and makes the final roadmap/maturity decision.
+Operate the War Room in MAINTENANCE / STABLE mode. Do not activate Builder, R&D, or Auditor merely to maintain activity. On a legitimate trigger, refresh canonical state first, evaluate severity/value/dependencies, define the appropriate WR Task ID, and only then activate the necessary role(s).
 
 Checkpoint / SHA:
-WR-008 began from `2899b10ae6d621e41bf7db4f5cdc443bb09774bd`. Verify current `main` after these Manager-owned workflow commits for the exact canonical SHA.
+PR #110 evidence merge: `276daacdfa506bf62ccab26deabf3a36af21ba0e`.
+Verify current `main` after WR-009 Manager reconciliation commits for the exact final canonical SHA.
