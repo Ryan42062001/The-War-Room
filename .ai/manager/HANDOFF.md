@@ -2,68 +2,72 @@
 
 HANDOFF
 
-Task ID: WR-003
+Task ID: WR-004
 Role: Manager / Architect
 Status: COMPLETE
 
 Verified starting state:
 - Repository: `Ryan42062001/The-War-Room`
-- Current main at Manager refresh: `fb404e3c98bdde0732bba06e67abd5624b74d3b8`
-- Canonical shared state was stale and still described WR-003 as awaiting audit.
-- `.ai/auditor/HANDOFF.md` and `.ai/auditor/AUDIT.md` independently recorded WR-003 verdict PASS with no findings.
-- PR #108 audited head: `d9b537ddac665207ab61aed7527d7da986cc4815`
-- PR #108 was open, unmerged, and mergeable at the Manager merge check.
-- Actual PR diff remained limited to four WR-003 files: `background-entry.js`, `manifest.json`, `completion-state.test.cjs`, and `manifest.test.cjs`.
-- Exact audited-head War Room CI #636 / run `34175697251` was completed / success; `npm test`, resilience syntax, and backup/offline reload steps were all green.
-- Current main was 21 commits beyond the PR production base `a6506d5815e6ec9027f71da759fbe607a40b5020`; independent Manager comparison confirmed every divergent file was under `.ai/`, with no production overlap.
-- Builder handoff: no active assignment.
-- Research handoff: no active assignment.
+- Canonical `main` before WR-004 edits: `241fe2b4d9c4c9e81709a723f6f20e0d5b4e9a55`
+- `.ai/shared/WORKFLOW.md` was canonical but did not yet explicitly require parallelism evaluation, dependency classification, Parallel Work Waves, activation plans, or parallel PR safety
+- WR-002 is the sole unfinished ESPN Live Sync closeout task
+- `.ai/auditor/HANDOFF.md` records WR-002 as BLOCKED awaiting required Level-4 user-supplied live evidence
+- Builder handoff has no active assignment
+- Research handoff has no active assignment
 
 Current milestone:
 ESPN Live Sync reliability / live-validation closeout
 
 Milestone status:
-IN PROGRESS — WR-003 is complete; WR-002 remains the sole open milestone task and requires Level-4 validation.
+IN PROGRESS — WR-002 remains the only unfinished milestone task and is blocked on Level-4 user evidence.
 
 Work completed:
-- refreshed canonical repository state and all relevant role handoffs
-- independently verified Auditor PASS and evidence record
-- independently re-applied the production merge gate to PR #108
-- verified Task ID, target branch, scope, stale-branch relationship, exact audited head, exact-head CI, findings, and mergeability
-- merged PR #108 using expected head `d9b537ddac665207ab61aed7527d7da986cc4815`
-- WR-003 production merge SHA: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
-- reconciled canonical PROJECT_STATE and ROADMAP
-- recorded durable completion-authority decision WR-D004
-- closed WR-003 with no Builder remediation required
+- created Manager task specification `.ai/manager/WR-004.md`
+- upgraded `.ai/shared/WORKFLOW.md` with explicit safe-parallelism rules
+- added dependency classes: INDEPENDENT, SOFT DEPENDENCY, HARD DEPENDENCY
+- added `PW-###` Parallel Work Wave format and required per-task fields
+- added parallel PR safety requirements: separate branches, minimal overlap, starting SHA tracking, target advancement checks, deliberate merge order, and affected-test reruns
+- established that parallel workers do not independently update `.ai/shared/*`; Manager remains the normal canonical-state reconciliation authority
+- added mandatory `ACTIVATE NOW` plan to Manager responses
+- established useful throughput, not worker utilization, as workload priority
+- reconciled `.ai/shared/PROJECT_STATE.md` to record WR-004 and the current WR-002 evidence blocker
+
+Dependency analysis for current candidate work:
+- WR-002 Level-4 Auditor validation vs any Builder task: no approved Builder task exists; no parallel assignment created
+- WR-002 Level-4 Auditor validation vs any Research task: no approved Research task exists; no parallel assignment created
+- non-blocking AGENTS.md cleanup: not promoted to a task because it does not advance the active milestone and would be work invented for utilization
+- non-blocking diagnostics wording cleanup: not promoted to a task because no evidence currently makes it necessary for WR-002 closure
+
+Parallel Work Wave decision:
+- No `PW-###` created at this checkpoint because fewer than two useful independent approved specialist assignments exist.
 
 Decisions made:
-- WR-003 merge gate was satisfied; Auditor PASS was valid and independently corroborated
-- a complete unique configured numbered-pick ledger is terminal completion authority, while explicit reset/session changes remain able to clear state
-- Level 4 is not retroactively required for WR-003 because the independent audit found no material residual live/browser uncertainty for this internal state invariant
-- WR-002 remains separate and still requires its own Level-4 live validation
-- no new feature work is created merely to keep the workflow active
+- safe parallelism is now a required Manager evaluation, not an optional optimization
+- independent useful work should run concurrently when integration is manageable
+- blocked or idle roles should remain blocked/idle rather than receive speculative work
+- WR-002 remains the sole active specialist task; Builder and Research stay idle
+- no roadmap or durable architecture decision update was required because WR-004 changes workflow mechanics only
 
 Files updated:
+- `.ai/manager/WR-004.md`
+- `.ai/shared/WORKFLOW.md`
 - `.ai/shared/PROJECT_STATE.md`
-- `.ai/shared/ROADMAP.md`
-- `.ai/shared/DECISIONS.md`
 - `.ai/manager/HANDOFF.md`
 
 Open findings:
-- WR-002 — ESPN Synthetic Navigation Attribution Level 4 remains pending.
-- Legacy `AGENTS.md` process wording cleanup remains non-blocking because `.ai/shared/*` is canonical.
+- WR-002 still requires user-side Level-4 ESPN mock evidence before Auditor can issue its final verdict.
+- Legacy `AGENTS.md` process wording cleanup remains non-blocking.
 - diagnostics wording about network capture / candidate-shaped fetch observations remains non-blocking and unassigned.
 
 Blocking issues:
-- None for WR-003.
-- The active ESPN Live Sync closeout milestone cannot be declared complete until WR-002 reaches its required Level-4 completion gate.
+- The ESPN Live Sync closeout milestone cannot be completed until WR-002 receives and evaluates the required Level-4 evidence.
+- No Builder or Research blocker exists because neither role has a currently justified task.
 
 Recommended next role:
-Independent Auditor / QA
+Independent Auditor / QA, once the user supplies WR-002 evidence.
 
 Exact next action:
-Execute WR-002 exactly as specified in `.ai/manager/WR-002.md`: load the current integrated Companion build, run one short disposable ESPN mock, do not manually open Pick History, capture one automatic Players → Pick History → Players transition if it occurs, collect diagnostics, and issue the strongest defensible Level-4 attribution result without overclaiming. No Builder or Research work should start unless WR-002 produces evidence that requires it.
+User performs the WR-002 bounded disposable ESPN mock procedure from `.ai/auditor/HANDOFF.md` and supplies the copied sanitized diagnostics (plus a short recording if available) to the Auditor chat. Auditor then evaluates the Level-4 evidence and closes WR-002 with the strongest defensible result. Do not activate Builder or Research unless new evidence creates a real task.
 
 Checkpoint / SHA:
-WR-003 production merge checkpoint: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`.
-Canonical main includes Manager-owned state-maintenance commits after that production merge; verify current `main` at the next session refresh.
+WR-004 workflow changes were written after starting checkpoint `241fe2b4d9c4c9e81709a723f6f20e0d5b4e9a55`; verify current `main` after this handoff commit for the exact canonical SHA.
