@@ -9,87 +9,61 @@ Owner: Manager / Architect
 Repository: `Ryan42062001/The-War-Room`
 Branch: `main`
 
-Latest research evidence integration:
-- WR-007 R&D PR #110 merge SHA: `276daacdfa506bf62ccab26deabf3a36af21ba0e`
-- R&D head reviewed: `a0494f4e10710ae662f1424a64d6f3d236043558`
-- exact-head War Room CI #701 / run `34187916951`: completed / success
-- changed files: `.ai/research/ROADMAP_DISCOVERY.md`, `.ai/research/HANDOFF.md` only
-- production behavior changed: NO
-
 Latest production merge remains:
 - WR-003 / PR #108 merge SHA: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
+
+Latest completed discovery integration:
+- WR-007 R&D PR #110 merge SHA: `276daacdfa506bf62ccab26deabf3a36af21ba0e`
+- Roadmap Discovery concluded MAINTENANCE / STABLE and was accepted by Manager in WR-009
 
 ## Project mode
 
 ### MAINTENANCE / STABLE — ACTIVE
 
-Manager decision: WR-009 independently reviewed WR-007 Roadmap Discovery and accepted the R&D recommendation that no successor production milestone is currently justified.
+The War Room remains in maintenance/stable mode. No production milestone is active and no production implementation is currently authorized.
 
-Decision basis:
-- canonical state contains no current blocking production defect
-- no explicit new product requirement is active
-- no changed external dependency currently requires remediation
-- no independently demonstrated recommendation/calibration failure currently requires scoring changes
-- WR-007 evaluated four serious future candidates and none cleared the WR-008 active-development threshold
-- the current production baseline is mature and broadly regression-protected
+Maintenance/stable permits narrowly scoped trigger-driven investigation when a legitimate opportunity appears. The user has now raised a materially valuable ranking/data opportunity: determine which publicly available preseason rankings are most accurate and whether they can be ingested automatically.
 
-Maintenance/stable means:
-- no active production milestone is required
-- speculative feature development is not used to maintain activity
-- Builder, R&D, and Auditor may remain IDLE when no legitimate task exists
-- known non-blocking observations are not automatically promoted into work
-- current verified production behavior and roadmap history remain preserved
+## Active maintenance investigation
 
-## Roadmap Discovery disposition
+### WR-010 — Ranking Accuracy & Automated Ingestion Feasibility
+Role: Research & Development (R&D)
+Status: ASSIGNED / ACTIVE
+Task spec: `.ai/manager/WR-010.md`
+Starting SHA: `2cab85f981e06f5f19bd4a7631a28adf2f7ff351`
+Production implementation authorized: NO
 
-### Roadmap Discovery — Next Milestone Selection — COMPLETE
+Objective:
+- determine the strongest evidence-backed ranking source/cohort for the War Room's PPR redraft use case
+- compare single-expert, top-N accurate-expert consensus, recency/accuracy-weighted approaches, and the current FantasyPros PPR ECR baseline
+- evaluate supported automated ingestion routes, especially the official FantasyPros API
+- review access/license constraints separately from technical feasibility
+- propose a fail-closed importer design without modifying production
 
-Task:
-- WR-007 — Roadmap Discovery: Next Milestone Candidate Evaluation
-- Role: Research & Development (R&D)
-- Status: COMPLETE
-- Evidence: `.ai/research/ROADMAP_DISCOVERY.md`
-- Handoff: `.ai/research/HANDOFF.md`
-- PR: #110
-- Outcome: MAINTENANCE / STABLE recommended by R&D and accepted by Manager
+Manager preliminary evidence to be independently verified by R&D:
+- FantasyPros publishes preseason Draft Accuracy and a 2023–2025 multi-year leaderboard
+- public current results identify Jody Smith as the multi-year #1, while 2025 single-year #1 was Seth Miller
+- FantasyPros Draft Accuracy is scored in Half-PPR, so it does not by itself prove a single best PPR expert
+- FantasyPros now advertises an official API with PPR consensus/per-expert rankings, expert filtering, expert metadata, tiers, and player metadata
+- API production/access terms must be checked before any production proposal
 
-Closest future candidates retained as trigger-driven proposals, not active tasks:
-1. ESPN Configuration Preflight / Settings Validation
-2. Recommendation Calibration Program
-3. Opponent-Aware Next-Turn Intelligence
-4. League-Aware Draft Profiles
+## Reactivation trigger classification
 
-## Reactivation triggers
+WR-010 trigger:
+- materially valuable opportunity
+- possible seasonal/data-refresh improvement
 
-Active development should resume only when one or more legitimate triggers become real and sufficiently important:
-- verified defects
-- real-world user feedback
-- changed external dependencies
-- new product requirements
-- materially valuable opportunities
-- seasonal/data updates
-- previously unresolved risks becoming actionable
-
-A trigger does not automatically authorize implementation. Manager must still refresh evidence, define a WR Task ID/milestone, classify dependencies, select validation levels, and evaluate safe parallelism.
-
-Proposal-specific revisit conditions from WR-007:
-- Configuration Preflight: real settings mismatch or live-proven stable independent ESPN settings source
-- Recommendation Calibration: sufficient independent completed-draft outcomes or repeatable recommendation error
-- Opponent-Aware Intelligence: user-reported wait/draft errors or a suitable real/mock held-out calibration corpus
-- League-Aware Profiles: explicit Standard / Half-PPR / Superflex / keeper / salary-cap / alternate-format requirement
+This trigger authorizes research only. It does not automatically reopen active production development.
 
 ## Verified product baseline
 
 - Canonical player universe: 717 players, zero canonical duplicates in the established validation baseline.
 - FantasyPros 2026 PPR ECR is the ranking/value authority; ESPN rank/ADP is timing/market information.
 - Current production league baseline is PPR / snake with the established starter and bench structure.
+- Ranking source refresh is controlled and current production data is not replaced casually.
 - Companion manifest version remains `0.9.14`.
-- Companion permissions remain `storage` and `scripting` with the existing narrow ESPN / War Room host permissions.
-- Live disposable ESPN mocks established Pick History DOM as the practical usable numbered-pick source when structured feeds are behind or empty.
-- Authoritative ESPN off-board numbered picks count toward draft progress without being fabricated into the canonical recommendation pool.
-- A complete unique configured numbered-pick ledger is terminal completion authority; later false UI-derived completion heartbeats cannot demote it.
-- WR-002 Level-4 evidence confirmed sync health at Captured/Applied/Unmatched `5/5/0`, ACK lag `0`, no missing numbered picks, and no ledger conflicts.
-- Root `npm test` includes release, module, syntax, dataset, Companion, ESPN UX, browser, responsive, off-board, hardening, draft-awareness, scoring, invariant, persistence, recovery, and live-mock coverage.
+- Live ESPN sync/recovery closeout is complete with no blocking findings.
+- Root `npm test` covers release, module, syntax, dataset, Companion, ESPN UX, browser, responsive, off-board, hardening, draft-awareness, scoring, invariant, persistence, recovery, and live-mock surfaces.
 
 ## Workflow baseline
 
@@ -103,52 +77,42 @@ Proposal-specific revisit conditions from WR-007:
 ## Task state
 
 ### WR-001 — Repository Operating Contract Bootstrap
-Role: Manager / Architect
 Status: COMPLETE
 PR: #109
 Merge SHA: `2d9ccb2094776e25babb17c65b69390646853c37`
 
 ### WR-002 — ESPN Synthetic Navigation Attribution Level 4
-Role: Independent Auditor / QA
-Status: COMPLETE
-Validation: Level 4 VERIFIED / PASS
-Final attribution ceiling: `script-generated / other-programmatic / caller=unknown / hash=174uabd`
+Status: COMPLETE / PASS
 
 ### WR-003 — ESPN Completion-State Consistency
-Role: Implementation Engineer → Independent Auditor / QA → Manager integration
-Status: COMPLETE
+Status: COMPLETE / PASS / MERGED
 PR: #108
-Audit: PASS
 Merge SHA: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
 
 ### WR-004 — Parallel Task Orchestration Workflow Upgrade
-Role: Manager / Architect
 Status: COMPLETE
 
 ### WR-005 — ESPN Live Sync Closeout Reconciliation
-Role: Manager / Architect
 Status: COMPLETE
 
 ### WR-006 — Research & Development Role Expansion Workflow Update
-Role: Manager / Architect
 Status: COMPLETE
 
 ### WR-007 — Roadmap Discovery: Next Milestone Candidate Evaluation
-Role: Research & Development (R&D)
 Status: COMPLETE
 PR: #110
 Outcome: MAINTENANCE / STABLE recommended
-Production behavior changed: NO
 
 ### WR-008 — Project Maturity / Maintenance Mode Rule
-Role: Manager / Architect
 Status: COMPLETE
-Production behavior changed: NO
 
 ### WR-009 — Roadmap Discovery Decision / Maintenance-Stable Transition
-Role: Manager / Architect
 Status: COMPLETE
 Outcome: MAINTENANCE / STABLE accepted
+
+### WR-010 — Ranking Accuracy & Automated Ingestion Feasibility
+Role: Research & Development (R&D)
+Status: ASSIGNED / ACTIVE
 Production behavior changed: NO
 Production implementation authorized: NO
 
@@ -158,17 +122,21 @@ Production implementation authorized: NO
 2. Diagnostics can over-emphasize `Capture method: network` / candidate-shaped fetch counts when Pick History DOM is the ledger-eligible source.
 3. Synthetic-navigation actor identity remains unknown at the verified WR-002 attribution ceiling.
 
-These are maintenance observations only. Reopen them when a legitimate trigger makes them user-visible or operationally important.
+These remain maintenance observations and are unrelated to WR-010 unless new evidence changes that assessment.
 
 ## Current workload / parallelism state
 
-Active specialist tasks: none.
+Active specialist tasks:
+- R&D — WR-010
 
+Idle specialist roles:
 - Builder — IDLE
-- R&D — IDLE
 - Auditor — IDLE
 
-Dependency analysis: no approved candidate task group exists.
+Dependency analysis:
+- WR-010 is INDEPENDENT of Builder and Auditor work
+- no second legitimate approved task exists
+
 Parallel Work Wave: none.
 
-Do not activate specialist work until a legitimate maintenance/reactivation trigger is evaluated and converted by Manager into an approved WR task or milestone.
+Do not authorize ranking-source changes, automatic ingestion, scoring changes, or production API integration until Manager reviews completed WR-010 evidence and creates an explicit production task if warranted.
