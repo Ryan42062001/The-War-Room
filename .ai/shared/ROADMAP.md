@@ -20,10 +20,12 @@ Draft-day reliability over feature count:
 
 ### Ranking / dataset authority — COMPLETE baseline
 - FantasyPros 2026 PPR ECR established as value/ranking authority
+- Top-20 Experts PPR ECR is primary, broader ECR is controlled fallback
 - ESPN rank/ADP used for timing/market pressure
 - 717-player canonical universe established
 - zero canonical duplicates in validation baseline
 - authoritative board rebuild before saved-state restoration
+- SHA-256 source/runtime baseline validation requires explicit acceptance for ranking-source changes
 
 ### Draft-state / persistence hardening — COMPLETE
 - state invariants and deterministic draft simulations
@@ -59,45 +61,48 @@ Draft-day reliability over feature count:
 - Manager WR-009 accepted maintenance/stable
 - no speculative successor production milestone was created
 
+### Ranking Accuracy & Automated Ingestion Feasibility — R&D COMPLETE
+
+WR-010 evidence:
+- PR #111 merged as `ce2ab0b75fd88549fb8def0509de4b801faa0e1c`
+- R&D outcome: **R&D ONLY / MORE EVIDENCE NEEDED**
+- strongest future source hypothesis: rolling three-year Top-10 FantasyPros Draft Accuracy cohort using the selected experts' current PPR consensus
+- current production decision: retain the existing validated Top-20 FantasyPros PPR ECR baseline
+- official FantasyPros API: technically capable of filtered PPR consensus ingestion
+- direct browser-side API integration: rejected due credential exposure
+- preferred future technical direction: maintainer/local staged fetch with fail-closed validation, explicit promotion, and last-known-good fallback
+- provider compatibility for this draft-assistant use: NOT VERIFIED
+- material accuracy lift over current Top-20 baseline: UNPROVEN
+
+Manager WR-011 disposition:
+- accepted R&D evidence
+- did not promote a production milestone
+- did not change ranking authority
+- did not authorize API integration
+- returned the project to normal MAINTENANCE / STABLE with explicit evidence gates
+
 ## Current project mode
 
 ### MAINTENANCE / STABLE
 
-No active production milestone is assigned.
+No active production milestone or specialist task is assigned.
 
-A legitimate maintenance trigger may activate bounded investigation without reopening production development automatically.
+The ranking-automation opportunity remains a trigger-driven future path, not an active roadmap commitment.
 
-## Active maintenance-trigger investigation
+## Ranking-automation reactivation gates
 
-### WR-010 — Ranking Accuracy & Automated Ingestion Feasibility — IN PROGRESS
+A future ranking-ingestion task may be reconsidered when there is new evidence satisfying one or more of these gates:
 
-Assigned role: Research & Development (R&D)
-Starting SHA: `2cab85f981e06f5f19bd4a7631a28adf2f7ff351`
-Task spec: `.ai/manager/WR-010.md`
-Production implementation authorization: **NONE**
+1. **Provider compatibility** — written/provider-supported clarification that the intended private/personal War Room draft-assistant use and storage/display model is permitted.
+2. **Live API completeness** — credential-safe non-production test demonstrates complete fresh PPR data for the intended expert cohort under the intended access tier.
+3. **Material ranking lift** — lawful independent/held-out evidence shows rolling Top-5/Top-10 or another strategy materially improves on the current Top-20 PPR baseline, or the user explicitly values freshness automation enough to retain the current cohort policy while automating refresh.
+4. **Production promotion** — if gates justify implementation, Manager creates a separate production WR task; independent Auditor validation is required because ranking authority affects scoring/recommendations.
 
-Trigger:
-The user asked whether the War Room can identify the most accurate publicly available rankings and automatically pull them into the app. This is a materially valuable opportunity and possible seasonal/data-refresh improvement.
+These gates are not active assignments. No API key should be pasted into chat or committed to the repository.
 
-Research objectives:
-- identify the strongest historical preseason ranking source/cohort for the War Room's PPR use case
-- compare single expert vs top-N accurate-expert consensus vs weighted approaches vs current broad PPR ECR
-- account explicitly for the fact that FantasyPros Draft Accuracy is measured in Half-PPR while the War Room uses PPR
-- evaluate the official FantasyPros API and any other supported machine-readable routes
-- separate technical feasibility from access/license permission
-- design a fail-closed ingestion/validation/rollback approach without implementing it
-- determine whether any proposed change is materially better than the current ranking baseline
+## General maintenance reactivation triggers
 
-Expected outcomes:
-- READY FOR MANAGER MILESTONE CONSIDERATION
-- R&D ONLY / MORE EVIDENCE NEEDED
-- DO NOT PURSUE
-
-Only Manager may promote WR-010 into a production milestone after evidence review.
-
-## Maintenance reactivation triggers
-
-Active development may be reconsidered when one or more of the following becomes real and sufficiently important:
+Active development may also be reconsidered when one or more of the canonical triggers becomes real and sufficiently important:
 - verified defects
 - real-world user feedback
 - changed external dependencies
@@ -116,8 +121,6 @@ These remain proposals, not active roadmap commitments:
 3. Opponent-Aware Next-Turn Intelligence
 4. League-Aware Draft Profiles
 
-WR-010 is a new trigger-driven ranking/data investigation and does not promote any of those proposals.
-
 ## Existing maintenance observations
 
 Non-blocking:
@@ -130,13 +133,9 @@ Non-blocking:
 No Parallel Work Wave is active.
 
 Current roles:
-- Manager: IDLE after assignment / awaiting evidence
+- Manager: IDLE except for trigger evaluation / canonical reconciliation when needed
 - Builder: IDLE
-- R&D: ACTIVE — WR-010
+- R&D: IDLE
 - Auditor: IDLE
-
-Dependency classification:
-- WR-010 is INDEPENDENT
-- no second legitimate approved specialist task exists
 
 Do not create parallel work until at least two legitimate independently executable approved tasks exist.
