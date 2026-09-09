@@ -76,12 +76,18 @@ try {
   // Draft Setup is expanded before progress and its saved values survive reload.
   const setup = page.locator('.draft-command-setup-disclosure');
   assert.equal(await setup.evaluate(element => element.open), true, 'Draft Setup must be expanded before meaningful progress');
-  await page.evaluate(() => {
+  const setupSaved = await page.evaluate(() => {
     clearDraftStateFromBoard();
     WarRoomCommandBarFixes.applySettings({teams:12, slot:7, rounds:18}, false);
-    if (typeof saveDraftState === 'function') saveDraftState();
+    if (typeof _saveTimer !== 'undefined' && _saveTimer) {
+      clearTimeout(_saveTimer);
+      _saveTimer = null;
+    }
+    const saved = typeof saveState === 'function' ? saveState() : false;
     WarRoomLayoutEfficiency.refresh();
+    return saved;
   });
+  assert.equal(setupSaved, true, 'Draft Setup settings must save through the canonical persistence checkpoint');
   await page.waitForFunction(() => document.querySelector('.draft-command-setup-summary-value')?.textContent === '12 teams · Pick 7 · 18 rounds');
   await page.reload({waitUntil:'load'});
   await page.waitForSelector('.draft-command-setup-disclosure');
