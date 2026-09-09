@@ -13,23 +13,12 @@
     display: none;
   }
 
-  body[data-board-view="position"] .position-board-header {
-    align-items: center;
-    margin-bottom: 5px;
-    padding-bottom: 4px;
-  }
-
-  body[data-board-view="position"] .position-board-header > p {
+  /* The command surface already establishes draft state, recommendation and
+     pressure. Remove duplicate empty/heading chrome so actionable players
+     arrive in the opening phone viewport. Meaningful awareness remains. */
+  body[data-board-view="position"] .position-board-header,
+  body[data-board-view="position"] #draft-awareness-strip:not(.has-targets):not(.has-alerts) {
     display: none;
-  }
-
-  body[data-board-view="position"] .position-board-header .summary-eyebrow {
-    font-size: .48rem;
-  }
-
-  body[data-board-view="position"] #position-board-title {
-    margin: 0;
-    font-size: 1rem;
   }
 
   body[data-board-view="position"] #position-decision-strip {
@@ -38,50 +27,17 @@
 
   body[data-board-view="position"] .phone-decision-nav {
     display: block;
-    margin: 4px 0 7px;
-    padding: 7px;
+    margin: 3px 0 6px;
+    padding: 5px;
     border: 1px solid rgba(240,199,94,.22);
     border-radius: 9px;
     background: linear-gradient(180deg,rgba(240,199,94,.055),rgba(255,255,255,.018));
     scroll-margin-top: 8px;
   }
 
-  .phone-decision-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-
-  .phone-decision-heading > div {
-    min-width: 0;
-  }
-
-  .phone-decision-heading strong {
-    display: block;
-    overflow: hidden;
-    color: #f0eee8;
-    font-size: .82rem;
-    line-height: 1.1;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .phone-decision-eyebrow {
-    display: block;
-    margin-bottom: 2px;
-    color: #c9aa56;
-    font-size: .43rem;
-    font-weight: 900;
-    letter-spacing: .09em;
-  }
-
-  .phone-position-count {
-    flex: 0 0 auto;
-    color: #9ba59f;
-    font-size: .52rem;
-    font-weight: 800;
+  .phone-decision-heading,
+  .phone-decision-help {
+    display: none;
   }
 
   .phone-position-tabs {
@@ -122,13 +78,6 @@
     font-size: .5rem;
   }
 
-  .phone-decision-help {
-    margin: 5px 1px 0;
-    color: #89938d;
-    font-size: .49rem;
-    line-height: 1.25;
-  }
-
   body[data-board-view="position"] #position-tier-grid > .position-column {
     display: none !important;
   }
@@ -147,9 +96,9 @@
   }
 
   body[data-board-view="position"] .position-column.phone-position-active .position-column-header {
-    min-height: 42px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    min-height: 38px;
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 
   body[data-board-view="position"] .position-column.phone-position-active .position-tier-block > summary {
