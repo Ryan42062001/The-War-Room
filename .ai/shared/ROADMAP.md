@@ -1,51 +1,67 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — LAYOUT PR RECONCILIATION + PARALLEL SHADOW-MODEL R&D
+Status: ACTIVE DEVELOPMENT — WR-018 MANAGER REVIEW PENDING
 Last updated: 2026-09-09
 Owner: Manager / Architect
 
-## Current production milestone
-### Draft-Day Layout Efficiency — FINAL RECONCILIATION BEFORE AUDIT
+## Completed production milestone
+### Draft-Day Layout Efficiency — COMPLETE
 
 #### WR-016 — Draft-Day Layout Efficiency Implementation
 Assigned role: Implementation Engineer
-Status: ACTIVE — FINAL PR RECONCILIATION
+Status: COMPLETE / MERGED
 PR: #114 — `WR-016 Improve draft-day layout efficiency`
-Prior head: `1ac362be96909bc638b06a49702b31167e2e2a09`
-Prior CI: War Room run #811 SUCCESS against prior main checkpoint.
+Audited final head: `5636bd75aa4be34bdbdfc5e459df44283c8f2483`
+Independent audit: WR-019 PASS WITH NON-BLOCKING FINDINGS
+Merge commit: `dfe5476883d700b9281fb57f1c710daa7758492a`
+Post-merge War Room CI #862 / `34370139838`: SUCCESS
+GitHub Pages deployment #665 / `34370138865`: SUCCESS
 
-Manager status reconciliation advanced canonical main after that successful run. A fresh GitHub check subsequently reported PR #114 as not mergeable. Builder must reconcile latest main into the PR branch, obtain a new final head, and rerun final integration CI before audit.
+Outcome:
+- bounded layout-efficiency improvements shipped
+- persistent chrome competition reduced
+- Manage progressive disclosure added for low-frequency/destructive actions
+- Draft Setup progressively disclosed after meaningful progress
+- stressed tablet/desktop geometry improved
+- zero required-matrix horizontal overflow/actionable occlusion/focus obstruction in automated validation
+- ranking/scoring/recommendation/state/persistence/ESPN authority unchanged
 
 #### WR-019 — Independent Release Audit
 Assigned role: Independent Auditor / QA
-Status: BLOCKED — WAITING WR-016 FINAL PR SYNC
-Task: `.ai/manager/WR-019.md`
+Status: COMPLETE
+Disposition: PASS WITH NON-BLOCKING FINDINGS
+Blocking findings: NONE
+Evidence: `.ai/auditor/WR-019_LAYOUT_RELEASE_AUDIT.md`
 
-Audit begins only after PR #114 is mergeable against current main with green final CI.
-
-## Active parallel R&D
+## Active Manager review
 ### WR-018 — Open-Data Shadow Ranking Model Experiment
 Assigned role: Research & Development (R&D)
-Status: ACTIVE — EXECUTION NEEDS REACTIVATION
-Task: `.ai/manager/WR-018.md`
+Status: COMPLETE — MANAGER DISPOSITION PENDING
+Research PR: #115
+Exact research head: `0c2f7e9e307ff30293ff96ab66fb0b1a72c8b051`
+Exact-head War Room CI #858 / `34367526671`: SUCCESS
+Primary result: `MORE EVIDENCE NEEDED`
 Production implementation authorization: NONE
 
-Latest Manager status check found no WR-018 branch or PR yet. R&D should resume the assigned non-production experiment.
+Current evidence does not justify replacing FantasyPros or promoting the shadow model into production. The strongest possible successor hypothesis is a narrower research validation adding rights-cleared point-in-time rookie/age/draft-capital/team-role/availability context while preserving rolling-origin holdouts and the naive comparator.
+
+Manager must decide whether that successor research is worth the cost or whether WR-018 should close without further immediate work.
 
 ## Parallel Work Wave
-### PW-002 — ACTIVE
+### PW-002 — ACTIVE / CLOSEOUT PENDING
+
+Completed:
+- Builder: WR-016 COMPLETE / MERGED
+- Auditor: WR-019 COMPLETE / PASS WITH NON-BLOCKING FINDINGS
+
+Pending Manager action:
+- WR-018 evidence disposition / PR #115 integration
 
 Current roles:
-- Builder: ACTIVE — WR-016 final reconciliation
-- R&D: ACTIVE — WR-018
-- Auditor: BLOCKED — WR-019
-- Manager: IDLE after reconciliation
-
-Dependencies:
-- WR-016 final reconciliation -> WR-019: HARD
-- WR-019 -> Manager merge decision: HARD
-- WR-018 -> any ranking-model successor: HARD on Manager review
-- WR-018 remains independent of the layout lane
+- Manager: ACTIVE — WR-018 review
+- Builder: IDLE
+- R&D: IDLE
+- Auditor: IDLE
 
 ## Ranking authority remains unchanged
 - FantasyPros Top-20 Experts 2026 PPR ECR primary
