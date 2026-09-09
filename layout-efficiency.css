@@ -1,0 +1,589 @@
+/* =========================================================
+   WR-016 DRAFT-DAY LAYOUT EFFICIENCY
+   Coordinates persistent chrome without changing draft logic.
+   ========================================================= */
+
+header {
+  position: static;
+  min-height: 0;
+}
+
+.header-inner {
+  min-height: 64px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.draft-control-shell {
+  position: sticky;
+  top: 0;
+  z-index: 72;
+  width: 100%;
+  border-bottom: 1px solid rgba(255,255,255,.055);
+  background: rgba(17,18,20,.975);
+  box-shadow: 0 8px 20px rgba(0,0,0,.16);
+  backdrop-filter: blur(12px);
+}
+
+.draft-control-shell > .toolbar,
+.draft-control-shell > .statusbar,
+.draft-control-shell > #tier-nav,
+.draft-control-shell > #draft-command-bar {
+  position: static !important;
+  top: auto !important;
+}
+
+.draft-control-shell > .toolbar {
+  z-index: auto;
+  min-height: 44px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.position-filter-strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.draft-control-shell > .statusbar {
+  z-index: auto;
+  min-height: 40px;
+  padding: 5px 12px;
+  gap: 7px;
+  flex-wrap: nowrap;
+  background: rgba(20,22,24,.98);
+}
+
+.statusbar #remaining-status {
+  flex: 1 1 auto;
+  min-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusbar #save-indicator:empty {
+  display: none;
+}
+
+.draft-session-control {
+  min-width: 0;
+  flex: 0 1 auto;
+  flex-wrap: nowrap;
+}
+
+.draft-session-control select {
+  min-width: 96px;
+  max-width: 190px;
+}
+
+.mark-mode-control {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.draft-manage {
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.draft-manage-summary {
+  display: flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 9px;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 6px;
+  color: #c6cec9;
+  background: rgba(255,255,255,.035);
+  font-size: .58rem;
+  font-weight: 900;
+  letter-spacing: .04em;
+  cursor: pointer;
+  list-style: none;
+}
+
+.draft-manage-summary::-webkit-details-marker {
+  display: none;
+}
+
+.draft-manage-summary::after {
+  content: "▾";
+  margin-left: 6px;
+  color: #8f9993;
+  font-size: .62rem;
+}
+
+.draft-manage[open] .draft-manage-summary {
+  border-color: rgba(240,199,94,.42);
+  color: #f1d27b;
+}
+
+.draft-manage[open] .draft-manage-summary::after {
+  content: "▴";
+}
+
+.draft-manage-summary:focus-visible {
+  outline: 2px solid #f0c75e;
+  outline-offset: 2px;
+}
+
+.draft-manage-actions {
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  z-index: 90;
+  display: grid;
+  grid-template-columns: repeat(2,minmax(120px,1fr));
+  gap: 5px;
+  width: min(330px,calc(100vw - 16px));
+  padding: 8px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 9px;
+  background: #17191b;
+  box-shadow: 0 16px 34px rgba(0,0,0,.42);
+}
+
+.draft-manage-actions > button {
+  width: 100%;
+  min-height: 32px;
+  margin: 0;
+  justify-content: center;
+  white-space: normal;
+}
+
+.draft-control-shell > #draft-command-bar {
+  width: min(1320px,calc(100% - 16px));
+  margin: 6px auto 5px;
+  z-index: auto;
+  backdrop-filter: none;
+}
+
+.draft-control-shell > #tier-nav {
+  z-index: auto;
+  margin-top: 0;
+}
+
+.draft-command-setup-disclosure {
+  min-width: 0;
+  border-right: 1px solid rgba(255,255,255,.065);
+  background: rgba(255,255,255,.018);
+}
+
+.draft-command-setup-summary {
+  display: flex;
+  min-height: 24px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 3px 8px;
+  color: #9ba8a0;
+  font-size: .44rem;
+  font-weight: 900;
+  letter-spacing: .035em;
+  cursor: pointer;
+  list-style: none;
+}
+
+.draft-command-setup-summary::-webkit-details-marker {
+  display: none;
+}
+
+.draft-command-setup-summary:focus-visible {
+  outline: 2px solid #f0c75e;
+  outline-offset: -2px;
+}
+
+.draft-command-setup-summary-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.draft-command-setup-edit {
+  flex: 0 0 auto;
+  color: #e0c46f;
+  font-size: .43rem;
+  text-transform: uppercase;
+}
+
+.draft-command-setup-disclosure:not([open]) {
+  display: flex;
+  align-items: stretch;
+}
+
+.draft-command-setup-disclosure:not([open]) > .draft-command-setup-summary {
+  width: 100%;
+  min-height: 100%;
+}
+
+.draft-command-setup-disclosure[open] > .draft-command-setup-summary {
+  border-bottom: 1px solid rgba(255,255,255,.055);
+}
+
+.draft-command-setup-disclosure .draft-command-setup {
+  border-right: 0;
+  background: transparent;
+}
+
+.draft-target-star {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.draft-command-pressure {
+  min-height: 28px;
+}
+
+@media (max-width: 1180px) and (min-width: 901px) {
+  .draft-control-shell > .toolbar {
+    flex-wrap: nowrap;
+  }
+
+  .position-filter-strip {
+    gap: 3px;
+  }
+
+  .toolbar #searchBox {
+    width: 112px;
+    min-width: 96px;
+  }
+}
+
+@media (max-width: 900px) and (min-width: 769px) {
+  .draft-control-shell > .toolbar {
+    flex-wrap: nowrap;
+    gap: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .board-view-btn,
+  .toolbar .filterbtn,
+  .toolbar .myteam-toggle {
+    min-height: 32px;
+  }
+
+  .toolbar #searchBox {
+    width: 104px;
+    min-width: 90px;
+    height: 34px;
+  }
+
+  .position-filter-strip {
+    flex: 1 1 auto;
+    gap: 2px;
+  }
+
+  .position-filter-strip .filterbtn {
+    min-width: 34px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .draft-control-shell > .statusbar {
+    min-height: 42px;
+    padding-left: 8px;
+    padding-right: 8px;
+    gap: 5px;
+  }
+
+  .statusbar #remaining-status {
+    min-width: 90px;
+    font-size: .56rem;
+  }
+
+  .draft-session-control label,
+  .mark-mode-control > span,
+  .mark-mode-shortcut {
+    display: none;
+  }
+
+  .draft-session-control select {
+    width: 110px;
+    min-width: 90px;
+    max-width: 120px;
+    min-height: 32px;
+  }
+
+  .mark-mode-btn,
+  .draft-manage-summary {
+    min-height: 32px;
+  }
+
+  body[data-board-view="position"] #draft-command-bar,
+  body[data-board-view="position"] #draft-command-bar.is-on-clock {
+    grid-template-columns: minmax(128px,.7fr) minmax(0,1.5fr) minmax(154px,.72fr) auto;
+  }
+
+  .draft-command-pressure-wrap {
+    grid-column: 1 / 3;
+  }
+
+  .draft-command-setup-disclosure {
+    grid-column: 3;
+    grid-row: 1 / 3;
+  }
+
+  .draft-command-actions {
+    grid-column: 4;
+    grid-row: 1 / 3;
+  }
+
+  .draft-command-pressure {
+    min-height: 34px;
+  }
+
+  .draft-command-setup-fields input {
+    min-height: 34px;
+    height: 34px;
+  }
+
+  .draft-target-star {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .draft-control-shell {
+    position: static;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .header-inner {
+    min-height: 54px;
+    padding: 6px 9px;
+  }
+
+  .brand-kicker,
+  .steelers-accent,
+  .header-meta > p {
+    display: none;
+  }
+
+  .brand-copy h1 {
+    font-size: 1.04rem;
+  }
+
+  .header-meta {
+    margin-left: auto;
+  }
+
+  .draft-control-shell > .toolbar {
+    gap: 4px;
+    padding: 5px 6px;
+  }
+
+  .draft-control-shell > .statusbar {
+    padding: 5px 7px;
+    gap: 5px;
+  }
+
+  .draft-control-shell > #draft-command-bar {
+    width: calc(100% - 12px);
+    margin: 5px auto;
+  }
+
+  .board-view-btn,
+  .toolbar .filterbtn,
+  .toolbar .myteam-toggle,
+  .mark-mode-btn,
+  .draft-manage-summary,
+  #tier-nav button {
+    min-height: 34px;
+  }
+
+  .toolbar #searchBox {
+    min-height: 34px;
+  }
+
+  .draft-command-pressure {
+    min-height: 34px;
+  }
+
+  .draft-command-setup-fields input {
+    min-height: 36px;
+    height: 36px;
+  }
+
+  .draft-target-star {
+    width: 32px;
+    height: 32px;
+  }
+
+  .draft-command-setup-disclosure {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    border-top: 1px solid rgba(255,255,255,.06);
+    border-right: 0;
+  }
+
+  .draft-command-setup-disclosure .draft-command-setup {
+    grid-column: auto;
+    grid-row: auto;
+    border-top: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-inner {
+    min-height: 48px;
+  }
+
+  .header-badges {
+    gap: 3px;
+  }
+
+  .header-badges > * {
+    max-width: 150px;
+  }
+
+  .draft-control-shell > .toolbar {
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .board-view-toggle {
+    order: 1;
+    flex: 0 0 auto;
+  }
+
+  .board-view-btn {
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: .58rem;
+  }
+
+  .toolbar .myteam-toggle {
+    order: 2;
+    margin-left: auto;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .toolbar #searchBox {
+    order: 3;
+    flex: 0 0 104px;
+    width: 104px;
+    min-width: 104px;
+  }
+
+  .position-filter-strip {
+    order: 4;
+    flex: 1 1 150px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+  }
+
+  .position-filter-strip .filterbtn {
+    flex: 0 0 auto;
+    min-width: 34px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .draft-control-shell > .statusbar {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) auto auto;
+    align-items: center;
+    min-height: 0;
+    padding: 5px 7px 6px;
+  }
+
+  .statusbar #remaining-status {
+    grid-column: 1 / -1;
+    min-width: 0;
+    font-size: .55rem;
+  }
+
+  .statusbar #save-indicator {
+    grid-column: 1 / -1;
+  }
+
+  .draft-session-control {
+    grid-column: 1;
+    min-width: 0;
+  }
+
+  .draft-session-control label,
+  .mark-mode-control > span,
+  .mark-mode-shortcut {
+    display: none;
+  }
+
+  .draft-session-control select {
+    width: 100%;
+    min-width: 0;
+    max-width: 130px;
+    min-height: 34px;
+  }
+
+  .mark-mode-control {
+    grid-column: 2;
+  }
+
+  .draft-manage {
+    grid-column: 3;
+    margin-left: 0;
+  }
+
+  .draft-manage-actions {
+    grid-template-columns: 1fr;
+    max-height: min(420px,70vh);
+    overflow-y: auto;
+  }
+
+  .draft-manage-actions > button {
+    min-height: 36px;
+  }
+
+  .draft-command-setup-summary {
+    min-height: 30px;
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+}
+
+@media (max-width: 360px) {
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    font-size: .75rem;
+  }
+
+  .brand-copy h1 {
+    font-size: .94rem;
+  }
+
+  .board-view-btn {
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: .54rem;
+  }
+
+  .toolbar .myteam-toggle {
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: .54rem;
+  }
+
+  .toolbar #searchBox {
+    flex-basis: 96px;
+    width: 96px;
+    min-width: 96px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .draft-manage-actions,
+  .draft-command-setup-disclosure {
+    scroll-behavior: auto;
+  }
+}
