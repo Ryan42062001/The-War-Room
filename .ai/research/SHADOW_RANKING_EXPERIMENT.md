@@ -134,7 +134,8 @@ A clean 2026 research snapshot was successfully created before the first 2026 re
 Persisted snapshot metadata:
 - source release: nflverse `stats_player`, release ID `236670328`;
 - release updated at `2026-08-26T07:35:58Z`;
-- frozen generation time: before `2026-09-10T00:20:00Z` kickoff deadline;
+- generation timestamp: `2026-09-09T14:53:48.967586+00:00` (10:53:48 AM ET);
+- first-kickoff deadline: `2026-09-10T00:20:00+00:00` (8:20 PM ET);
 - rows: 343 returning QB/RB/WR/TE players;
 - prediction columns: naive previous-season PPR/game, ridge shadow PPR/game, gradient-boost shadow PPR/game;
 - exact artifact: `.ai/research/generated/SHADOW_RANKING_2026_SNAPSHOT.csv`.
@@ -145,7 +146,6 @@ This snapshot is research-only and is not consumed by any production file.
 
 ## Reproducibility evidence
 
-Research workflow: `.github/workflows/wr018-experiment.yml`  
 Runner: `.ai/research/wr018_shadow_experiment.py`  
 Pinned dependencies: `.ai/research/wr018_requirements.txt`
 
@@ -154,6 +154,8 @@ Successful deterministic experiment evidence:
 - Persist/freeze rerun `34366601009`: experiment and generated-output freeze steps SUCCESS.
 - Artifact from first run: `wr018-shadow-results`, artifact ID `10109963499`, ZIP SHA-256 `0654cfe40e88ca73119a7d5698321c56d3a47d2765f4e747d1ca321f577c6b87`.
 - Official source assets are recorded with GitHub asset IDs, update times, provided digests, and independently computed matching SHA-256 values in `.ai/research/generated/SHADOW_RANKING_ASSET_MANIFEST.json`.
+
+A temporary branch-scoped Actions workflow was used only to execute the internet-dependent research run and persist the frozen outputs. Exact-head PR CI then correctly exposed the repository invariant that only `.github/workflows/ci.yml` may be tracked. The temporary WR-018 workflow was removed from the final diff before Manager review; the reproducible Python runner/config and frozen result artifacts remain.
 
 No large raw nflverse datasets are committed.
 
