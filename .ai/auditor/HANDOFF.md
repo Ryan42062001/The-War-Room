@@ -4,7 +4,7 @@ HANDOFF
 
 Task ID: WR-019
 Role: Independent Auditor / QA
-Status: ASSIGNED — ACTIVE
+Status: ASSIGNED / BLOCKED — WAITING FINAL PR RECONCILIATION
 Parallel Work Wave: PW-002
 
 ## Current assignment
@@ -14,29 +14,25 @@ Manager task spec: `.ai/manager/WR-019.md`
 Production PR under audit: #114 — `WR-016 Improve draft-day layout efficiency`
 Production implementation authorization for Auditor: NONE
 
-## Verified assignment context
-- canonical `main` before this audit assignment: `76357a80b0dfc4752438cfdf8eb74012ec342236`
-- WR-016 PR head: `1ac362be96909bc638b06a49702b31167e2e2a09`
-- PR reports generated merge commit: `141ee9515719fc0512e7f6b3273a67ad8f27af33`
-- War Room CI run #811 / `34346917355`: SUCCESS
-- Builder handoff: IMPLEMENTATION COMPLETE / PR #114 OPEN
-- Builder has not merged the PR
-- WR-016 Manager task requires independent audit before merge
+## Current block
+Do not begin the final audit yet.
 
-## Required outcome
-Independently audit PR #114 exactly as specified in `.ai/manager/WR-019.md` and return PASS, PASS WITH NON-BLOCKING FINDINGS, or FAIL.
+Builder previously completed PR #114 at head `1ac362be96909bc638b06a49702b31167e2e2a09` with green War Room CI run #811 against the prior main checkpoint `76357a80b0dfc4752438cfdf8eb74012ec342236`.
 
-Audit the actual PR head/diff and independently validate the important responsive, sticky/focus, Manage disclosure, Draft Setup, target ergonomics, My Draft, command-state, recovery/maintenance reachability, and non-UI regression claims. Do not rely only on Builder evidence.
+Manager then advanced canonical `main` with WR-019 assignment/status reconciliation. A fresh GitHub PR check reported PR #114 `mergeable: false` against the advanced main.
+
+Builder must first reconcile the PR branch with current canonical `main`, produce the final head, and obtain green final PR-head/merge-ref CI.
+
+This is an integration/staleness precondition, not an Auditor finding.
+
+## Exact next action when unblocked
+Once Manager/Builder confirms PR #114 is mergeable on current main with green final CI, execute WR-019 exactly as specified in `.ai/manager/WR-019.md` and return PASS, PASS WITH NON-BLOCKING FINDINGS, or FAIL.
 
 ## Authority limits
+- do not audit the stale head as final release evidence
 - do not modify production code
 - do not merge PR #114
 - do not update `.ai/shared/*`
-- do not audit WR-018 ranking research as part of this task
+- do not audit WR-018 ranking research under this task
 
-## Required output
-Prefer:
-- `.ai/auditor/WR-019_LAYOUT_RELEASE_AUDIT.md`
-- updated `.ai/auditor/HANDOFF.md`
-
-Recommended next role on completion: Manager / Architect.
+Recommended next role while blocked: Implementation Engineer / Builder for WR-016 final reconciliation.
