@@ -59,15 +59,28 @@ try {
 
   await page.waitForFunction(() => document.body.getAttribute('data-draft-command-mode') === 'on-clock');
   await page.waitForSelector('.draft-command-alternatives');
-  const onClock = await page.evaluate(() => ({
-    mode: document.body.getAttribute('data-draft-command-mode'),
-    label: document.querySelector('.draft-command-status .draft-command-mode')?.textContent.trim(),
-    eyebrow: document.querySelector('.draft-command-recommendation > .draft-command-eyebrow')?.textContent.trim(),
-    alternatives: document.querySelectorAll('.draft-command-alternatives b').length,
-    height: document.getElementById('draft-command-bar').getBoundingClientRect().height,
-    drafted: [...document.querySelectorAll('tr.draftrow.drafted-mine, tr.draftrow.drafted-other')]
-      .map(row => row.getAttribute('data-name'))
-  }));
+  const onClock = await page.evaluate(() => {
+    const bar = document.getElementById('draft-command-bar');
+    const layoutLink = document.getElementById('war-room-layout-efficiency-styles');
+    const style = getComputedStyle(bar);
+    return {
+      mode: document.body.getAttribute('data-draft-command-mode'),
+      boardView: document.body.getAttribute('data-board-view'),
+      label: document.querySelector('.draft-command-status .draft-command-mode')?.textContent.trim(),
+      eyebrow: document.querySelector('.draft-command-recommendation > .draft-command-eyebrow')?.textContent.trim(),
+      alternatives: document.querySelectorAll('.draft-command-alternatives b').length,
+      height: bar.getBoundingClientRect().height,
+      minHeight: style.minHeight,
+      className: bar.className,
+      parentId: bar.parentElement?.id || '',
+      layoutReady: Boolean(window.WarRoomLayoutEfficiency?.isReady?.()),
+      layoutHref: layoutLink?.getAttribute('href') || '',
+      layoutSheetReady: Boolean(layoutLink?.sheet),
+      drafted: [...document.querySelectorAll('tr.draftrow.drafted-mine, tr.draftrow.drafted-other')]
+        .map(row => row.getAttribute('data-name'))
+    };
+  });
+  console.log('WR016_COMMAND_DIAGNOSTIC ' + JSON.stringify({initialHeight:initial.height, onClock}));
   assert.equal(onClock.mode, 'on-clock');
   assert.match(onClock.label, /ON THE CLOCK/);
   assert.equal(onClock.eyebrow, 'MAKE THE PICK');
