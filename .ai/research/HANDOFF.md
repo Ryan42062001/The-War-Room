@@ -38,6 +38,8 @@ Produced `.ai/research/ADVANCED_METRICS_RANKING_DISCOVERY.md` with:
 - explainability and downstream recommendation risks;
 - bounded follow-up shadow-model experiment proposal.
 
+Research PR: **#113 — WR-014 Advanced metrics ranking feasibility R&D**
+
 ## Core result
 
 ### VERIFIED FACT
@@ -157,10 +159,11 @@ Manager / Architect
 
 ## Exact next action
 
-Manager reviews `.ai/research/ADVANCED_METRICS_RANKING_DISCOVERY.md` and decides whether the evidence justifies a separate non-production shadow-model experiment. WR-D001 remains unchanged unless a later independently validated task produces materially stronger evidence.
+Manager reviews `.ai/research/ADVANCED_METRICS_RANKING_DISCOVERY.md` and PR #113 and decides whether the evidence justifies a separate non-production shadow-model experiment. WR-D001 remains unchanged unless a later independently validated task produces materially stronger evidence.
 
 ## Checkpoint / SHA
 
 - WR-014 starting SHA: `041c40bc6250a2ba1cc1c6d3582c5a08254b3017`
 - R&D branch: `wr-014-research-advanced-metrics`
+- research PR: #113
 - discovery evidence commit: `6289dd048fb7795041078032d80627b6a6cc0136`
