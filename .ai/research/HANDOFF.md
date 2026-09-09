@@ -4,7 +4,7 @@ HANDOFF
 
 Task ID: WR-012
 Role: Research & Development (R&D)
-Status: COMPLETE — READY FOR MANAGER SYNTHESIS
+Status: COMPLETE — RESEARCH PR OPEN / READY FOR MANAGER SYNTHESIS
 Parallel Work Wave: PW-001
 
 ## Verified starting state
@@ -19,11 +19,14 @@ Parallel Work Wave: PW-001
 
 PW-001 — Layout Efficiency Discovery.
 
-Canonical `main` has since advanced to `86870ec0215ad0616d5dfd02d016a68c6f1b40a3`.
+Canonical `main` verified at `86870ec0215ad0616d5dfd02d016a68c6f1b40a3` before the WR-012 research PR was opened.
 
-Canonical state now records:
+Research PR: #112 — `WR-012 Layout efficiency and information architecture R&D`
+Branch: `wr-012-research-layout-efficiency`
+
+Canonical state records:
 - WR-013: COMPLETE
-- WR-012: still ACTIVE until this R&D evidence is integrated/reconciled by Manager
+- WR-012: ACTIVE until Manager integrates/reconciles this R&D evidence
 - WR-014: QUEUED — NOT ACTIVE, with a hard R&D-resource dependency on WR-012 completion
 
 R&D has not switched to WR-014.
@@ -125,7 +128,7 @@ Future validation should include sticky-union height, actionable overlap, focus-
 
 None for WR-012 R&D completion.
 
-Manager synthesis is now possible once this R&D evidence is available alongside the already-completed WR-013 audit.
+Manager synthesis is now possible using PR #112 alongside the already-completed WR-013 audit.
 
 ## Recommended next role
 
@@ -133,7 +136,7 @@ Manager / Architect.
 
 ## Exact next action
 
-Manager should review the WR-012 R&D evidence alongside WR-013, reconcile agreement/disagreement with runtime evidence, and decide whether PW-001 justifies a bounded production UI task. Builder remains unassigned until Manager explicitly authorizes one.
+Manager should review PR #112 and the WR-012 R&D evidence alongside WR-013, reconcile agreement/disagreement with runtime evidence, and decide whether PW-001 justifies a bounded production UI task. Builder remains unassigned until Manager explicitly authorizes one.
 
 WR-014 remains queued and must not activate until Manager closes/reconciles WR-012 and explicitly activates WR-014.
 
@@ -141,5 +144,7 @@ WR-014 remains queued and must not activate until Manager closes/reconciles WR-0
 
 - WR-012 starting SHA: `8df161ba8c5413b0cc3c11f87041c4ad80046dc0`
 - R&D first-pass production/UI inspection checkpoint: `cc9380de5879db1d32530bad0d05e2b1a635e81f`
-- latest verified canonical `main`: `86870ec0215ad0616d5dfd02d016a68c6f1b40a3`
+- latest verified canonical `main` before PR open: `86870ec0215ad0616d5dfd02d016a68c6f1b40a3`
+- integration-ready WR-012 evidence commit before PR handoff annotation: `0dfd05f18ec2c2d441677fc1610bc4e0fda6bfb5`
 - R&D branch: `wr-012-research-layout-efficiency`
+- Research PR: #112
