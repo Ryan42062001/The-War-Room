@@ -4,165 +4,124 @@ Status: MAINTENANCE / STABLE — BOUNDED DISCOVERY ACTIVE
 Last verified: 2026-09-08
 Owner: Manager / Architect
 
-## Canonical repository checkpoint
-
+## Canonical repository
 Repository: `Ryan42062001/The-War-Room`
 Branch: `main`
 
-PW-001 layout-discovery starting checkpoint:
-- canonical `main`: `8df161ba8c5413b0cc3c11f87041c4ad80046dc0`
-- latest production merge remains WR-003 / PR #108: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
-- latest R&D evidence merge before PW-001: WR-010 / PR #111 `ce2ab0b75fd88549fb8def0509de4b801faa0e1c`
-- no production behavior changed by WR-011 or PW-001 assignment commits
+Latest production merge remains:
+- WR-003 / PR #108: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
+
+No production behavior has changed during PW-001 or WR-014 queueing.
 
 ## Project mode
-
 ### MAINTENANCE / STABLE — ACTIVE
 
-The War Room remains in maintenance/stable mode. No production milestone is active and no production implementation is authorized.
+No production milestone is active and no production implementation is currently authorized.
 
-A new legitimate maintenance trigger is active: the user asked whether the website layout can be researched for maximum draft-day efficiency and whether there are evidence-backed improvements worth making.
+Two legitimate maintenance-trigger opportunities are being handled without speculative production work:
+1. active layout-efficiency discovery (PW-001)
+2. queued advanced-metrics ranking-model R&D (WR-014)
 
-Manager classified this as a materially valuable usability opportunity and activated evidence-gathering only.
-
-## Active maintenance discovery
-
-### PW-001 — Layout Efficiency Discovery — ACTIVE
-
-Two independent tasks run in parallel:
-
-### WR-012 — Layout Efficiency & Information Architecture R&D
-Role: Research & Development (R&D)
-Status: ASSIGNED / ACTIVE
-Task spec: `.ai/manager/WR-012.md`
-Objective: research current evidence-backed high-efficiency layout/information-architecture patterns and identify prioritized War Room improvements without changing production.
-Expected evidence: `.ai/research/LAYOUT_EFFICIENCY_DISCOVERY.md`
+## PW-001 — Layout Efficiency Discovery
+Status: ACTIVE
+Starting SHA: `8df161ba8c5413b0cc3c11f87041c4ad80046dc0`
 Production implementation authorized: NO
-
-### WR-013 — Current Layout Efficiency & Usability Baseline Audit
-Role: Independent Auditor / QA
-Status: ASSIGNED / ACTIVE
-Task spec: `.ai/manager/WR-013.md`
-Objective: independently measure current War Room viewport use, interaction friction, responsive ergonomics, and core draft-flow efficiency across desktop/tablet/mobile.
-Expected evidence: `.ai/auditor/LAYOUT_AUDIT.md`
-Production implementation authorized: NO
-
-Independence rule:
-- WR-012 and WR-013 are INDEPENDENT during first-pass evidence gathering and may run simultaneously.
-- Auditor should not anchor its first-pass findings on R&D's final recommendations.
-- Manager synthesis has a HARD DEPENDENCY on both completed handoffs before any UI implementation decision.
-
-## Verified current layout baseline
-
-Repository evidence at PW-001 start:
-- `index.html` places header, board/search/filter toolbar, status/session/marking controls, tier navigation, draft-position/recommendation/board-pressure surfaces, Position Tiers/Overall boards, and My Draft in the current page architecture.
-- `style-base.css` makes header, toolbar, status bar, and tier navigation sticky at successive offsets.
-- `style.css` contains an explicit Position Tiers density pass and expands Position-view main content to 1320px.
-- `command-bar-fixes.css` adapts the command bar at desktop/tablet/mobile breakpoints and permits status-bar wrapping at <=900px.
-- `scripts/test-responsive-overflow.mjs` checks 13 widths from 320 through 1280 across both Position and Overall views and asserts zero document horizontal overflow.
-
-These establish intentional responsive/density work, but they do not prove the current information hierarchy is optimal. PW-001 is intended to measure that question rather than assume a redesign is needed.
-
-## Existing production baseline
-
-- Canonical player universe: 717 players, zero canonical duplicates in the established validation baseline.
-- FantasyPros Top-20 Experts 2026 PPR ECR remains primary ranking/value authority; broader PPR ECR remains controlled fallback.
-- ESPN rank/ADP remains market-timing information only.
-- Current production league baseline is PPR / snake with established starter/bench structure.
-- ESPN Live Sync reliability closeout remains complete with no blocking findings.
-- Root `npm test` covers release, module, syntax, dataset, Companion, ESPN UX, browser, responsive, off-board, hardening, draft-awareness, scoring, invariant, persistence, recovery, and live-mock surfaces.
-
-## Ranking automation disposition retained
-
-WR-010 / WR-011 remain COMPLETE. Automatic FantasyPros ingestion is not active production work. Future production consideration still requires provider compatibility, live API completeness, and material-value evidence.
-
-## Workflow baseline
-
-- `.ai/shared/WORKFLOW.md` is canonical for team operation.
-- WR-004 requires dependency classification, safe parallel execution, Parallel Work Waves, activation plans, and parallel PR safety.
-- WR-006 defines Research & Development (R&D) and preserves `.ai/research/` as its role directory.
-- WR-008 defines project maturity and MAINTENANCE / STABLE mode.
-- Manager remains normal authority for `.ai/shared/*`, roadmap selection, architecture, integration, and production task authorization.
-- `IDLE` is valid when no useful task exists.
-
-## Task state
-
-### WR-001 — Repository Operating Contract Bootstrap
-Status: COMPLETE
-PR: #109
-
-### WR-002 — ESPN Synthetic Navigation Attribution Level 4
-Status: COMPLETE / PASS
-
-### WR-003 — ESPN Completion-State Consistency
-Status: COMPLETE / PASS / MERGED
-PR: #108
-Merge SHA: `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`
-
-### WR-004 — Parallel Task Orchestration Workflow Upgrade
-Status: COMPLETE
-
-### WR-005 — ESPN Live Sync Closeout Reconciliation
-Status: COMPLETE
-
-### WR-006 — Research & Development Role Expansion Workflow Update
-Status: COMPLETE
-
-### WR-007 — Roadmap Discovery: Next Milestone Candidate Evaluation
-Status: COMPLETE
-PR: #110
-Outcome: MAINTENANCE / STABLE recommended
-
-### WR-008 — Project Maturity / Maintenance Mode Rule
-Status: COMPLETE
-
-### WR-009 — Roadmap Discovery Decision / Maintenance-Stable Transition
-Status: COMPLETE
-Outcome: MAINTENANCE / STABLE accepted
-
-### WR-010 — Ranking Accuracy & Automated Ingestion Feasibility
-Status: COMPLETE
-PR: #111
-Outcome: R&D ONLY / MORE EVIDENCE NEEDED
-
-### WR-011 — WR-010 Research Disposition / Maintenance Return
-Status: COMPLETE
 
 ### WR-012 — Layout Efficiency & Information Architecture R&D
 Role: R&D
-Status: ASSIGNED / ACTIVE
-Parallel wave: PW-001
-Production implementation authorized: NO
+Status: ACTIVE
+Task: `.ai/manager/WR-012.md`
+Expected evidence: `.ai/research/LAYOUT_EFFICIENCY_DISCOVERY.md`
 
 ### WR-013 — Current Layout Efficiency & Usability Baseline Audit
 Role: Independent Auditor / QA
-Status: ASSIGNED / ACTIVE
-Parallel wave: PW-001
+Status: COMPLETE
+Task: `.ai/manager/WR-013.md`
+Evidence: `.ai/auditor/LAYOUT_AUDIT.md`
+Independent first-pass artifact commit: `40a6b7c5a4b67bdcb506234cc09d7e11fe9534e7`
+Final Auditor handoff checkpoint: `692ccf52aebb67ea48e06b4105725a6c621ff2e3`
+
+Auditor result:
+- no CRITICAL/HIGH layout defect proven
+- MEDIUM concerns: frequent sub-30px controls, desktop/tablet sticky vertical budget, low-frequency/destructive controls competing with live draft controls, and the 769–900px responsive band
+- current strengths to preserve include Position Tiers default, one-action board switching, mobile containment, command-bar urgency states, and broad responsive overflow coverage
+
+Manager UI synthesis remains blocked on WR-012 completion. Builder remains IDLE.
+
+## WR-014 — Advanced Metrics Ranking Model Feasibility
+Role: R&D
+Status: QUEUED — NOT ACTIVE
+Task: `.ai/manager/WR-014.md`
+Queue-time main: `692ccf52aebb67ea48e06b4105725a6c621ff2e3`
 Production implementation authorized: NO
 
+Trigger:
+The user proposed building a War Room-owned ranking model from underlying football statistics/advanced metrics instead of relying solely on FantasyPros expert consensus.
+
+Manager preliminary classification:
+- materially valuable differentiated-product opportunity
+- much larger ranking-authority change than WR-010
+- suitable for R&D only until data rights, predictive value, validation design, and integration risk are established
+
+Manager preliminary external evidence:
+- PFF's current terms restrict PFF data and derived data to personal/non-public use and expressly prohibit use of PFF data/derived data to train or develop statistical/predictive models; PFF is therefore not an acceptable assumed production model input without separate explicit rights
+- nflverse publishes openly accessible play-by-play/player-stat data and related analytics tooling, with core data repositories using CC BY 4.0
+- nflverse/ffverse expose player stats, snap counts, advanced stats, Next Gen Stats mirrors, fantasy player IDs, expected-fantasy-points/opportunity tooling, and other potentially useful feature families
+- NFL Next Gen Stats/NFL Pro makes extensive advanced performance metrics publicly viewable to subscribers, but machine-readable production-use rights must be separately verified before assuming ingestion
+
+WR-014 product/technical dependency on PW-001: INDEPENDENT.
+WR-014 resource dependency on WR-012: HARD because the project currently has one R&D role. WR-014 must not preempt or silently expand WR-012.
+
+## Ranking authority baseline
+Current production ranking/value authority remains unchanged:
+- FantasyPros Top-20 Experts 2026 PPR ECR primary
+- broader FantasyPros PPR ECR controlled fallback
+- ESPN rank/ADP market timing only
+- 717-player canonical universe remains the validated baseline
+- WR-D001 remains ACTIVE
+
+WR-010/WR-011 remain complete; FantasyPros API automation is still gated on provider compatibility, live completeness, and material-value evidence.
+
+## Task state
+- WR-001 — COMPLETE
+- WR-002 — COMPLETE / PASS
+- WR-003 — COMPLETE / PASS / MERGED
+- WR-004 — COMPLETE
+- WR-005 — COMPLETE
+- WR-006 — COMPLETE
+- WR-007 — COMPLETE
+- WR-008 — COMPLETE
+- WR-009 — COMPLETE
+- WR-010 — COMPLETE / R&D ONLY-MORE EVIDENCE NEEDED
+- WR-011 — COMPLETE
+- WR-012 — ACTIVE / R&D
+- WR-013 — COMPLETE / Auditor
+- WR-014 — QUEUED / R&D, NOT ACTIVE
+
 ## Open non-blocking findings
-
 1. Legacy `AGENTS.md` process wording remains non-blocking; canonical `.ai/shared/*` wins.
-2. Diagnostics can over-emphasize `Capture method: network` / candidate-shaped fetch counts when Pick History DOM is ledger-eligible authority.
-3. Synthetic-navigation actor identity remains unknown at the verified WR-002 attribution ceiling.
-4. Ranking automation remains technically promising but gated before production consideration.
+2. Diagnostics can over-emphasize network capture when Pick History DOM is actual ledger-eligible authority.
+3. Synthetic-navigation actor identity remains unknown at the WR-002 evidence ceiling.
+4. Ranking automation remains technically promising but gated.
+5. An internal advanced-metrics ranking model is promising enough for R&D, but no source/model/architecture is approved and PFF should not be assumed usable.
 
-These are unrelated to PW-001 unless evidence shows a direct layout impact.
-
-## Current workload / parallelism state
-
-PARALLEL WORK WAVE: PW-001
-
-Active specialist tasks:
+## Current workload / parallelism
+Active specialist task:
 - R&D — WR-012
+
+Completed specialist task awaiting synthesis:
 - Auditor — WR-013
 
-Idle specialist roles:
+Queued specialist task:
+- R&D — WR-014 after WR-012
+
+Idle:
 - Builder — IDLE
+- Auditor — IDLE after WR-013 completion
 
 Dependency classification:
-- WR-012 vs WR-013: INDEPENDENT during evidence gathering
-- Manager UI decision: HARD DEPENDENCY on both completed evidence streams
-- any Builder implementation: HARD DEPENDENCY on Manager synthesis and a separate approved production task
+- WR-012 vs WR-013 evidence: originally INDEPENDENT; WR-013 is complete
+- Manager PW-001 synthesis: HARD dependency on WR-012 completion
+- WR-014 vs PW-001: INDEPENDENT product/technical scope, HARD R&D-resource dependency on WR-012
 
-Do not authorize production HTML/CSS/JS changes until Manager reviews both WR-012 and WR-013 and explicitly creates an implementation task if the evidence justifies one.
+Parallel Work Wave PW-001 remains active only for layout discovery. Do not create Builder production work from WR-014 until separate Manager review after R&D evidence.
