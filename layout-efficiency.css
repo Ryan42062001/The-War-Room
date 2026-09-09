@@ -249,6 +249,37 @@ header {
   min-height: 28px;
 }
 
+/* Empty awareness is informationally quiet. Keep the labels discoverable but
+   make the no-target/no-alert state one compact row so player choices win the
+   viewport. Meaningful targets or alerts retain the full awareness layout. */
+body[data-board-view="position"] #draft-awareness-strip:not(.has-targets):not(.has-alerts) {
+  margin-bottom: 4px;
+}
+
+body[data-board-view="position"] #draft-awareness-strip:not(.has-targets):not(.has-alerts) .draft-awareness-targets,
+body[data-board-view="position"] #draft-awareness-strip:not(.has-targets):not(.has-alerts) .draft-awareness-changes {
+  display: flex;
+  min-height: 24px;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 8px;
+}
+
+body[data-board-view="position"] #draft-awareness-strip:not(.has-targets):not(.has-alerts) .draft-awareness-heading {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+body[data-board-view="position"] #draft-awareness-strip:not(.has-targets):not(.has-alerts) .draft-awareness-heading > small {
+  display: none;
+}
+
+body[data-board-view="position"] #draft-awareness-strip:not(.has-targets):not(.has-alerts) .draft-target-list,
+body[data-board-view="position"] #draft-awareness-strip:not(.has-targets):not(.has-alerts) .draft-change-list {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
 @media (max-width: 1180px) and (min-width: 901px) {
   .draft-control-shell > .toolbar {
     flex-wrap: nowrap;
@@ -367,8 +398,13 @@ header {
   }
 
   .header-inner {
-    min-height: 54px;
-    padding: 6px 9px;
+    min-height: 46px;
+    padding: 5px 9px;
+  }
+
+  .brand-mark {
+    width: 36px;
+    height: 36px;
   }
 
   .brand-kicker,
@@ -443,7 +479,7 @@ header {
 
 @media (max-width: 600px) {
   .header-inner {
-    min-height: 48px;
+    min-height: 44px;
   }
 
   .header-badges {
