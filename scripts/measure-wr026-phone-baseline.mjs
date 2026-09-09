@@ -99,8 +99,9 @@ try {
         positionSectionsInViewport: columns.filter(column => column.inViewport).length,
         fullPositionSectionsInViewport: columns.filter(column => column.fullyInViewport).length,
         columns,
-        recommendation: rect(document.getElementById('recommended-pick-box')),
-        pressure: rect(document.getElementById('board-pressure-widget')),
+        recommendation: rect(document.querySelector('.draft-command-recommendation')),
+        pressure: rect(document.querySelector('.draft-command-pressure-wrap')),
+        commandBar: rect(document.getElementById('draft-command-bar')),
         myDraft: rect(document.querySelector('.myteam-toggle')),
         targetSizes: {
           boardView: target('.board-view-btn'),
@@ -125,6 +126,8 @@ try {
       fullPositionSectionsInViewport: measurement.fullPositionSectionsInViewport,
       recommendationTop: measurement.recommendation ? round(measurement.recommendation.top) : null,
       pressureTop: measurement.pressure ? round(measurement.pressure.top) : null,
+      commandBarTop: measurement.commandBar ? round(measurement.commandBar.top) : null,
+      commandBarBottom: measurement.commandBar ? round(measurement.commandBar.bottom) : null,
       myDraftTop: measurement.myDraft ? round(measurement.myDraft.top) : null,
       columns: measurement.columns.map(column => ({
         position: column.position,
