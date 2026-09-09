@@ -25,6 +25,14 @@
     display: none;
   }
 
+  /* Draft Setup is progressive disclosure on phone. The explicit marker is
+     applied by the layout coordinator after a real disclosure toggle; this
+     prevents a freshly re-rendered command bar from flashing/focusing fields
+     before the phone collapsed state has been synchronized. */
+  .draft-command-setup-disclosure:not([data-phone-user-open="true"]) > .draft-command-setup {
+    display: none !important;
+  }
+
   body[data-board-view="position"] .phone-decision-nav {
     display: block;
     margin: 3px 0 6px;
