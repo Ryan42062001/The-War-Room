@@ -81,6 +81,11 @@
     document.head.appendChild(script);
   }
 
+  function isPhoneLayout() {
+    try { return window.matchMedia('(max-width: 600px)').matches; }
+    catch (error) { return window.innerWidth <= 600; }
+  }
+
   function hasDraftProgress() {
     if (typeof window.getCompletedDraftPickCount === 'function') {
       try { return Number(window.getCompletedDraftPickCount()) > 0; } catch (error) {}
@@ -210,7 +215,7 @@
       if (summary) summary.focus();
     });
     details.addEventListener('toggle', function() {
-      if (hasDraftProgress()) setupEditing = details.open;
+      if (hasDraftProgress() || isPhoneLayout()) setupEditing = details.open;
       if (!details.open) {
         var active = document.activeElement;
         if (active && active !== details.querySelector('summary') && details.contains(active)) {
@@ -244,11 +249,24 @@
     if (value && value.textContent !== nextSummary) value.textContent = nextSummary;
 
     var progressed = hasDraftProgress();
+    var phone = isPhoneLayout();
     if (!progressed) {
-      setupEditing = false;
-      details.open = true;
+      if (phone) {
+        if (details.dataset.phoneDefaulted !== 'true') {
+          setupEditing = false;
+          details.open = false;
+          details.dataset.phoneDefaulted = 'true';
+        } else {
+          details.open = Boolean(setupEditing);
+        }
+      } else {
+        setupEditing = false;
+        details.open = true;
+        details.removeAttribute('data-phone-defaulted');
+      }
       details.dataset.progress = 'false';
     } else {
+      details.removeAttribute('data-phone-defaulted');
       if (details.dataset.progress !== 'true') details.open = Boolean(setupEditing);
       details.dataset.progress = 'true';
     }
