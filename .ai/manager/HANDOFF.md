@@ -2,98 +2,108 @@
 
 HANDOFF
 
-Task ID: WR-016 / WR-019 / WR-018 / PW-002
+Task ID: WR-020 / WR-021
 Role: Manager / Architect
-Status: WR-016 COMPLETE / WR-019 COMPLETE / WR-018 MANAGER REVIEW PENDING
+Status: WR-020 COMPLETE / WR-021 ASSIGNED
 
-## Verified release closeout
-- Auditor branch: `audit/wr-019-pr114-5636bd75`
-- Auditor verdict: PASS WITH NON-BLOCKING FINDINGS
-- blocking findings: NONE
-- audited PR #114 head: `5636bd75aa4be34bdbdfc5e459df44283c8f2483`
-- audited base: `8931b30d4f4f387504b17ac07d837aa87a166948`
-- audited generated merge ref: `318a2ee96ed4c25b23b3609ac31891dc276fbff5`
-- exact integration CI #847 / `34366327920`: SUCCESS
-- Manager refreshed main/head/mergeability before merge and found the audited tuple unchanged
-- PR #114 merged by Manager as `dfe5476883d700b9281fb57f1c710daa7758492a`
-- post-merge War Room CI #862 / `34370139838`: SUCCESS
-- GitHub Pages deployment #665 / `34370138865`: SUCCESS
+## Verified starting state
+- canonical main at WR-018 review start: `33ad224d9f012d9cb1165ca00051109c9471a3e3`
+- WR-018 research PR #115 head: `0c2f7e9e307ff30293ff96ab66fb0b1a72c8b051`
+- exact-head War Room CI #858 / `34367526671`: SUCCESS
+- PR #115 scope: research-only under `.ai/research/`; production files changed NO; `.ai/shared/*` changed NO
 
-## WR-016 milestone result
-Draft-Day Layout Efficiency is COMPLETE.
+## WR-018 Manager review
+Manager independently reviewed:
+- R&D handoff
+- `SHADOW_RANKING_EXPERIMENT.md`
+- source/license manifest
+- reproducible runner
+- PR scope/head/CI
+- current nflverse rights/source feasibility
 
-Shipped behavior:
-- coordinated normal-flow draft controls instead of competing sticky layers
-- low-frequency/destructive actions moved behind Manage
-- session/Taken/Mine remain immediate
-- Draft Setup progressively collapses after meaningful progress
-- frequent controls and tablet/desktop geometry improved
-- command surface remains reachable for On-the-Clock transitions
-- recovery/maintenance workflows remain reachable
+Accepted result: `MORE EVIDENCE NEEDED`.
 
-Unchanged:
-- rankings
-- scoring
-- recommendation strategy
-- draft-state semantics
-- persistence schema
-- ESPN sync authority
+Key quantitative result:
+- Naive pooled MAE 2.636 / Spearman 0.742
+- Ridge pooled MAE 2.638 / Spearman 0.746
+- Gradient Boosting pooled MAE 2.674 / Spearman 0.731
+- neither challenger established persuasive pooled MAE lift
 
-## WR-019 audit finding
-`WR-019-AUD-01` — LOW / non-blocking: an older PR-body subsection retained stale integration metadata. Final audited tuple is preserved in the audit evidence and this Manager handoff.
+Manager methodological findings:
+1. WR-018 test inclusion required at least four target-season games, so the historical cohort conditions on target-season participation and does not represent full preseason availability/draft value.
+2. Bootstrap uncertainty treated repeated player-season rows as independent; successor work should use repeated-player-aware uncertainty.
+3. Rookies, age/experience, draft capital, team movement, role, and availability remain missing.
+4. No lawful historical FantasyPros comparator was used; no superiority claim is supported.
+5. 2022–2025 outcomes have now been observed by the project and are confirmatory, not pristine, for successor work.
 
-Level 4 physical-device/manual visual validation was not performed in WR-019 and was not a mandatory WR-016 release criterion.
+## Integration
+PR #115 was merged by Manager as:
+`9c7aa3b8b7b2600c50dac0f050f6da97b4aed08b`
 
-## WR-018 status
-R&D completed the open-data shadow ranking model experiment.
+Production ranking authority changed: NO.
+WR-D001 changed: NO.
 
-Research PR: #115
-Latest exact research head reviewed for status: `0c2f7e9e307ff30293ff96ab66fb0b1a72c8b051`
-Post-remediation exact-head War Room CI #858 / `34367526671`: SUCCESS
-Primary result: `MORE EVIDENCE NEEDED`
+## WR-020 decision
+Status: COMPLETE
+Task: `.ai/manager/WR-020.md`
 
-Summary:
-- 663 held-out returning-player predictions across 2022–2025
-- naive prior-season PPR/game remained a hard baseline
-- pooled Ridge MAE was effectively unchanged/slightly worse
-- Gradient Boosting was worse on pooled MAE
-- no persuasive held-out superiority established
-- clean 2026 research-only snapshot frozen for 343 returning QB/RB/WR/TE players
-- rookies, point-in-time injury/depth/role context, and availability modeling remain missing
+Decision:
+- accept WR-018 evidence
+- do not promote a production ranking model
+- preserve FantasyPros Top-20 PPR ECR production authority
+- authorize one final bounded research successor because the missing hypothesis is genuinely different and rights-clean nflverse sources appear to cover several key preseason context families
 
-WR-D001 remains ACTIVE. No production ranking/model change is authorized.
+## WR-021 assignment
+Task: `.ai/manager/WR-021.md`
+Role: R&D
+Status: ASSIGNED / ACTIVE
+Production authorization: NONE
+
+Objective:
+Test whether rights-cleared preseason context materially improves the shadow model while correcting WR-018 cohort/uncertainty limitations.
+
+Required focus:
+- preseason-defined cohort
+- explicit rookie handling
+- age/experience/draft capital/team movement/roster context only with verified rights and point-in-time semantics
+- availability handled explicitly
+- earlier-season model selection; 2022–2025 confirmatory only
+- repeated-player-aware uncertainty
+- predeclared material-lift gate
+- context-enriched 2026 freeze before kickoff only if still prospectively clean
 
 ## PW-002
-Status: ACTIVE — only WR-018 Manager disposition remains.
+Status: COMPLETE
+- WR-016 COMPLETE / MERGED
+- WR-019 COMPLETE / PASS WITH NON-BLOCKING FINDINGS
+- WR-018 COMPLETE / ACCEPTED / MERGED
 
-Completed:
-- Builder / WR-016
-- Auditor / WR-019
+WR-021 is standalone and not part of a Parallel Work Wave.
 
-Awaiting Manager decision:
-- accept WR-018 as `MORE EVIDENCE NEEDED` and stop immediate follow-up, or
-- authorize a narrowly scoped successor research validation adding rights-cleared point-in-time rookie/age/draft-capital/team-role/availability context while preserving rolling-origin holdouts and the naive baseline
+## Current project mode
+MAINTENANCE / STABLE — bounded R&D active.
+No active production milestone.
 
 ## Current role state
-- Manager: ACTIVE — WR-018 review / PW-002 closeout
+- Manager: IDLE after assignment
 - Builder: IDLE
-- R&D: IDLE
+- R&D: ACTIVE — WR-021
 - Auditor: IDLE
 
 ## Open findings
-- WR-019-AUD-01 LOW documentation-only stale PR-body metadata
-- WR-018 lacks a demonstrated model lift sufficient for production use
-- WR-018 missing preseason context families may or may not create meaningful lift; this remains unproven
+- WR-019-AUD-01 LOW documentation-only historical finding
+- no custom ranking model has demonstrated sufficient lift for production
+- availability/rookie/preseason context remains the key unresolved modeling hypothesis
 
 ## Blocking issues
-None for WR-016/WR-019 completion.
-Production ranking-model promotion remains blocked by insufficient WR-018 evidence.
+None for WR-018/WR-020 completion.
+Any production ranking-model change remains blocked on future evidence and a separate Manager-approved production milestone.
 
 ## Recommended next role
-Manager / Architect
+Research & Development (R&D)
 
 ## Exact next action
-Review and disposition WR-018 / PR #115. Do not change production ranking authority unless a future evidence-backed milestone is explicitly approved.
+Execute WR-021 from refreshed canonical main. If still before the first 2026 kickoff, prioritize freezing the context-enriched 2026 research snapshot before the deadline without compromising source-rights or leakage rules. Return evidence to Manager; do not change production rankings.
 
 ## Checkpoint / SHA
-After this handoff update, verify current `main` for the exact final canonical SHA.
+Verify current main after this reconciliation for the exact final canonical SHA.
