@@ -1,0 +1,46 @@
+name: WR-021 Context Shadow Experiment
+
+on:
+  push:
+    branches: [wr-021-context-enriched-shadow]
+    paths:
+      - '.ai/research/wr021_context_shadow_experiment.py'
+      - '.ai/research/wr021_requirements.txt'
+      - '.github/workflows/wr021-experiment.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  experiment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: wr-021-context-enriched-shadow
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: .ai/research/wr021_requirements.txt
+      - name: Install research dependencies
+        run: python -m pip install -r .ai/research/wr021_requirements.txt
+      - name: Run WR-021 experiment
+        run: python .ai/research/wr021_context_shadow_experiment.py
+      - name: Freeze exact generated research outputs
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .ai/research/generated/CONTEXT_SHADOW_RESULTS.json .ai/research/generated/CONTEXT_SHADOW_ASSET_MANIFEST.json
+          if [ -f .ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv ]; then git add .ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv; fi
+          git diff --cached --quiet && exit 0
+          git commit -m 'WR-021 freeze generated context shadow outputs'
+          git push origin HEAD:wr-021-context-enriched-shadow
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wr021-context-shadow-results
+          path: .ai/research/generated/CONTEXT_SHADOW_*
+          if-no-files-found: error
+          retention-days: 7
