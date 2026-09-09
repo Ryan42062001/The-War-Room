@@ -2,145 +2,139 @@
 
 HANDOFF
 
-Task ID: PW-001 / WR-012 / WR-013 / WR-014
+Task ID: WR-015 / PW-002 / WR-016 / WR-014
 Role: Manager / Architect
-Status: PW-001 ACTIVE / WR-013 COMPLETE / WR-014 QUEUED
+Status: WR-015 COMPLETE / PW-002 ACTIVE
 
 ## Verified repository state
 - Repository: `Ryan42062001/The-War-Room`
-- Latest verified main before this Manager trigger processing: `692ccf52aebb67ea48e06b4105725a6c621ff2e3`
-- Project mode: MAINTENANCE / STABLE — bounded discovery active
-- Latest production merge remains WR-003 / PR #108
-- No production UI/ranking/scoring/recommendation behavior changed by PW-001 or WR-014 queueing
+- Canonical `main` before WR-012 research merge: `86870ec0215ad0616d5dfd02d016a68c6f1b40a3`
+- WR-012 PR #112 final head: `f60d37186f7bd65d3cb43031758a453a01f0f21b`
+- PR #112 changed only `.ai/research/LAYOUT_EFFICIENCY_DISCOVERY.md` and `.ai/research/HANDOFF.md`
+- exact-head War Room CI #747 / run `34299953330`: SUCCESS
+- PR #112 merge SHA: `e46ae94bc592d73560eb88258046acce19d3c0c6`
+- no production UI behavior changed by WR-012/013 evidence work
 
-## PW-001 layout discovery
+## PW-001 closeout
+PW-001 — Layout Efficiency Discovery is COMPLETE.
 
-### WR-012 — R&D
-Status: ACTIVE
-Task: `.ai/manager/WR-012.md`
-Expected evidence: `.ai/research/LAYOUT_EFFICIENCY_DISCOVERY.md`
-Production implementation: NOT AUTHORIZED
+### WR-012 R&D result
+- no broad redesign recommended
+- preserve Position Tiers, Overall, command-state model, mobile containment, My Draft, and overflow protections
+- strongest candidates: coordinated persistent decision hierarchy, progressive disclosure of maintenance/destructive controls, Draft Setup collapse after initialization/progress
+- exact sticky/first-player/focus geometry remained unverified and must be measured before production edits
 
-### WR-013 — Independent Auditor / QA
-Status: COMPLETE
-Evidence: `.ai/auditor/LAYOUT_AUDIT.md`
-Independent first-pass artifact: `40a6b7c5a4b67bdcb506234cc09d7e11fe9534e7`
-Final Auditor handoff checkpoint on main: `692ccf52aebb67ea48e06b4105725a6c621ff2e3`
-
-Auditor findings:
+### WR-013 independent audit result
 - no CRITICAL/HIGH layout defect proven
-- MEDIUM: frequent sub-30px controls
-- MEDIUM: meaningful desktop/tablet persistent vertical budget
-- MEDIUM: low-frequency/destructive controls compete with live-draft controls
-- MEDIUM: 769–900px is the structurally stressed responsive band
-- preserve Position Tiers default, mobile containment, command urgency hierarchy, one-action board switching, and strong overflow regression coverage
+- MEDIUM: frequent compact/sub-30px targets
+- MEDIUM: persistent desktop/tablet vertical budget
+- MEDIUM: maintenance/destructive controls compete with live controls
+- MEDIUM: 769–900px responsive band is structurally stressed
+- preserve current decision-focused strengths
 
-Manager layout synthesis remains blocked on WR-012 completion. Builder remains idle.
+### Manager synthesis — WR-015
+Manager accepted the independently convergent findings and approved a bounded production milestone: **Draft-Day Layout Efficiency**.
 
-## New maintenance trigger — advanced-metrics ranking model
+Broad redesign: REJECTED.
 
-The user proposed replacing or supplementing FantasyPros expert-consensus rankings with a War Room-owned ranking model built from underlying football statistics and advanced metrics.
+Production scope approved:
+1. deterministic pre-change geometry/focus baseline
+2. coordinated persistent live-draft hierarchy / sticky-stack repair
+3. progressive disclosure of low-frequency maintenance/destructive controls
+4. Draft Setup summary + Edit after valid initialization/meaningful progress
+5. frequent target ergonomics hardening
+6. direct 769–900px plus representative mobile/desktop validation
 
-Manager classification:
-- materially valuable differentiated-product opportunity
-- legitimate R&D subject
-- potentially much higher architectural/ranking-authority risk than WR-010
-- production work not justified without source-rights and predictive-validation evidence
+Independent Auditor validation is required before the WR-016 production PR can merge.
+
+## PW-002 — ACTIVE
+
+### WR-016 — Draft-Day Layout Efficiency Implementation
+Assigned role: Implementation Engineer
+Status: ACTIVE
+Task: `.ai/manager/WR-016.md`
+Production implementation authorized: YES, WR-016 scope only
+
+Builder requirements:
+- refresh current main and record exact starting SHA
+- measure baseline before production edits
+- preserve scoring/ranking/recommendation/state/persistence/ESPN semantics
+- return production PR + pre/post measurements + tests
+- do not merge own PR
+- recommended next role must be Independent Auditor / QA
 
 ### WR-014 — Advanced Metrics Ranking Model Feasibility
-Role: Research & Development (R&D)
-Status: QUEUED — NOT ACTIVE
+Assigned role: R&D
+Status: ACTIVE
 Task: `.ai/manager/WR-014.md`
-Queue-time main: `692ccf52aebb67ea48e06b4105725a6c621ff2e3`
 Production implementation authorized: NO
 
-Why queued:
-- WR-014 is product/technically independent from PW-001
-- the same R&D role is currently executing WR-012
-- therefore there is a HARD resource dependency and WR-014 should not preempt/silently expand WR-012
+Objective:
+Determine whether a War Room-owned open/licensable advanced-statistics projection/value model can materially outperform or complement the current FantasyPros Top-20 PPR ECR baseline.
 
-## Manager preliminary technical view
-
-The idea is viable enough to research, but the best initial architecture is likely **not** "replace FantasyPros with PFF grades." A serious model would need position-specific forecasting of future opportunity + efficiency + availability, and historical stats alone will miss injuries, depth-chart changes, rookies, coaching changes, and role shifts.
-
-The strongest initial research question is whether an open/licensable War Room-owned model can materially outperform or complement the current Top-20 PPR ECR baseline.
-
-Candidate architecture families for R&D:
-1. open-data-only projection/value model
-2. open-data model plus expert/market prior hybrid
-3. full internal replacement only if held-out evidence clearly beats the existing baseline
-
-## Manager preliminary source evidence
-
-### PFF
-Current PFF Terms (reviewed 2026-09-08) materially constrain this idea:
-- PFF Data/API Data/Derived Data are restricted to personal, non-commercial, non-public use under consumer access
-- automated/manual extraction restrictions are broad
-- Derived Data explicitly includes rankings/models created from PFF data
-- terms expressly prohibit using PFF API/Derived Data to train, evaluate, benchmark, or develop statistical/predictive models
-- public distribution/competing-product restrictions also apply
-
-Manager conclusion: do not assume PFF can be a production training/input source. Use only if separate explicit rights are later established.
-
-### Open/licensable direction
-Current public evidence supports deeper R&D around nflverse/ffverse:
-- nflverse exposes play-by-play and player stats through public data releases/tooling
-- core nflverse PBP/player-stat repositories use CC BY 4.0
-- available families include snap counts, advanced pass/rush/receiving stats, Next Gen Stats mirrors, fantasy player IDs, and expected-fantasy-points/opportunity tooling
-- nflverse also exposes an openly published FTN charting subset
-
-NFL Next Gen Stats/NFL Pro has extensive advanced metrics, but machine-readable production rights and ingestion feasibility must be separately verified before assuming it is a model input.
-
-## Required WR-014 evidence when activated
-R&D must determine:
-- prediction target appropriate for PPR draft value
-- position-specific feature families
-- source/licensing matrix
-- injury/role/rookie/team-context strategy
-- transparent vs higher-complexity model alternatives
-- full replacement vs hybrid architecture
-- leakage-safe rolling/held-out historical validation
-- direct comparison to contemporaneous Top-20 PPR ECR baseline
-- seasonality/refresh/fail-closed design
-- explainability and downstream recommendation risks
-
-No production model should be considered merely because it fits historical data well.
-
-## Canonical decisions
-WR-D001 remains ACTIVE: FantasyPros PPR ECR is current ranking/value authority; ESPN rank/ADP is market timing only.
-No DECISIONS.md update is warranted yet because WR-014 is only queued research.
+Guardrails:
+- PFF is restricted unless separate explicit rights are established
+- no PFF scraping/reconstruction/model training under ordinary access
+- prefer open/licensable source investigation
+- require leakage-safe held-out validation
+- WR-D001 stays ACTIVE
+- no production model/ranking changes
 
 ## Dependency / parallelism analysis
-- WR-012 vs completed WR-013: evidence streams independent; Manager synthesis waits for WR-012
-- WR-014 vs layout subject: INDEPENDENT
-- WR-014 vs WR-012 resource: HARD DEPENDENCY — same R&D worker
-- Builder implementation from either discovery stream: HARD DEPENDENCY on Manager decision/new production task
+WR-016 vs WR-014: **INDEPENDENT**.
 
-PW-001 remains the only active Parallel Work Wave. WR-014 is not active and is not added to PW-001.
+They run concurrently because:
+- WR-016 is production UI/layout/tests
+- WR-014 is R&D evidence/isolated research only
+- neither depends on the other's result
+- no shared production area
+- neither specialist updates `.ai/shared/*`
 
-## Files updated by Manager
-- `.ai/manager/WR-014.md`
-- `.ai/manager/PW-001.md`
-- `.ai/shared/PROJECT_STATE.md`
-- `.ai/shared/ROADMAP.md`
-- `.ai/manager/HANDOFF.md`
+Downstream dependencies:
+- WR-016 -> independent Auditor: HARD before merge
+- WR-014 -> Manager review: HARD before any production ranking-model decision
 
-## Files reviewed but intentionally unchanged
-- `.ai/shared/DECISIONS.md`
-- production UI files
-- production ranking/scoring/recommendation files
-- `.ai/research/HANDOFF.md` while WR-012 is actively owned by R&D
+Parallel Work Wave: **PW-002**.
+
+## Current ranking authority
+Unchanged:
+- FantasyPros Top-20 Experts 2026 PPR ECR primary
+- broader FantasyPros PPR ECR fallback
+- ESPN rank/ADP market timing only
+- WR-D001 remains ACTIVE
+
+## Decisions file
+`.ai/shared/DECISIONS.md` was reviewed conceptually and remains unchanged. The layout direction should not become a durable decision record until the implementation is independently audited and accepted. WR-014 is research-only and does not alter ranking authority.
+
+## Work completed by Manager
+- refreshed current main and role handoffs
+- discovered completed WR-012 PR #112 despite stale canonical assignment state
+- verified exact PR scope/head
+- verified exact-head CI success
+- independently synthesized WR-012 with WR-013
+- merged PR #112
+- created WR-015 Manager synthesis record
+- closed PW-001
+- approved bounded Draft-Day Layout Efficiency milestone
+- created WR-016 Builder task
+- activated queued WR-014 R&D
+- created PW-002 for safe parallel execution
+- updated canonical PROJECT_STATE and ROADMAP
+- assigned Builder and R&D handoffs
 
 ## Blocking issues
-None for WR-012 or WR-014 planning.
+None for WR-016 implementation or WR-014 research.
 
-WR-014 activation is intentionally deferred until WR-012 completes. Production ranking-authority work is blocked on future R&D evidence and Manager approval.
+WR-016 merge is blocked on its future independent audit.
+Any advanced-metrics production work is blocked on completed WR-014 evidence plus Manager approval.
 
-## Recommended next role
-Research & Development continues WR-012. Auditor is idle after WR-013 completion. Builder remains idle.
+## Recommended next roles
+Implementation Engineer and R&D — activate concurrently.
 
 ## Exact next action
-Finish WR-012 first. When R&D returns its layout handoff, Manager should synthesize PW-001. After that synthesis, if no higher-priority issue supersedes it, activate WR-014 for advanced-metrics ranking-model feasibility research. Do not implement a ranking model yet.
+1. Builder executes WR-016 on its own branch and returns a production PR with pre/post layout evidence; do not merge before independent audit.
+2. R&D executes WR-014 independently and returns an evidence-backed feasibility result; do not modify production rankings.
+3. Auditor remains idle until WR-016 production evidence is ready.
 
 ## Checkpoint / SHA
-Verify current `main` after these Manager-owned reconciliation/queue commits for the exact canonical SHA.
+Verify current `main` after these Manager-owned PW-002 assignment commits for the exact canonical SHA.
