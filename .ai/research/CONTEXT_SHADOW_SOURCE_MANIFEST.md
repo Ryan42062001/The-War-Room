@@ -24,7 +24,7 @@ This is the same rights-cleared source family accepted in WR-018.
 - Producer: `nflverse/nflverse-players`.
 - Release purpose: player-level IDs and mostly immutable information; nflreadr documentation explicitly describes birthdate and draft position as in scope.
 - License: nflverse data family documented CC BY 4.0.
-- Permitted columns for WR-021: `gsis_id`, player name, `birth_date`, `rookie_season`, draft year/round/overall number/team fields where present, and position only for ID/context reconciliation.
+- Permitted columns for WR-021: `gsis_id`, player name, `birth_date`, `rookie_season`, `draft_year`, `draft_round`, `draft_pick`, `draft_team`, and position only for ID/context reconciliation.
 - Explicitly ignored even if present: PFF fields/IDs/status, NGS-derived fields, latest-team/current-status fields, or any mutable field whose historical as-of meaning is not established.
 
 Current release metadata observed before execution:
@@ -83,7 +83,7 @@ No target-season roster survival, games, fantasy points, injuries, depth role, o
 ### Regularized model search — development only
 Position-specific standardized Ridge model using the frozen context feature matrix.
 Candidate alphas allowed during 2018–2021 development only: `[1, 10, 100]`.
-Select one global alpha by lowest pooled development MAE on rolling-origin predictions. Ties favor the larger alpha/simpler shrinkage. Lock before 2022–2025 scoring.
+Select one global alpha by lowest pooled development **returning-player performance MAE** on rolling-origin predictions. Ties favor the larger alpha/simpler shrinkage. Lock before 2022–2025 scoring.
 
 ### Higher-capacity challenger — single fixed family
 At most one challenger: position-specific `GradientBoostingRegressor` with fixed predeclared parameters inherited from WR-018 discipline: 150 estimators, learning rate 0.05, max depth 2, min samples leaf 8, deterministic seed. No confirmatory tuning.
@@ -105,12 +105,14 @@ Report:
 ## Repeated-player-aware uncertainty — frozen
 For confirmatory 2022–2025 returning-player performance, bootstrap unique `gsis_id` clusters with replacement and retain all confirmatory seasons belonging to each sampled player. Report 2,000 deterministic bootstrap replicates for enriched-vs-naive MAE delta, pooled and by position where sample size permits. This replaces WR-018 row-wise independence.
 
-## Predeclared evidence gate — copied exactly in substance before execution
+## Predeclared evidence gate — frozen before execution
+The **regularized Ridge model is the primary enriched candidate**. The higher-capacity challenger is diagnostic and cannot by itself upgrade the final classification to `PROMISING` if the primary transparent model fails the gate.
+
 `PROMISING — CONTINUE VALIDATION` is permitted only if all primary returning-player conditions are met on confirmatory 2022–2025:
 1. at least **2% pooled MAE improvement** versus previous-season PPR/game naive baseline;
-2. repeated-player-aware 95% interval for MAE delta does **not** include a meaningful zero/worse result;
-3. pooled Spearman is not worse by more than **0.01**;
-4. no major position shows a persistent material regression that makes pooled performance misleading.
+2. player-clustered 95% interval for `Ridge absolute error - naive absolute error` has an **upper bound < 0.0**, so it excludes zero/worse performance;
+3. pooled Ridge Spearman is not worse than naive by more than **0.01**;
+4. no major position has a **>2% MAE regression in at least 3 of the 4 confirmatory seasons**. This is the predeclared operational definition of a persistent material position regression.
 
 Rookie/availability gains may support continued validation but cannot override material degradation in returning-player performance. If the gate fails, classification must be `MORE EVIDENCE NEEDED` or `DO NOT PURSUE`.
 
