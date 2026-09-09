@@ -2,124 +2,118 @@
 
 HANDOFF
 
-Task ID: WR-023 / WR-024
+Task ID: PW-003 / WR-025 / WR-026
 Role: Manager / Architect
-Status: WR-023 COMPLETE / WR-024 COMPLETE / PROJECT STABLE
+Status: PW-003 ACTIVE / WR-025 ACTIVE / WR-026 ACTIVE
 
 ## Verified starting state
-- canonical main before WR-023 integration: `8e51bc08c0ac70370f49943ac78fda481d7e77e7`
-- WR-023 research PR #117 head: `d3e3890834184da4ae99c1194ba333e48c98022b`
-- PR #117 mergeable before merge: YES
-- exact-head War Room CI #902 / `34382871798`: SUCCESS
-- final PR scope: 4 files, all under `.ai/research/`
-- production files changed by R&D: NO
-- canonical `.ai/shared/*` changed by R&D: NO
-- frozen WR-021 snapshot changed: NO
+- canonical `main` before new assignment commits: `9cc60b590b6d6cfe17c19a1cb78e06956d7b7944`
+- open PRs at assignment time: NONE
+- project was MAINTENANCE / STABLE — prospective validation frozen
+- WR-021 and WR-023 were COMPLETE / ACCEPTED / MERGED
+- production ranking authority remained FantasyPros under WR-D001
+- all workers were idle before the new user requirements
 
-## WR-023 Manager review
-Manager independently reviewed:
-- `.ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md`
-- `.ai/research/generated/WR023_PROTOCOL_MANIFEST.json`
-- `.ai/research/wr023_freeze_manifest.py`
-- R&D handoff
-- PR #117 commit history
-- temporary manifest workflow
-- exact-head CI / PR scope
+## New user triggers
+Two explicit requirements reactivated bounded work:
 
-Manager disposition: ACCEPT.
+1. Historical ranking research:
+   - use previous seasons to determine which statistics/context identify stronger future fantasy players;
+   - identify warning signals associated with underperformance/bust risk;
+   - get a research-only custom historical ranking prototype working.
 
-## Freeze integrity
-Verified repository evidence:
-- protocol freeze commit: `28903ef5dc7073b36cb400330104e8f9e3ee0e05`
-- protocol freeze timestamp: `2026-09-09T17:22:11Z`
-- protocol SHA-256: `f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`
-- WR-021 snapshot SHA-256: `9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d`
-- frozen universe: 523 unique players = 444 returners + 79 drafted rookies
-- manifest generator reads local committed artifacts only and makes no 2026 outcome request
-- temporary workflow only executed the manifest generator and committed its result
-- no 2026 outcome dataset appears in the final WR-023 PR diff
+2. Phone usability:
+   - current phone view feels like one big list and is not useful enough;
+   - desktop view is liked and must NOT be changed;
+   - optimize only the phone experience for faster draft decisions.
 
-## Frozen prospective contract
-Primary hypothesis:
-Returning-player frozen Ridge PPR/game vs frozen previous-season PPR/game baseline.
+## Parallelism decision
+Created PW-003 because the two tasks are INDEPENDENT.
 
-Rookies:
-Separate diagnostic only; cannot rescue primary failure.
+### WR-025 — Historical Ranking Signal / Breakout-Bust Research
+Assigned role: Research & Development (R&D)
+Status: ACTIVE
+Task: `.ai/manager/WR-025.md`
+Production authorization: NONE
 
-Outcome source:
-- nflverse Player Summary Stats `stats_player`
-- intended asset `stats_player_regpost_2026.csv`
-- regular season only
-- exact GSIS join only
-- exact asset metadata/hash must be recorded before scoring
+Key requirements:
+- historical rights-clean sources only;
+- identify stable positive/upside and negative/downside signals by position;
+- build a research-only ranking prototype;
+- define bust/downside relative to a preseason baseline unless a lawful historical draft-cost source is found;
+- no causal overclaiming;
+- no 2026 outcome inspection;
+- do not modify the frozen WR-021 2026 snapshot, WR-023 protocol, protocol manifest, or gate;
+- no production ranking changes;
+- leave research PR open for Manager review.
 
-Checkpoints:
-- Week 4 descriptive only
-- Week 8 descriptive only
-- Week 13 descriptive only
-- completed Week 18 regular season = only decisive checkpoint
+### WR-026 — Phone-Only Decision View Optimization
+Assigned role: Implementation Engineer / Builder
+Status: ACTIVE
+Task: `.ai/manager/WR-026.md`
+Production authorization: YES — phone UI/layout only
+Independent audit required: YES
 
-Final gate requires all:
-1. >=3% returner PPR/game MAE improvement;
-2. paired-player 10,000-replicate bootstrap 95% MAE-delta interval upper bound < 0;
-3. Ridge-minus-baseline Spearman >= -0.01;
-4. >=3/4 positions non-worse and no position >5% worse on MAE;
-5. zero contamination/post-freeze model, prediction, cohort, protocol or gate change.
+User requirement boundary:
+- phone only, preferably <=600px;
+- desktop/tablet >600px must remain visually and behaviorally unchanged.
 
-## Integration
-PR #117 merged by Manager as:
-`a1aa543f980f724977e0619d0610e046c719cbea`
+Target experience:
+- decision-first opening state;
+- recommendation/urgency and actionable players visible quickly;
+- one primary position context at a time instead of all full position lists stacked vertically;
+- one-tap position switcher;
+- bounded top relevant tier/player set with explicit Show more/full-list access;
+- preserve Position/Overall, My Draft, search, Taken/Mine, target stars, Manage, ESPN health, targets/change feed, K/DST;
+- no ranking/scoring/recommendation/state/persistence/ESPN semantic change.
 
-Production ranking authority changed: NO.
-WR-D001 changed: NO.
+Required phone baselines/tests:
+- 320x700
+- 375x812
+- 390x844
+- 430x932
 
-## WR-024 decision
-Task: `.ai/manager/WR-024.md`
-Status: COMPLETE
+Required desktop/tablet regression guard:
+- 768x1024
+- 820x900
+- 900x900
+- 1280x800
+- 1440x900
 
-Decision:
-- accept WR-023 as the authoritative future prospective evaluation protocol;
-- do not open a production ranking milestone;
-- return project to MAINTENANCE / STABLE;
-- leave all workers idle until a real maintenance trigger or predeclared checkpoint is due.
+Builder must not merge. Final mergeable green WR-026 PR goes to Independent Auditor before Manager release decision.
 
-## Interpretation boundary
-Even if the future WR-023 final gate passes, that establishes a prospective returning-player PPR/game signal only. It does not automatically validate:
-- rookie handling;
-- availability / season-total integration;
-- draft ranking/value transformation;
-- replacement-level logic;
-- superiority to FantasyPros.
+## Frozen prospective ranking contract
+UNCHANGED.
 
-Any production ranking milestone would require a separate Manager decision, architecture, implementation task, QA, and merge gate.
+WR-023 protocol SHA-256:
+`f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`
 
-## Current project mode
-MAINTENANCE / STABLE — prospective validation frozen.
-No active production milestone.
-No active R&D milestone.
+WR-021 snapshot SHA-256:
+`9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d`
+
+WR-025 is separate retrospective research. It may not alter or contaminate the frozen 2026 prospective evaluation.
+
+## Ranking authority
+UNCHANGED:
+- FantasyPros Top-20 Experts 2026 PPR ECR primary
+- broader FantasyPros PPR ECR fallback
+- ESPN rank/ADP timing only
+- WR-D001 ACTIVE
 
 ## Current role state
-- Manager: IDLE
-- Builder: IDLE
-- R&D: IDLE
-- Auditor: IDLE
+- Manager: IDLE after assignment/reconciliation
+- Builder: ACTIVE — WR-026
+- R&D: ACTIVE — WR-025
+- Auditor: IDLE / waiting for WR-026
 
-## Open findings
-- WR-019-AUD-01 LOW historical documentation-only finding
-- WR-021 historical signal is promising but non-pristine
-- rookie Ridge model remains unvalidated
-- RB/WR/TE historical position-level uncertainty individually inconclusive
-- availability model is recorded-games regression, not medical/injury modeling
-- no lawful FantasyPros superiority claim is supported
+## Recommended next actions
+1. Builder creates a dedicated WR-026 branch from refreshed canonical main, measures current phone behavior before edits, implements phone-only decision view, runs phone + desktop regression tests/full CI, opens PR, and stops for audit.
+2. R&D creates a dedicated WR-025 branch from refreshed canonical main, performs rights-clean historical signal/ranking research only, opens research PR if appropriate, and stops for Manager review.
+3. Do not activate Auditor until WR-026 is final, mergeable, and green.
+4. Manager reviews WR-025 independently when complete and activates Auditor for WR-026 when its release gate is ready.
 
 ## Blocking issues
-Any production ranking-model milestone remains blocked on the final pristine 2026 prospective result and subsequent Manager review.
-
-## Recommended next role
-IDLE until a valid maintenance trigger or WR-023 checkpoint is due.
-
-## Exact next action
-Do not assign work merely for utilization. If the user asks for an interim 2026 model read after Week 4/8/13, activate R&D under the frozen WR-023 protocol. The completed Week 18 regular-season evaluation is the decisive future checkpoint.
+None at assignment time.
 
 ## Checkpoint / SHA
-Verify current `main` after this reconciliation for the exact final canonical SHA.
+Verify current canonical `main` after this Manager reconciliation; assignment commits advanced main beyond `9cc60b590b6d6cfe17c19a1cb78e06956d7b7944`.
