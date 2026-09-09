@@ -43,6 +43,15 @@ replaceRequired(
   ''
 );
 
+replaceRequired(
+  'draft management disclosure',
+  "const sessionBefore = await page.locator('#draftSessionSelect option').count();\nawait page.getByRole('button', {name:'New Draft'}).click();",
+  "const sessionBefore = await page.locator('#draftSessionSelect option').count();\n" +
+    "await page.locator('#draft-manage > summary').click();\n" +
+    "assert.equal(await page.locator('#draft-manage').getAttribute('open'), '');\n" +
+    "await page.getByRole('button', {name:'New Draft'}).click();"
+);
+
 fs.writeFileSync(tempPath, source);
 try {
   await import(pathToFileURL(tempPath).href);
