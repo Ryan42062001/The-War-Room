@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WR-016 FINAL RECONCILIATION + PARALLEL SHADOW-MODEL R&D
+Status: ACTIVE DEVELOPMENT — LAYOUT RELEASE COMPLETE / WR-018 MANAGER REVIEW PENDING
 Last verified: 2026-09-09
 Owner: Manager / Architect
 
@@ -8,60 +8,59 @@ Owner: Manager / Architect
 Repository: `Ryan42062001/The-War-Room`
 Branch: `main`
 
-## Current production milestone
-### Draft-Day Layout Efficiency — FINAL RECONCILIATION BEFORE AUDIT
+## Draft-Day Layout Efficiency milestone
+Status: COMPLETE
 
 ### WR-016 — Draft-Day Layout Efficiency Implementation
 Role: Implementation Engineer
-Status: REACTIVATED / FINAL PR RECONCILIATION REQUIRED
+Status: COMPLETE / MERGED
 Production PR: #114 — `WR-016 Improve draft-day layout efficiency`
-Prior final head: `1ac362be96909bc638b06a49702b31167e2e2a09`
-Prior green War Room CI: run #811 / `34346917355`
+Audited final head: `5636bd75aa4be34bdbdfc5e459df44283c8f2483`
+Audited base: `8931b30d4f4f387504b17ac07d837aa87a166948`
+Audited merge ref: `318a2ee96ed4c25b23b3609ac31891dc276fbff5`
+Pre-merge exact integration CI: War Room #847 / `34366327920` — SUCCESS
+Merge commit: `dfe5476883d700b9281fb57f1c710daa7758492a`
+Post-merge main CI: War Room #862 / `34370139838` — SUCCESS
+GitHub Pages deployment #665 / `34370138865` — SUCCESS
 
-Builder completed the implementation and opened PR #114, but after Manager created WR-019 and reconciled canonical state, `main` advanced. A fresh GitHub PR check then reported PR #114 `mergeable: false`.
+Implemented outcome:
+- normal-flow coordinated draft control hierarchy instead of overlapping sticky layers
+- low-frequency/destructive actions behind Manage while session/Taken/Mine stay immediate
+- Draft Setup progressive disclosure before/after meaningful draft progress
+- responsive position filters and hardened frequent/touch targets
+- command-surface reveal for off-screen On-the-Clock transition
+- recovery/maintenance workflows remain reachable
+- no ranking/scoring/recommendation/draft-state/persistence-schema/ESPN-sync authority change
 
-Required next step:
-- Builder updates/reconciles `wr-016-draft-day-layout-efficiency` with the latest canonical main
-- resolve only legitimate integration conflicts without broadening scope
-- rerun final PR-head/merge-ref CI
-- update Builder handoff/PR with the new final head
-- do not merge
-
-### WR-019 — WR-016 Independent Release Audit
+### WR-019 — Independent Release Audit
 Role: Independent Auditor / QA
-Status: ASSIGNED / BLOCKED — WAITING FINAL PR RECONCILIATION
-Task: `.ai/manager/WR-019.md`
-
-Auditor must not execute the final release audit on the stale/unmergeable head. Audit starts only after PR #114 is mergeable on current main with green final CI.
+Status: COMPLETE
+Disposition: PASS WITH NON-BLOCKING FINDINGS
+Blocking findings: NONE
+Non-blocking finding: `WR-019-AUD-01` LOW — stale PR-body integration metadata only
+Validation levels: Level 1/2/3 VERIFIED; Level 4 physical-device/manual visual use not verified and not a mandatory WR-016 release gate
+Evidence: `.ai/auditor/WR-019_LAYOUT_RELEASE_AUDIT.md`
 
 ## Advanced-metrics ranking R&D
 
 ### WR-018 — Open-Data Shadow Ranking Model Experiment
 Role: Research & Development (R&D)
-Status: ASSIGNED / ACTIVE — NO REPOSITORY EXECUTION OBSERVED AT LATEST CHECK
-Task: `.ai/manager/WR-018.md`
-Production implementation authorization: NO
+Status: COMPLETE — MANAGER REVIEW / DISPOSITION PENDING
+Research PR: #115 — `WR-018: Open-data shadow ranking model experiment`
+Latest exact research head: `0c2f7e9e307ff30293ff96ab66fb0b1a72c8b051`
+Post-remediation exact-head War Room CI #858 / `34367526671`: SUCCESS
+Primary result: `MORE EVIDENCE NEEDED`
+Production ranking/model implementation authorization: NO
 
-At latest refresh:
-- no `wr-018-*` branch existed
-- no WR-018 PR existed
+Key result:
+- naive prior-season PPR/game remained a hard baseline
+- pooled Ridge MAE was effectively unchanged/slightly worse than naive
+- Gradient Boosting was worse on pooled MAE
+- richer summary-only features did not establish a persuasive held-out advantage
+- a clean research-only 2026 shadow snapshot was frozen for 343 returning QB/RB/WR/TE players
+- rookies, point-in-time injury/depth/role context, and availability modeling remain missing
 
-R&D should be reactivated and execute the assigned rights-clean, leakage-safe non-production experiment.
-
-## PW-002 — ACTIVE
-Current lanes:
-- Builder — ACTIVE / WR-016 final reconciliation
-- R&D — ACTIVE / WR-018, execution needs reactivation
-- Auditor — BLOCKED / WR-019 pending Builder final sync
-
-Dependency classification:
-- WR-016 final reconciliation -> WR-019 audit: HARD DEPENDENCY
-- WR-019 -> Manager release decision for PR #114: HARD DEPENDENCY
-- WR-018 -> any successor ranking-model work: HARD DEPENDENCY on Manager review
-- WR-018 is independent of the layout/release lane
-
-## Ranking authority baseline
-Unchanged:
+Current production ranking authority remains unchanged:
 - FantasyPros Top-20 Experts 2026 PPR ECR primary
 - broader FantasyPros PPR ECR fallback
 - ESPN rank/ADP market timing only
@@ -69,10 +68,20 @@ Unchanged:
 
 No shadow-model output is production authority.
 
+## PW-002
+Status: ACTIVE — ONLY WR-018 MANAGER DISPOSITION REMAINS
+
+Completed lanes:
+- Builder / WR-016 — COMPLETE / MERGED
+- Auditor / WR-019 — COMPLETE / PASS WITH NON-BLOCKING FINDINGS
+
+Pending lane:
+- R&D / WR-018 — COMPLETE / awaiting Manager disposition and research PR integration decision
+
 ## Current workload
-- Manager — IDLE after reconciliation
-- Builder — ACTIVE / WR-016 final reconciliation
-- R&D — ACTIVE / WR-018
-- Auditor — BLOCKED / WR-019
+- Manager — ACTIVE / WR-018 review and PW-002 closeout
+- Builder — IDLE
+- R&D — IDLE
+- Auditor — IDLE
 
 Workers must not independently update `.ai/shared/*`.
