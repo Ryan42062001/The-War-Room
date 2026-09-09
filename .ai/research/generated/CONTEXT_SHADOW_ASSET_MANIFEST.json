@@ -1,0 +1,365 @@
+[
+  {
+    "family": "stats_player",
+    "season": 2014,
+    "asset_id": 512985320,
+    "name": "stats_player_regpost_2014.csv",
+    "updated_at": "2026-08-13T12:53:07Z",
+    "github_digest": "sha256:7046a0fd69b979d0649feb679a42f82f6e8e175d19587857d3e9371f09427cd6",
+    "verified_sha256": "7046a0fd69b979d0649feb679a42f82f6e8e175d19587857d3e9371f09427cd6",
+    "regular_rows": 412,
+    "players": 412
+  },
+  {
+    "family": "stats_player",
+    "season": 2015,
+    "asset_id": 512984105,
+    "name": "stats_player_regpost_2015.csv",
+    "updated_at": "2026-08-13T12:52:11Z",
+    "github_digest": "sha256:b977be5bc8cad6b02dfb755e78974b4486a505fa272f683add499b968878e3eb",
+    "verified_sha256": "b977be5bc8cad6b02dfb755e78974b4486a505fa272f683add499b968878e3eb",
+    "regular_rows": 423,
+    "players": 423
+  },
+  {
+    "family": "stats_player",
+    "season": 2016,
+    "asset_id": 512985505,
+    "name": "stats_player_regpost_2016.csv",
+    "updated_at": "2026-08-13T12:53:18Z",
+    "github_digest": "sha256:041473e5860ca6cfcba7a29e98b2ddfc3f01db0df2469d5b44e44135603e2424",
+    "verified_sha256": "041473e5860ca6cfcba7a29e98b2ddfc3f01db0df2469d5b44e44135603e2424",
+    "regular_rows": 423,
+    "players": 423
+  },
+  {
+    "family": "stats_player",
+    "season": 2017,
+    "asset_id": 513235924,
+    "name": "stats_player_regpost_2017.csv",
+    "updated_at": "2026-08-13T16:45:26Z",
+    "github_digest": "sha256:88b85ba1a722f9a1cdc25612bdc96a82c8d81b8f2762713f253db4e787a2811b",
+    "verified_sha256": "88b85ba1a722f9a1cdc25612bdc96a82c8d81b8f2762713f253db4e787a2811b",
+    "regular_rows": 419,
+    "players": 419
+  },
+  {
+    "family": "stats_player",
+    "season": 2018,
+    "asset_id": 513236180,
+    "name": "stats_player_regpost_2018.csv",
+    "updated_at": "2026-08-13T16:45:34Z",
+    "github_digest": "sha256:85b55c0455d2afbd09fe7c8bcab31bc16ba2866fff45abec4fadc6b22c15fc4c",
+    "verified_sha256": "85b55c0455d2afbd09fe7c8bcab31bc16ba2866fff45abec4fadc6b22c15fc4c",
+    "regular_rows": 444,
+    "players": 444
+  },
+  {
+    "family": "stats_player",
+    "season": 2019,
+    "asset_id": 513237022,
+    "name": "stats_player_regpost_2019.csv",
+    "updated_at": "2026-08-13T16:46:09Z",
+    "github_digest": "sha256:a5b50ae01b39c4233533a4934e6d0185c256eaa5e2154eab26fa6da3b71f94f6",
+    "verified_sha256": "a5b50ae01b39c4233533a4934e6d0185c256eaa5e2154eab26fa6da3b71f94f6",
+    "regular_rows": 437,
+    "players": 437
+  },
+  {
+    "family": "stats_player",
+    "season": 2020,
+    "asset_id": 530454674,
+    "name": "stats_player_regpost_2020.csv",
+    "updated_at": "2026-08-26T07:35:57Z",
+    "github_digest": "sha256:512eaf469550988ed77077e8a1cc4bd0f612bca6c3a62e2f8c945f556862633a",
+    "verified_sha256": "512eaf469550988ed77077e8a1cc4bd0f612bca6c3a62e2f8c945f556862633a",
+    "regular_rows": 435,
+    "players": 435
+  },
+  {
+    "family": "stats_player",
+    "season": 2021,
+    "asset_id": 513240014,
+    "name": "stats_player_regpost_2021.csv",
+    "updated_at": "2026-08-13T16:48:33Z",
+    "github_digest": "sha256:22aa2fb78a3a0e977bbf1dd3613163a69c4298b1daf113ecf3e30cfd319f1eff",
+    "verified_sha256": "22aa2fb78a3a0e977bbf1dd3613163a69c4298b1daf113ecf3e30cfd319f1eff",
+    "regular_rows": 475,
+    "players": 475
+  },
+  {
+    "family": "stats_player",
+    "season": 2022,
+    "asset_id": 513240325,
+    "name": "stats_player_regpost_2022.csv",
+    "updated_at": "2026-08-13T16:48:48Z",
+    "github_digest": "sha256:6f56613e8d3b8531ddf3d00963442c6a0577428b53bcc7688f63b5492beef5eb",
+    "verified_sha256": "6f56613e8d3b8531ddf3d00963442c6a0577428b53bcc7688f63b5492beef5eb",
+    "regular_rows": 446,
+    "players": 446
+  },
+  {
+    "family": "stats_player",
+    "season": 2023,
+    "asset_id": 513240669,
+    "name": "stats_player_regpost_2023.csv",
+    "updated_at": "2026-08-13T16:49:07Z",
+    "github_digest": "sha256:b55110bdda4b1cb9c4f115991f5c5838824826cd76cfe4c60721af42ed4db766",
+    "verified_sha256": "b55110bdda4b1cb9c4f115991f5c5838824826cd76cfe4c60721af42ed4db766",
+    "regular_rows": 421,
+    "players": 421
+  },
+  {
+    "family": "stats_player",
+    "season": 2024,
+    "asset_id": 513241318,
+    "name": "stats_player_regpost_2024.csv",
+    "updated_at": "2026-08-13T16:49:36Z",
+    "github_digest": "sha256:e12c0dd3877e70bd18460f7b03afe83ae0e60aa6aba0c141e6fff9699de7ccb3",
+    "verified_sha256": "e12c0dd3877e70bd18460f7b03afe83ae0e60aa6aba0c141e6fff9699de7ccb3",
+    "regular_rows": 431,
+    "players": 431
+  },
+  {
+    "family": "stats_player",
+    "season": 2025,
+    "asset_id": 513244170,
+    "name": "stats_player_regpost_2025.csv",
+    "updated_at": "2026-08-13T16:51:54Z",
+    "github_digest": "sha256:a4cd28b5209608d87967c4e0db9720fc617c3f9aafe0a3a097461586ea90fd6d",
+    "verified_sha256": "a4cd28b5209608d87967c4e0db9720fc617c3f9aafe0a3a097461586ea90fd6d",
+    "regular_rows": 444,
+    "players": 444
+  },
+  {
+    "family": "players",
+    "asset_id": 552739287,
+    "name": "players.csv",
+    "updated_at": "2026-09-09T12:41:39Z",
+    "github_digest": "sha256:a33998d3981bda4f49f40390c5c0fa30036112ee1ea5de19ed4609e2ad3be3e2",
+    "verified_sha256": "a33998d3981bda4f49f40390c5c0fa30036112ee1ea5de19ed4609e2ad3be3e2",
+    "rows": 24826,
+    "used_columns": [
+      "gsis_id",
+      "display_name",
+      "birth_date",
+      "rookie_season"
+    ],
+    "explicitly_ignored_column_families": [
+      "position/position_group for historical rookie cohort",
+      "pff_*",
+      "ngs_*",
+      "latest_team",
+      "status"
+    ]
+  },
+  {
+    "family": "draft_picks",
+    "asset_id": 552425724,
+    "name": "draft_picks.csv",
+    "updated_at": "2026-09-09T09:22:54Z",
+    "github_digest": "sha256:6ec4a9b69ab16c6da5219554b8954f114b59e47bafb1cb6c476f672a5f25d02a",
+    "verified_sha256": "6ec4a9b69ab16c6da5219554b8954f114b59e47bafb1cb6c476f672a5f25d02a",
+    "rows": 12927,
+    "used_columns": [
+      "season",
+      "round",
+      "pick",
+      "team",
+      "gsis_id",
+      "pfr_player_name",
+      "position"
+    ],
+    "explicitly_ignored": "all career outcome/award/value columns",
+    "qb_rb_wr_te_gsis_coverage": {
+      "1980": {
+        "eligible_qb_rb_wr_te_draft_picks": 112,
+        "with_gsis_id": 67
+      },
+      "1981": {
+        "eligible_qb_rb_wr_te_draft_picks": 126,
+        "with_gsis_id": 79
+      },
+      "1982": {
+        "eligible_qb_rb_wr_te_draft_picks": 114,
+        "with_gsis_id": 75
+      },
+      "1983": {
+        "eligible_qb_rb_wr_te_draft_picks": 126,
+        "with_gsis_id": 94
+      },
+      "1984": {
+        "eligible_qb_rb_wr_te_draft_picks": 121,
+        "with_gsis_id": 83
+      },
+      "1985": {
+        "eligible_qb_rb_wr_te_draft_picks": 108,
+        "with_gsis_id": 83
+      },
+      "1986": {
+        "eligible_qb_rb_wr_te_draft_picks": 116,
+        "with_gsis_id": 90
+      },
+      "1987": {
+        "eligible_qb_rb_wr_te_draft_picks": 127,
+        "with_gsis_id": 107
+      },
+      "1988": {
+        "eligible_qb_rb_wr_te_draft_picks": 112,
+        "with_gsis_id": 75
+      },
+      "1989": {
+        "eligible_qb_rb_wr_te_draft_picks": 118,
+        "with_gsis_id": 78
+      },
+      "1990": {
+        "eligible_qb_rb_wr_te_draft_picks": 121,
+        "with_gsis_id": 78
+      },
+      "1991": {
+        "eligible_qb_rb_wr_te_draft_picks": 117,
+        "with_gsis_id": 77
+      },
+      "1992": {
+        "eligible_qb_rb_wr_te_draft_picks": 115,
+        "with_gsis_id": 69
+      },
+      "1993": {
+        "eligible_qb_rb_wr_te_draft_picks": 68,
+        "with_gsis_id": 61
+      },
+      "1994": {
+        "eligible_qb_rb_wr_te_draft_picks": 76,
+        "with_gsis_id": 64
+      },
+      "1995": {
+        "eligible_qb_rb_wr_te_draft_picks": 78,
+        "with_gsis_id": 62
+      },
+      "1996": {
+        "eligible_qb_rb_wr_te_draft_picks": 87,
+        "with_gsis_id": 71
+      },
+      "1997": {
+        "eligible_qb_rb_wr_te_draft_picks": 69,
+        "with_gsis_id": 58
+      },
+      "1998": {
+        "eligible_qb_rb_wr_te_draft_picks": 77,
+        "with_gsis_id": 61
+      },
+      "1999": {
+        "eligible_qb_rb_wr_te_draft_picks": 74,
+        "with_gsis_id": 67
+      },
+      "2000": {
+        "eligible_qb_rb_wr_te_draft_picks": 81,
+        "with_gsis_id": 69
+      },
+      "2001": {
+        "eligible_qb_rb_wr_te_draft_picks": 76,
+        "with_gsis_id": 63
+      },
+      "2002": {
+        "eligible_qb_rb_wr_te_draft_picks": 95,
+        "with_gsis_id": 78
+      },
+      "2003": {
+        "eligible_qb_rb_wr_te_draft_picks": 76,
+        "with_gsis_id": 66
+      },
+      "2004": {
+        "eligible_qb_rb_wr_te_draft_picks": 80,
+        "with_gsis_id": 73
+      },
+      "2005": {
+        "eligible_qb_rb_wr_te_draft_picks": 77,
+        "with_gsis_id": 62
+      },
+      "2006": {
+        "eligible_qb_rb_wr_te_draft_picks": 74,
+        "with_gsis_id": 65
+      },
+      "2007": {
+        "eligible_qb_rb_wr_te_draft_picks": 80,
+        "with_gsis_id": 73
+      },
+      "2008": {
+        "eligible_qb_rb_wr_te_draft_picks": 87,
+        "with_gsis_id": 86
+      },
+      "2009": {
+        "eligible_qb_rb_wr_te_draft_picks": 87,
+        "with_gsis_id": 84
+      },
+      "2010": {
+        "eligible_qb_rb_wr_te_draft_picks": 78,
+        "with_gsis_id": 76
+      },
+      "2011": {
+        "eligible_qb_rb_wr_te_draft_picks": 82,
+        "with_gsis_id": 82
+      },
+      "2012": {
+        "eligible_qb_rb_wr_te_draft_picks": 77,
+        "with_gsis_id": 77
+      },
+      "2013": {
+        "eligible_qb_rb_wr_te_draft_picks": 80,
+        "with_gsis_id": 79
+      },
+      "2014": {
+        "eligible_qb_rb_wr_te_draft_picks": 77,
+        "with_gsis_id": 75
+      },
+      "2015": {
+        "eligible_qb_rb_wr_te_draft_picks": 79,
+        "with_gsis_id": 78
+      },
+      "2016": {
+        "eligible_qb_rb_wr_te_draft_picks": 77,
+        "with_gsis_id": 77
+      },
+      "2017": {
+        "eligible_qb_rb_wr_te_draft_picks": 83,
+        "with_gsis_id": 83
+      },
+      "2018": {
+        "eligible_qb_rb_wr_te_draft_picks": 83,
+        "with_gsis_id": 83
+      },
+      "2019": {
+        "eligible_qb_rb_wr_te_draft_picks": 80,
+        "with_gsis_id": 80
+      },
+      "2020": {
+        "eligible_qb_rb_wr_te_draft_picks": 78,
+        "with_gsis_id": 77
+      },
+      "2021": {
+        "eligible_qb_rb_wr_te_draft_picks": 75,
+        "with_gsis_id": 75
+      },
+      "2022": {
+        "eligible_qb_rb_wr_te_draft_picks": 79,
+        "with_gsis_id": 79
+      },
+      "2023": {
+        "eligible_qb_rb_wr_te_draft_picks": 80,
+        "with_gsis_id": 80
+      },
+      "2024": {
+        "eligible_qb_rb_wr_te_draft_picks": 77,
+        "with_gsis_id": 77
+      },
+      "2025": {
+        "eligible_qb_rb_wr_te_draft_picks": 86,
+        "with_gsis_id": 85
+      },
+      "2026": {
+        "eligible_qb_rb_wr_te_draft_picks": 80,
+        "with_gsis_id": 79
+      }
+    }
+  }
+]
