@@ -1,0 +1,100 @@
+{
+  "task_id": "WR-023",
+  "classification": "RESEARCH ONLY / PRE-REGISTERED PROSPECTIVE VALIDATION",
+  "manifest_generated_at_utc": "2026-09-09T17:23:58.367414+00:00",
+  "starting_canonical_main": "8e51bc08c0ac70370f49943ac78fda481d7e77e7",
+  "protocol_freeze": {
+    "commit_sha": "28903ef5dc7073b36cb400330104e8f9e3ee0e05",
+    "commit_timestamp_utc": "2026-09-09T17:22:11Z",
+    "outcomes_inspected_before_freeze": false,
+    "outcomes_scored_before_freeze": false
+  },
+  "immutable_files": {
+    "protocol": {
+      "path": ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+      "bytes": 18218,
+      "git_blob_sha1": "2fc33ed684cfa539d2cc5684b52b7ba17adc47e1",
+      "sha256": "f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c"
+    },
+    "snapshot": {
+      "path": ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+      "bytes": 47256,
+      "git_blob_sha1": "d97280847779a945f1b7901e90bd1b3ee649e4f4",
+      "sha256": "9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d"
+    },
+    "wr021_source_manifest": {
+      "path": ".ai/research/CONTEXT_SHADOW_SOURCE_MANIFEST.md",
+      "bytes": 12208,
+      "git_blob_sha1": "5e814449ea2fb3ee16f8cb5b16f67580c34369c7",
+      "sha256": "e1c8347ba5db9ee7d8b8d09ef3b28f814b737fb9fc436cb2c4de8a6d99f95120"
+    },
+    "wr021_asset_manifest": {
+      "path": ".ai/research/generated/CONTEXT_SHADOW_ASSET_MANIFEST.json",
+      "bytes": 10787,
+      "git_blob_sha1": "07fc229791c4dcbf3234b506499c1eea186617d3",
+      "sha256": "ceb5b96e7152d16ebe7b637baad245b79893dc0e42b64545c756af4b6a221d4d"
+    },
+    "wr021_experiment_report": {
+      "path": ".ai/research/CONTEXT_SHADOW_EXPERIMENT.md",
+      "bytes": 15918,
+      "git_blob_sha1": "760a2895f153d7826741ed624d3082ad4a0b1fbb",
+      "sha256": "fc19ec45ea22be20a290c79350b6f1c3d26d1f6090f35ad03e3be3006cf8d42c"
+    }
+  },
+  "snapshot_checks": {
+    "rows": 523,
+    "returners": 444,
+    "drafted_rookies": 79,
+    "positions": [
+      "QB",
+      "RB",
+      "TE",
+      "WR"
+    ],
+    "unique_player_ids": 523,
+    "duplicate_player_ids": [],
+    "invalid_rookie_values": []
+  },
+  "outcome_source": {
+    "repository": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "asset_name": "stats_player_regpost_2026.csv",
+    "regular_season_filter": "season_type case-insensitive == REG",
+    "join_key": "snapshot player_id == outcome player_id (GSIS), exact only",
+    "required_fields": [
+      "player_id",
+      "season_type",
+      "games",
+      "fantasy_points_ppr"
+    ],
+    "season_field_rule": "if present, scored rows must have season == 2026",
+    "queried_before_protocol_freeze": false
+  },
+  "checkpoint_policy": {
+    "interim": [
+      "after regular-season Week 4 \u2014 descriptive only",
+      "after regular-season Week 8 \u2014 descriptive only",
+      "after regular-season Week 13 \u2014 descriptive only"
+    ],
+    "final": "after completed regular-season Week 18 \u2014 only decisive checkpoint",
+    "missed_interim_backfill": false
+  },
+  "primary_hypothesis": "returning-player frozen Ridge PPR/game vs frozen previous-season PPR/game baseline",
+  "rookies": "separate diagnostic only; transparent rookie baseline remains primary rookie comparator",
+  "paired_player_bootstrap": {
+    "replicates": 10000,
+    "seed": 23023,
+    "statistic": "mean(abs(ridge-actual) - abs(baseline-actual))",
+    "interval": "ordinary percentile 95% [2.5%, 97.5%]"
+  },
+  "final_evidence_gate": {
+    "returner_ppr_pg_mae_improvement_min_fraction": 0.03,
+    "paired_bootstrap_mae_delta_ci95_upper_strictly_lt": 0.0,
+    "ridge_minus_baseline_spearman_min": -0.01,
+    "positions_non_worse_min_count": 3,
+    "position_max_relative_mae_regression": 0.05,
+    "integrity_required": true
+  },
+  "production_authorization": "NONE",
+  "production_ranking_authority_changed": false
+}
