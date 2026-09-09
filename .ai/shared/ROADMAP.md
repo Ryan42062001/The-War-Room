@@ -1,6 +1,6 @@
 # War Room Roadmap
 
-Status: MAINTENANCE / STABLE — BOUNDED WR-023 R&D ACTIVE
+Status: MAINTENANCE / STABLE — PROSPECTIVE VALIDATION FROZEN
 Last updated: 2026-09-09
 Owner: Manager / Architect
 
@@ -24,19 +24,17 @@ Manager classification: `MORE EVIDENCE NEEDED`
 ### WR-021 — Context-Enriched Preseason Shadow Model Validation
 Status: COMPLETE / ACCEPTED / MERGED
 Research PR: #116
-Final head: `6e510d2223289f570e9f078ae0c61eff92a8374e`
-Exact-head War Room CI #888 / `34376884781`: SUCCESS
 Merge commit: `f2e3e9b1c0a9a59452d679783a5236d4a5da9a09`
 Manager classification: `PROMISING — CONTINUE VALIDATION` / RESEARCH ONLY
 
 Key result:
-- context-enriched returning-player Ridge model improved confirmatory MAE by 7.89%
-- repeated-player-aware pooled 95% interval was fully favorable
+- returning-player context Ridge improved confirmatory MAE by 7.89%
+- pooled repeated-player-aware uncertainty was favorable
 - pooled Spearman improved
-- all predeclared WR-021 research gates passed
-- rookie Ridge model failed versus transparent rookie baseline
+- historical predeclared gate passed
+- rookie Ridge model did not validate
 - 2022–2025 are not pristine project-level holdouts
-- a corrected 2026 prospective snapshot is frozen for 523 QB/RB/WR/TE players
+- corrected 2026 prospective snapshot frozen for 523 QB/RB/WR/TE players
 
 ### WR-022 — WR-021 Manager Disposition
 Status: COMPLETE
@@ -45,29 +43,43 @@ Decision:
 - preserve FantasyPros production authority and WR-D001
 - require pristine 2026 prospective validation before any production-milestone consideration
 
-## Active bounded R&D
 ### WR-023 — 2026 Prospective Shadow Evaluation Protocol Freeze
-Assigned role: Research & Development (R&D)
-Status: ACTIVE
-Production implementation authorization: NONE
-Task: `.ai/manager/WR-023.md`
+Status: COMPLETE / ACCEPTED / MERGED
+Research PR: #117
+Final head: `d3e3890834184da4ae99c1194ba333e48c98022b`
+Exact-head War Room CI #902 / `34382871798`: SUCCESS
+Merge commit: `a1aa543f980f724977e0619d0610e046c719cbea`
 
-Objective:
-Pre-register and hash the exact 2026 prospective evaluation protocol before any 2026 outcome scoring.
+Authoritative frozen identities:
+- protocol SHA-256: `f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`
+- WR-021 snapshot SHA-256: `9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d`
 
-Required protocol properties:
-- immutable WR-021 frozen snapshot universe
-- returners as primary hypothesis; rookies separate/diagnostic
-- rights-clean predeclared 2026 outcome source and field semantics
-- interim checkpoints descriptive only
-- final regular season is decisive
-- >=3% returning-player PPR/game MAE lift
-- paired player-bootstrap 95% interval upper bound < 0
+Future decisive gate after completed Week 18 requires all:
+- >=3% returner PPR/game MAE lift
+- favorable paired-player bootstrap interval
 - Spearman no worse by >0.01
-- >=3/4 positions non-worse on MAE and no position worse by >5%
-- no post-freeze model/snapshot modification
+- >=3/4 positions non-worse and none >5% worse
+- no contamination/post-freeze changes
 
-Passing the future prospective gate would authorize only Manager consideration of a separate production milestone; it would not directly change rankings.
+Interim Week 4 / Week 8 / Week 13 checkpoints are descriptive only and optional. Missed interim checkpoints may not be reconstructed from later cumulative data.
+
+### WR-024 — WR-023 Manager Disposition / Prospective Validation Hold
+Status: COMPLETE
+Decision:
+- accept WR-023 protocol freeze
+- do not open a production ranking milestone
+- keep all workers idle until a valid maintenance trigger or predeclared checkpoint is due
+
+## Future ranking-model decision path
+No immediate ranking-model implementation is authorized.
+
+A future production milestone may be considered only if the pristine 2026 final prospective gate is confirmed and Manager separately resolves:
+- rookie handling
+- availability / season-total integration
+- ranking/value transformation
+- replacement-level and positional logic
+- lawful comparison to existing FantasyPros authority where feasible
+- independent QA and production merge gates
 
 ## Ranking authority remains unchanged
 - FantasyPros Top-20 Experts 2026 PPR ECR primary
@@ -75,16 +87,15 @@ Passing the future prospective gate would authorize only Manager consideration o
 - ESPN rank/ADP timing only
 - WR-D001 remains ACTIVE
 
-## Parallel Work Wave
-### PW-002 — COMPLETE
-- WR-016 COMPLETE / MERGED
-- WR-019 COMPLETE / PASS WITH NON-BLOCKING FINDINGS
-- WR-018 COMPLETE / ACCEPTED / MERGED
-
-WR-023 is standalone R&D. No new Parallel Work Wave is justified.
+## Parallel work
+PW-002 — COMPLETE.
+No active Parallel Work Wave.
 
 ## Current roles
 - Manager: IDLE
 - Builder: IDLE
-- R&D: ACTIVE — WR-023
+- R&D: IDLE
 - Auditor: IDLE
+
+## Next activation
+Activate work only when a maintenance trigger is real. The next expected ranking-research opportunity is a WR-023 descriptive checkpoint after Week 4, but it need not be executed if there is no value in the interim read. The completed Week 18 final checkpoint is the decisive required evaluation.
