@@ -1,0 +1,218 @@
+[
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2012.csv",
+    "asset_id": 512980777,
+    "updated_at": "2026-08-13T12:48:53Z",
+    "sha256": "18d0d3ccbac3ba5489098629b74d58074b5297c8cf2c5de4ec06f809f2dffafc",
+    "rows_after_reg_skill_filter": 417,
+    "raw_filtered_rows": 417
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2013.csv",
+    "asset_id": 512983282,
+    "updated_at": "2026-08-13T12:51:32Z",
+    "sha256": "dbc7804c32c8dbf46120bfe4e724cdd926537509caa8a1bb96cd3b6e159b21f8",
+    "rows_after_reg_skill_filter": 410,
+    "raw_filtered_rows": 410
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2014.csv",
+    "asset_id": 512985320,
+    "updated_at": "2026-08-13T12:53:07Z",
+    "sha256": "7046a0fd69b979d0649feb679a42f82f6e8e175d19587857d3e9371f09427cd6",
+    "rows_after_reg_skill_filter": 412,
+    "raw_filtered_rows": 412
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2015.csv",
+    "asset_id": 512984105,
+    "updated_at": "2026-08-13T12:52:11Z",
+    "sha256": "b977be5bc8cad6b02dfb755e78974b4486a505fa272f683add499b968878e3eb",
+    "rows_after_reg_skill_filter": 423,
+    "raw_filtered_rows": 423
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2016.csv",
+    "asset_id": 512985505,
+    "updated_at": "2026-08-13T12:53:18Z",
+    "sha256": "041473e5860ca6cfcba7a29e98b2ddfc3f01db0df2469d5b44e44135603e2424",
+    "rows_after_reg_skill_filter": 423,
+    "raw_filtered_rows": 423
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2017.csv",
+    "asset_id": 513235924,
+    "updated_at": "2026-08-13T16:45:26Z",
+    "sha256": "88b85ba1a722f9a1cdc25612bdc96a82c8d81b8f2762713f253db4e787a2811b",
+    "rows_after_reg_skill_filter": 419,
+    "raw_filtered_rows": 419
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2018.csv",
+    "asset_id": 513236180,
+    "updated_at": "2026-08-13T16:45:34Z",
+    "sha256": "85b55c0455d2afbd09fe7c8bcab31bc16ba2866fff45abec4fadc6b22c15fc4c",
+    "rows_after_reg_skill_filter": 444,
+    "raw_filtered_rows": 444
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2019.csv",
+    "asset_id": 513237022,
+    "updated_at": "2026-08-13T16:46:09Z",
+    "sha256": "a5b50ae01b39c4233533a4934e6d0185c256eaa5e2154eab26fa6da3b71f94f6",
+    "rows_after_reg_skill_filter": 437,
+    "raw_filtered_rows": 437
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2020.csv",
+    "asset_id": 530454674,
+    "updated_at": "2026-08-26T07:35:57Z",
+    "sha256": "512eaf469550988ed77077e8a1cc4bd0f612bca6c3a62e2f8c945f556862633a",
+    "rows_after_reg_skill_filter": 435,
+    "raw_filtered_rows": 435
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2021.csv",
+    "asset_id": 513240014,
+    "updated_at": "2026-08-13T16:48:33Z",
+    "sha256": "22aa2fb78a3a0e977bbf1dd3613163a69c4298b1daf113ecf3e30cfd319f1eff",
+    "rows_after_reg_skill_filter": 475,
+    "raw_filtered_rows": 475
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2022.csv",
+    "asset_id": 513240325,
+    "updated_at": "2026-08-13T16:48:48Z",
+    "sha256": "6f56613e8d3b8531ddf3d00963442c6a0577428b53bcc7688f63b5492beef5eb",
+    "rows_after_reg_skill_filter": 446,
+    "raw_filtered_rows": 446
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2023.csv",
+    "asset_id": 513240669,
+    "updated_at": "2026-08-13T16:49:07Z",
+    "sha256": "b55110bdda4b1cb9c4f115991f5c5838824826cd76cfe4c60721af42ed4db766",
+    "rows_after_reg_skill_filter": 421,
+    "raw_filtered_rows": 421
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2024.csv",
+    "asset_id": 513241318,
+    "updated_at": "2026-08-13T16:49:36Z",
+    "sha256": "e12c0dd3877e70bd18460f7b03afe83ae0e60aa6aba0c141e6fff9699de7ccb3",
+    "rows_after_reg_skill_filter": 431,
+    "raw_filtered_rows": 431
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "stats_player",
+    "release_id": 236670328,
+    "asset_name": "stats_player_regpost_2025.csv",
+    "asset_id": 513244170,
+    "updated_at": "2026-08-13T16:51:54Z",
+    "sha256": "a4cd28b5209608d87967c4e0db9720fc617c3f9aafe0a3a097461586ea90fd6d",
+    "rows_after_reg_skill_filter": 444,
+    "raw_filtered_rows": 444
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "players",
+    "release_id": 69785162,
+    "asset_name": "players.csv",
+    "asset_id": 552739287,
+    "updated_at": "2026-09-09T12:41:39Z",
+    "sha256": "a33998d3981bda4f49f40390c5c0fa30036112ee1ea5de19ed4609e2ad3be3e2",
+    "rows": 24826
+  },
+  {
+    "source": "nflverse/nflverse-data",
+    "release_tag": "draft_picks",
+    "release_id": 66254658,
+    "asset_name": "draft_picks.csv",
+    "asset_id": 552425724,
+    "updated_at": "2026-09-09T09:22:54Z",
+    "sha256": "6ec4a9b69ab16c6da5219554b8954f114b59e47bafb1cb6c476f672a5f25d02a",
+    "rows": 12927
+  },
+  {
+    "source": "dynastyprocess/data-mfl_public",
+    "path": "safeleagues/league/year=2019/part-0.parquet",
+    "sha256": "fc665f1f781aa7ac163e337e08e5e440304b4b34051cb7b601da98f3d0c0e3ad",
+    "bytes": 12687,
+    "url": "https://raw.githubusercontent.com/dynastyprocess/data-mfl_public/9b8f37152036b44b1a5baeb35f70482b1d3369f8/safeleagues/league/year=2019/part-0.parquet"
+  },
+  {
+    "source": "dynastyprocess/data-mfl_public",
+    "path": "safeleagues/draft/year=2019/part-0.parquet",
+    "sha256": "60bae4e504335b78cbbfe6167d8298261208653d61254e2bf3a27a7ad1ce1214",
+    "bytes": 1004751,
+    "url": "https://raw.githubusercontent.com/dynastyprocess/data-mfl_public/9b8f37152036b44b1a5baeb35f70482b1d3369f8/safeleagues/draft/year=2019/part-0.parquet"
+  },
+  {
+    "source": "dynastyprocess/data-mfl_public",
+    "path": "safeleagues/league/year=2020/part-1.parquet",
+    "sha256": "b87e643dd145546cf05a54570bef6d4deb99444af8b5720a729959302d8891dd",
+    "bytes": 20327,
+    "url": "https://raw.githubusercontent.com/dynastyprocess/data-mfl_public/9b8f37152036b44b1a5baeb35f70482b1d3369f8/safeleagues/league/year=2020/part-1.parquet"
+  },
+  {
+    "source": "dynastyprocess/data-mfl_public",
+    "path": "safeleagues/draft/year=2020/part-1.parquet",
+    "sha256": "6bbc7f24b7a326c7edbc5358ec29f1602591719f2609075ed4af6976babf7f6f",
+    "bytes": 1772117,
+    "url": "https://raw.githubusercontent.com/dynastyprocess/data-mfl_public/9b8f37152036b44b1a5baeb35f70482b1d3369f8/safeleagues/draft/year=2020/part-1.parquet"
+  },
+  {
+    "source": "dynastyprocess/data-mfl_public",
+    "path": "safeleagues/league/year=2021/part-2.parquet",
+    "sha256": "b8d629230c971842ec31550bd82613b49742aa5cd0d09689744a26f7a3335070",
+    "bytes": 20001,
+    "url": "https://raw.githubusercontent.com/dynastyprocess/data-mfl_public/9b8f37152036b44b1a5baeb35f70482b1d3369f8/safeleagues/league/year=2021/part-2.parquet"
+  },
+  {
+    "source": "dynastyprocess/data-mfl_public",
+    "path": "safeleagues/draft/year=2021/part-2.parquet",
+    "sha256": "624a43bc0f1fb90e66119d63c418dce032f7c7eec70557ed0cc07443e9a6c35e",
+    "bytes": 757584,
+    "url": "https://raw.githubusercontent.com/dynastyprocess/data-mfl_public/9b8f37152036b44b1a5baeb35f70482b1d3369f8/safeleagues/draft/year=2021/part-2.parquet"
+  }
+]
