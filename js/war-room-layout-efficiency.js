@@ -61,12 +61,10 @@
   }
 
   function loadPhoneDecisionView() {
-    if (window.WarRoomPhoneDecisionView) {
-      if (typeof window.WarRoomPhoneDecisionView.refresh === 'function') {
-        window.WarRoomPhoneDecisionView.refresh();
-      }
-      return;
-    }
+    // The phone module observes its own board/view/resize inputs. Do not call
+    // refresh from the broad WR-016 class observer or the two observers can
+    // feed each other while dynamic command-bar controls are being focused.
+    if (window.WarRoomPhoneDecisionView) return;
     if (document.getElementById(PHONE_DECISION_SCRIPT_ID)) return;
 
     var script = document.createElement('script');
