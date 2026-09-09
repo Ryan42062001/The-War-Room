@@ -2,59 +2,77 @@
 
 HANDOFF
 
-Task ID: WR-014
+Task ID: WR-018
 Role: Research & Development (R&D)
 Status: ASSIGNED — ACTIVE
 Parallel Work Wave: PW-002
 
 ## Previous task closure
-WR-012 — Layout Efficiency & Information Architecture R&D is COMPLETE.
-- research PR #112 merged as `e46ae94bc592d73560eb88258046acce19d3c0c6`
-- Manager WR-015 synthesized WR-012 with WR-013 and closed PW-001
-- R&D's former resource block is cleared
+WR-014 — Advanced Metrics Ranking Model Feasibility is COMPLETE.
+
+- outcome: `R&D ONLY / MORE EVIDENCE NEEDED`
+- evidence: `.ai/research/ADVANCED_METRICS_RANKING_DISCOVERY.md`
+- research PR #113 final head: `84615936573f3ff10165ac0f884019a255c53fbf`
+- exact-head War Room CI #768 / run `34301913499`: SUCCESS
+- PR #113 merged as `c976deeca8619f30ca38db4fdb01bb7c02bd83b3`
+- Manager WR-017 accepted the evidence
+- WR-D001 remains ACTIVE and unchanged
 
 ## Current assignment
-Task: Advanced Metrics Ranking Model Feasibility
-Manager task spec: `.ai/manager/WR-014.md`
-Production implementation authorization: NONE
+Task: Open-Data Shadow Ranking Model Experiment
+Manager task spec: `.ai/manager/WR-018.md`
+Production ranking/model implementation authorization: NONE
 
-Refresh canonical state/current `main` before branching and record the actual starting SHA.
+Refresh current canonical `main` before branching and record the exact assignment-start SHA.
 
 ## Objective
-Determine whether an open/licensable War Room-owned preseason projection/value model built from underlying football statistics can materially outperform or complement the current FantasyPros Top-20 PPR ECR baseline.
+Empirically test whether a rights-conservative War Room-owned projection/value model has enough leakage-safe predictive signal to justify continued validation, while remaining completely disconnected from production rankings.
 
-Required work includes:
-- source/licensing matrix
-- position-specific predictive feature families
-- appropriate Full-PPR target definition
-- injury/role/rookie/team-context strategy
-- transparent vs higher-complexity modeling alternatives
-- open-data-only vs hybrid vs full-replacement architecture
-- leakage-safe rolling/held-out validation
-- direct comparison standard against current ECR when lawful historical inputs permit
-- seasonal refresh/fail-closed design
-- explainability/downstream recommendation risk
+## Required experiment
+- QB/RB/WR/TE only
+- build source/license manifest before conclusions
+- use only clearly permitted/open inputs
+- construct point-in-time rolling-origin historical features
+- no target-season Week 1+ leakage
+- compare transparent naive/statistical baseline, regularized position-specific model, and a higher-capacity challenger if justified
+- evaluate Full-PPR per-game error, rank quality, top-N behavior, season/availability error where defensible, and uncertainty/calibration
+- freeze a compact 2026 preseason shadow prediction snapshot if a prospectively clean freeze is still possible
+- preserve missing injury/rookie/context limitations honestly rather than reconstructing them with hindsight
 
-## Source rule
-Treat PFF as restricted unless separate explicit rights are established. Do not scrape, transcribe, reconstruct, train on, or derive a model from PFF data under ordinary access.
+## Source guardrails
+Do NOT use:
+- PFF data, grades, Derived Data, screenshots, transcription, exports, or API data
+- systematic NFL Next Gen Stats / NFL Pro input without explicit rights
+- FantasyPros API/historical benchmark data unless rights for that exact benchmarking use are established
+- any paid/private source with unclear terms
 
-Prefer open/licensable data sources and independently verify their current terms, completeness, provenance, and refresh behavior.
+Technical accessibility is not permission.
+
+## Required outputs
+Produce:
+- `.ai/research/SHADOW_RANKING_EXPERIMENT.md`
+- `.ai/research/SHADOW_RANKING_SOURCE_MANIFEST.md`
+- reproducible research-only experiment code/config as appropriate
+- compact metrics/results
+- frozen 2026 shadow snapshot if cleanly feasible
+- updated `.ai/research/HANDOFF.md`
+
+Do not commit large raw datasets when versioned/reproducible references are sufficient or redistribution rights are unclear.
+
+## Required result classification
+Return one:
+- `PROMISING — CONTINUE VALIDATION`
+- `MORE EVIDENCE NEEDED`
+- `DO NOT PURSUE`
+
+A promising result still does NOT authorize production ranking changes.
 
 ## Parallel independence
-Builder is executing WR-016 layout efficiency in parallel.
+Builder continues WR-016 layout implementation under PW-002.
 
-WR-014 vs WR-016: INDEPENDENT.
-Do not inspect or modify Builder production UI work unless needed only to understand an established integration boundary. Do not change production rankings/UI/state.
+WR-018 vs WR-016: INDEPENDENT.
+Do not inspect or modify Builder production UI work.
+Do not modify canonical `.ai/shared/*`.
 
-## Required output
-Produce:
-- `.ai/research/ADVANCED_METRICS_RANKING_DISCOVERY.md`
-- updated `.ai/research/HANDOFF.md`
-- optional isolated/disposable `.ai/research/` experiment only when it materially reduces uncertainty
-
-Outcome must be one of:
-- READY FOR MANAGER MILESTONE CONSIDERATION
-- R&D ONLY / MORE EVIDENCE NEEDED
-- DO NOT PURSUE
-
-Do not implement a production ranking model.
+## Exact next action
+Execute WR-018 exactly as specified in `.ai/manager/WR-018.md`. Build the rights-clean point-in-time experiment and return empirical evidence to Manager. Do not promote any model into production.
