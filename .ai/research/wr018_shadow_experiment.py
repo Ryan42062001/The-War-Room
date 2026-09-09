@@ -16,7 +16,7 @@ OWNER='nflverse'; REPO='nflverse-data'; TAG='stats_player'
 SEASONS=list(range(2012,2026)); HOLDS=[2022,2023,2024,2025]; POS=['QB','RB','WR','TE']; MIN_GAMES=4
 FREEZE=datetime.fromisoformat('2026-09-10T00:20:00+00:00')
 OUT=Path('.ai/research/generated'); OUT.mkdir(parents=True,exist_ok=True)
-REQ=['season','week','season_type','player_id','position','fantasy_points_ppr','attempts','carries','targets','receptions','passing_yards','passing_tds','passing_interceptions','rushing_yards','rushing_tds','receiving_yards','receiving_tds']
+REQ=['season','season_type','player_id','position','fantasy_points_ppr','attempts','carries','targets','receptions','passing_yards','passing_tds','passing_interceptions','rushing_yards','rushing_tds','receiving_yards','receiving_tds']
 SUMS=['fantasy_points_ppr','attempts','carries','targets','receptions','passing_yards','passing_tds','passing_interceptions','rushing_yards','rushing_tds','receiving_yards','receiving_tds','passing_epa','rushing_epa','receiving_epa']
 AVGS=['target_share','air_yards_share','wopr']
 FEATURES=['prev1_ppr_pg','prev1_games','prev1_attempts_pg','prev1_carries_pg','prev1_targets_pg','prev1_receptions_pg','prev1_pass_yards_pg','prev1_pass_tds_pg','prev1_int_pg','prev1_rush_yards_pg','prev1_rush_tds_pg','prev1_rec_yards_pg','prev1_rec_tds_pg','prev1_pass_epa_pg','prev1_rush_epa_pg','prev1_rec_epa_pg','prev1_target_share','prev1_air_yards_share','prev1_wopr','prev2_ppr_pg','prev2_games','ppr_delta','weighted_ppr_pg','has_prev2']
@@ -55,13 +55,18 @@ def aggregate(y,b):
         if c not in df: df[c]=np.nan
     rows={}
     for pid,g in df.groupby('player_id',dropna=True):
-        weeks=g.week.dropna().astype(str).nunique()
-        if not weeks: continue
-        sm={c:pd.to_numeric(g[c],errors='coerce').fillna(0).sum()/weeks for c in SUMS}
+        if 'week' in g.columns:
+            games=g.week.dropna().astype(str).nunique()
+        elif 'games' in g.columns:
+            gv=pd.to_numeric(g['games'],errors='coerce').dropna(); games=int(gv.max()) if len(gv) else 0
+        else:
+            raise AssertionError(f'{y} missing both week and games denominator')
+        if not games: continue
+        sm={c:pd.to_numeric(g[c],errors='coerce').fillna(0).sum()/games for c in SUMS}
         av={c:pd.to_numeric(g[c],errors='coerce').mean() for c in AVGS}
         name=(g.get('player_display_name',g.get('player_name')).dropna().astype(str).iloc[-1] if ('player_display_name' in g or 'player_name' in g) else str(pid))
         p=str(g.position.dropna().astype(str).iloc[-1]).upper()
-        rows[str(pid)]={'season':y,'player_id':str(pid),'player_name':name,'position':p,'games':int(weeks),'ppr_pg':sm['fantasy_points_ppr'],'attempts_pg':sm['attempts'],'carries_pg':sm['carries'],'targets_pg':sm['targets'],'receptions_pg':sm['receptions'],'pass_yards_pg':sm['passing_yards'],'pass_tds_pg':sm['passing_tds'],'int_pg':sm['passing_interceptions'],'rush_yards_pg':sm['rushing_yards'],'rush_tds_pg':sm['rushing_tds'],'rec_yards_pg':sm['receiving_yards'],'rec_tds_pg':sm['receiving_tds'],'pass_epa_pg':sm['passing_epa'],'rush_epa_pg':sm['rushing_epa'],'rec_epa_pg':sm['receiving_epa'],'target_share':0 if pd.isna(av['target_share']) else float(av['target_share']),'air_yards_share':0 if pd.isna(av['air_yards_share']) else float(av['air_yards_share']),'wopr':0 if pd.isna(av['wopr']) else float(av['wopr'])}
+        rows[str(pid)]={'season':y,'player_id':str(pid),'player_name':name,'position':p,'games':int(games),'ppr_pg':sm['fantasy_points_ppr'],'attempts_pg':sm['attempts'],'carries_pg':sm['carries'],'targets_pg':sm['targets'],'receptions_pg':sm['receptions'],'pass_yards_pg':sm['passing_yards'],'pass_tds_pg':sm['passing_tds'],'int_pg':sm['passing_interceptions'],'rush_yards_pg':sm['rushing_yards'],'rush_tds_pg':sm['rushing_tds'],'rec_yards_pg':sm['receiving_yards'],'rec_tds_pg':sm['receiving_tds'],'pass_epa_pg':sm['passing_epa'],'rush_epa_pg':sm['rushing_epa'],'rec_epa_pg':sm['receiving_epa'],'target_share':0 if pd.isna(av['target_share']) else float(av['target_share']),'air_yards_share':0 if pd.isna(av['air_yards_share']) else float(av['air_yards_share']),'wopr':0 if pd.isna(av['wopr']) else float(av['wopr'])}
     return rows,list(df.columns),len(df)
 
 def feat(y,pid,by):
