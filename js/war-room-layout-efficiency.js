@@ -16,6 +16,7 @@
   var observer = null;
   var setupEditing = false;
   var syncQueued = false;
+  var lastCommandMode = '';
 
   var MANAGE_SELECTORS = [
     '.draft-session-control > button',
@@ -219,6 +220,23 @@
     document.body.classList.toggle('draft-layout-has-progress', hasDraftProgress());
   }
 
+  function revealUrgentCommandState() {
+    var mode = document.body.getAttribute('data-draft-command-mode') || '';
+    if (mode === lastCommandMode) return;
+    var previousMode = lastCommandMode;
+    lastCommandMode = mode;
+    if (mode !== 'on-clock' || previousMode === 'on-clock') return;
+
+    var bar = document.getElementById('draft-command-bar');
+    if (!bar || typeof bar.scrollIntoView !== 'function') return;
+    var rect = bar.getBoundingClientRect();
+    if (rect.top >= 0 && rect.bottom <= window.innerHeight) return;
+
+    var reduceMotion = false;
+    try { reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (error) {}
+    bar.scrollIntoView({behavior:reduceMotion ? 'auto' : 'smooth', block:'start'});
+  }
+
   function synchronize() {
     syncQueued = false;
     ensureToolbarFilterGroup();
@@ -226,6 +244,7 @@
     moveManageActions();
     ensureSetupDisclosure();
     updateHeaderState();
+    revealUrgentCommandState();
   }
 
   function scheduleSynchronize() {
@@ -237,7 +256,12 @@
   function observeLayout() {
     if (observer) observer.disconnect();
     observer = new MutationObserver(scheduleSynchronize);
-    observer.observe(document.body, {childList:true, subtree:true, attributes:true, attributeFilter:['class','data-pick','data-board-view']});
+    observer.observe(document.body, {
+      childList:true,
+      subtree:true,
+      attributes:true,
+      attributeFilter:['class','data-pick','data-board-view','data-draft-command-mode']
+    });
   }
 
   function installSettingListeners() {
