@@ -19,6 +19,29 @@ const viewports = [
 ];
 const views = ['position', 'overall'];
 
+// Immutable pre-production-edit measurements captured on WR-016 head
+// 6397eb4a7f6aecbc8d9259df9c02f599363d2645 in CI run 34301185819.
+const BASELINE = {
+  '320x700:position': { firstChoiceY: 871, choicesAboveFold: 0, persistentUnion: 151, occludedChoices: 0 },
+  '320x700:overall': { firstChoiceY: 1674.2, choicesAboveFold: 0, persistentUnion: 151, occludedChoices: 0 },
+  '375x812:position': { firstChoiceY: 783, choicesAboveFold: 1, persistentUnion: 121, occludedChoices: 0 },
+  '375x812:overall': { firstChoiceY: 1512.5, choicesAboveFold: 0, persistentUnion: 121, occludedChoices: 0 },
+  '390x844:position': { firstChoiceY: 783, choicesAboveFold: 2, persistentUnion: 121, occludedChoices: 0 },
+  '390x844:overall': { firstChoiceY: 1512.5, choicesAboveFold: 0, persistentUnion: 129.5, occludedChoices: 0 },
+  '430x932:position': { firstChoiceY: 769, choicesAboveFold: 4, persistentUnion: 121, occludedChoices: 0 },
+  '430x932:overall': { firstChoiceY: 1445.5, choicesAboveFold: 0, persistentUnion: 155, occludedChoices: 0 },
+  '768x1024:position': { firstChoiceY: 631, choicesAboveFold: 9, persistentUnion: 197, occludedChoices: 3 },
+  '768x1024:overall': { firstChoiceY: 1212.5, choicesAboveFold: 0, persistentUnion: 220, occludedChoices: 0 },
+  '820x900:position': { firstChoiceY: 638.3, choicesAboveFold: 13, persistentUnion: 197, occludedChoices: 6 },
+  '820x900:overall': { firstChoiceY: 1049.6, choicesAboveFold: 0, persistentUnion: 231, occludedChoices: 0 },
+  '900x900:position': { firstChoiceY: 608.3, choicesAboveFold: 14, persistentUnion: 197, occludedChoices: 8 },
+  '900x900:overall': { firstChoiceY: 1019.6, choicesAboveFold: 0, persistentUnion: 231, occludedChoices: 0 },
+  '1280x800:position': { firstChoiceY: 457, choicesAboveFold: 30, persistentUnion: 169, occludedChoices: 16 },
+  '1280x800:overall': { firstChoiceY: 978.6, choicesAboveFold: 0, persistentUnion: 213, occludedChoices: 0 },
+  '1440x900:position': { firstChoiceY: 457, choicesAboveFold: 39, persistentUnion: 169, occludedChoices: 16 },
+  '1440x900:overall': { firstChoiceY: 978.6, choicesAboveFold: 0, persistentUnion: 213, occludedChoices: 0 }
+};
+
 const server = process.env.WAR_ROOM_URL ? null : http.createServer((request, response) => {
   const relative = request.url === '/' ? 'index.html' : request.url.split('?')[0].replace(/^\//, '');
   fs.readFile(path.join(root, relative), (error, data) => {
@@ -39,11 +62,22 @@ function round(value) {
   return Number.isFinite(value) ? Math.round(value * 10) / 10 : null;
 }
 
+function assertFrequentTargets(measurement) {
+  for (const [name, size] of Object.entries(measurement.targetSizes)) {
+    if (!size) continue;
+    assert.ok(
+      size.width >= 24 && size.height >= 24,
+      `${measurement.width}x${measurement.height} ${measurement.view} ${name} must be at least 24x24; got ${JSON.stringify(size)}`
+    );
+  }
+}
+
 try {
   await page.goto(appUrl, { waitUntil: 'load' });
   await page.waitForSelector('.position-player-card');
   await page.waitForSelector('#draft-command-bar');
   await page.waitForFunction(() => document.body.classList.contains('command-bar-ready'), null, { timeout: 10000 });
+  await page.waitForFunction(() => document.getElementById('draft-control-shell'));
   await page.waitForTimeout(150);
 
   const results = [];
@@ -236,14 +270,38 @@ try {
       };
 
       results.push(measurement);
-      assert.equal(measurement.overflow, 0, `Horizontal overflow at ${viewport.width}x${viewport.height} in ${view}: ${JSON.stringify(measurement)}`);
+      const key = `${viewport.width}x${viewport.height}:${view}`;
+      const baseline = BASELINE[key];
+      assert.ok(baseline, `Missing WR-016 pre-change baseline for ${key}`);
+      assert.equal(measurement.overflow, 0, `Horizontal overflow at ${key}: ${JSON.stringify(measurement)}`);
+      assert.equal(measurement.occludedChoices, 0, `Actionable choices occluded by persistent chrome at ${key}: ${JSON.stringify(measurement)}`);
+      assert.deepEqual(measurement.focusObscured, [], `Focused controls obscured at ${key}: ${JSON.stringify(measurement.focusObscured)}`);
+      assert.ok(measurement.firstChoiceY <= baseline.firstChoiceY + 2, `First actionable choice regressed at ${key}: before ${baseline.firstChoiceY}, after ${measurement.firstChoiceY}`);
+      assert.ok(measurement.choicesAboveFold >= baseline.choicesAboveFold, `Above-fold choices regressed at ${key}: before ${baseline.choicesAboveFold}, after ${measurement.choicesAboveFold}`);
+      assert.ok(measurement.persistentUnion <= baseline.persistentUnion + 2, `Persistent viewport budget regressed at ${key}: before ${baseline.persistentUnion}, after ${measurement.persistentUnion}`);
+      assertFrequentTargets(measurement);
     }
   }
 
+  for (const key of ['820x900:position', '900x900:position', '1280x800:position', '1440x900:position']) {
+    const result = results.find(item => `${item.width}x${item.height}:${item.view}` === key);
+    assert.ok(BASELINE[key].occludedChoices > 0, `${key} baseline must demonstrate the pre-change occlusion defect`);
+    assert.equal(result.occludedChoices, 0, `${key} must eliminate the pre-change sticky occlusion defect`);
+  }
+
+  for (const key of ['820x900:overall', '900x900:overall', '1280x800:overall', '1440x900:overall']) {
+    const result = results.find(item => `${item.width}x${item.height}:${item.view}` === key);
+    const baseline = BASELINE[key];
+    assert.ok(
+      result.firstChoiceY <= baseline.firstChoiceY - 10 || result.choicesAboveFold > baseline.choicesAboveFold,
+      `${key} must materially improve Overall board access: before y=${baseline.firstChoiceY}/choices=${baseline.choicesAboveFold}, after y=${result.firstChoiceY}/choices=${result.choicesAboveFold}`
+    );
+  }
+
   assert.deepEqual(errors, [], `Browser errors: ${JSON.stringify(errors)}`);
-  console.log('WR-016 layout measurement matrix:');
+  console.log('WR-016 post-change layout matrix (pre-change baseline: 6397eb4 / CI 34301185819):');
   for (const result of results) console.log(`LAYOUT_MEASURE ${JSON.stringify(result)}`);
-  console.log(`Layout measurement valid: ${viewports.length} viewports × ${views.length} board views, zero horizontal overflow and no browser/page errors.`);
+  console.log(`Layout efficiency valid: ${viewports.length} viewports × ${views.length} board views; no horizontal overflow, choice/focus occlusion, target-size regressions, or pre-change visibility regressions.`);
 } finally {
   await browser.close();
   if (server) await new Promise(resolve => server.close(resolve));
