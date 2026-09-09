@@ -37,14 +37,13 @@ try {
   const hierarchy = await page.evaluate(() => ({
     shellChildren: [...document.querySelectorAll('#draft-control-shell > *')].map(element => element.id || element.className),
     manageActions: [...document.querySelectorAll('#draft-manage-actions button')].map(button => button.textContent.replace(/\s+/g, ' ').trim()),
-    newDraftInsideManage: Boolean(document.querySelector('#draft-manage-actions .draft-session-control > button, #draft-manage-actions button[onclick*="createNewDraftSession"]')),
     sessionImmediate: Boolean(document.querySelector('.statusbar > .draft-session-control #draftSessionSelect')),
     markModeImmediate: Boolean(document.querySelector('.statusbar > .mark-mode-control')),
     headerPosition: getComputedStyle(document.querySelector('header')).position,
     shellPosition: getComputedStyle(document.getElementById('draft-control-shell')).position
   }));
   assert.equal(hierarchy.headerPosition, 'static');
-  assert.equal(hierarchy.shellPosition, 'sticky');
+  assert.equal(hierarchy.shellPosition, 'static', 'coordinated shell must not permanently cover board actions');
   assert.equal(hierarchy.sessionImmediate, true, 'saved-session selection must remain immediate');
   assert.equal(hierarchy.markModeImmediate, true, 'Taken/Mine marking must remain immediate');
   for (const label of ['New Draft', 'Delete Draft', 'Autosave', 'Mock Audit', 'Update Rankings', 'Customize Board', 'Restore FP Order', 'Reset all']) {
@@ -132,6 +131,11 @@ try {
   assert.equal(await page.locator('.draft-command-setup-disclosure').evaluate(element => element.open), false);
   assert.equal(await page.evaluate(() => document.activeElement === document.querySelector('.draft-command-setup-summary')), true, 'Escape must close Draft Setup and return focus to Edit summary');
 
+  // Put the command surface off-screen before the urgent transition. The
+  // presentation layer must reveal On-the-Clock without relying on a board-
+  // obscuring sticky overlay.
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await page.waitForFunction(() => document.getElementById('draft-command-bar').getBoundingClientRect().bottom < 0);
   await page.evaluate(() => {
     [...document.querySelectorAll('tr.draftrow')].slice(2, 4).forEach((row, offset) => {
       const pick = offset + 3;
@@ -143,6 +147,10 @@ try {
     triggerAllBoardUpdates({deferIntelligence:true});
   });
   await page.waitForFunction(() => document.body.getAttribute('data-draft-command-mode') === 'on-clock');
+  await page.waitForFunction(() => {
+    const rect = document.getElementById('draft-command-bar').getBoundingClientRect();
+    return rect.top >= -1 && rect.bottom <= innerHeight + 1;
+  });
   const onClock = await page.evaluate(() => ({
     height: document.getElementById('draft-command-bar').getBoundingClientRect().height,
     label: document.querySelector('.draft-command-status .draft-command-mode')?.textContent.trim() || '',
@@ -153,7 +161,7 @@ try {
   assert.ok(onClock.height >= nearHeight, `On-the-Clock must remain at least as prominent as Near (${onClock.height} < ${nearHeight})`);
 
   assert.deepEqual(errors, [], `Browser errors: ${JSON.stringify(errors)}`);
-  console.log('WR-016 layout behavior valid: hierarchy, Manage keyboard/destructive guards, saved Draft Setup disclosure, My Draft reachability, and Waiting/Near/On-the-Clock states passed at 820x900.');
+  console.log('WR-016 layout behavior valid: coordinated normal-flow hierarchy, Manage keyboard/destructive guards, saved Draft Setup disclosure, My Draft reachability, and Waiting/Near/On-the-Clock urgent reveal passed at 820x900.');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));
