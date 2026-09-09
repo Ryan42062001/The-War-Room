@@ -1,0 +1,855 @@
+{
+  "task_id": "WR-021",
+  "classification": "EXPERIMENTAL / NON-PRODUCTION",
+  "generated_at_utc": "2026-09-09T16:15:05.877407+00:00",
+  "starting_main": "4dbc0bf22d27296c3cd9b45fd90de637488ff001",
+  "source": {
+    "stats_release_id": 236670328,
+    "stats_release_updated_at": "2026-08-26T07:35:58Z",
+    "players_release_id": 69785162,
+    "players_release_updated_at": "2026-09-09T12:41:39Z",
+    "players_sha256": "a33998d3981bda4f49f40390c5c0fa30036112ee1ea5de19ed4609e2ad3be3e2"
+  },
+  "cohort_rule": "returning = every Y-1 stats player; rookie = drafted rookie metadata; target outcomes joined only after inclusion",
+  "features": [
+    "prev1_ppr_pg",
+    "prev1_games",
+    "prev1_attempts_pg",
+    "prev1_carries_pg",
+    "prev1_targets_pg",
+    "prev1_receptions_pg",
+    "prev1_pass_yards_pg",
+    "prev1_pass_tds_pg",
+    "prev1_int_pg",
+    "prev1_rush_yards_pg",
+    "prev1_rush_tds_pg",
+    "prev1_rec_yards_pg",
+    "prev1_rec_tds_pg",
+    "prev1_pass_epa_pg",
+    "prev1_rush_epa_pg",
+    "prev1_rec_epa_pg",
+    "prev1_target_share",
+    "prev1_air_yards_share",
+    "prev1_wopr",
+    "prev2_ppr_pg",
+    "prev2_games",
+    "ppr_delta",
+    "weighted_ppr_pg",
+    "has_prev2",
+    "age_sep1",
+    "age_missing",
+    "experience_years",
+    "rookie",
+    "draft_pick",
+    "log_draft_pick",
+    "draft_round",
+    "drafted",
+    "missing_prior"
+  ],
+  "development_targets": [
+    2018,
+    2019,
+    2020,
+    2021
+  ],
+  "confirmatory_targets": [
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "metrics": {
+    "development_alpha_search": {
+      "1.0": {
+        "n": 927,
+        "mae": 3.0690512489562494,
+        "rmse": 4.355511383306852,
+        "spearman": 0.6273378019480855
+      },
+      "10.0": {
+        "n": 927,
+        "mae": 2.944113225365806,
+        "rmse": 3.9890963374589403,
+        "spearman": 0.6451961417757103
+      },
+      "100.0": {
+        "n": 927,
+        "mae": 2.911670249516528,
+        "rmse": 3.831977642035733,
+        "spearman": 0.6575019403145586
+      }
+    },
+    "locked_alpha": 100.0,
+    "confirmatory": {
+      "returning_performance": {
+        "baseline": {
+          "n": 954,
+          "mae": 2.9099454989506324,
+          "rmse": 4.171620354326558,
+          "spearman": 0.6380570288879867
+        },
+        "ridge": {
+          "n": 954,
+          "mae": 2.678806044152369,
+          "rmse": 3.4934959090631823,
+          "spearman": 0.6835522891121888
+        },
+        "boost": {
+          "n": 954,
+          "mae": 2.7281402749633483,
+          "rmse": 3.5442585095661663,
+          "spearman": 0.6708317029766928
+        }
+      },
+      "all_active_performance": {
+        "baseline": {
+          "n": 1155,
+          "mae": 2.922092445561411,
+          "rmse": 4.114417550278979,
+          "spearman": 0.6178614751812369
+        },
+        "ridge": {
+          "n": 1155,
+          "mae": 2.774797938963945,
+          "rmse": 3.5874354604600605,
+          "spearman": 0.6520990487449039
+        },
+        "boost": {
+          "n": 1155,
+          "mae": 2.7753193072037208,
+          "rmse": 3.5894131873015094,
+          "spearman": 0.646280175498569
+        }
+      },
+      "rookie_active_performance": {
+        "baseline": {
+          "n": 201,
+          "mae": 2.9797451175349585,
+          "rmse": 3.831288753802587,
+          "spearman": 0.44834098924232013
+        },
+        "ridge": {
+          "n": 201,
+          "mae": 3.2304012606069485,
+          "rmse": 4.003350330959042,
+          "spearman": 0.4280988572594951
+        },
+        "boost": {
+          "n": 201,
+          "mae": 2.999243669180413,
+          "rmse": 3.796412604683433,
+          "spearman": 0.4897700036479886
+        }
+      },
+      "availability": {
+        "baseline": {
+          "n": 2094,
+          "mae": 5.454730791920618
+        },
+        "ridge": {
+          "n": 2094,
+          "mae": 4.6154858537991155
+        },
+        "boost": {
+          "n": 2094,
+          "mae": 4.61672495970552
+        }
+      },
+      "season_total": {
+        "baseline": {
+          "n": 2094,
+          "mae": 41.9668643707135
+        },
+        "ridge": {
+          "n": 2094,
+          "mae": 33.49653999722546
+        },
+        "boost": {
+          "n": 2094,
+          "mae": 33.60673321288461
+        }
+      },
+      "by_position": {
+        "QB": {
+          "baseline": {
+            "n": 163,
+            "mae": 5.188421557681663,
+            "rmse": 7.118072220890359,
+            "spearman": 0.34873569731838067,
+            "rank_mae": 10.036809815950921,
+            "top_n_overlap": 0.5833333333333334,
+            "perSeason": [
+              {
+                "season": 2022,
+                "n": 44,
+                "top_n": 12,
+                "hits": 7,
+                "overlap": 0.5833333333333334
+              },
+              {
+                "season": 2023,
+                "n": 42,
+                "top_n": 12,
+                "hits": 7,
+                "overlap": 0.5833333333333334
+              },
+              {
+                "season": 2024,
+                "n": 41,
+                "top_n": 12,
+                "hits": 8,
+                "overlap": 0.6666666666666666
+              },
+              {
+                "season": 2025,
+                "n": 36,
+                "top_n": 12,
+                "hits": 6,
+                "overlap": 0.5
+              }
+            ]
+          },
+          "ridge": {
+            "n": 163,
+            "mae": 4.362085446720037,
+            "rmse": 5.393198803982974,
+            "spearman": 0.5061148881285833,
+            "rank_mae": 9.104294478527608,
+            "top_n_overlap": 0.5625,
+            "perSeason": [
+              {
+                "season": 2022,
+                "n": 44,
+                "top_n": 12,
+                "hits": 9,
+                "overlap": 0.75
+              },
+              {
+                "season": 2023,
+                "n": 42,
+                "top_n": 12,
+                "hits": 5,
+                "overlap": 0.4166666666666667
+              },
+              {
+                "season": 2024,
+                "n": 41,
+                "top_n": 12,
+                "hits": 7,
+                "overlap": 0.5833333333333334
+              },
+              {
+                "season": 2025,
+                "n": 36,
+                "top_n": 12,
+                "hits": 6,
+                "overlap": 0.5
+              }
+            ]
+          },
+          "boost": {
+            "n": 163,
+            "mae": 4.537812525823251,
+            "rmse": 5.598508460412114,
+            "spearman": 0.4394683573420977,
+            "rank_mae": 9.742331288343559,
+            "top_n_overlap": 0.5625,
+            "perSeason": [
+              {
+                "season": 2022,
+                "n": 44,
+                "top_n": 12,
+                "hits": 8,
+                "overlap": 0.6666666666666666
+              },
+              {
+                "season": 2023,
+                "n": 42,
+                "top_n": 12,
+                "hits": 5,
+                "overlap": 0.4166666666666667
+              },
+              {
+                "season": 2024,
+                "n": 41,
+                "top_n": 12,
+                "hits": 8,
+                "overlap": 0.6666666666666666
+              },
+              {
+                "season": 2025,
+                "n": 36,
+                "top_n": 12,
+                "hits": 6,
+                "overlap": 0.5
+              }
+            ]
+          }
+        },
+        "RB": {
+          "baseline": {
+            "n": 232,
+            "mae": 2.7176158381074074,
+            "rmse": 3.6120750317731467,
+            "spearman": 0.7001838716184245,
+            "rank_mae": 10.008620689655173,
+            "top_n_overlap": 0.71875,
+            "perSeason": [
+              {
+                "season": 2022,
+                "n": 62,
+                "top_n": 24,
+                "hits": 18,
+                "overlap": 0.75
+              },
+              {
+                "season": 2023,
+                "n": 59,
+                "top_n": 24,
+                "hits": 16,
+                "overlap": 0.6666666666666666
+              },
+              {
+                "season": 2024,
+                "n": 59,
+                "top_n": 24,
+                "hits": 18,
+                "overlap": 0.75
+              },
+              {
+                "season": 2025,
+                "n": 52,
+                "top_n": 24,
+                "hits": 17,
+                "overlap": 0.7083333333333334
+              }
+            ]
+          },
+          "ridge": {
+            "n": 232,
+            "mae": 2.634087872748462,
+            "rmse": 3.3544821794613724,
+            "spearman": 0.7069729127376996,
+            "rank_mae": 10.060344827586206,
+            "top_n_overlap": 0.7291666666666666,
+            "perSeason": [
+              {
+                "season": 2022,
+                "n": 62,
+                "top_n": 24,
+                "hits": 17,
+                "overlap": 0.7083333333333334
+              },
+              {
+                "season": 2023,
+                "n": 59,
+                "top_n": 24,
+                "hits": 16,
+                "overlap": 0.6666666666666666
+              },
+              {
+                "season": 2024,
+                "n": 59,
+                "top_n": 24,
+                "hits": 19,
+                "overlap": 0.7916666666666666
+              },
+              {
+                "season": 2025,
+                "n": 52,
+                "top_n": 24,
+                "hits": 18,
+                "overlap": 0.75
+              }
+            ]
+          },
+          "boost": {
+            "n": 232,
+            "mae": 2.573900921498564,
+            "rmse": 3.226132123541684,
+            "spearman": 0.7437010020468153,
+            "rank_mae": 9.370689655172415,
+            "top_n_overlap": 0.7291666666666666,
+            "perSeason": [
+              {
+                "season": 2022,
+                "n": 62,
+                "top_n": 24,
+                "hits": 16,
+                "overlap": 0.6666666666666666
+              },
+              {
+                "season": 2023,
+                "n": 59,
+                "top_n": 24,
+                "hits": 17,
+                "overlap": 0.7083333333333334
+              },
+              {
+                "season": 2024,
+                "n": 59,
+                "top_n": 24,
+                "hits": 19,
+                "overlap": 0.7916666666666666
+              },
+              {
+                "season": 2025,
+                "n": 52,
+                "top_n": 24,
+                "hits": 18,
+                "overlap": 0.75
+              }
+            ]
+          }
+        },
+        "WR": {
+          "baseline": {
+            "n": 344,
+            "mae": 2.6464373610980143,
+            "rmse": 3.431547844315873,
+            "spearman": 0.7278797934927188,
+            "rank_mae": 14.273255813953488,
+            "top_n_overlap": 0.7638888888888888,
+            "perSeason": [
+              {
+                "season": 2022,
+                "n": 96,
+                "top_n": 36,
+                "hits": 25,
+                "overlap": 0.6944444444444444
+              },
+              {
+                "season": 2023,
+                "n": 77,
+                "top_n": 36,
+                "hits": 29,
+                "overlap": 0.8055555555555556
+              },
+              {
+                "season": 2024,
+                "n": 85,
+                "top_n": 36,
+                "hits": 28,
+                "overlap": 0.7777777777777778
+              },
+              {
+                "season": 2025,
+                "n": 86,
+                "top_n": 36,
+                "hits": 28,
+                "overlap": 0.7777777777777778
+              }
+            ]
+          },
+          "ridge": {
+            "n": 344,
+            "mae": 2.47678623534463,
+            "rmse": 3.0105566772909844,
+            "spearman": 0.7407839725306071,
+            "rank_mae": 13.901162790697674,
+            "top_n_overlap": 0.7638888888888888,
+            "perSeason": [
+              {
+                "season": 2022,
+                "n": 96,
+                "top_n": 36,
+                "hits": 27,
+                "overlap": 0.75
+              },
+              {
+                "season": 2023,
+                "n": 77,
+                "top_n": 36,
+                "hits": 27,
+                "overlap": 0.75
+              },
+              {
+                "season": 2024,
+                "n": 85,
+                "top_n": 36,
+                "hits": 28,
+                "overlap": 0.7777777777777778
+              },
+              {
+                "season": 2025,
+                "n": 86,
+                "top_n": 36,
+                "hits": 28,
+                "overlap": 0.7777777777777778
+              }
+            ]
+          },
+          "boost": {
+            "n": 344,
+            "mae": 2.6193379908879137,
+            "rmse": 3.1426336535990607,
+            "spearman": 0.7120916059619729,
+            "rank_mae": 14.848837209302326,
+            "top_n_overlap": 0.7291666666666666,
+            "perSeason": [
+              {
+                "season": 2022,
+                "n": 96,
+                "top_n": 36,
+                "hits": 24,
+                "overlap": 0.6666666666666666
+              },
+              {
+                "season": 2023,
+                "n": 77,
+                "top_n": 36,
+                "hits": 27,
+                "overlap": 0.75
+              },
+              {
+                "season": 2024,
+                "n": 85,
+                "top_n": 36,
+                "hits": 27,
+                "overlap": 0.75
+              },
+              {
+                "season": 2025,
+                "n": 86,
+                "top_n": 36,
+                "hits": 27,
+                "overlap": 0.75
+              }
+            ]
+          }
+        },
+        "TE": {
+          "baseline": {
+            "n": 215,
+            "mae": 1.8116928625030544,
+            "rmse": 2.4261070153713886,
+            "spearman": 0.6627402198484176,
+            "rank_mae": 9.906976744186046,
+            "top_n_overlap": 0.7291666666666666,
+            "perSeason": [
+              {
+                "season": 2022,
+                "n": 56,
+                "top_n": 12,
+                "hits": 8,
+                "overlap": 0.6666666666666666
+              },
+              {
+                "season": 2023,
+                "n": 52,
+                "top_n": 12,
+                "hits": 8,
+                "overlap": 0.6666666666666666
+              },
+              {
+                "season": 2024,
+                "n": 50,
+                "top_n": 12,
+                "hits": 10,
+                "overlap": 0.8333333333333334
+              },
+              {
+                "season": 2025,
+                "n": 57,
+                "top_n": 12,
+                "hits": 9,
+                "overlap": 0.75
+              }
+            ]
+          },
+          "ridge": {
+            "n": 215,
+            "mae": 1.77413110171999,
+            "rmse": 2.3363380654776584,
+            "spearman": 0.6920537561720597,
+            "rank_mae": 9.646511627906976,
+            "top_n_overlap": 0.7083333333333334,
+            "perSeason": [
+              {
+                "season": 2022,
+                "n": 56,
+                "top_n": 12,
+                "hits": 6,
+                "overlap": 0.5
+              },
+              {
+                "season": 2023,
+                "n": 52,
+                "top_n": 12,
+                "hits": 8,
+                "overlap": 0.6666666666666666
+              },
+              {
+                "season": 2024,
+                "n": 50,
+                "top_n": 12,
+                "hits": 10,
+                "overlap": 0.8333333333333334
+              },
+              {
+                "season": 2025,
+                "n": 57,
+                "top_n": 12,
+                "hits": 10,
+                "overlap": 0.8333333333333334
+              }
+            ]
+          },
+          "boost": {
+            "n": 215,
+            "mae": 1.6966748741987687,
+            "rmse": 2.2234855326432745,
+            "spearman": 0.6777883178467423,
+            "rank_mae": 9.87906976744186,
+            "top_n_overlap": 0.7083333333333334,
+            "perSeason": [
+              {
+                "season": 2022,
+                "n": 56,
+                "top_n": 12,
+                "hits": 6,
+                "overlap": 0.5
+              },
+              {
+                "season": 2023,
+                "n": 52,
+                "top_n": 12,
+                "hits": 9,
+                "overlap": 0.75
+              },
+              {
+                "season": 2024,
+                "n": 50,
+                "top_n": 12,
+                "hits": 10,
+                "overlap": 0.8333333333333334
+              },
+              {
+                "season": 2025,
+                "n": 57,
+                "top_n": 12,
+                "hits": 9,
+                "overlap": 0.75
+              }
+            ]
+          }
+        }
+      },
+      "per_season_returning": {
+        "2022": {
+          "baseline": {
+            "n": 258,
+            "mae": 2.8340578719742537,
+            "rmse": 3.9759004571267513,
+            "spearman": 0.6032624975533085
+          },
+          "ridge": {
+            "n": 258,
+            "mae": 2.4972340329535143,
+            "rmse": 3.2358559985867816,
+            "spearman": 0.6620671122858163
+          },
+          "boost": {
+            "n": 258,
+            "mae": 2.614248773724651,
+            "rmse": 3.3560514570582995,
+            "spearman": 0.6572978834084603
+          }
+        },
+        "2023": {
+          "baseline": {
+            "n": 230,
+            "mae": 2.8563423024971617,
+            "rmse": 3.966723940735413,
+            "spearman": 0.6463826569804558
+          },
+          "ridge": {
+            "n": 230,
+            "mae": 2.7858957095922787,
+            "rmse": 3.5590901869805327,
+            "spearman": 0.6617804007331202
+          },
+          "boost": {
+            "n": 230,
+            "mae": 2.726605606849343,
+            "rmse": 3.572959050051543,
+            "spearman": 0.6521775134723271
+          }
+        },
+        "2024": {
+          "baseline": {
+            "n": 235,
+            "mae": 3.076148989364133,
+            "rmse": 4.493449894022188,
+            "spearman": 0.6505217443740128
+          },
+          "ridge": {
+            "n": 235,
+            "mae": 2.8725224416198483,
+            "rmse": 3.768416963471369,
+            "spearman": 0.6924932427131796
+          },
+          "boost": {
+            "n": 235,
+            "mae": 2.8869059925291705,
+            "rmse": 3.7565535344886993,
+            "spearman": 0.6641634319547794
+          }
+        },
+        "2025": {
+          "baseline": {
+            "n": 231,
+            "mae": 2.878992783353364,
+            "rmse": 4.243438277057315,
+            "spearman": 0.6480253093482281
+          },
+          "ridge": {
+            "n": 231,
+            "mae": 2.57790389018383,
+            "rmse": 3.413104062362712,
+            "spearman": 0.6946892573891774
+          },
+          "boost": {
+            "n": 231,
+            "mae": 2.6953568869020375,
+            "rmse": 3.497442155631214,
+            "spearman": 0.6903020785935253
+          }
+        }
+      },
+      "clustered_bootstrap": {
+        "QB": {
+          "ridge": {
+            "clusters": 85,
+            "mean_delta_mae_vs_baseline": -0.82588071744178,
+            "ci95_low": -1.2940103252548587,
+            "ci95_high": -0.34641736081320745
+          },
+          "boost": {
+            "clusters": 85,
+            "mean_delta_mae_vs_baseline": -0.6455760994071056,
+            "ci95_low": -1.1774260847271811,
+            "ci95_high": -0.1497219453106227
+          }
+        },
+        "RB": {
+          "ridge": {
+            "clusters": 138,
+            "mean_delta_mae_vs_baseline": -0.08637632176471904,
+            "ci95_low": -0.30584962089999834,
+            "ci95_high": 0.14626478739150983
+          },
+          "boost": {
+            "clusters": 138,
+            "mean_delta_mae_vs_baseline": -0.14666350615630835,
+            "ci95_low": -0.42410517639443074,
+            "ci95_high": 0.1414660434062068
+          }
+        },
+        "WR": {
+          "ridge": {
+            "clusters": 219,
+            "mean_delta_mae_vs_baseline": -0.17057497527539311,
+            "ci95_low": -0.3705693262348674,
+            "ci95_high": 0.02476889291162928
+          },
+          "boost": {
+            "clusters": 219,
+            "mean_delta_mae_vs_baseline": -0.026395186169047465,
+            "ci95_low": -0.23682116401624503,
+            "ci95_high": 0.181383674982538
+          }
+        },
+        "TE": {
+          "ridge": {
+            "clusters": 117,
+            "mean_delta_mae_vs_baseline": -0.04334582452852535,
+            "ci95_low": -0.22333966519239018,
+            "ci95_high": 0.15956896661502365
+          },
+          "boost": {
+            "clusters": 117,
+            "mean_delta_mae_vs_baseline": -0.11538504692376828,
+            "ci95_low": -0.2861494820670501,
+            "ci95_high": 0.06627772298982845
+          }
+        },
+        "pooled": {
+          "ridge": {
+            "clusters": 559,
+            "mean_delta_mae_vs_baseline": -0.23351269420683057,
+            "ci95_low": -0.36254766531854254,
+            "ci95_high": -0.10663491972730636
+          },
+          "boost": {
+            "clusters": 559,
+            "mean_delta_mae_vs_baseline": -0.18163077527447474,
+            "ci95_low": -0.3195479250120321,
+            "ci95_high": -0.04225134928393231
+          }
+        }
+      }
+    }
+  },
+  "cohort_summary": [
+    {
+      "season": 2022,
+      "cohort_n": 553,
+      "returners": 475,
+      "drafted_rookies": 78,
+      "zero_game": 240,
+      "active": 313
+    },
+    {
+      "season": 2023,
+      "cohort_n": 527,
+      "returners": 446,
+      "drafted_rookies": 81,
+      "zero_game": 248,
+      "active": 279
+    },
+    {
+      "season": 2024,
+      "cohort_n": 499,
+      "returners": 421,
+      "drafted_rookies": 78,
+      "zero_game": 213,
+      "active": 286
+    },
+    {
+      "season": 2025,
+      "cohort_n": 515,
+      "returners": 431,
+      "drafted_rookies": 84,
+      "zero_game": 238,
+      "active": 277
+    }
+  ],
+  "evidence_gate": {
+    "ridge_pooled_mae_lift": 0.07943085356121461,
+    "mae_lift_ge_2pct": true,
+    "cluster_ci_upper_lt_zero": true,
+    "spearman_not_worse_by_gt_0_01": true,
+    "persistent_material_position_regressions": [],
+    "passes_all": true
+  },
+  "snapshot": {
+    "created": true,
+    "freeze_timestamp_utc": "2026-09-09T16:15:05.877407+00:00",
+    "deadline_utc": "2026-09-10T00:20:00+00:00",
+    "rows": 523,
+    "returners": 444,
+    "drafted_rookies": 79,
+    "production_repo_commit_reference": "4dbc0bf22d27296c3cd9b45fd90de637488ff001",
+    "cutoff": "completed-through-2025 stats + immutable/preseason-known Players metadata only",
+    "limitations": [
+      "drafted rookies only; UDFA/no-prior-history excluded without defensible historical preseason roster source",
+      "no historical as-of depth/injury/roster-status context",
+      "no current/latest-team field used",
+      "research only; no 2026 outcomes used"
+    ]
+  },
+  "availability_definition": "recorded games; missing target stats = 0",
+  "undrafted_handling": "excluded from primary cohort due missing defensible historical preseason roster as-of source",
+  "confirmatory_limitation": "2022-2025 outcomes observed previously by project; confirmatory not pristine"
+}
