@@ -18,7 +18,7 @@ Branch: `wr-018-open-data-shadow-ranking`
 
 Starting SHA: `8931b30d4f4f387504b17ac07d837aa87a166948`
 
-Final SHA: use current branch head / PR checkpoint at Manager review time. Research-result checkpoint immediately before this handoff update: `823971d5ee8a65fd6d732f216b9ddefa6f2a5c9f`.
+Final SHA: use the exact PR head recorded in the Manager-facing external handoff. Latest research/documentation checkpoint before this handoff commit: `7c5a6cf9461d067a7f47ff2425dc337f4fc08963`.
 
 ## Objective
 Build and evaluate a strictly non-production, rights-conservative, leakage-safe shadow projection experiment for QB/RB/WR/TE and determine whether a War Room-owned model has enough held-out predictive signal to justify further validation.
@@ -33,7 +33,7 @@ Build and evaluate a strictly non-production, rights-conservative, leakage-safe 
 - Explicitly did not model availability/season totals without defensible point-in-time inputs.
 - Did not perform unauthorized historical FantasyPros benchmarking.
 - Created and persisted a clean prospective 2026 shadow snapshot before the first 2026 regular-season kickoff.
-- Added an isolated GitHub Actions workflow to reproduce the experiment and persist research-only generated outputs.
+- Used a temporary branch-scoped GitHub Actions workflow to execute the internet-dependent experiment and persist exact outputs; removed that workflow after exact-head CI exposed the repository single-workflow invariant.
 - Documented results and interpretation in `.ai/research/SHADOW_RANKING_EXPERIMENT.md`.
 
 ## Sources used
@@ -138,8 +138,11 @@ Reason: richer historical models did not reliably beat the transparent naive bas
 - WR-018 persist/freeze run `34366601009`: experiment and generated-output freeze steps SUCCESS.
 - First run artifact `wr018-shadow-results`: artifact ID `10109963499`, ZIP SHA-256 `0654cfe40e88ca73119a7d5698321c56d3a47d2765f4e747d1ca321f577c6b87`.
 - Exact generated results, source-asset provenance, and 2026 snapshot are committed under `.ai/research/generated/`.
+- Initial PR exact-head CI run `34367196615` FAILED at `test:release` because the temporary WR-018 workflow was still tracked and `validate-release-candidate.mjs` requires `.github/workflows/ci.yml` to be the only workflow.
+- Remediation: temporary `.github/workflows/wr018-experiment.yml` deleted from the final branch diff. This was a research infrastructure cleanup only; no production behavior was changed.
+- Manager should require the post-remediation exact-head CI run to be green before merge.
 
-## Files changed
+## Files changed in final diff
 Research-only:
 - `.ai/research/SHADOW_RANKING_SOURCE_MANIFEST.md`
 - `.ai/research/SHADOW_RANKING_EXPERIMENT.md`
@@ -149,7 +152,9 @@ Research-only:
 - `.ai/research/generated/SHADOW_RANKING_ASSET_MANIFEST.json`
 - `.ai/research/generated/SHADOW_RANKING_2026_SNAPSHOT.csv`
 - `.ai/research/HANDOFF.md`
-- `.github/workflows/wr018-experiment.yml` — isolated WR-018 research execution workflow only.
+
+Temporary execution-only file removed before final handoff:
+- `.github/workflows/wr018-experiment.yml`
 
 Production files changed: NO
 
@@ -174,14 +179,14 @@ INFERENCE: the next value of R&D is more likely to come from genuinely preseason
 UNKNOWN: whether a rights-cleared model with those missing context families can produce a stable, material held-out lift.
 
 ## Blocking issues
-No block on completing WR-018. There is a block on any production-model recommendation: current held-out evidence is insufficient.
+No block on completing WR-018. There is a block on any production-model recommendation: current held-out evidence is insufficient. Merge readiness also requires green post-remediation exact-head CI.
 
 ## Recommended next role
 Manager / Architect
 
 ## Exact next action
-Manager should review WR-018 evidence and either close the milestone at `MORE EVIDENCE NEEDED` or authorize a narrowly scoped successor validation whose evidence gate is: add rights-cleared point-in-time rookie/age/draft-capital/team-role context, preserve the same rolling-origin holdouts and naive comparator, and later score the frozen 2026 shadow snapshot prospectively. Do not authorize production ranking changes from WR-018 alone.
+Manager should review PR #115 and WR-018 evidence after exact-head CI is green, then either close the milestone at `MORE EVIDENCE NEEDED` or authorize a narrowly scoped successor validation whose evidence gate is: add rights-cleared point-in-time rookie/age/draft-capital/team-role context, preserve the same rolling-origin holdouts and naive comparator, and later score the frozen 2026 shadow snapshot prospectively. Do not authorize production ranking changes from WR-018 alone.
 
 ## Checkpoint / SHA
-Research-result checkpoint before this handoff update: `823971d5ee8a65fd6d732f216b9ddefa6f2a5c9f`.  
-For merge/review, use the exact current head of `wr-018-open-data-shadow-ranking` / its open PR; the external Manager handoff should record that final immutable SHA.
+Latest research/documentation checkpoint before this handoff commit: `7c5a6cf9461d067a7f47ff2425dc337f4fc08963`.  
+For merge/review, use the exact current head of `wr-018-open-data-shadow-ranking` / PR #115; the external Manager handoff should record that final immutable SHA.
