@@ -1,11 +1,12 @@
 /* War Room offline shell. Network stays authoritative when available. */
 var CACHE_PREFIX = 'war-room-shell-';
-var CACHE_NAME = CACHE_PREFIX + '20260907-3';
+var CACHE_NAME = CACHE_PREFIX + '20260909-1';
 var CORE_ASSETS = [
   './',
   './index.html',
   './style.css',
   './draft-polish.css',
+  './layout-efficiency.css',
   './fantasypros-2026-data.js',
   './espn-2026-board-data.js',
   './war-room-config.js',
@@ -23,6 +24,7 @@ var CORE_ASSETS = [
   './js/war-room-resilience.js',
   './js/war-room-command-bar.js',
   './js/war-room-command-bar-fixes.js',
+  './js/war-room-layout-efficiency.js',
   './js/war-room-draft-awareness.js',
   './js/war-room-awareness-live-sync.js',
   './assets/steelers-logo.png',

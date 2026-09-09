@@ -35,14 +35,22 @@ function loadOptionalScript(src, marker, label, next, onLoad) {
   document.head.appendChild(script);
 }
 
+function loadDraftLayoutEfficiency() {
+  loadOptionalScript('js/war-room-layout-efficiency.js?v=20260909-1', 'data-war-room-layout-efficiency', 'layout efficiency', function() {}, function() {
+    if (typeof window.WarRoomLayoutEfficiency?.refresh === 'function') window.WarRoomLayoutEfficiency.refresh();
+  });
+}
+
 function loadDraftPolishStyles() {
-  if (document.getElementById('war-room-draft-polish-styles')) return;
-  var link = document.createElement('link');
-  link.id = 'war-room-draft-polish-styles';
-  link.rel = 'stylesheet';
-  link.href = 'draft-polish.css?v=20260907-1';
-  link.onerror = function() { reportWarRoomEnhancementFailure('draft polish'); };
-  document.head.appendChild(link);
+  if (!document.getElementById('war-room-draft-polish-styles')) {
+    var link = document.createElement('link');
+    link.id = 'war-room-draft-polish-styles';
+    link.rel = 'stylesheet';
+    link.href = 'draft-polish.css?v=20260907-1';
+    link.onerror = function() { reportWarRoomEnhancementFailure('draft polish'); };
+    document.head.appendChild(link);
+  }
+  loadDraftLayoutEfficiency();
 }
 
 function loadAwarenessLiveSync() {

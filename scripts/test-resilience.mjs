@@ -69,6 +69,27 @@ async function getPageWidth(page) {
   return page.evaluate(() => Math.max(document.documentElement.scrollWidth, document.body.scrollWidth));
 }
 
+async function openRecovery(page) {
+  const button = page.getByRole('button', {name:'Open draft recovery and system check'});
+  await page.waitForFunction(() => {
+    const control = document.getElementById('war-room-maintenance-btn');
+    if (!control) return false;
+    const style = window.getComputedStyle(control);
+    const visible = style.display !== 'none' && style.visibility !== 'hidden' && control.getClientRects().length > 0;
+    const layoutReady = document.body.classList.contains('draft-layout-efficiency-ready');
+    return visible || layoutReady;
+  });
+  if (!(await button.isVisible().catch(() => false))) {
+    const manage = page.locator('#draft-manage');
+    await manage.waitFor({state:'attached'});
+    if (!(await manage.evaluate(element => element.open))) {
+      await manage.locator('summary').click();
+    }
+    await button.waitFor({state:'visible'});
+  }
+  await button.click();
+}
+
 async function assertRecoveryContained(page, label, baselineDocumentWidth) {
   const metrics = await page.evaluate(() => {
     const dialog = document.getElementById('war-room-maintenance-dialog');
@@ -138,7 +159,7 @@ try {
   assert.equal(backupResult.rejectedUnrelated, true);
 
   const desktopBaselineWidth = await getPageWidth(page);
-  await page.getByRole('button', {name:'Open draft recovery and system check'}).click();
+  await openRecovery(page);
   await page.waitForSelector('#war-room-maintenance-dialog[open]');
   assert.equal(await page.getByRole('heading', {name:'Draft Recovery'}).count(), 1);
   assert.equal(await page.getByText('Recovery is ready', {exact:true}).count(), 1);
@@ -214,7 +235,7 @@ try {
     await page.setViewportSize({width, height:900});
     const baselineWidth = await getPageWidth(page);
     if (baselineWidth > width + 1) preExistingOverflow.push({width, documentWidth:baselineWidth});
-    await page.getByRole('button', {name:'Open draft recovery and system check'}).click();
+    await openRecovery(page);
     await page.waitForSelector('#war-room-maintenance-dialog[open]');
     await assertRecoveryContained(page, `${width}px recovery`, baselineWidth);
     if (width <= 560) {
@@ -240,7 +261,7 @@ try {
   assert.equal(offlineReload.resilience, true);
   assert.equal(offlineReload.recoveryButton, true);
   const offlineBaselineWidth = await getPageWidth(page);
-  await page.getByRole('button', {name:'Open draft recovery and system check'}).click();
+  await openRecovery(page);
   await page.waitForSelector('#war-room-maintenance-dialog[open]');
   await assertRecoveryContained(page, '390px offline recovery', offlineBaselineWidth);
   assert.equal(await page.getByText('Offline mode is active', {exact:true}).count(), 1);

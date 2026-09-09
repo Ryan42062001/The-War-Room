@@ -75,7 +75,13 @@ try {
   assert.ok(onClock.height >= initial.height + 20, `expected clock bar ${onClock.height}px to be visibly taller than waiting ${initial.height}px`);
   assert.deepEqual(onClock.drafted.sort(), draftedNames.slice().sort());
 
+  const setupDisclosure = page.locator('.draft-command-setup-disclosure');
+  if (await setupDisclosure.count()) {
+    const setupOpen = await setupDisclosure.evaluate(details => details.open);
+    if (!setupOpen) await setupDisclosure.locator('summary').click();
+  }
   const slotInput = page.locator('[data-command-setting="slot"]');
+  await slotInput.waitFor({state:'visible'});
   await slotInput.fill('6');
   await slotInput.dispatchEvent('change');
   await page.waitForFunction(() => document.body.getAttribute('data-draft-command-mode') === 'waiting');
@@ -183,7 +189,7 @@ try {
   assert.match(pressureState.className, /is-closing/);
 
   assert.deepEqual(errors, []);
-  console.log('Command bar regression valid: settings visible, Waiting/On-the-Clock distinct, draft state preserved, ESPN session takeover blocked, and pressure counts live tier cards instead of stale cached totals.');
+  console.log('Command bar regression valid: progressive settings remain reachable, Waiting/On-the-Clock distinct, draft state preserved, ESPN session takeover blocked, and pressure counts live tier cards instead of stale cached totals.');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));
