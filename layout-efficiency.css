@@ -48,7 +48,8 @@ header {
 }
 
 .draft-control-shell > .statusbar {
-  z-index: auto;
+  position: relative !important;
+  z-index: 2;
   min-height: 40px;
   padding: 5px 12px;
   gap: 7px;
@@ -171,6 +172,10 @@ header {
 .draft-control-shell > #tier-nav {
   z-index: auto;
   margin-top: 0;
+}
+
+.draft-control-shell > #tier-nav button {
+  min-height: 24px;
 }
 
 .draft-command-setup-disclosure {
