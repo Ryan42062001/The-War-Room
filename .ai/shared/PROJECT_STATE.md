@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — PW-003 PHONE UX + HISTORICAL RANKING R&D
+Status: ACTIVE DEVELOPMENT — PW-003 PHONE UX + POSITION-SPECIFIC RISK R&D
 Last verified: 2026-09-09
 Owner: Manager / Architect
 
@@ -27,13 +27,6 @@ Status: COMPLETE / ACCEPTED / MERGED
 PR #116 merge: `f2e3e9b1c0a9a59452d679783a5236d4a5da9a09`
 Manager disposition: `PROMISING — CONTINUE VALIDATION` / RESEARCH ONLY
 
-Key result:
-- returning-player Ridge MAE 2.680 vs baseline 2.910: 7.89% historical confirmatory improvement
-- pooled Spearman 0.684 vs 0.638
-- repeated-player-aware pooled uncertainty favorable
-- rookie Ridge model did not validate
-- corrected 2026 snapshot frozen prospectively for 523 players
-
 ### WR-023 — 2026 Prospective Shadow Evaluation Protocol Freeze
 Status: COMPLETE / ACCEPTED / MERGED
 PR #117 merge: `a1aa543f980f724977e0619d0610e046c719cbea`
@@ -43,62 +36,65 @@ Immutable prospective identities:
 - protocol SHA-256: `f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`
 - WR-021 snapshot SHA-256: `9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d`
 
-Future decisive gate after completed Week 18 requires all:
-- >=3% returner PPR/game MAE lift
-- paired-player bootstrap interval favorable
-- Spearman no worse by >0.01
-- >=3/4 positions non-worse and none >5% worse
-- no contamination or post-freeze changes
+WR-027 must not inspect 2026 outcomes or alter these frozen artifacts.
 
-WR-025 must not inspect 2026 outcomes or alter these frozen artifacts.
-
-## PW-003 — ACTIVE
-Direct user feedback / explicit product requirement reactivated bounded work.
-
+## Historical ranking R&D
 ### WR-025 — Historical Ranking Signal / Breakout-Bust Research
 Role: R&D
+Status: COMPLETE / ACCEPTED / MERGED
+Research PR: #118
+Final research head: `22c5678c876081c012000c28f2082668116c4b8b`
+Exact-head War Room CI #934 / run `34401904213`: SUCCESS
+Merge commit: `93da7e5de10ca2130d40142450cab9840c755ab4`
+Manager disposition: `MORE EVIDENCE NEEDED`
+Production behavior changed: NO
+
+Key evidence:
+- returning-player Ridge mean projection improved pooled MAE 3.0262 -> 2.8262 (6.61%);
+- player-clustered paired MAE interval `[-0.3235, -0.0616]`;
+- downside AUC was useful by position, especially RB/WR/TE;
+- universal risk overlay improved QB/RB rank MAE but worsened WR +5.51% and TE +6.20%;
+- rookie Ridge remained worse than transparent rookie prior;
+- lawful MFL public archive was investigated but comparable PPR redraft sample was too small to admit as historical ADP benchmark;
+- no 2026 outcomes inspected and frozen WR-021/WR-023 artifacts remained unchanged.
+
+### WR-027 — Position-Specific Risk Calibration Study
+Role: R&D
 Status: ASSIGNED / ACTIVE
-Task: `.ai/manager/WR-025.md`
+Task: `.ai/manager/WR-027.md`
 Production authorization: NONE
 
 Objective:
-- use rights-clean historical data to identify stable positive ranking signals and warning/downside signals;
-- define breakout/bust relative to a preseason expectation unless a lawful historical draft-cost benchmark is found;
-- build and evaluate a research-only historical ranking prototype;
-- keep WR-021 snapshot and WR-023 protocol unchanged;
-- do not inspect 2026 outcomes.
+- preserve WR-025 successful mean-projection model as benchmark;
+- calibrate downside/breakout/availability warnings separately by QB/RB/WR/TE;
+- determine per position whether risk should modify rank or remain warning-only;
+- test a transparent robust-regression challenger for occasional Ridge outliers;
+- keep rookies separate;
+- preserve frozen WR-021/WR-023 prospective test unchanged.
 
+## PW-003 — ACTIVE
 ### WR-026 — Phone-Only Decision View Optimization
 Role: Builder
-Status: ASSIGNED / ACTIVE
+Status: ACTIVE
 Task: `.ai/manager/WR-026.md`
 Production authorization: YES — phone UI/layout only
 Independent audit required: YES
 
 User requirement:
-- desktop view is liked and must remain unchanged;
-- phone view should no longer feel like one giant stacked list;
-- optimize phone for fast draft decisions.
-
-Required direction:
-- phone-only activation, preferably <=600px;
-- decision-first opening state;
-- one primary position context at a time with one-tap switching;
-- compact actionable player set + explicit full-list access;
-- preserve Position/Overall, My Draft, search, Taken/Mine, targets, Manage, ESPN health, K/DST;
-- no ranking/scoring/recommendation/state/persistence/ESPN semantic change;
-- desktop/tablet >600px preserved and regression-tested.
+- desktop/tablet >600px must remain unchanged;
+- phone should be decision-first rather than one giant stacked list.
 
 ### Dependency
-WR-025 vs WR-026: INDEPENDENT.
-Parallel wave: `.ai/manager/PW-003.md`.
+WR-027 vs WR-026: INDEPENDENT.
+
+Builder must reconcile its final WR-026 PR with current main before audit because Manager/R&D integration has advanced main since its assignment base.
 
 Auditor remains idle until Builder produces a final mergeable WR-026 PR with green CI.
 
 ## Current workload
-- Manager — IDLE after PW-003 assignment/reconciliation
+- Manager — IDLE after WR-025 disposition / WR-027 assignment
 - Builder — ACTIVE / WR-026
-- R&D — ACTIVE / WR-025
+- R&D — ACTIVE / WR-027
 - Auditor — IDLE / waiting for WR-026
 
 Workers must not independently update `.ai/shared/*`.
