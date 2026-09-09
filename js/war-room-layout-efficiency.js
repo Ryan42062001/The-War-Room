@@ -1,7 +1,8 @@
 /* =========================================================
    DRAFT-DAY LAYOUT EFFICIENCY
    Presentation-only coordination for live controls, secondary
-   maintenance disclosure, and progressive Draft Setup disclosure.
+   maintenance disclosure, progressive Draft Setup disclosure,
+   and the phone-only WR-026 decision view.
    Does not change draft state, scoring, recommendations, or sync.
    ========================================================= */
 
@@ -13,6 +14,7 @@
   var MANAGE_ID = 'draft-manage';
   var MANAGE_ACTIONS_ID = 'draft-manage-actions';
   var SETUP_DISCLOSURE_CLASS = 'draft-command-setup-disclosure';
+  var PHONE_DECISION_SCRIPT_ID = 'war-room-phone-decision-script';
   var observer = null;
   var setupEditing = false;
   var syncQueued = false;
@@ -56,6 +58,27 @@
     link.addEventListener('load', onReady, {once:true});
     link.addEventListener('error', reportStyleFailure, {once:true});
     document.head.appendChild(link);
+  }
+
+  function loadPhoneDecisionView() {
+    if (window.WarRoomPhoneDecisionView) {
+      if (typeof window.WarRoomPhoneDecisionView.refresh === 'function') {
+        window.WarRoomPhoneDecisionView.refresh();
+      }
+      return;
+    }
+    if (document.getElementById(PHONE_DECISION_SCRIPT_ID)) return;
+
+    var script = document.createElement('script');
+    script.id = PHONE_DECISION_SCRIPT_ID;
+    script.src = 'js/war-room-phone-decision-view.js?v=20260909-1';
+    script.async = false;
+    script.addEventListener('error', function() {
+      if (typeof window.reportWarRoomEnhancementFailure === 'function') {
+        window.reportWarRoomEnhancementFailure('phone decision view');
+      }
+    }, {once:true});
+    document.head.appendChild(script);
   }
 
   function hasDraftProgress() {
@@ -260,6 +283,7 @@
     ensureSetupDisclosure();
     updateHeaderState();
     revealUrgentCommandState();
+    loadPhoneDecisionView();
   }
 
   function scheduleSynchronize() {
