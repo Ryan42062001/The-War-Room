@@ -5,159 +5,101 @@ Last updated: 2026-09-08
 Owner: Manager / Architect
 
 ## Project priority
-
-Draft-day reliability and decision efficiency over feature count:
-- recommendations remain trustworthy
-- drafted players never reappear available
-- state is not silently lost or corrupted
-- ESPN failures recover safely
-- persistence is robust
-- the app remains fast and mobile-friendly
-- the user can identify the next correct draft action quickly
-- regressions are caught before release
-- `main` remains deployable
+Draft-day reliability, trustworthy recommendations, and decision efficiency over feature count.
 
 ## Completed foundations
-
-### Ranking / dataset authority — COMPLETE baseline
-- FantasyPros Top-20 Experts 2026 PPR ECR primary
-- broader FantasyPros PPR ECR controlled fallback
-- ESPN rank/ADP timing/market only
-- 717-player canonical universe with zero canonical duplicates in baseline
-- SHA-256 fail-closed baseline acceptance
-
-### Draft-state / persistence hardening — COMPLETE
-- deterministic draft invariants
-- corruption/backup/restore/quota handling
-- offline/reconnect resilience
-- stale ESPN snapshot monotonicity protections
-
-### Recommendation / scoring correctness — COMPLETE baseline
-- canonical scoring/recommendation modules
-- known corrections in required production path
-- fail-closed bootstrap
-
-### Repository operating contract — COMPLETE
-- canonical `.ai/shared/*`
-- safe parallel orchestration
-- R&D role expansion
-- MAINTENANCE / STABLE maturity governance
-
-### ESPN Live Sync reliability / live-validation closeout — COMPLETE
-- layered sync/recovery
-- observability/forensics
-- off-board pick correctness
-- trust UX
-- completion consistency
-- required Level-4 validation
-
-### Roadmap Discovery — COMPLETE
-- WR-007 found no justified successor production milestone
-- WR-009 placed project into MAINTENANCE / STABLE
-
-### Ranking Accuracy & Automated Ingestion Feasibility — R&D COMPLETE
-- WR-010 / PR #111 evidence accepted by Manager in WR-011
-- current Top-20 PPR ranking authority retained
-- automatic API integration not production-ready
-- ranking automation remains gated on provider compatibility, live completeness, and material-value evidence
+- Ranking / dataset authority baseline — COMPLETE
+- Draft-state / persistence hardening — COMPLETE
+- Recommendation / scoring correctness — COMPLETE baseline
+- Repository operating contract — COMPLETE
+- ESPN Live Sync reliability / live-validation closeout — COMPLETE
+- Roadmap Discovery — COMPLETE; project placed into MAINTENANCE / STABLE
+- Ranking Accuracy & Automated Ingestion Feasibility — R&D COMPLETE; current Top-20 FantasyPros PPR baseline retained
 
 ## Current project mode
-
 ### MAINTENANCE / STABLE
 
-No active production milestone is assigned.
-
-A legitimate maintenance trigger may activate bounded research/audit without automatically reopening production development.
+No active production milestone is assigned. Legitimate maintenance triggers may activate bounded R&D/audit without automatically reopening production development.
 
 ## Active maintenance discovery
-
 ### PW-001 — Layout Efficiency Discovery — IN PROGRESS
-
-Trigger:
-The user asked whether the War Room website can be researched for the most efficient possible layout and whether there are evidence-backed improvements worth making.
-
 Production implementation authorization: **NONE**
 
 #### WR-012 — Layout Efficiency & Information Architecture R&D
-Assigned role: Research & Development (R&D)
+Assigned role: R&D
+Status: ACTIVE
 Starting SHA: `8df161ba8c5413b0cc3c11f87041c4ad80046dc0`
-Task spec: `.ai/manager/WR-012.md`
-
-Purpose:
-- research evidence-backed high-density real-time dashboard / draft-assistant layout principles
-- inspect current War Room information architecture and responsive composition
-- measure/estimate scan efficiency and persistent-chrome cost where runtime evidence permits
-- compare desktop/tablet/mobile needs
-- identify and prioritize concrete improvement candidates
-- explicitly allow a `no material change justified` outcome
+Task: `.ai/manager/WR-012.md`
+Purpose: research evidence-backed layout/information hierarchy improvements for live draft use.
 
 #### WR-013 — Current Layout Efficiency & Usability Baseline Audit
 Assigned role: Independent Auditor / QA
-Starting SHA: `8df161ba8c5413b0cc3c11f87041c4ad80046dc0`
-Task spec: `.ai/manager/WR-013.md`
+Status: COMPLETE
+Task: `.ai/manager/WR-013.md`
+Evidence: `.ai/auditor/LAYOUT_AUDIT.md`
 
-Purpose:
-- independently measure actual current-layout efficiency across representative viewports
-- evaluate core draft flows, sticky viewport consumption, interaction counts, target ergonomics, overflow/crowding, and accessibility behavior
-- identify areas already efficient and findings that materially slow or risk draft-day use
-- avoid anchoring on WR-012's recommendations during first-pass evidence gathering
+Auditor summary:
+- no CRITICAL/HIGH layout defect proven
+- strongest MEDIUM concerns: touch-target size, desktop/tablet sticky vertical budget, low-frequency/destructive control competition, and 769–900px responsive stress
+- several current layout strengths should be preserved
 
-### PW-001 dependency model
+Manager layout decision has a HARD DEPENDENCY on WR-012 completion plus the already-complete WR-013 evidence.
 
-WR-012 vs WR-013: **INDEPENDENT** — run simultaneously.
+## Queued maintenance discovery
+### WR-014 — Advanced Metrics Ranking Model Feasibility — QUEUED / NOT ACTIVE
+Assigned role: R&D
+Task: `.ai/manager/WR-014.md`
+Production implementation authorization: **NONE**
 
-Manager synthesis: **HARD DEPENDENCY** on both completed evidence streams.
+Trigger:
+The user proposed building a War Room-owned ranking model from underlying football statistics/advanced metrics rather than relying solely on expert consensus.
 
-Builder implementation: **HARD DEPENDENCY** on Manager synthesis and a separate approved production WR task.
+Research direction when activated:
+- assess open/licensable data sources and restricted sources separately
+- define position-specific predictive features and modeling targets
+- compare open-data-only, hybrid, and full-replacement ranking architectures
+- design leakage-safe historical validation against the current Top-20 PPR ECR baseline
+- require material predictive lift before changing ranking authority
+- preserve explainability, seasonal refresh safety, and fail-closed behavior
 
-No UI change is authorized merely because either specialist proposes one.
+Preliminary source constraint:
+- do not assume PFF can be used to train or derive a production ranking model; current PFF terms materially restrict model development/derived-data use without separate rights
+- open/licensable sources such as nflverse/ffverse are the preferred starting point for feasibility research
 
-## Current layout evidence already verified by Manager
+Dependency status:
+- WR-014 is INDEPENDENT of the layout topic
+- WR-014 has a HARD resource dependency on WR-012 because the project currently has one R&D role
+- WR-014 should activate only after WR-012 completes and Manager confirms priority
 
-- `index.html` contains a dense single-page draft command surface: header, search/filter toolbar, status/session/marking controls, tier navigation, command/recommendation/pressure information, Position Tiers/Overall boards, and My Draft.
-- `style-base.css` currently stacks several sticky layers.
-- `style.css` already includes an explicit Position Tiers density pass and a 1320px Position-view main surface.
-- `command-bar-fixes.css` adapts command composition across desktop/tablet/mobile and wraps the status bar <=900px.
-- `scripts/test-responsive-overflow.mjs` tests 13 widths from 320–1280 across both Position and Overall views for zero document horizontal overflow.
+## Ranking authority remains unchanged
+- FantasyPros Top-20 Experts 2026 PPR ECR primary
+- broader FantasyPros PPR ECR fallback
+- ESPN rank/ADP market timing only
+- WR-D001 remains ACTIVE
 
-These facts justify measured optimization research; they do not themselves prove that the current layout is inefficient.
+No advanced-metrics model, source, weighting, algorithm, or production architecture is approved yet.
 
-## General maintenance reactivation triggers
-
-Active production development may be reconsidered when one or more becomes real and sufficiently important:
-- verified defects
-- real-world user feedback
-- changed external dependencies
-- new product requirements
-- materially valuable opportunities
-- seasonal/data updates
-- previously unresolved risks becoming actionable
-
-Triggers do not automatically authorize implementation.
-
-## Deferred trigger-driven opportunities retained
-
+## Deferred trigger-driven opportunities
 - ESPN Configuration Preflight / Settings Validation
 - Recommendation Calibration Program
 - Opponent-Aware Next-Turn Intelligence
 - League-Aware Draft Profiles
-- Ranking automation after its evidence gates are satisfied
+- FantasyPros ranking automation after its evidence gates
+- WR-014 advanced-metrics ranking model research after WR-012
 
 ## Existing maintenance observations
-
 Non-blocking:
 - legacy `AGENTS.md` process wording
 - diagnostics capture-source wording
 - unresolved synthetic-navigation actor identity at WR-002 evidence ceiling
 
 ## Parallelism status
-
-PARALLEL WORK WAVE: **PW-001**
+PARALLEL WORK WAVE: **PW-001** remains active for layout evidence only.
 
 Current roles:
-- Manager: IDLE after assignment / awaiting evidence
+- Manager: ACTIVE for trigger evaluation/canonical reconciliation, then IDLE
 - Builder: IDLE
 - R&D: ACTIVE — WR-012
-- Auditor: ACTIVE — WR-013
+- Auditor: IDLE — WR-013 complete
 
-Do not assign Builder work until Manager synthesizes both discovery streams and explicitly determines that a bounded implementation is justified.
+WR-014 is QUEUED, not an additional active parallel assignment. Do not assign Builder work from either layout or ranking-model discovery without a separate Manager production decision.
