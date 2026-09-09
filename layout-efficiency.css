@@ -252,6 +252,15 @@ header {
   min-height: 26px;
 }
 
+/* Preserve the command bar's pre-WR-016 desktop urgency contract even though
+   Draft Setup now expands before progress and makes Waiting intrinsically
+   taller. Tablet/mobile keep their tighter responsive composition. */
+@media (min-width: 901px) {
+  body[data-board-view="position"] #draft-command-bar.is-on-clock {
+    min-height: 110px;
+  }
+}
+
 /* Empty awareness is informationally quiet. Keep the labels discoverable but
    make the no-target/no-alert state one compact row so player choices win the
    viewport. Meaningful targets or alerts retain the full awareness layout. */
