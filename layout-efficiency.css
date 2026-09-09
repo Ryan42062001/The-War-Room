@@ -256,8 +256,8 @@ header {
    Draft Setup now expands before progress and makes Waiting intrinsically
    taller. Tablet/mobile keep their tighter responsive composition. */
 @media (min-width: 901px) {
-  body[data-board-view="position"] #draft-command-bar.is-on-clock {
-    min-height: 110px;
+  body[data-board-view="position"] .draft-control-shell > #draft-command-bar.is-on-clock {
+    min-height: 110px !important;
   }
 }
 
