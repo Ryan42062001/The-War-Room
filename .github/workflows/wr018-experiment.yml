@@ -1,0 +1,29 @@
+name: WR-018 Experimental Shadow Model
+on:
+  push:
+    branches: [wr-018-exec-scratch]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  experiment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: .ai/research/wr018_requirements.txt
+      - name: Install research dependencies
+        run: python -m pip install -r .ai/research/wr018_requirements.txt
+      - name: Run WR-018 experiment
+        run: python .ai/research/wr018_shadow_experiment.py
+      - name: Upload WR-018 research outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wr018-shadow-results
+          path: .ai/research/generated/
+          if-no-files-found: error
+          retention-days: 3
