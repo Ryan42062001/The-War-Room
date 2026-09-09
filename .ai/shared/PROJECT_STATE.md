@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — LAYOUT RELEASE COMPLETE / WR-018 MANAGER REVIEW PENDING
+Status: MAINTENANCE / STABLE — BOUNDED WR-021 R&D ACTIVE
 Last verified: 2026-09-09
 Owner: Manager / Architect
 
@@ -8,59 +8,68 @@ Owner: Manager / Architect
 Repository: `Ryan42062001/The-War-Room`
 Branch: `main`
 
-## Draft-Day Layout Efficiency milestone
-Status: COMPLETE
+## Production baseline
+No active production milestone.
 
-### WR-016 — Draft-Day Layout Efficiency Implementation
-Role: Implementation Engineer
-Status: COMPLETE / MERGED
-Production PR: #114 — `WR-016 Improve draft-day layout efficiency`
-Audited final head: `5636bd75aa4be34bdbdfc5e459df44283c8f2483`
-Audited base: `8931b30d4f4f387504b17ac07d837aa87a166948`
-Audited merge ref: `318a2ee96ed4c25b23b3609ac31891dc276fbff5`
-Pre-merge exact integration CI: War Room #847 / `34366327920` — SUCCESS
-Merge commit: `dfe5476883d700b9281fb57f1c710daa7758492a`
-Post-merge main CI: War Room #862 / `34370139838` — SUCCESS
-GitHub Pages deployment #665 / `34370138865` — SUCCESS
-
-Implemented outcome:
-- normal-flow coordinated draft control hierarchy instead of overlapping sticky layers
-- low-frequency/destructive actions behind Manage while session/Taken/Mine stay immediate
-- Draft Setup progressive disclosure before/after meaningful draft progress
-- responsive position filters and hardened frequent/touch targets
-- command-surface reveal for off-screen On-the-Clock transition
-- recovery/maintenance workflows remain reachable
-- no ranking/scoring/recommendation/draft-state/persistence-schema/ESPN-sync authority change
-
-### WR-019 — Independent Release Audit
-Role: Independent Auditor / QA
-Status: COMPLETE
-Disposition: PASS WITH NON-BLOCKING FINDINGS
-Blocking findings: NONE
-Non-blocking finding: `WR-019-AUD-01` LOW — stale PR-body integration metadata only
-Validation levels: Level 1/2/3 VERIFIED; Level 4 physical-device/manual visual use not verified and not a mandatory WR-016 release gate
-Evidence: `.ai/auditor/WR-019_LAYOUT_RELEASE_AUDIT.md`
+### Draft-Day Layout Efficiency — COMPLETE
+- WR-016 COMPLETE / MERGED
+- PR #114 merge: `dfe5476883d700b9281fb57f1c710daa7758492a`
+- Independent WR-019 audit: PASS WITH NON-BLOCKING FINDINGS
+- Post-merge War Room CI #862 / `34370139838`: SUCCESS
+- GitHub Pages #665 / `34370138865`: SUCCESS
+- No ranking/scoring/recommendation/draft-state/persistence/ESPN authority changes from the layout milestone.
 
 ## Advanced-metrics ranking R&D
 
 ### WR-018 — Open-Data Shadow Ranking Model Experiment
 Role: Research & Development (R&D)
-Status: COMPLETE — MANAGER REVIEW / DISPOSITION PENDING
-Research PR: #115 — `WR-018: Open-data shadow ranking model experiment`
-Latest exact research head: `0c2f7e9e307ff30293ff96ab66fb0b1a72c8b051`
-Post-remediation exact-head War Room CI #858 / `34367526671`: SUCCESS
-Primary result: `MORE EVIDENCE NEEDED`
-Production ranking/model implementation authorization: NO
+Status: COMPLETE / ACCEPTED / MERGED
+Research PR: #115
+Research head: `0c2f7e9e307ff30293ff96ab66fb0b1a72c8b051`
+Exact-head War Room CI #858 / `34367526671`: SUCCESS
+Merge commit: `9c7aa3b8b7b2600c50dac0f050f6da97b4aed08b`
+Manager disposition: `MORE EVIDENCE NEEDED`
+Production behavior changed: NO
 
-Key result:
-- naive prior-season PPR/game remained a hard baseline
-- pooled Ridge MAE was effectively unchanged/slightly worse than naive
-- Gradient Boosting was worse on pooled MAE
-- richer summary-only features did not establish a persuasive held-out advantage
-- a clean research-only 2026 shadow snapshot was frozen for 343 returning QB/RB/WR/TE players
-- rookies, point-in-time injury/depth/role context, and availability modeling remain missing
+Key evidence:
+- 663 rolling-origin held-out returning-player predictions across 2022–2025
+- naive previous-season PPR/game MAE 2.636
+- Ridge MAE 2.638; Gradient Boosting MAE 2.674
+- neither challenger established persuasive pooled MAE lift
+- clean research-only 2026 snapshot frozen for 343 returning QB/RB/WR/TE players
 
-Current production ranking authority remains unchanged:
+Manager review also recorded two methodological limits relevant to future work:
+- WR-018 historical cohort conditioned on at least four target-season games, so it does not represent complete preseason draft value / availability risk
+- row-wise bootstrap did not cluster repeated players across seasons
+
+### WR-020 — WR-018 Manager Disposition
+Role: Manager / Architect
+Status: COMPLETE
+Task: `.ai/manager/WR-020.md`
+Decision:
+- accept WR-018 as `MORE EVIDENCE NEEDED`
+- do not change WR-D001
+- do not promote a production model
+- authorize one bounded successor research validation focused on genuinely preseason context
+
+### WR-021 — Context-Enriched Preseason Shadow Model Validation
+Role: Research & Development (R&D)
+Status: ASSIGNED / ACTIVE
+Task: `.ai/manager/WR-021.md`
+Production implementation authorization: NONE
+
+Required successor focus:
+- preseason-defined historical cohort; no target-season outcome used to decide inclusion
+- explicit rookies/no-prior-history handling
+- rights-cleared age/experience/draft-capital/team-movement/roster context where point-in-time semantics are defensible
+- availability handled explicitly rather than silently excluding zero/low-participation players
+- earlier-season model selection; 2022–2025 treated as confirmatory because their outcomes have already been observed by the project
+- repeated-player-aware uncertainty
+- predeclared material-lift gate before any `PROMISING` classification
+- freeze a context-enriched 2026 research snapshot before kickoff only if still prospectively clean
+
+## Ranking authority baseline
+UNCHANGED:
 - FantasyPros Top-20 Experts 2026 PPR ECR primary
 - broader FantasyPros PPR ECR fallback
 - ESPN rank/ADP market timing only
@@ -69,19 +78,17 @@ Current production ranking authority remains unchanged:
 No shadow-model output is production authority.
 
 ## PW-002
-Status: ACTIVE — ONLY WR-018 MANAGER DISPOSITION REMAINS
+Status: COMPLETE
+- WR-016 Builder lane COMPLETE / MERGED
+- WR-019 Auditor lane COMPLETE / PASS WITH NON-BLOCKING FINDINGS
+- WR-018 R&D lane COMPLETE / ACCEPTED / MERGED
 
-Completed lanes:
-- Builder / WR-016 — COMPLETE / MERGED
-- Auditor / WR-019 — COMPLETE / PASS WITH NON-BLOCKING FINDINGS
-
-Pending lane:
-- R&D / WR-018 — COMPLETE / awaiting Manager disposition and research PR integration decision
+WR-021 is a new standalone R&D task and is not part of PW-002.
 
 ## Current workload
-- Manager — ACTIVE / WR-018 review and PW-002 closeout
+- Manager — IDLE after WR-020/WR-021 assignment
 - Builder — IDLE
-- R&D — IDLE
+- R&D — ACTIVE / WR-021
 - Auditor — IDLE
 
 Workers must not independently update `.ai/shared/*`.
