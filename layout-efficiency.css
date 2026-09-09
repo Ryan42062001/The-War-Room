@@ -53,6 +53,7 @@ header {
   padding: 5px 12px;
   gap: 7px;
   flex-wrap: nowrap;
+  overflow: visible;
   background: rgba(20,22,24,.98);
 }
 
@@ -88,6 +89,10 @@ header {
   position: relative;
   flex: 0 0 auto;
   margin-left: auto;
+}
+
+.draft-manage[open] {
+  z-index: 100;
 }
 
 .draft-manage-summary {
