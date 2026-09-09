@@ -201,7 +201,8 @@
     }
 
     var value = details.querySelector('.draft-command-setup-summary-value');
-    if (value) value.textContent = setupSummaryText();
+    var nextSummary = setupSummaryText();
+    if (value && value.textContent !== nextSummary) value.textContent = nextSummary;
 
     var progressed = hasDraftProgress();
     if (!progressed) {
