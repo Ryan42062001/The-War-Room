@@ -95,13 +95,14 @@ try {
   assert.equal(await page.locator('.draft-command-setup-disclosure').evaluate(element => element.open), true);
 
   // My Draft stays one action away and both primary views remain reachable.
-  await page.getByRole('button', {name:'My Draft'}).click();
+  const myDraftToggle = page.locator('.myteam-toggle');
+  await myDraftToggle.click();
   assert.equal(await page.locator('#myteam-panel').evaluate(element => element.classList.contains('open')), true);
   await page.getByRole('tab', {name:'Lineup'}).click();
   assert.equal(await page.getByRole('tab', {name:'Lineup'}).getAttribute('aria-selected'), 'true');
   await page.getByRole('tab', {name:'Summary'}).click();
   assert.equal(await page.getByRole('tab', {name:'Summary'}).getAttribute('aria-selected'), 'true');
-  await page.getByRole('button', {name:'My Draft'}).click();
+  await myDraftToggle.click();
   assert.equal(await page.locator('#myteam-panel').evaluate(element => element.classList.contains('open')), false);
 
   // Waiting -> Near -> On-the-Clock remains semantically distinct in the stressed tablet band.
