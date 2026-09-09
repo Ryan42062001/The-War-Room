@@ -71,3 +71,19 @@ The admitted source set does not establish a defensible point-in-time preseason 
 VERIFIED FACT: the NFL's official 2026 Week 1 schedule lists Patriots at Seahawks on Wednesday, September 9, 2026 at 8:20 PM ET as the first regular-season game.
 
 WR-018 may create a prospectively clean 2026 shadow snapshot only before that kickoff and only from information available before the freeze. The snapshot must use completed data through 2025, remain disconnected from production, and explicitly flag missing rookie/injury/depth context. If generated after kickoff, it is ineligible and must not be reconstructed retrospectively.
+
+## Post-execution provenance verification
+The manifest above existed on the research branch before the experiment was run. After execution, the following provenance was captured without expanding the admitted source set:
+
+- official release ID: `236670328`;
+- release name: `Player Summary Stats`;
+- release tag: `stats_player`;
+- release updated timestamp: `2026-08-26T07:35:58Z`;
+- historical assets actually used: official `stats_player_regpost_2012.csv` through `stats_player_regpost_2025.csv`;
+- every GitHub-provided SHA-256 digest matched the independently computed download SHA-256;
+- exact per-season asset IDs, sizes, timestamps, URLs, digests, and verified hashes are frozen in `.ai/research/generated/SHADOW_RANKING_ASSET_MANIFEST.json`;
+- persisted 2026 snapshot generation timestamp: `2026-09-09T14:53:48.967586+00:00` (10:53:48 AM ET), before the `2026-09-10T00:20:00+00:00` first-kickoff deadline;
+- snapshot population: 343 returning QB/RB/WR/TE players;
+- no 2026 regular-season outcomes were used.
+
+No additional source family was admitted after this manifest was created.
