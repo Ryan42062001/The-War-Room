@@ -213,7 +213,16 @@
       if (summary) summary.focus();
     });
     details.addEventListener('toggle', function() {
-      if (hasDraftProgress() || isPhoneLayout()) setupEditing = details.open;
+      var phone = isPhoneLayout();
+      if (hasDraftProgress() || phone) setupEditing = details.open;
+
+      // On phones the setup fields are intentionally progressive disclosure.
+      // Mark an open state only after the disclosure has actually toggled so
+      // a freshly re-rendered command bar cannot briefly expose fields before
+      // WR-026 applies its collapsed default.
+      if (phone && details.open) details.dataset.phoneUserOpen = 'true';
+      else details.removeAttribute('data-phone-user-open');
+
       if (!details.open) {
         var active = document.activeElement;
         if (active && active !== details.querySelector('summary') && details.contains(active)) {
@@ -253,18 +262,22 @@
         if (details.dataset.phoneDefaulted !== 'true') {
           setupEditing = false;
           details.open = false;
+          details.removeAttribute('data-phone-user-open');
           details.dataset.phoneDefaulted = 'true';
         } else {
           details.open = Boolean(setupEditing);
+          if (!setupEditing) details.removeAttribute('data-phone-user-open');
         }
       } else {
         setupEditing = false;
         details.open = true;
         details.removeAttribute('data-phone-defaulted');
+        details.removeAttribute('data-phone-user-open');
       }
       details.dataset.progress = 'false';
     } else {
       details.removeAttribute('data-phone-defaulted');
+      if (!phone) details.removeAttribute('data-phone-user-open');
       if (details.dataset.progress !== 'true') details.open = Boolean(setupEditing);
       details.dataset.progress = 'true';
     }
