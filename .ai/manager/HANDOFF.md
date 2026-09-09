@@ -2,108 +2,118 @@
 
 HANDOFF
 
-Task ID: WR-020 / WR-021
+Task ID: WR-022 / WR-023
 Role: Manager / Architect
-Status: WR-020 COMPLETE / WR-021 ASSIGNED
+Status: WR-022 COMPLETE / WR-023 ASSIGNED
 
 ## Verified starting state
-- canonical main at WR-018 review start: `33ad224d9f012d9cb1165ca00051109c9471a3e3`
-- WR-018 research PR #115 head: `0c2f7e9e307ff30293ff96ab66fb0b1a72c8b051`
-- exact-head War Room CI #858 / `34367526671`: SUCCESS
-- PR #115 scope: research-only under `.ai/research/`; production files changed NO; `.ai/shared/*` changed NO
+- canonical main at WR-021 review start: `4dbc0bf22d27296c3cd9b45fd90de637488ff001`
+- WR-021 research PR #116 head: `6e510d2223289f570e9f078ae0c61eff92a8374e`
+- PR #116 mergeable: YES
+- exact-head War Room CI #888 / `34376884781`: SUCCESS
+- final PR scope: 8 files, all under `.ai/research/`
+- production files changed: NO
+- canonical `.ai/shared/*` changed by R&D: NO
 
-## WR-018 Manager review
+## WR-021 Manager review
 Manager independently reviewed:
 - R&D handoff
-- `SHADOW_RANKING_EXPERIMENT.md`
-- source/license manifest
-- reproducible runner
-- PR scope/head/CI
-- current nflverse rights/source feasibility
+- `CONTEXT_SHADOW_SOURCE_MANIFEST.md`
+- `CONTEXT_SHADOW_EXPERIMENT.md`
+- reproducible `wr021_context_shadow_experiment.py`
+- generated `CONTEXT_SHADOW_RESULTS.json`
+- exact PR scope/head/CI
+- nflverse-data repository license evidence (CC BY 4.0)
 
-Accepted result: `MORE EVIDENCE NEEDED`.
+Manager accepted classification:
+`PROMISING — CONTINUE VALIDATION` / RESEARCH ONLY.
 
-Key quantitative result:
-- Naive pooled MAE 2.636 / Spearman 0.742
-- Ridge pooled MAE 2.638 / Spearman 0.746
-- Gradient Boosting pooled MAE 2.674 / Spearman 0.731
-- neither challenger established persuasive pooled MAE lift
+### Supporting evidence
+- preseason cohort is defined before target outcomes are joined
+- 2018–2021 development window selects Ridge alpha; 2022–2025 use locked specification
+- returning-player baseline MAE 2.910 / Ridge MAE 2.680 = 7.89% improvement
+- pooled Spearman 0.638 -> 0.684
+- pooled player-clustered Ridge-minus-baseline MAE 95% interval `[-0.360, -0.106]`
+- all four predeclared WR-021 research gates pass
+- MAE improves for QB/RB/WR/TE in pooled position summaries
+- corrected 2026 snapshot was frozen prospectively before kickoff for 523 players
 
-Manager methodological findings:
-1. WR-018 test inclusion required at least four target-season games, so the historical cohort conditions on target-season participation and does not represent full preseason availability/draft value.
-2. Bootstrap uncertainty treated repeated player-season rows as independent; successor work should use repeated-player-aware uncertainty.
-3. Rookies, age/experience, draft capital, team movement, role, and availability remain missing.
-4. No lawful historical FantasyPros comparator was used; no superiority claim is supported.
-5. 2022–2025 outcomes have now been observed by the project and are confirmatory, not pristine, for successor work.
+### Reasons production remains blocked
+- 2022–2025 are confirmatory but not pristine project-level holdouts; outcomes were already observed before WR-021 design
+- initial diagnostic run used current Players position for historical rookie cohort and was correctly invalidated/replaced; final classification uses corrected draft-time PFR position
+- rookie Ridge MAE is worse than the transparent rookie baseline (3.236 vs 2.977)
+- individual RB/WR/TE clustered intervals cross zero
+- availability is recorded-games regression, not a validated medical/injury model
+- no lawful contemporaneous FantasyPros superiority benchmark has been established
+- no 2026 prospective outcome has yet been scored
 
 ## Integration
-PR #115 was merged by Manager as:
-`9c7aa3b8b7b2600c50dac0f050f6da97b4aed08b`
+PR #116 merged by Manager as:
+`f2e3e9b1c0a9a59452d679783a5236d4a5da9a09`
 
 Production ranking authority changed: NO.
 WR-D001 changed: NO.
 
-## WR-020 decision
+## WR-022 decision
 Status: COMPLETE
-Task: `.ai/manager/WR-020.md`
+Task: `.ai/manager/WR-022.md`
 
 Decision:
-- accept WR-018 evidence
-- do not promote a production ranking model
-- preserve FantasyPros Top-20 PPR ECR production authority
-- authorize one final bounded research successor because the missing hypothesis is genuinely different and rights-clean nflverse sources appear to cover several key preseason context families
+- accept WR-021 as promising research for returning players
+- do not promote a production model
+- preserve FantasyPros ranking authority
+- require pristine 2026 prospective validation before any production-milestone consideration
+- authorize WR-023 to freeze the prospective protocol before outcome scoring
 
-## WR-021 assignment
-Task: `.ai/manager/WR-021.md`
-Role: R&D
+## WR-023 assignment
+Task: `.ai/manager/WR-023.md`
+Role: Research & Development (R&D)
 Status: ASSIGNED / ACTIVE
 Production authorization: NONE
 
 Objective:
-Test whether rights-cleared preseason context materially improves the shadow model while correcting WR-018 cohort/uncertainty limitations.
+Pre-register and hash the exact 2026 prospective evaluation protocol for the frozen WR-021 snapshot before any 2026 result is inspected/scored.
 
-Required focus:
-- preseason-defined cohort
-- explicit rookie handling
-- age/experience/draft capital/team movement/roster context only with verified rights and point-in-time semantics
-- availability handled explicitly
-- earlier-season model selection; 2022–2025 confirmatory only
-- repeated-player-aware uncertainty
-- predeclared material-lift gate
-- context-enriched 2026 freeze before kickoff only if still prospectively clean
+Primary final evidence gate later requires all:
+- >=3% returner PPR/game MAE improvement vs frozen baseline
+- paired player-bootstrap 95% MAE-delta interval upper bound < 0
+- pooled Spearman not worse by >0.01
+- at least 3/4 positions non-worse on MAE and no position worse by >5%
+- no contamination or post-freeze model/snapshot changes
 
-## PW-002
-Status: COMPLETE
-- WR-016 COMPLETE / MERGED
-- WR-019 COMPLETE / PASS WITH NON-BLOCKING FINDINGS
-- WR-018 COMPLETE / ACCEPTED / MERGED
+Passing that future gate still does not authorize production; it only permits Manager consideration of a separate production milestone.
 
-WR-021 is standalone and not part of a Parallel Work Wave.
-
-## Current project mode
+## Project mode
 MAINTENANCE / STABLE — bounded R&D active.
 No active production milestone.
+
+## Parallelism
+No Parallel Work Wave.
+WR-023 is standalone R&D.
+Builder and Auditor remain legitimately IDLE.
 
 ## Current role state
 - Manager: IDLE after assignment
 - Builder: IDLE
-- R&D: ACTIVE — WR-021
+- R&D: ACTIVE — WR-023
 - Auditor: IDLE
 
 ## Open findings
-- WR-019-AUD-01 LOW documentation-only historical finding
-- no custom ranking model has demonstrated sufficient lift for production
-- availability/rookie/preseason context remains the key unresolved modeling hypothesis
+- WR-019-AUD-01 LOW historical documentation-only finding
+- WR-021 historical signal is promising but non-pristine
+- rookie model not validated
+- RB/WR/TE position-level uncertainty individually inconclusive
+- no FantasyPros superiority claim is supported
 
 ## Blocking issues
-None for WR-018/WR-020 completion.
-Any production ranking-model change remains blocked on future evidence and a separate Manager-approved production milestone.
+None for WR-021/WR-022 completion.
+Any production ranking-model milestone remains blocked on prospective validation and later Manager review.
 
 ## Recommended next role
 Research & Development (R&D)
 
 ## Exact next action
-Execute WR-021 from refreshed canonical main. If still before the first 2026 kickoff, prioritize freezing the context-enriched 2026 research snapshot before the deadline without compromising source-rights or leakage rules. Return evidence to Manager; do not change production rankings.
+Execute WR-023 from refreshed canonical main. Freeze the evaluation protocol before inspecting/scoring any 2026 outcome. Do not change production rankings.
 
 ## Checkpoint / SHA
 Verify current main after this reconciliation for the exact final canonical SHA.
