@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: MAINTENANCE / STABLE — BOUNDED WR-023 R&D ACTIVE
+Status: MAINTENANCE / STABLE — PROSPECTIVE VALIDATION FROZEN
 Last verified: 2026-09-09
 Owner: Manager / Architect
 
@@ -38,47 +38,62 @@ Merge commit: `f2e3e9b1c0a9a59452d679783a5236d4a5da9a09`
 Manager disposition: `PROMISING — CONTINUE VALIDATION` / RESEARCH ONLY
 Production behavior changed: NO
 
-Key WR-021 evidence:
-- preseason-defined returning cohort and explicit drafted-rookie cohort
-- model selection restricted to 2018–2021; 2022–2025 treated as confirmatory/non-pristine
-- returning-player Ridge MAE 2.680 vs baseline 2.910: 7.89% improvement
+Key evidence:
+- preseason-defined historical cohort
+- returning-player Ridge MAE 2.680 vs baseline 2.910: 7.89% historical confirmatory improvement
 - pooled Spearman 0.684 vs 0.638
-- player-clustered Ridge-minus-baseline MAE 95% interval `[-0.360, -0.106]`
-- all predeclared WR-021 research gates passed
-- pooled returner MAE improved in QB/RB/WR/TE, but individual RB/WR/TE clustered intervals remain inconclusive
-- rookie Ridge MAE 3.236 vs rookie baseline 2.977: negative result / rookie model not validated
-- recorded-games MAE and experimental season-total MAE improved, but availability is not a medical injury model
-- corrected 2026 research-only snapshot frozen prospectively at `2026-09-09T16:22:20.858306+00:00`
-- 2026 snapshot coverage: 523 players = 444 returners + 79 drafted rookies
+- player-clustered MAE-delta 95% interval `[-0.360, -0.106]`
+- all predeclared WR-021 historical research gates passed
+- rookie Ridge model did not validate
+- 2022–2025 are confirmatory/non-pristine, so production remains blocked
+- corrected 2026 snapshot was frozen prospectively before kickoff
+- 2026 frozen universe: 523 players = 444 returners + 79 drafted rookies
 
 ### WR-022 — WR-021 Manager Disposition
-Role: Manager / Architect
 Status: COMPLETE
-Task: `.ai/manager/WR-022.md`
 Decision:
-- accept WR-021 as genuinely promising research for returning players
-- do not change WR-D001
-- do not promote a production model
+- accept WR-021 as promising research only
+- preserve WR-D001 and FantasyPros production authority
 - require pristine 2026 prospective validation before any production-milestone consideration
-- authorize WR-023 protocol freeze before outcome scoring
 
 ### WR-023 — 2026 Prospective Shadow Evaluation Protocol Freeze
 Role: Research & Development (R&D)
-Status: ASSIGNED / ACTIVE
-Task: `.ai/manager/WR-023.md`
-Production implementation authorization: NONE
+Status: COMPLETE / ACCEPTED / MERGED
+Research PR: #117
+Final research head: `d3e3890834184da4ae99c1194ba333e48c98022b`
+Exact-head War Room CI #902 / `34382871798`: SUCCESS
+Merge commit: `a1aa543f980f724977e0619d0610e046c719cbea`
+Manager disposition: ACCEPTED
+Production behavior changed: NO
 
-Purpose:
-Freeze the 2026 prospective evaluation universe, outcome definitions, checkpoints, and decisive evidence gate before any 2026 result is inspected or scored.
+Frozen protocol identity:
+- freeze commit: `28903ef5dc7073b36cb400330104e8f9e3ee0e05`
+- protocol SHA-256: `f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`
+- WR-021 snapshot SHA-256: `9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d`
 
-Primary final gate for later production-milestone consideration:
+Frozen final prospective gate requires all:
 - >=3% returner PPR/game MAE improvement vs frozen baseline
-- paired player-bootstrap 95% MAE-delta interval upper bound < 0
-- pooled Spearman not worse by >0.01
-- >=3/4 positions non-worse on MAE and no position worse by >5%
-- no snapshot/data contamination or post-freeze model change
+- paired-player bootstrap 95% MAE-delta interval upper bound < 0
+- pooled Spearman no worse by more than 0.01
+- >=3/4 positions non-worse on MAE and no position >5% worse
+- no contamination or post-freeze model/prediction/cohort/protocol/gate changes
 
-Passing WR-023's future gate would still not authorize production; it would only permit Manager consideration of a separate production milestone.
+Checkpoint policy:
+- Week 4: optional descriptive only
+- Week 8: optional descriptive only
+- Week 13: optional descriptive only
+- after completed Week 18 regular season: decisive
+
+### WR-024 — WR-023 Manager Disposition / Prospective Validation Hold
+Role: Manager / Architect
+Status: COMPLETE
+Decision:
+- accept the frozen protocol as the authoritative future evaluation contract
+- do not authorize production ranking changes
+- return project to maintenance/stable until a checkpoint or other valid maintenance trigger is due
+
+Important boundary:
+Passing the future WR-023 gate would validate the returning-player PPR/game signal and permit Manager consideration of a separate production milestone. It would not itself validate rookie handling, availability/season-total integration, ranking/value transformation, or superiority to FantasyPros.
 
 ## Ranking authority baseline
 UNCHANGED:
@@ -89,18 +104,22 @@ UNCHANGED:
 
 No shadow-model output is production authority.
 
-## PW-002
-Status: COMPLETE
-- WR-016 Builder lane COMPLETE / MERGED
-- WR-019 Auditor lane COMPLETE / PASS WITH NON-BLOCKING FINDINGS
-- WR-018 R&D lane COMPLETE / ACCEPTED / MERGED
-
-WR-021 and WR-023 are standalone R&D tasks and are not part of PW-002.
+## Parallel work
+PW-002: COMPLETE.
+No active Parallel Work Wave.
 
 ## Current workload
-- Manager — IDLE after WR-022/WR-023 assignment
+- Manager — IDLE
 - Builder — IDLE
-- R&D — ACTIVE / WR-023
+- R&D — IDLE
 - Auditor — IDLE
 
 Workers must not independently update `.ai/shared/*`.
+
+## Next valid activation triggers
+- a verified production defect or real-user regression
+- changed external dependency or ranking source
+- explicit new product requirement
+- materially valuable maintenance opportunity
+- a predeclared WR-023 checkpoint becoming due
+- final completed 2026 regular season for decisive prospective scoring
