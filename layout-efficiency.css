@@ -9,9 +9,9 @@ header {
 }
 
 .header-inner {
-  min-height: 64px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  min-height: 52px;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 /* Measured WR-016 evidence showed that a full-width sticky control stack
