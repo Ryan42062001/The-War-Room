@@ -13,11 +13,26 @@
   var COMPACT_AVAILABLE_LIMIT = 8;
   var NAV_ID = 'phone-position-decision-nav';
   var MORE_ID = 'phone-position-show-more';
+  var STYLE_ID = 'war-room-phone-decision-styles';
   var activePosition = 'WR';
   var expanded = false;
   var syncQueued = false;
   var observer = null;
   var media = null;
+
+  function ensureStyles() {
+    if (document.getElementById(STYLE_ID)) return;
+    var link = document.createElement('link');
+    link.id = STYLE_ID;
+    link.rel = 'stylesheet';
+    link.href = 'phone-decision-view.css?v=20260909-1';
+    link.addEventListener('error', function() {
+      if (typeof window.reportWarRoomEnhancementFailure === 'function') {
+        window.reportWarRoomEnhancementFailure('phone decision view styles');
+      }
+    }, {once:true});
+    document.head.appendChild(link);
+  }
 
   function isPhone() {
     try {
@@ -328,6 +343,7 @@
   }
 
   function init() {
+    ensureStyles();
     ensureControls();
     installInteractionListeners();
     observeBoard();
