@@ -1,70 +1,75 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — WR-018 MANAGER REVIEW PENDING
+Status: MAINTENANCE / STABLE — BOUNDED WR-021 R&D ACTIVE
 Last updated: 2026-09-09
 Owner: Manager / Architect
 
 ## Completed production milestone
 ### Draft-Day Layout Efficiency — COMPLETE
+- WR-016 COMPLETE / MERGED via PR #114
+- WR-019 independent audit: PASS WITH NON-BLOCKING FINDINGS
+- merge commit: `dfe5476883d700b9281fb57f1c710daa7758492a`
+- post-merge War Room CI #862: SUCCESS
+- GitHub Pages #665: SUCCESS
 
-#### WR-016 — Draft-Day Layout Efficiency Implementation
-Assigned role: Implementation Engineer
-Status: COMPLETE / MERGED
-PR: #114 — `WR-016 Improve draft-day layout efficiency`
-Audited final head: `5636bd75aa4be34bdbdfc5e459df44283c8f2483`
-Independent audit: WR-019 PASS WITH NON-BLOCKING FINDINGS
-Merge commit: `dfe5476883d700b9281fb57f1c710daa7758492a`
-Post-merge War Room CI #862 / `34370139838`: SUCCESS
-GitHub Pages deployment #665 / `34370138865`: SUCCESS
+No active production milestone remains.
 
-Outcome:
-- bounded layout-efficiency improvements shipped
-- persistent chrome competition reduced
-- Manage progressive disclosure added for low-frequency/destructive actions
-- Draft Setup progressively disclosed after meaningful progress
-- stressed tablet/desktop geometry improved
-- zero required-matrix horizontal overflow/actionable occlusion/focus obstruction in automated validation
-- ranking/scoring/recommendation/state/persistence/ESPN authority unchanged
-
-#### WR-019 — Independent Release Audit
-Assigned role: Independent Auditor / QA
-Status: COMPLETE
-Disposition: PASS WITH NON-BLOCKING FINDINGS
-Blocking findings: NONE
-Evidence: `.ai/auditor/WR-019_LAYOUT_RELEASE_AUDIT.md`
-
-## Active Manager review
+## Completed ranking R&D
 ### WR-018 — Open-Data Shadow Ranking Model Experiment
-Assigned role: Research & Development (R&D)
-Status: COMPLETE — MANAGER DISPOSITION PENDING
+Status: COMPLETE / ACCEPTED / MERGED
 Research PR: #115
-Exact research head: `0c2f7e9e307ff30293ff96ab66fb0b1a72c8b051`
-Exact-head War Room CI #858 / `34367526671`: SUCCESS
-Primary result: `MORE EVIDENCE NEEDED`
+Merge commit: `9c7aa3b8b7b2600c50dac0f050f6da97b4aed08b`
+Manager classification: `MORE EVIDENCE NEEDED`
+
+Evidence:
+- richer prior-season summary-only models did not reliably beat the transparent previous-season PPR/game baseline
+- no production ranking-model promotion is justified
+- WR-D001 remains ACTIVE
+- a clean research-only 2026 snapshot exists for later prospective evaluation
+
+### WR-020 — Manager Disposition
+Status: COMPLETE
+Decision:
+- accept WR-018 evidence
+- preserve FantasyPros production authority
+- authorize one final bounded successor validation focused on genuinely preseason context rather than additional summary-stat tuning
+
+## Active bounded R&D
+### WR-021 — Context-Enriched Preseason Shadow Model Validation
+Assigned role: Research & Development (R&D)
+Status: ACTIVE
 Production implementation authorization: NONE
+Task: `.ai/manager/WR-021.md`
 
-Current evidence does not justify replacing FantasyPros or promoting the shadow model into production. The strongest possible successor hypothesis is a narrower research validation adding rights-cleared point-in-time rookie/age/draft-capital/team-role/availability context while preserving rolling-origin holdouts and the naive comparator.
+Objective:
+Test whether rights-cleared preseason context (age/experience, draft capital, rookie priors, team movement, point-in-time roster context, and availability where defensible) can materially improve the shadow model.
 
-Manager must decide whether that successor research is worth the cost or whether WR-018 should close without further immediate work.
-
-## Parallel Work Wave
-### PW-002 — ACTIVE / CLOSEOUT PENDING
-
-Completed:
-- Builder: WR-016 COMPLETE / MERGED
-- Auditor: WR-019 COMPLETE / PASS WITH NON-BLOCKING FINDINGS
-
-Pending Manager action:
-- WR-018 evidence disposition / PR #115 integration
-
-Current roles:
-- Manager: ACTIVE — WR-018 review
-- Builder: IDLE
-- R&D: IDLE
-- Auditor: IDLE
+Required methodological upgrades:
+- cohort defined from preseason information only
+- rookies handled explicitly
+- zero/low target-season participation reported as availability rather than silently excluded
+- earlier seasons used for model/feature selection
+- 2022–2025 treated as confirmatory, not pristine project-level holdouts
+- repeated-player-aware uncertainty
+- predeclared material-lift gate
+- 2026 enriched freeze only if still created before kickoff without outcome contamination
 
 ## Ranking authority remains unchanged
 - FantasyPros Top-20 Experts 2026 PPR ECR primary
 - broader FantasyPros PPR ECR fallback
 - ESPN rank/ADP timing only
 - WR-D001 remains ACTIVE
+
+## Parallel Work Wave
+### PW-002 — COMPLETE
+- WR-016 COMPLETE / MERGED
+- WR-019 COMPLETE / PASS WITH NON-BLOCKING FINDINGS
+- WR-018 COMPLETE / ACCEPTED / MERGED
+
+WR-021 is standalone R&D; no new PW is required.
+
+## Current roles
+- Manager: IDLE
+- Builder: IDLE
+- R&D: ACTIVE — WR-021
+- Auditor: IDLE
