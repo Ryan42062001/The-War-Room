@@ -17,6 +17,8 @@
   var setupEditing = false;
   var syncQueued = false;
   var lastCommandMode = '';
+  var layoutReady = false;
+  var layoutStarting = false;
 
   var MANAGE_SELECTORS = [
     '.draft-session-control > button',
@@ -29,17 +31,30 @@
     '#war-room-maintenance-btn'
   ];
 
-  function loadStyles() {
-    if (document.getElementById(STYLE_ID)) return;
+  function reportStyleFailure() {
+    if (typeof window.reportWarRoomEnhancementFailure === 'function') {
+      window.reportWarRoomEnhancementFailure('layout efficiency styles');
+    }
+  }
+
+  function loadStyles(onReady) {
+    var existing = document.getElementById(STYLE_ID);
+    if (existing) {
+      if (existing.sheet) {
+        onReady();
+        return;
+      }
+      existing.addEventListener('load', onReady, {once:true});
+      existing.addEventListener('error', reportStyleFailure, {once:true});
+      return;
+    }
+
     var link = document.createElement('link');
     link.id = STYLE_ID;
     link.rel = 'stylesheet';
-    link.href = 'layout-efficiency.css?v=20260909-1';
-    link.onerror = function() {
-      if (typeof window.reportWarRoomEnhancementFailure === 'function') {
-        window.reportWarRoomEnhancementFailure('layout efficiency styles');
-      }
-    };
+    link.href = 'layout-efficiency.css?v=20260909-2';
+    link.addEventListener('load', onReady, {once:true});
+    link.addEventListener('error', reportStyleFailure, {once:true});
     document.head.appendChild(link);
   }
 
@@ -248,7 +263,7 @@
   }
 
   function scheduleSynchronize() {
-    if (syncQueued) return;
+    if (!layoutReady || syncQueued) return;
     syncQueued = true;
     requestAnimationFrame(synchronize);
   }
@@ -273,19 +288,31 @@
     }, true);
   }
 
-  function init() {
-    loadStyles();
+  function startLayout() {
+    if (layoutReady) return;
+    layoutReady = true;
     synchronize();
     observeLayout();
     installSettingListeners();
     window.addEventListener('resize', scheduleSynchronize, {passive:true});
+    document.body.classList.add('draft-layout-efficiency-ready');
+  }
+
+  function init() {
+    if (layoutReady || layoutStarting) return;
+    layoutStarting = true;
+    loadStyles(function() {
+      layoutStarting = false;
+      startLayout();
+    });
   }
 
   window.WarRoomLayoutEfficiency = {
     version: 1,
     refresh: scheduleSynchronize,
     hasDraftProgress: hasDraftProgress,
-    readDraftSettings: readDraftSettings
+    readDraftSettings: readDraftSettings,
+    isReady: function() { return layoutReady; }
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true});
