@@ -166,7 +166,7 @@ header {
 
 .draft-control-shell > #draft-command-bar {
   width: min(1320px,calc(100% - 16px));
-  margin: 6px auto 5px;
+  margin: 0 auto 5px;
   z-index: auto;
   backdrop-filter: none;
   scroll-margin-top: 8px;
@@ -249,7 +249,7 @@ header {
 }
 
 .draft-command-pressure {
-  min-height: 28px;
+  min-height: 26px;
 }
 
 /* Empty awareness is informationally quiet. Keep the labels discoverable but
