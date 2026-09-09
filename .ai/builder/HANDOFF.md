@@ -17,45 +17,22 @@ Production implementation authorization: WR-016 ONLY
 - Canonical `main`: `8931b30d4f4f387504b17ac07d837aa87a166948`
 - Prior completed PR head: `1ac362be96909bc638b06a49702b31167e2e2a09`
 - Reconciled implementation/test head: `9edb3f488f3928676a6c706736cb913358edb436`
-- Validated administrative PR head before this handoff-only documentation refresh: `392004dd4017fa9424783b1c0aec3de4e4ef72fa`
 - Reconciliation commit uses `1ac362be...` and `8931b30d...` as parents.
-- Reconciliation tree was built from canonical main and overlaid only with the 12 WR-016 changed files.
+- Reconciliation tree was built from canonical main and overlaid only with the original WR-016 file set.
 - Manager/Auditor/shared canonical files from `8931b30d...` were preserved unchanged except this Builder-owned handoff.
-- Compare against `8931b30d...` remains confined to the original WR-016 file set.
 - GitHub reports PR #114 mergeable/clean against `8931b30d...`.
 - Builder merge performed: NO.
 
-## CI evidence
+## Final verified CI chain
 Reconciled implementation state:
 - War Room CI run `34364443102` (#834), job `102509419384` — PASS on `9edb3f488f3928676a6c706736cb913358edb436`.
 
-Administrative PR head `48a98396e77433e713974ee0e5a487610c22ad27`:
-- Exact-head push CI run `34364866441` (#835), job `102510861352` — PASS.
-- PR merge-ref CI run `34364872958` (#836), job `102510882518` — PASS against base `8931b30d4f4f387504b17ac07d837aa87a166948`.
+Administrative verification heads:
+- `48a98396e77433e713974ee0e5a487610c22ad27`: push #835 / job `102510861352` PASS; PR merge-ref #836 / job `102510882518` PASS.
+- `392004dd4017fa9424783b1c0aec3de4e4ef72fa`: push #837 / job `102512533610` PASS; PR merge-ref #838 / job `102512554581` PASS.
+- `6d1b8e6f215c64bf91306148a7a10f5c8dc62441`: push #841 / job `102514274771` PASS; PR merge-ref #842 / job `102514296519` PASS.
 
-Administrative PR head `392004dd4017fa9424783b1c0aec3de4e4ef72fa`:
-- Exact-head push CI run `34365356195` (#837), job `102512533610` — PASS.
-- PR merge-ref CI run `34365362370` (#838), job `102512554581` — PASS against base `8931b30d4f4f387504b17ac07d837aa87a166948`.
-- Generated merge commit at that gate: `6c5f3d46342295cd257e0d570acae2a7b2b5bf32`.
-
-All final runs passed:
-- full `npm test`
-- release-candidate and production-module guards
-- syntax and 717-player dataset integrity
-- ESPN Companion 164/164
-- browser regression suite
-- responsive overflow 13 widths × 2 board views
-- WR-016 layout efficiency 9 viewports × 2 board views
-- WR-016 behavior contract
-- ESPN off-board 288/288
-- hardening / command bar / draft awareness / live sync / polish
-- canonical scoring corrections
-- 160-pick + 224-pick deterministic draft invariants
-- persistence/recovery integration
-- recovery failure injection
-- live mock fixtures
-- resilience syntax
-- guarded restore and full 717-player offline reload
+All final runs passed the full `npm test`, resilience syntax, guarded restore, and full 717-player offline reload gates.
 
 ## Implementation outcome
 WR-016 remains bounded to layout efficiency. It does not change ranking, scoring, recommendation, draft-state, persistence-schema, or ESPN-sync authority semantics.
@@ -72,30 +49,14 @@ Implemented:
 - immediate On-the-Clock prominence without stale height animation
 - recovery/maintenance workflows remain reachable through Manage
 
-## Files changed by WR-016
-- `.ai/builder/HANDOFF.md` — Builder-owned administrative handoff only
-- `command-bar-fixes.css`
-- `js/war-room-layout-efficiency.js`
-- `layout-efficiency.css`
-- `package.json`
-- `script.js`
-- `scripts/run-test-browser.mjs`
-- `scripts/test-command-bar.mjs`
-- `scripts/test-layout-efficiency-behavior.mjs`
-- `scripts/test-layout-efficiency.mjs`
-- `scripts/test-resilience.mjs`
-- `service-worker.js`
-
-No temporary diagnostic logging remains.
-
 ## Validation status
 - Level 1 static/implementation review: COMPLETE
 - Level 2 automated regression: COMPLETE
 - Level 3 deterministic simulated layout/draft workflows: COMPLETE
 - Level 4 real-device/manual visual use: NOT VERIFIED IN THIS BUILDER SESSION
 
-## Final evidence source
-PR #114 is the authoritative final record for the latest handoff-only administrative head, its exact-head CI, and generated merge-ref CI. This avoids an impossible self-reference requirement where a commit would need to contain its own SHA and future CI IDs.
+## Authoritative final metadata
+PR #114 is the authoritative record for the frozen latest branch head, exact-head CI, generated merge-ref SHA, and mergeability. A Git commit cannot contain its own SHA or CI IDs generated after it exists, so this handoff records the completed reconciliation and CI chain while the PR records the immutable newest head/CI tuple.
 
 ## Recommended next role
 Independent Auditor / QA.
