@@ -17,7 +17,7 @@ Production implementation authorization: WR-016 ONLY
 - Canonical `main`: `8931b30d4f4f387504b17ac07d837aa87a166948`
 - Prior completed PR head: `1ac362be96909bc638b06a49702b31167e2e2a09`
 - Reconciled implementation/test head: `9edb3f488f3928676a6c706736cb913358edb436`
-- Final PR head validated after the Builder handoff update: `48a98396e77433e713974ee0e5a487610c22ad27`
+- Validated administrative PR head before this handoff-only documentation refresh: `392004dd4017fa9424783b1c0aec3de4e4ef72fa`
 - Reconciliation commit uses `1ac362be...` and `8931b30d...` as parents.
 - Reconciliation tree was built from canonical main and overlaid only with the 12 WR-016 changed files.
 - Manager/Auditor/shared canonical files from `8931b30d...` were preserved unchanged except this Builder-owned handoff.
@@ -25,16 +25,20 @@ Production implementation authorization: WR-016 ONLY
 - GitHub reports PR #114 mergeable/clean against `8931b30d...`.
 - Builder merge performed: NO.
 
-## Final CI evidence
+## CI evidence
 Reconciled implementation state:
 - War Room CI run `34364443102` (#834), job `102509419384` — PASS on `9edb3f488f3928676a6c706736cb913358edb436`.
 
-Final administrative PR head `48a98396e77433e713974ee0e5a487610c22ad27`:
+Administrative PR head `48a98396e77433e713974ee0e5a487610c22ad27`:
 - Exact-head push CI run `34364866441` (#835), job `102510861352` — PASS.
 - PR merge-ref CI run `34364872958` (#836), job `102510882518` — PASS against base `8931b30d4f4f387504b17ac07d837aa87a166948`.
-- Generated merge commit tested by the PR merge-ref: `adae04d489325d4cdcedb48b241ec2c0d1182889`.
 
-Both final runs passed:
+Administrative PR head `392004dd4017fa9424783b1c0aec3de4e4ef72fa`:
+- Exact-head push CI run `34365356195` (#837), job `102512533610` — PASS.
+- PR merge-ref CI run `34365362370` (#838), job `102512554581` — PASS against base `8931b30d4f4f387504b17ac07d837aa87a166948`.
+- Generated merge commit at that gate: `6c5f3d46342295cd257e0d570acae2a7b2b5bf32`.
+
+All final runs passed:
 - full `npm test`
 - release-candidate and production-module guards
 - syntax and 717-player dataset integrity
@@ -90,8 +94,8 @@ No temporary diagnostic logging remains.
 - Level 3 deterministic simulated layout/draft workflows: COMPLETE
 - Level 4 real-device/manual visual use: NOT VERIFIED IN THIS BUILDER SESSION
 
-## Final metadata note
-This handoff records the exact validated PR head and CI that existed before this documentation-only successor commit. Because a Git commit cannot contain its own SHA or a CI run ID generated only after it exists, PR #114 is the authoritative final record of the newest administrative head and its CI. No production/test file is changed by this documentation update.
+## Final evidence source
+PR #114 is the authoritative final record for the latest handoff-only administrative head, its exact-head CI, and generated merge-ref CI. This avoids an impossible self-reference requirement where a commit would need to contain its own SHA and future CI IDs.
 
 ## Recommended next role
 Independent Auditor / QA.
