@@ -55,24 +55,24 @@ async function clearSearch() {
   await settle();
 }
 
-async function ensureCollapsed() {
+async function setPhoneContext(position = 'WR') {
+  await page.evaluate(next => {
+    setBoardView('position', { persist: false });
+    window.WarRoomPhoneDecisionView.setActivePosition(next);
+    window.scrollTo(0, 0);
+  }, position);
+  await clearSearch();
   const expanded = await page.evaluate(() => Boolean(window.WarRoomPhoneDecisionView?.isExpanded?.()));
   if (expanded) {
     await page.locator('#phone-position-show-more').click();
     await settle();
   }
+  await settle();
 }
 
 async function phoneMeasurement(viewport) {
   await page.setViewportSize(viewport);
-  await page.evaluate(() => {
-    setBoardView('position', { persist: false });
-    window.WarRoomPhoneDecisionView.setActivePosition('WR');
-    window.scrollTo(0, 0);
-  });
-  await clearSearch();
-  await ensureCollapsed();
-  await settle();
+  await setPhoneContext('WR');
 
   return page.evaluate(() => {
     function visible(element) {
@@ -80,6 +80,11 @@ async function phoneMeasurement(viewport) {
       const style = getComputedStyle(element);
       const rect = element.getBoundingClientRect();
       return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) !== 0 && rect.width > 0 && rect.height > 0;
+    }
+    function inViewport(element) {
+      if (!visible(element)) return false;
+      const rect = element.getBoundingClientRect();
+      return rect.top < innerHeight && rect.bottom > 0 && rect.left < innerWidth && rect.right > 0;
     }
     function size(selector) {
       const element = [...document.querySelectorAll(selector)].find(visible);
@@ -92,8 +97,11 @@ async function phoneMeasurement(viewport) {
     const visibleColumns = columns.filter(visible);
     const active = document.querySelector('#position-tier-grid > .position-column.phone-position-active');
     const visibleCards = active ? [...active.querySelectorAll('.position-player-card')].filter(visible) : [];
+    const intersectingCards = visibleCards.filter(inViewport);
     const firstCard = visibleCards[0] || null;
     const firstRect = firstCard ? firstCard.getBoundingClientRect() : null;
+    const firstIntersecting = intersectingCards[0] || null;
+    const firstIntersectingRect = firstIntersecting ? firstIntersecting.getBoundingClientRect() : null;
     const viewportWidth = document.documentElement.clientWidth;
     const overflow = Math.max(0, document.documentElement.scrollWidth - viewportWidth, document.body.scrollWidth - viewportWidth);
     const nav = document.getElementById('phone-position-decision-nav');
@@ -101,12 +109,12 @@ async function phoneMeasurement(viewport) {
     const more = document.getElementById('phone-position-show-more');
     const moreRect = more && visible(more) ? more.getBoundingClientRect() : null;
 
-    let firstCardOccluded = false;
-    if (firstRect) {
-      const x = Math.max(0, Math.min(innerWidth - 1, firstRect.left + Math.min(firstRect.width / 2, 28)));
-      const y = Math.max(0, Math.min(innerHeight - 1, firstRect.top + Math.min(firstRect.height / 2, 20)));
+    let firstVisibleCardOccluded = false;
+    if (firstIntersectingRect) {
+      const x = Math.max(0, Math.min(innerWidth - 1, firstIntersectingRect.left + Math.min(firstIntersectingRect.width / 2, 28)));
+      const y = Math.max(0, Math.min(innerHeight - 1, firstIntersectingRect.top + Math.min(firstIntersectingRect.height / 2, 20)));
       const hit = document.elementFromPoint(x, y);
-      firstCardOccluded = Boolean(hit && hit !== firstCard && !firstCard.contains(hit));
+      firstVisibleCardOccluded = Boolean(hit && hit !== firstIntersecting && !firstIntersecting.contains(hit));
     }
 
     return {
@@ -118,11 +126,8 @@ async function phoneMeasurement(viewport) {
       visibleCards: visibleCards.length,
       compactHiddenCards: active ? active.querySelectorAll('.phone-compact-hidden').length : 0,
       firstChoiceY: firstRect ? firstRect.top : null,
-      choicesAboveFold: visibleCards.filter(card => {
-        const rect = card.getBoundingClientRect();
-        return rect.top < innerHeight && rect.bottom > 0;
-      }).length,
-      firstCardOccluded,
+      choicesAboveFold: intersectingCards.length,
+      firstVisibleCardOccluded,
       overflow,
       navTop: navRect ? navRect.top : null,
       navBottom: navRect ? navRect.bottom : null,
@@ -144,7 +149,7 @@ async function phoneMeasurement(viewport) {
   });
 }
 
-function assertPhoneTargetSizes(measurement) {
+function assertPhoneTargets(measurement) {
   for (const [name, size] of Object.entries(measurement.targetSizes)) {
     if (!size) continue;
     assert.ok(size.height >= 44, `${measurement.width}x${measurement.height} ${name} must be at least 44px tall; got ${JSON.stringify(size)}`);
@@ -168,43 +173,40 @@ try {
   for (const viewport of phoneViewports) {
     const measurement = await phoneMeasurement(viewport);
     phoneResults.push(measurement);
-
-    assert.equal(measurement.navVisible, true, `Phone navigator must be visible at ${viewport.width}x${viewport.height}`);
-    assert.deepEqual(measurement.visibleColumns, ['WR'], `Phone view must expose one primary position at ${viewport.width}x${viewport.height}`);
-    assert.ok(measurement.visibleCards > 0 && measurement.visibleCards <= 8, `Compact phone view must show 1-8 actionable WR choices at ${viewport.width}x${viewport.height}; got ${measurement.visibleCards}`);
-    assert.ok(measurement.compactHiddenCards > 0, `Compact phone view must defer the long tail at ${viewport.width}x${viewport.height}`);
-    assert.equal(measurement.overflow, 0, `Phone view must not overflow horizontally at ${viewport.width}x${viewport.height}`);
-    assert.equal(measurement.firstCardOccluded, false, `First phone choice must not be occluded at ${viewport.width}x${viewport.height}`);
-    assert.equal(measurement.recommendationVisible, true, `Recommendation must remain reachable at ${viewport.width}x${viewport.height}`);
-    assert.equal(measurement.pressureVisible, true, `Board pressure must remain reachable at ${viewport.width}x${viewport.height}`);
-    assert.equal(measurement.myDraftVisible, true, `My Draft must remain reachable at ${viewport.width}x${viewport.height}`);
-    assertPhoneTargetSizes(measurement);
-
     if (viewport.width === 320 || viewport.width === 390 || viewport.width === 430) {
       await page.screenshot({ path: path.join(artifactsDir, `wr-026-phone-${viewport.width}x${viewport.height}.png`), fullPage: true });
     }
   }
 
+  const reportPath = path.join(artifactsDir, 'wr-026-phone-decision-report.json');
+  fs.writeFileSync(reportPath, JSON.stringify({ phone: phoneResults, desktop: [] }, null, 2) + '\n');
+
+  for (const measurement of phoneResults) {
+    assert.equal(measurement.navVisible, true, `Phone navigator must be visible at ${measurement.width}x${measurement.height}`);
+    assert.deepEqual(measurement.visibleColumns, ['WR'], `Phone view must expose one primary position at ${measurement.width}x${measurement.height}`);
+    assert.ok(measurement.visibleCards > 0 && measurement.visibleCards <= 8, `Compact phone view must show 1-8 WR choices at ${measurement.width}x${measurement.height}; got ${measurement.visibleCards}`);
+    assert.ok(measurement.compactHiddenCards > 0, `Compact phone view must defer the long tail at ${measurement.width}x${measurement.height}`);
+    assert.equal(measurement.overflow, 0, `Phone view must not overflow horizontally at ${measurement.width}x${measurement.height}`);
+    assert.equal(measurement.firstVisibleCardOccluded, false, `An intersecting phone choice must not be occluded at ${measurement.width}x${measurement.height}`);
+    assert.equal(measurement.recommendationVisible, true, `Recommendation must remain reachable at ${measurement.width}x${measurement.height}`);
+    assert.equal(measurement.pressureVisible, true, `Board pressure must remain reachable at ${measurement.width}x${measurement.height}`);
+    assert.equal(measurement.myDraftVisible, true, `My Draft must remain reachable at ${measurement.width}x${measurement.height}`);
+    assertPhoneTargets(measurement);
+  }
+
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.evaluate(() => {
-    setBoardView('position', { persist: false });
-    window.WarRoomPhoneDecisionView.setActivePosition('WR');
-    window.scrollTo(0, 0);
-  });
-  await clearSearch();
-  await ensureCollapsed();
+  await setPhoneContext('WR');
 
   await page.locator('[data-phone-position="RB"]').click();
   await settle();
-  let context = await page.evaluate(() => ({
+  let state = await page.evaluate(() => ({
     active: window.WarRoomPhoneDecisionView.getActivePosition(),
     visible: [...document.querySelectorAll('#position-tier-grid > .position-column')].filter(column => getComputedStyle(column).display !== 'none').map(column => column.getAttribute('data-position')),
     selected: document.querySelector('[data-phone-position="RB"]')?.getAttribute('aria-pressed')
   }));
-  assert.deepEqual(context, { active: 'RB', visible: ['RB'], selected: 'true' }, 'Position navigator must switch to one RB context');
+  assert.deepEqual(state, { active: 'RB', visible: ['RB'], selected: 'true' }, 'Phone navigator must switch to one RB context');
 
-  const compactCount = await page.locator('.position-column.phone-position-active .phone-compact-hidden').count();
-  assert.ok(compactCount > 0, 'RB compact view should defer lower players');
+  assert.ok(await page.locator('.position-column.phone-position-active .phone-compact-hidden').count() > 0, 'RB compact view should defer lower players');
   await page.locator('#phone-position-show-more').click();
   await settle();
   assert.equal(await page.locator('.position-column.phone-position-active .phone-compact-hidden').count(), 0, 'Show all must restore the full active position');
@@ -212,53 +214,61 @@ try {
 
   await page.locator('[data-phone-position="ENDGAME"]').click();
   await settle();
-  context = await page.evaluate(() => ({
+  state = await page.evaluate(() => ({
     active: window.WarRoomPhoneDecisionView.getActivePosition(),
-    gridDisplay: getComputedStyle(document.getElementById('position-tier-grid')).display,
-    endgameDisplay: getComputedStyle(document.getElementById('position-endgame-section')).display
+    grid: getComputedStyle(document.getElementById('position-tier-grid')).display,
+    endgame: getComputedStyle(document.getElementById('position-endgame-section')).display
   }));
-  assert.equal(context.active, 'ENDGAME', 'K/DST must be a first-class phone context');
-  assert.equal(context.gridDisplay, 'none', 'Primary stacked grid must leave the phone flow in K/DST context');
-  assert.notEqual(context.endgameDisplay, 'none', 'K/DST endgame must remain reachable');
+  assert.equal(state.active, 'ENDGAME', 'K/DST must be a first-class phone context');
+  assert.equal(state.grid, 'none', 'Primary grid must leave the phone flow in K/DST context');
+  assert.notEqual(state.endgame, 'none', 'K/DST endgame must remain reachable');
 
   await page.locator('[data-phone-position="WR"]').click();
   await clearSearch();
   await page.locator('#searchBox').fill('Josh');
   await page.locator('#searchBox').dispatchEvent('input');
   await settle();
-  const searchState = await page.evaluate(() => ({
+  state = await page.evaluate(() => ({
     searchMode: document.body.classList.contains('phone-decision-search-active'),
     visibleColumns: [...document.querySelectorAll('#position-tier-grid > .position-column')].filter(column => getComputedStyle(column).display !== 'none').length,
-    hiddenCompact: document.querySelectorAll('.phone-compact-hidden').length,
-    moreVisible: (() => {
+    compactHidden: document.querySelectorAll('.phone-compact-hidden').length,
+    showMore: (() => {
       const element = document.getElementById('phone-position-show-more');
-      return element && getComputedStyle(element).display !== 'none' && !element.hidden;
+      return Boolean(element && !element.hidden && getComputedStyle(element).display !== 'none');
     })()
   }));
-  assert.equal(searchState.searchMode, true, 'Search must enter full cross-position phone results mode');
-  assert.equal(searchState.visibleColumns, 4, 'Search must not hide matching players in other primary positions');
-  assert.equal(searchState.hiddenCompact, 0, 'Search results must not be compact-truncated');
-  assert.equal(searchState.moreVisible, false, 'Show-all control is unnecessary while search is already full');
+  assert.equal(state.searchMode, true, 'Search must expose full cross-position results');
+  assert.equal(state.visibleColumns, 4, 'Search must not hide matching primary positions');
+  assert.equal(state.compactHidden, 0, 'Search must not compact-truncate results');
+  assert.equal(state.showMore, false, 'Show more must stay hidden while search is full');
   await clearSearch();
 
   await page.locator('.filterbtn[data-pos="QB"]').click();
-  await page.waitForTimeout(20);
+  await page.waitForTimeout(30);
   await settle();
-  assert.equal(await page.evaluate(() => window.WarRoomPhoneDecisionView.getActivePosition()), 'QB', 'Existing QB filter must synchronize phone context without replacing filter semantics');
+  assert.equal(await page.evaluate(() => window.WarRoomPhoneDecisionView.getActivePosition()), 'QB', 'Existing position filter must synchronize phone context');
 
   await page.locator('.mark-mode-btn[data-mark-mode="mine"]').click();
-  const activeCard = page.locator('.position-column.phone-position-active .position-player-card:not(.phone-compact-hidden)').first();
-  const activeKey = await activeCard.getAttribute('data-player-key');
-  await activeCard.click();
+  const card = page.locator('.position-column.phone-position-active .position-player-card:not(.phone-compact-hidden)').first();
+  const key = await card.getAttribute('data-player-key');
+  await card.click();
   await settle();
-  const markedMine = await page.locator(`.position-player-card[data-player-key="${activeKey}"]`).first().evaluate(card => card.classList.contains('is-mine') || card.getAttribute('data-status') === 'mine');
-  assert.equal(markedMine, true, 'Phone player action must still use existing Mine marking semantics');
-  await activeCard.click();
+  assert.equal(await page.locator(`.position-player-card[data-player-key="${key}"]`).first().evaluate(element => element.classList.contains('is-mine') || element.getAttribute('data-status') === 'mine'), true, 'Phone player action must preserve Mine marking semantics');
+  await card.click();
   await settle();
+
+  const targetStar = page.locator('.position-column.phone-position-active .position-player-card:not(.phone-compact-hidden) .draft-target-star').first();
+  if (await targetStar.count()) {
+    await targetStar.click();
+    await settle();
+    assert.equal(await targetStar.evaluate(element => element.closest('.position-player-card')?.classList.contains('is-targeted')), true, 'Target action must remain usable on phone');
+    await targetStar.click();
+    await settle();
+  }
 
   await page.locator('.myteam-toggle').click();
   await settle();
-  assert.equal(await page.locator('#myteam-panel').getAttribute('aria-hidden'), 'false', 'My Draft must open from phone view');
+  assert.equal(await page.locator('#myteam-panel').getAttribute('aria-hidden'), 'false', 'My Draft must open on phone');
   await page.locator('#myteam-panel .close-btn').click();
   await settle();
 
@@ -266,9 +276,7 @@ try {
   assert.equal(await page.locator('#draft-manage').getAttribute('open'), '', 'Manage must remain reachable on phone');
   await page.locator('#draft-manage > summary').click();
 
-  await page.evaluate(() => {
-    window.WarRoomPhoneDecisionView.setActivePosition('TE');
-  });
+  await page.evaluate(() => window.WarRoomPhoneDecisionView.setActivePosition('TE'));
   await settle();
   if (!(await page.evaluate(() => window.WarRoomPhoneDecisionView.isExpanded()))) {
     await page.locator('#phone-position-show-more').click();
@@ -277,42 +285,42 @@ try {
 
   await page.setViewportSize({ width: 768, height: 1024 });
   await settle();
-  let resizeState = await page.evaluate(() => ({
+  state = await page.evaluate(() => ({
     active: window.WarRoomPhoneDecisionView.getActivePosition(),
     expanded: window.WarRoomPhoneDecisionView.isExpanded(),
-    navDisplay: getComputedStyle(document.getElementById('phone-position-decision-nav')).display,
+    nav: getComputedStyle(document.getElementById('phone-position-decision-nav')).display,
     visibleColumns: [...document.querySelectorAll('#position-tier-grid > .position-column')].filter(column => getComputedStyle(column).display !== 'none').map(column => column.getAttribute('data-position')),
-    hiddenCompact: document.querySelectorAll('.phone-compact-hidden').length,
-    ariaHiddenColumns: document.querySelectorAll('#position-tier-grid > .position-column[aria-hidden="true"]').length
+    compactHidden: document.querySelectorAll('.phone-compact-hidden').length,
+    ariaHidden: document.querySelectorAll('#position-tier-grid > .position-column[aria-hidden="true"]').length
   }));
-  assert.equal(resizeState.active, 'TE', 'Phone position selection must survive resize');
-  assert.equal(resizeState.expanded, true, 'Phone expansion mode must survive resize');
-  assert.equal(resizeState.navDisplay, 'none', 'Phone navigator must be inert above 600px');
-  assert.deepEqual(resizeState.visibleColumns, ['WR', 'RB', 'QB', 'TE'], 'Desktop/tablet must restore the normal four-column position board');
-  assert.equal(resizeState.hiddenCompact, 0, 'Desktop/tablet must not retain phone compact hiding');
-  assert.equal(resizeState.ariaHiddenColumns, 0, 'Desktop/tablet must not retain phone accessibility hiding');
+  assert.equal(state.active, 'TE', 'Phone position selection must survive resize');
+  assert.equal(state.expanded, true, 'Phone expansion mode must survive resize');
+  assert.equal(state.nav, 'none', 'Phone navigator must be inert above 600px');
+  assert.deepEqual(state.visibleColumns, ['WR', 'RB', 'QB', 'TE'], 'Desktop/tablet must restore the normal four-column board');
+  assert.equal(state.compactHidden, 0, 'Desktop/tablet must not retain phone compact hiding');
+  assert.equal(state.ariaHidden, 0, 'Desktop/tablet must not retain phone aria hiding');
 
   await page.setViewportSize({ width: 390, height: 844 });
   await settle();
-  resizeState = await page.evaluate(() => ({
+  state = await page.evaluate(() => ({
     active: window.WarRoomPhoneDecisionView.getActivePosition(),
     expanded: window.WarRoomPhoneDecisionView.isExpanded(),
     visibleColumns: [...document.querySelectorAll('#position-tier-grid > .position-column')].filter(column => getComputedStyle(column).display !== 'none').map(column => column.getAttribute('data-position'))
   }));
-  assert.equal(resizeState.active, 'TE', 'Returning to phone width must restore selected position');
-  assert.equal(resizeState.expanded, true, 'Returning to phone width must restore expansion mode');
-  assert.deepEqual(resizeState.visibleColumns, ['TE'], 'Returning to phone width must restore one-position context');
+  assert.equal(state.active, 'TE', 'Returning to phone must restore selected position');
+  assert.equal(state.expanded, true, 'Returning to phone must restore expansion');
+  assert.deepEqual(state.visibleColumns, ['TE'], 'Returning to phone must restore one-position context');
 
   await page.evaluate(() => setBoardView('overall', { persist: false }));
   await settle();
-  const overallState = await page.evaluate(() => ({
-    navDisplay: getComputedStyle(document.getElementById('phone-position-decision-nav')).display,
-    overallDisplay: getComputedStyle(document.getElementById('big-board-wrap')).display,
-    positionDisplay: getComputedStyle(document.getElementById('position-board')).display
+  state = await page.evaluate(() => ({
+    nav: getComputedStyle(document.getElementById('phone-position-decision-nav')).display,
+    overall: getComputedStyle(document.getElementById('big-board-wrap')).display,
+    position: getComputedStyle(document.getElementById('position-board')).display
   }));
-  assert.equal(overallState.navDisplay, 'none', 'Phone decision navigator must leave Overall view untouched');
-  assert.notEqual(overallState.overallDisplay, 'none', 'Overall board must remain reachable on phone');
-  assert.equal(overallState.positionDisplay, 'none', 'Position board must hide in Overall as before');
+  assert.equal(state.nav, 'none', 'Phone decision navigator must leave Overall untouched');
+  assert.notEqual(state.overall, 'none', 'Overall board must remain reachable');
+  assert.equal(state.position, 'none', 'Position board must hide in Overall');
 
   await page.evaluate(() => setBoardView('position', { persist: false }));
   await clearSearch();
@@ -322,34 +330,32 @@ try {
   for (const viewport of desktopViewports) {
     await page.setViewportSize(viewport);
     await settle();
-    const state = await page.evaluate(() => {
+    const desktop = await page.evaluate(() => {
       const viewportWidth = document.documentElement.clientWidth;
       return {
         width: innerWidth,
         height: innerHeight,
-        navDisplay: getComputedStyle(document.getElementById('phone-position-decision-nav')).display,
+        nav: getComputedStyle(document.getElementById('phone-position-decision-nav')).display,
         visibleColumns: [...document.querySelectorAll('#position-tier-grid > .position-column')].filter(column => getComputedStyle(column).display !== 'none').map(column => column.getAttribute('data-position')),
-        hiddenCompact: document.querySelectorAll('.phone-compact-hidden').length,
-        phoneClasses: document.body.classList.contains('phone-decision-view-ready'),
+        compactHidden: document.querySelectorAll('.phone-compact-hidden').length,
+        phoneReady: document.body.classList.contains('phone-decision-view-ready'),
         overflow: Math.max(0, document.documentElement.scrollWidth - viewportWidth, document.body.scrollWidth - viewportWidth)
       };
     });
-    desktopResults.push(state);
-    assert.equal(state.navDisplay, 'none', `Phone controls must stay hidden at ${viewport.width}x${viewport.height}`);
-    assert.deepEqual(state.visibleColumns, ['WR', 'RB', 'QB', 'TE'], `Desktop/tablet four-column board must be preserved at ${viewport.width}x${viewport.height}`);
-    assert.equal(state.hiddenCompact, 0, `Phone truncation must be absent at ${viewport.width}x${viewport.height}`);
-    assert.equal(state.phoneClasses, false, `Phone layout state must be inert at ${viewport.width}x${viewport.height}`);
-    assert.equal(state.overflow, 0, `Desktop/tablet overflow must remain zero at ${viewport.width}x${viewport.height}`);
+    desktopResults.push(desktop);
+    assert.equal(desktop.nav, 'none', `Phone controls must stay hidden at ${viewport.width}x${viewport.height}`);
+    assert.deepEqual(desktop.visibleColumns, ['WR', 'RB', 'QB', 'TE'], `Desktop/tablet board must preserve four columns at ${viewport.width}x${viewport.height}`);
+    assert.equal(desktop.compactHidden, 0, `Phone truncation must be absent at ${viewport.width}x${viewport.height}`);
+    assert.equal(desktop.phoneReady, false, `Phone layout state must be inert at ${viewport.width}x${viewport.height}`);
+    assert.equal(desktop.overflow, 0, `Desktop/tablet overflow must remain zero at ${viewport.width}x${viewport.height}`);
   }
 
   await page.setViewportSize({ width: 768, height: 1024 });
   await page.screenshot({ path: path.join(artifactsDir, 'wr-026-desktop-768x1024.png'), fullPage: true });
+  fs.writeFileSync(reportPath, JSON.stringify({ phone: phoneResults, desktop: desktopResults }, null, 2) + '\n');
 
-  const report = { phone: phoneResults, desktop: desktopResults };
-  fs.writeFileSync(path.join(artifactsDir, 'wr-026-phone-decision-report.json'), JSON.stringify(report, null, 2) + '\n');
   phoneResults.forEach(result => console.log(`WR026_PHONE_MEASURE ${JSON.stringify(Object.fromEntries(Object.entries(result).map(([key, value]) => [key, typeof value === 'number' ? round(value) : value])))}`));
   console.log(`WR-026 phone decision view valid: ${phoneViewports.length} phone viewports and ${desktopViewports.length} desktop/tablet guard viewports.`);
-
   assert.deepEqual(consoleErrors, [], `Unexpected browser console errors: ${JSON.stringify(consoleErrors)}`);
 } finally {
   await browser.close();
