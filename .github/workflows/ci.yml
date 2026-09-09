@@ -11,6 +11,18 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      - name: Test WR-026 phone decision view
+        run: npm run test:phone-decision-view
+      - name: Upload WR-026 phone review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wr-026-phone-review-${{ github.sha }}
+          path: |
+            artifacts/wr-026-phone-*.png
+            artifacts/wr-026-desktop-*.png
+            artifacts/wr-026-phone-decision-report.json
+          if-no-files-found: ignore
       - run: npm test
       - name: Validate resilience syntax
         run: node --check service-worker.js && node --check js/war-room-resilience.js && node --check scripts/test-resilience.mjs
