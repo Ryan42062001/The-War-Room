@@ -14,15 +14,17 @@ header {
   padding-bottom: 8px;
 }
 
+/* Measured WR-016 evidence showed that a full-width sticky control stack
+   necessarily covered actionable player choices while scrolling. Keep one
+   coordinated control shell in normal flow instead; urgency is preserved by
+   the command-state composition and the layout module reveals a newly
+   On-the-Clock command surface when it is off-screen. */
 .draft-control-shell {
-  position: sticky;
-  top: 0;
-  z-index: 72;
+  position: static;
   width: 100%;
   border-bottom: 1px solid rgba(255,255,255,.055);
   background: rgba(17,18,20,.975);
   box-shadow: 0 8px 20px rgba(0,0,0,.16);
-  backdrop-filter: blur(12px);
 }
 
 .draft-control-shell > .toolbar,
@@ -167,6 +169,7 @@ header {
   margin: 6px auto 5px;
   z-index: auto;
   backdrop-filter: none;
+  scroll-margin-top: 8px;
 }
 
 .draft-control-shell > #tier-nav {
@@ -392,9 +395,7 @@ body[data-board-view="position"] #draft-awareness-strip:not(.has-targets):not(.h
 
 @media (max-width: 768px) {
   .draft-control-shell {
-    position: static;
     box-shadow: none;
-    backdrop-filter: none;
   }
 
   .header-inner {
