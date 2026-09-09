@@ -71,13 +71,21 @@ async function getPageWidth(page) {
 
 async function openRecovery(page) {
   const button = page.getByRole('button', {name:'Open draft recovery and system check'});
+  await page.waitForFunction(() => {
+    const control = document.getElementById('war-room-maintenance-btn');
+    if (!control) return false;
+    const style = window.getComputedStyle(control);
+    const visible = style.display !== 'none' && style.visibility !== 'hidden' && control.getClientRects().length > 0;
+    const layoutReady = document.body.classList.contains('draft-layout-efficiency-ready');
+    return visible || layoutReady;
+  });
   if (!(await button.isVisible().catch(() => false))) {
     const manage = page.locator('#draft-manage');
-    if (await manage.count()) {
-      if (!(await manage.evaluate(element => element.open))) {
-        await manage.locator('summary').click();
-      }
+    await manage.waitFor({state:'attached'});
+    if (!(await manage.evaluate(element => element.open))) {
+      await manage.locator('summary').click();
     }
+    await button.waitFor({state:'visible'});
   }
   await button.click();
 }
