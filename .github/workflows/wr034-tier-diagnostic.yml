@@ -1,0 +1,39 @@
+name: WR-034 Performance Tier Diagnostic
+
+on:
+  push:
+    branches:
+      - wr-034-availability-expected-games
+    paths:
+      - '.github/workflows/wr034-tier-diagnostic.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: .ai/research/wr034_requirements.txt
+      - run: python -m pip install -r .ai/research/wr034_requirements.txt
+      - run: python -m py_compile .ai/research/wr034_performance_tier_diagnostic.py
+      - run: python .ai/research/wr034_performance_tier_diagnostic.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wr034-performance-tier-diagnostic
+          path: .ai/research/generated/WR034_PERFORMANCE_TIER_DIAGNOSTIC.*
+          if-no-files-found: error
+      - name: Commit diagnostic evidence
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .ai/research/generated/WR034_PERFORMANCE_TIER_DIAGNOSTIC.*
+          git commit -m 'WR-034 freeze performance-tier diagnostic outputs'
+          git push origin HEAD:wr-034-availability-expected-games
