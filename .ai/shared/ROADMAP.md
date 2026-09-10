@@ -62,8 +62,9 @@ Engine architecture is separated into:
 9. tiers / explanations / warnings;
 10. ESPN market timing as a separate signal.
 
-Planned evidence-gated phases after WR-027:
-- freeze returning-player projection specification;
+Planned evidence-gated phases after WR-027 now include an explicit advanced-context enrichment gate before the returning-player v1 freeze:
+- WR-029: evaluate snap/participation, route/YPRR-style features, advanced efficiency, offensive-line proxies, coaching/scheme, team context, depth/competition, age/physical and maintainable availability context;
+- freeze returning-player projection specification only after WR-029 disposition;
 - validate rookie engine v1;
 - validate availability model;
 - build season-total distribution;
@@ -80,6 +81,18 @@ Definition:
 - `PRODUCTION-AUTHORITATIVE` may not be considered until the frozen WR-023 prospective gate and a separate Manager production decision are satisfied.
 
 No future phase is automatically activated merely because it appears on this roadmap. Each phase requires the preceding evidence gate and a dedicated WR task when activated.
+
+### WR-029 — Advanced Context Feature Enrichment / Source Feasibility
+Role: R&D
+Status: PLANNED / BLOCKED ON WR-027 MANAGER DISPOSITION
+Production authorization: NONE
+Task: `.ai/manager/WR-029.md`
+
+Purpose:
+- test richer preseason-known usage, snap, route, advanced-efficiency, offensive-line, team, coaching/scheme and depth/competition features before returning-player v1 is frozen;
+- require exact rights and point-in-time semantics for each source family;
+- classify each family as core-model, warning/explanation-only, insufficient, or excluded for rights/coverage/point-in-time reasons;
+- do not inspect 2026 outcomes and do not touch WR-021/WR-023 frozen artifacts.
 
 ## Active Parallel Work Wave
 ### PW-003 — Phone UX + Custom-Ranking Development
@@ -130,15 +143,16 @@ Required validation:
 - ESPN rank/ADP timing only
 - WR-D001 remains ACTIVE
 
-WR-027 and future custom-engine historical development do not supersede the frozen WR-023 prospective contract.
+WR-027/WR-029 and future custom-engine historical development do not supersede the frozen WR-023 prospective contract.
 
 ## Integration path
-- WR-027 research result -> Manager review/disposition -> next custom-engine roadmap phase only if justified.
+- WR-027 research result -> Manager review/disposition -> WR-029 activation if still justified.
+- WR-029 result -> Manager accepts/rejects feature families -> returning-player v1 specification freeze.
 - WR-026 Builder PR -> reconcile with current main -> green CI -> Independent Auditor -> Manager merge decision.
-- These paths remain independent.
+- Phone and ranking paths remain independent.
 
 ## Current roles
-- Manager: IDLE after WR-028 roadmap planning
+- Manager: IDLE after WR-029 planning update
 - Builder: ACTIVE — WR-026
 - R&D: ACTIVE — WR-027
 - Auditor: IDLE / waiting for WR-026 final PR
