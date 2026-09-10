@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-10T02:08:00Z",
+  "updated_at_utc": "2026-09-10T20:25:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": [
@@ -19,27 +19,24 @@
     {
       "task_id": "WR-026",
       "owner": "Builder",
-      "status": "IN_PROGRESS",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-026.md",
       "role_handoff": ".ai/builder/HANDOFF.md",
       "assignment_main_sha": "69689edadab5c8f270bc483b6acc461274ec7f87",
-      "worker_checkpoint_sha": "6b0821a03608f170903a46f015976028d9991275",
+      "worker_checkpoint_sha": "ca7126a76df29ec1fa85020fe15acdca9c8c6c5b",
       "branch": "wr-026-phone-decision-view",
       "pr": 120,
       "dependency": "INDEPENDENT",
       "audit_required": true,
-      "blocked_on": [],
+      "blocked_on": ["WR-031 independent audit"],
       "allowed_path_prefixes": [],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/"
-      ],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/"],
       "forbidden_exact_paths": [
         ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "Builder final handoff / exact head -> AUDIT_READY -> Independent Auditor -> Manager merge decision"
+      "next_gate": "WR-031 Auditor verdict -> Manager merge/rework decision"
     },
     {
       "task_id": "WR-029",
@@ -54,19 +51,36 @@
       "dependency": "INDEPENDENT",
       "audit_required": false,
       "blocked_on": [],
-      "allowed_path_prefixes": [
-        ".ai/research/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/"
-      ],
+      "allowed_path_prefixes": [".ai/research/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/"],
       "forbidden_exact_paths": [
         ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
       "next_gate": "R&D handoff -> MANAGER_REVIEW_READY -> Manager feature-family disposition -> Phase 2 specification-freeze decision"
+    },
+    {
+      "task_id": "WR-031",
+      "owner": "Auditor",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-031.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": "b89919121cfcc00fc9a02be5d82c1a892036e70b",
+      "worker_checkpoint_sha": null,
+      "branch": null,
+      "pr": 120,
+      "dependency": "HARD",
+      "audit_required": false,
+      "blocked_on": [],
+      "allowed_path_prefixes": [".ai/auditor/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/"],
+      "forbidden_exact_paths": [
+        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
+      ],
+      "next_gate": "Auditor verdict -> Manager merge/rework decision on WR-026 / PR #120"
     }
   ]
 }
