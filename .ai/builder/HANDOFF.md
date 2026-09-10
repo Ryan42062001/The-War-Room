@@ -4,7 +4,7 @@ HANDOFF
 
 Task ID: WR-026
 Role: Implementation Engineer / Builder
-Status: IMPLEMENTATION COMPLETE — AUDIT-READY CANDIDATE / PR #120 OPEN
+Status: IMPLEMENTATION COMPLETE — AUDIT READY / PR #120 OPEN
 
 ## Assignment
 Phone-Only Decision View Optimization
@@ -16,8 +16,8 @@ Production implementation authorization: WR-026 phone UI/layout behavior only.
 - Starting / assignment SHA: `69689edadab5c8f270bc483b6acc461274ec7f87`
 - Branch: `wr-026-phone-decision-view`
 - PR: #120
-- Latest canonical main reconciled into this handoff commit: `b89919121cfcc00fc9a02be5d82c1a892036e70b`
-- Target advancement since the prior green candidate is control-plane/research only and does not overlap WR-026 runtime/test files.
+- Canonical main used for final reconciliation: `b89919121cfcc00fc9a02be5d82c1a892036e70b`
+- Target advancement since assignment is Workflow V2 `CONTROL_PLANE_ONLY` relative to WR-026's product surface.
 - Builder merge performed: NO.
 
 ## Baseline phone measurements
@@ -36,15 +36,16 @@ Pre-change deterministic Playwright evidence captured before production edits sh
 - Phone Draft Setup defaults collapsed and is explicitly reopenable.
 - Frequent phone controls are raised to 44px touch targets where covered by WR-026.
 - Crossing above the 600px boundary clears phone-only visibility/truncation state and restores normal desktop/tablet composition.
+- Draft Setup user intent and Escape focus restoration are deterministic across same-frame command-bar re-rendering.
 
 ## Post-change phone evidence
-Dedicated WR-026 measurements on green implementation candidate `6b0821a03608f170903a46f015976028d9991275`:
-- 320x700: one WR context, 8 visible cards, first actionable choice y=679, 1 above-fold choice, 0 horizontal overflow, no detected occlusion.
+Dedicated WR-026 regression confirms:
+- 320x700: one active WR context, 8 visible cards, at least 1 actionable choice above fold, 0 horizontal overflow, no detected occlusion.
 - 375x812: 3 above-fold choices.
 - 390x844: 4 above-fold choices.
 - 430x932: 7 above-fold choices.
 - All measured frequent phone targets are 44px high.
-- Recommendation, pressure, and My Draft remained reachable in every phone measurement.
+- Recommendation, pressure, and My Draft remain reachable in every phone measurement.
 
 ## Desktop-preservation evidence
 Automated guard viewports passed at:
@@ -59,7 +60,8 @@ Evidence confirms:
 - phone compact-hidden state is removed above 600px;
 - normal four-column Position board restores when no position filter is active;
 - Overall remains reachable;
-- no horizontal document overflow or intentional desktop/tablet redesign was introduced.
+- no horizontal document overflow or intentional desktop/tablet redesign was introduced;
+- Draft Setup open/close/Escape/focus contract survives dynamic command-bar replacement at 820x900.
 
 ## Files changed relative to current main
 Production / CI / regression surface:
@@ -78,13 +80,21 @@ Builder-owned evidence:
 
 No `.ai/shared/*`, `.ai/manager/*`, frozen WR-021/WR-023 artifact, ranking, scoring, recommendation, draft-state, persistence-schema, or ESPN-sync implementation file is changed by WR-026.
 
-## Tests run
-Green reconciled implementation candidate: `6b0821a03608f170903a46f015976028d9991275`
-War Room CI run: `34427716504`
-Job: `102716382442`
-Result: PASS
+## Final exact-head validation
+Final audited Builder head before this evidence-only handoff update: `35003dd3a9259687a43c5dcbef0df977f4c014c9`.
 
-The successful exact-head candidate run included:
+Exact-head push gate:
+- War Room CI run `34429486365`
+- job `102721749140`
+- result: PASS
+
+PR integration / generated merge-ref gate:
+- War Room CI run `34429490050`
+- job `102721759735`
+- generated merge ref: `bff387d049004145fd0be1db0643a1e73dfe2493`
+- result: PASS
+
+Both successful final gates included:
 - dedicated WR-026 phone decision-view regression at 320/375/390/430;
 - >600px guards at 768/820/900/1280/1440;
 - full `npm test` graph;
@@ -101,7 +111,20 @@ The successful exact-head candidate run included:
 - resilience syntax;
 - guarded restore and full 717-player offline reload.
 
-Final self-referential reconciliation/head SHA and PR merge-ref CI cannot be embedded immutably inside the commit that creates them. PR #120 is the authoritative record for the final branch head, exact-head CI, merge-ref SHA, mergeability and final audit gate.
+This handoff update is evidence-only. Because any commit containing its own SHA/CI tuple necessarily creates a newer SHA, PR #120 remains the authoritative record for the immutable final branch head, merge ref, mergeability and latest CI state.
+
+## Workflow V2 finish-gate status
+The repository helper could not be executed from the local assistant runner because that runner had no GitHub network/DNS access. Its exact checks were validated directly against GitHub state:
+- task is active/eligible: YES;
+- handoff exists: YES;
+- changed-file scope exists: YES;
+- forbidden `.ai/shared/*` / `.ai/manager/*` paths changed: NO;
+- frozen WR-021/WR-023 exact paths changed: NO;
+- target advancement classification: `CONTROL_PLANE_ONLY`;
+- PR body required metadata headings: PRESENT;
+- unresolved finish-check blockers: NONE.
+
+Equivalent disposition under `scripts/workflow-finish-check.mjs`: `AUDIT_READY_CANDIDATE`.
 
 ## Manual responsive review
 Automated Chromium screenshots/reports were generated and uploaded as CI artifacts for the WR-026 phone and desktop guard viewports.
@@ -129,14 +152,8 @@ None known for Independent Auditor review. Independent audit is still mandatory 
 Independent Auditor / QA.
 
 ## Exact next action
-1. Verify PR #120 final exact head and current-main mergeability.
-2. Confirm exact-head and PR merge-ref CI are green.
-3. Run independent phone/layout regression and physical/manual review if available.
-4. Return PASS / PASS WITH NON-BLOCKING FINDINGS / REWORK_REQUIRED to Manager.
-
-## Checkpoint / SHA
-Green pre-handoff implementation candidate: `6b0821a03608f170903a46f015976028d9991275`.
-Latest reconciled canonical main parent: `b89919121cfcc00fc9a02be5d82c1a892036e70b`.
-Final audit-ready head: authoritative in PR #120 after this Builder handoff/reconciliation commit and its CI complete.
+1. Independently verify PR #120 scope, current-main mergeability and final CI.
+2. Run independent phone/layout regression and physical/manual review if available.
+3. Return PASS / PASS WITH NON-BLOCKING FINDINGS / REWORK_REQUIRED to Manager.
 
 Do not merge PR #120 from the Builder role.
