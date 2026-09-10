@@ -80,21 +80,17 @@ Builder-owned evidence:
 
 No `.ai/shared/*`, `.ai/manager/*`, frozen WR-021/WR-023 artifact, ranking, scoring, recommendation, draft-state, persistence-schema, or ESPN-sync implementation file is changed by WR-026.
 
-## Final exact-head validation
-Final audited Builder head before this evidence-only handoff update: `35003dd3a9259687a43c5dcbef0df977f4c014c9`.
+## Final validation
+Final runtime/test implementation head before evidence-only handoff commits: `35003dd3a9259687a43c5dcbef0df977f4c014c9`.
 
-Exact-head push gate:
-- War Room CI run `34429486365`
-- job `102721749140`
-- result: PASS
+That implementation state passed:
+- exact-head War Room CI run `34429486365`, job `102721749140` — PASS;
+- PR integration War Room CI run `34429490050`, job `102721759735` — PASS;
+- generated merge ref at that implementation state: `bff387d049004145fd0be1db0643a1e73dfe2493`.
 
-PR integration / generated merge-ref gate:
-- War Room CI run `34429490050`
-- job `102721759735`
-- generated merge ref: `bff387d049004145fd0be1db0643a1e73dfe2493`
-- result: PASS
+The subsequent Builder handoff update is evidence-only and does not modify production/test behavior. PR #120 is the authoritative record for the immutable newest branch head, current generated merge ref, mergeability and latest CI tuple because a commit cannot contain its own SHA or CI IDs generated after it exists.
 
-Both successful final gates included:
+All final validation gates include:
 - dedicated WR-026 phone decision-view regression at 320/375/390/430;
 - >600px guards at 768/820/900/1280/1440;
 - full `npm test` graph;
@@ -110,8 +106,6 @@ Both successful final gates included:
 - live mock fixtures;
 - resilience syntax;
 - guarded restore and full 717-player offline reload.
-
-This handoff update is evidence-only. Because any commit containing its own SHA/CI tuple necessarily creates a newer SHA, PR #120 remains the authoritative record for the immutable final branch head, merge ref, mergeability and latest CI state.
 
 ## Workflow V2 finish-gate status
 The repository helper could not be executed from the local assistant runner because that runner had no GitHub network/DNS access. Its exact checks were validated directly against GitHub state:
