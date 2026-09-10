@@ -18,6 +18,7 @@
   var observer = null;
   var setupEditing = false;
   var setupFocusSummaryRequested = false;
+  var phoneSetupDefaulted = false;
   var syncQueued = false;
   var lastCommandMode = '';
   var layoutReady = false;
@@ -70,7 +71,7 @@
 
     var script = document.createElement('script');
     script.id = PHONE_DECISION_SCRIPT_ID;
-    script.src = 'js/war-room-phone-decision-view.js?v=20260909-1';
+    script.src = 'js/war-room-phone-decision-view.js?v=20260910-2';
     script.async = false;
     script.addEventListener('error', function() {
       if (typeof window.reportWarRoomEnhancementFailure === 'function') {
@@ -277,17 +278,17 @@
     var phone = isPhoneLayout();
     if (!progressed) {
       if (phone) {
-        if (details.dataset.phoneDefaulted !== 'true') {
+        if (!phoneSetupDefaulted) {
           setupEditing = false;
-          details.open = false;
-          details.removeAttribute('data-phone-user-open');
-          details.dataset.phoneDefaulted = 'true';
-        } else {
-          details.open = Boolean(setupEditing);
-          if (!setupEditing) details.removeAttribute('data-phone-user-open');
+          phoneSetupDefaulted = true;
         }
+        details.dataset.phoneDefaulted = 'true';
+        details.open = Boolean(setupEditing);
+        if (setupEditing) details.dataset.phoneUserOpen = 'true';
+        else details.removeAttribute('data-phone-user-open');
       } else {
         setupEditing = false;
+        phoneSetupDefaulted = false;
         details.open = true;
         details.removeAttribute('data-phone-defaulted');
         details.removeAttribute('data-phone-user-open');
@@ -387,7 +388,7 @@
   }
 
   window.WarRoomLayoutEfficiency = {
-    version: 1,
+    version: 2,
     refresh: scheduleSynchronize,
     hasDraftProgress: hasDraftProgress,
     readDraftSettings: readDraftSettings,
