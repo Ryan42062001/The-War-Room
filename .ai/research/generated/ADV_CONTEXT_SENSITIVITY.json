@@ -1,0 +1,8 @@
+{
+  "selected_families": [],
+  "fallback_contract": "LOCKED_RIDGE",
+  "source_omission": [],
+  "perturbation": [],
+  "note": "No development-passing direct family; combined model equals locked Ridge.",
+  "perturbation_note": "No development-selected enrichment family; +/-0.5 SD sensitivity is vacuous because the combined model equals locked Ridge."
+}
