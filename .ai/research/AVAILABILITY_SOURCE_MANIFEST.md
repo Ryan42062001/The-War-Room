@@ -2,7 +2,7 @@
 
 Status: FROZEN PRE-SCORING SOURCE CONTRACT — EXPERIMENTAL / NON-PRODUCTION
 Task: WR-034
-Protocol Git blob: `4ed74ba431110c7e9742dccab2dfb63ef50592ae`
+Protocol Git blob: `6d608001b91ef76851484f527835f7fd2a7005c6`
 
 ## Admitted sources
 
