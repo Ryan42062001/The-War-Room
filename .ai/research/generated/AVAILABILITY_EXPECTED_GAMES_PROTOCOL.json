@@ -7,6 +7,8 @@
   "human_protocol_git_blob_sha": "6d608001b91ef76851484f527835f7fd2a7005c6",
   "source_manifest_path": ".ai/research/AVAILABILITY_SOURCE_MANIFEST.md",
   "source_manifest_git_blob_sha": "6c9cabd3a2c55f2e4c9979a9d33f874eecdb1e53",
+  "candidate_spec_path": ".ai/research/AVAILABILITY_CANDIDATE_SPEC.md",
+  "candidate_spec_git_blob_sha": "69aedb2104ec9a7bf8f79997fccac65957a50a61",
   "historical_stats_seasons": [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
   "target_seasons": [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
   "scored_seasons": [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
@@ -61,7 +63,7 @@
   "predictive_interval": "80% training-only position residual interval using 10th/90th percentiles, clipped to valid games",
   "metrics": {
     "expected_games": ["MAE", "RMSE", "mean_bias", "Spearman", "predicted-range calibration"],
-    "events": ["prevalence", "Brier", "Brier_skill", "ROC_AUC", "PR_AUC", "log_loss", "reliability", "probability-tier event rate"],
+    "events": ["prevalence", "Brier", "Brier_skill", "ROC_AUC", "PR_AUC", "log_loss", "reliability", "probability-tier event_rate"],
     "uncertainty": ["80pct_interval_coverage", "mean_interval_width", "by_position_coverage"],
     "robustness": ["5000_player_cluster_bootstrap", "season_stability", "coverage_missingness", "selected_model_omission_and_half_sd_perturbation", "fallback_test"]
   },
@@ -83,6 +85,7 @@
   "event_warning_gate": {
     "confirmation_pooled_brier_skill_gt": 0.0,
     "position_brier_skill_floor": -0.05,
+    "gross_reliability_inversion_definition": "confirmation pooled highest probability quartile event rate < lowest probability quartile event rate",
     "gross_reliability_inversion_forbidden": true,
     "ordering_effect": "NONE"
   },
