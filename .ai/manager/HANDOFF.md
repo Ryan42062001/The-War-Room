@@ -2,85 +2,88 @@
 
 HANDOFF
 
-Task ID: PW-003 / WR-025 / WR-026
+Task ID: PW-003 / WR-025 / WR-026 / WR-027
 Role: Manager / Architect
-Status: PW-003 ACTIVE / WR-025 ACTIVE / WR-026 ACTIVE
+Status: WR-025 COMPLETE / WR-026 ACTIVE / WR-027 ACTIVE
 
-## Verified starting state
-- canonical `main` before new assignment commits: `9cc60b590b6d6cfe17c19a1cb78e06956d7b7944`
-- open PRs at assignment time: NONE
-- project was MAINTENANCE / STABLE — prospective validation frozen
-- WR-021 and WR-023 were COMPLETE / ACCEPTED / MERGED
-- production ranking authority remained FantasyPros under WR-D001
-- all workers were idle before the new user requirements
+## Verified starting state for WR-025 review
+- canonical main: `69689edadab5c8f270bc483b6acc461274ec7f87`
+- WR-025 PR #118 head: `22c5678c876081c012000c28f2082668116c4b8b`
+- PR #118 mergeable: YES
+- exact-head War Room CI #934 / run `34401904213`: SUCCESS
+- final diff: research-only under `.ai/research/*`
+- production files changed: NO
+- frozen WR-021 snapshot changed: NO
+- frozen WR-023 protocol/manifest changed: NO
+- 2026 outcomes inspected: NO
 
-## New user triggers
-Two explicit requirements reactivated bounded work:
+## WR-025 Manager disposition
+Accepted classification: `MORE EVIDENCE NEEDED`.
 
-1. Historical ranking research:
-   - use previous seasons to determine which statistics/context identify stronger future fantasy players;
-   - identify warning signals associated with underperformance/bust risk;
-   - get a research-only custom historical ranking prototype working.
+PR #118 merged by Manager as:
+`93da7e5de10ca2130d40142450cab9840c755ab4`
 
-2. Phone usability:
-   - current phone view feels like one big list and is not useful enough;
-   - desktop view is liked and must NOT be changed;
-   - optimize only the phone experience for faster draft decisions.
+Production ranking authority changed: NO.
+WR-D001 changed: NO.
 
-## Parallelism decision
-Created PW-003 because the two tasks are INDEPENDENT.
+## Key WR-025 evidence
+Returning-player mean projection:
+- previous-season PPR/game MAE: 3.0262
+- Ridge MAE: 2.8262
+- Ridge improvement: 6.61%
+- Ridge Spearman: 0.6775 vs baseline 0.6359
+- player-clustered paired MAE 95% interval: `[-0.3235, -0.0616]`
 
-### WR-025 — Historical Ranking Signal / Breakout-Bust Research
-Assigned role: Research & Development (R&D)
-Status: ACTIVE
-Task: `.ai/manager/WR-025.md`
+Downside ROC AUC:
+- QB .757
+- RB .802
+- WR .787
+- TE .841
+
+Universal risk-overlay position rank MAE:
+- QB improved 9.95%
+- RB improved 3.11%
+- WR worsened 5.51%
+- TE worsened 6.20%
+
+Interpretation:
+- preserve the successful mean projection;
+- do not use one universal risk penalty;
+- downside probabilities appear useful enough to calibrate separately by position;
+- warning presentation may be more appropriate than rank modification for some positions;
+- rookies remain a separate unresolved model family.
+
+A rights-clean SafeLeagues/MFL public-draft source was found but did not meet the predeclared sample-size requirement for a comparable historical PPR redraft ADP benchmark, so no true draft-cost bust claim is supported.
+
+## WR-027 assignment
+Task: `.ai/manager/WR-027.md`
+Role: Research & Development (R&D)
+Status: ASSIGNED / ACTIVE
 Production authorization: NONE
 
-Key requirements:
-- historical rights-clean sources only;
-- identify stable positive/upside and negative/downside signals by position;
-- build a research-only ranking prototype;
-- define bust/downside relative to a preseason baseline unless a lawful historical draft-cost source is found;
-- no causal overclaiming;
-- no 2026 outcome inspection;
-- do not modify the frozen WR-021 2026 snapshot, WR-023 protocol, protocol manifest, or gate;
-- no production ranking changes;
-- leave research PR open for Manager review.
+Objective:
+- preserve WR-025 Ridge mean projection as benchmark;
+- calibrate downside/breakout/low-availability warnings separately for QB/RB/WR/TE;
+- decide by position whether risk belongs in ranking or warning-only presentation;
+- test a transparent robust-regression challenger for Ridge tail/outlier errors;
+- keep rookies separate;
+- do not inspect 2026 outcomes or change WR-021/WR-023 frozen artifacts.
 
-### WR-026 — Phone-Only Decision View Optimization
-Assigned role: Implementation Engineer / Builder
-Status: ACTIVE
-Task: `.ai/manager/WR-026.md`
-Production authorization: YES — phone UI/layout only
-Independent audit required: YES
+Position-level final decision vocabulary:
+- `RANK MODIFIER SUPPORTED`
+- `WARNING-ONLY SUPPORTED`
+- `INSUFFICIENT EVIDENCE`
 
-User requirement boundary:
-- phone only, preferably <=600px;
-- desktop/tablet >600px must remain visually and behaviorally unchanged.
+Rank-modifier adoption requires predeclared rank improvement plus no material MAE/Spearman harm. Useful calibrated warnings that fail the rank guard must remain warning-only.
 
-Target experience:
-- decision-first opening state;
-- recommendation/urgency and actionable players visible quickly;
-- one primary position context at a time instead of all full position lists stacked vertically;
-- one-tap position switcher;
-- bounded top relevant tier/player set with explicit Show more/full-list access;
-- preserve Position/Overall, My Draft, search, Taken/Mine, target stars, Manage, ESPN health, targets/change feed, K/DST;
-- no ranking/scoring/recommendation/state/persistence/ESPN semantic change.
+## WR-026 phone lane
+Builder remains ACTIVE on WR-026.
 
-Required phone baselines/tests:
-- 320x700
-- 375x812
-- 390x844
-- 430x932
+Important integration note:
+Main advanced via WR-025 merge and Manager reconciliation after WR-026 assignment. Builder must reconcile its final WR-026 PR with refreshed current main before independent audit.
 
-Required desktop/tablet regression guard:
-- 768x1024
-- 820x900
-- 900x900
-- 1280x800
-- 1440x900
-
-Builder must not merge. Final mergeable green WR-026 PR goes to Independent Auditor before Manager release decision.
+Desktop/tablet >600px preservation remains a hard requirement.
+Independent Auditor required before production merge.
 
 ## Frozen prospective ranking contract
 UNCHANGED.
@@ -91,7 +94,7 @@ WR-023 protocol SHA-256:
 WR-021 snapshot SHA-256:
 `9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d`
 
-WR-025 is separate retrospective research. It may not alter or contaminate the frozen 2026 prospective evaluation.
+No WR-027 result may rewrite or substitute into that prospective test.
 
 ## Ranking authority
 UNCHANGED:
@@ -101,19 +104,20 @@ UNCHANGED:
 - WR-D001 ACTIVE
 
 ## Current role state
-- Manager: IDLE after assignment/reconciliation
+- Manager: IDLE after WR-025 disposition / WR-027 assignment
 - Builder: ACTIVE — WR-026
-- R&D: ACTIVE — WR-025
+- R&D: ACTIVE — WR-027
 - Auditor: IDLE / waiting for WR-026
 
 ## Recommended next actions
-1. Builder creates a dedicated WR-026 branch from refreshed canonical main, measures current phone behavior before edits, implements phone-only decision view, runs phone + desktop regression tests/full CI, opens PR, and stops for audit.
-2. R&D creates a dedicated WR-025 branch from refreshed canonical main, performs rights-clean historical signal/ranking research only, opens research PR if appropriate, and stops for Manager review.
-3. Do not activate Auditor until WR-026 is final, mergeable, and green.
-4. Manager reviews WR-025 independently when complete and activates Auditor for WR-026 when its release gate is ready.
+1. R&D executes WR-027 from refreshed current main and returns a research PR for Manager review.
+2. Builder continues WR-026, but must reconcile with current main before declaring final audit-ready head.
+3. Activate Auditor only when WR-026 is final, mergeable, and green.
 
 ## Blocking issues
-None at assignment time.
+- production custom-ranking promotion remains unauthorized;
+- rookie ranking remains unvalidated;
+- 2026 prospective proof remains frozen and pending future checkpoints.
 
 ## Checkpoint / SHA
-Verify current canonical `main` after this Manager reconciliation; assignment commits advanced main beyond `9cc60b590b6d6cfe17c19a1cb78e06956d7b7944`.
+Verify current canonical main after this reconciliation for the exact final SHA.

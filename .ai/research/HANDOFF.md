@@ -2,223 +2,457 @@
 
 HANDOFF
 
-Task ID: WR-023
-Role: Research & Development (R&D)
-Status: COMPLETE — PROTOCOL FROZEN / MANAGER REVIEW REQUIRED
+Task ID: WR-025  
+Role: Research & Development (R&D)  
+Status: COMPLETE — MANAGER REVIEW REQUIRED
 
 ## Verified starting state
-- refreshed canonical `main`: `8e51bc08c0ac70370f49943ac78fda481d7e77e7`
-- project state: MAINTENANCE / STABLE — bounded WR-023 R&D active
-- WR-021: COMPLETE / ACCEPTED / MERGED
-- WR-021 research PR #116 merge: `f2e3e9b1c0a9a59452d679783a5236d4a5da9a09`
-- WR-021 final corrected 2026 snapshot remained committed at `.ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv`
-- production ranking authority remained unchanged under WR-D001
+
+- refreshed canonical `main`: `69689edadab5c8f270bc483b6acc461274ec7f87`
+- active wave: PW-003
+- WR-025 production authorization: NONE
+- WR-021 snapshot / WR-023 protocol already accepted and frozen
+- production ranking authority: FantasyPros under WR-D001
+- no existing WR-025 branch or PR at start
 
 ## Branch
-`wr-023-prospective-protocol-freeze`
+
+`wr-025-historical-ranking-signals`
 
 ## Starting SHA
-`8e51bc08c0ac70370f49943ac78fda481d7e77e7`
+
+`69689edadab5c8f270bc483b6acc461274ec7f87`
 
 ## Objective completed
-The exact 2026 prospective evaluation protocol for the frozen WR-021 shadow snapshot was pre-registered and committed **before any 2026 regular-season outcome source was queried, inspected, downloaded or scored in this WR-023 execution**.
 
-WR-023 performed no 2026 outcome scoring.
+Used rights-clean historical football data to identify stable preseason-known positive ranking signals and warning/downside signals by position and built a research-only rolling-origin historical ranking prototype.
 
-## Protocol freeze boundary
-Protocol file:
-`.ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md`
+A lawful historical draft-cost source was investigated separately. The source rights were acceptable, but the predeclared comparable-market sample-size gate failed, so no historical ADP/draft-cost benchmark was admitted.
 
-Freeze commit:
-`28903ef5dc7073b36cb400330104e8f9e3ee0e05`
+## Prospective isolation / frozen artifacts
 
-Freeze commit timestamp:
-`2026-09-09T17:22:11Z`
+WR-025 inspected **no 2026 regular-season outcome**.
 
-Protocol Git blob SHA-1:
-`2fc33ed684cfa539d2cc5684b52b7ba17adc47e1`
+The experiment runner hard-caps historical Player Summary Stats at 2025.
 
-Protocol SHA-256:
-`f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`
+Execution verified these frozen identities both before and after historical scoring:
 
-The protocol must not be rewritten after outcome inspection. Later outcome artifacts must reference this exact hash.
+- WR-021 snapshot SHA-256: `9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d`
+- WR-023 protocol SHA-256: `f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`
 
-## Frozen WR-021 snapshot identity
-Path:
-`.ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv`
+Both integrity checks passed.
 
-Git blob SHA-1:
-`d97280847779a945f1b7901e90bd1b3ee649e4f4`
+WR-021 snapshot changed: **NO**  
+WR-023 protocol/manifest changed: **NO**  
+2026 outcomes inspected: **NO**
 
-SHA-256:
-`9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d`
+## Sources used
 
-Independent manifest-generator checks:
-- rows: 523
-- unique player IDs: 523
-- returners: 444
-- drafted rookies: 79
-- positions: QB/RB/WR/TE only
-- duplicate IDs: none
-- invalid rookie flags: none
+### nflverse Player Summary Stats
 
-No WR-021 prediction value was changed.
-
-## Additional frozen provenance hashes
-WR-021 source manifest:
-- Git blob: `5e814449ea2fb3ee16f8cb5b16f67580c34369c7`
-- SHA-256: `e1c8347ba5db9ee7d8b8d09ef3b28f814b737fb9fc436cb2c4de8a6d99f95120`
-
-WR-021 asset manifest:
-- Git blob: `07fc229791c4dcbf3234b506499c1eea186617d3`
-- SHA-256: `ceb5b96e7152d16ebe7b637baad245b79893dc0e42b64545c756af4b6a221d4d`
-
-WR-021 experiment report:
-- Git blob: `760a2895f153d7826741ed624d3082ad4a0b1fbb`
-- SHA-256: `fc19ec45ea22be20a290c79350b6f1c3d26d1f6090f35ad03e3be3006cf8d42c`
-
-## Outcome source definition — frozen before outcome inspection
-Predeclared source family:
-- `nflverse/nflverse-data`
+- repository: `nflverse/nflverse-data`
 - release tag: `stats_player`
-- intended asset: `stats_player_regpost_2026.csv`
-- rights basis: same accepted nflverse CC BY 4.0 Player Summary Stats family used in WR-021
+- license: CC BY 4.0
+- loaded assets: historical `stats_player_regpost_2012.csv` through `stats_player_regpost_2025.csv` only
+- target-season predictor leakage: prohibited
 
-Required later fields:
-- `player_id`
-- `season_type`
-- `games`
-- `fantasy_points_ppr`
-- if `season` exists, scored rows must equal 2026
+Release ID during execution: `236670328`.
 
-Regular-season rule:
-- case-insensitive `season_type == REG`
-- postseason excluded
+### nflverse Players
 
-Join rule:
-- exact frozen `player_id` / GSIS ID only
-- no name-based rescue matching in the primary evaluation
+- release tag: `players`
+- license: CC BY 4.0
+- permitted use: GSIS identity, player name, birth date, rookie season, deterministic MFL-ID crosswalk only
+- current team/status/position and PFF fields: not used as historical predictors
 
-Outcome aggregation:
-- `actual_games = max(non-null games)` per player
-- `actual_season_ppr = sum(fantasy_points_ppr)` over retained regular-season rows
-- if games >=1, `actual_ppr_pg = actual_season_ppr / actual_games`
-- no retained outcome row = 0 games / 0 season PPR; per-game target undefined
+Execution asset:
+- release ID `69785162`
+- asset ID `552739287`
+- SHA-256 `a33998d3981bda4f49f40390c5c0fa30036112ee1ea5de19ed4609e2ad3be3e2`
 
-Later evaluators must hash the exact outcome asset before calculating any metric.
+### nflverse Draft Picks
 
-## Primary prospective hypothesis
-RETURNING PLAYERS ONLY:
+- release tag: `draft_picks`
+- license: CC BY 4.0
+- permitted use: draft-time position, pick/round/team, deterministic GSIS identity
+- hindsight career-result fields: ignored
 
-Frozen WR-021 Ridge PPR/game (`ridge_ppr_pg`) versus frozen previous-season PPR/game baseline (`baseline_ppr_pg`) on returning players with >=1 recorded 2026 regular-season game.
+Execution asset:
+- release ID `66254658`
+- asset ID `552425724`
+- SHA-256 `6ec4a9b69ab16c6da5219554b8954f114b59e47bafb1cb6c476f672a5f25d02a`
 
-Rookies remain separate / diagnostic because WR-021 did not validate the Ridge rookie model historically.
+### SafeLeagues / public MFL archive — rights-cleared investigation, benchmark NOT admitted
 
-Gradient Boosting remains secondary / diagnostic and cannot satisfy the primary gate if Ridge fails.
+Repository: `dynastyprocess/data-mfl_public`  
+Pinned identity investigated: `9b8f37152036b44b1a5baeb35f70482b1d3369f8`  
+License: CC0 1.0 Universal
 
-## Interim checkpoint policy
-Predeclared opportunities:
-- after Week 4
-- after Week 8
-- after Week 13
+Candidate public draft/league records for 2019–2021 had explicit league and draft schema. The frozen comparable-market filter required:
+- redraft naming;
+- 1QB;
+- not best ball;
+- 12 teams;
+- explicit PPR scoring flags and not half-PPR;
+- deterministic player/pick data.
 
-All are `INTERIM — DESCRIPTIVE ONLY`.
+Only **6** eligible league drafts survived versus the predeclared minimum of 100.
 
-Interim results may not:
-- confirm or reject the final signal
-- trigger refitting
-- change features
-- change cohort membership
-- change prediction values
-- change thresholds
-- trigger early stopping
-- authorize a production proposal
+Disposition: **NOT ADMITTED** as historical ADP/draft-cost benchmark.
 
-A missed interim checkpoint may not be reconstructed later from a newer cumulative outcome asset.
+Therefore WR-025 does not make true draft-cost “bust” claims.
 
-## Decisive final checkpoint
-The only decisive checkpoint is after the complete 2026 NFL regular season through Week 18.
+## Rights evidence
 
-No postseason outcome is part of WR-023.
+- nflverse repository data family: CC BY 4.0, same family already accepted by prior War Room research.
+- `dynastyprocess/data-mfl_public`: repository `LICENSE` explicitly CC0 1.0 Universal.
+- open-source software that merely scrapes upstream FantasyPros/FFC/MFL/etc. was not treated as conferring rights to upstream data.
+- FantasyPros historical/API, PFF/PFF-derived, NFL Pro/NGS systematic, paid/private, ambiguous scraped data: excluded.
 
-## Primary final evidence gate — frozen
-`PROSPECTIVE SIGNAL CONFIRMED — PRODUCTION MILESTONE MAY BE CONSIDERED` is allowed only if all hold:
+Exact downloaded historical asset provenance and SHA-256 values are in:
+`.ai/research/generated/HISTORICAL_RANKING_ASSET_MANIFEST.json`.
 
-1. pooled returning-player Ridge PPR/game MAE improves by at least 3.00% versus frozen baseline;
-2. 10,000-replicate paired player bootstrap with deterministic seed 23023 gives a 95% percentile interval for `|Ridge error| - |baseline error|` whose upper bound is strictly < 0.0;
-3. pooled Ridge Spearman minus baseline Spearman is >= -0.01;
-4. at least 3 of 4 frozen positions are non-worse on MAE and no position is >5% worse;
-5. no snapshot/data contamination and no post-freeze model, prediction, cohort, protocol or gate change.
+## Historical cohort definition
 
-Classification mapping:
-- all five validly measured and all pass -> `PROSPECTIVE SIGNAL CONFIRMED — PRODUCTION MILESTONE MAY BE CONSIDERED`
-- valid final evaluation and any primary gate fails -> `PROSPECTIVE SIGNAL NOT CONFIRMED`
-- material source/integrity/completeness issue prevents a defensible test -> `MORE EVIDENCE NEEDED`
+### Returning players — primary
 
-Passing the future gate still does not authorize production. It only permits Manager consideration of a separate production milestone.
+For target Y:
+- every QB/RB/WR/TE with a completed Y-1 regular-season summary row enters before target outcomes are joined;
+- target missing row remains 0 games / 0 season PPR for availability/total analysis;
+- PPR/game scoring requires >=1 target recorded game because PPR/game is undefined at zero.
 
-## Secondary metrics frozen
-Report separately without overriding the primary gate:
-- RMSE
-- rank MAE
-- position top-N overlap using QB12 / RB24 / WR36 / TE12
-- availability recorded-games MAE
-- experimental season-total PPR MAE
-- position-level metrics
-- rookie baseline/Ridge/Boost diagnostics
-- Boost returning diagnostics
+Historical target seasons assembled: 2014–2025.  
+Rolling scored seasons: **2018–2025**.  
+Every scored season uses only earlier target seasons for training.
 
-## FantasyPros boundary
-No WR-023 classification depends on FantasyPros.
+Returner cohort:
+- 5,176 historical player-seasons assembled
+- 1,881 active scored rows in 2018–2025
+- 886 unique scored returners
 
-Do not claim superiority to FantasyPros without separate Manager authorization for a lawful and methodologically valid contemporaneous comparison.
+### Drafted rookies — diagnostic
 
-Production ranking reference preserved from WR-021:
-`4dbc0bf22d27296c3cd9b45fd90de637488ff001`
+Drafted QB/RB/WR/TE from draft-time nflverse records with valid overall pick + GSIS ID. Target participation does not define membership.
 
-WR-D001 remains unchanged.
+Rookie historical cohort: 949 player-seasons.
 
-## Manifest generation evidence
-Deterministic generator:
-`.ai/research/wr023_freeze_manifest.py`
+## Expectation / baseline definition
 
-Generated manifest:
-`.ai/research/generated/WR023_PROTOCOL_MANIFEST.json`
+Returning primary baseline:
+`previous-season Full-PPR points per recorded game`.
 
-Temporary manifest-freeze workflow run:
-`34382647524` — SUCCESS
+Rookie baseline:
+rolling historical position + draft-pick-bucket prior learned only from earlier seasons.
 
-The temporary workflow was removed after successful manifest creation so it does not remain in the final research diff.
+Availability baseline:
+previous-season recorded games for returners.
 
-## Files changed
-Intended final research files:
-- `.ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md`
-- `.ai/research/generated/WR023_PROTOCOL_MANIFEST.json`
-- `.ai/research/wr023_freeze_manifest.py`
+## Breakout definition
+
+For active returners:
+
+`target PPR/game - previous-season PPR/game >= +3.0`
+
+This is expectation-relative upside, not a draft-cost breakout definition.
+
+## Bust / downside definition
+
+For active returners:
+
+`target PPR/game - previous-season PPR/game <= -3.0`
+
+Terminology used in the report: **performance downside / under-expectation**.
+
+It is not called a true fantasy-draft-cost bust because no sufficiently broad lawful historical market-cost benchmark was admitted.
+
+Separate availability warning:
+`target recorded games <= 8`, including zero-game cohort members.
+
+This is not a medical injury model.
+
+## Interpretable models
+
+All position-specific and chronological:
+
+- expected performance: standardized Ridge, alpha 100
+- breakout: standardized L2 logistic, C 0.25, balanced classes
+- downside: same fixed logistic specification
+- low availability: same fixed logistic specification
+- diagnostic nonlinear challenger: fixed Gradient Boosting, no scored-season tuning
+
+Stable signal criterion was frozen before scoring:
+- >=6 estimable scored seasons;
+- same coefficient direction >=75%;
+- median absolute standardized coefficient >=0.05 for strongest-list reporting.
+
+## Strongest positive signals
+
+### QB
+
+- prior games / two-year playing continuity
+- two-year and recency-weighted PPR level
+- prior passing EPA/game
+- prior passing TD/game
+- QB carries/game / rushing opportunity
+- NFL draft pedigree
+
+### RB
+
+- prior rushing yards/game
+- target share
+- WOPR / receiving opportunity
+- prior/weighted PPR level
+- prior games
+- rushing efficiency as a smaller supporting signal
+- carries/game for absolute expected performance
+
+### WR
+
+- prior receiving yards/game
+- two-year PPR level
+- recency-weighted PPR
+- receiving EPA/game
+- receptions/game and targets/game
+- receiving TD/game
+- air-yards share as breakout/expected-performance support
+
+### TE
+
+- receiving yards/game
+- target share
+- air-yards share / WOPR
+- multi-year PPR level
+- receptions/game
+- receiving EPA/game
+
+## Strongest warning / downside signals
+
+Warnings are conditional expectation-risk signals, not automatic rank-down instructions.
+
+### QB
+
+- large positive one-year PPR jump / mean-reversion risk
+- later NFL draft capital
+- some high prior volume/production measures predict downside versus an already-high baseline
+- isolated passing-efficiency ratios are mixed after richer context
+
+### RB
+
+- age
+- later draft capital / later round
+- extremely high prior carries/receptions can increase downside versus their own elevated baseline
+- receiving yards/target is less trustworthy than durable share/volume
+
+### WR
+
+- age — one of the clearest stable WR warnings
+- later draft capital / round
+- elevated prior target volume can increase under-expectation risk relative to an already-high baseline
+- high receiving TD rate / efficiency spikes show regression risk
+- large positive one-year PPR jump
+
+### TE
+
+- high prior receptions/targets relative to baseline
+- high receiving TD rate
+- large positive one-year PPR jump
+- later draft capital
+- experience as downside/low-availability context
+
+## Important interpretation
+
+The same feature can be:
+- positive for **absolute expected performance**, and
+- positive for **downside versus last year's already-high expectation**.
+
+Example: high carries/targets can identify a good player while also identifying greater regression risk relative to that strong baseline. WR-025 does not present that as a contradiction or causal finding.
+
+## Breakout/downside diagnostic quality
+
+ROC AUC by position:
+
+| Position | Breakout | Downside |
+|---|---:|---:|
+| QB | 0.776 | 0.757 |
+| RB | 0.643 | 0.802 |
+| WR | 0.669 | 0.787 |
+| TE | 0.600 | 0.841 |
+
+Primary interpretation:
+- downside discrimination is materially stronger than breakout discrimination at RB/WR/TE;
+- TE breakout model is weak;
+- QB breakout discrimination is the strongest first-pass breakout result.
+
+This supports treating downside models as warning/context research rather than applying a universal rank penalty.
+
+## Ranking prototype
+
+Frozen before scoring:
+
+`prototype_score = ridge_mu + 1.5*(p_breakout - p_downside) - 0.75*p_lowavail`
+
+The weights were not tuned after observing results.
+
+### Pooled mean projection
+
+Baseline:
+- MAE 3.0262
+- RMSE 4.2460
+- Spearman 0.6359
+
+Ridge:
+- MAE **2.8262**
+- RMSE 4.2364
+- Spearman **0.6775**
+
+Ridge MAE improvement: **6.61%**.
+
+Repeated-player bootstrap:
+- 886 player clusters
+- 2,000 reps / seed 25026
+- Ridge-minus-baseline MAE delta mean `-0.1993`
+- 95% interval **[-0.3235, -0.0616]**
+
+### Risk-adjusted ranking result
+
+Mean position rank MAE:
+- QB: baseline 8.611 -> prototype **7.755** (9.95% improvement)
+- RB: baseline 10.962 -> prototype **10.621** (3.11% improvement)
+- WR: baseline 14.441 -> prototype **15.236** (**5.51% worse**)
+- TE: baseline 9.709 -> prototype **10.312** (**6.20% worse**)
+
+Pooled Spearman:
+- baseline 0.6359
+- Ridge mean projection 0.6775
+- risk prototype 0.6643
+
+Average position rank MAE is slightly worse overall for the risk prototype (10.9808 vs 10.9309 baseline).
+
+The predeclared universal overlay therefore fails the final ranking-stability gate.
+
+## Nonlinear challenger
+
+Fixed Gradient Boosting pooled:
+- MAE 2.8100
+- RMSE 3.6764
+- Spearman 0.6703
+
+It improves RMSE substantially but does not displace Ridge as the primary interpretable research model. Permutation-importance evidence is retained separately and does not change the classification.
+
+## Rookie findings
+
+Transparent rookie prior:
+- N 387 active drafted-rookie rows
+- MAE **2.9379**
+- Spearman 0.4980
+
+Rookie Ridge using age + draft capital:
+- MAE **3.1438** — worse
+- Spearman 0.4926
+
+By MAE, Ridge is worse at QB/RB/WR and slightly better at TE.
+
+Draft capital remains extremely directionally stable: later overall pick / later round coefficients are negative in all scored seasons for all four rookie positions. Age coefficients are also negative in all four positions. These are useful historical indicators, but the enriched rookie model does not beat the transparent prior.
+
+Rookie model validated: **NO**.
+
+## Historical ADP / draft-cost benchmark status
+
+**Lawful source exists, but benchmark NOT established.**
+
+CC0 SafeLeagues source passed rights review and schema inspection but failed the predeclared comparable-market sample gate: 6 eligible PPR redraft league drafts vs required 100.
+
+True draft-cost bust claims: **NO**.
+
+## Negative/null findings
+
+- one universal risk overlay does not transfer safely to every position;
+- breakout probability is much less useful than downside probability at RB/WR/TE;
+- TE breakout discrimination is weak;
+- isolated efficiency spikes are less stable than opportunity/share signals;
+- multicollinearity means coefficients are predictive associations, not causal isolated effects;
+- Ridge pooled MAE is favorable but has occasional severe fold-specific extrapolation (notably 2021 WR RMSE), so robustification deserves separate validation;
+- rookie enrichment remains unresolved;
+- broad lawful ADP benchmark remains unresolved.
+
+## Predeclared evidence gate
+
+PASS:
+- stable positive + warning signals in >=3/4 positions — all four positions qualify
+- Ridge pooled MAE lift >=2% — 6.61%
+- player-clustered bootstrap interval upper <0 — upper `-0.0616`
+- risk-prototype pooled Spearman non-worse
+- rights/leakage/frozen-artifact integrity
+
+FAIL:
+- average position rank MAE improved — NO
+- no position rank-MAE regression >5% — NO; WR +5.51%, TE +6.20%
+
+## Primary result
+
+**MORE EVIDENCE NEEDED**
+
+This is a useful positive-but-incomplete result:
+- historical mean projection signal is established strongly enough to merit continued research;
+- stable position-specific positive and downside indicators exist;
+- the universal risk-adjusted ranking formula is not established;
+- no production promotion is authorized.
+
+## Reproducibility
+
+Experiment workflow run: `34400961071` — SUCCESS.
+
+Frozen research artifact:
+- ID `10123492844`
+- SHA-256 `2e945ae17850f9c4aac2731f5bf6901a9e4f10385fe0cbf496e379dd47be1187`
+
+Generated files:
+- `.ai/research/generated/HISTORICAL_RANKING_RESULTS.json`
+- `.ai/research/generated/HISTORICAL_RANKING_ASSET_MANIFEST.json`
+- `.ai/research/generated/HISTORICAL_RANKING_SIGNAL_TABLE.csv`
+- `.ai/research/generated/HISTORICAL_RANKING_ROLLING_METRICS.csv`
+- `.ai/research/generated/HISTORICAL_RANKING_PERMUTATION_IMPORTANCE.csv`
+
+Temporary experiment workflow was removed after the successful evidence freeze and must not appear in the final research PR diff.
+
+## Files intended in final WR-025 research diff
+
+- `.ai/research/HISTORICAL_RANKING_SIGNAL_MANIFEST.md`
+- `.ai/research/HISTORICAL_RANKING_SIGNAL_ANALYSIS.md`
+- `.ai/research/wr025_historical_ranking_signals.py`
+- `.ai/research/wr025_requirements.txt`
+- generated compact WR-025 evidence files listed above
 - `.ai/research/HANDOFF.md`
 
-Production files changed: NO
-Canonical `.ai/shared/*` changed: NO
-Frozen WR-021 snapshot changed: NO
-Production rankings changed: NO
+Production files changed: **NO**  
+Canonical `.ai/shared/*` changed: **NO**  
+Production rankings changed: **NO**
 
 ## Known limitations
-- no 2026 outcome has yet been scored; that is intentional for WR-023
-- the future source asset can change over the season, so every checkpoint requires append-only source metadata/hash provenance
-- frozen universe excludes UDFAs/no-history players and one drafted 2026 skill-position player without deterministic GSIS ID, exactly as WR-021 froze it
-- rookie Ridge remains unvalidated and is diagnostic only
-- a future lawful FantasyPros comparison is outside this protocol unless separately authorized
+
+- historical study is observational and cannot establish causation;
+- 2022–2025 are chronological retrospective folds but not pristine project-level holdouts;
+- no sufficiently broad lawful historical ADP benchmark;
+- no historical preseason depth/injury/roster-as-of source was admitted;
+- zero-game players cannot have defined PPR/game but remain in availability/season-total cohort;
+- universal risk overlay failed WR/TE stability;
+- rookie model remains unvalidated;
+- no 2026 outcome evidence is part of WR-025 by design.
 
 ## Blocking issues
-None for protocol freeze completion.
 
-Any production milestone remains blocked on the final pristine 2026 prospective result and subsequent Manager review.
+None for completion of WR-025 historical research.
+
+Any production ranking-model milestone remains separately blocked on Manager authorization and the frozen WR-023 prospective process. WR-025 does not supersede WR-023.
 
 ## Recommended next role
+
 Manager / Architect
 
 ## Exact next action
-Review the WR-023 protocol/hash manifest and research PR. If accepted, preserve the protocol and snapshot unchanged. Later R&D may score only the predeclared descriptive checkpoints or final Week 18 checkpoint under this exact protocol, with each 2026 outcome asset hashed before scoring.
+
+Review the open WR-025 research PR and accept/reject the `MORE EVIDENCE NEEDED` disposition. If further historical R&D is justified, authorize a separate position-specific risk-calibration task that preserves the current mean-projection benchmark, predeclares calibration on earlier seasons, treats warnings separately from value projection, keeps rookies separate, and does not touch the frozen WR-021/WR-023 prospective artifacts.
 
 ## Checkpoint / SHA
-Verify the final research branch head after this handoff commit and final exact-head CI.
+
+Final branch head must be verified after this handoff commit and exact-head CI. R&D must leave the research PR open for Manager review.
