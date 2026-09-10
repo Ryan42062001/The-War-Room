@@ -1,0 +1,2680 @@
+{
+  "task_id": "WR-027",
+  "starting_main": "9bb1f39013e4069dc59f14644fd383b5a4385ca8",
+  "historical_only": true,
+  "max_stats_season_loaded": 2025,
+  "outcomes_2026_inspected": false,
+  "wr021_snapshot_modified": false,
+  "wr023_protocol_modified": false,
+  "source_reuse": "WR-025 exact historical nflverse asset digests",
+  "final_scored_seasons": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "oos_support_seasons": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "mean_benchmark": {
+    "verified": true,
+    "checks": {
+      "n": [
+        1881,
+        1881
+      ],
+      "baseline_mae": [
+        3.0261717095879073,
+        3.0261717095879073
+      ],
+      "ridge_mae": [
+        2.8261944402894574,
+        2.8261944402894574
+      ],
+      "ridge_spearman": [
+        0.677508831151748,
+        0.677508831151748
+      ]
+    },
+    "active_rows": 1881,
+    "unique_players": 886
+  },
+  "calibration": {
+    "QB": {
+      "breakout": {
+        "n": 297,
+        "prevalence": 0.23905723905723905,
+        "roc_auc": 0.77215505421912,
+        "average_precision": 0.5206314943748358,
+        "brier": 0.15290712648544863,
+        "climatology_brier": 0.18190887551156912,
+        "brier_skill": 0.15943009347158554,
+        "log_loss": 0.46877190716555167,
+        "ece_fixed_bins": 0.04679394350945431,
+        "warning_informative": true
+      },
+      "downside": {
+        "n": 297,
+        "prevalence": 0.31986531986531985,
+        "roc_auc": 0.7474205315268369,
+        "average_precision": 0.6028782372116012,
+        "brier": 0.1792952826898312,
+        "climatology_brier": 0.21755149701277646,
+        "brier_skill": 0.17584900517001978,
+        "log_loss": 0.5300963292775511,
+        "ece_fixed_bins": 0.061077007584305204,
+        "warning_informative": true
+      },
+      "low_availability": {
+        "n": 495,
+        "prevalence": 0.8121212121212121,
+        "roc_auc": 0.7826459102337773,
+        "average_precision": 0.9362004272452897,
+        "brier": 0.13193081272880255,
+        "climatology_brier": 0.1525803489439853,
+        "brier_skill": 0.13533548951813923,
+        "log_loss": 0.40927279524440907,
+        "ece_fixed_bins": 0.04992053175182943,
+        "warning_informative": false
+      }
+    },
+    "RB": {
+      "breakout": {
+        "n": 472,
+        "prevalence": 0.1673728813559322,
+        "roc_auc": 0.6370019647631011,
+        "average_precision": 0.25109276743092823,
+        "brier": 0.1371132125445735,
+        "climatology_brier": 0.13935919994254525,
+        "brier_skill": 0.016116534817204098,
+        "log_loss": 0.4467716930447155,
+        "ece_fixed_bins": 0.029252557662425793,
+        "warning_informative": false
+      },
+      "downside": {
+        "n": 472,
+        "prevalence": 0.2605932203389831,
+        "roc_auc": 0.800195681039905,
+        "average_precision": 0.500237644519143,
+        "brier": 0.1605847254719803,
+        "climatology_brier": 0.1926843938523413,
+        "brier_skill": 0.16659194726979154,
+        "log_loss": 0.484633931098339,
+        "ece_fixed_bins": 0.07751885303759555,
+        "warning_informative": true
+      },
+      "low_availability": {
+        "n": 900,
+        "prevalence": 0.7188888888888889,
+        "roc_auc": 0.724511427017979,
+        "average_precision": 0.8560904558021116,
+        "brier": 0.18211157485408666,
+        "climatology_brier": 0.20208765432098766,
+        "brier_skill": 0.09884858891563864,
+        "log_loss": 0.5465504351737385,
+        "ece_fixed_bins": 0.04622228651954272,
+        "warning_informative": true
+      }
+    },
+    "WR": {
+      "breakout": {
+        "n": 698,
+        "prevalence": 0.1504297994269341,
+        "roc_auc": 0.6641612462860355,
+        "average_precision": 0.2708894542075218,
+        "brier": 0.12324181133530532,
+        "climatology_brier": 0.12780067487130647,
+        "brier_skill": 0.03567167028336793,
+        "log_loss": 0.4142711245758383,
+        "ece_fixed_bins": 0.02895977815268563,
+        "warning_informative": true
+      },
+      "downside": {
+        "n": 698,
+        "prevalence": 0.2191977077363897,
+        "roc_auc": 0.7817233315344486,
+        "average_precision": 0.4346676790393211,
+        "brier": 0.1500336514017368,
+        "climatology_brier": 0.17115007265950197,
+        "brier_skill": 0.12337956350024848,
+        "log_loss": 0.4600609263571688,
+        "ece_fixed_bins": 0.06198210972712032,
+        "warning_informative": true
+      },
+      "low_availability": {
+        "n": 1351,
+        "prevalence": 0.7054034048852702,
+        "roc_auc": 0.733945171819222,
+        "average_precision": 0.8518138555668238,
+        "brier": 0.18056029935417836,
+        "climatology_brier": 0.20780944126153775,
+        "brier_skill": 0.1311256203853851,
+        "log_loss": 0.544799881114456,
+        "ece_fixed_bins": 0.032889946398562006,
+        "warning_informative": true
+      }
+    },
+    "TE": {
+      "breakout": {
+        "n": 414,
+        "prevalence": 0.11594202898550725,
+        "roc_auc": 0.45400728597449913,
+        "average_precision": 0.11292251976753176,
+        "brier": 0.1050809576000538,
+        "climatology_brier": 0.10249947490023105,
+        "brier_skill": -0.025185326093967397,
+        "log_loss": 0.3745881536937597,
+        "ece_fixed_bins": 0.0060447350068334165,
+        "warning_informative": false
+      },
+      "downside": {
+        "n": 414,
+        "prevalence": 0.11594202898550725,
+        "roc_auc": 0.8345286885245901,
+        "average_precision": 0.4709322279530645,
+        "brier": 0.08239034227424911,
+        "climatology_brier": 0.10249947490023105,
+        "brier_skill": 0.19618766482028682,
+        "log_loss": 0.2913322423230193,
+        "ece_fixed_bins": 0.011472421231884801,
+        "warning_informative": true
+      },
+      "low_availability": {
+        "n": 762,
+        "prevalence": 0.7073490813648294,
+        "roc_auc": 0.7301929332678853,
+        "average_precision": 0.8561590041849209,
+        "brier": 0.18234532628162745,
+        "climatology_brier": 0.20700635845716134,
+        "brier_skill": 0.11913176174555695,
+        "log_loss": 0.5498850483559159,
+        "ece_fixed_bins": 0.03907241411599284,
+        "warning_informative": true
+      }
+    }
+  },
+  "rank_results": {
+    "QB": {
+      "mean_only": {
+        "n": 297,
+        "mae": 4.263031588411885,
+        "rmse": 5.3267656865371205,
+        "spearman": 0.5663917040805622,
+        "abs_error_p90": 8.626299036490108,
+        "abs_error_p95": 10.669762114908789,
+        "mean_season_rank_mae": 7.771299018243455,
+        "mean_season_spearman": 0.5562700367376595
+      },
+      "risk_modifier": {
+        "n": 297,
+        "mae": 4.263031588411885,
+        "rmse": 5.3267656865371205,
+        "spearman": 0.5663917040805622,
+        "abs_error_p90": 8.626299036490108,
+        "abs_error_p95": 10.669762114908789,
+        "mean_season_rank_mae": 7.771299018243455,
+        "mean_season_spearman": 0.5562700367376595
+      },
+      "rank_mae_improvement_fraction": 0.0,
+      "severe_rank_regression_gt10_count": 0,
+      "severe_rank_regression_gt20_count": 0
+    },
+    "RB": {
+      "mean_only": {
+        "n": 472,
+        "mae": 2.7845509492473166,
+        "rmse": 3.6453479642897304,
+        "spearman": 0.6892101787540329,
+        "abs_error_p90": 5.703768169517921,
+        "abs_error_p95": 6.523423020298778,
+        "mean_season_rank_mae": 10.456288656762819,
+        "mean_season_spearman": 0.6779770769078576
+      },
+      "risk_modifier": {
+        "n": 472,
+        "mae": 2.7845509492473166,
+        "rmse": 3.6453479642897304,
+        "spearman": 0.6892101787540329,
+        "abs_error_p90": 5.703768169517921,
+        "abs_error_p95": 6.523423020298778,
+        "mean_season_rank_mae": 10.456288656762819,
+        "mean_season_spearman": 0.6779770769078576
+      },
+      "rank_mae_improvement_fraction": 0.0,
+      "severe_rank_regression_gt10_count": 0,
+      "severe_rank_regression_gt20_count": 0
+    },
+    "WR": {
+      "mean_only": {
+        "n": 698,
+        "mae": 2.760522334031476,
+        "rmse": 4.7654215094903085,
+        "spearman": 0.7097674003290303,
+        "abs_error_p90": 5.1450303717085735,
+        "abs_error_p95": 6.374635673099667,
+        "mean_season_rank_mae": 14.564334996623085,
+        "mean_season_spearman": 0.7100950019212932
+      },
+      "risk_modifier": {
+        "n": 698,
+        "mae": 2.760522334031476,
+        "rmse": 4.7654215094903085,
+        "spearman": 0.7097674003290303,
+        "abs_error_p90": 5.1450303717085735,
+        "abs_error_p95": 6.374635673099667,
+        "mean_season_rank_mae": 14.564334996623085,
+        "mean_season_spearman": 0.7100950019212932
+      },
+      "rank_mae_improvement_fraction": 0.0,
+      "severe_rank_regression_gt10_count": 0,
+      "severe_rank_regression_gt20_count": 0
+    },
+    "TE": {
+      "mean_only": {
+        "n": 414,
+        "mae": 1.953620104414097,
+        "rmse": 2.783402433125825,
+        "spearman": 0.661471708960717,
+        "abs_error_p90": 3.7966063467871383,
+        "abs_error_p95": 5.087945265614936,
+        "mean_season_rank_mae": 9.701541749290808,
+        "mean_season_spearman": 0.6402837028307173
+      },
+      "risk_modifier": {
+        "n": 414,
+        "mae": 1.953620104414097,
+        "rmse": 2.783402433125825,
+        "spearman": 0.661471708960717,
+        "abs_error_p90": 3.7966063467871383,
+        "abs_error_p95": 5.087945265614936,
+        "mean_season_rank_mae": 9.701541749290808,
+        "mean_season_spearman": 0.6402837028307173
+      },
+      "rank_mae_improvement_fraction": 0.0,
+      "severe_rank_regression_gt10_count": 0,
+      "severe_rank_regression_gt20_count": 0
+    }
+  },
+  "position_decisions": {
+    "QB": {
+      "decision": "WARNING-ONLY SUPPORTED",
+      "rank_guard_pass": false,
+      "warning_evidence_pass": true,
+      "downside_warning_informative": true,
+      "low_availability_warning_informative": false,
+      "breakout_warning_informative": true
+    },
+    "RB": {
+      "decision": "WARNING-ONLY SUPPORTED",
+      "rank_guard_pass": false,
+      "warning_evidence_pass": true,
+      "downside_warning_informative": true,
+      "low_availability_warning_informative": true,
+      "breakout_warning_informative": false
+    },
+    "WR": {
+      "decision": "WARNING-ONLY SUPPORTED",
+      "rank_guard_pass": false,
+      "warning_evidence_pass": true,
+      "downside_warning_informative": true,
+      "low_availability_warning_informative": true,
+      "breakout_warning_informative": true
+    },
+    "TE": {
+      "decision": "WARNING-ONLY SUPPORTED",
+      "rank_guard_pass": false,
+      "warning_evidence_pass": true,
+      "downside_warning_informative": true,
+      "low_availability_warning_informative": true,
+      "breakout_warning_informative": false
+    }
+  },
+  "robust_regression": {
+    "QB": {
+      "ridge": {
+        "n": 297,
+        "mae": 4.263031588411885,
+        "rmse": 5.3267656865371205,
+        "spearman": 0.5663917040805622,
+        "abs_error_p90": 8.626299036490108,
+        "abs_error_p95": 10.669762114908789,
+        "mean_season_rank_mae": 7.771299018243455
+      },
+      "huber": {
+        "n": 297,
+        "mae": 4.504020083508395,
+        "rmse": 5.676186698057459,
+        "spearman": 0.5363046118551273,
+        "abs_error_p90": 9.072606088566042,
+        "abs_error_p95": 11.474757310033931,
+        "mean_season_rank_mae": 8.020087880359455
+      },
+      "clustered_bootstrap_huber_minus_ridge_mae": {
+        "clusters": 113,
+        "replicates": 2000,
+        "seed": 27027,
+        "mean_delta_mae_first_minus_second": 0.2452763691129234,
+        "ci95_low": 0.0717402864379626,
+        "ci95_high": 0.4244337679541364
+      }
+    },
+    "RB": {
+      "ridge": {
+        "n": 472,
+        "mae": 2.7845509492473166,
+        "rmse": 3.6453479642897304,
+        "spearman": 0.6892101787540329,
+        "abs_error_p90": 5.703768169517921,
+        "abs_error_p95": 6.523423020298778,
+        "mean_season_rank_mae": 10.456288656762819
+      },
+      "huber": {
+        "n": 472,
+        "mae": 2.798087935893348,
+        "rmse": 3.8275522746229247,
+        "spearman": 0.6642937747708203,
+        "abs_error_p90": 6.038838800598784,
+        "abs_error_p95": 7.6131919754423,
+        "mean_season_rank_mae": 10.757872160973772
+      },
+      "clustered_bootstrap_huber_minus_ridge_mae": {
+        "clusters": 229,
+        "replicates": 2000,
+        "seed": 27028,
+        "mean_delta_mae_first_minus_second": 0.014340794608987066,
+        "ci95_low": -0.07100506448623489,
+        "ci95_high": 0.11215166915354524
+      }
+    },
+    "WR": {
+      "ridge": {
+        "n": 698,
+        "mae": 2.760522334031476,
+        "rmse": 4.7654215094903085,
+        "spearman": 0.7097674003290303,
+        "abs_error_p90": 5.1450303717085735,
+        "abs_error_p95": 6.374635673099667,
+        "mean_season_rank_mae": 14.564334996623085
+      },
+      "huber": {
+        "n": 698,
+        "mae": 2.8089009679329275,
+        "rmse": 6.2245611456092576,
+        "spearman": 0.7003569255764059,
+        "abs_error_p90": 5.263536251782448,
+        "abs_error_p95": 6.707732028773363,
+        "mean_season_rank_mae": 14.880697686434099
+      },
+      "clustered_bootstrap_huber_minus_ridge_mae": {
+        "clusters": 352,
+        "replicates": 2000,
+        "seed": 27029,
+        "mean_delta_mae_first_minus_second": 0.047601053770160655,
+        "ci95_low": -0.06613914158203335,
+        "ci95_high": 0.22514296249928592
+      }
+    },
+    "TE": {
+      "ridge": {
+        "n": 414,
+        "mae": 1.953620104414097,
+        "rmse": 2.783402433125825,
+        "spearman": 0.661471708960717,
+        "abs_error_p90": 3.7966063467871383,
+        "abs_error_p95": 5.087945265614936,
+        "mean_season_rank_mae": 9.701541749290808
+      },
+      "huber": {
+        "n": 414,
+        "mae": 1.9091290852246419,
+        "rmse": 2.570589259808909,
+        "spearman": 0.659521418628056,
+        "abs_error_p90": 3.74961817545421,
+        "abs_error_p95": 5.365819808698717,
+        "mean_season_rank_mae": 9.692131985385247
+      },
+      "clustered_bootstrap_huber_minus_ridge_mae": {
+        "clusters": 192,
+        "replicates": 2000,
+        "seed": 27030,
+        "mean_delta_mae_first_minus_second": -0.04345864643173871,
+        "ci95_low": -0.12913832851931478,
+        "ci95_high": 0.03156710911674589
+      }
+    }
+  },
+  "weight_selection": [
+    {
+      "season": 2018,
+      "position": "QB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2018,
+      "position": "RB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2018,
+      "position": "WR",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2018,
+      "position": "TE",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2019,
+      "position": "QB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2019,
+      "position": "RB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2019,
+      "position": "WR",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2019,
+      "position": "TE",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2020,
+      "position": "QB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2020,
+      "position": "RB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2020,
+      "position": "WR",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2020,
+      "position": "TE",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2021,
+      "position": "QB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2021,
+      "position": "RB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2021,
+      "position": "WR",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2021,
+      "position": "TE",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2022,
+      "position": "QB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2022,
+      "position": "RB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2022,
+      "position": "WR",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2022,
+      "position": "TE",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2023,
+      "position": "QB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2023,
+      "position": "RB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2023,
+      "position": "WR",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2023,
+      "position": "TE",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2024,
+      "position": "QB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2024,
+      "position": "RB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2024,
+      "position": "WR",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2024,
+      "position": "TE",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2025,
+      "position": "QB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2025,
+      "position": "RB",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2025,
+      "position": "WR",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    },
+    {
+      "season": 2025,
+      "position": "TE",
+      "U": 0.0,
+      "D": 0.0,
+      "A": 0.0,
+      "reason": "no_candidate_passed_prior_guard",
+      "eligible_candidates": 0
+    }
+  ],
+  "model_meta": [
+    {
+      "season": 2016,
+      "position": "QB",
+      "train_rows": 114,
+      "test_rows": 58,
+      "active_test_rows": 35,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 0,
+          "platt_used": false
+        },
+        "downside": {
+          "prior_oos_n": 0,
+          "platt_used": false
+        },
+        "low_availability": {
+          "prior_oos_n": 0,
+          "platt_used": false
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        },
+        "downside": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        }
+      }
+    },
+    {
+      "season": 2016,
+      "position": "RB",
+      "train_rows": 212,
+      "test_rows": 117,
+      "active_test_rows": 69,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 0,
+          "platt_used": false
+        },
+        "downside": {
+          "prior_oos_n": 0,
+          "platt_used": false
+        },
+        "low_availability": {
+          "prior_oos_n": 0,
+          "platt_used": false
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        },
+        "downside": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        }
+      }
+    },
+    {
+      "season": 2016,
+      "position": "WR",
+      "train_rows": 303,
+      "test_rows": 153,
+      "active_test_rows": 71,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 0,
+          "platt_used": false
+        },
+        "downside": {
+          "prior_oos_n": 0,
+          "platt_used": false
+        },
+        "low_availability": {
+          "prior_oos_n": 0,
+          "platt_used": false
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        },
+        "downside": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        }
+      }
+    },
+    {
+      "season": 2016,
+      "position": "TE",
+      "train_rows": 193,
+      "test_rows": 95,
+      "active_test_rows": 53,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 0,
+          "platt_used": false
+        },
+        "downside": {
+          "prior_oos_n": 0,
+          "platt_used": false
+        },
+        "low_availability": {
+          "prior_oos_n": 0,
+          "platt_used": false
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        },
+        "downside": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        }
+      }
+    },
+    {
+      "season": 2017,
+      "position": "QB",
+      "train_rows": 172,
+      "test_rows": 58,
+      "active_test_rows": 35,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 35,
+          "platt_used": false
+        },
+        "downside": {
+          "prior_oos_n": 35,
+          "platt_used": false
+        },
+        "low_availability": {
+          "prior_oos_n": 58,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        },
+        "downside": {
+          "thresholds": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "source": "fixed_fallback"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.6779906903357035,
+            0.8942218817661551,
+            0.9345771509191786
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2017,
+      "position": "RB",
+      "train_rows": 329,
+      "test_rows": 117,
+      "active_test_rows": 65,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 69,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 69,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 117,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.4669254191382599,
+            0.6437913184456433,
+            0.7093001700243932
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.48108814210025275,
+            0.7472565476466108,
+            0.8724013964949517
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.5762317907118283,
+            0.7325537398927036,
+            0.8237687856753139
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2017,
+      "position": "WR",
+      "train_rows": 456,
+      "test_rows": 148,
+      "active_test_rows": 68,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 71,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 71,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 153,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.46710943276759626,
+            0.6086076159145013,
+            0.7229034643465825
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.3844028829049944,
+            0.6788154501914113,
+            0.8895047297219134
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.5461680884040893,
+            0.7602965728939852,
+            0.8828523648720698
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2017,
+      "position": "TE",
+      "train_rows": 288,
+      "test_rows": 100,
+      "active_test_rows": 54,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 53,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 53,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 95,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.30392334106447355,
+            0.60295269407246,
+            0.7508430157921713
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.21335207310181573,
+            0.393513639680447,
+            0.8246341825996805
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.5029076012242957,
+            0.7275615245061227,
+            0.8751970605675556
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2018,
+      "position": "QB",
+      "train_rows": 230,
+      "test_rows": 57,
+      "active_test_rows": 29,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 70,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 70,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 116,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.4011998613362092,
+            0.7087500770963076,
+            0.8913086696534982
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.4209606466856479,
+            0.663031446661585,
+            0.8712497676572343
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.7727832505156107,
+            0.9342917593519098,
+            0.9623710974675337
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2018,
+      "position": "RB",
+      "train_rows": 446,
+      "test_rows": 111,
+      "active_test_rows": 58,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 134,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 134,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 234,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.21938503219315075,
+            0.4711610171402958,
+            0.6733098545252034
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.287383666013696,
+            0.5423890538719587,
+            0.7874865892110742
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.6869937259620067,
+            0.7371443387421143,
+            0.7717513539234971
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2018,
+      "position": "WR",
+      "train_rows": 604,
+      "test_rows": 156,
+      "active_test_rows": 84,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 139,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 139,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 301,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.27155416401347116,
+            0.4784230788031247,
+            0.6692733407365307
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.2569793899447335,
+            0.44837281763814985,
+            0.7605959720310799
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.6437729604228722,
+            0.7625617763074868,
+            0.827095124266551
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2018,
+      "position": "TE",
+      "train_rows": 388,
+      "test_rows": 95,
+      "active_test_rows": 51,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 107,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 107,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 195,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.1360186380103438,
+            0.29571721526158246,
+            0.6482960450541007
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.12003616665561052,
+            0.2958206827926767,
+            0.7389022926577554
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.6956282622320402,
+            0.825739772941706,
+            0.8804114740417444
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2019,
+      "position": "QB",
+      "train_rows": 287,
+      "test_rows": 60,
+      "active_test_rows": 31,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 99,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 99,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 173,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.26704845437631497,
+            0.5710161025870112,
+            0.8392824676760283
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.3148206490770026,
+            0.5580735446764888,
+            0.8152544681646408
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.8001515311696576,
+            0.9224619411793082,
+            0.9573247545624107
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2019,
+      "position": "RB",
+      "train_rows": 557,
+      "test_rows": 111,
+      "active_test_rows": 55,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 192,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 192,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 345,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.21685233597628345,
+            0.3310005336484533,
+            0.6342381661836874
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.27837514831994026,
+            0.4567267545761047,
+            0.7439556711926931
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.6970291177454477,
+            0.7373372328853117,
+            0.7701560791279872
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2019,
+      "position": "WR",
+      "train_rows": 760,
+      "test_rows": 175,
+      "active_test_rows": 85,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 223,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 223,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 457,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.2240774116796264,
+            0.3122245006973588,
+            0.5782555868258384
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.2052836064260202,
+            0.39234142603846145,
+            0.6958239402824478
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.6754034424414332,
+            0.7838623332988178,
+            0.8458588072788271
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2019,
+      "position": "TE",
+      "train_rows": 483,
+      "test_rows": 98,
+      "active_test_rows": 49,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 158,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 158,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 290,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.10974758046486502,
+            0.1984981961950812,
+            0.5685854657002831
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.09290446952487943,
+            0.23085413268684682,
+            0.6558869468366053
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.6892749051943483,
+            0.7945795408539529,
+            0.8588812775054423
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2020,
+      "position": "QB",
+      "train_rows": 347,
+      "test_rows": 57,
+      "active_test_rows": 37,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 130,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 130,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 233,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.2266232851059367,
+            0.476278475617022,
+            0.8065347192301205
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.27636458650011364,
+            0.4877272398607637,
+            0.8023548589535785
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.8273817072494083,
+            0.9291795647764429,
+            0.9573247545624107
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2020,
+      "position": "RB",
+      "train_rows": 668,
+      "test_rows": 110,
+      "active_test_rows": 62,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 247,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 247,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 456,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.21285957270845504,
+            0.24397423731878426,
+            0.5710456723672515
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.27453907068205596,
+            0.447613922425226,
+            0.7000259412486427
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.69936780792842,
+            0.7427600807026009,
+            0.7860876344246781
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2020,
+      "position": "WR",
+      "train_rows": 935,
+      "test_rows": 175,
+      "active_test_rows": 94,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 308,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 308,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 632,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.20804535124307888,
+            0.29146106755905177,
+            0.5067514012308697
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.1813196664784568,
+            0.36937209782635105,
+            0.6225556795769721
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.6970324570111806,
+            0.7978673502225414,
+            0.8675628050096478
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2020,
+      "position": "TE",
+      "train_rows": 581,
+      "test_rows": 95,
+      "active_test_rows": 48,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 207,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 207,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 388,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.12619482504806384,
+            0.14465005222424693,
+            0.3808900744764335
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.07769833293127462,
+            0.21561549593330812,
+            0.582116957877738
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.6961633024029562,
+            0.7803038055210395,
+            0.8528225175010158
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2021,
+      "position": "QB",
+      "train_rows": 404,
+      "test_rows": 63,
+      "active_test_rows": 37,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 167,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 167,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 290,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.19299498211292118,
+            0.34989423641883677,
+            0.7277717675250255
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.3020031101668002,
+            0.42642349527714274,
+            0.7325632430291519
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.8405200234767558,
+            0.9291262878197587,
+            0.9536683860997015
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2021,
+      "position": "RB",
+      "train_rows": 778,
+      "test_rows": 116,
+      "active_test_rows": 65,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 309,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 309,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 566,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.20621696123113745,
+            0.23401902866200686,
+            0.4933313391093066
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.27180701002024166,
+            0.4395495968170317,
+            0.6704721522443414
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.7006024779914102,
+            0.7461184787165178,
+            0.7876900956408386
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2021,
+      "position": "WR",
+      "train_rows": 1110,
+      "test_rows": 162,
+      "active_test_rows": 91,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 402,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 402,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 807,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.19795043255451222,
+            0.2769955448219605,
+            0.43045253220084073
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.17886415249961674,
+            0.3338624196254476,
+            0.5312503936569214
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.7026384229757582,
+            0.8049982725621649,
+            0.8701029370462651
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2021,
+      "position": "TE",
+      "train_rows": 676,
+      "test_rows": 94,
+      "active_test_rows": 51,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 255,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 255,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 483,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.1310213866830998,
+            0.1461618076709995,
+            0.3077789571335114
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.07769833293127462,
+            0.21083809970803086,
+            0.5442445922510458
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.7080109126652556,
+            0.7844783605275462,
+            0.8484094485978929
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2022,
+      "position": "QB",
+      "train_rows": 467,
+      "test_rows": 66,
+      "active_test_rows": 44,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 204,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 204,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 353,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.18585780968129856,
+            0.32850317262197776,
+            0.6772711621476099
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.2995121333304807,
+            0.42091603214886314,
+            0.661958736913446
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.850105284946473,
+            0.928527424561332,
+            0.9538425983487864
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2022,
+      "position": "RB",
+      "train_rows": 894,
+      "test_rows": 119,
+      "active_test_rows": 62,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 374,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 374,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 682,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.20644463048498202,
+            0.2332759454197689,
+            0.42499534058184024
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.2628475365028388,
+            0.433676183317682,
+            0.6446288441622645
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.7021864672478699,
+            0.748474934480219,
+            0.7868538053282723
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2022,
+      "position": "WR",
+      "train_rows": 1272,
+      "test_rows": 188,
+      "active_test_rows": 96,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 493,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 493,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 969,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.19617598996215088,
+            0.2692995760137034,
+            0.36404155497457275
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.17779715661504528,
+            0.31570929267809944,
+            0.5037431199489512
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.7026384229757582,
+            0.8092241081083539,
+            0.8706979067276799
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2022,
+      "position": "TE",
+      "train_rows": 770,
+      "test_rows": 102,
+      "active_test_rows": 56,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 306,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 306,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 577,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.13379249390945613,
+            0.14995945997537158,
+            0.24408912333505334
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.07680834692990517,
+            0.19593643465171012,
+            0.5084255398520681
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.7144696725351454,
+            0.7917707982158235,
+            0.8476814800313066
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2023,
+      "position": "QB",
+      "train_rows": 533,
+      "test_rows": 66,
+      "active_test_rows": 42,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 248,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 248,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 419,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.1839940524539968,
+            0.31997330252715733,
+            0.5677357659599803
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.2970809558528318,
+            0.4175533559902803,
+            0.6166515648625533
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.855277289008602,
+            0.9290730108630745,
+            0.9553255795683617
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2023,
+      "position": "RB",
+      "train_rows": 1013,
+      "test_rows": 117,
+      "active_test_rows": 59,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 436,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 436,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 801,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.20489090257769849,
+            0.2296781877686856,
+            0.3638137198768786
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.25673820941253134,
+            0.4297660526885756,
+            0.6242922761312037
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.7033755647975339,
+            0.7509941722213823,
+            0.7885042208536557
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2023,
+      "position": "WR",
+      "train_rows": 1460,
+      "test_rows": 171,
+      "active_test_rows": 77,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 589,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 589,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 1157,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.19312198587105397,
+            0.2569281142156041,
+            0.33820133019000265
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.1754635915112562,
+            0.28964912173441826,
+            0.46081788418825326
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.7074892846272056,
+            0.8117080121805936,
+            0.8663378879002309
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2023,
+      "position": "TE",
+      "train_rows": 872,
+      "test_rows": 92,
+      "active_test_rows": 52,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 362,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 362,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 679,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.1340328346781321,
+            0.14956430089244221,
+            0.2176084415831466
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.07698984496620995,
+            0.18391727049410117,
+            0.46742575646722706
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.720325952223461,
+            0.7970909121264835,
+            0.8486680985260989
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2024,
+      "position": "QB",
+      "train_rows": 599,
+      "test_rows": 66,
+      "active_test_rows": 41,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 290,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 290,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 485,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.1815253068440722,
+            0.31036148779567474,
+            0.5559340779137246
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.3000106219244666,
+            0.417927223997732,
+            0.5982185088885245
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.8611253901835968,
+            0.9325327973299485,
+            0.9601359172530826
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2024,
+      "position": "RB",
+      "train_rows": 1130,
+      "test_rows": 110,
+      "active_test_rows": 59,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 495,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 495,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 918,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.20281925571148957,
+            0.22836881094490974,
+            0.3081934279705377
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.2611308080415161,
+            0.4298074906120398,
+            0.6254337749497686
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.7058848022801318,
+            0.7547614518003869,
+            0.7921256527121712
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2024,
+      "position": "WR",
+      "train_rows": 1631,
+      "test_rows": 154,
+      "active_test_rows": 85,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 666,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 666,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 1328,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.18949376498894446,
+            0.2507920389285871,
+            0.32297792575272305
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.17511446807362546,
+            0.2857353907927589,
+            0.44722724009944054
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.7073862536269855,
+            0.8153170098951603,
+            0.8646003806734084
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2024,
+      "position": "TE",
+      "train_rows": 964,
+      "test_rows": 91,
+      "active_test_rows": 50,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 414,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 414,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 771,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.1327366934402418,
+            0.14659955461374263,
+            0.19811385337289528
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.07921385148455656,
+            0.18194564141969932,
+            0.41642785168727303
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.720325952223461,
+            0.7990255023164228,
+            0.8526833457866482
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2025,
+      "position": "QB",
+      "train_rows": 665,
+      "test_rows": 60,
+      "active_test_rows": 36,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 331,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 331,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 551,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.18252832490696586,
+            0.3090900380759495,
+            0.5558004194961476
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.29471853386647195,
+            0.4187065286686214,
+            0.5929970251252106
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.859050786905957,
+            0.9310518114778782,
+            0.9586676076467096
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2025,
+      "position": "RB",
+      "train_rows": 1240,
+      "test_rows": 106,
+      "active_test_rows": 52,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 554,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 554,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 1028,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.20289794301760214,
+            0.22875270623865954,
+            0.2765257805215591
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.24826063006371024,
+            0.41972096956693017,
+            0.6207719592352676
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.707142137326678,
+            0.7601889746139134,
+            0.8029483912908135
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2025,
+      "position": "WR",
+      "train_rows": 1785,
+      "test_rows": 170,
+      "active_test_rows": 86,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 751,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 751,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 1482,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.18782133403226106,
+            0.24483476917441147,
+            0.3144953719004225
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.17535262818896546,
+            0.2857169289156333,
+            0.4336300026493752
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.7045723728491183,
+            0.8150490179189447,
+            0.8655249918746356
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    },
+    {
+      "season": 2025,
+      "position": "TE",
+      "train_rows": 1055,
+      "test_rows": 95,
+      "active_test_rows": 57,
+      "huber_available": true,
+      "calibration": {
+        "breakout": {
+          "prior_oos_n": 464,
+          "platt_used": true
+        },
+        "downside": {
+          "prior_oos_n": 464,
+          "platt_used": true
+        },
+        "low_availability": {
+          "prior_oos_n": 862,
+          "platt_used": true
+        }
+      },
+      "tiering": {
+        "breakout": {
+          "thresholds": [
+            0.12940969257250023,
+            0.14481740287852862,
+            0.17966927008802216
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "downside": {
+          "thresholds": [
+            0.07514267545714298,
+            0.1746177506835348,
+            0.38878288521224713
+          ],
+          "source": "prior_oos_quantiles"
+        },
+        "low_availability": {
+          "thresholds": [
+            0.7206790281029473,
+            0.8012824787503905,
+            0.8551524492620702
+          ],
+          "source": "prior_oos_quantiles"
+        }
+      }
+    }
+  ],
+  "frozen_integrity_before": {
+    "snapshot_sha256": "9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d",
+    "protocol_sha256": "f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c"
+  },
+  "frozen_integrity_after": {
+    "snapshot_sha256": "9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d",
+    "protocol_sha256": "f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c"
+  },
+  "rookie_boundary": "separate; no rookie model fitted in WR-027"
+}
