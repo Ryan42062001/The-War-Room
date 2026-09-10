@@ -127,6 +127,13 @@ try {
   const nearHeight = await page.locator('#draft-command-bar').evaluate(element => element.getBoundingClientRect().height);
   assert.ok(nearHeight >= waitingHeight, `Near state must not visually collapse below Waiting (${nearHeight} < ${waitingHeight})`);
 
+  // The command bar can re-render its native <details> while state settles.
+  // Normalize it closed before testing the explicit reopen/Escape contract so
+  // the regression is not timing-dependent on a stale disclosure instance.
+  await page.evaluate(() => {
+    const details = document.querySelector('.draft-command-setup-disclosure');
+    if (details?.open) details.querySelector('summary')?.click();
+  });
   await page.waitForFunction(() => {
     const details = document.querySelector('.draft-command-setup-disclosure');
     return Boolean(details && !details.open);
