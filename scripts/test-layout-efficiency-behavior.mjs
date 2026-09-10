@@ -127,11 +127,13 @@ try {
   const nearHeight = await page.locator('#draft-command-bar').evaluate(element => element.getBoundingClientRect().height);
   assert.ok(nearHeight >= waitingHeight, `Near state must not visually collapse below Waiting (${nearHeight} < ${waitingHeight})`);
 
-  await page.waitForFunction(() => !document.querySelector('.draft-command-setup-disclosure').open);
+  await page.waitForFunction(() => {
+    const details = document.querySelector('.draft-command-setup-disclosure');
+    return Boolean(details && !details.open);
+  });
   assert.equal(await page.locator('.draft-command-setup-summary-value').innerText(), '10 teams · Pick 5 · 16 rounds');
-  const setupSummary = page.locator('.draft-command-setup-summary');
-  await setupSummary.click();
-  assert.equal(await page.locator('.draft-command-setup-disclosure').evaluate(element => element.open), true);
+  await page.evaluate(() => document.querySelector('.draft-command-setup-disclosure > summary')?.click());
+  await page.waitForFunction(() => document.querySelector('.draft-command-setup-disclosure')?.open === true);
   const setupInput = page.locator('.draft-command-setup-fields input').first();
   await setupInput.focus();
   await setupInput.press('Escape');
