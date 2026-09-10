@@ -204,17 +204,28 @@
   function configureSetupDisclosure(details) {
     if (!details || details.dataset.layoutEfficiencyReady === 'true') return;
     details.dataset.layoutEfficiencyReady = 'true';
+    var summary = details.querySelector('summary');
+
+    // Preserve explicit user intent independently from native <details> toggle
+    // timing. The command bar can replace this disclosure while draft state is
+    // updating, so a delayed/programmatic toggle must never redefine whether
+    // the user intended Draft Setup to stay open.
+    if (summary) {
+      summary.addEventListener('click', function() {
+        if (hasDraftProgress() || isPhoneLayout()) setupEditing = !details.open;
+      });
+    }
+
     details.addEventListener('keydown', function(event) {
       if (event.key !== 'Escape' || !details.open) return;
       event.preventDefault();
       setupEditing = false;
       details.open = false;
-      var summary = details.querySelector('summary');
-      if (summary) summary.focus();
+      var currentSummary = details.querySelector('summary');
+      if (currentSummary) currentSummary.focus();
     });
     details.addEventListener('toggle', function() {
       var phone = isPhoneLayout();
-      if (hasDraftProgress() || phone) setupEditing = details.open;
 
       // On phones the setup fields are intentionally progressive disclosure.
       // Mark an open state only after the disclosure has actually toggled so
@@ -225,8 +236,9 @@
 
       if (!details.open) {
         var active = document.activeElement;
-        if (active && active !== details.querySelector('summary') && details.contains(active)) {
-          details.querySelector('summary').focus();
+        var currentSummary = details.querySelector('summary');
+        if (active && currentSummary && active !== currentSummary && details.contains(active)) {
+          currentSummary.focus();
         }
       }
     });
