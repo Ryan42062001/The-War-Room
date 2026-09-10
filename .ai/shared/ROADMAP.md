@@ -44,6 +44,56 @@ Key findings:
 Manager decision:
 Preserve the mean projection and continue only with position-specific risk calibration. Do not promote a universal risk penalty.
 
+### WR-028 — Custom Ranking Engine Roadmap / Architecture Plan
+Status: COMPLETE
+Task: `.ai/manager/WR-028.md`
+
+Manager established a staged path for completing a War Room-owned ranking engine before season end while keeping production promotion gated.
+
+Engine architecture is separated into:
+1. returning-player expected performance;
+2. opportunity / role;
+3. position-specific risk and uncertainty;
+4. rookie handling;
+5. availability / expected games;
+6. season-total projection;
+7. positional replacement value;
+8. cross-position draft value / overall rank;
+9. tiers / explanations / warnings;
+10. ESPN market timing as a separate signal.
+
+Planned evidence-gated phases after WR-027 now include an explicit advanced-context enrichment gate before the returning-player v1 freeze:
+- WR-029: evaluate snap/participation, route/YPRR-style features, advanced efficiency, offensive-line proxies, coaching/scheme, team context, depth/competition, age/physical and maintainable availability context;
+- freeze returning-player projection specification only after WR-029 disposition;
+- validate rookie engine v1;
+- validate availability model;
+- build season-total distribution;
+- define replacement-level and cross-position custom draft value;
+- replay historical preseasons with the complete ranking engine;
+- generate a clearly labeled 2026 custom development board from frozen/preseason inputs;
+- integrate custom rankings as a non-authoritative shadow production path;
+- independent engine QA;
+- retain WR-023 final Week 18 prospective validation as a hard gate on production-authority consideration;
+- only then consider a separate production-ranking milestone.
+
+Definition:
+- `ENGINE-COMPLETE` may be achieved before the 2026 season ends.
+- `PRODUCTION-AUTHORITATIVE` may not be considered until the frozen WR-023 prospective gate and a separate Manager production decision are satisfied.
+
+No future phase is automatically activated merely because it appears on this roadmap. Each phase requires the preceding evidence gate and a dedicated WR task when activated.
+
+### WR-029 — Advanced Context Feature Enrichment / Source Feasibility
+Role: R&D
+Status: PLANNED / BLOCKED ON WR-027 MANAGER DISPOSITION
+Production authorization: NONE
+Task: `.ai/manager/WR-029.md`
+
+Purpose:
+- test richer preseason-known usage, snap, route, advanced-efficiency, offensive-line, team, coaching/scheme and depth/competition features before returning-player v1 is frozen;
+- require exact rights and point-in-time semantics for each source family;
+- classify each family as core-model, warning/explanation-only, insufficient, or excluded for rights/coverage/point-in-time reasons;
+- do not inspect 2026 outcomes and do not touch WR-021/WR-023 frozen artifacts.
+
 ## Active Parallel Work Wave
 ### PW-003 — Phone UX + Custom-Ranking Development
 Status: ACTIVE
@@ -93,15 +143,16 @@ Required validation:
 - ESPN rank/ADP timing only
 - WR-D001 remains ACTIVE
 
-WR-027 is retrospective research and does not supersede the frozen WR-023 prospective contract.
+WR-027/WR-029 and future custom-engine historical development do not supersede the frozen WR-023 prospective contract.
 
 ## Integration path
-- WR-027 research result -> Manager review/disposition.
+- WR-027 research result -> Manager review/disposition -> WR-029 activation if still justified.
+- WR-029 result -> Manager accepts/rejects feature families -> returning-player v1 specification freeze.
 - WR-026 Builder PR -> reconcile with current main -> green CI -> Independent Auditor -> Manager merge decision.
-- These paths remain independent.
+- Phone and ranking paths remain independent.
 
 ## Current roles
-- Manager: IDLE after WR-025 disposition / WR-027 assignment
+- Manager: IDLE after WR-029 planning update
 - Builder: ACTIVE — WR-026
 - R&D: ACTIVE — WR-027
 - Auditor: IDLE / waiting for WR-026 final PR
