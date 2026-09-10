@@ -17,6 +17,7 @@
   var PHONE_DECISION_SCRIPT_ID = 'war-room-phone-decision-script';
   var observer = null;
   var setupEditing = false;
+  var setupFocusSummaryRequested = false;
   var syncQueued = false;
   var lastCommandMode = '';
   var layoutReady = false;
@@ -220,9 +221,14 @@
       if (event.key !== 'Escape' || !details.open) return;
       event.preventDefault();
       setupEditing = false;
+      setupFocusSummaryRequested = true;
       details.open = false;
       var currentSummary = details.querySelector('summary');
       if (currentSummary) currentSummary.focus();
+      // Reconcile focus on the next presentation frame as well. If the command
+      // bar replaces this <details> during the same state update, the current
+      // focused summary is detached and focus would otherwise fall to body.
+      scheduleSynchronize();
     });
     details.addEventListener('toggle', function() {
       var phone = isPhoneLayout();
@@ -292,6 +298,14 @@
       if (!phone) details.removeAttribute('data-phone-user-open');
       if (details.dataset.progress !== 'true') details.open = Boolean(setupEditing);
       details.dataset.progress = 'true';
+    }
+
+    if (setupFocusSummaryRequested && !details.open) {
+      var focusSummary = details.querySelector('summary');
+      if (focusSummary) {
+        focusSummary.focus();
+        setupFocusSummaryRequested = false;
+      }
     }
   }
 
