@@ -1,39 +1,81 @@
 # War Room Team Workflow
 
-Status: ACTIVE
-Last updated: 2026-09-08
+Status: ACTIVE — WORKFLOW V2
+Last updated: 2026-09-09
 Owner: Manager / Architect
 
-This file is the canonical repository workflow for the Fantasy Draft War Room. If older repository guidance conflicts with this file, this file wins unless the Manager explicitly records a newer approved change.
+This file is the canonical repository workflow for The War Room. If older repository guidance conflicts with this file, this file wins unless the Manager records a newer approved change.
 
 ## Team roles
 
 1. **Manager / Architect** — roadmap, requirements, architecture, priorities, task decomposition, acceptance criteria, integration decisions, merge authority, canonical shared state.
-2. **Implementation Engineer** — production implementation, debugging, tests, technical execution, remediation.
-3. **Research & Development (R&D)** — external APIs, documentation, feasibility, technical uncertainty, difficult investigations, forward-looking product/technical R&D, isolated experiments/proofs of concept, future architecture evaluation, product/reliability gap discovery, and evidence-backed milestone proposals.
+2. **Implementation Engineer / Builder** — production implementation, debugging, tests, technical execution, remediation.
+3. **Research & Development (R&D)** — external APIs/docs/data, feasibility, technical uncertainty, difficult investigations, forward-looking R&D, isolated experiments/proofs of concept, algorithms/model research, source-rights investigation, future architecture evaluation, and evidence-backed milestone proposals.
 4. **Independent Auditor / QA** — independent verification, regression analysis, real/mock draft validation, PASS/FAIL decisions.
 
-The R&D role continues to use `.ai/research/` as its role-owned directory. Do not create a separate `.ai/rnd/` tree unless a future Manager decision establishes a compelling compatibility reason.
+R&D continues to use `.ai/research/`. Do not create a separate `.ai/rnd/` tree unless a future Manager decision requires it.
 
-## Canonical project files
+## Canonical project sources
 
-Read these before relying on chat history:
+### Fast-path current-task index
+- `.ai/shared/ACTIVE_TASKS.json` — Manager-owned machine-readable current task/dependency/status index.
 
+### Human-readable canonical sources
 - `.ai/shared/PROJECT_STATE.md`
 - `.ai/shared/ROADMAP.md`
 - `.ai/shared/DECISIONS.md`
 - `.ai/shared/WORKFLOW.md`
 - `.ai/manager/HANDOFF.md`
-- the latest relevant role handoff
+- latest relevant role handoff
+- active task spec under `.ai/manager/WR-###.md`
 
-Repository state overrides stale conversational memory. Conflicts must be surfaced, not silently reconciled.
+Repository state overrides stale chat memory. Conflicts must be surfaced, not silently reconciled.
 
-## Task IDs
+`ACTIVE_TASKS.json` does not replace task specs or evidence reports. It is the current-control-plane index. Only the Manager updates `.ai/shared/*`.
 
-Every meaningful work item uses a unique ID such as `WR-001`.
+## Refresh modes
 
-Each active task should define:
+### Fast Refresh
+Use for routine status checks, ordinary `continue`, checking whether a worker finished, and low-risk task resumption when no architecture/merge/release decision is being made.
 
+Read/verify:
+1. actual `main` SHA;
+2. `.ai/shared/ACTIVE_TASKS.json`;
+3. open PRs/current mergeability when relevant;
+4. the active task spec and latest relevant role handoff if the task changed or a handoff is being evaluated;
+5. contradictions or unexpected target advancement.
+
+Do not reread the full historical roadmap/decision record merely to answer a simple current-status question.
+
+### Full Refresh
+Required before:
+- creating/activating a new meaningful task;
+- architecture or roadmap decisions;
+- durable product decisions;
+- Manager disposition of research that changes the next milestone;
+- production merge/release decisions;
+- audit/release-gate decisions with meaningful integration risk;
+- resolving contradictions/conflicts;
+- resuming after a materially stale checkpoint;
+- any case where Fast Refresh exposes uncertainty that could affect correctness.
+
+Read/verify:
+1. current `main` and open PRs;
+2. `ACTIVE_TASKS.json`;
+3. `PROJECT_STATE.md`;
+4. `ROADMAP.md`;
+5. `DECISIONS.md`;
+6. `WORKFLOW.md`;
+7. Manager handoff;
+8. relevant role handoff(s);
+9. active task spec(s);
+10. branch/checkpoint and target advancement.
+
+## Task IDs and lifecycle
+
+Every meaningful work item uses a unique `WR-###` Task ID. Parallel coordination uses `PW-###` and does not replace the underlying WR IDs.
+
+Task specs should define:
 - TASK ID
 - OBJECTIVE
 - WHY IT IS NEEDED
@@ -48,202 +90,139 @@ Each active task should define:
 
 Do not mix unrelated work under one Task ID.
 
+### Workflow V2 lifecycle states
+
+Current task state is indexed in `ACTIVE_TASKS.json` using:
+- `PLANNED` — approved future work, not yet assignable;
+- `BLOCKED` — approved but waiting on an explicit dependency/gate;
+- `ASSIGNED` — activated by Manager, worker not yet confirmed in progress;
+- `IN_PROGRESS` — worker is executing;
+- `MANAGER_REVIEW_READY` — research/architecture evidence is complete for Manager disposition;
+- `AUDIT_READY` — production work is complete enough for independent Auditor;
+- `MERGE_READY` — required audit/review gates have passed and Manager may merge;
+- `REWORK_REQUIRED` — a blocking finding or integration issue must be remediated;
+- `MERGED` — PR/integration merged, final reconciliation not necessarily complete;
+- `CLOSED` — Manager has reconciled canonical state and the task is complete.
+
+Workers report completion/readiness in their role handoff/PR. They do not independently change the Manager-owned registry state.
+
+Backward compatibility: existing task documents may still use labels such as `ACTIVE`, `COMPLETE — MANAGER REVIEW REQUIRED`, or `PASS`. Manager maps those to the lifecycle above during reconciliation. Active WR-026/WR-027 work started under Workflow V1 remains valid.
+
 ## Evidence hierarchy
 
 Prefer evidence in this order:
-
-1. actual repository contents
-2. actual test/runtime output
-3. verified branch/commit information
-4. current authoritative external documentation
-5. explicit approved project decisions
-6. chat summaries
-7. assumptions
+1. actual repository contents;
+2. actual test/runtime output;
+3. verified branch/commit information;
+4. current authoritative external documentation/data/licensing;
+5. explicit approved project decisions;
+6. chat summaries;
+7. assumptions.
 
 Never present an assumption as verified fact.
 
-## Session refresh
+## Work routing and authority
 
-When resuming project work:
+Use R&D when external facts/data/source rights, feasibility, algorithms/models, unknown behavior, or bounded experimentation materially reduces uncertainty.
 
-1. read canonical shared files
-2. read Manager handoff
-3. read the latest relevant role handoff
-4. identify the active WR Task ID
-5. verify branch/checkpoint when tools permit
-6. identify contradictions between repository and conversation state
+Use Builder only after objective, scope, architecture/dependencies, and acceptance criteria are sufficiently settled.
 
-## Work routing
+Use Independent Auditor for production changes affecting recommendation logic, draft state, live sync, persistence/restoration, ranking/datasets, high-risk shared code, core workflows, or milestone completion.
 
-Use **Research & Development (R&D)** when any of the following materially helps the project:
+R&D findings do not become roadmap/architecture commitments automatically. R&D may not:
+- select the final roadmap;
+- modify production without an approved implementation assignment;
+- modify `.ai/shared/*`;
+- merge production work;
+- audit its own production implementation.
 
-- external facts, documentation, APIs, data sources, or undocumented system behavior must be investigated
-- feasibility or technical uncertainty needs evidence before architecture/implementation is chosen
-- promising future War Room capabilities should be explored
-- algorithms, integrations, data sources, or future architectures need comparison/evaluation
-- a bounded isolated/disposable experiment or proof of concept can reduce uncertainty
-- meaningful product or reliability gaps need evidence-backed characterization
-- Roadmap Discovery needs evidence-backed future milestone proposals
+## Maintenance / stable mode
 
-R&D may be assigned forward-looking work even when it does not block the current implementation, provided it is a legitimate Manager-approved task with clear acceptance criteria and does not create unsafe dependencies or production overlap. Dependency-safe R&D may run in parallel with current milestone work.
+No worker must be kept busy merely for utilization. `IDLE` is valid.
 
-Use **Implementation Engineer** only after objective, scope, architecture, dependencies, and acceptance criteria are sufficiently settled.
+Development may reactivate for verified defects, real-world feedback, changed dependencies, explicit product requirements, materially valuable opportunities, seasonal/data updates, or previously unresolved risks becoming actionable. A trigger does not by itself authorize implementation.
 
-Use **Independent Auditor / QA** for changes affecting recommendation logic, draft state, live synchronization, persistence/restoration, ranking/dataset behavior, high-risk shared code, core workflows, or milestone completion.
+## Parallel work
 
-R&D findings and proposals do not automatically become architecture or roadmap commitments. The Manager decides final roadmap, architecture, task assignment, prioritization, and integration after evaluating the evidence.
+Parallelism is preferred when tasks are genuinely independent and integration remains clear.
 
-### R&D authority boundaries
+Dependency classes:
+- `INDEPENDENT` — may run simultaneously;
+- `SOFT DEPENDENCY` — may run simultaneously but one result can influence later integration;
+- `HARD DEPENDENCY` — must run sequentially.
 
-R&D retains the existing evidence, repository-ownership, research, and handoff rules, but it does **not** gain authority to:
+When two or more roles run independently, Manager may create a `PW-###` wave recording task, role, objective, dependency, work area, expected output, and integration considerations.
 
-- select the final roadmap
-- modify production code without an approved implementation assignment
-- modify canonical `.ai/shared/*` state
-- merge production work
-- audit its own production implementation
+Parallel workers must:
+- use dedicated task branches for production work;
+- minimize overlapping files;
+- preserve starting/checkpoint information;
+- avoid independent `.ai/shared/*` edits;
+- check target advancement before readiness/merge.
 
-R&D experiments and proofs of concept should remain isolated/disposable unless the Manager explicitly promotes the result into an approved implementation task. Experimental evidence may inform architecture or roadmap decisions, but experimental code is not production merely because it works.
+## Target-branch advancement classification
 
-## Project maturity and maintenance mode
+Do not treat every `main` advance as equally risky.
 
-Roadmap Discovery is allowed to conclude that **no successor production milestone is currently justified**. Do not create features, milestones, experiments, or specialist work merely to maintain development activity.
+Classify target advancement relative to a task's assignment/reference checkpoint:
 
-If the strongest available candidate does not provide enough user value, reliability leverage, evidence strength, or strategic benefit to justify its implementation/validation cost and risk, R&D should say so. In that case it may recommend that the Manager place the project into **MAINTENANCE / STABLE** mode instead of recommending a weak successor milestone.
+### `CURRENT`
+Target did not advance materially from the relevant checkpoint.
 
-The Manager retains final authority to select a successor milestone, request more discovery, or enter MAINTENANCE / STABLE mode.
+### `CONTROL_PLANE_ONLY`
+Target changes are confined to `.ai/**` and workflow-control scripts such as `scripts/workflow-*.mjs`, with no task-surface overlap.
 
-### MAINTENANCE / STABLE mode
+Effect:
+- do not force expensive product revalidation solely because of these changes;
+- existing runtime/visual evidence remains usable if the task code itself is unchanged;
+- normal final CI/Manager merge checks still apply.
 
-In MAINTENANCE / STABLE mode:
+### `NON_OVERLAPPING`
+Target includes product/tooling changes outside the control plane, but no changed file or tightly coupled surface overlaps the task.
 
-- no active production milestone is required
-- Builder, R&D, and Auditor may remain IDLE when no legitimate task exists
-- known non-blocking findings are not automatically promoted into work
-- speculative feature development is not used to keep the workflow active
-- the current verified production baseline, roadmap history, and canonical state remain preserved
-- narrowly scoped maintenance, validation, data refreshes, or investigation may still be assigned when a legitimate trigger exists
+Effect:
+- reconcile before final release when practical;
+- rerun affected integration/smoke checks and final CI;
+- Manager may decide a full expensive revalidation is unnecessary when evidence shows no coupling.
 
-Active development should resume only when one or more of these triggers becomes real and sufficiently important:
+### `OVERLAPPING_RISK`
+Target changed the same files or a tightly coupled behavior/architecture used by the task.
 
-- verified defects
-- real-world user feedback
-- changed external dependencies
-- new product requirements
-- materially valuable opportunities
-- seasonal/data updates
-- previously unresolved risks becoming actionable
+Effect:
+- reconcile before audit/merge;
+- rerun the materially affected validation levels;
+- unresolved overlap blocks release readiness.
 
-A trigger does not automatically authorize implementation. The Manager still evaluates scope, evidence, dependencies, architecture, validation burden, and parallelism before creating production tasks.
+File-level overlap is a first-pass heuristic, not proof of independence. Manager/Auditor may escalate classification based on behavior coupling.
 
-When Roadmap Discovery recommends MAINTENANCE / STABLE mode, the evidence should identify the strongest considered candidates, explain why they did not clear the active-development threshold, and record the concrete reactivation triggers that would justify revisiting them.
+## Workflow helper scripts
 
-## Parallel task orchestration
+Two read-only helpers reduce repeated manual checking:
 
-Parallelism is encouraged when it increases useful throughput without creating unsafe dependencies or integration ambiguity. Do not unnecessarily serialize independent work, and do not create speculative work merely to keep workers busy.
+- `node scripts/workflow-preflight.mjs --task WR-###`
+- `node scripts/workflow-finish-check.mjs --task WR-###`
 
-Whenever the Manager determines what should happen next, explicitly evaluate whether multiple approved tasks can proceed simultaneously.
+Optional flags:
+- `--target <ref>` to override the default `origin/main`/`main` target;
+- `--json` for machine-readable output;
+- finish check: `--pr-body <path>` to validate required PR metadata headings.
 
-A task may run in parallel when all of the following are true:
+These scripts may check registry status, branch/target diff, target-advance classification, frozen/forbidden paths, allowlisted research scope, handoff presence, and PR-template structure.
 
-- it does not depend on the unfinished result of another active task
-- workers will not make conflicting changes to the same production area
-- shared canonical state does not need to change independently in multiple branches
-- each task has its own Task ID and acceptance criteria
-- each worker can produce independently verifiable evidence
-- integration order is manageable
-
-Do not parallelize when any of the following apply:
-
-- Builder needs R&D findings before implementation can be designed
-- Auditor needs Builder implementation before an audit can begin
-- two tasks modify the same tightly coupled state or files and would create unsafe integration conflicts
-- one task materially changes the architecture assumed by another
-- completion of one task may make the other unnecessary
-- a milestone decision must occur before downstream work is valid
-
-### Dependency classification
-
-For every group of candidate tasks, the Manager classifies dependencies as:
-
-- **INDEPENDENT** — may run simultaneously
-- **SOFT DEPENDENCY** — may run simultaneously, but one result may influence later integration
-- **HARD DEPENDENCY** — must run sequentially
-
-Prefer parallel execution for INDEPENDENT tasks.
-
-### Parallel Work Waves
-
-When two or more roles can work independently, the Manager creates a Parallel Work Wave using sequential IDs such as:
-
-- `PW-001`
-- `PW-002`
-- `PW-003`
-
-Each wave must record for every active assignment:
-
-- Task ID
-- assigned role
-- objective
-- dependency status
-- branch / work area
-- expected output
-- merge / integration considerations
-
-A Parallel Work Wave coordinates execution only; it does not replace the underlying WR Task IDs or acceptance criteria.
-
-### Parallel PR safety
-
-When several employees work simultaneously:
-
-- give each production task its own branch
-- minimize overlapping files
-- track each task's starting SHA
-- require workers to check target-branch advancement before completion
-- merge in a deliberate order
-- rerun affected tests after meaningful integration changes
-- do not let parallel workers independently update canonical `.ai/shared/*` state
-
-The Manager remains the normal authority for canonical shared-state reconciliation after integration.
-
-### Workload priority
-
-Optimize for maximum useful throughput, not maximum worker utilization.
-
-Multiple workers doing genuinely independent useful work is desirable. Workers doing unnecessary speculative work merely because they are available is not. `IDLE` is a valid and desirable state when no useful independent work exists.
-
-## Parallel activation plan
-
-Every Manager response that determines or reports next work ends with an `ACTIVATE NOW` section covering all four roles:
-
-- Manager: `ACTIVE` or `IDLE`
-- Builder: `ACTIVE — WR-###` or `IDLE`
-- R&D: `ACTIVE — WR-###` or `IDLE`
-- Auditor: `ACTIVE — WR-###` or `IDLE`
-
-For every active specialist, include:
-
-- `CHAT:` role name
-- `TASK:` WR Task ID
-- `ACTIVATION MESSAGE:` an exact short message the user can paste into that employee chat
-
-Activation messages should normally be concise because each role must refresh from repository state before acting.
-
-Do not activate a role solely to keep it busy. If a task is blocked on user evidence or another prerequisite, state that explicitly rather than assigning unrelated work.
+They **do not prove tests or CI ran** and do not replace Manager/Auditor judgment.
 
 ## Validation levels
 
-- **Level 1 — Static correctness:** code inspection and logic review.
-- **Level 2 — Automated tests:** unit, regression, integration tests.
-- **Level 3 — Simulated draft behavior:** controlled draft-state scenarios.
-- **Level 4 — Real/mock draft validation:** actual or realistic draft environment.
+- **Level 1 — Static correctness**: code/data/spec inspection.
+- **Level 2 — Automated tests**: unit/regression/integration/CI.
+- **Level 3 — Simulated draft behavior**: controlled draft-state scenarios.
+- **Level 4 — Real/mock draft validation**: actual or realistic draft environment.
 
-A lower level does not prove a higher level. Live draft synchronization and dynamic recommendation behavior may require Level 4 before milestone completion.
+A lower level does not prove a higher level.
 
 ## Pull request protocol
 
-For PR-based work, require:
-
+For PR-based work require:
 - TASK ID
 - ROLE
 - OBJECTIVE
@@ -258,57 +237,87 @@ For PR-based work, require:
 - DEPENDENCIES
 - RECOMMENDED NEXT ROLE
 
-Prefer one dedicated branch per implementation task. Auditor remediation normally stays on the same task branch/PR.
+Prefer one dedicated branch per implementation task. Auditor remediation normally stays on the same branch/PR.
 
 ## Merge gate
 
-Before merging a production-code PR, the Manager must verify:
+Before merging production code, Manager verifies:
+1. approved Task ID/target;
+2. current branch/checkpoint and target-advance classification;
+3. scope matches task;
+4. required tests actually ran;
+5. unresolved findings/conflicts;
+6. audit requirement;
+7. no unresolved CRITICAL/HIGH findings;
+8. required handoff/evidence;
+9. exact PR head and relevant CI;
+10. integration implications of target advancement.
 
-1. approved Task ID and target branch
-2. current branch/checkpoint and staleness relative to target
-3. scope matches the approved task
-4. required tests actually ran
-5. unresolved findings and conflicts
-6. whether independent audit is required
-7. CRITICAL/HIGH findings are resolved
-8. required handoff/evidence is present
+Production changes requiring audit need `PASS` or `PASS WITH NON-BLOCKING FINDINGS` before merge.
 
-Production-code changes requiring audit need `PASS` or `PASS WITH NON-BLOCKING FINDINGS` before merge.
+## Atomic Manager reconciliation
 
-If the target branch advanced after the worker checkpoint, evaluate overlap and rerun affected validation after update/rebase/merge when necessary.
+Manager should minimize control-plane churn.
 
-## After merge
+For one decision/transition, prepare the required canonical updates and commit them as **one reconciliation transaction** whenever tooling permits. Avoid separate commits for task spec, project state, registry, roadmap and handoff when they are one logical decision.
 
-After a successful merge, the Manager updates:
-
-1. `.ai/shared/PROJECT_STATE.md`
-2. `.ai/shared/ROADMAP.md` if milestone status changed
-3. `.ai/shared/DECISIONS.md` only for durable decisions
-4. `.ai/manager/HANDOFF.md`
-5. task status and next role/action
+After a merge or major disposition, update only what actually changed:
+- `ACTIVE_TASKS.json` for lifecycle/dependency/next-gate changes;
+- `PROJECT_STATE.md` for current state;
+- `ROADMAP.md` only when roadmap/milestone status changed;
+- `DECISIONS.md` only for durable architectural/product decisions;
+- Manager handoff for the current checkpoint/next action;
+- relevant task status.
 
 A merged PR does not by itself prove milestone completion.
 
+## Canonical-document scope
+
+Keep control-plane files concise:
+- `PROJECT_STATE.md` = current baseline, active tasks, blockers, next gates;
+- `ROADMAP.md` = milestones/phase plan and material dispositions, not every metric;
+- `DECISIONS.md` = durable decisions only;
+- task/research/audit reports = detailed evidence and metrics;
+- `ACTIVE_TASKS.json` = machine-readable current task index.
+
+Do not duplicate full evidence tables into several canonical files.
+
 ## Scope control
 
-Do not opportunistically add unrelated improvements. Record newly discovered issues, classify severity, decide whether they block the active task, and schedule non-blocking work separately.
+Do not opportunistically add unrelated improvements. Record discovered issues, classify severity, decide whether they block the active task, and schedule non-blocking work separately.
 
-## Handoff format
+## Handoffs
 
-Every meaningful work session ends with:
-
+Every meaningful worker session ends with enough information for the next role to act without re-discovering the work:
 - Task ID
 - Role
-- Status
+- Status/readiness state
 - Verified starting state
-- Current milestone
 - Work completed
-- Decisions made
+- Decisions made (if authorized)
 - Files updated
+- Tests/evidence actually produced
 - Open findings
 - Blocking issues
 - Recommended next role
 - Exact next action
 - Checkpoint / SHA
 
+If a detailed task/research/audit report already contains the evidence, the handoff should link/refer to it rather than duplicate the entire report.
+
 If no checkpoint was verified, state `Checkpoint / SHA: Not verified in this session`.
+
+## Manager activation output
+
+Whenever Manager determines or reports next work, end with `ACTIVATE NOW` covering:
+- Manager: `ACTIVE` or `IDLE`;
+- Builder: `ACTIVE — WR-###` or `IDLE`;
+- R&D: `ACTIVE — WR-###` or `IDLE`;
+- Auditor: `ACTIVE — WR-###` or `IDLE/BLOCKED`.
+
+For a newly activated specialist, provide:
+- `CHAT:` role name;
+- `TASK:` WR ID;
+- `ACTIVATION MESSAGE:` short paste-ready instruction.
+
+Do not re-emit activation prompts for workers already executing the same task unless the user needs them again.

@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — PW-003 PHONE UX + POSITION-SPECIFIC RISK R&D
+Status: ACTIVE DEVELOPMENT — WORKFLOW V2 / PW-003 PHONE UX + CUSTOM-RANKING R&D
 Last verified: 2026-09-09
 Owner: Manager / Architect
 
@@ -8,136 +8,69 @@ Owner: Manager / Architect
 Repository: `Ryan42062001/The-War-Room`
 Branch: `main`
 
+## Current control plane
+Workflow: **V2 ACTIVE** via WR-030.
+
+Fast current-task index:
+`.ai/shared/ACTIVE_TASKS.json`
+
+Current task states:
+- WR-026 — Builder — `IN_PROGRESS` — phone-only decision view — independent audit required.
+- WR-027 — R&D — `IN_PROGRESS` — position-specific risk calibration — Manager review next.
+- WR-029 — R&D — `BLOCKED` — waits for WR-027 Manager disposition.
+
+Detailed task requirements remain in `.ai/manager/WR-026.md`, `.ai/manager/WR-027.md`, and `.ai/manager/WR-029.md`.
+
 ## Production baseline
-### Draft-Day Layout Efficiency — COMPLETE
-- WR-016 COMPLETE / MERGED
-- PR #114 merge: `dfe5476883d700b9281fb57f1c710daa7758492a`
-- WR-019 audit: PASS WITH NON-BLOCKING FINDINGS
-- post-merge CI / Pages: SUCCESS
+Draft-Day Layout Efficiency is complete and audited.
 
-### Ranking authority — UNCHANGED
-- FantasyPros Top-20 Experts 2026 PPR ECR primary
-- broader FantasyPros PPR ECR fallback
-- ESPN rank/ADP timing only
-- WR-D001 remains ACTIVE
+Ranking authority remains unchanged:
+- FantasyPros Top-20 Experts 2026 PPR ECR primary;
+- broader FantasyPros PPR ECR fallback;
+- ESPN rank/ADP is market timing only;
+- WR-D001 ACTIVE.
 
-## Frozen prospective ranking research
-### WR-021 — Context-Enriched Preseason Shadow Model Validation
-Status: COMPLETE / ACCEPTED / MERGED
-PR #116 merge: `f2e3e9b1c0a9a59452d679783a5236d4a5da9a09`
-Manager disposition: `PROMISING — CONTINUE VALIDATION` / RESEARCH ONLY
+## Frozen prospective ranking contract
+WR-021 and WR-023 remain accepted/frozen.
 
-### WR-023 — 2026 Prospective Shadow Evaluation Protocol Freeze
-Status: COMPLETE / ACCEPTED / MERGED
-PR #117 merge: `a1aa543f980f724977e0619d0610e046c719cbea`
-Manager disposition: ACCEPTED
-
-Immutable prospective identities:
-- protocol SHA-256: `f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`
+Authoritative identities:
+- WR-023 protocol SHA-256: `f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`
 - WR-021 snapshot SHA-256: `9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d`
 
-WR-027, WR-029 and all later historical engine development must not inspect 2026 outcomes or alter these frozen artifacts.
+No current historical custom-ranking development may inspect 2026 regular-season outcomes or rewrite these artifacts.
 
-## Historical ranking R&D
-### WR-025 — Historical Ranking Signal / Breakout-Bust Research
-Role: R&D
-Status: COMPLETE / ACCEPTED / MERGED
-Research PR: #118
-Final research head: `22c5678c876081c012000c28f2082668116c4b8b`
-Exact-head War Room CI #934 / run `34401904213`: SUCCESS
-Merge commit: `93da7e5de10ca2130d40142450cab9840c755ab4`
-Manager disposition: `MORE EVIDENCE NEEDED`
-Production behavior changed: NO
-
-Key evidence:
-- returning-player Ridge mean projection improved pooled MAE 3.0262 -> 2.8262 (6.61%);
-- player-clustered paired MAE interval `[-0.3235, -0.0616]`;
-- downside AUC was useful by position, especially RB/WR/TE;
-- universal risk overlay improved QB/RB rank MAE but worsened WR +5.51% and TE +6.20%;
-- rookie Ridge remained worse than transparent rookie prior;
-- lawful MFL public archive was investigated but comparable PPR redraft sample was too small to admit as historical ADP benchmark;
-- no 2026 outcomes inspected and frozen WR-021/WR-023 artifacts remained unchanged.
-
-### WR-027 — Position-Specific Risk Calibration Study
-Role: R&D
-Status: ASSIGNED / ACTIVE
-Task: `.ai/manager/WR-027.md`
-Production authorization: NONE
-
-Objective:
-- preserve WR-025 successful mean-projection model as benchmark;
-- calibrate downside/breakout/availability warnings separately by QB/RB/WR/TE;
-- determine per position whether risk should modify rank or remain warning-only;
-- test a transparent robust-regression challenger for occasional Ridge outliers;
-- keep rookies separate;
-- preserve frozen WR-021/WR-023 prospective test unchanged.
-
-## Custom ranking engine roadmap
-### WR-028 — Custom Ranking Engine Roadmap / Architecture Plan
-Role: Manager / Architect
-Status: COMPLETE
-Task: `.ai/manager/WR-028.md`
-
-Manager has established an evidence-gated plan to make the custom ranking engine technically complete before season end without prematurely changing production ranking authority.
-
-Planned layers:
-- returning-player expected performance;
-- position-specific risk / warnings;
-- advanced context / opportunity / scheme enrichment;
-- rookie engine;
-- availability / expected games;
-- season-total production and uncertainty;
-- positional replacement value;
-- cross-position custom draft value / overall rank;
-- tiers / explanations / warnings;
-- ESPN market timing kept separate;
-- shadow production integration;
-- independent engine QA;
-- final WR-023 prospective promotion gate.
-
-Definitions:
-- `ENGINE-COMPLETE`: reproducible QB/RB/WR/TE projections, risk outputs, availability, season totals, replacement-adjusted values, overall/position ranks, tiers and explanations.
-- `SHADOW-READY`: integrated non-authoritatively with deterministic versioning/QA while FantasyPros remains authority.
-- `PRODUCTION-AUTHORITATIVE`: not currently authorized; requires final WR-023 prospective evidence plus separate Manager/Builder/Auditor milestone and WR-D001 change.
-
-### WR-029 — Advanced Context Feature Enrichment / Source Feasibility
-Role: R&D
-Status: PLANNED / BLOCKED ON WR-027 MANAGER DISPOSITION
-Task: `.ai/manager/WR-029.md`
-Production authorization: NONE
-
-Purpose:
-- evaluate snap percentage / participation, route or pass-play participation, YPRR only where exact route denominators exist, advanced player efficiency, offensive-line proxies, team offensive environment, coaching/scheme continuity, depth/competition, age/physical context and maintainable availability context;
-- require source-rights and point-in-time verification before any feature is admitted;
-- classify every family as core model, warning/explanation-only, insufficient evidence, or excluded;
-- complete before the returning-player v1 specification freeze.
+## Custom-ranking path
+WR-028 defines the custom ranking engine roadmap.
 
 Current hard dependency:
-WR-027 Manager disposition -> WR-029 -> returning-player Phase-2 specification freeze.
+WR-027 Manager disposition -> WR-029 advanced context enrichment -> returning-player v1 specification freeze.
 
-## PW-003 — ACTIVE
-### WR-026 — Phone-Only Decision View Optimization
-Role: Builder
-Status: ACTIVE
-Task: `.ai/manager/WR-026.md`
-Production authorization: YES — phone UI/layout only
-Independent audit required: YES
+Production custom-ranking authority remains unauthorized.
 
-User requirement:
-- desktop/tablet >600px must remain unchanged;
-- phone should be decision-first rather than one giant stacked list.
+## Phone lane
+WR-026 remains independent of ranking R&D.
 
-### Dependency
-WR-027/WR-029 ranking lane vs WR-026 phone lane: INDEPENDENT.
+User boundary remains:
+- optimize phone only;
+- preserve desktop/tablet >600px;
+- preserve ranking/scoring/recommendation/state/ESPN semantics.
 
-Builder must reconcile its final WR-026 PR with current main before audit because Manager/R&D integration has advanced main since its assignment base.
+Workflow V2 target-advance rules mean Manager/control-plane-only changes do not, by themselves, invalidate WR-026's expensive phone evidence. Actual overlap still requires reconciliation/revalidation.
 
-Auditor remains idle until Builder produces a final mergeable WR-026 PR with green CI.
+## Workflow V2 summary
+WR-030 added:
+- machine-readable active-task registry;
+- Fast Refresh vs Full Refresh;
+- explicit lifecycle states;
+- target-advance classification;
+- workflow preflight/finish helper scripts;
+- atomic Manager reconciliation;
+- concise canonical-document responsibilities.
+
+Role separation, merge authority and independent-audit gates remain intact.
 
 ## Current workload
-- Manager — IDLE after WR-029 planning update
-- Builder — ACTIVE / WR-026
-- R&D — ACTIVE / WR-027
-- Auditor — IDLE / waiting for WR-026
-
-Workers must not independently update `.ai/shared/*`.
+- Manager — IDLE after WR-030 completion.
+- Builder — ACTIVE / WR-026.
+- R&D — ACTIVE / WR-027.
+- Auditor — IDLE / waiting for WR-026 audit-ready handoff.
