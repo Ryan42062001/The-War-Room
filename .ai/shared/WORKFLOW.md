@@ -1,19 +1,42 @@
 # War Room Team Workflow
 
-Status: ACTIVE — WORKFLOW V2
-Last updated: 2026-09-09
+Status: ACTIVE — WORKFLOW V3
+Last updated: 2026-09-10
 Owner: Manager / Architect
 
-This file is the canonical repository workflow for The War Room. If older repository guidance conflicts with this file, this file wins unless the Manager records a newer approved change.
+This file is the canonical repository workflow for **The War Room**, the live fantasy-football **draft assistant**. If older repository guidance conflicts with this file, this file wins unless the Manager records a newer approved change.
 
-## Team roles
+## Project identity boundary
 
-1. **Manager / Architect** — roadmap, requirements, architecture, priorities, task decomposition, acceptance criteria, integration decisions, merge authority, canonical shared state.
-2. **Implementation Engineer / Builder** — production implementation, debugging, tests, technical execution, remediation.
-3. **Research & Development (R&D)** — external APIs/docs/data, feasibility, technical uncertainty, difficult investigations, forward-looking R&D, isolated experiments/proofs of concept, algorithms/model research, source-rights investigation, future architecture evaluation, and evidence-backed milestone proposals.
-4. **Independent Auditor / QA** — independent verification, regression analysis, real/mock draft validation, PASS/FAIL decisions.
+Do not confuse this repository with the user's other projects:
+- **The War Room** = live fantasy draft assistant.
+- **The Chip Winner** = in-season fantasy helper.
+- **Family Finance Hub** = personal-finance website/application.
+- **ECOG website** = church website.
 
-R&D continues to use `.ai/research/`. Do not create a separate `.ai/rnd/` tree unless a future Manager decision requires it.
+Work, strategy, research, and roadmap decisions in this repository must stay scoped to the draft-assistant product unless an explicit cross-project task says otherwise.
+
+## Core operating model
+
+The repository is durable memory. Roles are durable. Individual ChatGPT conversations are disposable execution sessions.
+
+**ROLE = DURABLE**  
+**CHAT = DISPOSABLE**  
+**TASK = UNIT OF WORK**  
+**REPOSITORY = MEMORY**  
+**MANAGER = ROUTER / INTEGRATOR**
+
+The default permanent role set is intentionally small:
+
+1. **Manager / Architect** — roadmap, requirements, architecture, priorities, task decomposition, acceptance criteria, execution-mode recommendation, integration decisions, merge authority, canonical shared state.
+2. **Implementation Engineer / Builder** — production implementation, normal debugging, tests, technical execution, remediation.
+3. **Draft Strategy & Decision Intelligence Analyst** — draft-decision policy: value vs need, positional scarcity, tiers, survival-to-next-pick, turn dynamics, roster construction, QB/TE timing, FLEX implications, league/slot effects, and whether recommendations make strategic fantasy-football sense.
+4. **Research & Development (R&D)** — external APIs/docs/data, source rights, projection/model research, technical uncertainty, isolated experiments/proofs of concept, future architecture evaluation, and evidence-backed milestone proposals.
+5. **Independent Auditor / QA** — independent verification, regression analysis, recommendation-behavior review, real/mock draft validation, PASS/FAIL decisions.
+
+A temporary **Troubleshooting & Root Cause Engineer** may be activated only when the anti-loop escalation rule is triggered or the Manager determines a cross-layer diagnosis needs fresh independent eyes.
+
+Permanent role charters live under `.ai/roles/`. R&D continues to use `.ai/research/` for compatibility. Draft Strategy uses `.ai/strategy/`.
 
 ## Canonical project sources
 
@@ -28,31 +51,36 @@ R&D continues to use `.ai/research/`. Do not create a separate `.ai/rnd/` tree u
 - `.ai/manager/HANDOFF.md`
 - latest relevant role handoff
 - active task spec under `.ai/manager/WR-###.md`
+- applicable role charter under `.ai/roles/`
 
 Repository state overrides stale chat memory. Conflicts must be surfaced, not silently reconciled.
 
-`ACTIVE_TASKS.json` does not replace task specs or evidence reports. It is the current-control-plane index. Only the Manager updates `.ai/shared/*`.
+`ACTIVE_TASKS.json` does not replace task specs or evidence reports. It is the current control-plane index. Only the Manager updates `.ai/shared/*` unless a Manager-approved workflow task explicitly says otherwise.
 
-## Refresh modes
+## Context budget and refresh modes
+
+Workers should load the **minimum sufficient context** first and expand only when the task requires it. Do not reread the entire repository history on every `continue`.
 
 ### Fast Refresh
-Use for routine status checks, ordinary `continue`, checking whether a worker finished, and low-risk task resumption when no architecture/merge/release decision is being made.
+Use for routine status checks, ordinary `continue`, task-scoped worker startup, low-risk task resumption, and checking whether a worker finished.
 
-Read/verify:
+Read/verify first:
 1. actual `main` SHA;
 2. `.ai/shared/ACTIVE_TASKS.json`;
-3. open PRs/current mergeability when relevant;
-4. the active task spec and latest relevant role handoff if the task changed or a handoff is being evaluated;
-5. contradictions or unexpected target advancement.
+3. your role charter;
+4. your active task spec;
+5. latest relevant role handoff;
+6. open PR/current branch state when relevant;
+7. contradictions or unexpected target advancement.
 
-Do not reread the full historical roadmap/decision record merely to answer a simple current-status question.
+Only fetch additional roadmap/decision/research history if the current task actually needs it.
 
 ### Full Refresh
 Required before:
 - creating/activating a new meaningful task;
 - architecture or roadmap decisions;
 - durable product decisions;
-- Manager disposition of research that changes the next milestone;
+- Manager disposition of research/strategy that changes the next milestone;
 - production merge/release decisions;
 - audit/release-gate decisions with meaningful integration risk;
 - resolving contradictions/conflicts;
@@ -69,44 +97,134 @@ Read/verify:
 7. Manager handoff;
 8. relevant role handoff(s);
 9. active task spec(s);
-10. branch/checkpoint and target advancement.
+10. applicable role charter(s);
+11. branch/checkpoint and target advancement.
+
+## Chat lifecycle and context hygiene
+
+Worker chats should normally be **task-scoped**.
+
+Preferred lifecycle:
+1. Manager assigns WR task.
+2. User opens a fresh chat for the required role when practical.
+3. Fresh chat reads the role charter + minimum sufficient repository context.
+4. Worker executes the task and persists a concise handoff/evidence.
+5. Chat may be retired after task completion.
+
+The same worker chat may continue for small remediation on the exact same task/PR when it remains fast and focused. A new chat is preferred if the prior chat becomes slow, confused, repetitive, or burdened by unrelated history.
+
+Manager chats may span a milestone, but should normally roll over at milestone/phase boundaries or earlier when context size begins affecting speed or state accuracy.
+
+### Rollover triggers
+A chat should be replaced when any of these become material:
+- noticeable response/UI slowdown associated with conversation size;
+- repeated confusion between old and current tasks;
+- stale-state mistakes despite repository refresh;
+- excessive old logs/diffs dominating context;
+- repeated restatement without new evidence;
+- troubleshooting loops;
+- milestone boundary with a complete repository handoff.
+
+Replacement chats must not require the user to copy old conversation history. They bootstrap from the repository.
 
 ## Task IDs and lifecycle
 
-Every meaningful work item uses a unique `WR-###` Task ID. Parallel coordination uses `PW-###` and does not replace the underlying WR IDs.
+Every meaningful work item uses a unique `WR-###` Task ID. Parallel coordination uses `PW-###` and does not replace underlying WR IDs.
 
-Task specs should define:
+Task specs should define, as relevant:
 - TASK ID
+- OWNER / ROLE
 - OBJECTIVE
 - WHY IT IS NEEDED
 - VERIFIED STARTING STATE
+- DEPENDENCY CLASSIFICATION
+- EXECUTION MODE RECOMMENDATION
 - REQUIRED BEHAVIOR
 - LIKELY FILES / COMPONENTS
 - NON-GOALS
 - EDGE CASES
 - TEST REQUIREMENTS
+- VALIDATION LEVEL
 - ACCEPTANCE CRITERIA
 - EXPECTED HANDOFF
 
 Do not mix unrelated work under one Task ID.
 
-### Workflow V2 lifecycle states
+### Workflow V3 lifecycle states
 
 Current task state is indexed in `ACTIVE_TASKS.json` using:
 - `PLANNED` — approved future work, not yet assignable;
 - `BLOCKED` — approved but waiting on an explicit dependency/gate;
 - `ASSIGNED` — activated by Manager, worker not yet confirmed in progress;
 - `IN_PROGRESS` — worker is executing;
-- `MANAGER_REVIEW_READY` — research/architecture evidence is complete for Manager disposition;
+- `MANAGER_REVIEW_READY` — research/strategy/architecture evidence is complete for Manager disposition;
 - `AUDIT_READY` — production work is complete enough for independent Auditor;
 - `MERGE_READY` — required audit/review gates have passed and Manager may merge;
 - `REWORK_REQUIRED` — a blocking finding or integration issue must be remediated;
 - `MERGED` — PR/integration merged, final reconciliation not necessarily complete;
 - `CLOSED` — Manager has reconciled canonical state and the task is complete.
 
-Workers report completion/readiness in their role handoff/PR. They do not independently change the Manager-owned registry state.
+Workers report readiness in their role handoff/PR. They do not independently change the Manager-owned registry state.
 
-Backward compatibility: existing task documents may still use labels such as `ACTIVE`, `COMPLETE — MANAGER REVIEW REQUIRED`, or `PASS`. Manager maps those to the lifecycle above during reconciliation. Active WR-026/WR-027 work started under Workflow V1 remains valid.
+Backward compatibility: existing task documents may use older labels. Manager maps them to this lifecycle during reconciliation.
+
+## Work Mode / execution-mode acceleration
+
+For every newly created meaningful task, the Manager should assess whether **ChatGPT Work mode** would materially accelerate execution.
+
+The purpose is speed and convenience, not dependency on credits.
+
+Use one of these classifications:
+
+### `STANDARD_CHAT`
+Normal chat/repository tools are sufficient. Work mode is unlikely to materially improve throughput.
+
+Typical examples:
+- strategy analysis;
+- focused code review;
+- policy/architecture reasoning;
+- narrow research;
+- small isolated patches.
+
+### `WORK_MODE_PREFERRED`
+Work mode is likely to save meaningful time because the task benefits from sustained multi-step execution, extensive repository navigation, repeated file edits, browser interaction, artifact gathering, or coordinated validation.
+
+Typical examples:
+- broad multi-file implementation;
+- substantial refactors with repeated test/debug cycles;
+- large repository inspections;
+- browser-heavy integration investigation;
+- gathering and organizing many artifacts/evidence items;
+- multi-step CI/PR validation.
+
+### `WORK_MODE_HIGH_VALUE`
+Work mode is expected to provide a major acceleration because the task is long-running, highly interactive, or requires many sequential tool/browser steps.
+
+This classification is a recommendation, **not a blocker**.
+
+### Fallback rule
+Every `WORK_MODE_PREFERRED` or `WORK_MODE_HIGH_VALUE` task must remain executable without Work mode whenever the underlying capabilities exist in normal chat.
+
+The task spec or activation message must include a fallback path such as:
+- exact repository files to inspect/change;
+- expected patches or commands;
+- tests to run;
+- evidence to return;
+- smaller sequential substeps if needed.
+
+If Work credits are exhausted or Work mode is unavailable:
+- do not mark the whole project blocked merely because the preferred accelerator is unavailable;
+- switch to normal Chat Implementation / reasoning / research mode;
+- continue with exact patches, commands, or user-returned outputs;
+- only block the specific step if it truly requires a capability unavailable outside Work mode.
+
+Manager should surface the recommendation in `ACTIVATE NOW` as:
+
+`EXECUTION MODE: STANDARD_CHAT | WORK_MODE_PREFERRED | WORK_MODE_HIGH_VALUE`
+
+and, when Work mode is preferred, also include:
+
+`FALLBACK: <concise non-Work execution path>`
 
 ## Evidence hierarchy
 
@@ -116,25 +234,75 @@ Prefer evidence in this order:
 3. verified branch/commit information;
 4. current authoritative external documentation/data/licensing;
 5. explicit approved project decisions;
-6. chat summaries;
-7. assumptions.
+6. specialist handoffs/reports;
+7. chat summaries;
+8. assumptions.
 
 Never present an assumption as verified fact.
 
 ## Work routing and authority
 
-Use R&D when external facts/data/source rights, feasibility, algorithms/models, unknown behavior, or bounded experimentation materially reduces uncertainty.
+Use **Draft Strategy** when the unresolved question is what the draft assistant SHOULD recommend or how draft-state context should affect decisions, including:
+- value versus need;
+- VORP/replacement-value interpretation;
+- positional scarcity/tier cliffs;
+- survival-to-next-pick;
+- turn dynamics;
+- roster construction/FLEX implications;
+- QB/TE timing;
+- league size/scoring/slot effects;
+- opponent positional runs;
+- recommendation-policy coherence.
 
-Use Builder only after objective, scope, architecture/dependencies, and acceptance criteria are sufficiently settled.
+Use **R&D** when external facts/data/source rights, feasibility, projection/model research, algorithms, APIs, unknown behavior, or bounded experimentation materially reduces uncertainty.
 
-Use Independent Auditor for production changes affecting recommendation logic, draft state, live sync, persistence/restoration, ranking/datasets, high-risk shared code, core workflows, or milestone completion.
+Use **Builder** only after objective, scope, architecture/dependencies, and acceptance criteria are sufficiently settled.
 
-R&D findings do not become roadmap/architecture commitments automatically. R&D may not:
+Use **Independent Auditor** for production changes affecting recommendation logic, draft state, live sync, persistence/restoration, ranking/datasets, high-risk shared code, core workflows, or milestone completion.
+
+Draft Strategy and R&D are advisory. Their findings do not automatically become product requirements or production authority. Manager approves final architecture/roadmap/strategy changes.
+
+R&D may not:
 - select the final roadmap;
 - modify production without an approved implementation assignment;
 - modify `.ai/shared/*`;
 - merge production work;
 - audit its own production implementation.
+
+Draft Strategy may not:
+- write production code under a strategy-only task;
+- change canonical ranking authority on its own;
+- modify `.ai/shared/*`;
+- merge production work;
+- self-certify production correctness.
+
+## Anti-loop rule
+
+All roles must stop unproductive loops.
+
+If approximately **three materially different approaches/hypotheses** fail without meaningful progress or new evidence:
+1. STOP speculative iteration.
+2. Do not repeat the same conclusion with different wording.
+3. Persist a concise `STALLED / ESCALATION REQUIRED` handoff.
+4. State what is known, what was tried, results, what evidence is missing, and who should act next.
+
+For Engineering/debugging, create or update a troubleshooting evidence packet containing:
+- Task ID;
+- exact symptom;
+- expected behavior;
+- observed behavior;
+- reproduction steps;
+- relevant logs/errors;
+- current branch/SHA;
+- hypotheses tested;
+- changes attempted;
+- observed result of each attempt;
+- suspected components/layers;
+- unresolved questions.
+
+Manager may then activate a **fresh temporary Troubleshooting & Root Cause Engineer**.
+
+The temporary Root Cause Engineer must independently diagnose the issue and must not assume the original Builder's diagnosis is correct. It normally identifies root cause and recommends remediation; the appropriate production Builder implements the final fix, and Auditor verifies when required.
 
 ## Maintenance / stable mode
 
@@ -151,7 +319,7 @@ Dependency classes:
 - `SOFT DEPENDENCY` — may run simultaneously but one result can influence later integration;
 - `HARD DEPENDENCY` — must run sequentially.
 
-When two or more roles run independently, Manager may create a `PW-###` wave recording task, role, objective, dependency, work area, expected output, and integration considerations.
+When two or more roles run independently, Manager may create a `PW-###` wave recording task, role, objective, dependency, work area, expected output, execution-mode recommendation, and integration considerations.
 
 Parallel workers must:
 - use dedicated task branches for production work;
@@ -160,11 +328,17 @@ Parallel workers must:
 - avoid independent `.ai/shared/*` edits;
 - check target advancement before readiness/merge.
 
+Do not force every task through every role. Manager chooses the shortest valid path.
+
+Examples:
+- CSS/layout defect: Manager -> Builder -> Auditor when needed.
+- New ranking philosophy: Manager -> Draft Strategy + R&D -> Manager synthesis -> Builder -> Auditor.
+- Research-only question: Manager -> R&D -> Manager.
+- Strategy-only question: Manager -> Draft Strategy -> Manager.
+
 ## Target-branch advancement classification
 
 Do not treat every `main` advance as equally risky.
-
-Classify target advancement relative to a task's assignment/reference checkpoint:
 
 ### `CURRENT`
 Target did not advance materially from the relevant checkpoint.
@@ -174,7 +348,7 @@ Target changes are confined to `.ai/**` and workflow-control scripts such as `sc
 
 Effect:
 - do not force expensive product revalidation solely because of these changes;
-- existing runtime/visual evidence remains usable if the task code itself is unchanged;
+- existing runtime/visual evidence remains usable if task code is unchanged;
 - normal final CI/Manager merge checks still apply.
 
 ### `NON_OVERLAPPING`
@@ -183,22 +357,21 @@ Target includes product/tooling changes outside the control plane, but no change
 Effect:
 - reconcile before final release when practical;
 - rerun affected integration/smoke checks and final CI;
-- Manager may decide a full expensive revalidation is unnecessary when evidence shows no coupling.
+- Manager may decide full expensive revalidation is unnecessary when evidence shows no coupling.
 
 ### `OVERLAPPING_RISK`
 Target changed the same files or a tightly coupled behavior/architecture used by the task.
 
 Effect:
 - reconcile before audit/merge;
-- rerun the materially affected validation levels;
+- rerun materially affected validation levels;
 - unresolved overlap blocks release readiness.
 
-File-level overlap is a first-pass heuristic, not proof of independence. Manager/Auditor may escalate classification based on behavior coupling.
+File-level overlap is a first-pass heuristic, not proof of independence.
 
 ## Workflow helper scripts
 
 Two read-only helpers reduce repeated manual checking:
-
 - `node scripts/workflow-preflight.mjs --task WR-###`
 - `node scripts/workflow-finish-check.mjs --task WR-###`
 
@@ -207,9 +380,7 @@ Optional flags:
 - `--json` for machine-readable output;
 - finish check: `--pr-body <path>` to validate required PR metadata headings.
 
-These scripts may check registry status, branch/target diff, target-advance classification, frozen/forbidden paths, allowlisted research scope, handoff presence, and PR-template structure.
-
-They **do not prove tests or CI ran** and do not replace Manager/Auditor judgment.
+These scripts may check registry status, branch/target diff, target-advance classification, frozen/forbidden paths, allowlisted research scope, handoff presence, and PR-template structure. They do **not** prove tests or CI ran and do not replace Manager/Auditor judgment.
 
 ## Validation levels
 
@@ -237,7 +408,7 @@ For PR-based work require:
 - DEPENDENCIES
 - RECOMMENDED NEXT ROLE
 
-Prefer one dedicated branch per implementation task. Auditor remediation normally stays on the same branch/PR.
+Prefer one dedicated branch per implementation task. Auditor remediation normally stays on the same branch/PR unless context-hygiene rollover justifies a fresh chat continuing the same branch/task.
 
 ## Merge gate
 
@@ -259,7 +430,7 @@ Production changes requiring audit need `PASS` or `PASS WITH NON-BLOCKING FINDIN
 
 Manager should minimize control-plane churn.
 
-For one decision/transition, prepare the required canonical updates and commit them as **one reconciliation transaction** whenever tooling permits. Avoid separate commits for task spec, project state, registry, roadmap and handoff when they are one logical decision.
+For one decision/transition, prepare required canonical updates and commit them as **one reconciliation transaction** whenever tooling permits. Avoid separate commits for task spec, project state, registry, roadmap and handoff when they are one logical decision.
 
 After a merge or major disposition, update only what actually changed:
 - `ACTIVE_TASKS.json` for lifecycle/dependency/next-gate changes;
@@ -277,33 +448,28 @@ Keep control-plane files concise:
 - `PROJECT_STATE.md` = current baseline, active tasks, blockers, next gates;
 - `ROADMAP.md` = milestones/phase plan and material dispositions, not every metric;
 - `DECISIONS.md` = durable decisions only;
-- task/research/audit reports = detailed evidence and metrics;
+- task/research/strategy/audit reports = detailed evidence and metrics;
 - `ACTIVE_TASKS.json` = machine-readable current task index.
 
 Do not duplicate full evidence tables into several canonical files.
 
-## Scope control
+## Handoffs: concise pointers, not encyclopedias
 
-Do not opportunistically add unrelated improvements. Record discovered issues, classify severity, decide whether they block the active task, and schedule non-blocking work separately.
-
-## Handoffs
-
-Every meaningful worker session ends with enough information for the next role to act without re-discovering the work:
+Every meaningful worker session ends with enough information for the next role to act without rediscovering the task:
 - Task ID
 - Role
 - Status/readiness state
 - Verified starting state
-- Work completed
-- Decisions made (if authorized)
-- Files updated
-- Tests/evidence actually produced
-- Open findings
-- Blocking issues
-- Recommended next role
-- Exact next action
-- Checkpoint / SHA
+- concise work/result summary
+- files/artifacts updated
+- tests/evidence actually produced
+- open findings
+- blocking issues
+- recommended next role
+- exact next action
+- checkpoint/SHA
 
-If a detailed task/research/audit report already contains the evidence, the handoff should link/refer to it rather than duplicate the entire report.
+Detailed evidence belongs in the task report, research report, strategy analysis, audit report, PR description, or test artifact. The handoff should point to that evidence rather than copy it wholesale.
 
 If no checkpoint was verified, state `Checkpoint / SHA: Not verified in this session`.
 
@@ -312,12 +478,28 @@ If no checkpoint was verified, state `Checkpoint / SHA: Not verified in this ses
 Whenever Manager determines or reports next work, end with `ACTIVATE NOW` covering:
 - Manager: `ACTIVE` or `IDLE`;
 - Builder: `ACTIVE — WR-###` or `IDLE`;
+- Draft Strategy: `ACTIVE — WR-###` or `IDLE`;
 - R&D: `ACTIVE — WR-###` or `IDLE`;
-- Auditor: `ACTIVE — WR-###` or `IDLE/BLOCKED`.
+- Auditor: `ACTIVE — WR-###` or `IDLE/BLOCKED`;
+- Temporary Troubleshooting: `ACTIVE — WR-###` only when explicitly instantiated, otherwise omit or mark `NOT INSTANTIATED`.
 
-For a newly activated specialist, provide:
+For every newly activated specialist, provide:
 - `CHAT:` role name;
 - `TASK:` WR ID;
-- `ACTIVATION MESSAGE:` short paste-ready instruction.
+- `EXECUTION MODE:` `STANDARD_CHAT`, `WORK_MODE_PREFERRED`, or `WORK_MODE_HIGH_VALUE`;
+- `ACTIVATION MESSAGE:` short paste-ready instruction;
+- `FALLBACK:` when Work mode is preferred/high-value, a concise normal-chat path if Work credits are unavailable.
 
 Do not re-emit activation prompts for workers already executing the same task unless the user needs them again.
+
+## Worker bootstrap pattern
+
+Fresh chats should not receive giant duplicated workflow prompts. Give them a short identity/bootstrap message that points them at the repository role charter.
+
+Typical pattern:
+
+`You are the <role> for The War Room. Repository: Ryan42062001/The-War-Room. Treat the repository as authoritative. Read .ai/shared/WORKFLOW.md, your .ai/roles/<ROLE>.md charter, .ai/shared/ACTIVE_TASKS.json, your current task spec, and the relevant role handoff. Execute only the assigned task; if none exists, remain IDLE.`
+
+## Workflow principle
+
+Use the smallest permanent team that preserves meaningful separation of responsibilities. Create temporary specialists only when a real task requires them. Prefer fresh task-scoped chats over indefinitely growing conversations. Preserve independent audit and Manager integration authority. Use Work mode when it materially accelerates execution, but never make ordinary progress depend on available Work credits when a normal-chat fallback exists.
