@@ -32,6 +32,9 @@ jobs:
       - name: Verify locked contracts before scoring
         shell: bash
         run: |
+          echo "LOCK $(sha256sum .ai/research/generated/ADV_CONTEXT_BENCHMARK_LOCK.json | awk '{print $1}')"
+          echo "SNAPSHOT $(sha256sum .ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv | awk '{print $1}')"
+          echo "PROTOCOL $(sha256sum .ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md | awk '{print $1}')"
           test "$(sha256sum .ai/research/generated/ADV_CONTEXT_BENCHMARK_LOCK.json | awk '{print $1}')" = "a93c1ce6d04c10e262d245858a7b5dfd07bb6eb98e5d1a0cb38cf877c846261e"
           test "$(sha256sum .ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv | awk '{print $1}')" = "9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d"
           test "$(sha256sum .ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md | awk '{print $1}')" = "f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c"
