@@ -11,6 +11,10 @@
   "candidate_spec_git_blob_sha": "39517955300c9ed8bf6024c1083c4831bbe79052",
   "pre_scoring_source_correction_path": ".ai/research/AVAILABILITY_PRE_SCORING_SOURCE_CORRECTION.md",
   "pre_scoring_source_correction_git_blob_sha": "67688468fdb2db79e32a60e780a3adc5f99f06cb",
+  "runner_path": ".ai/research/wr034_availability_expected_games.py",
+  "runner_git_blob_sha": "c5a15bf5e0e2091e480e2dd460af292404d5463b",
+  "requirements_path": ".ai/research/wr034_requirements.txt",
+  "requirements_git_blob_sha": "10a79b9ea4c149e09ba9fdeaf8bf2d4a0bbf79fd",
   "first_guarded_attempt": {
     "workflow_run": 34537885926,
     "candidate_scoring_started": false,
