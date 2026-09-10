@@ -18,6 +18,7 @@
   var observer = null;
   var setupEditing = false;
   var setupFocusSummaryRequested = false;
+  var setupFocusStabilizeFrames = 0;
   var phoneSetupDefaulted = false;
   var syncQueued = false;
   var lastCommandMode = '';
@@ -223,12 +224,13 @@
       event.preventDefault();
       setupEditing = false;
       setupFocusSummaryRequested = true;
+      setupFocusStabilizeFrames = 3;
       details.open = false;
       var currentSummary = details.querySelector('summary');
       if (currentSummary) currentSummary.focus();
-      // Reconcile focus on the next presentation frame as well. If the command
-      // bar replaces this <details> during the same state update, the current
-      // focused summary is detached and focus would otherwise fall to body.
+      // Reconcile focus across a short bounded settle window. The command bar
+      // can replace this <details> on a later presentation frame; keeping the
+      // request alive prevents focus from falling to body after that replacement.
       scheduleSynchronize();
     });
     details.addEventListener('toggle', function() {
@@ -303,8 +305,11 @@
 
     if (setupFocusSummaryRequested && !details.open) {
       var focusSummary = details.querySelector('summary');
-      if (focusSummary) {
-        focusSummary.focus();
+      if (focusSummary) focusSummary.focus();
+      if (setupFocusStabilizeFrames > 0) {
+        setupFocusStabilizeFrames--;
+        window.requestAnimationFrame(scheduleSynchronize);
+      } else if (focusSummary && document.activeElement === focusSummary && focusSummary.isConnected) {
         setupFocusSummaryRequested = false;
       }
     }
