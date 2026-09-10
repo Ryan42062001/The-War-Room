@@ -1,7 +1,7 @@
 {
   "task_id": "WR-029",
   "lock_kind": "PRE-ENRICHMENT BENCHMARK / SOURCE LOCK",
-  "generated_at_utc": "2026-09-10T02:23:28.383131+00:00",
+  "generated_at_utc": "2026-09-10T02:25:07.474697+00:00",
   "starting_main": "b89919121cfcc00fc9a02be5d82c1a892036e70b",
   "historical_only": true,
   "max_outcome_season": 2025,
@@ -73,8 +73,8 @@
       "active_rows": 1881,
       "unique_players": 886,
       "baseline_mae": 3.0261717095879073,
-      "ridge_mae": 2.826194440289458,
-      "ridge_rmse": 4.23636148245536,
+      "ridge_mae": 2.8261944402894574,
+      "ridge_rmse": 4.2363614824553535,
       "ridge_spearman": 0.677508831151748
     },
     "expected": {
