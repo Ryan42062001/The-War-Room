@@ -135,7 +135,7 @@ Robustness:
 
 The WR-025 feature builder's existing explicit history and age-missing indicators remain authoritative. Numeric missing values in that frozen matrix retain the WR-025 construction behavior. No missing availability-specific context is silently converted into an observed injury/status value because no such source is admitted.
 
-A learned candidate requires >=25 active training rows for fitting. Event logistic candidates additionally require both event classes. Candidate failure on a fold falls back to PREV_RATE and is recorded.
+A learned candidate requires >=25 training rows, including zero-game rows, for fitting. Event logistic candidates additionally require both event classes. Candidate failure on a fold falls back to PREV_RATE and is recorded.
 
 ## Adoption gates
 
