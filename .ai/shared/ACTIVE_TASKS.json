@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-10T22:16:00Z",
+  "updated_at_utc": "2026-09-10T22:30:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": [
@@ -19,7 +19,7 @@
     {
       "task_id": "WR-026",
       "owner": "Builder",
-      "status": "AUDIT_READY",
+      "status": "REWORK_REQUIRED",
       "task_file": ".ai/manager/WR-026.md",
       "role_handoff": ".ai/builder/HANDOFF.md",
       "assignment_main_sha": "69689edadab5c8f270bc483b6acc461274ec7f87",
@@ -27,8 +27,9 @@
       "branch": "wr-026-phone-decision-view",
       "pr": 120,
       "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT",
       "audit_required": true,
-      "blocked_on": ["WR-031 independent audit"],
+      "blocked_on": [],
       "allowed_path_prefixes": [],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/"],
       "forbidden_exact_paths": [
@@ -36,21 +37,21 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "WR-031 Auditor verdict -> Manager merge/rework decision"
+      "next_gate": "Builder remediates WR-031-AUD-01 and WR-031-AUD-02 on PR #120 -> exact-head/full CI -> AUDIT_READY -> WR-031 re-audit"
     },
     {
       "task_id": "WR-031",
       "owner": "Auditor",
-      "status": "ASSIGNED",
+      "status": "BLOCKED",
       "task_file": ".ai/manager/WR-031.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
       "assignment_main_sha": "b89919121cfcc00fc9a02be5d82c1a892036e70b",
-      "worker_checkpoint_sha": null,
-      "branch": null,
+      "worker_checkpoint_sha": "f78c009b73e7675c1fca178321c15c8e601ffa02",
+      "branch": "audit/wr-031-pr120-ca7126a",
       "pr": 120,
       "dependency": "HARD",
       "audit_required": false,
-      "blocked_on": [],
+      "blocked_on": ["WR-026 remediation on PR #120"],
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/"],
       "forbidden_exact_paths": [
@@ -58,7 +59,7 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "Auditor refreshes current main/PR #120 tuple -> verdict -> Manager merge/rework decision"
+      "next_gate": "WR-026 returns a new exact remediated head -> Auditor independently re-audits both findings and regression scope"
     },
     {
       "task_id": "WR-034",

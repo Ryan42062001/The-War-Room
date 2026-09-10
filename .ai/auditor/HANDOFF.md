@@ -2,42 +2,24 @@
 
 HANDOFF
 
-Task ID: WR-019
+Task ID: WR-031
 Role: Independent Auditor / QA
-Status: COMPLETE
-Parallel Work Wave: PW-002
+Status: AUDIT COMPLETE — REMEDIATION REQUIRED
+Audited PR/head: PR #120 / `ca7126a76df29ec1fa85020fe15acdca9c8c6c5b`
+Scope verdict: Presentation/test/CI/cache scope only; no ranking, scoring, recommendation-authority, draft-state, persistence-schema, or ESPN-sync implementation file changed.
+Phone verdict: Material decision-first improvement verified, but primary phone navigation is not coherent after an existing position filter is used. HIGH finding `WR-031-AUD-01` blocks release.
+Desktop/tablet preservation verdict: Required 768/820/900/1280/1440 guards passed in independently inspected CI artifact data; phone-only CSS/state is inactive above 600px. No overlapping runtime change exists on current `main`.
+Semantic regression verdict: No semantic-authority regression identified in audited scope.
+Tests/evidence independently verified: PR integration CI run `34430059740` / job `102723486494` SUCCESS; dedicated WR-026 phone suite, full `npm test`, resilience, offline reload, retained screenshot/report artifact `10134135808` inspected. Local checkout rerun unavailable because audit runner GitHub DNS failed; anti-loop rule applied.
+Level-4 physical/manual status: NOT VERIFIED. Manual review was limited to retained Chromium screenshots; no physical-phone evidence is claimed.
+Findings by severity: HIGH — `WR-031-AUD-01` legacy position filter can desynchronize/break new one-tap phone tabs. MEDIUM — `WR-031-AUD-02` fresh-draft phone Draft Setup can collapse after a setting-triggered command-bar re-render. CRITICAL: none. LOW: none.
+Final verdict: FAIL — REMEDIATION REQUIRED
+Recommended next role: Manager / Architect
+Exact next action: Manager route PR #120 back to Builder for bounded remediation of WR-031-AUD-01 and WR-031-AUD-02 on WR-026, require focused regression coverage for both paths plus normal relevant CI, then return the exact remediated head for independent re-audit. Do not merge PR #120 in its audited state.
+Checkpoint / SHA: audited implementation `ca7126a76df29ec1fa85020fe15acdca9c8c6c5b`; audit report commit `f78c009b73e7675c1fca178321c15c8e601ffa02`; audit branch `audit/wr-031-pr120-ca7126a`.
 
-Audit verdict: PASS WITH NON-BLOCKING FINDINGS
-
-Verified starting state:
-- Canonical `main` at audit time: `8931b30d4f4f387504b17ac07d837aa87a166948`
-- Manager task: `.ai/manager/WR-019.md`
-- Implementation task: `.ai/manager/WR-016.md`
-- PR #114 was open, unmerged, mergeable, and reconciled before audit.
-
-Verified final audit tuple:
-- PR #114 head: `5636bd75aa4be34bdbdfc5e459df44283c8f2483`
-- audited base: `8931b30d4f4f387504b17ac07d837aa87a166948`
-- generated merge ref: `318a2ee96ed4c25b23b3609ac31891dc276fbff5`
-- exact integration War Room CI #847 / run `34366327920`: SUCCESS
-
-Disposition:
-- PASS WITH NON-BLOCKING FINDINGS
-- blocking findings: NONE
-- non-blocking finding: `WR-019-AUD-01` LOW — stale integration metadata remained in an older PR-body subsection
-- Level 4 physical-device/manual visual validation was not performed and was not a mandatory WR-016 release criterion
-
-Evidence:
-- `.ai/auditor/WR-019_LAYOUT_RELEASE_AUDIT.md`
-- source audit branch: `audit/wr-019-pr114-5636bd75`
-- source audit branch head observed by Manager: `6c46f4fc7f0073d86157528aa3efcd7e0f3f5799`
+Detailed evidence: `.ai/auditor/WR-031_PHONE_DECISION_AUDIT.md`
 
 Production files changed by Auditor: NO
 Canonical `.ai/shared/*` changed by Auditor: NO
-Auditor merged PR #114: NO
-
-Manager subsequently verified the exact audited tuple remained unchanged and exercised merge authority for PR #114.
-
-Recommended next role: Manager / Architect
-
-Exact next action: none for WR-019. Preserve the audit evidence and reopen only if a later regression or new evidence invalidates the release conclusion.
+Auditor merged PR #120: NO

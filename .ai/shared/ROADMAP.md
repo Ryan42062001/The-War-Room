@@ -1,6 +1,6 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — PHONE UX AUDIT + CUSTOM-ENGINE AVAILABILITY RESEARCH
+Status: ACTIVE DEVELOPMENT — PHONE UX REMEDIATION + CUSTOM-ENGINE AVAILABILITY RESEARCH
 Last updated: 2026-09-10
 Owner: Manager / Architect
 Workflow: V3
@@ -14,7 +14,7 @@ FantasyPros remains production ranking authority under WR-D001. ESPN rank/ADP re
 - WR-023 — COMPLETE / prospective protocol frozen
 - WR-025 — COMPLETE / ACCEPTED / returning-player Ridge mean projection promising; universal risk penalty rejected
 - WR-027 — COMPLETE / ACCEPTED / MERGED; Ridge retained, risk warning-only, Huber rejected
-- WR-029 — COMPLETE / ACCEPTED / MERGED via PR #121 at `f079220e8ed07280d08f13c5db006661728d7f35`; no advanced enrichment family earned promotion
+- WR-029 — COMPLETE / ACCEPTED / MERGED via PR #121; no advanced enrichment family earned promotion
 - WR-033 — COMPLETE / CLOSED / Returning-Player v1 Specification Freeze
 
 ## Returning-player v1 frozen architecture
@@ -72,7 +72,25 @@ WR-034 assigned to R&D. Model availability separately from expected PPR/game. Do
 Combine frozen expected performance with accepted expected-games architecture and calibrated uncertainty.
 
 ### Phase 6 — Replacement / cross-position draft value — PLANNED
-League-specific VORP/FLEX/scarcity; market timing remains separate.
+Primary goal remains a league-specific intrinsic value transform with market timing separate.
+
+Advisory candidate retained for later Manager-approved validation, not frozen:
+- deterministic eligibility-constrained league-wide starter assignment;
+- signed marginal starter value from counterfactual optimal starter output;
+- FLEX/Superflex allocated by eligibility and projection, not fixed extra-position counts;
+- bench depth excluded from the primary starter baseline and handled only through separately named waiver/draftability sensitivity;
+- WR-027 risk remains warning/confidence context, not an automatic value subtraction;
+- K/DST remain separate/endgame until separately validated;
+- future shadow integration must replace, not stack with, overlapping intrinsic rank-gap VORP/scarcity components.
+
+Before Phase 6 can freeze, resolve at minimum:
+- full-PPR-only versus stat-component multi-scoring support;
+- expected season points versus weekly/bye-aware objective;
+- below-frontier public ordering semantics;
+- historical player-universe completeness at the replacement frontier;
+- platform/league eligibility authority and versioning;
+- deterministic solver tie behavior;
+- chronological tier-boundary persistence/dominance gates.
 
 ### Phase 7 — Complete historical replay — PLANNED
 Evaluate whole board/rank/tier/value/warning behavior across prior fake preseasons.
@@ -95,24 +113,26 @@ Requires engine/audit gates, final WR-023 gate and a separate durable Manager de
 ## Phone UX lane
 ### WR-026 — Phone-Only Decision View Optimization
 Role: Builder
-Status: AUDIT_READY
+Status: REWORK_REQUIRED
 PR: #120
+Audit cycle 1 found HIGH `WR-031-AUD-01` and MEDIUM `WR-031-AUD-02`. Builder owns bounded remediation on the same task/PR.
 
 ### WR-031 — Independent Audit of WR-026
 Role: Auditor
-Status: ASSIGNED
+Status: BLOCKED pending remediated WR-026 head
+Audit cycle 1 verdict: `FAIL — REMEDIATION REQUIRED`.
 
 ## PW-004 — ACTIVE
-Two independent lanes are valid in parallel:
-- WR-031 — Auditor — phone release gate for PR #120;
+Two independent lanes remain valid in parallel:
+- WR-026 — Builder — bounded phone remediation on PR #120;
 - WR-034 — R&D — expected-games/availability research.
 
-Dependency: `INDEPENDENT` across lanes. Builder and Draft Strategy remain idle because no current task requires them.
+WR-031 is blocked until WR-026 returns a new exact head. Draft Strategy remains idle because no current task requires it.
 
 ## Current roles
 - Manager: IDLE after reconciliation
-- Builder: IDLE
+- Builder: ACTIVE — WR-026
 - Draft Strategy: IDLE
 - R&D: ACTIVE — WR-034
-- Auditor: ACTIVE — WR-031
+- Auditor: BLOCKED — WR-031
 - Temporary Troubleshooting: NOT INSTANTIATED
