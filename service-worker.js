@@ -1,6 +1,6 @@
 /* War Room offline shell. Network stays authoritative when available. */
 var CACHE_PREFIX = 'war-room-shell-';
-var CACHE_NAME = CACHE_PREFIX + '20260909-2';
+var CACHE_NAME = CACHE_PREFIX + '20260910-3';
 var CORE_ASSETS = [
   './',
   './index.html',
