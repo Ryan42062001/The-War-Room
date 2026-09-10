@@ -1,10 +1,10 @@
 # WR-027 — Position-Specific Risk Calibration Study
 
-Status: PRE-EXECUTION DESIGN FROZEN; RESULTS PENDING  
+Status: COMPLETE — MANAGER REVIEW REQUIRED  
 Role: Research & Development (R&D)  
 Production authorization: NONE
 
-> This design section is frozen before WR-027 model scoring. Results will be appended later without changing the rules below.
+> The design section below was frozen before WR-027 model scoring. The results section was appended after deterministic execution; the rules were not retuned to the observed results.
 
 ## Research question
 
@@ -185,4 +185,137 @@ WR-027 must not modify production files or `.ai/shared/*`.
 
 ## Results
 
-Pending execution under the frozen design above.
+### Benchmark reproduction
+
+The WR-025 mean benchmark reproduced exactly before WR-027 conclusions were accepted:
+- active rows: 1,881;
+- unique returners: 886;
+- baseline pooled MAE: `3.0261717096` — exact WR-025 match;
+- Ridge pooled MAE: `2.8261944403` — exact WR-025 match;
+- Ridge pooled Spearman: `0.6775088312` — exact WR-025 match.
+
+This confirms WR-027 evaluated risk use against the same mean architecture rather than a silently shifted benchmark.
+
+### Position-specific calibration
+
+Pooled 2018–2025 OOS results:
+
+| Position | Label | Prevalence | ROC AUC | PR AUC | Brier skill | ECE | Informative? |
+|---|---|---:|---:|---:|---:|---:|---|
+| QB | breakout | .239 | .772 | .521 | .159 | .047 | YES |
+| QB | downside | .320 | .747 | .603 | .176 | .061 | YES |
+| QB | low availability | .812 | .783 | .936 | .135 | .050 | NO under frozen tier-lift rule |
+| RB | breakout | .167 | .637 | .251 | .016 | .029 | NO |
+| RB | downside | .261 | .800 | .500 | .167 | .078 | YES |
+| RB | low availability | .719 | .725 | .856 | .099 | .046 | YES |
+| WR | breakout | .150 | .664 | .271 | .036 | .029 | YES |
+| WR | downside | .219 | .782 | .435 | .123 | .062 | YES |
+| WR | low availability | .705 | .734 | .852 | .131 | .033 | YES |
+| TE | breakout | .116 | .454 | .113 | -.025 | .006 | NO |
+| TE | downside | .116 | .835 | .471 | .196 | .011 | YES |
+| TE | low availability | .707 | .730 | .856 | .119 | .039 | YES |
+
+The strongest recurring result is downside discrimination. TE downside is especially strong; RB and WR are also useful. Breakout is substantially less transferable: QB is useful, WR is modest, RB fails the frozen rule, and TE breakout is not useful.
+
+QB low-availability probability has strong discrimination/calibration metrics, but with prevalence above .80 the frozen `VERY HIGH >= 1.25x prevalence` rule is mathematically very demanding; it therefore does not qualify as `WARNING-INFORMATIVE`. QB still has qualifying downside evidence, so this does not alter the position policy.
+
+### Warning tiers
+
+The pooled warning tiers show operational separation for the primary downside signals:
+- QB downside: NORMAL event rate 17.8% vs VERY HIGH 90.0% (VERY HIGH N=10);
+- RB downside: NORMAL 10.3% vs VERY HIGH 53.8% (N=26);
+- WR downside: NORMAL 8.5% vs VERY HIGH 62.1% (N=29);
+- TE downside: NORMAL 2.1% vs VERY HIGH 58.8% (N=17).
+
+Low-availability tiers also separate strongly at RB/WR/TE:
+- RB: NORMAL 55.9% vs VERY HIGH 91.0%;
+- WR: NORMAL 53.7% vs VERY HIGH 90.2%;
+- TE: NORMAL 54.7% vs VERY HIGH 94.8%.
+
+These are historical predictive-warning strata, not medical/injury probabilities and not causal effects.
+
+### Ranking-use result
+
+The prior-only candidate grid produced **zero eligible rank-modifier candidates in every position for every final scored season 2018–2025**.
+
+Accordingly, the deterministic selector correctly chose `U=D=A=0` for all 32 season-position decisions. The final risk-modifier ranking therefore remained identical to the Ridge mean ranking rather than forcing a penalty unsupported by prior evidence.
+
+This is a strong negative result for direct rank penalties: even when the warning probabilities contain useful information, no candidate consistently cleared the combined prior rank-MAE, projection-MAE, Spearman and severe-regression guard.
+
+### Position-level policy decision
+
+Under the frozen decision vocabulary:
+
+| Position | Decision | Primary reason |
+|---|---|---|
+| QB | **WARNING-ONLY SUPPORTED** | downside warning qualifies; no rank modifier cleared prior guard |
+| RB | **WARNING-ONLY SUPPORTED** | downside + low-availability warnings qualify; no rank modifier cleared prior guard |
+| WR | **WARNING-ONLY SUPPORTED** | downside + low-availability warnings qualify; no rank modifier cleared prior guard |
+| TE | **WARNING-ONLY SUPPORTED** | downside + low-availability warnings qualify; no rank modifier cleared prior guard |
+
+**No position supports a direct risk-based rank modifier in WR-027.**
+
+Recommended architecture implication for Manager consideration: retain expected-performance rank as the ordering signal and expose position-specific downside/availability warnings separately as explanations/decision context. This is research guidance only and is not a production authorization.
+
+### Robust regression result
+
+Huber did not establish a general replacement for Ridge.
+
+| Position | Ridge MAE | Huber MAE | Ridge RMSE | Huber RMSE | Ridge rank MAE | Huber rank MAE | MAE bootstrap Huber-Ridge 95% CI |
+|---|---:|---:|---:|---:|---:|---:|---|
+| QB | 4.263 | 4.504 | 5.327 | 5.676 | 7.771 | 8.020 | `[+0.072,+0.424]` |
+| RB | 2.785 | 2.798 | 3.645 | 3.828 | 10.456 | 10.758 | `[-0.071,+0.112]` |
+| WR | 2.761 | 2.809 | 4.765 | 6.225 | 14.564 | 14.881 | `[-0.066,+0.225]` |
+| TE | 1.954 | 1.909 | 2.783 | 2.571 | 9.702 | 9.692 | `[-0.129,+0.032]` |
+
+QB Huber is clearly worse with clustered uncertainty entirely unfavorable. RB and WR do not improve. TE shows a modest central MAE/RMSE improvement, but its interval crosses zero, Spearman is slightly lower (`.6595` vs `.6615`), and p95 absolute error worsens (`5.366` vs `5.088`).
+
+Disposition: **retain Ridge as the WR-025/WR-027 mean benchmark; do not replace it with Huber.**
+
+### Rookie boundary
+
+Unchanged. No rookie model was fit in WR-027. The WR-025 transparent position + draft-capital prior remains the accepted research baseline, and the richer rookie Ridge remains unvalidated.
+
+### Prospective isolation / source integrity
+
+- maximum statistical outcome season loaded: **2025**;
+- 2026 regular-season outcomes inspected: **NO**;
+- every nflverse historical asset was checked against the exact WR-025 recorded SHA-256 digest;
+- WR-021 snapshot hash passed before and after execution;
+- WR-023 protocol hash passed before and after execution;
+- frozen WR-021 snapshot changed: **NO**;
+- WR-023 protocol/manifest changed: **NO**.
+
+### Reproducibility
+
+Execution workflow run: `34426951155` — SUCCESS.
+
+Artifact:
+- ID: `10133084430`
+- SHA-256: `67df16e013395d9c6d1336cdec621544c4e0b4015788950769dbe09dabb2f699`
+
+Generated evidence:
+- `.ai/research/generated/POSITION_RISK_RESULTS.json`
+- `.ai/research/generated/POSITION_RISK_ASSET_VERIFICATION.json`
+- `.ai/research/generated/POSITION_RISK_RELIABILITY.csv`
+- `.ai/research/generated/POSITION_RISK_WARNING_TIERS.csv`
+- `.ai/research/generated/POSITION_RISK_CALIBRATION_BY_SEASON.csv`
+- `.ai/research/generated/POSITION_RISK_WEIGHT_SELECTION.csv`
+- `.ai/research/generated/POSITION_RISK_RANK_ROLLING.csv`
+- `.ai/research/generated/POSITION_RISK_ROBUST_ROLLING.csv`
+
+The temporary execution workflow was removed after the successful evidence freeze and must not appear in the final research PR diff.
+
+## WR-027 conclusion
+
+The main projection signal survives intact, but risk belongs in a **separate warning/explanation layer**, not as a direct rank penalty under the tested evidence gate.
+
+Position decisions:
+- QB — `WARNING-ONLY SUPPORTED`
+- RB — `WARNING-ONLY SUPPORTED`
+- WR — `WARNING-ONLY SUPPORTED`
+- TE — `WARNING-ONLY SUPPORTED`
+
+Robust regression: Huber **not supported** as a Ridge replacement.
+
+Production ranking changes authorized: **NONE**.
