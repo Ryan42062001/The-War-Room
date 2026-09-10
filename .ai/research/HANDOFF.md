@@ -2,324 +2,261 @@
 
 HANDOFF
 
-Task ID: WR-027  
+Task ID: WR-029  
 Role: Research & Development (R&D)  
 Status: COMPLETE — MANAGER REVIEW REQUIRED
 
 ## Verified starting state
 
-- refreshed canonical `main`: `9bb1f39013e4069dc59f14644fd383b5a4385ca8`
-- WR-025: COMPLETE / ACCEPTED / MERGED research-only
-- WR-027: ASSIGNED / ACTIVE at start
-- WR-029: PLANNED / BLOCKED ON WR-027 MANAGER DISPOSITION
-- production ranking authority: FantasyPros under WR-D001
-- WR-021 snapshot / WR-023 protocol: accepted, frozen and immutable
-- no existing WR-027 branch or PR at start
+- refreshed canonical `main`: `b89919121cfcc00fc9a02be5d82c1a892036e70b`
+- WR-027: COMPLETE / ACCEPTED / MERGED
+- accepted architecture entering WR-029:
+  - WR-025 Ridge mean projection remains returning-player ordering;
+  - QB/RB/WR/TE risk remains warning/explanation-only;
+  - Huber is not adopted;
+  - rookies remain separate.
+- WR-021 snapshot and WR-023 protocol remain frozen/immutable.
+- production ranking authority remains FantasyPros under WR-D001.
 
 ## Branch
 
-`wr-027-position-risk-calibration`
+`wr-029-advanced-context-enrichment`
 
 ## Starting SHA
 
-`9bb1f39013e4069dc59f14644fd383b5a4385ca8`
+`b89919121cfcc00fc9a02be5d82c1a892036e70b`
 
-## Objective completed
+## Benchmark lock / cutoff contract
 
-Calibrated WR-025 downside, breakout and low-availability signals separately by QB/RB/WR/TE under chronological rolling-origin evaluation, tested whether any position-specific risk penalty earned direct rank use, and tested a transparent Huber robust-regression challenger while preserving the WR-025 Ridge mean architecture exactly.
+Human pre-scoring lock:
+`.ai/research/ADV_CONTEXT_BENCHMARK_LOCK.md`
 
-## Source / rights basis
+Machine lock:
+`.ai/research/generated/ADV_CONTEXT_BENCHMARK_LOCK.json`
 
-WR-027 admitted no new outcome-data family.
+Authoritative committed-byte SHA-256:
+`6498e7399d04cf62018859ec7647eaf14f96d3d4415b0ec3ceffaebbae1773e7`
 
-Reused the exact WR-025 rights-clean nflverse historical sources:
-- Player Summary Stats — CC BY 4.0 — statistical seasons 2012–2025 only;
-- Players immutable/stable identity metadata — CC BY 4.0;
-- Draft Picks — CC BY 4.0.
-
-Every downloaded nflverse asset was independently SHA-256 checked against `.ai/research/generated/HISTORICAL_RANKING_ASSET_MANIFEST.json` from WR-025. A digest mismatch would fail closed.
-
-SafeLeagues/MFL draft-cost data was not re-opened because WR-025's benchmark admission gate already failed.
-
-Source addendum:
-`.ai/research/POSITION_RISK_SOURCE_MANIFEST.md`
-
-## Mean projection benchmark
-
-WR-025 benchmark reproduced exactly before WR-027 conclusions were accepted:
-- active rows: 1,881;
+Exact WR-025 benchmark reproduction before enrichment:
+- active returning rows: 1,881;
 - unique returners: 886;
-- previous-season PPR/game pooled MAE: `3.0261717096`;
-- Ridge pooled MAE: `2.8261944403`;
-- Ridge pooled Spearman: `0.6775088312`.
+- previous-season baseline MAE: `3.0261717096`;
+- Ridge MAE: `2.8261944403`;
+- Ridge RMSE: `4.2363614825`;
+- Ridge Spearman: `0.6775088312`.
 
-All exact values matched WR-025.
+Cutoff:
+- every enrichment target Y uses completed Y-1 REG PBP or immutable/draft metadata only;
+- fixed research cutoff September 1 12:00 UTC of target season;
+- target Week 1+ data forbidden;
+- 2026 statistical/PBP outcomes never requested.
 
-## Risk calibration design
+WR-029 development folds: 2018–2021.  
+Within-task confirmation folds: 2022–2025.  
+Every target model remains rolling-origin.
 
-Position-specific historical models:
-- breakout: standardized L2 logistic, C=.25, balanced classes;
-- downside: same;
-- low availability: same, including zero-game cohort rows.
+## Pre-scoring integrity corrections
 
-Chronological recalibration:
-- raw position/label OOS probabilities generated season by season;
-- later seasons use only earlier OOS probabilities for a one-dimensional Platt recalibrator when >=50 prior OOS observations with both classes exist;
-- warning tiers use prior OOS position/label probability distributions;
-- no target-season outcome calibrates its own probability.
+Two fail-closed corrections happened before an enrichment metric existed:
 
-Frozen labels:
-- breakout: residual >= +3.0 PPR/game vs previous-season baseline;
-- downside: residual <= -3.0;
-- low availability: recorded games <=8, including zero.
+1. machine-lock sidecar normalized to the actual Git-committed JSON bytes; lock JSON/methodology unchanged;
+2. locked Player Summary Stats was found to lack a historical team column. Before any family model fit, `.ai/research/ADV_CONTEXT_PRE_SCORING_SOURCE_CORRECTION.md` froze a replacement prior-team locator using only locked Y-1 PBP offensive involvement. No target-Y roster/current-team field was introduced.
 
-## Pooled calibration results
+No family, fold, threshold, Ridge alpha, warning gate, bootstrap or frozen prospective contract was changed after enrichment evidence appeared.
 
-### QB
-Breakout:
-- prevalence .239
-- ROC AUC .772
-- PR AUC .521
-- Brier skill .159
-- ECE .047
-- `WARNING-INFORMATIVE`: YES
+## Sources / rights / PIT reviewed
 
-Downside:
-- prevalence .320
-- ROC AUC .747
-- PR AUC .603
-- Brier skill .176
-- ECE .061
-- `WARNING-INFORMATIVE`: YES
+Detailed source review:
+`.ai/research/ADV_CONTEXT_SOURCE_MANIFEST.md`
 
-Low availability:
-- prevalence .812
-- ROC AUC .783
-- PR AUC .936
-- Brier skill .135
-- ECE .050
-- frozen tier-lift rule: NO
+Admitted:
+- exact WR-025 nflverse Player Summary Stats / approved immutable Players subset / draft-time Draft Picks fields;
+- nflverse PBP 2012–2025, exact assets/schema locked, completed Y-1 REG events only;
+- FTN Data via nflverse charting, CC-BY-SA, short-history scheme diagnostic only.
 
-### RB
-Breakout:
-- ROC AUC .637
-- `WARNING-INFORMATIVE`: NO
+Audit-only / not model input:
+- participation; provider transition NFL NGS -> FTN and no route denominator inference.
 
-Downside:
-- prevalence .261
-- ROC AUC .800
-- PR AUC .500
-- Brier skill .167
-- `WARNING-INFORMATIVE`: YES
+Excluded:
+- historical depth/weekly roster target-preseason role reconstruction — PIT/source transition insufficient;
+- PFR snap counts/advanced/combine enrichment — rights hold;
+- systematic NFL NGS/NFL Pro feature family — rights hold;
+- current injury feed — coverage/maintainability;
+- staff/play-caller corpus — no rights-clean complete dated PIT corpus admitted;
+- FantasyPros historical/API competing-model inputs — excluded;
+- ESPN ADP/rank — market timing only under WR-D001;
+- 2026 outcomes — frozen-test contamination.
 
-Low availability:
-- prevalence .719
-- ROC AUC .725
-- PR AUC .856
-- Brier skill .099
-- `WARNING-INFORMATIVE`: YES
+True routes/YPRR: **NOT CALCULATED**. No snaps/participation substitute was relabeled as routes.
 
-### WR
-Breakout:
-- prevalence .150
-- ROC AUC .664
-- PR AUC .271
-- Brier skill .036
-- `WARNING-INFORMATIVE`: YES under frozen pooled rule, but VERY HIGH sample is small and this should remain secondary
+## Feature families tested in predeclared order
 
-Downside:
-- prevalence .219
-- ROC AUC .782
-- PR AUC .435
-- Brier skill .123
-- `WARNING-INFORMATIVE`: YES
+1. `OPPORTUNITY_ROLE`
+2. `EFFICIENCY_REGRESSION`
+3. `QB_TEAM_ENVIRONMENT`
+4. `OL_ENVIRONMENT`
+5. `AGE_DRAFT_INTERACTIONS`
+6. `PIT_DEPTH_ROSTER` source/PIT audit
+7. `SHORT_HISTORY_SCHEME`
+8. `STAFF_CONTINUITY` source/PIT audit
+9. combined confirmation using only development-passing families
 
-Low availability:
-- prevalence .705
-- ROC AUC .734
-- PR AUC .852
-- Brier skill .131
-- `WARNING-INFORMATIVE`: YES
+Frozen exact definitions:
+`.ai/research/ADV_CONTEXT_FEATURE_SPEC.md`
 
-### TE
-Breakout:
-- ROC AUC .454
-- Brier skill negative
-- `WARNING-INFORMATIVE`: NO
+## Primary family results
 
-Downside:
-- prevalence .116
-- ROC AUC .835
-- PR AUC .471
-- Brier skill .196
-- ECE .011
-- `WARNING-INFORMATIVE`: YES
+No scored long-history family passed the predeclared 2018–2021 development gate.
 
-Low availability:
-- prevalence .707
-- ROC AUC .730
-- PR AUC .856
-- Brier skill .119
-- `WARNING-INFORMATIVE`: YES
+| Family | Development MAE lift | Confirmation MAE lift | Final disposition |
+|---|---:|---:|---|
+| OPPORTUNITY_ROLE | -0.498% | +0.047% | `INSUFFICIENT EVIDENCE` |
+| EFFICIENCY_REGRESSION | -0.928% | -0.715% | `EXCLUDED — RIGHTS / POINT-IN-TIME / COVERAGE` — coverage reason |
+| QB_TEAM_ENVIRONMENT | -0.837% | +0.131% | `INSUFFICIENT EVIDENCE` |
+| OL_ENVIRONMENT | -1.113% | -0.376% | `INSUFFICIENT EVIDENCE` |
+| AGE_DRAFT_INTERACTIONS | +0.133% | +0.210% | `INSUFFICIENT EVIDENCE` |
 
-## Warning-tier separation
+Positive lift means lower MAE. Core development threshold was >=1.0%, so none selected.
 
-Primary downside warning tiers separate materially:
-- QB NORMAL 17.8% downside vs VERY HIGH 90.0% (VERY HIGH N=10);
-- RB NORMAL 10.3% vs VERY HIGH 53.8% (N=26);
-- WR NORMAL 8.5% vs VERY HIGH 62.1% (N=29);
-- TE NORMAL 2.1% vs VERY HIGH 58.8% (N=17).
+`development_selected_families_before_confirmation = []`.
 
-Low-availability tiers also separate at RB/WR/TE:
-- RB NORMAL 55.9% vs VERY HIGH 91.0%;
-- WR NORMAL 53.7% vs VERY HIGH 90.2%;
-- TE NORMAL 54.7% vs VERY HIGH 94.8%.
+Confirmation metrics for non-selected families were computed only descriptively after development selection had already frozen; they were not used to rescue selection.
 
-These are historical predictive-warning strata, not injury diagnoses or causal effects.
+## Per-position confirmation direction
 
-## Position-specific rank modifier study
+- OPPORTUNITY_ROLE: QB 0.05% worse / RB 0.82% better / WR 0.13% better / TE 1.14% worse.
+- EFFICIENCY_REGRESSION: QB 0.94% worse / RB 2.11% worse / WR 0.22% worse / TE 0.79% better.
+- QB_TEAM_ENVIRONMENT: QB 1.65% worse / RB 0.97% better / WR 0.15% better / TE 1.98% better.
+- OL_ENVIRONMENT: QB 0.87% worse / RB 0.06% better / WR 0.64% worse / TE 0.40% better.
+- AGE_DRAFT_INTERACTIONS: QB 0.20% better / RB 0.14% worse / WR 0.33% better / TE 0.51% better.
 
-Frozen candidate family:
+No family showed a stable, material position-safe direct-ordering advantage.
 
-`risk_score = ridge_mu + U*p_breakout - D*p_downside - A*p_low_availability`
+## Repeated-player-aware uncertainty
 
-with fixed grid:
-- U {0,.5,1,1.5}
-- D {0,.5,1,1.5}
-- A {0,.5,1}
+5,000 player-cluster bootstrap replicates, seed 29029.
 
-For each target season/position, weights could be selected only from earlier OOS evidence and had to clear prior rank-MAE, PPR/game MAE, Spearman and severe-season-regression guards.
+Examples, enriched-minus-Ridge MAE:
+- OPPORTUNITY_ROLE: point `-0.00126`, CI `[-0.03201,+0.02993]`;
+- EFFICIENCY_REGRESSION: point `+0.01915`, CI `[-0.00867,+0.04658]`;
+- QB_TEAM_ENVIRONMENT: point `-0.00352`, CI `[-0.03809,+0.03087]`;
+- AGE_DRAFT_INTERACTIONS: point `-0.00562`, CI `[-0.01491,+0.00304]`.
 
-Result:
-**no candidate passed the prior-only adoption guard for any position in any final scored season 2018–2025.**
+No small positive confirmation result established non-zero incremental benefit.
 
-All 32 season-position selections therefore correctly fell back to `U=D=A=0`.
+## Coverage / missingness / confidence
 
-This negative result was preserved. No post-hoc penalty was tuned.
+Generated:
+- `.ai/research/generated/ADV_CONTEXT_COVERAGE_BY_POSITION_SEASON.csv`
+- `.ai/research/generated/ADV_CONTEXT_PLAYER_FAMILY_COVERAGE.csv`
 
-## Position-level rank-use decision
+Findings:
+- opportunity/team/OL PBP families maintain >90% minimum confirmation row-coverage;
+- age/draft interactions: 100% feature coverage;
+- efficiency/regression: minimum >=70%-feature row coverage falls to ~59.5% development and ~52.3% confirmation; excluded for coverage despite admitted PBP rights/PIT;
+- short-history scheme: minimum row coverage ~90.4% in available diagnostic seasons;
+- missing numeric family values use training-only position medians plus explicit missing indicators;
+- unknown source rows are never silently converted to observed zeros.
 
-QB: `WARNING-ONLY SUPPORTED`  
-Reason: useful downside/breakout warning evidence; no rank modifier earned adoption.
+## Warning / explanation findings
 
-RB: `WARNING-ONLY SUPPORTED`  
-Reason: useful downside + low-availability warning evidence; no rank modifier earned adoption.
+The separate WR-027 downside-warning enrichment gate was applied.
 
-WR: `WARNING-ONLY SUPPORTED`  
-Reason: useful downside + low-availability warning evidence; no rank modifier earned adoption.
+Result: **no WR-029 family passed**.
 
-TE: `WARNING-ONLY SUPPORTED`  
-Reason: especially strong downside + useful low-availability warning evidence; no rank modifier earned adoption.
+No family achieved the predeclared >=2% Brier or >=0.02 AUC improvement in at least two positions while preserving the no->5%-Brier-regression guard.
 
-**No position is `RANK MODIFIER SUPPORTED` under WR-027.**
+WR-027 warning architecture therefore remains unchanged.
 
-Architecture implication for Manager consideration: preserve expected-performance rank as the ordering signal and treat risk as a separate position-specific warning/explanation layer.
+## Short-history scheme challenger
 
-Production authorization remains NONE.
+FTN Data via nflverse exact PBP-match rates:
+- 2022: 95.44%
+- 2023: 91.37%
+- 2024: 91.30%
+- 2025: 90.97%.
 
-## Robust regression result
+Only target seasons 2023–2025 are available without 2026 outcomes.
 
-Fixed challenger:
-`StandardScaler -> HuberRegressor(epsilon=1.35, alpha=.0001)`
+Across 696 paired active rows:
+- Ridge MAE `2.73590`;
+- scheme-enriched MAE `2.77667` (~1.49% worse);
+- Spearman `0.69604 -> 0.68032`;
+- mean position rank MAE `10.0549 -> 10.3274` (~2.71% worse).
 
-### QB
-- Ridge MAE 4.263 vs Huber 4.504
-- Ridge RMSE 5.327 vs Huber 5.676
-- rank MAE 7.771 vs 8.020
-- clustered Huber-minus-Ridge MAE CI `[+0.072,+0.424]`
-- conclusion: Huber clearly worse
+Disposition: `INSUFFICIENT EVIDENCE`.
 
-### RB
-- Ridge MAE 2.785 vs Huber 2.798
-- rank MAE 10.456 vs 10.758
-- clustered CI `[-0.071,+0.112]`
-- conclusion: no improvement
+## Combined confirmation / sensitivity
 
-### WR
-- Ridge MAE 2.761 vs Huber 2.809
-- Ridge RMSE 4.765 vs Huber 6.225
-- rank MAE 14.564 vs 14.881
-- clustered CI `[-0.066,+0.225]`
-- conclusion: no improvement
+Development-selected families: none.
 
-### TE
-- Ridge MAE 1.954 vs Huber 1.909
-- Ridge RMSE 2.783 vs Huber 2.571
-- rank MAE 9.702 vs 9.692
-- clustered CI `[-0.129,+0.032]`
-- Huber p95 error 5.366 vs Ridge 5.088 and Spearman slightly lower
-- conclusion: modest local signal, not enough to replace Ridge
+Combined model therefore equals locked Ridge, not a new enriched model.
 
-Overall robust-regression disposition:
-**retain Ridge as mean benchmark; Huber not supported as replacement.**
+2022–2025 locked Ridge confirmation:
+- n 954;
+- MAE `2.6801823057`;
+- RMSE `3.5699801547`;
+- Spearman `0.6954278827`;
+- mean position rank MAE `10.4536789767`.
 
-## Rookie boundary
+Source-omission and +/-0.5 SD perturbation tests are correctly vacuous because no enrichment family was selected. Fallback remains deterministic `LOCKED_RIDGE`.
 
-Rookies remained completely separate. No rookie model was fit in WR-027.
+## Required final family dispositions
 
-WR-025 transparent position + draft-capital prior remains the accepted research baseline. The richer rookie model remains unvalidated.
+- OPPORTUNITY_ROLE — `INSUFFICIENT EVIDENCE`
+- EFFICIENCY_REGRESSION — `EXCLUDED — RIGHTS / POINT-IN-TIME / COVERAGE` (coverage specifically)
+- QB_TEAM_ENVIRONMENT — `INSUFFICIENT EVIDENCE`
+- OL_ENVIRONMENT — `INSUFFICIENT EVIDENCE`
+- AGE_DRAFT_INTERACTIONS — `INSUFFICIENT EVIDENCE`
+- PIT_DEPTH_ROSTER — `EXCLUDED — RIGHTS / POINT-IN-TIME / COVERAGE`
+- SHORT_HISTORY_SCHEME — `INSUFFICIENT EVIDENCE`
+- STAFF_CONTINUITY — `EXCLUDED — RIGHTS / POINT-IN-TIME / COVERAGE`
 
-## Prospective isolation verification
+`CORE MODEL SUPPORTED`: none.  
+New `WARNING / EXPLANATION ONLY`: none.
 
-Historical max statistical season loaded: 2025.
+## Recommended Phase-2 returning-player specification
 
-2026 regular-season outcomes inspected: **NO**.
+For Manager consideration:
 
-Frozen identities verified both before and after scoring:
-- WR-021 snapshot SHA-256 `9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d` — PASS;
-- WR-023 protocol SHA-256 `f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c` — PASS.
+- ordering: accepted WR-025 Ridge unchanged;
+- risk: accepted WR-027 warning-only architecture unchanged;
+- Huber: no replacement;
+- rookies: separate transparent prior remains benchmark;
+- WR-029 enriched families: do not promote;
+- fallback: locked Ridge;
+- retain WR-029 provenance/cutoff/source-version/coverage/fallback governance concepts for later engine specification if Manager accepts them.
 
-WR-021 snapshot changed: **NO**  
-WR-023 protocol/manifest changed: **NO**
+Detailed result:
+`.ai/research/ADV_CONTEXT_ENRICHMENT.md`
 
 ## Reproducibility
 
-Execution workflow run: `34426951155` — SUCCESS.
+Successful guarded execution:
+- workflow run `34430397953` — SUCCESS;
+- scoring head `1e14be7d481b21b81f0f0f7ca3ed69d0250cf013`;
+- generated-result commit `16074f133e7e122a13c955f287df28f0019af9cc`.
 
 Artifact:
-- ID `10133084430`
-- SHA-256 `67df16e013395d9c6d1336cdec621544c4e0b4015788950769dbe09dabb2f699`
+- ID `10134274500`;
+- SHA-256 `efc58c76cb87b1994626355764719d8c1374a0a578b3538fe61ab4c3f6951c5b`.
 
-Temporary experiment workflow removed after successful output freeze and is not intended in the final research diff.
+The execution-only workflow was removed after output freeze and must not appear in the final research PR.
 
-## Files changed / intended final WR-027 scope
+## Integrity statements
 
-- `.ai/research/POSITION_RISK_SOURCE_MANIFEST.md`
-- `.ai/research/POSITION_RISK_CALIBRATION.md`
-- `.ai/research/wr027_position_risk_calibration.py`
-- `.ai/research/wr027_requirements.txt`
-- `.ai/research/generated/POSITION_RISK_RESULTS.json`
-- `.ai/research/generated/POSITION_RISK_ASSET_VERIFICATION.json`
-- `.ai/research/generated/POSITION_RISK_RELIABILITY.csv`
-- `.ai/research/generated/POSITION_RISK_WARNING_TIERS.csv`
-- `.ai/research/generated/POSITION_RISK_CALIBRATION_BY_SEASON.csv`
-- `.ai/research/generated/POSITION_RISK_WEIGHT_SELECTION.csv`
-- `.ai/research/generated/POSITION_RISK_RANK_ROLLING.csv`
-- `.ai/research/generated/POSITION_RISK_ROBUST_ROLLING.csv`
-- `.ai/research/HANDOFF.md`
-
+2026 outcomes inspected: **NO**  
+WR-021 snapshot changed: **NO**  
+WR-023 protocol/manifest changed: **NO**  
 Production files changed: **NO**  
-Canonical shared state changed: **NO**  
-Production rankings changed: **NO**
-
-## Known limitations
-
-- 2018–2025 are chronological OOS folds but not pristine project-level holdouts;
-- warning labels are expectation-relative observational outcomes, not causal effects;
-- low-availability is recorded-games context, not an injury model;
-- high-risk tier sample sizes are smaller, especially QB downside and breakout tails;
-- breakout evidence remains substantially weaker/less consistent than downside evidence at RB/TE;
-- no direct risk penalty earned adoption, so risk-to-rank interaction remains unsupported rather than merely untuned;
-- Huber does not solve WR-025 outlier concerns generally;
-- rookie engine remains unresolved;
-- no broad lawful historical ADP benchmark exists from WR-025;
-- no 2026 outcome evidence is part of WR-027.
+Production rankings changed: **NO**  
+Canonical `.ai/shared/*` changed: **NO**
 
 ## Blocking issues
 
-None for WR-027 research completion.
+None for WR-029 research completion.
 
-WR-029 remains blocked until Manager reviews/disposes WR-027. Production ranking authority remains separately gated by WR-D001 and the frozen WR-023 prospective process.
+No evidence from WR-029 authorizes a production ranking change. Final prospective promotion remains separately gated by WR-023 and WR-D001.
 
 ## Recommended next role
 
@@ -327,13 +264,7 @@ Manager / Architect
 
 ## Exact next action
 
-Review the WR-027 research PR and accept/reject the position policy. If accepted, unlock the already planned WR-029 advanced-context/source-feasibility phase with this provisional architecture assumption:
-
-- Ridge expected performance remains the returning-player ordering benchmark;
-- QB/RB/WR/TE risk remains warning/explanation-only;
-- no Huber replacement;
-- no rookie promotion;
-- frozen WR-021/WR-023 prospective contract remains untouched.
+Review the WR-029 research PR and accept/reject the family dispositions and proposed Phase-2 returning-player specification. If accepted, freeze Phase 2 around the existing WR-025 Ridge ordering + WR-027 warning-only architecture, while carrying forward the accepted provenance/coverage/fallback governance rather than these rejected enrichment families.
 
 ## Checkpoint / SHA
 
