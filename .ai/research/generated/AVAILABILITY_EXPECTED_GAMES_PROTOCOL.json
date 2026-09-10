@@ -1,0 +1,99 @@
+{
+  "task_id": "WR-034",
+  "status": "FROZEN_PRE_SCORING_LOCK",
+  "experimental_non_production": true,
+  "assignment_base_sha": "f079220e8ed07280d08f13c5db006661728d7f35",
+  "human_protocol_path": ".ai/research/AVAILABILITY_EXPECTED_GAMES_PROTOCOL.md",
+  "human_protocol_git_blob_sha": "4ed74ba431110c7e9742dccab2dfb63ef50592ae",
+  "source_manifest_path": ".ai/research/AVAILABILITY_SOURCE_MANIFEST.md",
+  "source_manifest_git_blob_sha": "02ea51b23c523ae01e491d80409f98aa518ace5d",
+  "historical_stats_seasons": [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+  "target_seasons": [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+  "scored_seasons": [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+  "development_seasons": [2018, 2019, 2020, 2021],
+  "confirmation_seasons": [2022, 2023, 2024, 2025],
+  "positions": ["QB", "RB", "WR", "TE"],
+  "target": {
+    "primary": "recorded_regular_season_games",
+    "zero_game_returners_valid": true,
+    "max_games_rule": "16 through 2020; 17 from 2021 onward",
+    "events": {
+      "low_availability": "target_games <= 8",
+      "high_availability": "target_games >= 14"
+    },
+    "medical_injury_label": false
+  },
+  "cutoff": {
+    "research_cutoff": "September 1 12:00 UTC of target season",
+    "predictors": "completed Y-1/Y-2 regular-season information and admitted immutable metadata only",
+    "target_season_week1_plus_predictors_forbidden": true,
+    "outcomes_2026_forbidden": true
+  },
+  "sources": {
+    "locked_asset_manifest": ".ai/research/generated/HISTORICAL_RANKING_ASSET_MANIFEST.json",
+    "admitted": ["nflverse Player Summary Stats", "nflverse Players stable metadata", "nflverse Draft Picks"],
+    "new_source_families_admitted": [],
+    "verify_downloaded_sha256_against_wr025": true
+  },
+  "baselines": [
+    "PREV_RATE: prev1_games / prior_season_max * target_season_max, clipped",
+    "PREV_GAMES: prev1_games clipped to target-season max",
+    "POSITION_MEAN: earlier-target-season position mean"
+  ],
+  "feature_sets": {
+    "MINIMAL_AVAILABILITY": [
+      "prev1_games", "prev2_games", "games_delta", "has_prev2", "age_sep1",
+      "age_missing", "experience_years", "log_draft_pick", "draft_round", "drafted"
+    ],
+    "FULL_WR025": "exact wr025_historical_ranking_signals.FEATURES"
+  },
+  "expected_games_candidates": {
+    "RIDGE_MINIMAL": "StandardScaler -> Ridge(alpha=100.0)",
+    "RIDGE_FULL": "StandardScaler -> Ridge(alpha=100.0)",
+    "POISSON_MINIMAL": "StandardScaler -> PoissonRegressor(alpha=1.0,max_iter=2000)",
+    "MULTINOMIAL_HURDLE": "StandardScaler -> LogisticRegression(C=0.25,solver=lbfgs,max_iter=2000,random_state=34034); classes 0-8,9-13,14+; expectation uses training-only within-class mean games"
+  },
+  "event_candidates": {
+    "PREVALENCE": "training-position prevalence",
+    "LOGIT_MINIMAL": "StandardScaler -> LogisticRegression(C=0.25,solver=liblinear,max_iter=2000,random_state=34034)",
+    "LOGIT_FULL": "StandardScaler -> LogisticRegression(C=0.25,solver=liblinear,max_iter=2000,random_state=34034)"
+  },
+  "predictive_interval": "80% training-only position residual interval using 10th/90th percentiles, clipped to valid games",
+  "metrics": {
+    "expected_games": ["MAE", "RMSE", "mean_bias", "Spearman", "predicted-range calibration"],
+    "events": ["prevalence", "Brier", "Brier_skill", "ROC_AUC", "PR_AUC", "log_loss", "reliability", "probability-tier event rate"],
+    "uncertainty": ["80pct_interval_coverage", "mean_interval_width", "by_position_coverage"],
+    "robustness": ["5000_player_cluster_bootstrap", "season_stability", "coverage_missingness", "selected_model_omission_and_half_sd_perturbation", "fallback_test"]
+  },
+  "seeds": {"model": 34034, "bootstrap": 34035},
+  "adoption_gate": {
+    "development_mae_lift_min": 0.01,
+    "development_rmse_regression_max": 0.01,
+    "development_position_mae_regression_max": 0.05,
+    "development_mean_season_mae_delta_max": 0.0,
+    "development_cluster_bootstrap_ci_upper_lt": 0.0,
+    "confirmation_mae_lift_min": 0.005,
+    "confirmation_cluster_bootstrap_ci_upper_lte": 0.0,
+    "confirmation_position_mae_regression_max": 0.05,
+    "confirmation_interval_coverage_min": 0.72,
+    "confirmation_interval_coverage_max": 0.88,
+    "candidate_tiebreak_order": ["RIDGE_MINIMAL", "POISSON_MINIMAL", "RIDGE_FULL", "MULTINOMIAL_HURDLE"]
+  },
+  "event_warning_gate": {
+    "confirmation_pooled_brier_skill_gt": 0.0,
+    "position_brier_skill_floor": -0.05,
+    "gross_reliability_inversion_forbidden": true,
+    "ordering_effect": "NONE"
+  },
+  "fallback": {
+    "expected_games_primary": "PREV_RATE",
+    "expected_games_if_prior_games_missing": "training-position mean with flag",
+    "event_probability": "training-position prevalence with flag"
+  },
+  "frozen_artifact_sentinels": [
+    ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+    ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+    ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
+  ],
+  "production_authorization": "NONE"
+}
