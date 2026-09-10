@@ -55,3 +55,24 @@ RATIONALE: The numbered ledger is the reconciled source of draft progress. A tra
 EVIDENCE: PR #108 audited head `d9b537ddac665207ab61aed7527d7da986cc4815`; Independent Auditor PASS in `.ai/auditor/AUDIT.md`; deterministic RED-before-fix CI #624 and GREEN exact-head CI #636; merged as `c5648122710d0720a59d8a8a79944b7ddf5b1d5a`.
 ALTERNATIVES REJECTED: Allow any later UI heartbeat to overwrite completion regardless of ledger state; make UI markers the sole completion authority; prevent explicit reset/session changes from clearing completion.
 REVISIT CONDITION: The numbered-ledger model or configured draft-slot semantics materially change, or new evidence shows the ledger can be complete without representing terminal draft progress.
+
+---
+
+## DECISION WR-D005
+
+DATE: 2026-09-10
+TASK: WR-033 — Returning-Player v1 Specification Freeze
+STATUS: ACTIVE — RESEARCH / DEVELOPMENT ARCHITECTURE ONLY
+DECISION:
+- Returning-player expected PPR/game ordering uses the exact WR-025 feature matrix/preprocessing and separate-by-position `StandardScaler -> Ridge(alpha=100)`.
+- WR-027 QB/RB/WR/TE risk outputs remain warning/explanation-only using its fixed position-specific logistic, prior-only recalibration, and warning-tier contract; risk does not directly modify rank.
+- Huber is not adopted as a Ridge replacement.
+- No WR-029 enrichment family is promoted.
+- WR-029 point-in-time, provenance, source-version, coverage, missing-data, and fallback governance is adopted for later engine work. Historical research/evaluation retains the fixed September 1 12:00 UTC target-season cutoff; runtime refresh cadence remains a later implementation decision.
+- Deterministic source/model fallback remains `LOCKED_RIDGE`.
+- Rookies remain separate from the returning-player model.
+- WR-D001 remains unchanged. This decision does not authorize custom rankings in production.
+RATIONALE: WR-029 reproduced the accepted WR-025 Ridge benchmark exactly, then no tested enrichment family cleared the predeclared development gate or warning-enrichment gate. WR-027 separately established informative position-specific warnings while every direct rank-modifier candidate failed its prior-evidence guard.
+EVIDENCE: `.ai/research/HISTORICAL_RANKING_SIGNAL_MANIFEST.md`; `.ai/research/POSITION_RISK_CALIBRATION.md`; WR-029 research merged through PR #121 after successful exact-head CI.
+ALTERNATIVES REJECTED: Promote sub-threshold age/draft interactions; adopt a kitchen-sink context model; apply direct risk penalties to rank; replace Ridge with Huber; admit depth/staff/route or other fields that failed rights, point-in-time, or coverage gates.
+REVISIT CONDITION: New rights-clean, cutoff-safe, predeclared evidence clears the applicable adoption gates or a later approved engine milestone formally revises the returning-player specification without contaminating WR-023.

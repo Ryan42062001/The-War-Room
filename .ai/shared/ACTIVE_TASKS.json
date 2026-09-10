@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-10T20:25:00Z",
+  "updated_at_utc": "2026-09-10T22:16:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": [
@@ -39,28 +39,6 @@
       "next_gate": "WR-031 Auditor verdict -> Manager merge/rework decision"
     },
     {
-      "task_id": "WR-029",
-      "owner": "R&D",
-      "status": "IN_PROGRESS",
-      "task_file": ".ai/manager/WR-029.md",
-      "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": "316160dee856d2445731fbb92fe63d7fd9cbdb7e",
-      "worker_checkpoint_sha": null,
-      "branch": null,
-      "pr": null,
-      "dependency": "INDEPENDENT",
-      "audit_required": false,
-      "blocked_on": [],
-      "allowed_path_prefixes": [".ai/research/"],
-      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/"],
-      "forbidden_exact_paths": [
-        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
-        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
-        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
-      ],
-      "next_gate": "R&D handoff -> MANAGER_REVIEW_READY -> Manager feature-family disposition -> Phase 2 specification-freeze decision"
-    },
-    {
       "task_id": "WR-031",
       "owner": "Auditor",
       "status": "ASSIGNED",
@@ -80,7 +58,30 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "Auditor verdict -> Manager merge/rework decision on WR-026 / PR #120"
+      "next_gate": "Auditor refreshes current main/PR #120 tuple -> verdict -> Manager merge/rework decision"
+    },
+    {
+      "task_id": "WR-034",
+      "owner": "R&D",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-034.md",
+      "role_handoff": ".ai/research/HANDOFF.md",
+      "assignment_main_sha": "f079220e8ed07280d08f13c5db006661728d7f35",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-034-availability-expected-games",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "WORK_MODE_PREFERRED",
+      "audit_required": false,
+      "blocked_on": [],
+      "allowed_path_prefixes": [".ai/research/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/"],
+      "forbidden_exact_paths": [
+        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
+      ],
+      "next_gate": "R&D handoff -> MANAGER_REVIEW_READY -> Manager Phase-4 disposition -> Phase-5 season-total task"
     }
   ]
 }

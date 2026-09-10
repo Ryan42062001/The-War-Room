@@ -1,34 +1,35 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — PW-003 PHONE UX + CUSTOM-RANKING ENRICHMENT
-Last updated: 2026-09-09
+Status: ACTIVE DEVELOPMENT — PHONE UX AUDIT + CUSTOM-ENGINE AVAILABILITY RESEARCH
+Last updated: 2026-09-10
 Owner: Manager / Architect
+Workflow: V3
 
 ## Production baseline
-Draft-Day Layout Efficiency is complete. FantasyPros remains ranking authority under WR-D001; ESPN rank/ADP remains market timing only.
+FantasyPros remains production ranking authority under WR-D001. ESPN rank/ADP remains downstream market timing only. WR-021 / WR-023 prospective artifacts remain frozen and untouched.
 
 ## Ranking R&D history
 - WR-018 — COMPLETE / MORE EVIDENCE NEEDED
 - WR-021 — COMPLETE / PROMISING — CONTINUE VALIDATION / research only
 - WR-023 — COMPLETE / prospective protocol frozen
 - WR-025 — COMPLETE / ACCEPTED / returning-player Ridge mean projection promising; universal risk penalty rejected
-- WR-027 — COMPLETE / ACCEPTED / MERGED via PR #119 at `316160dee856d2445731fbb92fe63d7fd9cbdb7e`
+- WR-027 — COMPLETE / ACCEPTED / MERGED; Ridge retained, risk warning-only, Huber rejected
+- WR-029 — COMPLETE / ACCEPTED / MERGED via PR #121 at `f079220e8ed07280d08f13c5db006661728d7f35`; no advanced enrichment family earned promotion
+- WR-033 — COMPLETE / CLOSED / Returning-Player v1 Specification Freeze
 
-## WR-027 accepted architecture
-Entering the next phase:
-- Ridge remains expected-performance ordering benchmark;
-- QB/RB/WR/TE risk is warning/explanation-only;
-- no direct risk rank modifier is supported;
-- Huber is not adopted;
-- rookies remain separate.
+## Returning-player v1 frozen architecture
+- cohort: returning QB/RB/WR/TE; rookies separate;
+- expected-performance ordering: exact WR-025 feature matrix with position-specific `StandardScaler -> Ridge(alpha=100)`;
+- risk: WR-027 position-specific calibrated warning/explanation outputs only;
+- direct risk rank modifier: NONE;
+- Huber replacement: NOT ADOPTED;
+- WR-029 enrichment families: NONE PROMOTED;
+- historical research/evaluation cutoff: September 1 12:00 UTC of target season;
+- governance: immutable source/version/provenance/schema identities, point-in-time joins, explicit missingness/coverage/confidence, training-only imputation, fail-closed handling, and deterministic `LOCKED_RIDGE` fallback;
+- production authority: UNCHANGED under WR-D001.
 
-## WR-028 — Custom Ranking Engine Roadmap / Architecture Plan
-Status: COMPLETE / AMENDED
-Task: `.ai/manager/WR-028.md`
-
-The roadmap targets `ENGINE-COMPLETE` and `SHADOW-READY` before season end while keeping production promotion gated on frozen WR-023 evidence.
-
-Cross-cutting contracts now explicitly required:
+## Cross-cutting engine contracts
+WR-028 remains the architecture plan. Before `ENGINE-COMPLETE` / `SHADOW-READY`, resolve and preserve:
 - point-in-time feature store/cutoff semantics;
 - immutable source/schema/manifests/hashes;
 - missing-data and fallback policy;
@@ -37,7 +38,7 @@ Cross-cutting contracts now explicitly required:
 - uncertainty-aware deterministic tiers;
 - league replacement/FLEX/value contract;
 - K/DST separate policy;
-- late entrant and position-change/eligibility policy;
+- late entrants and position-change/eligibility policy;
 - data/model/value/board versioning;
 - Champion/Challenger governance;
 - Last-Known-Good rollback;
@@ -48,64 +49,36 @@ Cross-cutting contracts now explicitly required:
 - strict separation of intrinsic custom value from ESPN/live-draft strategy;
 - deterministic reproducibility and independent leakage/provenance audit.
 
-## Work-mode gap analysis disposition
-Manager accepted the external Technical Research & Architecture Support report as advisory evidence.
+## Roadmap phases
+### Phase 0 — Evidence foundation — COMPLETE
+WR-018 / WR-021 / WR-023 / WR-025.
 
-Accepted direction:
-- strengthen WR-029 rather than create a new task ID;
-- lock the post-WR-027 benchmark before scoring enrichment;
-- test long-history rights-clean PBP families first;
-- require explicit rights/PIT/coverage exclusions;
-- do not fabricate true routes/YPRR;
-- treat source classifications as provisional until R&D independently verifies them.
+### Phase 1 — Position-specific risk calibration — COMPLETE
+WR-027 accepted.
 
-## WR-029 — Advanced Context Feature Enrichment / Source Feasibility
-Role: R&D
-Status: ACTIVE
-Task: `.ai/manager/WR-029.md`
-Production authorization: NONE
+### Phase 1.5 — Advanced context enrichment — COMPLETE
+WR-029 accepted. Negative adoption result: no enrichment family promoted; governance evidence retained.
 
-Test order:
-1. benchmark lock + cutoff/provenance contract;
-2. long-history opportunity/red-zone/concentration;
-3. long-history efficiency/regression;
-4. QB decomposition + team pace/pass tendency/efficiency;
-5. PBP-derived OL environment;
-6. age/experience/draft-capital interactions;
-7. PIT-audited depth/roster/vacated-opportunity context;
-8. short-history scheme challenger;
-9. staff continuity only after predeclared coverage/PIT threshold;
-10. selected combined model and confirmation.
-
-Every feature family must end as:
-- `CORE MODEL SUPPORTED`
-- `WARNING / EXPLANATION ONLY`
-- `INSUFFICIENT EVIDENCE`
-- `EXCLUDED — RIGHTS / POINT-IN-TIME / COVERAGE`
-
-WR-029 must not inspect 2026 outcomes or modify WR-021/WR-023.
-
-## Subsequent custom-engine phases
-### Phase 2 — Returning-player v1 specification freeze — PLANNED / HARD BLOCKED ON WR-029
-Freeze final features, preprocessing, model, cutoff/provenance, uncertainty and warning outputs.
+### Phase 2 — Returning-player v1 specification freeze — COMPLETE
+WR-033. Fixed returner architecture recorded under WR-D005.
 
 ### Phase 3 — Rookie engine v1 — PLANNED
-Transparent draft-capital/position prior remains benchmark unless a lawful chronological challenger wins.
+Transparent position + draft-capital prior remains benchmark unless a lawful chronological challenger wins. May run independently of Phase 4 when useful.
 
-### Phase 4 — Availability / expected-games model — PLANNED
-Separate availability from PPR/game; do not claim medical injury prediction without admitted evidence.
+### Phase 4 — Availability / expected-games model — ACTIVE
+WR-034 assigned to R&D. Model availability separately from expected PPR/game. Do not claim medical/injury prediction without admitted medical/injury evidence.
 
-### Phase 5 — Season-total distribution — PLANNED
-Expected PPR/game + expected games + calibrated uncertainty.
+### Phase 5 — Season-total distribution — PLANNED / HARD BLOCKED ON WR-034
+Combine frozen expected performance with accepted expected-games architecture and calibrated uncertainty.
 
 ### Phase 6 — Replacement / cross-position draft value — PLANNED
-League-specific VORP/FLEX/scarcity; market timing kept separate.
+League-specific VORP/FLEX/scarcity; market timing remains separate.
 
 ### Phase 7 — Complete historical replay — PLANNED
 Evaluate whole board/rank/tier/value/warning behavior across prior fake preseasons.
 
 ### Phase 8 — 2026 custom development board — PLANNED
-Use only frozen/preseason inputs; label as development/post-kickoff architecture, not a new pristine prospective test.
+Use only frozen/preseason inputs; label DEVELOPMENT / post-kickoff architecture, not a new pristine prospective test.
 
 ### Phase 9 — Shadow production integration — PLANNED
 Builder + Auditor; FantasyPros stays authoritative.
@@ -119,21 +92,27 @@ Optional Week 4/8/13 descriptive checkpoints; completed Week 18 regular season d
 ### Phase 12 — Production-ranking promotion decision — FUTURE / CONDITIONAL
 Requires engine/audit gates, final WR-023 gate and a separate durable Manager decision.
 
-## PW-003 — ACTIVE
+## Phone UX lane
 ### WR-026 — Phone-Only Decision View Optimization
 Role: Builder
-Status: IN PROGRESS
-PR: #120 draft
-Independent audit required.
+Status: AUDIT_READY
+PR: #120
 
-### WR-029 — Advanced Context Feature Enrichment
-Role: R&D
-Status: ACTIVE
+### WR-031 — Independent Audit of WR-026
+Role: Auditor
+Status: ASSIGNED
 
-Dependency: WR-026 vs WR-029 = INDEPENDENT.
+## PW-004 — ACTIVE
+Two independent lanes are valid in parallel:
+- WR-031 — Auditor — phone release gate for PR #120;
+- WR-034 — R&D — expected-games/availability research.
+
+Dependency: `INDEPENDENT` across lanes. Builder and Draft Strategy remain idle because no current task requires them.
 
 ## Current roles
-- Manager: IDLE after WR-027 disposition / WR-029 activation
-- Builder: ACTIVE — WR-026
-- R&D: ACTIVE — WR-029
-- Auditor: IDLE / waiting for WR-026 AUDIT_READY
+- Manager: IDLE after reconciliation
+- Builder: IDLE
+- Draft Strategy: IDLE
+- R&D: ACTIVE — WR-034
+- Auditor: ACTIVE — WR-031
+- Temporary Troubleshooting: NOT INSTANTIATED
