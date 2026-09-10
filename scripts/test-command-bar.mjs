@@ -75,13 +75,18 @@ try {
   assert.ok(onClock.height >= initial.height + 20, `expected clock bar ${onClock.height}px to be visibly taller than waiting ${initial.height}px`);
   assert.deepEqual(onClock.drafted.sort(), draftedNames.slice().sort());
 
-  const setupDisclosure = page.locator('.draft-command-setup-disclosure');
-  if (await setupDisclosure.count()) {
-    const setupOpen = await setupDisclosure.evaluate(details => details.open);
-    if (!setupOpen) await setupDisclosure.locator('summary').click();
-  }
+  await page.evaluate(() => {
+    const details = document.querySelector('.draft-command-setup-disclosure');
+    if (details && !details.open) details.querySelector('summary')?.click();
+  });
+  await page.waitForFunction(() => {
+    const input = document.querySelector('[data-command-setting="slot"]');
+    if (!input) return false;
+    const rect = input.getBoundingClientRect();
+    const style = getComputedStyle(input);
+    return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+  });
   const slotInput = page.locator('[data-command-setting="slot"]');
-  await slotInput.waitFor({state:'visible'});
   await slotInput.fill('6');
   await slotInput.dispatchEvent('change');
   await page.waitForFunction(() => document.body.getAttribute('data-draft-command-mode') === 'waiting');
