@@ -14,6 +14,12 @@ if spec is None or spec.loader is None:
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
 
+# Authoritative committed-byte lock. The initial lock workflow sidecar captured
+# its pre-commit working-tree hash; a later no-scoring lock rerun normalized the
+# sidecar to these exact committed repository bytes. No enrichment scoring had
+# occurred before this value was bound.
+mod.LOCK_SHA256 = "6498e7399d04cf62018859ec7647eaf14f96d3d4415b0ec3ceffaebbae1773e7"
+
 # Preserve the frozen feature definition exactly: top-QB share means the single
 # largest QB dropback share, not top-two concentration. The base aggregation
 # already computes every other family statistic; this wrapper independently
