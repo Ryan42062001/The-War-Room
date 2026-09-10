@@ -68,6 +68,17 @@
     return getSearchValue().length > 0;
   }
 
+  function getLegacyFilterButton(position) {
+    return document.querySelector('.filterbtn[data-pos="' + position + '"]');
+  }
+
+  function syncLegacyPositionFilter(position) {
+    var next = position || 'ALL';
+    if (typeof window.currentPosFilter !== 'undefined' && window.currentPosFilter === next) return;
+    if (typeof window.setPosFilter !== 'function') return;
+    window.setPosFilter(next, getLegacyFilterButton(next));
+  }
+
   function ensureControls() {
     var board = getBoard();
     var grid = getGrid();
@@ -98,8 +109,8 @@
         var button = event.target && event.target.closest ? event.target.closest('[data-phone-position]') : null;
         if (!button || !nav.contains(button)) return;
         var next = button.getAttribute('data-phone-position');
-        if (next === 'ENDGAME') setActiveContext('ENDGAME', true);
-        else if (PRIMARY_POSITIONS.indexOf(next) >= 0) setActiveContext(next, true);
+        if (next === 'ENDGAME') setActiveContext('ENDGAME', true, true);
+        else if (PRIMARY_POSITIONS.indexOf(next) >= 0) setActiveContext(next, true, true);
       });
     }
 
@@ -208,10 +219,14 @@
     };
   }
 
-  function setActiveContext(next, shouldReveal) {
+  function setActiveContext(next, shouldReveal, syncLegacy) {
     if (next === 'ENDGAME') activePosition = 'ENDGAME';
     else if (PRIMARY_POSITIONS.indexOf(next) >= 0) activePosition = next;
     else return;
+
+    if (syncLegacy && isPhone() && isPositionView()) {
+      syncLegacyPositionFilter(activePosition === 'ENDGAME' ? 'ALL' : activePosition);
+    }
 
     expanded = false;
     synchronize();
@@ -314,19 +329,38 @@
     if (search && search.dataset.phoneDecisionBound !== 'true') {
       search.dataset.phoneDecisionBound = 'true';
       search.addEventListener('input', function() {
+        if (isPhone() && isPositionView()) {
+          var searchActive = isSearchActive();
+          var nextFilter = searchActive
+            ? 'ALL'
+            : (PRIMARY_POSITIONS.indexOf(activePosition) >= 0 ? activePosition : 'ALL');
+          syncLegacyPositionFilter(nextFilter);
+        }
         window.requestAnimationFrame(scheduleSync);
       });
     }
 
     document.addEventListener('click', function(event) {
-      if (!isPhone() || !isPositionView()) return;
-      var target = event.target && event.target.closest ? event.target.closest('[data-pos], [data-command-position]') : null;
-      if (!target) return;
-      var position = target.getAttribute('data-command-position') || target.getAttribute('data-pos');
+      if (!isPhone() || !isPositionView() || !event.target || !event.target.closest) return;
+
+      var commandTarget = event.target.closest('[data-command-position]');
+      if (commandTarget) {
+        var commandPosition = commandTarget.getAttribute('data-command-position');
+        if (PRIMARY_POSITIONS.indexOf(commandPosition) >= 0) {
+          window.setTimeout(function() { setActiveContext(commandPosition, true, true); }, 0);
+        } else if (commandPosition === 'K' || commandPosition === 'DST') {
+          window.setTimeout(function() { setActiveContext('ENDGAME', true, true); }, 0);
+        }
+        return;
+      }
+
+      var legacyTarget = event.target.closest('.filterbtn[data-pos]');
+      if (!legacyTarget) return;
+      var position = legacyTarget.getAttribute('data-pos');
       if (PRIMARY_POSITIONS.indexOf(position) >= 0) {
-        window.setTimeout(function() { setActiveContext(position, true); }, 0);
+        window.setTimeout(function() { setActiveContext(position, true, false); }, 0);
       } else if (position === 'K' || position === 'DST') {
-        window.setTimeout(function() { setActiveContext('ENDGAME', true); }, 0);
+        window.setTimeout(function() { setActiveContext('ENDGAME', true, false); }, 0);
       }
     }, false);
   }
@@ -359,9 +393,9 @@
   }
 
   window.WarRoomPhoneDecisionView = {
-    version: 1,
+    version: 2,
     refresh: scheduleSync,
-    setActivePosition: function(position) { setActiveContext(position, false); },
+    setActivePosition: function(position) { setActiveContext(position, false, false); },
     getActivePosition: function() { return activePosition; },
     isExpanded: function() { return expanded; },
     isPhone: isPhone
