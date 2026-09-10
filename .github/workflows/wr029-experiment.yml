@@ -1,0 +1,75 @@
+name: WR-029 Advanced Context Experiment
+
+on:
+  push:
+    branches: [wr-029-advanced-context-enrichment]
+
+permissions:
+  contents: write
+
+jobs:
+  experiment:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: .ai/research/wr029_requirements.txt
+      - name: Install research dependencies
+        run: pip install -r .ai/research/wr029_requirements.txt
+      - name: Static syntax check
+        run: |
+          python -m py_compile \
+            .ai/research/wr029_benchmark_lock.py \
+            .ai/research/wr029_advanced_context_enrichment.py \
+            .ai/research/wr029_run_experiment.py \
+            .ai/research/wr029_sensitivity_addendum.py
+      - name: Verify locked contracts before scoring
+        shell: bash
+        run: |
+          test "$(sha256sum .ai/research/generated/ADV_CONTEXT_BENCHMARK_LOCK.json | awk '{print $1}')" = "a93c1ce6d04c10e262d245858a7b5dfd07bb6eb98e5d1a0cb38cf877c846261e"
+          test "$(sha256sum .ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv | awk '{print $1}')" = "9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d"
+          test "$(sha256sum .ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md | awk '{print $1}')" = "f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c"
+      - name: Run predeclared enrichment experiment
+        run: python .ai/research/wr029_run_experiment.py
+      - name: Run numeric perturbation sensitivity
+        run: python .ai/research/wr029_sensitivity_addendum.py
+      - name: Verify locked contracts after scoring
+        shell: bash
+        run: |
+          test "$(sha256sum .ai/research/generated/ADV_CONTEXT_BENCHMARK_LOCK.json | awk '{print $1}')" = "a93c1ce6d04c10e262d245858a7b5dfd07bb6eb98e5d1a0cb38cf877c846261e"
+          test "$(sha256sum .ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv | awk '{print $1}')" = "9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d"
+          test "$(sha256sum .ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md | awk '{print $1}')" = "f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c"
+      - name: Persist exact generated WR-029 outputs
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            .ai/research/generated/ADV_CONTEXT_RESULTS.json \
+            .ai/research/generated/ADV_CONTEXT_FAMILY_ABLATIONS.csv \
+            .ai/research/generated/ADV_CONTEXT_COVERAGE_BY_POSITION_SEASON.csv \
+            .ai/research/generated/ADV_CONTEXT_PLAYER_FAMILY_COVERAGE.csv \
+            .ai/research/generated/ADV_CONTEXT_SENSITIVITY.json \
+            .ai/research/generated/ADV_CONTEXT_SOURCE_EXECUTION_AUDIT.json
+          git commit -m 'WR-029 freeze advanced context experiment outputs'
+          git push
+      - name: Upload WR-029 evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: wr029-advanced-context-results
+          path: |
+            .ai/research/generated/ADV_CONTEXT_BENCHMARK_LOCK.json
+            .ai/research/generated/ADV_CONTEXT_BENCHMARK_LOCK.sha256
+            .ai/research/generated/ADV_CONTEXT_RESULTS.json
+            .ai/research/generated/ADV_CONTEXT_FAMILY_ABLATIONS.csv
+            .ai/research/generated/ADV_CONTEXT_COVERAGE_BY_POSITION_SEASON.csv
+            .ai/research/generated/ADV_CONTEXT_PLAYER_FAMILY_COVERAGE.csv
+            .ai/research/generated/ADV_CONTEXT_SENSITIVITY.json
+            .ai/research/generated/ADV_CONTEXT_SOURCE_EXECUTION_AUDIT.json
+          if-no-files-found: error
