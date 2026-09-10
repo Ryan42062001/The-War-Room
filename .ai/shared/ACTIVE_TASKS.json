@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-10T01:45:00Z",
+  "updated_at_utc": "2026-09-10T02:08:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": [
@@ -23,9 +23,9 @@
       "task_file": ".ai/manager/WR-026.md",
       "role_handoff": ".ai/builder/HANDOFF.md",
       "assignment_main_sha": "69689edadab5c8f270bc483b6acc461274ec7f87",
-      "worker_checkpoint_sha": null,
-      "branch": null,
-      "pr": null,
+      "worker_checkpoint_sha": "6b0821a03608f170903a46f015976028d9991275",
+      "branch": "wr-026-phone-decision-view",
+      "pr": 120,
       "dependency": "INDEPENDENT",
       "audit_required": true,
       "blocked_on": [],
@@ -39,15 +39,15 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "Builder handoff -> finish check -> Independent Auditor -> Manager merge decision"
+      "next_gate": "Builder final handoff / exact head -> AUDIT_READY -> Independent Auditor -> Manager merge decision"
     },
     {
-      "task_id": "WR-027",
+      "task_id": "WR-029",
       "owner": "R&D",
       "status": "IN_PROGRESS",
-      "task_file": ".ai/manager/WR-027.md",
+      "task_file": ".ai/manager/WR-029.md",
       "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": "dc412db43b52dc0fd6c195478f7e873344228fb7",
+      "assignment_main_sha": "316160dee856d2445731fbb92fe63d7fd9cbdb7e",
       "worker_checkpoint_sha": null,
       "branch": null,
       "pr": null,
@@ -66,36 +66,7 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "R&D handoff -> MANAGER_REVIEW_READY -> Manager disposition"
-    },
-    {
-      "task_id": "WR-029",
-      "owner": "R&D",
-      "status": "BLOCKED",
-      "task_file": ".ai/manager/WR-029.md",
-      "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": null,
-      "worker_checkpoint_sha": null,
-      "branch": null,
-      "pr": null,
-      "dependency": "HARD",
-      "audit_required": false,
-      "blocked_on": [
-        "WR-027 Manager disposition"
-      ],
-      "allowed_path_prefixes": [
-        ".ai/research/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/"
-      ],
-      "forbidden_exact_paths": [
-        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
-        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
-        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
-      ],
-      "next_gate": "Manager accepts WR-027 and explicitly activates WR-029"
+      "next_gate": "R&D handoff -> MANAGER_REVIEW_READY -> Manager feature-family disposition -> Phase 2 specification-freeze decision"
     }
   ]
 }

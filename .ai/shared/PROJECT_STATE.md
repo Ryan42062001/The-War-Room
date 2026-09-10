@@ -1,76 +1,107 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WORKFLOW V2 / PW-003 PHONE UX + CUSTOM-RANKING R&D
+Status: ACTIVE DEVELOPMENT — PHONE UX + ADVANCED CUSTOM-RANKING ENRICHMENT
 Last verified: 2026-09-09
 Owner: Manager / Architect
 
 ## Canonical repository
 Repository: `Ryan42062001/The-War-Room`
 Branch: `main`
-
-## Current control plane
-Workflow: **V2 ACTIVE** via WR-030.
-
-Fast current-task index:
-`.ai/shared/ACTIVE_TASKS.json`
-
-Current task states:
-- WR-026 — Builder — `IN_PROGRESS` — phone-only decision view — independent audit required.
-- WR-027 — R&D — `IN_PROGRESS` — position-specific risk calibration — Manager review next.
-- WR-029 — R&D — `BLOCKED` — waits for WR-027 Manager disposition.
-
-Detailed task requirements remain in `.ai/manager/WR-026.md`, `.ai/manager/WR-027.md`, and `.ai/manager/WR-029.md`.
+Workflow: V2
+Fast-path task index: `.ai/shared/ACTIVE_TASKS.json`
 
 ## Production baseline
-Draft-Day Layout Efficiency is complete and audited.
+Ranking authority remains unchanged under WR-D001:
+- FantasyPros Top-20 Experts 2026 PPR ECR primary
+- broader FantasyPros PPR ECR fallback
+- ESPN rank/ADP timing only
 
-Ranking authority remains unchanged:
-- FantasyPros Top-20 Experts 2026 PPR ECR primary;
-- broader FantasyPros PPR ECR fallback;
-- ESPN rank/ADP is market timing only;
-- WR-D001 ACTIVE.
+No custom-ranking research currently changes production rankings, scoring or recommendations.
 
 ## Frozen prospective ranking contract
-WR-021 and WR-023 remain accepted/frozen.
+### WR-021 — COMPLETE / ACCEPTED / MERGED
+Context-enriched 2026 preseason shadow snapshot frozen.
 
-Authoritative identities:
-- WR-023 protocol SHA-256: `f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`
+### WR-023 — COMPLETE / ACCEPTED / MERGED
+Prospective evaluation protocol frozen.
+
+Immutable identities:
+- protocol SHA-256: `f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`
 - WR-021 snapshot SHA-256: `9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d`
 
-No current historical custom-ranking development may inspect 2026 regular-season outcomes or rewrite these artifacts.
+No post-kickoff historical-development task may inspect 2026 regular-season outcomes or modify/substitute these artifacts.
 
-## Custom-ranking path
-WR-028 defines the custom ranking engine roadmap.
+## Historical custom-ranking R&D
+### WR-025 — COMPLETE / ACCEPTED / MERGED
+Returning-player Ridge mean projection improved pooled historical MAE by 6.61% with favorable repeated-player-aware uncertainty. Universal risk overlay was not safe. Rookie richer model remained unvalidated.
 
-Current hard dependency:
-WR-027 Manager disposition -> WR-029 advanced context enrichment -> returning-player v1 specification freeze.
+### WR-027 — COMPLETE / ACCEPTED / MERGED
+Research PR #119 merged as `316160dee856d2445731fbb92fe63d7fd9cbdb7e`.
 
-Production custom-ranking authority remains unauthorized.
+Accepted architecture result:
+- Ridge remains mean expected-performance ordering benchmark;
+- QB risk: WARNING-ONLY SUPPORTED;
+- RB risk: WARNING-ONLY SUPPORTED;
+- WR risk: WARNING-ONLY SUPPORTED;
+- TE risk: WARNING-ONLY SUPPORTED;
+- no direct risk rank modifier passed the predeclared prior-only guard;
+- Huber robust-regression challenger not supported as Ridge replacement;
+- rookies remain separate.
 
-## Phone lane
-WR-026 remains independent of ranking R&D.
+Exact-head War Room CI for WR-027: SUCCESS.
+Production changed: NO.
+Frozen WR-021/WR-023 changed: NO.
+2026 outcomes inspected: NO.
 
-User boundary remains:
-- optimize phone only;
-- preserve desktop/tablet >600px;
-- preserve ranking/scoring/recommendation/state/ESPN semantics.
+### Work-mode technical gap analysis — MANAGER ACCEPTED AS ADVISORY EVIDENCE
+Manager accepted the report's recommended WR-029/WR-028 expansions, while preserving Manager/R&D authority boundaries. Source-rights and coverage classifications remain provisional until WR-029 independently verifies them.
 
-Workflow V2 target-advance rules mean Manager/control-plane-only changes do not, by themselves, invalidate WR-026's expensive phone evidence. Actual overlap still requires reconciliation/revalidation.
+Key accepted additions:
+- benchmark lock before enrichment scoring;
+- cutoff-aware feature/data contract;
+- immutable source/schema manifests and hashes;
+- explicit missingness, coverage and confidence handling;
+- position/family ablations and ranking sensitivity;
+- source-failure / LKG / versioning / Champion-Challenger governance;
+- league replacement, late-entry, position-change and K/DST contracts;
+- strict separation of intrinsic player value from ESPN/live-draft strategy.
 
-## Workflow V2 summary
-WR-030 added:
-- machine-readable active-task registry;
-- Fast Refresh vs Full Refresh;
-- explicit lifecycle states;
-- target-advance classification;
-- workflow preflight/finish helper scripts;
-- atomic Manager reconciliation;
-- concise canonical-document responsibilities.
+### WR-028 — COMPLETE / AMENDED
+Custom Ranking Engine Roadmap now includes the above cross-cutting engine contracts.
 
-Role separation, merge authority and independent-audit gates remain intact.
+### WR-029 — ASSIGNED / ACTIVE
+Advanced Context Feature Enrichment / Source Feasibility.
+
+Fixed benchmark entering WR-029:
+- Ridge mean ordering;
+- risk warning-only for QB/RB/WR/TE;
+- no Huber replacement;
+- rookies separate.
+
+WR-029 will test long-history PBP opportunity/role, efficiency/regression, QB/team context, PBP-derived OL proxies, age/draft interactions, then PIT-sensitive depth/staff/scheme challengers under strict rights/coverage gates.
+
+Important current holds:
+- no fabricated routes/YPRR denominator;
+- no proprietary PFF inputs;
+- no systematic NGS/NFL Pro dependency absent accepted rights basis;
+- PFR-linked snap/advanced/combine sources are not core dependencies unless rights are independently cleared;
+- current injury feed is not a maintainable core source;
+- ESPN ADP remains excluded from intrinsic custom value.
+
+## Phone UX lane
+### WR-026 — IN PROGRESS
+Builder PR #120 is open/draft.
+Current green implementation candidate: `6b0821a03608f170903a46f015976028d9991275`.
+Desktop/tablet >600px preservation remains a hard requirement.
+Independent audit required before merge.
+
+## Current dependency map
+- WR-026 vs WR-029: INDEPENDENT.
+- WR-029 -> returning-player Phase 2 specification freeze: HARD.
+- WR-023 final Week-18 prospective evaluation remains a HARD gate on any future production-authority consideration.
 
 ## Current workload
-- Manager — IDLE after WR-030 completion.
-- Builder — ACTIVE / WR-026.
-- R&D — ACTIVE / WR-027.
-- Auditor — IDLE / waiting for WR-026 audit-ready handoff.
+- Manager: IDLE after WR-027 disposition / WR-029 activation
+- Builder: ACTIVE — WR-026
+- R&D: ACTIVE — WR-029
+- Auditor: IDLE — waiting for WR-026 AUDIT_READY
