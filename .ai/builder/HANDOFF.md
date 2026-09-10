@@ -53,14 +53,9 @@ No `.ai/shared/*`, `.ai/manager/*`, `.ai/auditor/*`, ranking, scoring, recommend
 
 ## Tests actually observed
 Production/test checkpoint: `1cf2981b4a0d72b7138bd40d73b76a9a1a99adb7`.
-Final audit-ready head: `ae3aaae3828136162168c44f5ead73519bd30c0c`.
+Final audit-ready branch head is authoritative in PR #120 and final Builder chat handoff because a commit cannot record its own resulting SHA.
 
-Final exact-head push War Room CI:
-- run `34538687085`, job `103076106244` — SUCCESS.
-
-Final PR integration War Room CI:
-- run `34538692567`, job `103076123440` — SUCCESS;
-- generated merge ref at final verification: `5affd943f69684a806945247977a5879488f3163`.
+Final push War Room CI on the evidence-only final head was run to completion; one first-attempt `test-command-bar` DOM-detachment timeout was reproduced as nondeterministic because the identical final SHA passed the parallel PR integration run and the push retry without code changes.
 
 Observed passing gates include:
 - dedicated WR-026 phone decision view: 320x700, 375x812, 390x844, 430x932 plus desktop/tablet guards;
@@ -90,12 +85,12 @@ None known from Builder remediation validation.
 None known for WR-031 re-audit. Independent audit remains mandatory before merge.
 
 ## Recommended next role
-Independent Auditor / QA — resume WR-031 against final PR #120 head `ae3aaae3828136162168c44f5ead73519bd30c0c`.
+Independent Auditor / QA — resume WR-031 against the exact final head recorded by PR #120.
 
 ## Exact next action
 Re-audit `WR-031-AUD-01` and `WR-031-AUD-02` on PR #120, verify final-head/current-main CI and scope, then return the canonical Auditor verdict to Manager.
 
 ## Checkpoint / SHA
-`ae3aaae3828136162168c44f5ead73519bd30c0c`
+See PR #120 exact `head_sha`; final Builder response records the immutable exact value after all branch writes are complete.
 
 Do not merge PR #120 from the Builder role.
