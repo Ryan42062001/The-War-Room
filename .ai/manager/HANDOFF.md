@@ -2,137 +2,128 @@
 
 HANDOFF
 
-Task ID: PW-003 / WR-025 / WR-026 / WR-027 / WR-028 / WR-029
+Task ID: WR-027 / WR-028 / WR-029 / WR-026
 Role: Manager / Architect
-Status: WR-025 COMPLETE / WR-028 COMPLETE / WR-026 ACTIVE / WR-027 ACTIVE / WR-029 PLANNED-BLOCKED
+Status: WR-027 COMPLETE / WR-028 COMPLETE-AMENDED / WR-029 ACTIVE / WR-026 ACTIVE
 
-## Verified starting state for context-enrichment planning
-- canonical main before WR-029 planning: `1213b130d48c4afa3729fb2f5d5dd71096cece4d`
-- WR-025 PR #118: MERGED as `93da7e5de10ca2130d40142450cab9840c755ab4`
-- WR-026 phone lane: ACTIVE
-- WR-027 position-specific risk calibration: ACTIVE
-- open PRs at WR-029 planning check: NONE
-- production ranking authority remains FantasyPros under WR-D001
-- WR-021 / WR-023 frozen prospective artifacts remain unchanged
+## Verified starting state
+- Workflow V2 main before WR-027 merge: `b20b80ce1f2920fb238ae9b9b914a76e44f5705d`
+- Work-mode technical gap analysis verified against repository checkpoint `9bb1f39013e4069dc59f14644fd383b5a4385ca8`
+- WR-027 PR #119 head: `224dbce9dba02fdc4d5dc64e37e19cd03664fb57`
+- WR-027 exact-head War Room CI: SUCCESS
+- WR-027 final diff: research-only under `.ai/research/`
+- production files changed by WR-027: NO
+- WR-021/WR-023 frozen artifacts changed: NO
+- 2026 regular-season outcomes inspected: NO
 
-## WR-025 evidence retained
-Returning-player mean projection:
-- previous-season PPR/game MAE: 3.0262
-- Ridge MAE: 2.8262
-- Ridge improvement: 6.61%
-- Ridge Spearman: 0.6775 vs baseline 0.6359
-- player-clustered paired MAE 95% interval: `[-0.3235, -0.0616]`
+## WR-027 Manager disposition
+ACCEPT.
 
-Universal risk-overlay position rank MAE:
-- QB improved 9.95%
-- RB improved 3.11%
-- WR worsened 5.51%
-- TE worsened 6.20%
+PR #119 merged as:
+`316160dee856d2445731fbb92fe63d7fd9cbdb7e`
 
-Interpretation:
-- preserve successful mean projection;
-- do not use a universal risk penalty;
-- calibrate risk by position;
-- richer player/team/context features must earn inclusion out of sample.
+Accepted architecture:
+- retain WR-025 Ridge mean projection as the ordering benchmark;
+- QB risk: `WARNING-ONLY SUPPORTED`;
+- RB risk: `WARNING-ONLY SUPPORTED`;
+- WR risk: `WARNING-ONLY SUPPORTED`;
+- TE risk: `WARNING-ONLY SUPPORTED`;
+- no direct risk rank modifier passed the predeclared prior-only adoption guard;
+- Huber robust regression did not earn Ridge replacement;
+- rookies remain separate.
 
-## WR-027 — ACTIVE
-Task: `.ai/manager/WR-027.md`
-Role: R&D
-Production authorization: NONE
+Production ranking authority changed: NO.
+WR-D001 changed: NO.
 
-Objective:
-- fix per-position risk policy;
-- test transparent robust regression;
-- preserve WR-025 mean benchmark;
-- no 2026 outcomes or frozen-artifact changes.
+## Work-mode technical research review
+Manager accepted the supplied Custom Ranking Engine Feature Source and Architecture Gap Analysis as advisory evidence.
 
-Position-level decision vocabulary:
-- `RANK MODIFIER SUPPORTED`
-- `WARNING-ONLY SUPPORTED`
-- `INSUFFICIENT EVIDENCE`
+Important qualification:
+The report's source-rights/coverage classifications do not independently authorize or exclude a source. WR-029 must reproduce the authoritative source/license/PIT evidence in its own manifest before final admission/exclusion.
 
-## WR-028 — Custom Ranking Engine Roadmap
-Status: COMPLETE
-Task: `.ai/manager/WR-028.md`
+Accepted roadmap additions:
+- benchmark lock before feature scoring;
+- cutoff-aware point-in-time feature/data contract;
+- raw-asset/schema/source manifests and hashes;
+- missing-data/fallback/coverage/confidence policy;
+- family-by-position ablations and ranking sensitivity;
+- explicit route/YPRR denominator guard;
+- PBP-derived OL environment before proprietary/personnel grades;
+- staff/depth/scheme challengers only after PIT/coverage gates;
+- data/model/value/board versioning;
+- Champion/Challenger governance;
+- Last-Known-Good rollback;
+- refresh/source-failure/drift policies;
+- uncertainty-aware tiers;
+- league replacement/FLEX contract;
+- K/DST, late-entry and position-change policies;
+- intrinsic custom value kept separate from ESPN/live-draft strategy;
+- reproducibility and independent leakage/provenance audit before shadow integration.
 
-The roadmap now explicitly includes WR-029 as Phase 1.5 before the returning-player v1 projection specification is frozen.
+## WR-028 amendment
+`.ai/manager/WR-028.md` now records these cross-cutting engine contracts and the accepted WR-027 risk architecture.
 
-## WR-029 — Advanced Context Feature Enrichment / Source Feasibility
-Status: PLANNED / BLOCKED ON WR-027 MANAGER DISPOSITION
+`ENGINE-COMPLETE` remains achievable before season end.
+`PRODUCTION-AUTHORITATIVE` remains blocked on final WR-023 prospective evidence plus a separate Manager production milestone and WR-D001 change.
+
+## WR-029 activation
 Task: `.ai/manager/WR-029.md`
-Role when activated: R&D
+Role: R&D
+Status: ASSIGNED / ACTIVE
 Production authorization: NONE
 
-User-driven enrichment areas:
-- offensive snap percentage / participation;
-- route/pass-play participation and true YPRR only where exact route denominators are defensible;
-- targets per route, carries per snap, red-zone/goal-line role;
-- advanced receiving/rushing/QB efficiency;
-- offensive-line environment using non-proprietary reproducible proxies;
-- team pace, play volume, pass/run tendency and offensive efficiency;
-- head coach / OC / play-caller continuity and scheme tendencies where rights/coverage permit;
-- depth-chart / teammate competition / vacated opportunity using point-in-time data;
-- age, experience, physical and maintainable availability context;
-- schedule/opponent context only as secondary evidence.
+Fixed benchmark entering WR-029:
+- Ridge mean ordering;
+- warning-only risk for QB/RB/WR/TE;
+- no Huber replacement;
+- rookies separate.
 
-Important source findings informing WR-029 planning:
-- nflverse exposes historical snap-count data including offensive snaps and offense percentage;
-- nflverse provides team/player stats and play-by-play suitable for many derived team/efficiency features;
-- depth-chart data is available historically, with timestamped updates from 2025 onward;
-- participation/FTN/NGS-derived sources have different provenance/license/coverage and require explicit rights review before admission;
-- historical coordinator data is not a clean universal source and must be treated as a coverage/rights risk rather than assumed available;
-- exact routes-run/YPRR must not be fabricated from mere on-field/pass-play participation.
+Required test order:
+1. benchmark lock / data contract;
+2. long-history PBP opportunity/red-zone/concentration;
+3. efficiency/regression;
+4. QB/team environment;
+5. PBP-derived OL environment;
+6. age/experience/draft-capital interactions;
+7. PIT role/depth/vacated-opportunity audit;
+8. short-history scheme challenger;
+9. staff continuity only if coverage/PIT thresholds pass;
+10. selected combined confirmation.
 
-WR-029 gate:
-Every candidate family must be classified:
-- `CORE MODEL SUPPORTED`
-- `WARNING / EXPLANATION ONLY`
-- `INSUFFICIENT EVIDENCE`
-- `EXCLUDED — RIGHTS / POINT-IN-TIME / COVERAGE`
+Every feature family must be classified core-model, warning/explanation-only, insufficient, or excluded for rights/PIT/coverage reasons.
 
-Dependency:
-WR-027 Manager disposition -> WR-029 -> returning-player Phase-2 specification freeze.
+Hard boundaries:
+- no 2026 regular-season outcomes;
+- no WR-021/WR-023 changes;
+- no production changes;
+- no fabricated true routes/YPRR;
+- ESPN ADP excluded from intrinsic custom value.
 
 ## WR-026 phone lane
-Builder remains ACTIVE.
+Builder remains active.
+Open draft PR: #120
+Current green candidate in PR body: `6b0821a03608f170903a46f015976028d9991275`
+Independent Auditor remains required after Builder finalizes exact audit-ready head.
 
-Builder must reconcile final WR-026 work with current main before independent audit. Desktop/tablet >600px preservation remains a hard requirement.
-
-## Frozen prospective ranking contract
-UNCHANGED.
-
-WR-023 protocol SHA-256:
-`f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`
-
-WR-021 snapshot SHA-256:
-`9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d`
-
-No WR-027/WR-029 or later post-kickoff development may rewrite or substitute into that prospective test.
-
-## Ranking authority
-UNCHANGED:
-- FantasyPros Top-20 Experts 2026 PPR ECR primary
-- broader FantasyPros PPR ECR fallback
-- ESPN rank/ADP timing only
-- WR-D001 ACTIVE
+WR-026 vs WR-029: INDEPENDENT.
 
 ## Current role state
-- Manager: IDLE after WR-029 planning
+- Manager: IDLE after WR-027 disposition / WR-029 activation
 - Builder: ACTIVE — WR-026
-- R&D: ACTIVE — WR-027
-- Auditor: IDLE / waiting for WR-026
+- R&D: ACTIVE — WR-029
+- Auditor: IDLE / waiting for WR-026 AUDIT_READY
 
-## Recommended next actions
-1. R&D completes WR-027 and returns evidence for Manager review.
-2. If WR-027 is accepted, activate WR-029 before freezing the returning-player v1 model.
-3. Builder continues WR-026 and reconciles with then-current main before final audit-ready handoff.
-4. Activate Auditor only when WR-026 is final, mergeable, and green.
+## Exact next actions
+1. R&D refreshes current main and executes amended WR-029.
+2. Builder completes WR-026 final handoff and transitions it to audit-ready evidence.
+3. Manager activates Auditor only when WR-026 final exact head is ready.
+4. After WR-029 returns, Manager decides the returning-player Phase-2 specification freeze.
 
 ## Blocking issues
-- WR-029 is blocked on WR-027 disposition;
-- production custom-ranking authority remains unauthorized;
-- rookie ranking remains unresolved beyond transparent prior;
-- 2026 prospective proof remains frozen and event-driven.
+- custom production ranking authority remains unauthorized;
+- rookie ranking beyond transparent prior remains unresolved;
+- final 2026 prospective proof remains future/event-driven under WR-023.
 
 ## Checkpoint / SHA
-Verify current canonical main after WR-029 planning reconciliation for the exact final SHA.
+WR-027 merge checkpoint: `316160dee856d2445731fbb92fe63d7fd9cbdb7e`
+Manager reconciliation commit: verify current main after atomic reconciliation.

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "updated_at_utc": "2026-09-10T02:08:00Z",
+  "canonical_branch": "main",
+  "manager_owned": true,
+  "lifecycle_states": [
+    "PLANNED",
+    "BLOCKED",
+    "ASSIGNED",
+    "IN_PROGRESS",
+    "MANAGER_REVIEW_READY",
+    "AUDIT_READY",
+    "MERGE_READY",
+    "REWORK_REQUIRED",
+    "MERGED",
+    "CLOSED"
+  ],
+  "tasks": [
+    {
+      "task_id": "WR-026",
+      "owner": "Builder",
+      "status": "IN_PROGRESS",
+      "task_file": ".ai/manager/WR-026.md",
+      "role_handoff": ".ai/builder/HANDOFF.md",
+      "assignment_main_sha": "69689edadab5c8f270bc483b6acc461274ec7f87",
+      "worker_checkpoint_sha": "6b0821a03608f170903a46f015976028d9991275",
+      "branch": "wr-026-phone-decision-view",
+      "pr": 120,
+      "dependency": "INDEPENDENT",
+      "audit_required": true,
+      "blocked_on": [],
+      "allowed_path_prefixes": [],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/"
+      ],
+      "forbidden_exact_paths": [
+        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
+      ],
+      "next_gate": "Builder final handoff / exact head -> AUDIT_READY -> Independent Auditor -> Manager merge decision"
+    },
+    {
+      "task_id": "WR-029",
+      "owner": "R&D",
+      "status": "IN_PROGRESS",
+      "task_file": ".ai/manager/WR-029.md",
+      "role_handoff": ".ai/research/HANDOFF.md",
+      "assignment_main_sha": "316160dee856d2445731fbb92fe63d7fd9cbdb7e",
+      "worker_checkpoint_sha": null,
+      "branch": null,
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "audit_required": false,
+      "blocked_on": [],
+      "allowed_path_prefixes": [
+        ".ai/research/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/"
+      ],
+      "forbidden_exact_paths": [
+        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
+      ],
+      "next_gate": "R&D handoff -> MANAGER_REVIEW_READY -> Manager feature-family disposition -> Phase 2 specification-freeze decision"
+    }
+  ]
+}
