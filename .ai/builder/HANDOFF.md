@@ -4,150 +4,98 @@ HANDOFF
 
 Task ID: WR-026
 Role: Implementation Engineer / Builder
-Status: IMPLEMENTATION COMPLETE — AUDIT READY / PR #120 OPEN
-
-## Assignment
-Phone-Only Decision View Optimization
-
-Manager task spec: `.ai/manager/WR-026.md`
-Production implementation authorization: WR-026 phone UI/layout behavior only.
+Status: REMEDIATION COMPLETE — AUDIT_READY / PR #120 OPEN
 
 ## Verified starting state
-- Starting / assignment SHA: `69689edadab5c8f270bc483b6acc461274ec7f87`
+- Remediation requested by WR-031 for `WR-031-AUD-01` and `WR-031-AUD-02` only.
 - Branch: `wr-026-phone-decision-view`
 - PR: #120
-- Canonical main used for final reconciliation: `b89919121cfcc00fc9a02be5d82c1a892036e70b`
-- Target advancement since assignment is Workflow V2 `CONTROL_PLANE_ONLY` relative to WR-026's product surface.
+- Current `main` at remediation refresh: `b54e8f01e696ffa5ff9cca54dc09bb10e3f8fa12`.
+- Main advancement from the prior WR-026 reconciliation point is control-plane/research only relative to the WR-026 production surface.
 - Builder merge performed: NO.
 
-## Baseline phone measurements
-Pre-change deterministic Playwright evidence captured before production edits showed:
-- 320x700: 0 actionable player choices above the fold.
-- The opening WR section alone required approximately 4210px of vertical travel before the next major position context.
-- Existing phone flow exposed the board primarily as a long stacked multi-position list.
+## Remediation completed
+### WR-031-AUD-01 — phone position state coherence
+- Phone position tabs now drive the same legacy position-filter state used by the board instead of maintaining a conflicting independent restriction.
+- Legacy WR/RB/QB/TE filter clicks continue to update the active phone context.
+- Pressure-position jumps replace a stale legacy primary-position restriction with the intended phone context.
+- Phone search temporarily uses legacy `ALL` so matching players across primary positions remain visible, then restores the selected phone context when search clears.
+- K/DST Endgame clears incompatible primary-position filtering while preserving existing endgame filtering behavior.
 
-## Phone design implemented
-- <=600px Position view exposes one active primary context at a time: WR / RB / QB / TE.
-- K/DST remains reachable through a separate Endgame context.
-- Default active position is compacted to the top 8 available/actionable cards, with explicit Show All / Show Top controls.
-- Search deliberately expands across all primary position columns and removes compact truncation while active.
-- Existing position-filter actions synchronize the phone context.
-- Taken/Mine marking, target stars, player detail access, My Draft, Manage, Position/Overall switching, recommendation, pressure, and Waiting/Near/On-the-Clock semantics remain reachable.
-- Phone Draft Setup defaults collapsed and is explicitly reopenable.
-- Frequent phone controls are raised to 44px touch targets where covered by WR-026.
-- Crossing above the 600px boundary clears phone-only visibility/truncation state and restores normal desktop/tablet composition.
-- Draft Setup user intent and Escape focus restoration are deterministic across same-frame command-bar re-rendering.
+### WR-031-AUD-02 — Draft Setup reconstruction intent
+- Explicit phone Draft Setup open intent is stored outside the replaceable `<details>` element so Teams/Pick/Rounds command-bar reconstruction no longer resets it to the phone default-collapsed state.
+- Escape still closes Draft Setup and now stabilizes focus restoration across a short bounded reconstruction window so focus remains on the replacement summary.
+- >600px default/open behavior is preserved.
 
-## Post-change phone evidence
-Dedicated WR-026 regression confirms:
-- 320x700: one active WR context, 8 visible cards, at least 1 actionable choice above fold, 0 horizontal overflow, no detected occlusion.
-- 375x812: 3 above-fold choices.
-- 390x844: 4 above-fold choices.
-- 430x932: 7 above-fold choices.
-- All measured frequent phone targets are 44px high.
-- Recommendation, pressure, and My Draft remain reachable in every phone measurement.
+## Focused regression coverage
+Added `scripts/test-wr-026-audit-remediation.mjs` and wired it into `npm test`.
 
-## Desktop-preservation evidence
-Automated guard viewports passed at:
-- 768x1024
-- 820x900
-- 900x900
-- 1280x800
-- 1440x900
+Deterministic coverage includes:
+- QB legacy filter -> RB phone tab;
+- WR legacy filter -> TE phone tab;
+- stale legacy filter -> pressure-position jump;
+- search expansion across WR/RB/QB/TE and restoration after clear;
+- Draft Setup open -> Teams change -> replacement remains open;
+- Draft Setup open -> Pick change -> replacement remains open;
+- Draft Setup open -> Rounds change -> replacement remains open;
+- Escape closes and restores focus to the replacement summary;
+- 820x900 guard confirms phone navigator remains hidden and pre-progress Draft Setup remains open above 600px.
 
-Evidence confirms:
-- phone navigator is inert/hidden above 600px;
-- phone compact-hidden state is removed above 600px;
-- normal four-column Position board restores when no position filter is active;
-- Overall remains reachable;
-- no horizontal document overflow or intentional desktop/tablet redesign was introduced;
-- Draft Setup open/close/Escape/focus contract survives dynamic command-bar replacement at 820x900.
-
-## Files changed relative to current main
-Production / CI / regression surface:
-- `.github/workflows/ci.yml`
-- `js/war-room-layout-efficiency.js`
+## Files changed by this remediation
 - `js/war-room-phone-decision-view.js`
+- `js/war-room-layout-efficiency.js`
+- `scripts/test-wr-026-audit-remediation.mjs`
 - `package.json`
-- `phone-decision-view.css`
-- `scripts/test-command-bar.mjs`
-- `scripts/test-layout-efficiency-behavior.mjs`
-- `scripts/test-phone-decision-view-final.mjs`
 - `service-worker.js`
+- `.ai/builder/HANDOFF.md` — evidence only
 
-Builder-owned evidence:
-- `.ai/builder/HANDOFF.md`
+No `.ai/shared/*`, `.ai/manager/*`, `.ai/auditor/*`, ranking, scoring, recommendation, draft-state, persistence, ESPN-sync, or player-data authority files were modified by this remediation.
 
-No `.ai/shared/*`, `.ai/manager/*`, frozen WR-021/WR-023 artifact, ranking, scoring, recommendation, draft-state, persistence-schema, or ESPN-sync implementation file is changed by WR-026.
+## Tests actually observed
+Remediated production/test checkpoint: `1cf2981b4a0d72b7138bd40d73b76a9a1a99adb7`.
 
-## Final validation
-Final runtime/test implementation head before evidence-only handoff commits: `35003dd3a9259687a43c5dcbef0df977f4c014c9`.
+Exact-head push War Room CI:
+- run `34538363257` — SUCCESS.
 
-That implementation state passed:
-- exact-head War Room CI run `34429486365`, job `102721749140` — PASS;
-- PR integration War Room CI run `34429490050`, job `102721759735` — PASS;
-- generated merge ref at that implementation state: `bff387d049004145fd0be1db0643a1e73dfe2493`.
+PR integration War Room CI against current `main`:
+- run `34538366191`, job `103075110581` — SUCCESS;
+- generated merge ref: `5cc6653450524a6de04f350db2a2ef43d5c0152e`.
 
-The subsequent Builder handoff update is evidence-only and does not modify production/test behavior. PR #120 is the authoritative record for the immutable newest branch head, current generated merge ref, mergeability and latest CI tuple because a commit cannot contain its own SHA or CI IDs generated after it exists.
+Observed passing gates include:
+- dedicated WR-026 phone decision view: 320x700, 375x812, 390x844, 430x932 plus desktop/tablet guards;
+- `test:layout-efficiency-behavior`, including Escape/focus contract at 820x900;
+- new `test:wr026-audit-remediation` — PASS;
+- full `npm test` — PASS;
+- Companion extension 164/164 — PASS;
+- browser/draft/ESPN suites — PASS;
+- responsive overflow: 13 widths x Position/Overall, zero horizontal overflow — PASS;
+- draft invariant torture harness — PASS;
+- persistence/recovery and failure injection — PASS;
+- resilience syntax and guarded full 717-player offline reload — PASS.
 
-All final validation gates include:
-- dedicated WR-026 phone decision-view regression at 320/375/390/430;
-- >600px guards at 768/820/900/1280/1440;
-- full `npm test` graph;
-- Companion extension 164/164;
-- browser/draft/ESPN suites;
-- responsive overflow;
-- WR-016 layout efficiency and behavior;
-- command bar / draft awareness / live-sync awareness / draft polish;
-- scoring corrections;
-- deterministic draft invariants;
-- persistence/recovery;
-- recovery failure injection;
-- live mock fixtures;
-- resilience syntax;
-- guarded restore and full 717-player offline reload.
+## Validation boundary
+Physical-phone / Level-4 validation: NOT VERIFIED in this Builder session.
 
-## Workflow V2 finish-gate status
-The repository helper could not be executed from the local assistant runner because that runner had no GitHub network/DNS access. Its exact checks were validated directly against GitHub state:
-- task is active/eligible: YES;
-- handoff exists: YES;
-- changed-file scope exists: YES;
-- forbidden `.ai/shared/*` / `.ai/manager/*` paths changed: NO;
-- frozen WR-021/WR-023 exact paths changed: NO;
-- target advancement classification: `CONTROL_PLANE_ONLY`;
-- PR body required metadata headings: PRESENT;
-- unresolved finish-check blockers: NONE.
-
-Equivalent disposition under `scripts/workflow-finish-check.mjs`: `AUDIT_READY_CANDIDATE`.
-
-## Manual responsive review
-Automated Chromium screenshots/reports were generated and uploaded as CI artifacts for the WR-026 phone and desktop guard viewports.
-
-Physical-phone validation: NOT VERIFIED.
-
-## Semantic boundaries
 Ranking/scoring/recommendation semantics changed: NO.
 Draft-state semantics changed: NO.
 Persistence semantics/schema changed: NO.
 ESPN sync authority changed: NO.
 Desktop/tablet redesign: NO.
 
-## Known limitations
-- Physical-device touch feel, browser chrome effects, and real-phone visual polish remain unverified by Builder.
-- Automated Chromium viewport evidence is Level 2/3-style implementation evidence, not a claim of Level-4 physical-device proof.
-
 ## Open findings
-None known from Builder validation.
+None known from Builder remediation validation.
 
 ## Blocking issues
-None known for Independent Auditor review. Independent audit is still mandatory before merge.
+None known for WR-031 re-audit. Independent audit remains mandatory before merge.
 
 ## Recommended next role
-Independent Auditor / QA.
+Independent Auditor / QA — resume WR-031 against the final PR #120 head.
 
 ## Exact next action
-1. Independently verify PR #120 scope, current-main mergeability and final CI.
-2. Run independent phone/layout regression and physical/manual review if available.
-3. Return PASS / PASS WITH NON-BLOCKING FINDINGS / REWORK_REQUIRED to Manager.
+Re-audit `WR-031-AUD-01` and `WR-031-AUD-02` on PR #120, verify final-head/current-main CI and scope, then return the canonical Auditor verdict to Manager.
+
+## Checkpoint / SHA
+Production/test checkpoint: `1cf2981b4a0d72b7138bd40d73b76a9a1a99adb7`.
+The evidence-only handoff commit necessarily creates a newer branch head; PR #120 is authoritative for that exact final head and its CI tuple.
 
 Do not merge PR #120 from the Builder role.
