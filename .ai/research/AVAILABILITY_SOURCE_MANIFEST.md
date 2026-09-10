@@ -2,73 +2,63 @@
 
 Status: FROZEN PRE-SCORING SOURCE CONTRACT — EXPERIMENTAL / NON-PRODUCTION
 Task: WR-034
-Protocol Git blob: `6d608001b91ef76851484f527835f7fd2a7005c6`
+Protocol Git blob: `163d1085dc71f9ceed36a467a8983c40e2d3db7f`
+Correction record: `.ai/research/AVAILABILITY_PRE_SCORING_SOURCE_CORRECTION.md`
 
-## Admitted sources
+## Admitted scoring source
 
-| Source | Use in WR-034 | Rights basis | PIT treatment | Immutable/provenance requirement | Status |
+| Source | Use | Rights basis | PIT rule | Immutable requirement | Status |
 |---|---|---|---|---|---|
-| nflverse Player Summary Stats | historical target games; prior Y-1/Y-2 production/games/features | previously admitted by WR-025 under CC BY 4.0 | only seasons <=2025; target-Y fields used only as outcomes, never predictors | exact release asset and SHA-256 must match `.ai/research/generated/HISTORICAL_RANKING_ASSET_MANIFEST.json` | ADMITTED |
-| nflverse Players | stable identity, birth date, rookie season / experience | previously admitted by WR-025 under CC BY 4.0 | immutable/stable metadata only | exact locked asset SHA-256 must match WR-025 manifest | ADMITTED |
-| nflverse Draft Picks | immutable draft pick/round metadata | previously admitted by WR-025 under CC BY 4.0 | draft-time immutable metadata only | exact locked asset SHA-256 must match WR-025 manifest | ADMITTED |
+| nflverse Player Summary Stats | historical target games and completed Y-1/Y-2 statistical/usage features | previously admitted by WR-025 under CC BY 4.0 | target-Y fields are outcomes only; predictors use completed earlier seasons | exact WR-025 asset ID and SHA-256 for each 2012–2025 file must reproduce | ADMITTED |
 
-No new source family is admitted for WR-034 scoring.
+No new source family is admitted.
 
-## Explicitly excluded / held sources
+## Removed after fail-closed pre-scoring verification
+
+The first guarded run (`34537885926`) verified the requested 2012–2025 Player Summary Stats assets and then stopped before scoring because current nflverse `players.csv` had SHA-256 `c2402e02d39c7ca1adbd9ca5c894bb11f693ab01da0721bff44db2a8bd1ea53d`, not the WR-025 locked `a33998d3981bda4f49f40390c5c0fa30036112ee1ea5de19ed4609e2ad3be3e2`.
+
+The exact historical asset bytes were not recovered through the available release-asset endpoint. WR-034 therefore excludes both Players metadata and Draft Picks metadata from its candidate inputs rather than substitute revised mutable bytes. This is a pre-scoring source correction; no candidate result existed.
+
+## Explicitly excluded / held
 
 | Source/family | Disposition | Reason |
 |---|---|---|
-| 2026 regular-season stats/PBP/outcomes | EXCLUDED — FROZEN TEST CONTAMINATION | WR-021/WR-023 prospective boundary; not requested or inspected |
-| ESPN ADP/rank | EXCLUDED FROM EXPECTED-GAMES MODEL | downstream market timing only under WR-D001; not intrinsic availability |
-| current roster/status/injury designation | EXCLUDED — POINT-IN-TIME | mutable current fields do not reconstruct historical target-preseason state |
-| historical injury/medical feeds not already admitted | EXCLUDED — RIGHTS / PIT / COVERAGE | no separately verified lawful, complete, maintainable as-of corpus under WR-034 |
+| 2026 regular-season stats/PBP/outcomes | EXCLUDED — FROZEN TEST CONTAMINATION | WR-021/WR-023 boundary |
+| nflverse Players current/revised asset | EXCLUDED FROM WR-034 EXECUTION | exact locked historical raw bytes not reproduced |
+| nflverse Draft Picks | EXCLUDED FROM WR-034 EXECUTION | metadata family removed conservatively with failed immutable-metadata path; not needed for cohort |
+| ESPN ADP/rank | EXCLUDED FROM EXPECTED-GAMES MODEL | downstream market timing only under WR-D001 |
+| current roster/status/injury designation | EXCLUDED — POINT-IN-TIME | mutable current state cannot reconstruct historical preseason state |
+| historical injury/medical feeds not separately admitted | EXCLUDED — RIGHTS / PIT / COVERAGE | no verified lawful complete historical as-of corpus under WR-034 |
 | depth charts / weekly rosters | EXCLUDED — POINT-IN-TIME / COVERAGE | WR-029 did not establish a uniform historical preseason-as-of contract |
-| transactions/suspensions/retirements reconstructed from current state | EXCLUDED — POINT-IN-TIME | hindsight reconstruction risk |
-| PFR snap/advanced/combine | HOLD / EXCLUDE RIGHTS | existing WR-029 rights hold remains |
-| PFF / proprietary grades or derived inputs | EXCLUDED — RIGHTS | no admitted license basis |
-| systematic NFL NGS / NFL Pro features | EXCLUDED — RIGHTS | no admitted rights basis |
-| current nflverse injury feed as core dependency | EXCLUDED — COVERAGE / MAINTAINABILITY | WR-029 maintainability finding remains |
-| FantasyPros historical/API data for competing-model training | EXCLUDED | not admitted for competing model training |
+| hindsight transactions/suspensions/retirements | EXCLUDED — POINT-IN-TIME | hindsight reconstruction risk |
+| PFR snap/advanced/combine | HOLD / EXCLUDE RIGHTS | WR-029 rights hold |
+| PFF / proprietary grades | EXCLUDED — RIGHTS | no admitted license basis |
+| systematic NFL NGS / NFL Pro | EXCLUDED — RIGHTS | no admitted rights basis |
+| current nflverse injury feed as core dependency | EXCLUDED — COVERAGE / MAINTAINABILITY | WR-029 maintainability finding |
+| FantasyPros historical/API competing-model input | EXCLUDED | not admitted for competing training |
 
 ## Target semantics
+`target_games` is the recorded regular-season games field in the admitted Player Summary Stats target-season asset. A stats-defined returner without a qualifying target-season row receives zero target games under the reused WR-025 cohort construction. This is participation/availability, not a medical injury label.
 
-`target_games` is the recorded regular-season games field in the admitted historical Player Summary Stats asset for target season Y. If a returner has a prior-season qualifying row but no target-season qualifying row, WR-025 cohort construction records target games as zero. This is an availability/participation outcome, not a medical injury label.
+`LOW_AVAILABILITY = target_games <= 8`; `HIGH_AVAILABILITY = target_games >= 14`.
 
-`LOW_AVAILABILITY` is `target_games <= 8`, matching WR-027. `HIGH_AVAILABILITY` is `target_games >= 14` and is descriptive only.
+## Cutoff / join contract
+For target Y, features use only completed Y-1/Y-2 Player Summary Stats. Target-Y Player Summary Stats define outcomes only after prediction. No target-Y Week 1+ information may enter features, preprocessing, model selection, calibration, interval construction, or fallback parameters. No 2026 asset may be requested.
 
-## Cutoff contract
+Historical research cutoff remains September 1 12:00 UTC of target Y.
 
-For target season Y:
-- predictors may use completed Y-1/Y-2 regular-season information and admitted immutable metadata;
-- target Y Player Summary Stats may be used only to define the historical outcome after the prediction is formed;
-- no target-Y Week 1+ field may enter features, preprocessing, imputation, model selection, probability calibration, or interval construction;
-- no 2026 statistical outcome may be downloaded or requested.
+## Raw-asset verification
+The guarded runner must read `.ai/research/generated/HISTORICAL_RANKING_ASSET_MANIFEST.json`, request only `stats_player_regpost_2012.csv` through `stats_player_regpost_2025.csv`, calculate SHA-256, verify exact locked asset IDs/digests, fail closed on mismatch/schema failure, and emit retrieval timestamp, release/asset ID, calculated/locked digest, row count, columns, and schema hash.
 
-Historical research cutoff remains September 1 12:00 UTC of target season.
-
-## Raw asset verification
-
-The guarded runner must:
-1. read `.ai/research/generated/HISTORICAL_RANKING_ASSET_MANIFEST.json` from the committed repository;
-2. download only the exact `stats_player_regpost_2012.csv` through `stats_player_regpost_2025.csv`, `players.csv`, and `draft_picks.csv` assets required by the WR-025 cohort builder;
-3. calculate SHA-256 from downloaded bytes;
-4. compare each digest to the WR-025 locked digest;
-5. fail closed on missing asset, schema mismatch, or digest mismatch;
-6. emit a WR-034 provenance manifest containing release IDs, asset IDs, retrieval timestamp, calculated digest, locked digest, row counts, and schema hash/columns.
-
-No 2026 stats asset may be referenced by the runner.
-
-## Frozen artifact integrity
-
-The runner must hash before and after scoring:
+## Frozen prospective sentinels
+Before and after scoring hash:
 - `.ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv`;
 - `.ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md`;
 - `.ai/research/generated/WR023_PROTOCOL_MANIFEST.json`.
 
-The before/after digests must be identical. The WR-021 snapshot and WR-023 protocol known accepted identities must also remain consistent with prior accepted research where recorded.
+Before/after values must match exactly. The accepted WR-021 snapshot and WR-023 protocol identities remain immutable.
 
-## Coverage and missingness
+## Coverage / missingness
+WR-034's admitted candidate features come from prior-season/prior-two-season Player Summary Stats plus the explicit `has_prev2` history indicator. No unavailable medical/status/metadata field is imputed. Y-2 absence follows the reused WR-025 history construction and is explicitly flagged by `has_prev2`.
 
-Because WR-034 reuses the WR-025 returner builder, core source coverage is the cohort itself. Missing Y-2 history and age use the existing explicit `has_prev2` / `age_missing` indicators. No unavailable injury/status/depth field is imputed because those families are excluded, not optional inputs.
-
-A source-integrity failure invalidates candidate scoring and yields fail-closed research status rather than a best-effort model result.
+Any historical stats asset integrity failure invalidates scoring rather than degrading silently.
