@@ -1,0 +1,133 @@
+{
+  "development": {
+    "Q1": {
+      "n": 439,
+      "zero_game_fraction": 0.5603644646924829,
+      "mean_target_games": 2.924829157175399,
+      "PREV_RATE_mae": 4.018223234624146,
+      "POSITION_MEAN_mae": 4.443796659176379,
+      "RIDGE_FULL_mae": 3.317596851364364,
+      "ridge_lift_vs_prev_rate": 0.1743622348361929,
+      "ridge_lift_vs_position_mean": 0.2534318948834952
+    },
+    "Q2": {
+      "n": 433,
+      "zero_game_fraction": 0.5219399538106235,
+      "mean_target_games": 3.4226327944572748,
+      "PREV_RATE_mae": 5.467378752886836,
+      "POSITION_MEAN_mae": 4.513071806598936,
+      "RIDGE_FULL_mae": 3.9357649722409453,
+      "ridge_lift_vs_prev_rate": 0.28013676203375915,
+      "ridge_lift_vs_position_mean": 0.12791882316471515
+    },
+    "Q3": {
+      "n": 426,
+      "zero_game_fraction": 0.42488262910798125,
+      "mean_target_games": 5.187793427230047,
+      "PREV_RATE_mae": 6.805457746478873,
+      "POSITION_MEAN_mae": 5.209713982060531,
+      "RIDGE_FULL_mae": 5.157958937452845,
+      "ridge_lift_vs_prev_rate": 0.24208493688443514,
+      "ridge_lift_vs_position_mean": 0.009934335125863555
+    },
+    "Q4": {
+      "n": 437,
+      "zero_game_fraction": 0.35469107551487417,
+      "mean_target_games": 7.393592677345538,
+      "PREV_RATE_mae": 6.9582379862700225,
+      "POSITION_MEAN_mae": 6.357855861425693,
+      "RIDGE_FULL_mae": 6.134413957658907,
+      "ridge_lift_vs_prev_rate": 0.11839549469803747,
+      "ridge_lift_vs_position_mean": 0.03514422293252197
+    }
+  },
+  "confirmation": {
+    "Q1": {
+      "n": 449,
+      "zero_game_fraction": 0.6080178173719376,
+      "mean_target_games": 2.2516703786191536,
+      "PREV_RATE_mae": 3.6325167037861914,
+      "POSITION_MEAN_mae": 4.385976195075202,
+      "RIDGE_FULL_mae": 2.8983428067518036,
+      "ridge_lift_vs_prev_rate": 0.20211163689052125,
+      "ridge_lift_vs_position_mean": 0.3391795400061197
+    },
+    "Q2": {
+      "n": 440,
+      "zero_game_fraction": 0.48863636363636365,
+      "mean_target_games": 3.602272727272727,
+      "PREV_RATE_mae": 5.3954545454545455,
+      "POSITION_MEAN_mae": 4.446843127776566,
+      "RIDGE_FULL_mae": 3.9076796571967747,
+      "ridge_lift_vs_prev_rate": 0.2757459776046416,
+      "ridge_lift_vs_position_mean": 0.12124634377407738
+    },
+    "Q3": {
+      "n": 436,
+      "zero_game_fraction": 0.4059633027522936,
+      "mean_target_games": 5.454128440366972,
+      "PREV_RATE_mae": 6.43348623853211,
+      "POSITION_MEAN_mae": 5.253653001052846,
+      "RIDGE_FULL_mae": 5.010292897944711,
+      "ridge_lift_vs_prev_rate": 0.22121650498969905,
+      "ridge_lift_vs_position_mean": 0.046322074004385996
+    },
+    "Q4": {
+      "n": 448,
+      "zero_game_fraction": 0.34375,
+      "mean_target_games": 7.9375,
+      "PREV_RATE_mae": 6.542410714285714,
+      "POSITION_MEAN_mae": 6.736436366665596,
+      "RIDGE_FULL_mae": 6.1091798433407405,
+      "ridge_lift_vs_prev_rate": 0.0662188434607125,
+      "ridge_lift_vs_position_mean": 0.09311399814132515
+    }
+  },
+  "confirmation_q4_by_position": {
+    "QB": {
+      "n": 66,
+      "zero_game_fraction": 0.2727272727272727,
+      "mean_target_games": 6.090909090909091,
+      "PREV_RATE_mae": 6.787878787878788,
+      "POSITION_MEAN_mae": 5.067402596220015,
+      "RIDGE_FULL_mae": 4.973038834740311,
+      "ridge_lift_vs_prev_rate": 0.2673648145248649,
+      "ridge_lift_vs_position_mean": 0.01862172181663512
+    },
+    "RB": {
+      "n": 114,
+      "zero_game_fraction": 0.3684210526315789,
+      "mean_target_games": 7.9035087719298245,
+      "PREV_RATE_mae": 6.5701754385964914,
+      "POSITION_MEAN_mae": 6.873348726219659,
+      "RIDGE_FULL_mae": 6.053721164220423,
+      "ridge_lift_vs_prev_rate": 0.07860585751518259,
+      "ridge_lift_vs_position_mean": 0.11924719589340993
+    },
+    "WR": {
+      "n": 172,
+      "zero_game_fraction": 0.3430232558139535,
+      "mean_target_games": 8.494186046511627,
+      "PREV_RATE_mae": 6.488372093023256,
+      "POSITION_MEAN_mae": 7.121857074066056,
+      "RIDGE_FULL_mae": 6.484072268783512,
+      "ridge_lift_vs_prev_rate": 0.0006626969258386226,
+      "ridge_lift_vs_position_mean": 0.08955315989210319
+    },
+    "TE": {
+      "n": 96,
+      "zero_game_fraction": 0.3645833333333333,
+      "mean_target_games": 8.25,
+      "PREV_RATE_mae": 6.4375,
+      "POSITION_MEAN_mae": 7.030768222783997,
+      "RIDGE_FULL_mae": 6.28445170595728,
+      "ridge_lift_vs_prev_rate": 0.02377449227848078,
+      "ridge_lift_vs_position_mean": 0.1061500668459236
+    }
+  },
+  "task_id": "WR-034",
+  "descriptive_post_selection_only": true,
+  "outcomes_2026_inspected": false,
+  "frozen_artifacts_unchanged": true,
+  "interpretation_trigger": "Q4 lift remains positive versus position-mean baseline"
+}
