@@ -36,7 +36,7 @@ Immutable prospective identities:
 - protocol SHA-256: `f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`
 - WR-021 snapshot SHA-256: `9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d`
 
-WR-027 must not inspect 2026 outcomes or alter these frozen artifacts.
+WR-027 and all later historical engine development must not inspect 2026 outcomes or alter these frozen artifacts.
 
 ## Historical ranking R&D
 ### WR-025 — Historical Ranking Signal / Breakout-Bust Research
@@ -72,6 +72,36 @@ Objective:
 - keep rookies separate;
 - preserve frozen WR-021/WR-023 prospective test unchanged.
 
+## Custom ranking engine roadmap
+### WR-028 — Custom Ranking Engine Roadmap / Architecture Plan
+Role: Manager / Architect
+Status: COMPLETE
+Task: `.ai/manager/WR-028.md`
+
+Manager has established an evidence-gated plan to make the custom ranking engine technically complete before season end without prematurely changing production ranking authority.
+
+Planned layers:
+- returning-player expected performance;
+- position-specific risk / warnings;
+- rookie engine;
+- availability / expected games;
+- season-total production and uncertainty;
+- positional replacement value;
+- cross-position custom draft value / overall rank;
+- tiers / explanations / warnings;
+- ESPN market timing kept separate;
+- shadow production integration;
+- independent engine QA;
+- final WR-023 prospective promotion gate.
+
+Definitions:
+- `ENGINE-COMPLETE`: reproducible QB/RB/WR/TE projections, risk outputs, availability, season totals, replacement-adjusted values, overall/position ranks, tiers and explanations.
+- `SHADOW-READY`: integrated non-authoritatively with deterministic versioning/QA while FantasyPros remains authority.
+- `PRODUCTION-AUTHORITATIVE`: not currently authorized; requires final WR-023 prospective evidence plus separate Manager/Builder/Auditor milestone and WR-D001 change.
+
+Current hard dependency:
+WR-027 must finish before the returning-player v1 projection/risk specification is frozen and the next roadmap phase is activated.
+
 ## PW-003 — ACTIVE
 ### WR-026 — Phone-Only Decision View Optimization
 Role: Builder
@@ -92,7 +122,7 @@ Builder must reconcile its final WR-026 PR with current main before audit becaus
 Auditor remains idle until Builder produces a final mergeable WR-026 PR with green CI.
 
 ## Current workload
-- Manager — IDLE after WR-025 disposition / WR-027 assignment
+- Manager — IDLE after WR-028 roadmap planning
 - Builder — ACTIVE / WR-026
 - R&D — ACTIVE / WR-027
 - Auditor — IDLE / waiting for WR-026
