@@ -4,38 +4,43 @@
   "experimental_non_production": true,
   "assignment_base_sha": "f079220e8ed07280d08f13c5db006661728d7f35",
   "human_protocol_path": ".ai/research/AVAILABILITY_EXPECTED_GAMES_PROTOCOL.md",
-  "human_protocol_git_blob_sha": "6d608001b91ef76851484f527835f7fd2a7005c6",
+  "human_protocol_git_blob_sha": "163d1085dc71f9ceed36a467a8983c40e2d3db7f",
   "source_manifest_path": ".ai/research/AVAILABILITY_SOURCE_MANIFEST.md",
-  "source_manifest_git_blob_sha": "6c9cabd3a2c55f2e4c9979a9d33f874eecdb1e53",
+  "source_manifest_git_blob_sha": "2b826de784757b51423ef7b8bab1a639fdef02bf",
   "candidate_spec_path": ".ai/research/AVAILABILITY_CANDIDATE_SPEC.md",
-  "candidate_spec_git_blob_sha": "69aedb2104ec9a7bf8f79997fccac65957a50a61",
-  "historical_stats_seasons": [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
-  "target_seasons": [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
-  "scored_seasons": [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
-  "development_seasons": [2018, 2019, 2020, 2021],
-  "confirmation_seasons": [2022, 2023, 2024, 2025],
-  "positions": ["QB", "RB", "WR", "TE"],
+  "candidate_spec_git_blob_sha": "39517955300c9ed8bf6024c1083c4831bbe79052",
+  "pre_scoring_source_correction_path": ".ai/research/AVAILABILITY_PRE_SCORING_SOURCE_CORRECTION.md",
+  "pre_scoring_source_correction_git_blob_sha": "67688468fdb2db79e32a60e780a3adc5f99f06cb",
+  "first_guarded_attempt": {
+    "workflow_run": 34537885926,
+    "candidate_scoring_started": false,
+    "failure": "current players.csv SHA-256 differed from WR-025 locked SHA-256",
+    "corrective_action": "exclude Players and Draft Picks metadata from WR-034 execution; retain exact locked Player Summary Stats only"
+  },
+  "historical_stats_seasons": [2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],
+  "target_seasons": [2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],
+  "scored_seasons": [2018,2019,2020,2021,2022,2023,2024,2025],
+  "development_seasons": [2018,2019,2020,2021],
+  "confirmation_seasons": [2022,2023,2024,2025],
+  "positions": ["QB","RB","WR","TE"],
   "target": {
     "primary": "recorded_regular_season_games",
     "zero_game_returners_valid": true,
     "max_games_rule": "16 through 2020; 17 from 2021 onward",
-    "events": {
-      "low_availability": "target_games <= 8",
-      "high_availability": "target_games >= 14"
-    },
+    "events": {"low_availability":"target_games <= 8","high_availability":"target_games >= 14"},
     "medical_injury_label": false
   },
   "cutoff": {
     "research_cutoff": "September 1 12:00 UTC of target season",
-    "predictors": "completed Y-1/Y-2 regular-season information and admitted immutable metadata only",
+    "predictors": "completed Y-1/Y-2 Player Summary Stats only",
     "target_season_week1_plus_predictors_forbidden": true,
     "outcomes_2026_forbidden": true
   },
   "sources": {
     "locked_asset_manifest": ".ai/research/generated/HISTORICAL_RANKING_ASSET_MANIFEST.json",
-    "admitted": ["nflverse Player Summary Stats", "nflverse Players stable metadata", "nflverse Draft Picks"],
-    "new_source_families_admitted": [],
-    "verify_downloaded_sha256_against_wr025": true
+    "admitted_for_scoring": ["nflverse Player Summary Stats 2012-2025 exact WR-025 locked assets"],
+    "removed_after_pre_scoring_failure": ["nflverse Players metadata","nflverse Draft Picks metadata"],
+    "verify_downloaded_asset_id_and_sha256_against_wr025": true
   },
   "baselines": [
     "PREV_RATE: prev1_games / prior_season_max * target_season_max, clipped",
@@ -43,32 +48,23 @@
     "POSITION_MEAN: earlier-target-season position mean"
   ],
   "feature_sets": {
-    "MINIMAL_AVAILABILITY": [
-      "prev1_games", "prev2_games", "games_delta", "has_prev2", "age_sep1",
-      "age_missing", "experience_years", "log_draft_pick", "draft_round", "drafted"
-    ],
-    "FULL_WR025": "exact wr025_historical_ranking_signals.FEATURES"
+    "MINIMAL_AVAILABILITY": ["prev1_games","prev2_games","games_delta","has_prev2"],
+    "FULL_STATS_AVAILABILITY": "exact WR-025 FEATURES excluding age_sep1, age_missing, experience_years, log_draft_pick, draft_round, drafted"
   },
   "expected_games_candidates": {
     "RIDGE_MINIMAL": "StandardScaler -> Ridge(alpha=100.0)",
-    "RIDGE_FULL": "StandardScaler -> Ridge(alpha=100.0)",
+    "RIDGE_FULL": "StandardScaler -> Ridge(alpha=100.0) on FULL_STATS_AVAILABILITY",
     "POISSON_MINIMAL": "StandardScaler -> PoissonRegressor(alpha=1.0,max_iter=2000)",
-    "MULTINOMIAL_HURDLE": "StandardScaler -> LogisticRegression(C=0.25,solver=lbfgs,max_iter=2000,random_state=34034); classes 0-8,9-13,14+; expectation uses training-only within-class mean games"
+    "MULTINOMIAL_HURDLE": "StandardScaler -> LogisticRegression(C=0.25,solver=lbfgs,max_iter=2000,random_state=34034); classes 0-8,9-13,14+; expectation from training-only class means"
   },
   "event_candidates": {
     "PREVALENCE": "training-position prevalence",
     "LOGIT_MINIMAL": "StandardScaler -> LogisticRegression(C=0.25,solver=liblinear,max_iter=2000,random_state=34034)",
-    "LOGIT_FULL": "StandardScaler -> LogisticRegression(C=0.25,solver=liblinear,max_iter=2000,random_state=34034)"
+    "LOGIT_FULL": "same on FULL_STATS_AVAILABILITY"
   },
-  "predictive_interval": "80% training-only position residual interval using 10th/90th percentiles, clipped to valid games",
-  "metrics": {
-    "expected_games": ["MAE", "RMSE", "mean_bias", "Spearman", "predicted-range calibration"],
-    "events": ["prevalence", "Brier", "Brier_skill", "ROC_AUC", "PR_AUC", "log_loss", "reliability", "probability-tier event_rate"],
-    "uncertainty": ["80pct_interval_coverage", "mean_interval_width", "by_position_coverage"],
-    "robustness": ["5000_player_cluster_bootstrap", "season_stability", "coverage_missingness", "selected_model_omission_and_half_sd_perturbation", "fallback_test"]
-  },
+  "predictive_interval": "80% training-only per-position residual interval using 10th/90th percentiles, clipped",
   "minimum_training_rows_including_zero_game": 25,
-  "seeds": {"model": 34034, "bootstrap": 34035},
+  "seeds": {"model":34034,"bootstrap":34035,"bootstrap_replicates":5000},
   "adoption_gate": {
     "development_mae_lift_min": 0.01,
     "development_rmse_regression_max": 0.01,
@@ -80,13 +76,12 @@
     "confirmation_position_mae_regression_max": 0.05,
     "confirmation_interval_coverage_min": 0.72,
     "confirmation_interval_coverage_max": 0.88,
-    "candidate_tiebreak_order": ["RIDGE_MINIMAL", "POISSON_MINIMAL", "RIDGE_FULL", "MULTINOMIAL_HURDLE"]
+    "candidate_tiebreak_order": ["RIDGE_MINIMAL","POISSON_MINIMAL","RIDGE_FULL","MULTINOMIAL_HURDLE"]
   },
   "event_warning_gate": {
     "confirmation_pooled_brier_skill_gt": 0.0,
     "position_brier_skill_floor": -0.05,
-    "gross_reliability_inversion_definition": "confirmation pooled highest probability quartile event rate < lowest probability quartile event rate",
-    "gross_reliability_inversion_forbidden": true,
+    "gross_reliability_inversion_definition": "highest confirmation probability quartile event rate < lowest quartile event rate",
     "ordering_effect": "NONE"
   },
   "fallback": {
