@@ -144,6 +144,11 @@ try {
   const setupInput = page.locator('.draft-command-setup-fields input').first();
   await setupInput.focus();
   await setupInput.press('Escape');
+  await page.waitForFunction(() => {
+    const details = document.querySelector('.draft-command-setup-disclosure');
+    const summary = document.querySelector('.draft-command-setup-summary');
+    return Boolean(details && summary && !details.open && document.activeElement === summary);
+  });
   assert.equal(await page.locator('.draft-command-setup-disclosure').evaluate(element => element.open), false);
   assert.equal(await page.evaluate(() => document.activeElement === document.querySelector('.draft-command-setup-summary')), true, 'Escape must close Draft Setup and return focus to Edit summary');
 
