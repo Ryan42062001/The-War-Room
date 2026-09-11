@@ -1,0 +1,60 @@
+{
+  "task_id": "WR-035",
+  "status": "FROZEN_PRE_SCORING_LOCK",
+  "data_ceiling": 2025,
+  "cohort": "returning QB/RB/WR/TE constructed from target-season Y-1",
+  "target": "realized regular-season full-PPR season points; zero-game returners equal zero",
+  "development_seasons": [2018, 2019, 2020, 2021],
+  "confirmation_seasons": [2022, 2023, 2024, 2025],
+  "upstream": {
+    "wr033": "position-specific StandardScaler then Ridge(alpha=100), exact WR-025 features, active-game PPR target",
+    "wr034": "position-specific RIDGE_FULL, exact accepted stats-only features, target games clipped to schedule",
+    "retuning_allowed": false
+  },
+  "central_methods": [
+    "INDEPENDENT_PRODUCT",
+    "PAIRED_RESIDUAL_MEAN",
+    "WR033_X_PREV_RATE",
+    "PRIOR_TOTAL_SCHEDULE_ADJUSTED",
+    "POSITION_MEAN_TOTAL"
+  ],
+  "distribution_methods": ["PAIRED_RESIDUAL_DRAWS", "INDEPENDENT_RESIDUAL_DRAWS"],
+  "draws": 2001,
+  "draw_seed_formula": "35035 + 100*target_season + 10*position_index + method_index",
+  "bootstrap_reps": 5000,
+  "bootstrap_seed": 35036,
+  "residual_minimum": 25,
+  "interval_nominal": 0.8,
+  "catastrophic_points": 100.0,
+  "top_n": {"QB": 12, "RB": 24, "WR": 36, "TE": 12},
+  "selection": {
+    "paired_development_min_mae_improvement": 0.01,
+    "paired_development_max_rmse_worsening": 0.01,
+    "paired_development_max_absolute_bias_worsening_points": 5.0,
+    "paired_development_min_positions_nonnegative_mae": 3,
+    "paired_development_max_catastrophic_over_worsening": 0.01,
+    "paired_confirmation_min_mae_improvement": 0.01,
+    "paired_confirmation_bootstrap_upper_below_zero": true,
+    "paired_confirmation_max_position_mae_worsening": 0.03,
+    "independence_must_not_lose_to_both_primary_baselines": true,
+    "independence_min_improvement_over_one_baseline": 0.02
+  },
+  "distribution_gate": {
+    "pooled_coverage_min": 0.75,
+    "pooled_coverage_max": 0.85,
+    "position_coverage_min": 0.70,
+    "position_coverage_max": 0.90,
+    "tail_rate_min": 0.05,
+    "tail_rate_max": 0.15,
+    "paired_interval_score_must_not_exceed_independent": true
+  },
+  "prohibitions": [
+    "2026 regular-season outcomes",
+    "target-season Week 1+ predictors",
+    "upstream retuning",
+    "rookie modeling",
+    "ESPN or FantasyPros inputs",
+    "replacement/FLEX/MSV/value work",
+    "production changes"
+  ]
+}
