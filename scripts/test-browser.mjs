@@ -178,6 +178,9 @@ const normalizedPersistence = await persistencePage.evaluate(() => {
   const registry = JSON.parse(localStorage.getItem('war-room-draft-sessions-v1') || '[]');
   const before = activeDraftSessionId;
   const phantomSwitch = switchDraftSession('missing-session');
+  const diagnosticPayload = JSON.parse(localStorage.getItem('draft-state-v1:good'));
+  diagnosticPayload.savedAt = '<img src=x onerror=alert(1)>';
+  localStorage.setItem('draft-state-v1:good', JSON.stringify(diagnosticPayload));
   const diagElement = document.createElement('div');
   diagElement.id = 'storage-diag';
   document.body.appendChild(diagElement);
