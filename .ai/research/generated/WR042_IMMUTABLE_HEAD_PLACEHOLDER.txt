@@ -1,0 +1,1 @@
+Immutable head is the commit SHA recorded in the WR-042 pull request metadata. This file intentionally contains no SHA to avoid self-referential head movement.
