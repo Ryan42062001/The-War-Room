@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-11T09:45:00Z",
+  "updated_at_utc": "2026-09-11T09:48:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": ["PLANNED","BLOCKED","ASSIGNED","IN_PROGRESS","MANAGER_REVIEW_READY","AUDIT_READY","MERGE_READY","REWORK_REQUIRED","MERGED","CLOSED"],
@@ -49,7 +49,7 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "CLOSED with FAIL — REMEDIATION REQUIRED; findings route to WR-037 and WR-038"
+      "next_gate": "CLOSED with FAIL — REMEDIATION REQUIRED; audit evidence merged via PR #125 at 793c091b6c68012e37c021be1bd753d4406c679b; findings route to WR-037 and WR-038"
     },
     {
       "task_id": "WR-037",
