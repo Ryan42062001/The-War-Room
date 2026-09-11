@@ -159,8 +159,17 @@ try {
   // Put the command surface off-screen before the urgent transition. The
   // presentation layer must reveal On-the-Clock without relying on a board-
   // obscuring sticky overlay.
-  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-  await page.waitForFunction(() => document.getElementById('draft-command-bar').getBoundingClientRect().bottom < 0);
+  const commandBarOffscreen = await page.evaluate(async () => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    for (let frame = 0; frame < 20; frame += 1) {
+      window.scrollTo(0, document.documentElement.scrollHeight);
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      const bar = document.getElementById('draft-command-bar');
+      if (bar && bar.getBoundingClientRect().bottom < 0) return true;
+    }
+    return false;
+  });
+  assert.equal(commandBarOffscreen, true, 'command bar must be off-screen before urgent transition');
   await page.evaluate(() => {
     [...document.querySelectorAll('tr.draftrow')].slice(2, 4).forEach((row, offset) => {
       const pick = offset + 3;
