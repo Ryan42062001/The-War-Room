@@ -4,7 +4,7 @@ HANDOFF
 
 Task IDs: WR-035 / WR-036 / WR-037 / WR-038 / WR-039 / WR-040 / WR-041
 Role: Manager / Architect
-Status: RETURNING-PLAYER V2 EVIDENCE RESET ACTIVE / WR-041 WORKFLOW INTEGRATION
+Status: WR-041 COMPLETE / RETURNING-PLAYER V2 EVIDENCE RESET ACTIVE
 
 ## Returning-player v2 disposition
 WR-D007 remains unchanged.
@@ -13,8 +13,12 @@ The WR-035 / WR-037 v1 Phase-5 composition path is CLOSED as insufficiently prov
 
 WR-039 remains the active R&D prospective evidence-contract task. WR-040 remains blocked pending one immutable WR-039 contract target. WR-041 does not redefine or disposition WR-039/WR-040 football/research substance.
 
-## WR-041 — Work Helper / Super Troubleshooter
-Manager is integrating a permanent first-class privileged troubleshooting role:
+## WR-041 — COMPLETE — Work Helper / Super Troubleshooter
+Manager PR: #128
+Starting main: `6bc66fa6c779e558940ca6cc3f267441def62595`
+Integration mode: control-plane-only; squash merge after exact-head CI.
+
+WR-041 establishes the permanent first-class:
 
 **Work Helper / Super Troubleshooter / Cross-Functional Operator**
 
@@ -49,24 +53,21 @@ Auditor remains independent verification authority.
 
 Work Helper is `IDLE` until a real Manager-approved troubleshooting assignment exists.
 
-## WR-041 integration scope
+## WR-041 scope verification
 Control-plane only under `.ai/**`. No production behavior, ranking policy, football-model result, frozen research artifact, or WR-039 branch content is changed.
 
-No new entry is added to `.ai/shared/DECISIONS.md` because this is workflow governance; the canonical workflow explicitly places workflow mechanics in `WORKFLOW.md` and role charters rather than product/model decisions.
+No new entry was added to `.ai/shared/DECISIONS.md` because this is workflow governance; canonical workflow places workflow mechanics in `WORKFLOW.md` and role charters rather than product/model decisions.
 
 ## Staffing
-- Manager: ACTIVE — WR-041 integration, then IDLE
+- Manager: IDLE after WR-041 integration
 - Builder: IDLE
 - Draft Strategy: IDLE
 - R&D: ACTIVE/ASSIGNED — WR-039
 - Auditor: IDLE — WR-040 blocked
 - Work Helper: IDLE — permanent role; no active troubleshooting assignment
 
-## Next gates
-1. Exact-head CI and Manager merge for WR-041.
-2. Work Helper remains IDLE.
-3. WR-039 immutable evidence-contract head -> Manager verification -> activate WR-040.
-4. WR-040 independent contract verdict -> Manager decides whether to authorize v2 scoring research.
+## Next gate
+WR-039 immutable evidence-contract head -> Manager verification -> activate WR-040 -> independent contract verdict -> Manager decides whether to authorize v2 scoring research.
 
 ## Production authority
 UNCHANGED. WR-D001 remains active. No custom ranking is production-authorized.
