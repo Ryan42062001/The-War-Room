@@ -1,0 +1,16 @@
+{
+  "byte_for_byte_substantive_rerun_equal": true,
+  "files": {
+    "SEASON_TOTAL_DISTRIBUTION_RESEARCH.md": "1503a9f6c406aef2bf5b4119b9f816bab33d6461bfac19e101fb2a49e391ef36",
+    "WR035_CALIBRATION.csv": "3bbb589df675d7850eab41af2af628adaf5fe63aa3370b02d8a636717ec44ebd",
+    "WR035_CENTRAL_EVALUATION.csv": "af4f63dd9a2135af11c45ead41da369d31b2333c99ac75342db86024a89a6ea3",
+    "WR035_DEPENDENCE_ANALYSIS.json": "ec081b1ebff0f53f1179032aa6c84cd85d8e4459ab8e10e4caa1c9e3bb62e924",
+    "WR035_DISTRIBUTION_EVALUATION.csv": "2fa078637330481548f8de89ce88837838bdbc6cce09895127d3ac45c4616744",
+    "WR035_INTEGRITY.json": "23df83b2dfabb26acab75fa4f7e21d88b73edf1d44bc8b820851f46776782c51",
+    "WR035_RESULTS.json": "c5c1fbbd9688fe3ca25ff141c9edb803f8f309289964c0b8f4a8242edd1c3768",
+    "WR035_SOURCE_PROVENANCE.json": "0a2ca44431cfba2dbc717177e0cf4e13439ccf7517313ffde2b045f25f2e6c36"
+  },
+  "runs_compared": 2,
+  "status": "PASS",
+  "task_id": "WR-035"
+}

@@ -1,0 +1,19 @@
+{
+  "candidate_spec_sha256": "2b6bac22c63f2a76b7861789798ac8d3c0788b4d9304b5856902535b059a6bdd",
+  "machine_lock_sha256": "373dd4ae6cd2bc8fb7f06bcf196e3cdb8b4c5d97e10dde96af52a663e2adf61d",
+  "max_outcome_season": 2025,
+  "outcomes_2026_inspected": false,
+  "production_changed": false,
+  "protocol_sha256": "e01416b5925127953905d6dae2fb2dcb2c75dbf6a902ce6c10ac36dce3507152",
+  "runtime": {
+    "numpy": "2.1.3",
+    "pandas": "2.2.3",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "scikit_learn": "1.5.2",
+    "scipy": "1.14.1"
+  },
+  "wr021_wr023_unchanged": true,
+  "wr033_changed": false,
+  "wr034_changed": false
+}

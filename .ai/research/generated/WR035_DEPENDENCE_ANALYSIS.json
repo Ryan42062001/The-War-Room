@@ -1,0 +1,19 @@
+{
+  "bootstrap": {
+    "ci95_high": 2.6800394160362253,
+    "ci95_low": 1.8060280820742158,
+    "clusters": 921,
+    "mean_delta_mae_paired_minus_independence": 2.301057419752814,
+    "replicates": 5000,
+    "seed": 35036
+  },
+  "decision": {
+    "central_supported": true,
+    "confirmation_paired_gate": false,
+    "development_paired_gate": false,
+    "distribution_supported": true,
+    "final_phase5_disposition": "INDEPENDENCE PRODUCT SUPPORTED",
+    "positions_nonnegative_development": 0,
+    "selected_central": "INDEPENDENT_PRODUCT"
+  }
+}
