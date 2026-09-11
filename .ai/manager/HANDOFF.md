@@ -2,72 +2,90 @@
 
 HANDOFF
 
-Task IDs: WR-035 / WR-036 / WR-037 / WR-038 / WR-039 / WR-040 / WR-041
+Task IDs: WR-039 / WR-040 / WR-041
 Role: Manager / Architect
-Status: WR-041 COMPLETE / RETURNING-PLAYER V2 EVIDENCE RESET ACTIVE
+Status: WR-040 INDEPENDENT CONTRACT AUDIT ACTIVE
 
-## Returning-player v2 disposition
-WR-D007 remains unchanged.
+## Canonical baseline
+Production authority remains WR-D001. WR-D007 remains the controlling Returning-Player v2 evidence-reset decision. WR-041 is complete and Work Helper remains IDLE.
 
-The WR-035 / WR-037 v1 Phase-5 composition path is CLOSED as insufficiently provable under the frozen WR-033 provenance contract. PR #124 is closed unmerged and preserved only as historical research/blocker evidence.
+The historical v1 Phase-5 path remains closed as insufficiently provable. PR #124 is closed unmerged.
 
-WR-039 remains the active R&D prospective evidence-contract task. WR-040 remains blocked pending one immutable WR-039 contract target. WR-041 does not redefine or disposition WR-039/WR-040 football/research substance.
+## WR-039 — COMPLETE / AUDIT READY
+R&D produced one immutable prospective Returning-Player v2 evidence-contract target:
 
-## WR-041 — COMPLETE — Work Helper / Super Troubleshooter
-Manager PR: #128
-Starting main: `6bc66fa6c779e558940ca6cc3f267441def62595`
-Integration mode: control-plane-only; squash merge after exact-head CI.
+- PR: #127
+- branch: `wr-039-returning-player-v2-evidence-contract`
+- exact head: `00a9e787e716d6697e6cd0d9252982a672abbbe0`
+- machine-lock SHA-256: `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`
+- changed-file scope: exactly five `.ai/research/**` files
 
-WR-041 establishes the permanent first-class:
+Manager verified the contract/handoff structure and scope. It explicitly preserves v1/v2 non-equivalence, source/version/cutoff/rights/retention requirements, durable custody, full-row keyed evidence for every future considered row including zero-game/excluded rows, deterministic lock requirements, prospective chronology, and fail-closed behavior.
 
-**Work Helper / Super Troubleshooter / Cross-Functional Operator**
+No v2 model fitting, scoring, tuning, comparison, ranking, or evaluation occurred. No 2026 regular-season outcomes were inspected. Production, WR-021/WR-023, historical WR-033/WR-034 specifications, and Phase 6 were not changed.
 
-The old temporary Troubleshooting & Root Cause Engineer is superseded for new work.
+Do not mutate or merge PR #127 while WR-040 audits it.
 
-### Privileges
-When Manager assigns a real troubleshooting task, Work Helper may broadly inspect the entire repository/project evidence across Manager, Builder, Strategy, R&D, Auditor, CI, branches/commits/PRs, production code/tests, integrations, research tooling, and generated evidence.
+## Target advancement
+WR-039 began from main `6bc66fa6c779e558940ca6cc3f267441def62595`.
 
-Default write authority is `.ai/work_helper/**` plus Manager-approved diagnostic/test branches. Writes elsewhere require explicit authorization in the current Work Helper task.
+Current main advanced through WR-041 only. That advancement is `CONTROL_PLANE_ONLY` and does not overlap the five `.ai/research/**` files in PR #127. The immutable WR-039 head is therefore intentionally not rebased.
 
-Manager may authorize bounded cross-layer remediation spanning production code, tests, workflows/CI, research tooling, integrations, and recovery paths when required.
+## CI evidence requiring independent disposition
+Run `34613965662` is overall `FAILURE` after the one permitted unchanged-head retry.
 
-### No fixed attempt ceiling
-Normal roles retain the approximately-three-materially-distinct-attempt anti-loop threshold.
+Attempt 1:
+- exact WR-039 head unchanged;
+- WR-026 phone check passed;
+- extension unit tests passed 164/164;
+- failure occurred in `test-command-bar` when `[data-command-setting="slot"]` detached from the DOM and became hidden during `locator.fill`;
+- matches the known non-coupled command-bar UI flake.
 
-Work Helper is explicitly exempt from any fixed numerical attempt limit. It may continue evidence-driven troubleshooting while attempts materially advance understanding, avoid mindless repetition, respect task/write scope and frozen boundaries, record durable findings, and preserve approval gates for destructive/irreversible actions.
+Attempt 2:
+- exact WR-039 head unchanged;
+- WR-026 phone check passed;
+- extension unit tests passed 164/164;
+- failure occurred later in an unrelated production-browser persistence assertion expecting a null storage value but observing persisted production state.
 
-If many paths fail, Work Helper widens the investigation and records what has been ruled out rather than terminating because an arbitrary count was reached.
+PR #127 changes only `.ai/research/**`. Manager classifies both failures as structurally non-overlapping with the research contract but does NOT convert the red run into a CI success. WR-040 must independently inspect and disposition the run and determine whether any finding blocks contract acceptance.
 
-### Governance boundaries
-Work Helper is a technical superuser, not a second Manager.
+No further WR-039 retry or head mutation is authorized before audit.
 
-It may not independently change roadmap/durable product-model decisions, production ranking authority, Manager canonical state, frozen evidence standards, or Draft Strategy policy. It may not self-approve or independently audit work it materially changes. Production/milestone merges remain Manager-controlled unless explicitly delegated under the merge gate.
+## WR-040 — ASSIGNED TO INDEPENDENT AUDITOR / QA
+Audit target:
+- PR #127
+- exact immutable head `00a9e787e716d6697e6cd0d9252982a672abbbe0`
 
-Auditor remains independent verification authority.
+Audit scope is the prospective evidence/provenance contract, not model performance.
 
-### Persistent workspace
-- `.ai/roles/WORK_HELPER.md`
-- `.ai/work_helper/HANDOFF.md`
-- `.ai/work_helper/TROUBLESHOOTING_LOG.md`
-- optional task-specific `.ai/work_helper/WR-###_DIAGNOSIS.md`
+The Auditor must independently verify:
+- source/version/cutoff/digest/schema rules;
+- rights/license/redistribution and retention rules;
+- durable raw/derived evidence policy;
+- complete full-row keyed feature/preprocessing/prediction requirements;
+- duplicate/missing/inconsistent fail-closed behavior;
+- deterministic model/preprocessing/split/seed/environment/code/source lock surface;
+- frozen-before-scoring chronology;
+- no 2026 outcome inspection;
+- WR-021/WR-023 unchanged;
+- v1/v2 non-equivalence and reuse/re-versioning boundary;
+- no production/Phase-6 work;
+- exact CI-run disposition above.
 
-Work Helper is `IDLE` until a real Manager-approved troubleshooting assignment exists.
+Final verdict must be exactly one of:
+- `PASS`
+- `PASS WITH NON-BLOCKING FINDINGS`
+- `FAIL — REMEDIATION REQUIRED`
 
-## WR-041 scope verification
-Control-plane only under `.ai/**`. No production behavior, ranking policy, football-model result, frozen research artifact, or WR-039 branch content is changed.
-
-No new entry was added to `.ai/shared/DECISIONS.md` because this is workflow governance; canonical workflow places workflow mechanics in `WORKFLOW.md` and role charters rather than product/model decisions.
+Auditor must not score models, modify PR #127, merge the research PR, or authorize scoring itself.
 
 ## Staffing
-- Manager: IDLE after WR-041 integration
+- Manager: IDLE after activation reconciliation
 - Builder: IDLE
 - Draft Strategy: IDLE
-- R&D: ACTIVE/ASSIGNED — WR-039
-- Auditor: IDLE — WR-040 blocked
-- Work Helper: IDLE — permanent role; no active troubleshooting assignment
+- R&D: IDLE / WR-039 AUDIT_READY; immutable PR #127 must not move
+- Auditor: ACTIVE / ASSIGNED — WR-040
+- Work Helper: IDLE
 
 ## Next gate
-WR-039 immutable evidence-contract head -> Manager verification -> activate WR-040 -> independent contract verdict -> Manager decides whether to authorize v2 scoring research.
-
-## Production authority
-UNCHANGED. WR-D001 remains active. No custom ranking is production-authorized.
+WR-040 verdict on exact head `00a9e787e716d6697e6cd0d9252982a672abbbe0` -> Manager disposition. No v2 scoring task exists yet.
