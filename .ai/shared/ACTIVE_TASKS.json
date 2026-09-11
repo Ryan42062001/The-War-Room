@@ -1,9 +1,20 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-11T15:43:00Z",
+  "updated_at_utc": "2026-09-11T16:34:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
-  "lifecycle_states": ["PLANNED","BLOCKED","ASSIGNED","IN_PROGRESS","MANAGER_REVIEW_READY","AUDIT_READY","MERGE_READY","REWORK_REQUIRED","MERGED","CLOSED"],
+  "lifecycle_states": [
+    "PLANNED",
+    "BLOCKED",
+    "ASSIGNED",
+    "IN_PROGRESS",
+    "MANAGER_REVIEW_READY",
+    "AUDIT_READY",
+    "MERGE_READY",
+    "REWORK_REQUIRED",
+    "MERGED",
+    "CLOSED"
+  ],
   "tasks": [
     {
       "task_id": "WR-035",
@@ -79,12 +90,12 @@
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/"],
       "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
-      "next_gate": "CLOSED without activation because WR-037 produced no valid remediated v1 audit target; superseded by WR-040"
+      "next_gate": "CLOSED without activation because WR-037 produced no valid remediated v1 target; superseded by WR-040"
     },
     {
       "task_id": "WR-039",
       "owner": "R&D",
-      "status": "AUDIT_READY",
+      "status": "CLOSED",
       "task_file": ".ai/manager/WR-039.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "6bc66fa6c779e558940ca6cc3f267441def62595",
@@ -98,18 +109,18 @@
       "allowed_path_prefixes": [".ai/research/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", "src/", "public/"],
       "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
-      "next_gate": "WR-040 independently audits immutable PR #127 head 00a9e787e716d6697e6cd0d9252982a672abbbe0; do not modify or merge the research head before audit"
+      "next_gate": "CLOSED — accepted under WR-D008 after WR-040 PASS WITH NON-BLOCKING FINDINGS; PR #127 merged preserving audited head at a0f090e5c8bbbf513e34c24a3fead7df2c094d44"
     },
     {
       "task_id": "WR-040",
       "owner": "Auditor",
-      "status": "ASSIGNED",
+      "status": "CLOSED",
       "task_file": ".ai/manager/WR-040.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
       "assignment_main_sha": "068d8b98da86ca4125dc65a2fa2b0168b9f46928",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "c68ef98b27f81e8e1fb26a36a1d2f8d5739b8824",
       "branch": "wr-040-v2-evidence-contract-audit",
-      "pr": 127,
+      "pr": 130,
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_PREFERRED",
       "audit_required": false,
@@ -117,7 +128,7 @@
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/", "src/", "public/"],
       "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
-      "next_gate": "Audit PR #127 exact head 00a9e787e716d6697e6cd0d9252982a672abbbe0, including source/rights/retention/reproducibility and CI-run disposition -> Manager decision"
+      "next_gate": "CLOSED — PASS WITH NON-BLOCKING FINDINGS; audit PR #130 merged at 24c375775d58a0d8a4c178576efde5df64a3eedd; exact WR-039 head accepted under WR-D008"
     },
     {
       "task_id": "WR-041",
@@ -136,7 +147,83 @@
       "allowed_path_prefixes": [".ai/"],
       "forbidden_path_prefixes": ["src/", "public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "CLOSED at merge 068d8b98da86ca4125dc65a2fa2b0168b9f46928; Work Helper remains IDLE until a real troubleshooting assignment exists"
+      "next_gate": "CLOSED at merge 068d8b98da86ca4125dc65a2fa2b0168b9f46928; permanent Work Helper role established"
+    },
+    {
+      "task_id": "WR-042",
+      "owner": "R&D",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-042.md",
+      "role_handoff": ".ai/research/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": "wr-042-v2-source-custody",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "WORK_MODE_HIGH_VALUE",
+      "audit_required": true,
+      "blocked_on": [],
+      "allowed_path_prefixes": [".ai/research/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", "src/", "public/"],
+      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
+      "next_gate": "Freeze one immutable no-scoring exact source-custody/source-snapshot PR/head under WR-D008 -> activate WR-043"
+    },
+    {
+      "task_id": "WR-043",
+      "owner": "Auditor",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-043.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": "wr-043-v2-source-custody-audit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "WORK_MODE_PREFERRED",
+      "audit_required": false,
+      "blocked_on": ["WR-042 complete with one immutable no-scoring source-custody PR/head"],
+      "allowed_path_prefixes": [".ai/auditor/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/", "src/", "public/"],
+      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
+      "next_gate": "WR-042 immutable custody target -> WR-043 independent audit -> Manager may create a model-protocol freeze task only after PASS-family verdict"
+    },
+    {
+      "task_id": "WR-044",
+      "owner": "Work Helper",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-044.md",
+      "role_handoff": ".ai/work_helper/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": "wr-044-browser-ci-determinism",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "WORK_MODE_HIGH_VALUE",
+      "audit_required": true,
+      "blocked_on": [],
+      "allowed_path_prefixes": [".ai/work_helper/", ".github/workflows/", "scripts/"],
+      "forbidden_path_prefixes": ["src/", "public/", ".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/research/"],
+      "forbidden_exact_paths": [],
+      "next_gate": "Diagnose/remediate browser-CI nondeterminism without production behavior changes -> immutable target -> WR-045"
+    },
+    {
+      "task_id": "WR-045",
+      "owner": "Auditor",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-045.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": "wr-045-browser-ci-audit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "WORK_MODE_PREFERRED",
+      "audit_required": false,
+      "blocked_on": ["WR-044 complete with one immutable CI/test-harness remediation PR/head"],
+      "allowed_path_prefixes": [".ai/auditor/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/work_helper/", ".ai/research/", "src/", "public/"],
+      "forbidden_exact_paths": [],
+      "next_gate": "WR-044 immutable remediation -> WR-045 independent audit -> Manager merge/acceptance decision"
     }
   ]
 }
