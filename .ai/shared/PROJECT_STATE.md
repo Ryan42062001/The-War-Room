@@ -98,18 +98,17 @@ Phase 6 replacement/cross-position draft value remains BLOCKED.
 It may not start until a later v2 expected-performance/season-total path has been scored under the audited evidence contract, independently audited, and explicitly accepted by Manager.
 
 ## Current roles
-- Manager: ACTIVE — WR-041 control-plane integration, then IDLE
+- Manager: IDLE after WR-041 integration
 - Builder: IDLE
 - Draft Strategy: IDLE
 - R&D: ACTIVE/ASSIGNED — WR-039
 - Auditor: IDLE — WR-040 blocked
-- Work Helper: IDLE — permanent role established by WR-041; no troubleshooting assignment
+- Work Helper: IDLE — permanent role; no troubleshooting assignment
 
 ## Next gates
-1. WR-041 exact-head CI and control-plane merge; Work Helper remains IDLE.
-2. WR-039 freezes one immutable prospective v2 evidence contract without scoring.
-3. Manager pins that exact contract head and activates WR-040.
-4. WR-040 PASS-family verdict -> Manager may create a new v2 scoring/evaluation research task.
-5. Only after later season-total acceptance may Phase 6 be activated.
+1. WR-039 freezes one immutable prospective v2 evidence contract without scoring.
+2. Manager pins that exact contract head and activates WR-040.
+3. WR-040 PASS-family verdict -> Manager may create a new v2 scoring/evaluation research task.
+4. Only after later season-total acceptance may Phase 6 be activated.
 
 Production authority remains WR-D001 throughout.
