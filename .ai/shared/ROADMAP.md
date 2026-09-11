@@ -53,7 +53,7 @@ WR-034 accepted / merged via PR #123. `RIDGE_FULL` supported as a separate avail
 ### Phase 5 — Season-total distribution — AUDIT PENDING
 WR-035 research on PR #124 proposes `INDEPENDENCE PRODUCT SUPPORTED`: frozen WR-033 expected PPR/game × accepted WR-034 expected games is the selected central transform; the predeclared dependence-aware mean failed to improve it. Pooled empirical distribution coverage passed, but high-value/Q4/D10 coverage is weak and must not be represented as a calibrated guarantee.
 
-WR-036 independently audits WR-035 before Manager merge/freeze. PR #124 remains unmerged. A first integration CI attempt failed in an existing command-bar UI test despite research-only diff and green base-main CI; immutable-head retry is pending and must be classified in the audit.
+WR-036 independently audits WR-035 before Manager merge/freeze. PR #124 remains unmerged. PR integration CI attempt 1 failed in an existing command-bar UI test, while an unchanged-head retry passed; Auditor must include that non-coupled/flaky-CI classification in the audit evidence.
 
 ### Phase 6 — Replacement / cross-position draft value — BLOCKED ON PHASE 5 AUDIT/DISPOSITION
 Leading advisory candidate remains deterministic eligibility-constrained starter assignment / marginal starter value (MSV). Do not freeze until WR-035 is independently audited and accepted. FLEX/Superflex, bench policy, scoring scope, eligibility versioning, solver determinism, below-frontier ordering, and tier gates remain explicit Phase-6 questions.

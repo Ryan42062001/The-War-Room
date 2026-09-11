@@ -23,16 +23,16 @@ Verified Manager-review evidence:
 
 These facts are sufficient to justify independent audit, not final freeze.
 
-## CI exception under review
+## CI disposition before audit
 PR integration War Room CI run `34556251098` attempt 1 FAILED in existing `scripts/test-command-bar.mjs`: Playwright could not fill `[data-command-setting="slot"]` because the element was hidden/detached during command-bar reconstruction.
 
 Important context:
 - PR #124 changes only `.ai/research/**`, no production or test file;
 - base `main` commit `f99490a124e6f6f14a76bfd1b639fbdb61d4e1c4` passed the same full War Room CI in run `34554030426`;
-- Manager requested a rerun of the failed PR integration job on the unchanged exact head;
-- attempt 2 is in progress at this checkpoint.
+- Manager requested an immutable-head rerun of the failed PR integration job;
+- attempt 2 completed SUCCESS on the same exact PR head with no research-byte changes.
 
-Auditor must inspect the retry outcome and classify the failure. Do not assume research caused it; do not waive a persistent integration failure without evidence. If repeated evidence becomes genuinely contradictory or cross-layer, return to Manager for possible temporary Troubleshooting activation.
+The CI retry is therefore no longer a blocker. Auditor must still inspect and document attempt 1 versus attempt 2 and confirm no evidence couples the timeout to WR-035.
 
 ## WR-036 independent audit
 WR-036 is assigned to Independent Auditor / QA.
@@ -52,7 +52,7 @@ Audit scope:
 - source/PIT/frozen 2026 boundary integrity;
 - Phase-6 input contract contains no draft strategy/value fields and does not overstate empirical quantiles as calibrated high-value guarantees;
 - PR scope remains research-only;
-- CI attempt-1 failure plus retry classification.
+- CI attempt-1 failure plus successful immutable-head retry classification.
 
 Auditor must not merge PR #124.
 
@@ -65,10 +65,10 @@ Auditor must not merge PR #124.
 - Temporary Troubleshooting: NOT INSTANTIATED
 
 ## Next gate
-WR-036 final verdict -> Manager merge/rework decision on PR #124. Only an acceptable audit plus satisfactory CI disposition can unlock Phase 6.
+WR-036 final verdict -> Manager merge/rework decision on PR #124. Only an acceptable audit can unlock Phase 6.
 
 ## Production authority
 UNCHANGED. WR-D001 remains active. No custom ranking is production-authorized.
 
 ## Checkpoint
-Pre-reconciliation `main`: `f99490a124e6f6f14a76bfd1b639fbdb61d4e1c4`.
+Pre-reconciliation `main`: `1a45baf308277e42e7a631bc87624b5bab618d24`.

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-11T03:00:00Z",
+  "updated_at_utc": "2026-09-11T03:02:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": ["PLANNED","BLOCKED","ASSIGNED","IN_PROGRESS","MANAGER_REVIEW_READY","AUDIT_READY","MERGE_READY","REWORK_REQUIRED","MERGED","CLOSED"],
@@ -18,7 +18,7 @@
       "dependency": "INDEPENDENT",
       "execution_mode": "WORK_MODE_PREFERRED",
       "audit_required": true,
-      "blocked_on": ["WR-036 independent audit", "PR #124 integration CI retry"],
+      "blocked_on": ["WR-036 independent audit"],
       "allowed_path_prefixes": [".ai/research/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/"],
       "forbidden_exact_paths": [
@@ -26,7 +26,7 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "WR-036 independent audit of PR #124 exact head 9b4769899dd73f7c94679df6b6c67158e3ee39b6 plus CI classification -> Manager merge/rework decision"
+      "next_gate": "WR-036 independent audit of PR #124 exact head 9b4769899dd73f7c94679df6b6c67158e3ee39b6 -> Manager merge/rework decision"
     },
     {
       "task_id": "WR-036",
