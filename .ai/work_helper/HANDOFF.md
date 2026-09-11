@@ -2,32 +2,22 @@
 
 HANDOFF
 
-Role: Work Helper / Super Troubleshooter / Cross-Functional Operator
-Status: IDLE
-Active Task: NONE
-Assignment Mode: NONE
-
-## Canonical role state
-WR-041 establishes Work Helper as a permanent first-class privileged troubleshooting role.
-
-Work Helper has broad cross-functional read/inspection authority when assigned, default write authority under `.ai/work_helper/**`, and Manager-scoped write authority elsewhere.
-
-Work Helper is exempt from any fixed numerical troubleshooting-attempt limit. It must still remain evidence-driven, non-repetitive, within task/write scope, and subject to normal approval/audit/merge boundaries.
-
-## Governance
-- Manager remains roadmap/task/canonical/merge authority.
-- Auditor remains independent verification authority.
-- Builder owns routine production implementation/debugging.
-- R&D owns normal research/model/source work.
-- Draft Strategy owns recommendation policy.
-- Work Helper may cross these technical boundaries only for a Manager-approved troubleshooting assignment and may not self-certify work it materially changes.
-
-## Current assignment
-NONE.
-
-Do not invent troubleshooting work merely because the role exists.
-
-## Activation requirement
-A future Manager activation must provide task, assignment mode, blocker, target/checkpoint, authorized read/write scope, execution mode, required evidence, governance boundaries, and expected handoff.
-
-Checkpoint / SHA: role bootstrap begins from canonical main `6bc66fa6c779e558940ca6cc3f267441def62595`; final WR-041 integration checkpoint is Manager-owned.
+Task ID: WR-044
+Role: Work Helper / Super Troubleshooter
+Assignment mode: WORKFLOW / CI TROUBLESHOOTING
+Status: COMPLETE — AUDIT REQUIRED
+Starting main SHA: `142a9580fb408cd78ddae1026a67dd82f7d7b144`
+Final PR/head: PR #132; exact immutable head recorded in PR metadata after publication
+Failure classes reproduced: command-bar replacement-generation detach/hidden race; pending debounced autosave versus session-delete/storage assertion race
+Root cause(s): two independent test-harness lifecycle defects—non-atomic interaction across a deliberately replaced DOM subtree, and missing requestAnimationFrame/autosave quiescence around a destructive scenario in a long-lived page
+Files changed: `.github/workflows/ci.yml`; `.ai/work_helper/HANDOFF.md`; `.ai/work_helper/TROUBLESHOOTING_LOG.md`; `.ai/work_helper/WR-044_DIAGNOSIS.md`; `scripts/browser-test-helpers.mjs`; `scripts/run-test-browser.mjs`; `scripts/test-browser.mjs`; `scripts/test-command-bar.mjs`
+Assertions/coverage weakened: NO
+Production behavior changed: NO
+Targeted repeat evidence: run `34626238479` passed 5/5 persistence-lifecycle and 5/5 command-bar-lifecycle repetitions; final-head repetitions recorded on PR #132
+Full-suite repeat evidence: checkpoint run `34625637031` PASS and stress-checkpoint run `34626238479` PASS; three consecutive immutable-final-head attempts recorded on PR #132
+Exact-head CI: recorded on PR #132 after immutable-head validation
+Durable troubleshooting log updated: YES
+Blocking issues: none for independent audit; local browser execution was unavailable because the Chromium CDN timed out/returned 502, so browser evidence is repository-native CI evidence
+Recommended next role: Independent Auditor / QA
+Exact next action: activate WR-045 against the exact immutable PR #132 head; independently verify root causes, effective assertion preservation, five-repeat stress gate, three full-suite passes, and zero production drift
+Checkpoint / SHA: exact final SHA is recorded in PR #132 because committing it here would move the target

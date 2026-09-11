@@ -25,6 +25,11 @@ For each durable entry prefer:
 
 ## Entries
 
-No Work Helper incidents recorded yet.
+### WR-044 / 2026-09-11 — Browser lifecycle and persistence isolation
 
-WR-041 creates the role and workspace only; prior incidents are not retroactively attributed to Work Helper.
+- Symptom: unchanged documentation-only heads failed at different browser steps, including a command setting detaching/becoming hidden during `fill()` and a deleted/cleared storage key unexpectedly containing a valid autosave payload.
+- Root causes: browser tests spanned intentional command-bar render generations; a long-lived stateful page lacked a boundary around the application's 400 ms debounced autosave queue.
+- Decisive technique: add a fail-fast repeated targeted CI gate. An initial “wait visible” fix deterministically selected the hidden replacement and a later “open then edit” fix failed under repetition, proving the edit had to be committed in the same browser task as current-generation resolution.
+- Durable pattern: for intentionally replaced DOM, settle/re-resolve/commit synchronously within one browser task. Before storage-destructive scenarios, drain both requestAnimationFrame and application-owned debounce queues; assert cleanup after the drain.
+- Avoid: larger action timeouts, generic Playwright retries, immediate post-delete assertions, or assuming a locator's earlier visibility applies to a replacement node.
+- Evidence: `.ai/work_helper/WR-044_DIAGNOSIS.md`; PR #132.
