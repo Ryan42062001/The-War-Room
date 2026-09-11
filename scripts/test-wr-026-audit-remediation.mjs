@@ -3,6 +3,7 @@ import { createRequire } from 'node:module';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import {commitDisclosureControl} from './browser-test-helpers.mjs';
 
 const { chromium } = createRequire(import.meta.url)('playwright');
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(.:)/, '$1')), '..');
@@ -142,8 +143,7 @@ try {
 
   for (const [setting, value] of settingCases) {
     const selector = `.draft-command-setup [data-command-setting="${setting}"]`;
-    await page.locator(selector).fill(value);
-    await page.locator(selector).dispatchEvent('change');
+    await commitDisclosureControl(page, '.draft-command-setup-disclosure', selector, value);
     await page.waitForFunction(([name, expected]) => {
       const details = document.querySelector('.draft-command-setup-disclosure');
       const input = details?.querySelector(`[data-command-setting="${name}"]`);

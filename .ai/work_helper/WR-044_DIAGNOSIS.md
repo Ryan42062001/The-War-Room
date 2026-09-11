@@ -44,17 +44,20 @@ The remediated test waits for two animation frames, `_saveTimer === null`, then 
 ### `scripts/browser-test-helpers.mjs`
 
 - `commitDisclosureControl()` opens and settles the currently mounted disclosure, re-resolves its current control, validates visibility, and dispatches `input` plus `change` synchronously in the same browser task. Rendering cannot replace the control between resolution and commit.
+- `pressDisclosureControl()` applies the same current-generation boundary to focus plus keyboard dispatch used by the Escape/focus-restoration contract.
 - `waitForWarRoomQuiescence()` drains request-animation-frame work and the explicit 400 ms autosave queue boundary twice. It does not cancel work or alter production state.
 
 ### Existing tests
 
 - `scripts/test-command-bar.mjs` uses the atomic disclosure/control commit but retains all state-preservation, settings, mode, ESPN-guard, and pressure assertions.
+- `scripts/test-layout-efficiency-behavior.mjs` uses atomic current-generation Escape dispatch and retains its exact close/focus postconditions.
+- `scripts/test-wr-026-audit-remediation.mjs` uses the shared atomic commit for teams, slot, and rounds and retains its replacement-control visibility, value, and focus assertions.
 - `scripts/test-browser.mjs` preserves the deleted-state `null` assertion and moves it after the queue-drain boundary. It also directly contains the already-effective Draft Management disclosure assertion previously injected by its wrapper.
 - `scripts/run-test-browser.mjs` removes only the now-redundant runtime injection of that same disclosure assertion. Other historical compatibility transformations remain unchanged.
 
 ### CI
 
-`.github/workflows/ci.yml` now executes five targeted repetitions each of `test:browser` and `test:command-bar` before the existing phone and full-suite gates. This is a deterministic stress gate, not an automatic failure retry: any iteration fails the job immediately and visibly.
+`.github/workflows/ci.yml` now executes five targeted repetitions of the persistence test and all three command-bar lifecycle suites before the existing phone and full-suite gates. This is a deterministic stress gate, not an automatic failure retry: any iteration fails the job immediately and visibly.
 
 ## Competing hypotheses
 
@@ -96,6 +99,7 @@ The local runner could not download the pinned Chromium archive because the CDN 
 | `34625637031` | Stable-disclosure checkpoint | PASS complete suite, but later stress exposed an inter-operation gap. |
 | `34626002986` | First five-repeat stress gate | FAIL on command-bar iteration 1; proved “open then edit” was still non-atomic. |
 | `34626238479` | Atomic single-browser-task remediation + five-repeat gate | PASS: 5/5 persistence, 5/5 command bar, phone, full `npm test`, syntax, and resilience. |
+| `34626824379` | First documentation head | Five-repeat persistence/primary command-bar gate passed; full suite exposed the same replacement-generation race in layout Escape focus/press, proving the helper had to cover adjacent command-bar suites. |
 
 Final immutable-head run IDs and repeated full-suite attempts are recorded in PR #132 so recording them does not mutate the audited head.
 

@@ -18,6 +18,8 @@ jobs:
             npm run test:browser
             echo "Determinism iteration ${iteration}/5: command-bar lifecycle"
             npm run test:command-bar
+            npm run test:layout-efficiency-behavior
+            npm run test:wr026-audit-remediation
           done
       - name: Test WR-026 phone decision view
         run: npm run test:phone-decision-view

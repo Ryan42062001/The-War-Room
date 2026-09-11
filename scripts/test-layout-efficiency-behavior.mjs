@@ -3,6 +3,7 @@ import {createRequire} from 'node:module';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import {pressDisclosureControl} from './browser-test-helpers.mjs';
 
 const {chromium} = createRequire(import.meta.url)('playwright');
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(.:)/, '$1')), '..');
@@ -141,9 +142,12 @@ try {
   assert.equal(await page.locator('.draft-command-setup-summary-value').innerText(), '10 teams · Pick 5 · 16 rounds');
   await page.evaluate(() => document.querySelector('.draft-command-setup-disclosure > summary')?.click());
   await page.waitForFunction(() => document.querySelector('.draft-command-setup-disclosure')?.open === true);
-  const setupInput = page.locator('.draft-command-setup-fields input').first();
-  await setupInput.focus();
-  await setupInput.press('Escape');
+  await pressDisclosureControl(
+    page,
+    '.draft-command-setup-disclosure',
+    '.draft-command-setup-fields input',
+    'Escape'
+  );
   await page.waitForFunction(() => {
     const details = document.querySelector('.draft-command-setup-disclosure');
     const summary = document.querySelector('.draft-command-setup-summary');

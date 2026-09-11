@@ -8,7 +8,7 @@ Assignment mode: WORKFLOW / CI TROUBLESHOOTING
 Status: COMPLETE — AUDIT REQUIRED
 Starting main SHA: `142a9580fb408cd78ddae1026a67dd82f7d7b144`
 Final PR/head: PR #132; exact immutable head recorded in PR metadata after publication
-Failure classes reproduced: command-bar replacement-generation detach/hidden race; pending debounced autosave versus session-delete/storage assertion race
+Failure classes reproduced: command-bar replacement-generation detach/hidden/edit/Escape race across three suites; pending debounced autosave versus session-delete/storage assertion race
 Root cause(s): two independent test-harness lifecycle defects—non-atomic interaction across a deliberately replaced DOM subtree, and missing requestAnimationFrame/autosave quiescence around a destructive scenario in a long-lived page
 Files changed: `.github/workflows/ci.yml`; `.ai/work_helper/HANDOFF.md`; `.ai/work_helper/TROUBLESHOOTING_LOG.md`; `.ai/work_helper/WR-044_DIAGNOSIS.md`; `scripts/browser-test-helpers.mjs`; `scripts/run-test-browser.mjs`; `scripts/test-browser.mjs`; `scripts/test-command-bar.mjs`
 Assertions/coverage weakened: NO

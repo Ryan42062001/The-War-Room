@@ -30,6 +30,26 @@ export async function commitDisclosureControl(page, disclosureSelector, controlS
   assert.ok(result.renderFrames >= 1 && result.renderFrames <= 20);
 }
 
+/** Dispatch a key from the current visible disclosure generation atomically. */
+export async function pressDisclosureControl(page, disclosureSelector, controlSelector, key) {
+  const result = await page.evaluate(async ({disclosureSelector, controlSelector, key}) => {
+    for (let frame = 0; frame < 20; frame++) {
+      let details = document.querySelector(disclosureSelector);
+      if (details && !details.open) details.querySelector(':scope > summary')?.click();
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      details = document.querySelector(disclosureSelector);
+      const input = details?.querySelector(controlSelector);
+      if (!details?.open || !input) continue;
+      input.focus();
+      input.dispatchEvent(new KeyboardEvent('keydown', {key, bubbles:true, cancelable:true}));
+      return {dispatched:true, renderFrames:frame + 1};
+    }
+    return {dispatched:false};
+  }, {disclosureSelector, controlSelector, key});
+  assert.equal(result.dispatched, true, 'current disclosure generation never accepted keyboard input');
+  assert.ok(result.renderFrames >= 1 && result.renderFrames <= 20);
+}
+
 /**
  * Establish a persistence boundary between scenarios. War Room autosave is a
  * 400 ms debounce and command rendering is requestAnimationFrame-driven. The
