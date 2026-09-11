@@ -29,7 +29,7 @@ PR #124 state at refresh: OPEN / UNMERGED / research-only
 Frozen WR-021/WR-023 changed: NO
 WR-033/WR-034 specification changed: NO
 Production changed: NO
-Exact-head CI: NOT APPLICABLE — no scoring/implementation remediation head; blocker-only research evidence
+Exact-head CI: blocker-evidence head `81762f6030ce843542cacaf8dcc172a222645cd7` passed full War Room CI run `34586738394`; no scoring/implementation remediation head exists
 Blocking issues: full 3,508-row exact frozen-WR-033 feature/prediction identity cannot be established without the deleted raw asset or a trustworthy pre-existing keyed reference
 
 Recommended next role: Manager / Architect
