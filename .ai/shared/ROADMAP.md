@@ -29,7 +29,7 @@ Work Helper remains IDLE unless Manager assigns a real bounded troubleshooting t
 - WR-038 — CLOSED / NOT ACTIVATED / SUPERSEDED
 - WR-039 — ASSIGNED / Returning-Player v2 prospective evidence-contract freeze
 - WR-040 — BLOCKED / independent evidence-contract audit
-- WR-041 — IN PROGRESS / Work Helper first-class workflow role
+- WR-041 — COMPLETE / permanent Work Helper super-troubleshooter workflow role
 
 ## Historical returning-player architecture
 - cohort: returning QB/RB/WR/TE; rookies separate;
@@ -129,7 +129,7 @@ Requires engine/audit gates, final WR-023 gate, and separate durable Manager dec
 WR-026 / PR #120 — COMPLETE / MERGED. WR-031 re-audit — PASS. No unresolved findings. Physical-phone Level-4 remains unverified.
 
 ## Current roles
-- Manager: ACTIVE — WR-041 integration, then IDLE
+- Manager: IDLE after WR-041 integration
 - Builder: IDLE
 - Draft Strategy: IDLE
 - R&D: ACTIVE/ASSIGNED — WR-039
