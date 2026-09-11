@@ -7,6 +7,13 @@ Owner: Manager / Architect
 ## Production baseline
 FantasyPros remains production ranking authority under WR-D001. ESPN rank/ADP remains downstream market timing only. WR-021 / WR-023 prospective artifacts remain frozen and untouched.
 
+## Workflow governance
+WR-041 establishes **Work Helper / Super Troubleshooter / Cross-Functional Operator** as a permanent privileged troubleshooting role.
+
+This is workflow/control-plane architecture only. It does not change football-model policy, production ranking authority, or research milestone requirements.
+
+Work Helper remains IDLE unless Manager assigns a real bounded troubleshooting task. Its no-fixed-attempt-limit exemption applies only to evidence-driven troubleshooting under Manager-defined scope; independent audit and Manager merge/governance gates remain intact.
+
 ## Ranking R&D history
 - WR-018 — COMPLETE / MORE EVIDENCE NEEDED
 - WR-021 — COMPLETE / PROMISING — CONTINUE VALIDATION / research only
@@ -22,6 +29,7 @@ FantasyPros remains production ranking authority under WR-D001. ESPN rank/ADP re
 - WR-038 — CLOSED / NOT ACTIVATED / SUPERSEDED
 - WR-039 — ASSIGNED / Returning-Player v2 prospective evidence-contract freeze
 - WR-040 — BLOCKED / independent evidence-contract audit
+- WR-041 — IN PROGRESS / Work Helper first-class workflow role
 
 ## Historical returning-player architecture
 - cohort: returning QB/RB/WR/TE; rookies separate;
@@ -121,9 +129,9 @@ Requires engine/audit gates, final WR-023 gate, and separate durable Manager dec
 WR-026 / PR #120 — COMPLETE / MERGED. WR-031 re-audit — PASS. No unresolved findings. Physical-phone Level-4 remains unverified.
 
 ## Current roles
-- Manager: integrating WR-D007, then IDLE
+- Manager: ACTIVE — WR-041 integration, then IDLE
 - Builder: IDLE
 - Draft Strategy: IDLE
-- R&D: ASSIGNED — WR-039
+- R&D: ACTIVE/ASSIGNED — WR-039
 - Auditor: IDLE — WR-040 blocked
-- Temporary Troubleshooting: NOT INSTANTIATED
+- Work Helper: IDLE — permanent role, no active troubleshooting task
