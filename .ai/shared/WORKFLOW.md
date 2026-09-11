@@ -1,7 +1,7 @@
 # War Room Team Workflow
 
 Status: ACTIVE — WORKFLOW V3
-Last updated: 2026-09-10
+Last updated: 2026-09-11
 Owner: Manager / Architect
 
 This file is the canonical repository workflow for **The War Room**, the live fantasy-football **draft assistant**. If older repository guidance conflicts with this file, this file wins unless the Manager records a newer approved change.
@@ -26,17 +26,18 @@ The repository is durable memory. Roles are durable. Individual ChatGPT conversa
 **REPOSITORY = MEMORY**  
 **MANAGER = ROUTER / INTEGRATOR**
 
-The default permanent role set is intentionally small:
+The permanent role set is intentionally small:
 
 1. **Manager / Architect** — roadmap, requirements, architecture, priorities, task decomposition, acceptance criteria, execution-mode recommendation, integration decisions, merge authority, canonical shared state.
 2. **Implementation Engineer / Builder** — production implementation, normal debugging, tests, technical execution, remediation.
 3. **Draft Strategy & Decision Intelligence Analyst** — draft-decision policy: value vs need, positional scarcity, tiers, survival-to-next-pick, turn dynamics, roster construction, QB/TE timing, FLEX implications, league/slot effects, and whether recommendations make strategic fantasy-football sense.
 4. **Research & Development (R&D)** — external APIs/docs/data, source rights, projection/model research, technical uncertainty, isolated experiments/proofs of concept, future architecture evaluation, and evidence-backed milestone proposals.
 5. **Independent Auditor / QA** — independent verification, regression analysis, recommendation-behavior review, real/mock draft validation, PASS/FAIL decisions.
+6. **Work Helper / Super Troubleshooter / Cross-Functional Operator** — privileged cross-role diagnosis and Manager-scoped remediation for difficult blockers that cross normal employee boundaries or resist routine debugging/research.
 
-A temporary **Troubleshooting & Root Cause Engineer** may be activated only when the anti-loop escalation rule is triggered or the Manager determines a cross-layer diagnosis needs fresh independent eyes.
+The previous temporary **Troubleshooting & Root Cause Engineer** is superseded. `.ai/roles/TROUBLESHOOTING.md` remains only as a compatibility redirect; new troubleshooting work routes to Work Helper.
 
-Permanent role charters live under `.ai/roles/`. R&D continues to use `.ai/research/` for compatibility. Draft Strategy uses `.ai/strategy/`.
+Permanent role charters live under `.ai/roles/`. R&D continues to use `.ai/research/` for compatibility. Draft Strategy uses `.ai/strategy/`. Work Helper uses `.ai/work_helper/`.
 
 ## Canonical project sources
 
@@ -52,6 +53,7 @@ Permanent role charters live under `.ai/roles/`. R&D continues to use `.ai/resea
 - latest relevant role handoff
 - active task spec under `.ai/manager/WR-###.md`
 - applicable role charter under `.ai/roles/`
+- `.ai/work_helper/HANDOFF.md` and relevant `.ai/work_helper/WR-###_DIAGNOSIS.md` when Work Helper is involved.
 
 Repository state overrides stale chat memory. Conflicts must be surfaced, not silently reconciled.
 
@@ -195,7 +197,8 @@ Typical examples:
 - large repository inspections;
 - browser-heavy integration investigation;
 - gathering and organizing many artifacts/evidence items;
-- multi-step CI/PR validation.
+- multi-step CI/PR validation;
+- deep Work Helper reconstruction spanning multiple layers.
 
 ### `WORK_MODE_HIGH_VALUE`
 Work mode is expected to provide a major acceleration because the task is long-running, highly interactive, or requires many sequential tool/browser steps.
@@ -256,9 +259,21 @@ Use **Draft Strategy** when the unresolved question is what the draft assistant 
 
 Use **R&D** when external facts/data/source rights, feasibility, projection/model research, algorithms, APIs, unknown behavior, or bounded experimentation materially reduces uncertainty.
 
-Use **Builder** only after objective, scope, architecture/dependencies, and acceptance criteria are sufficiently settled.
+Use **Builder** after objective, scope, architecture/dependencies, and acceptance criteria are sufficiently settled; Builder also owns routine production debugging.
 
 Use **Independent Auditor** for production changes affecting recommendation logic, draft state, live sync, persistence/restoration, ranking/datasets, high-risk shared code, core workflows, or milestone completion.
+
+Use **Work Helper** when:
+- a worker has stalled after multiple materially different attempts;
+- root cause crosses normal role boundaries;
+- repository/task/branch/PR/CI evidence conflicts;
+- a hidden dependency is suspected;
+- repeated remediation is not converging;
+- routine Builder/R&D diagnosis cannot isolate the problem;
+- the Manager needs an independent cross-functional technical reconstruction;
+- a workflow/infrastructure/repository-state problem would be inefficient to bounce among several narrow roles.
+
+Manager may activate Work Helper earlier when the problem is already clearly cross-layer or unusually complex; the three-attempt threshold is an escalation guardrail for normal workers, not a prerequisite for every Work Helper assignment.
 
 Draft Strategy and R&D are advisory. Their findings do not automatically become product requirements or production authority. Manager approves final architecture/roadmap/strategy changes.
 
@@ -276,15 +291,68 @@ Draft Strategy may not:
 - merge production work;
 - self-certify production correctness.
 
+## Work Helper privilege and governance contract
+
+Work Helper is a privileged technical operator, not a second Manager.
+
+### Broad inspection authority
+When assigned, Work Helper may read/inspect essentially the entire repository and relevant project evidence, including production code/tests, CI/workflows, branches/commits/PRs, specialist work, Manager tasks/state, generated evidence, integrations, research tooling, and relevant external technical evidence.
+
+Role-folder boundaries are not read barriers for legitimate Work Helper troubleshooting.
+
+### Default write authority
+Work Helper may freely write:
+- `.ai/work_helper/**`;
+- Manager-approved diagnostic/test branches and temporary diagnostic artifacts.
+
+Any write elsewhere requires the **current Manager-approved Work Helper task** to explicitly authorize the path/category. Authorized scope may include production code, tests, workflows/CI, research tooling, integrations, or recovery/remediation changes when needed.
+
+### Governance boundaries
+Work Helper may not independently:
+- change roadmap or durable product/model decisions;
+- create/reassign tasks as final authority;
+- change production ranking authority;
+- rewrite Manager-owned canonical state without explicit authorization;
+- bypass frozen research/provenance/outcome-contamination restrictions;
+- weaken prospective evidence standards;
+- redefine Draft Strategy policy;
+- approve its own production implementation;
+- issue an Independent Auditor PASS on work it materially changed;
+- merge production/milestone work unless Manager explicitly delegates the action under the canonical merge gate.
+
+If Work Helper materially changes an audit-required target, a separate Independent Auditor must verify the resulting target.
+
+### Assignment modes
+Every Work Helper task should identify one mode:
+- `DIAGNOSIS ONLY`;
+- `DIAGNOSIS + REMEDIATION`;
+- `CROSS-ROLE RECOVERY`;
+- `WORKFLOW / CI TROUBLESHOOTING`;
+- another explicitly bounded super-troubleshooter mode.
+
+### Required activation contract
+Manager must provide:
+- TASK;
+- ASSIGNMENT MODE;
+- PROBLEM / BLOCKER;
+- TARGET repo/branch/PR/SHA when applicable;
+- AUTHORIZED READ SCOPE;
+- AUTHORIZED WRITE SCOPE;
+- EXECUTION MODE;
+- REQUIRED EVIDENCE;
+- GOVERNANCE BOUNDARIES;
+- EXPECTED HANDOFF.
+
 ## Anti-loop rule
 
-All roles must stop unproductive loops.
+Normal roles must stop unproductive loops.
 
 If approximately **three materially different approaches/hypotheses** fail without meaningful progress or new evidence:
 1. STOP speculative iteration.
 2. Do not repeat the same conclusion with different wording.
 3. Persist a concise `STALLED / ESCALATION REQUIRED` handoff.
 4. State what is known, what was tried, results, what evidence is missing, and who should act next.
+5. Recommend Work Helper when the blocker is suitable for privileged cross-functional troubleshooting.
 
 For Engineering/debugging, create or update a troubleshooting evidence packet containing:
 - Task ID;
@@ -300,13 +368,37 @@ For Engineering/debugging, create or update a troubleshooting evidence packet co
 - suspected components/layers;
 - unresolved questions.
 
-Manager may then activate a **fresh temporary Troubleshooting & Root Cause Engineer**.
+Manager may then activate a **fresh Work Helper / Super Troubleshooter** task with explicit read/write scope and assignment mode.
 
-The temporary Root Cause Engineer must independently diagnose the issue and must not assume the original Builder's diagnosis is correct. It normally identifies root cause and recommends remediation; the appropriate production Builder implements the final fix, and Auditor verifies when required.
+### Work Helper exemption — NO FIXED ATTEMPT LIMIT
+Work Helper is explicitly exempt from the approximately-three-attempt threshold.
+
+There is **no fixed numerical ceiling** on Work Helper diagnostic/remediation attempts.
+
+Work Helper may continue while:
+- each attempt is evidence-driven or materially advances understanding;
+- the same failed action is not mindlessly repeated;
+- task/write scope and repository safety are respected;
+- meaningful findings/failed paths are recorded;
+- destructive or irreversible actions remain governed by normal approval rules.
+
+If many approaches fail, Work Helper should progressively widen the investigation and document what has been ruled out rather than terminating because an arbitrary count was reached.
+
+This exemption does not authorize endless repetition, scope-free experiments, destructive guessing, frozen-evidence violations, or governance bypass.
+
+## Persistent Work Helper memory
+
+`.ai/work_helper/HANDOFF.md` is the current operational checkpoint.
+
+`.ai/work_helper/TROUBLESHOOTING_LOG.md` stores only high-value durable knowledge such as root-cause patterns, approaches worth avoiding, CI/infrastructure quirks, cross-role dependency failures, evidence/provenance pitfalls, and reusable diagnostic techniques.
+
+Do not turn the log into a transcript of every command.
+
+Substantial investigations may create `.ai/work_helper/WR-###_DIAGNOSIS.md` or equivalent task-specific reports.
 
 ## Maintenance / stable mode
 
-No worker must be kept busy merely for utilization. `IDLE` is valid.
+No worker must be kept busy merely for utilization. `IDLE` is valid, including Work Helper.
 
 Development may reactivate for verified defects, real-world feedback, changed dependencies, explicit product requirements, materially valuable opportunities, seasonal/data updates, or previously unresolved risks becoming actionable. A trigger does not by itself authorize implementation.
 
@@ -335,6 +427,7 @@ Examples:
 - New ranking philosophy: Manager -> Draft Strategy + R&D -> Manager synthesis -> Builder -> Auditor.
 - Research-only question: Manager -> R&D -> Manager.
 - Strategy-only question: Manager -> Draft Strategy -> Manager.
+- persistent cross-layer defect: Manager -> Work Helper -> appropriate owner/remediation -> Auditor when required.
 
 ## Target-branch advancement classification
 
@@ -426,11 +519,13 @@ Before merging production code, Manager verifies:
 
 Production changes requiring audit need `PASS` or `PASS WITH NON-BLOCKING FINDINGS` before merge.
 
+Work Helper remediation does not waive the merge gate or audit requirement.
+
 ## Atomic Manager reconciliation
 
 Manager should minimize control-plane churn.
 
-For one decision/transition, prepare required canonical updates and commit them as **one reconciliation transaction** whenever tooling permits. Avoid separate commits for task spec, project state, registry, roadmap and handoff when they are one logical decision.
+For one decision/transition, prepare required canonical updates and commit them as **one reconciliation transaction** whenever tooling permits. Avoid separate canonical commits for task spec, project state, registry, roadmap and handoff when they are one logical decision. Task-branch work may contain multiple preparation commits when the final integration is squash/atomic.
 
 After a merge or major disposition, update only what actually changed:
 - `ACTIVE_TASKS.json` for lifecycle/dependency/next-gate changes;
@@ -440,6 +535,8 @@ After a merge or major disposition, update only what actually changed:
 - Manager handoff for the current checkpoint/next action;
 - relevant task status.
 
+Workflow mechanics belong in `WORKFLOW.md` and role charters; do not create a product/model decision merely to document workflow mechanics.
+
 A merged PR does not by itself prove milestone completion.
 
 ## Canonical-document scope
@@ -447,8 +544,8 @@ A merged PR does not by itself prove milestone completion.
 Keep control-plane files concise:
 - `PROJECT_STATE.md` = current baseline, active tasks, blockers, next gates;
 - `ROADMAP.md` = milestones/phase plan and material dispositions, not every metric;
-- `DECISIONS.md` = durable decisions only;
-- task/research/strategy/audit reports = detailed evidence and metrics;
+- `DECISIONS.md` = durable product/architecture decisions only;
+- task/research/strategy/audit/work-helper reports = detailed evidence and diagnostics;
 - `ACTIVE_TASKS.json` = machine-readable current task index.
 
 Do not duplicate full evidence tables into several canonical files.
@@ -469,7 +566,7 @@ Every meaningful worker session ends with enough information for the next role t
 - exact next action
 - checkpoint/SHA
 
-Detailed evidence belongs in the task report, research report, strategy analysis, audit report, PR description, or test artifact. The handoff should point to that evidence rather than copy it wholesale.
+Detailed evidence belongs in the task report, research report, strategy analysis, audit report, Work Helper diagnosis, PR description, or test artifact. The handoff should point to that evidence rather than copy it wholesale.
 
 If no checkpoint was verified, state `Checkpoint / SHA: Not verified in this session`.
 
@@ -481,7 +578,7 @@ Whenever Manager determines or reports next work, end with `ACTIVATE NOW` coveri
 - Draft Strategy: `ACTIVE — WR-###` or `IDLE`;
 - R&D: `ACTIVE — WR-###` or `IDLE`;
 - Auditor: `ACTIVE — WR-###` or `IDLE/BLOCKED`;
-- Temporary Troubleshooting: `ACTIVE — WR-###` only when explicitly instantiated, otherwise omit or mark `NOT INSTANTIATED`.
+- Work Helper: `ACTIVE — WR-###` or `IDLE`.
 
 For every newly activated specialist, provide:
 - `CHAT:` role name;
@@ -489,6 +586,16 @@ For every newly activated specialist, provide:
 - `EXECUTION MODE:` `STANDARD_CHAT`, `WORK_MODE_PREFERRED`, or `WORK_MODE_HIGH_VALUE`;
 - `ACTIVATION MESSAGE:` short paste-ready instruction;
 - `FALLBACK:` when Work mode is preferred/high-value, a concise normal-chat path if Work credits are unavailable.
+
+For newly activated Work Helper also provide:
+- `ASSIGNMENT MODE:`;
+- `PROBLEM / BLOCKER:`;
+- `TARGET / CHECKPOINT:`;
+- `AUTHORIZED READ SCOPE:`;
+- `AUTHORIZED WRITE SCOPE:`;
+- `REQUIRED EVIDENCE:`;
+- `GOVERNANCE BOUNDARIES:`;
+- `EXPECTED HANDOFF:`.
 
 Do not re-emit activation prompts for workers already executing the same task unless the user needs them again.
 
@@ -500,6 +607,8 @@ Typical pattern:
 
 `You are the <role> for The War Room. Repository: Ryan42062001/The-War-Room. Treat the repository as authoritative. Read .ai/shared/WORKFLOW.md, your .ai/roles/<ROLE>.md charter, .ai/shared/ACTIVE_TASKS.json, your current task spec, and the relevant role handoff. Execute only the assigned task; if none exists, remain IDLE.`
 
+For Work Helper, `<ROLE>` is `WORK_HELPER` and the relevant role handoff is `.ai/work_helper/HANDOFF.md`.
+
 ## Workflow principle
 
-Use the smallest permanent team that preserves meaningful separation of responsibilities. Create temporary specialists only when a real task requires them. Prefer fresh task-scoped chats over indefinitely growing conversations. Preserve independent audit and Manager integration authority. Use Work mode when it materially accelerates execution, but never make ordinary progress depend on available Work credits when a normal-chat fallback exists.
+Use the smallest permanent team that preserves meaningful separation of responsibilities. Work Helper is the permanent privileged troubleshooting role but should remain IDLE unless a real blocker merits cross-functional intervention. Prefer fresh task-scoped chats over indefinitely growing conversations. Preserve independent audit and Manager integration authority. Use Work mode when it materially accelerates execution, but never make ordinary progress depend on available Work credits when a normal-chat fallback exists.
