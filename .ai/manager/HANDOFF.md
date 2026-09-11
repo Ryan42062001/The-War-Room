@@ -2,90 +2,90 @@
 
 HANDOFF
 
-Task IDs: WR-039 / WR-040 / WR-041
+Task IDs: WR-039 / WR-040 / WR-041 / WR-042 / WR-043 / WR-044 / WR-045
 Role: Manager / Architect
-Status: WR-040 INDEPENDENT CONTRACT AUDIT ACTIVE
+Status: V2 EVIDENCE CONTRACT ACCEPTED / SOURCE CUSTODY ACTIVE / CI RELIABILITY REMEDIATION ACTIVE
 
-## Canonical baseline
-Production authority remains WR-D001. WR-D007 remains the controlling Returning-Player v2 evidence-reset decision. WR-041 is complete and Work Helper remains IDLE.
+## Accepted v2 evidence architecture
+WR-D008 accepts the exact independently audited WR-039 contract:
 
-The historical v1 Phase-5 path remains closed as insufficiently provable. PR #124 is closed unmerged.
-
-## WR-039 — COMPLETE / AUDIT READY
-R&D produced one immutable prospective Returning-Player v2 evidence-contract target:
-
-- PR: #127
-- branch: `wr-039-returning-player-v2-evidence-contract`
-- exact head: `00a9e787e716d6697e6cd0d9252982a672abbbe0`
+- WR-039 PR #127 head: `00a9e787e716d6697e6cd0d9252982a672abbbe0`
 - machine-lock SHA-256: `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`
-- changed-file scope: exactly five `.ai/research/**` files
+- WR-040 audit head: `c68ef98b27f81e8e1fb26a36a1d2f8d5739b8824`
+- WR-040 verdict: `PASS WITH NON-BLOCKING FINDINGS`
+- audit PR #130 merge: `24c375775d58a0d8a4c178576efde5df64a3eedd`
+- research PR #127 merge: `a0f090e5c8bbbf513e34c24a3fead7df2c094d44`
 
-Manager verified the contract/handoff structure and scope. It explicitly preserves v1/v2 non-equivalence, source/version/cutoff/rights/retention requirements, durable custody, full-row keyed evidence for every future considered row including zero-game/excluded rows, deterministic lock requirements, prospective chronology, and fail-closed behavior.
+PR #127 was merged without rewriting the audited commit; `00a9e787...` remains a direct parent of the accepted merge.
 
-No v2 model fitting, scoring, tuning, comparison, ranking, or evaluation occurred. No 2026 regular-season outcomes were inspected. Production, WR-021/WR-023, historical WR-033/WR-034 specifications, and Phase 6 were not changed.
+No model scoring is authorized by WR-D008.
 
-Do not mutate or merge PR #127 while WR-040 audits it.
+## WR-042 — ASSIGNED TO R&D
+Task: `Returning-Player v2 Exact Source-Custody Freeze`
+Execution mode: `WORK_MODE_HIGH_VALUE`
+Branch: `wr-042-v2-source-custody`
 
-## Target advancement
-WR-039 began from main `6bc66fa6c779e558940ca6cc3f267441def62595`.
+R&D must freeze exact source instances under contract v1.0.0 before any model-protocol/scoring task may exist.
 
-Current main advanced through WR-041 only. That advancement is `CONTROL_PLANE_ONLY` and does not overlap the five `.ai/research/**` files in PR #127. The immutable WR-039 head is therefore intentionally not rebased.
+Only admitted source classes:
+- `NFLVERSE_PLAYER_SUMMARY_STATS`
+- `NFLVERSE_PLAYERS_METADATA_MINIMAL`
+- `NFLVERSE_DRAFT_CAPITAL_MINIMAL`
 
-## CI evidence requiring independent disposition
-Run `34613965662` is overall `FAILURE` after the one permitted unchanged-head retry.
+Required output includes exact source/version/asset/byte/schema/cutoff identity, per-instance rights disposition, project-controlled immutable custody, second project-controlled copy, source-snapshot manifest/hash, and deterministic no-outcome cohort/source-eligibility evidence.
 
-Attempt 1:
-- exact WR-039 head unchanged;
-- WR-026 phone check passed;
-- extension unit tests passed 164/164;
-- failure occurred in `test-command-bar` when `[data-command-setting="slot"]` detached from the DOM and became hidden during `locator.fill`;
-- matches the known non-coupled command-bar UI flake.
+Hard boundaries remain: no 2026 outcomes, no outcome join, no fitting/scoring/tuning/evaluation, no production, no WR-021/WR-023 changes, no Phase 6.
 
-Attempt 2:
-- exact WR-039 head unchanged;
-- WR-026 phone check passed;
-- extension unit tests passed 164/164;
-- failure occurred later in an unrelated production-browser persistence assertion expecting a null storage value but observing persisted production state.
+If source rights/identity/custody cannot be independently proven, fail closed.
 
-PR #127 changes only `.ai/research/**`. Manager classifies both failures as structurally non-overlapping with the research contract but does NOT convert the red run into a CI success. WR-040 must independently inspect and disposition the run and determine whether any finding blocks contract acceptance.
+## WR-043 — BLOCKED AUDIT
+Independent Auditor / QA may activate only after WR-042 publishes one immutable no-scoring custody target.
 
-No further WR-039 retry or head mutation is authorized before audit.
+PASS-family WR-043 may authorize Manager to create a later model-protocol freeze task only. It does not authorize scoring itself.
 
-## WR-040 — ASSIGNED TO INDEPENDENT AUDITOR / QA
-Audit target:
-- PR #127
-- exact immutable head `00a9e787e716d6697e6cd0d9252982a672abbbe0`
+## WR-040-AUD-01 parallel disposition
+LOW finding `WR-040-AUD-01` is separately tracked because unchanged research/audit targets repeatedly hit browser-suite failures.
 
-Audit scope is the prospective evidence/provenance contract, not model performance.
+The WR-040 audit PR #130 itself had a failed initial PR run, then one unchanged-head retry of run `34621843706` passed the complete suite on exact head `c68ef98b27f81e8e1fb26a36a1d2f8d5739b8824`:
+- phone validation: PASS
+- full `npm test`: PASS
+- resilience syntax: PASS
+- backup/offline reload: PASS
 
-The Auditor must independently verify:
-- source/version/cutoff/digest/schema rules;
-- rights/license/redistribution and retention rules;
-- durable raw/derived evidence policy;
-- complete full-row keyed feature/preprocessing/prediction requirements;
-- duplicate/missing/inconsistent fail-closed behavior;
-- deterministic model/preprocessing/split/seed/environment/code/source lock surface;
-- frozen-before-scoring chronology;
-- no 2026 outcome inspection;
-- WR-021/WR-023 unchanged;
-- v1/v2 non-equivalence and reuse/re-versioning boundary;
-- no production/Phase-6 work;
-- exact CI-run disposition above.
+This supports nondeterminism/state-isolation instability and gives WR-040 a clean merge gate, but does not resolve the repository reliability defect.
 
-Final verdict must be exactly one of:
-- `PASS`
-- `PASS WITH NON-BLOCKING FINDINGS`
-- `FAIL — REMEDIATION REQUIRED`
+## WR-044 — ASSIGNED TO WORK HELPER
+Task: `Browser-CI Determinism and State-Isolation Recovery`
+Assignment mode: `WORKFLOW / CI TROUBLESHOOTING`
+Execution mode: `WORK_MODE_HIGH_VALUE`
+Branch: `wr-044-browser-ci-determinism`
 
-Auditor must not score models, modify PR #127, merge the research PR, or authorize scoring itself.
+Work Helper may inspect broadly and write only authorized CI/test-harness surfaces plus `.ai/work_helper/**`. It has no fixed attempt limit.
+
+Do not weaken assertions, skip coverage, hide failures with retries/continue-on-error, or change production behavior. If a production source change is required, stop with:
+`ROOT CAUSE REQUIRES PRODUCTION SCOPE EXPANSION`.
+
+## WR-045 — BLOCKED AUDIT
+Any completed WR-044 remediation requires independent Auditor verification before Manager acceptance.
+
+## Production / football boundaries
+UNCHANGED:
+- WR-D001 remains production ranking authority.
+- WR-021/WR-023 remain frozen.
+- WR-033/WR-034 historical records remain unchanged.
+- 2026 regular-season outcome inspection remains prohibited for this development chain.
+- Phase 6 remains blocked.
 
 ## Staffing
-- Manager: IDLE after activation reconciliation
+- Manager: IDLE after next-wave reconciliation
 - Builder: IDLE
 - Draft Strategy: IDLE
-- R&D: IDLE / WR-039 AUDIT_READY; immutable PR #127 must not move
-- Auditor: ACTIVE / ASSIGNED — WR-040
-- Work Helper: IDLE
+- R&D: ACTIVE / ASSIGNED — WR-042
+- Auditor: IDLE / BLOCKED — WR-043 and WR-045
+- Work Helper: ACTIVE / ASSIGNED — WR-044
 
-## Next gate
-WR-040 verdict on exact head `00a9e787e716d6697e6cd0d9252982a672abbbe0` -> Manager disposition. No v2 scoring task exists yet.
+## Next gates
+1. WR-042 immutable no-scoring source-custody target -> activate WR-043.
+2. WR-043 PASS-family -> Manager may create a model-protocol freeze task; scoring still separately gated.
+3. Parallel WR-044 immutable CI-remediation target -> activate WR-045.
+4. WR-045 PASS-family -> Manager may merge/accept CI reliability remediation.
