@@ -55,6 +55,7 @@ The remediated test waits for two animation frames, `_saveTimer === null`, then 
 - After that focus contract is proved, its urgent-transition setup blurs the summary and performs a bounded animation-frame scroll/verification in one browser task, preventing late focus/layout settlement from undoing the off-screen precondition.
 - `scripts/test-wr-026-audit-remediation.mjs` uses the shared atomic commit for teams, slot, and rounds and retains its replacement-control visibility, value, and focus assertions.
 - `scripts/test-browser.mjs` preserves the deleted-state `null` assertion and moves it after the queue-drain boundary. It also directly contains the already-effective Draft Management disclosure assertion previously injected by its wrapper.
+- Its XSS-safe storage diagnostic check retains the startup normalization assertions, then synchronously restores the exact malicious `savedAt` field immediately before `loadState()` and DOM inspection so an intervening startup autosave cannot silently replace the security fixture.
 - `scripts/run-test-browser.mjs` removes only the now-redundant runtime injection of that same disclosure assertion. Other historical compatibility transformations remain unchanged.
 
 ### CI
@@ -108,6 +109,7 @@ The local runner could not download the pinned Chromium archive because the CDN 
 | `34628586503`, attempt 3 | Pre-final-head repeat | Five-iteration command/state stress, phone, and full `npm test` passed; the separate resilience gate exposed a hidden recovery control because its helper accepted layout readiness without opening the containing disclosure. |
 | `34630281641` | Resilience-remediation candidate | Targeted stress and phone passed; full `npm test` exposed an off-screen setup race immediately after the layout test's intentional Escape focus restoration. |
 | `34630708418`, attempt 3 | First resilience stress candidate | Command/state stress and full `npm test` passed; resilience iteration 2 proved that checking client rects in the same task as `details.open = true` can precede layout. |
+| `34632228509` | Layout/recovery settle candidate | Stress exposed startup autosave replacing the malicious persistence diagnostic field before its explicit XSS-safe `loadState()` assertion. |
 
 Final immutable-head run IDs and repeated full-suite attempts are recorded in PR #132 so recording them does not mutate the audited head.
 
