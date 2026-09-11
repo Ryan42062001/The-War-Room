@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — PHONE UX REMEDIATION + AVAILABILITY RESEARCH
+Status: ACTIVE DEVELOPMENT — PHONE RE-AUDIT + AVAILABILITY FINALIZATION
 Last verified: 2026-09-10
 Owner: Manager / Architect
 Workflow: V3
@@ -22,62 +22,40 @@ WR-021 and WR-023 remain accepted/frozen. No post-kickoff development may inspec
 ## Custom-ranking architecture
 WR-029 is COMPLETE / ACCEPTED / MERGED. WR-033 Returning-Player v1 Specification Freeze is COMPLETE / CLOSED under WR-D005.
 
-Frozen research/development architecture remains:
-- returning QB/RB/WR/TE ordering uses the exact WR-025 feature matrix and position-specific `StandardScaler -> Ridge(alpha=100)`;
-- WR-027 calibrated risk remains warning/explanation-only by position;
-- no direct risk rank modifier is authorized;
-- Huber is not adopted;
-- no WR-029 enrichment family is admitted;
-- historical research/evaluation uses the fixed September 1 12:00 UTC target-season cutoff and explicit PIT/provenance/coverage/fallback rules;
-- rookies remain separate;
-- WR-D001 production ranking authority is unchanged.
+Frozen returning-player research/development architecture remains unchanged. No production ranking-authority change is authorized.
 
-WR-034 remains assigned to R&D for Availability / Expected-Games Model Research. It is research-only and independent of the phone remediation lane.
+WR-034 has materially advanced on branch `wr-034-availability-expected-games` to `a0b39354398629da0822cc54357cde8932b926c2`. The branch contains the expected-games research report marked `COMPLETE — MANAGER REVIEW REQUIRED`, generated evaluation/calibration evidence, and integrity artifacts. However, the required `.ai/research/HANDOFF.md` still reflects WR-029 and no WR-034 PR exists yet. Therefore WR-034 remains `IN_PROGRESS` only for finalization: update the concise handoff, complete final verification/CI as required, open the research PR, and return it to Manager. No additional research scope is authorized merely to keep R&D busy.
 
 ## Phase-6 advisory architecture evidence
-The external War Room helper architecture report has been reviewed as advisory evidence only. It was produced against an older repository snapshot and does not supersede current canonical state.
-
-Leading Phase-6 candidate for later bounded validation:
-- deterministic eligibility-constrained league-wide starter assignment;
-- marginal starter value from counterfactual optimal lineup output;
-- FLEX/Superflex demand handled through slot eligibility rather than fixed position quotas;
-- bench depth kept out of the primary starter baseline;
-- WR-027 risk remains warning/confidence context rather than an automatic value penalty;
-- K/DST remain separate/endgame until independently validated;
-- any future custom intrinsic value must replace rather than stack with overlapping intrinsic VORP/scarcity components.
-
-This is NOT a Phase-6 freeze or production authorization. Scoring-component support, season-vs-weekly objective, below-frontier ordering, historical-universe completeness, eligibility authority, and tier gates remain unresolved until a future Manager-approved Phase-6 task.
+The external War Room helper projection-to-draft-value report remains advisory only. Its marginal-starter-assignment/MSV design is retained as a leading Phase-6 candidate but is not frozen or production-authorized. Upstream Phase-4/5 contracts still come first.
 
 ## Phone UX
-WR-031 Independent Auditor completed audit cycle 1 against PR #120 head `ca7126a76df29ec1fa85020fe15acdca9c8c6c5b`.
+WR-031 audit cycle 1 failed PR #120 head `ca7126a76df29ec1fa85020fe15acdca9c8c6c5b` on HIGH `WR-031-AUD-01` and MEDIUM `WR-031-AUD-02`.
 
-Final verdict: `FAIL — REMEDIATION REQUIRED`.
+Builder remediation is now COMPLETE on the same PR/branch. Current PR #120 exact head is `0640967d5793e8828c5acf5b16f5bc6f2fc251f5`, PR is open/mergeable, and exact-head PR-triggered War Room CI run `34539669442` completed SUCCESS.
 
-Findings:
-- HIGH `WR-031-AUD-01`: legacy phone position filter can desynchronize with the new one-tap phone position navigator and leave the selected tab without a usable column;
-- MEDIUM `WR-031-AUD-02`: phone Draft Setup can lose explicit open intent after setting-triggered command-bar reconstruction.
+Builder reports focused deterministic coverage for:
+- legacy position filter -> phone tab transitions;
+- pressure jumps and search state restoration;
+- Draft Setup open intent across Teams/Pick/Rounds reconstruction;
+- Escape/focus behavior;
+- >600px preservation.
 
-Non-findings:
-- phone decision-first improvement was independently verified;
-- required desktop/tablet guard widths passed;
-- no ranking/scoring/recommendation-authority/draft-state/persistence-schema/ESPN-sync regression was identified;
-- physical-phone Level-4 validation remains NOT VERIFIED.
+Builder is now idle. Independent re-audit remains mandatory before merge. WR-031 is reactivated against exact head `0640967d5793e8828c5acf5b16f5bc6f2fc251f5`.
 
-WR-026 is now `REWORK_REQUIRED` on the same branch/PR. Builder must make only bounded remediation for the two audit findings, add focused regression coverage, run relevant/full CI, and return a new exact head for re-audit.
-
-WR-031 is BLOCKED until that new head exists. Do not merge the currently audited head.
+Physical-phone Level-4 validation remains NOT VERIFIED unless the Auditor obtains new evidence.
 
 ## Current roles
 - Manager: IDLE after this reconciliation
-- Builder: ACTIVE — WR-026 bounded remediation
+- Builder: IDLE — WR-026 remediation complete / AUDIT_READY
 - Draft Strategy: IDLE
-- R&D: ACTIVE — WR-034
-- Auditor: BLOCKED — WR-031 awaiting remediated WR-026 head
+- R&D: ACTIVE — WR-034 finalization only
+- Auditor: ACTIVE — WR-031 re-audit of remediated PR #120
 - Temporary Troubleshooting: NOT INSTANTIATED
 
 ## Next gates
-- WR-026 Builder remediation -> exact-head/full CI -> AUDIT_READY -> WR-031 independent re-audit -> Manager merge/rework decision.
-- WR-034 R&D handoff -> Manager Phase-4 disposition -> Phase-5 season-total task.
+- WR-031 re-audit -> Manager merge/rework decision for PR #120.
+- WR-034 concise handoff + research PR -> Manager Phase-4 disposition -> Phase-5 season-total task.
 - Phase 3 Rookie Engine remains planned and unactivated.
 - Phase 6 remains planned; helper/MSV architecture is advisory candidate evidence only until upstream contracts are frozen.
 

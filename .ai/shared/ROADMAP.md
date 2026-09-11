@@ -1,6 +1,6 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — PHONE UX REMEDIATION + CUSTOM-ENGINE AVAILABILITY RESEARCH
+Status: ACTIVE DEVELOPMENT — PHONE RE-AUDIT + CUSTOM-ENGINE AVAILABILITY FINALIZATION
 Last updated: 2026-09-10
 Owner: Manager / Architect
 Workflow: V3
@@ -29,25 +29,7 @@ FantasyPros remains production ranking authority under WR-D001. ESPN rank/ADP re
 - production authority: UNCHANGED under WR-D001.
 
 ## Cross-cutting engine contracts
-WR-028 remains the architecture plan. Before `ENGINE-COMPLETE` / `SHADOW-READY`, resolve and preserve:
-- point-in-time feature store/cutoff semantics;
-- immutable source/schema/manifests/hashes;
-- missing-data and fallback policy;
-- per-player/family coverage and confidence;
-- calibrated uncertainty and ranking sensitivity;
-- uncertainty-aware deterministic tiers;
-- league replacement/FLEX/value contract;
-- K/DST separate policy;
-- late entrants and position-change/eligibility policy;
-- data/model/value/board versioning;
-- Champion/Challenger governance;
-- Last-Known-Good rollback;
-- preseason refresh cadence;
-- source-failure and drift handling;
-- explainability/version/as-of output;
-- FantasyPros external-benchmark boundary;
-- strict separation of intrinsic custom value from ESPN/live-draft strategy;
-- deterministic reproducibility and independent leakage/provenance audit.
+WR-028 remains the architecture plan. Before `ENGINE-COMPLETE` / `SHADOW-READY`, resolve and preserve point-in-time/provenance, missing-data/fallback, calibrated uncertainty, ranking sensitivity, deterministic tiers, league replacement/FLEX value, K/DST policy, player-universe/eligibility, versioning, rollback, refresh/source-failure/drift handling, explainability, market separation, and independent reproducibility/audit.
 
 ## Roadmap phases
 ### Phase 0 — Evidence foundation — COMPLETE
@@ -63,34 +45,16 @@ WR-029 accepted. Negative adoption result: no enrichment family promoted; govern
 WR-033. Fixed returner architecture recorded under WR-D005.
 
 ### Phase 3 — Rookie engine v1 — PLANNED
-Transparent position + draft-capital prior remains benchmark unless a lawful chronological challenger wins. May run independently of Phase 4 when useful.
+Transparent position + draft-capital prior remains benchmark unless a lawful chronological challenger wins. May run independently when useful.
 
-### Phase 4 — Availability / expected-games model — ACTIVE
-WR-034 assigned to R&D. Model availability separately from expected PPR/game. Do not claim medical/injury prediction without admitted medical/injury evidence.
+### Phase 4 — Availability / expected-games model — FINALIZATION IN PROGRESS
+WR-034 research execution has produced a completed research report and generated evidence on branch `wr-034-availability-expected-games` at checkpoint `a0b39354398629da0822cc54357cde8932b926c2`. Manager disposition is not yet available because the required R&D handoff and research PR are not finalized. R&D remains active only to complete that deliverable.
 
-### Phase 5 — Season-total distribution — PLANNED / HARD BLOCKED ON WR-034
-Combine frozen expected performance with accepted expected-games architecture and calibrated uncertainty.
+### Phase 5 — Season-total distribution — PLANNED / HARD BLOCKED ON WR-034 MANAGER DISPOSITION
+Combine frozen expected performance with the accepted expected-games architecture and calibrated uncertainty after Manager accepts/rejects WR-034.
 
 ### Phase 6 — Replacement / cross-position draft value — PLANNED
-Primary goal remains a league-specific intrinsic value transform with market timing separate.
-
-Advisory candidate retained for later Manager-approved validation, not frozen:
-- deterministic eligibility-constrained league-wide starter assignment;
-- signed marginal starter value from counterfactual optimal starter output;
-- FLEX/Superflex allocated by eligibility and projection, not fixed extra-position counts;
-- bench depth excluded from the primary starter baseline and handled only through separately named waiver/draftability sensitivity;
-- WR-027 risk remains warning/confidence context, not an automatic value subtraction;
-- K/DST remain separate/endgame until separately validated;
-- future shadow integration must replace, not stack with, overlapping intrinsic rank-gap VORP/scarcity components.
-
-Before Phase 6 can freeze, resolve at minimum:
-- full-PPR-only versus stat-component multi-scoring support;
-- expected season points versus weekly/bye-aware objective;
-- below-frontier public ordering semantics;
-- historical player-universe completeness at the replacement frontier;
-- platform/league eligibility authority and versioning;
-- deterministic solver tie behavior;
-- chronological tier-boundary persistence/dominance gates.
+Leading advisory candidate remains deterministic eligibility-constrained league-wide starter assignment with marginal starter value, FLEX/Superflex eligibility allocation, bench outside the primary starter baseline, risk warning-only, K/DST separate, and no double-counting with overlapping intrinsic VORP/scarcity. This is not frozen; upstream Phase-4/5 contracts still govern sequencing.
 
 ### Phase 7 — Complete historical replay — PLANNED
 Evaluate whole board/rank/tier/value/warning behavior across prior fake preseasons.
@@ -113,26 +77,27 @@ Requires engine/audit gates, final WR-023 gate and a separate durable Manager de
 ## Phone UX lane
 ### WR-026 — Phone-Only Decision View Optimization
 Role: Builder
-Status: REWORK_REQUIRED
+Status: AUDIT_READY
 PR: #120
-Audit cycle 1 found HIGH `WR-031-AUD-01` and MEDIUM `WR-031-AUD-02`. Builder owns bounded remediation on the same task/PR.
+Current remediated head: `0640967d5793e8828c5acf5b16f5bc6f2fc251f5`
+Builder remediation for `WR-031-AUD-01` and `WR-031-AUD-02` is complete with focused regression coverage and green exact-head PR-triggered CI. Builder is idle pending independent re-audit.
 
 ### WR-031 — Independent Audit of WR-026
 Role: Auditor
-Status: BLOCKED pending remediated WR-026 head
-Audit cycle 1 verdict: `FAIL — REMEDIATION REQUIRED`.
+Status: ASSIGNED — RE-AUDIT
+Audit cycle 1 verdict was `FAIL — REMEDIATION REQUIRED`. The blocking dependency is cleared. Re-audit exact head `0640967d5793e8828c5acf5b16f5bc6f2fc251f5`, both prior findings, regression scope, CI, and preserved boundaries. Do not merge.
 
 ## PW-004 — ACTIVE
-Two independent lanes remain valid in parallel:
-- WR-026 — Builder — bounded phone remediation on PR #120;
-- WR-034 — R&D — expected-games/availability research.
+Two independent lanes are valid now:
+- WR-031 — Auditor — re-audit remediated PR #120;
+- WR-034 — R&D — finalize required handoff and Manager-review-ready research PR.
 
-WR-031 is blocked until WR-026 returns a new exact head. Draft Strategy remains idle because no current task requires it.
+Builder and Draft Strategy are idle because no current task requires further work from them.
 
 ## Current roles
 - Manager: IDLE after reconciliation
-- Builder: ACTIVE — WR-026
+- Builder: IDLE — WR-026 AUDIT_READY
 - Draft Strategy: IDLE
-- R&D: ACTIVE — WR-034
-- Auditor: BLOCKED — WR-031
+- R&D: ACTIVE — WR-034 finalization only
+- Auditor: ACTIVE — WR-031 re-audit
 - Temporary Troubleshooting: NOT INSTANTIATED

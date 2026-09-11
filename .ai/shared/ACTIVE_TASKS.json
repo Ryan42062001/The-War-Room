@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-10T22:30:00Z",
+  "updated_at_utc": "2026-09-11T01:58:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": [
@@ -19,17 +19,17 @@
     {
       "task_id": "WR-026",
       "owner": "Builder",
-      "status": "REWORK_REQUIRED",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-026.md",
       "role_handoff": ".ai/builder/HANDOFF.md",
       "assignment_main_sha": "69689edadab5c8f270bc483b6acc461274ec7f87",
-      "worker_checkpoint_sha": "ca7126a76df29ec1fa85020fe15acdca9c8c6c5b",
+      "worker_checkpoint_sha": "0640967d5793e8828c5acf5b16f5bc6f2fc251f5",
       "branch": "wr-026-phone-decision-view",
       "pr": 120,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT",
       "audit_required": true,
-      "blocked_on": [],
+      "blocked_on": ["WR-031 re-audit"],
       "allowed_path_prefixes": [],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/"],
       "forbidden_exact_paths": [
@@ -37,21 +37,22 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "Builder remediates WR-031-AUD-01 and WR-031-AUD-02 on PR #120 -> exact-head/full CI -> AUDIT_READY -> WR-031 re-audit"
+      "next_gate": "WR-031 independently re-audits PR #120 head 0640967d5793e8828c5acf5b16f5bc6f2fc251f5 -> Manager merge/rework decision"
     },
     {
       "task_id": "WR-031",
       "owner": "Auditor",
-      "status": "BLOCKED",
+      "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-031.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
       "assignment_main_sha": "b89919121cfcc00fc9a02be5d82c1a892036e70b",
       "worker_checkpoint_sha": "f78c009b73e7675c1fca178321c15c8e601ffa02",
-      "branch": "audit/wr-031-pr120-ca7126a",
+      "branch": null,
       "pr": 120,
       "dependency": "HARD",
+      "execution_mode": "STANDARD_CHAT",
       "audit_required": false,
-      "blocked_on": ["WR-026 remediation on PR #120"],
+      "blocked_on": [],
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/"],
       "forbidden_exact_paths": [
@@ -59,16 +60,16 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "WR-026 returns a new exact remediated head -> Auditor independently re-audits both findings and regression scope"
+      "next_gate": "Auditor re-audits WR-031-AUD-01 and WR-031-AUD-02 plus regression scope on exact remediated head -> verdict -> Manager merge/rework decision"
     },
     {
       "task_id": "WR-034",
       "owner": "R&D",
-      "status": "ASSIGNED",
+      "status": "IN_PROGRESS",
       "task_file": ".ai/manager/WR-034.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "f079220e8ed07280d08f13c5db006661728d7f35",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "a0b39354398629da0822cc54357cde8932b926c2",
       "branch": "wr-034-availability-expected-games",
       "pr": null,
       "dependency": "INDEPENDENT",
@@ -82,7 +83,7 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "R&D handoff -> MANAGER_REVIEW_READY -> Manager Phase-4 disposition -> Phase-5 season-total task"
+      "next_gate": "R&D finalizes WR-034 handoff and opens Manager-review-ready research PR -> Manager Phase-4 disposition -> Phase-5 season-total task"
     }
   ]
 }
