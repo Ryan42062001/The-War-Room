@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-11T15:10:00Z",
+  "updated_at_utc": "2026-09-11T15:24:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": ["PLANNED","BLOCKED","ASSIGNED","IN_PROGRESS","MANAGER_REVIEW_READY","AUDIT_READY","MERGE_READY","REWORK_REQUIRED","MERGED","CLOSED"],
@@ -146,13 +146,13 @@
     {
       "task_id": "WR-041",
       "owner": "Manager",
-      "status": "IN_PROGRESS",
+      "status": "CLOSED",
       "task_file": ".ai/manager/WR-041.md",
       "role_handoff": ".ai/manager/HANDOFF.md",
       "assignment_main_sha": "6bc66fa6c779e558940ca6cc3f267441def62595",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "72d8888e70902c9910bdd60651a35f323ddacf6e",
       "branch": "manager/wr-041-work-helper-role",
-      "pr": null,
+      "pr": 128,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT",
       "audit_required": false,
@@ -160,7 +160,7 @@
       "allowed_path_prefixes": [".ai/"],
       "forbidden_path_prefixes": ["src/", "public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager exact-head CI -> control-plane merge -> Work Helper remains IDLE until a real troubleshooting assignment exists"
+      "next_gate": "CLOSED after Manager exact-head CI and control-plane merge; Work Helper remains IDLE until a real troubleshooting assignment exists"
     }
   ]
 }
