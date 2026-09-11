@@ -2,29 +2,36 @@
 
 HANDOFF
 
-Task ID: WR-035
+Task ID: WR-037
 Role: Research & Development (R&D)
-Status: COMPLETE — MANAGER REVIEW REQUIRED
-Verified starting state: origin/main `f99490a124e6f6f14a76bfd1b639fbdb61d4e1c4`; control-plane-only advance from assignment base reconciled
-Branch / final SHA / PR: `wr-035-season-total-distribution` / exact final head recorded by PR after this handoff commit / PR #124
-Execution mode used: Work Mode; pinned isolated Python replay
-Frozen protocol/hash: remote pre-scoring commit `b9b353e712b297ffaa801141cb87954be622ebd3`; hashes recorded in `WR035_INTEGRITY.json`
-Upstream WR-033/WR-034 replay verification: WR-033 exact 1,881-row aggregate; WR-034 3,508 rows, maximum delta `2.19e-13`
-Baselines/candidates tested: independence product; paired empirical residual mean/draws; WR033 × PREV_RATE; schedule-adjusted prior total; training-position mean
-Independence-product results: confirmation MAE 32.513, RMSE 53.176, bias -1.979; supported over primary baselines
-Dependence-aware results: failed development in all positions; confirmation MAE 34.815; repeated-player bootstrap delta +2.301, 95% CI [+1.806,+2.680]
-Central season-total results: `INDEPENDENT_PRODUCT` selected; QB/RB/WR/TE confirmation MAE 45.819/31.897/32.299/24.596
-Calibration/distribution results: paired empirical 80% coverage 82.7%, width 90.51; pooled gate passed, but rank and high-value calibration warnings required
-High-value-player applicability: central product beat baselines; 80% coverage only 61.0% Q4, 50.0% D10, 64.0% WR Q4
-Coverage/sensitivity/fallback: 3,508 rows including 1,627 zero-game; no fitted WR-034 fallback rows; deterministic fallback test passed; current players metadata accepted only after exact WR-033 replay
-Final Phase-5 disposition: INDEPENDENCE PRODUCT SUPPORTED
-Recommended Phase-6 interface: `season_total_transform_v1` central product plus separately flagged empirical quantiles, provenance/fallback/upstream hashes, and no draft-strategy/value fields
+Status: REMEDIATION BLOCKED — UPSTREAM IDENTITY NOT PROVABLE
+
+Starting PR/head: PR #124 / `9b4769899dd73f7c94679df6b6c67158e3ee39b6`
+Final PR/head: PR #124 / exact final handoff head reported after publication
+Execution mode used: Work mode; fail-closed identity investigation only
+
+Remediation addendum/hash: NOT CREATED — mandatory upstream-identity gate failed before addendum/rescoring
+WR-036-AUD-01 full-cohort keyed WR-033 identity: BLOCKED — original Players asset `552739287` / SHA-256 `a33998d3...` is deleted; repository history and retained WR-025/WR-029 artifacts contain no keyed full-cohort feature/prediction reference; authoritative upstream git history contains no generated payload; independent public evidence preserves only selected rows. Exact identity for 1,627 zero-game predictions cannot be proven.
+WR-036-AUD-02 fallback order: NOT ATTEMPTED after mandatory stop
+WR-036-AUD-03 clustered MAE/RMSE/interval-score: NOT ATTEMPTED after mandatory stop
+WR-036-AUD-04 central/distribution coherence: NOT ATTEMPTED after mandatory stop
+WR-036-AUD-05 negative/out-of-domain policy: NOT ATTEMPTED after mandatory stop
+WR-034 keyed replay: prior evidence retained; not rerun because scoring remediation was prohibited after identity failure
+Metrics changed from WR-035 original: NONE
+Deterministic rerun: NOT RUN — no affected rescoring permitted after mandatory stop
+
+Recovery evidence: `.ai/research/WR037_UPSTREAM_IDENTITY_BLOCKER.md`
+Original WR-025 Actions artifact inspected: run `34400961071`, artifact `10123492844`; contains aggregate/result files only
+Original release-asset retrieval: HTTP 404
+PR #124 state at refresh: OPEN / UNMERGED / research-only
+
 2026 outcomes inspected: NO
-WR-021/WR-023 changed: NO
-WR-033 changed: NO
-WR-034 changed: NO
-Production files/rankings changed: NO
-Blocking issues: none for Manager review; high-value and rank intervals are not calibrated guarantees; historical player-metadata asset archival remains a risk
+Frozen WR-021/WR-023 changed: NO
+WR-033/WR-034 specification changed: NO
+Production changed: NO
+Exact-head CI: NOT APPLICABLE — no scoring/implementation remediation head; blocker-only research evidence
+Blocking issues: full 3,508-row exact frozen-WR-033 feature/prediction identity cannot be established without the deleted raw asset or a trustworthy pre-existing keyed reference
+
 Recommended next role: Manager / Architect
-Exact next action: review open WR-035 research PR and assign Auditor if the Phase-5 disposition/interface is accepted
-Checkpoint / SHA: research result checkpoint `89a7a17c9c896aaaebe00dddeedb5954495e82f3`; exact final handoff head is the current head of PR #124
+Exact next action: accept the fail-closed WR-037 blocker; do not activate WR-038 as a successful remediation audit. Decide whether Phase 5 closes as insufficient evidence or whether a newly authorized prospective research contract may use a different explicitly versioned upstream basis without claiming frozen-WR-033 replay equivalence.
+Checkpoint / SHA: blocker-evidence commit `6a566b1be0956dcd01f090a01b3ea7fa06c82ae0`; final handoff head is the published PR #124 head
