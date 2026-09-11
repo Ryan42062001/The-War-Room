@@ -8,8 +8,8 @@ Assignment mode: WORKFLOW / CI TROUBLESHOOTING
 Status: COMPLETE — AUDIT REQUIRED
 Starting main SHA: `142a9580fb408cd78ddae1026a67dd82f7d7b144`
 Final PR/head: PR #132; exact immutable head recorded in PR metadata after publication
-Failure classes reproduced: command-bar replacement-generation detach/hidden/edit/Escape race across three suites; pending debounced autosave versus session-delete/storage assertion race; resilience recovery control hidden inside a closed Draft Management disclosure
-Root cause(s): independent test-harness lifecycle defects—non-atomic interaction across a deliberately replaced DOM subtree, missing requestAnimationFrame/autosave quiescence around a destructive scenario in a long-lived page, and a resilience helper accepting layout readiness without proving the nested recovery control visible before clicking
+Failure classes reproduced: command-bar replacement-generation detach/hidden/edit/Escape race across three suites; pending debounced autosave versus session-delete/storage assertion race; resilience recovery control hidden inside a closed Draft Management disclosure; post-focus scroll setup racing browser focus/layout settlement
+Root cause(s): independent test-harness lifecycle defects—non-atomic interaction across a deliberately replaced DOM subtree, missing requestAnimationFrame/autosave quiescence around a destructive scenario in a long-lived page, false resilience readiness that did not prove its nested control visible, and an off-screen test precondition issued while the just-focused command summary could still restore the viewport
 Files changed: `.github/workflows/ci.yml`; `.ai/work_helper/HANDOFF.md`; `.ai/work_helper/TROUBLESHOOTING_LOG.md`; `.ai/work_helper/WR-044_DIAGNOSIS.md`; `scripts/browser-test-helpers.mjs`; `scripts/run-test-browser.mjs`; `scripts/test-browser.mjs`; `scripts/test-command-bar.mjs`; `scripts/test-layout-efficiency-behavior.mjs`; `scripts/test-resilience.mjs`; `scripts/test-wr-026-audit-remediation.mjs`
 Assertions/coverage weakened: NO
 Production behavior changed: NO
