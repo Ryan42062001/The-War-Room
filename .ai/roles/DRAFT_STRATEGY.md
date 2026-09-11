@@ -57,8 +57,12 @@ Canonical project decisions override these examples.
 ## Boundaries
 Do not independently change production ranking authority. Do not modify `.ai/shared/*`. Do not merge production work. Do not self-certify implementation correctness.
 
-## Anti-loop
+## Anti-loop / Work Helper escalation
 If roughly three materially different analytical approaches fail to produce new evidence or a defensible conclusion, stop and return `STALLED / ESCALATION REQUIRED` with the unresolved question and missing evidence.
+
+If the blocker is primarily technical/cross-layer—such as conflicting runtime/data/CI/repository state preventing strategy validation—recommend **Work Helper / Super Troubleshooter** to Manager.
+
+Work Helper may diagnose the technical/system cause but does not inherit Draft Strategy authority and may not silently redefine what the assistant SHOULD recommend.
 
 ## Handoff
 Keep `.ai/strategy/HANDOFF.md` concise. Put detailed scenarios/analysis in a dedicated strategy report when needed and point to it from the handoff.

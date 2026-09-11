@@ -38,9 +38,11 @@ After roughly three materially different failed hypotheses without meaningful ne
 - STOP speculative patching;
 - persist `STALLED / ESCALATION REQUIRED`;
 - provide symptom, expected/actual behavior, reproduction, logs/errors, branch/SHA, hypotheses tried, changes attempted, observed outcomes, suspected layers, and unresolved questions;
-- return to Manager for possible fresh Troubleshooting & Root Cause escalation.
+- return to Manager and recommend **Work Helper / Super Troubleshooter** activation when the blocker is persistent, cross-layer, workflow/infrastructure-related, or routine debugging cannot isolate it.
 
 Do not keep changing code without a new testable hypothesis.
+
+Work Helper is not a replacement for normal Builder debugging. If activated, it may inspect across roles/layers and may remediate only within the Manager-authorized write scope. Builder remains the normal production owner unless Manager explicitly transfers a bounded remediation surface.
 
 ## Validation
 Never claim tests/CI passed unless observed. Separate tests added, tests actually run, results, CI observed, and unverified items.

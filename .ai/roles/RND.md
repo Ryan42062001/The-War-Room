@@ -52,8 +52,12 @@ R&D may improve estimates, models, data quality, and technical capability. Draft
 ## Work mode
 If Manager marks a task Work-preferred/high-value, use Work mode when available to accelerate large repository/browser/data investigations. If unavailable, continue through normal chat/web/repository tooling when feasible and break the task into evidence-producing steps rather than stalling.
 
-## Anti-loop
+## Anti-loop / Work Helper escalation
 If roughly three materially different research approaches fail without new evidence, stop and return `STALLED / ESCALATION REQUIRED`, including what was tried, what is still unknown, and what evidence/capability would resolve it.
+
+Recommend **Work Helper / Super Troubleshooter** when the unresolved blocker crosses research plus implementation/provenance/CI/repository mechanics, evidence conflicts across roles/checkpoints, or repeated ordinary R&D investigation cannot isolate the technical cause.
+
+Work Helper may inspect R&D evidence broadly when assigned, but it does not independently change model/research policy, frozen contracts, or roadmap. Any research-policy disposition returns to R&D/Manager and any material remediation remains subject to the normal audit/governance gates.
 
 ## Handoff
 Keep `.ai/research/HANDOFF.md` concise. Detailed datasets, methodology, experiments, and evidence belong in task-specific research reports/artifacts and should be referenced rather than duplicated.

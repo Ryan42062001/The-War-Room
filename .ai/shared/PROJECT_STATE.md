@@ -16,7 +16,19 @@ UNCHANGED under WR-D001:
 - broader FantasyPros PPR ECR fallback;
 - ESPN rank/ADP timing only.
 
-No custom ranking is production-authorized by the v2 research reset.
+No custom ranking is production-authorized by the v2 research reset or WR-041 workflow change.
+
+## Workflow architecture
+WR-041 establishes **Work Helper / Super Troubleshooter / Cross-Functional Operator** as a permanent first-class role.
+
+Work Helper:
+- has broad cross-functional inspection authority when assigned;
+- writes `.ai/work_helper/**` by default and may write elsewhere only under explicit Manager-approved scope;
+- is exempt from a fixed numerical troubleshooting-attempt limit while remaining evidence-driven, non-repetitive, scoped, and subject to normal safety/approval gates;
+- does not inherit Manager roadmap/merge authority or Auditor independence;
+- remains `IDLE` unless a real troubleshooting assignment exists.
+
+The old temporary Troubleshooting & Root Cause Engineer is superseded for new work.
 
 ## Frozen prospective contract
 WR-021 and WR-023 remain accepted/frozen. No post-kickoff development may inspect 2026 regular-season outcomes or modify/substitute the frozen snapshot/protocol.
@@ -53,7 +65,7 @@ Under WR-D007:
 - WR-035 is CLOSED as insufficiently provable;
 - WR-037 is CLOSED fail-closed;
 - WR-038 is CLOSED without activation because no valid remediated v1 target exists;
-- PR #124 must remain unmerged and is preserved only as historical research/blocker evidence.
+- PR #124 is closed unmerged and preserved only as historical research/blocker evidence.
 
 ## Returning-Player v2 evidence reset
 Manager decision WR-D007 authorizes a new explicitly versioned v2 research path without weakening the v1 audit standard.
@@ -71,6 +83,8 @@ Hard requirements include:
 - explicit v1/v2 non-equivalence;
 - NO model scoring or 2026 outcome inspection in WR-039.
 
+R&D branch activity exists on `wr-039-returning-player-v2-evidence-contract`; WR-041 does not inspect, modify, or disposition that research result.
+
 ### WR-040 — BLOCKED INDEPENDENT CONTRACT AUDIT
 WR-040 may start only after WR-039 publishes one immutable evidence-contract PR/head.
 
@@ -84,18 +98,17 @@ Phase 6 replacement/cross-position draft value remains BLOCKED.
 It may not start until a later v2 expected-performance/season-total path has been scored under the audited evidence contract, independently audited, and explicitly accepted by Manager.
 
 ## Current roles
-- Manager: ACTIVE for WR-D007 integration / then IDLE
+- Manager: IDLE after WR-041 integration
 - Builder: IDLE
 - Draft Strategy: IDLE
-- R&D: ASSIGNED — WR-039
+- R&D: ACTIVE/ASSIGNED — WR-039
 - Auditor: IDLE — WR-040 blocked
-- Temporary Troubleshooting: NOT INSTANTIATED
+- Work Helper: IDLE — permanent role; no troubleshooting assignment
 
 ## Next gates
-1. Integrate WR-D007 and close PR #124 unmerged as historical blocker evidence.
-2. WR-039 freezes one immutable prospective v2 evidence contract without scoring.
-3. Manager pins that exact contract head and activates WR-040.
-4. WR-040 PASS-family verdict -> Manager may create a new v2 scoring/evaluation research task.
-5. Only after later season-total acceptance may Phase 6 be activated.
+1. WR-039 freezes one immutable prospective v2 evidence contract without scoring.
+2. Manager pins that exact contract head and activates WR-040.
+3. WR-040 PASS-family verdict -> Manager may create a new v2 scoring/evaluation research task.
+4. Only after later season-total acceptance may Phase 6 be activated.
 
 Production authority remains WR-D001 throughout.
