@@ -37,4 +37,8 @@ jobs:
       - name: Validate resilience syntax
         run: node --check service-worker.js && node --check js/war-room-resilience.js && node --check scripts/test-resilience.mjs
       - name: Test backup and offline reload
-        run: node scripts/test-resilience.mjs
+        run: |
+          for iteration in 1 2 3; do
+            echo "Resilience lifecycle iteration ${iteration}/3"
+            node scripts/test-resilience.mjs
+          done
