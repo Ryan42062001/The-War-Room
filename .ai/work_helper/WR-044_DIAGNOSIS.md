@@ -45,6 +45,7 @@ The remediated test waits for two animation frames, `_saveTimer === null`, then 
 
 - `commitDisclosureControl()` opens and settles the currently mounted disclosure, re-resolves its current control, validates visibility, and dispatches `input` plus `change` synchronously in the same browser task. Rendering cannot replace the control between resolution and commit.
 - `pressDisclosureControl()` applies the same current-generation boundary to focus plus keyboard dispatch used by the Escape/focus-restoration contract.
+- `focusDisclosureControl()` verifies focusability against the current mounted replacement rather than focusing one generation and inspecting its successor.
 - `waitForWarRoomQuiescence()` drains request-animation-frame work and the explicit 400 ms autosave queue boundary twice. It does not cancel work or alter production state.
 
 ### Existing tests
@@ -100,6 +101,7 @@ The local runner could not download the pinned Chromium archive because the CDN 
 | `34626002986` | First five-repeat stress gate | FAIL on command-bar iteration 1; proved “open then edit” was still non-atomic. |
 | `34626238479` | Atomic single-browser-task remediation + five-repeat gate | PASS: 5/5 persistence, 5/5 command bar, phone, full `npm test`, syntax, and resilience. |
 | `34626824379` | First documentation head | Five-repeat persistence/primary command-bar gate passed; full suite exposed the same replacement-generation race in layout Escape focus/press, proving the helper had to cover adjacent command-bar suites. |
+| `34627286054`, attempt 3 | Expanded command lifecycle stress | Passed three complete targeted iterations, then exposed a focus/inspection generation gap in the WR-026 replacement-control assertion; setting commits themselves passed. |
 
 Final immutable-head run IDs and repeated full-suite attempts are recorded in PR #132 so recording them does not mutate the audited head.
 

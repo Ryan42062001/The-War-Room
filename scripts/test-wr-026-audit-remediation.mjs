@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
-import {commitDisclosureControl} from './browser-test-helpers.mjs';
+import {commitDisclosureControl, focusDisclosureControl} from './browser-test-helpers.mjs';
 
 const { chromium } = createRequire(import.meta.url)('playwright');
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(.:)/, '$1')), '..');
@@ -149,8 +149,11 @@ try {
       const input = details?.querySelector(`[data-command-setting="${name}"]`);
       return details?.open === true && details?.dataset.phoneUserOpen === 'true' && input?.value === expected;
     }, [setting, value]);
-    await page.locator(selector).focus();
-    assert.equal(await page.evaluate(name => document.activeElement?.getAttribute('data-command-setting') === name, setting), true, `${setting}: replacement setup control remains focusable`);
+    assert.equal(
+      await focusDisclosureControl(page, '.draft-command-setup-disclosure', selector),
+      setting,
+      `${setting}: replacement setup control remains focusable`
+    );
   }
 
   await page.keyboard.press('Escape');

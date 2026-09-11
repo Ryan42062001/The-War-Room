@@ -50,6 +50,25 @@ export async function pressDisclosureControl(page, disclosureSelector, controlSe
   assert.ok(result.renderFrames >= 1 && result.renderFrames <= 20);
 }
 
+/** Prove the current visible replacement control accepts focus. */
+export async function focusDisclosureControl(page, disclosureSelector, controlSelector) {
+  const result = await page.evaluate(async ({disclosureSelector, controlSelector}) => {
+    for (let frame = 0; frame < 20; frame++) {
+      let details = document.querySelector(disclosureSelector);
+      if (details && !details.open) details.querySelector(':scope > summary')?.click();
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      details = document.querySelector(disclosureSelector);
+      const input = details?.querySelector(controlSelector);
+      if (!details?.open || !input) continue;
+      input.focus();
+      return {focused:document.activeElement === input, setting:input.getAttribute('data-command-setting')};
+    }
+    return {focused:false};
+  }, {disclosureSelector, controlSelector});
+  assert.equal(result.focused, true, `${result.setting || controlSelector}: current replacement control did not accept focus`);
+  return result.setting;
+}
+
 /**
  * Establish a persistence boundary between scenarios. War Room autosave is a
  * 400 ms debounce and command rendering is requestAnimationFrame-driven. The
