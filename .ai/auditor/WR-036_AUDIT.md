@@ -6,7 +6,7 @@ Audited PR: #124
 Audited immutable head: `9b4769899dd73f7c94679df6b6c67158e3ee39b6`  
 Audit refresh `main`: `aa586cdc0b5b8bff8100fb7bed9bad867e20162f`  
 Target advancement classification: `CONTROL_PLANE_ONLY`  
-Validation achieved: Level 1 static correctness + Level 2 CI/evidence inspection. Level 3/4 draft validation is not applicable to this research-only, non-production milestone and was not used to elevate confidence.
+Validation achieved: Level 1 static correctness + Level 2 independent exact-version historical replay and CI/evidence inspection. Level 3/4 draft validation is not applicable to this research-only, non-production milestone and was not used to elevate confidence.
 
 ## Final verdict
 
@@ -32,6 +32,19 @@ The `players.csv` source-correction document appears in the result commit rather
 
 No evidence was found that WR-021/WR-023 frozen artifacts, production behavior, WR-033 specification, or WR-034 specification were modified. WR035 integrity artifacts declare a maximum outcome season of 2025 and no 2026 outcomes inspected. The executable requests historical assets through 2025 only and the Phase-6 contract excludes ADP/ECR, drafted state, roster need, opponent demand, survival, position runs, replacement/FLEX/MSV, and live recommendation scores.
 
+## Independent replay
+
+The Auditor exported exact target head `9b476989...` to a temporary directory, installed the versions pinned in `wr035_requirements.txt`, and ran `wr035_season_total_distribution.py` without modifying the audited branch or PR.
+
+- Every retained WR-035 CSV/JSON/report reproduced byte-for-byte.
+- The cohort reproduced at 3,508 returning-player seasons, 1,399 stable players, and 1,627 zero-game rows.
+- The WR-033 active-row gate reproduced 1,881 rows and the committed MAE `2.8261944402894574`, RMSE `4.2363614824553535`, and Spearman `0.677508831151748` exactly.
+- WR-034 reproduced all 3,508 keys and fallback flags; maximum prediction delta was `2.1949109196839345e-13` against tolerance `1e-10`.
+- All scored residual pools used prior out-of-sample same-position rows (minimum pool size 176), so the small-pool fallback mismatch in WR-036-AUD-02 was not activated by the retained historical result.
+- No fitted WR-034 fallback occurred in scored folds.
+
+This proves deterministic reproducibility of the current substituted-input experiment and strong WR-034 identity. It does not cure WR-036-AUD-01: the available WR-033 gate still compares only active-row aggregate metrics and no immutable keyed reference exists for the other 1,627 predictions.
+
 ## B. Central composition / dependence result
 
 The formulas implemented for the primary central candidates are consistent with the frozen specification:
@@ -49,6 +62,8 @@ The confirmation bootstrap sign convention is correct for the implemented MAE co
 
 The confirmation independence central MAE is about `32.513`, materially better than both `WR033_X_PREV_RATE` (about `41.408`) and schedule-adjusted prior total (about `42.709`). These arithmetic results are internally coherent, but their approval is blocked by Finding WR-036-AUD-01 because the exact frozen WR-033 prediction identity feeding all scored rows is not established.
 
+Independent reconstruction of the repeated-player bootstrap reproduced mean challenger-minus-independence MAE delta `+2.3010574197535` and percentile 95% CI `[+1.80602808,+2.68003942]`. CSV-rounded formula reconstruction differed by less than `1.4e-9`.
+
 ## C. Distribution / high-value behavior
 
 The paired residual draws preserve an empirical historical relationship by sampling performance and games residuals from the same historical row. The independent comparator samples those residual indices independently. This is a defensible transparent dependence experiment; it is not a medical or injury model.
@@ -58,6 +73,8 @@ Confirmation paired-distribution 80% coverage is approximately `82.7%` pooled, w
 High-value coverage is materially weaker: Q4 about `61.0%`, D10 `50.0%`, and WR Q4 about `64.0%`. Draw-derived rank intervals are also weak as calibrated rank claims (pooled empirical 80% rank coverage about `38.5%`). WR-035's reports and Phase-6 contract appropriately qualify these outputs rather than presenting them as guarantees. If the central research is successfully remediated, Phase 6 may use high-value quantiles only as warning/diagnostic uncertainty with explicit low-confidence/calibration flags unless later evidence improves calibration.
 
 The high-value undercoverage is therefore a material limitation but not a separate blocking finding, because the proposed contract already narrows the claim and does not let these diagnostics override central selection.
+
+The replay exposed an additional coherence limitation: the selected raw central product permits negative active-game and season expectations, whereas paired distribution draws clip active-game PPR at zero. In confirmation, the paired-draw mean differs from the selected central product by about 5.01 points on average and by as much as 292.53 points. The paired quantiles therefore are not a coherent predictive distribution whose expectation is the selected central transform. They must remain experimental diagnostics even outside the named high-value cohorts until a future predeclared calibration or recentering design is validated.
 
 ## D. Phase-6 interface
 
@@ -81,55 +98,55 @@ PR integration run `34556251098` attempt 1 failed in the existing command-bar UI
 
 ### WR-036-AUD-01 — HIGH — Exact WR-033 replay is not established for all scored season-total rows
 
-**Requirement**  
+**Requirement**
 WR-035 requires exact replay of frozen WR-033 without retuning, and WR-036 specifically requires the Auditor to verify the claimed WR-033 identity and upstream replay tolerances. The frozen protocol states that WR-033 is the exact WR-025 position-specific `StandardScaler -> Ridge(alpha=100)` model/feature contract.
 
-**Evidence**  
+**Evidence**
 The historical locked `players.csv` asset (`asset_id 552739287`, SHA-256 beginning `a33998d3...`) became unavailable and WR-035 accepted replacement asset `554983670` (SHA-256 beginning `c2402e02...`). WR-025/WR-033 features include player-metadata-derived fields such as `age_sep1`, `age_missing`, and `experience_years`.
 
 `verify_wr033_replay()` filters to scored rows with `target_games > 0` and a defined target active-game PPR, then checks only four aggregate values: row count, MAE, RMSE, and Spearman. It does not compare row keys or row-level WR-033 predictions. WR035 reports `1,881` active replay rows, but its season-total cohort contains `3,508` rows, including `1,627` zero-game rows. `upstream_predictions()` generates `wr033_expected_ppr_pg` for every returner, and `compose()` uses that prediction in `INDEPENDENT_PRODUCT`, `PAIRED_RESIDUAL_MEAN`, and `WR033_X_PREV_RATE` for every scored row—including the zero-game rows excluded from the WR-033 replay check.
 
-**Failure**  
+**Failure**
 Matching active-row aggregate MAE/RMSE/Spearman is not row-level prediction identity and does not verify the 1,627 zero-game-row WR-033 predictions at all. The substituted metadata source therefore has not been proven equivalent to the frozen WR-033 input/prediction surface actually consumed by Phase 5.
 
-**Impact**  
+**Impact**
 Nearly half of the season-total evaluation rows can influence central MAE/RMSE/bias and distribution residual behavior without an exact upstream-WR-033 identity check. The currently published Phase-5 disposition may be numerically identical to the intended frozen model, but the repository evidence does not prove it. That violates a core acceptance criterion and blocks Manager acceptance/merge as an evidence-backed frozen composition result.
 
-**Required remediation**  
+**Required remediation**
 R&D must establish exact WR-033 identity for all 3,508 scored returner rows before re-scoring is accepted. Prefer one of:
 1. reacquire/reconstruct the original locked player metadata from an immutable archival source and rerun against it; or
 2. independently prove that the replacement metadata produces an identical WR-033 feature matrix and identical WR-033 prediction for every scored keyed row.
 
 Persist a keyed replay artifact or deterministic keyed feature/prediction hash covering `(player_id, position, target_season)` for all scored rows, including zero-game outcomes. Compare row-for-row against a trustworthy frozen/independently reconstructed reference and fail closed on any difference. If exact upstream identity cannot be established, WR-035 must not claim exact replay; Manager should require a newly frozen, explicitly changed research contract/disposition rather than retroactively accepting the substitution.
 
-**Validation needed**  
+**Validation needed**
 Level 1: inspect keyed full-cohort replay artifact and source provenance.  
 Level 2: rerun WR-035 from the remediated frozen source/replay contract, reproduce substantive outputs deterministically, and re-observe exact-head CI. Recompute central, dependence, distribution, and high-value metrics if any prediction changes.
 
-**Confidence**  
+**Confidence**
 HIGH.
 
 ### WR-036-AUD-02 — MEDIUM — Residual-distribution fallback implementation skips the frozen first fallback
 
-**Requirement**  
+**Requirement**
 The frozen protocol specifies: when fewer than 25 same-position prior OOS residual pairs exist, first use same-position in-sample training residuals and flag `TRAINING_RESIDUAL_FALLBACK`; only if that is also insufficient may the implementation use pooled-position prior OOS residuals; otherwise distribution is unavailable.
 
-**Evidence**  
+**Evidence**
 `compose()` constructs same-position prior OOS residuals, but if the pool is under 25 it immediately replaces it with all-position prior OOS residuals and sets `PRIOR_OOS_POOLED_FALLBACK`. There is no same-position in-sample residual construction and no `TRAINING_RESIDUAL_FALLBACK` path in the executable.
 
-**Failure**  
+**Failure**
 The executable does not implement the pre-scoring-locked fallback order.
 
-**Impact**  
+**Impact**
 The current 2018–2025 primary result is not shown to depend on this small-pool path, so this finding alone would not invalidate the reported primary metrics. It does, however, make the frozen transform operationally inconsistent and would produce different uncertainty behavior if the small-pool condition were reached in later/restricted use.
 
-**Required remediation**  
+**Required remediation**
 Implement the exact frozen fallback sequence or, if the original sequence is no longer defensible, create a new Manager-approved pre-scoring protocol before rescoring. Add an explicit fallback state for same-position in-sample training residuals.
 
-**Validation needed**  
+**Validation needed**
 Level 1 code/spec comparison plus Level 2 deterministic targeted tests that force: same-position OOS >=25, same-position OOS <25 but in-sample >=25, pooled prior OOS fallback, and distribution unavailable. Re-run WR-035 deterministic equality checks.
 
-**Confidence**  
+**Confidence**
 HIGH.
 
 ### WR-036-AUD-03 — MEDIUM — Predeclared repeated-player comparison is only implemented for MAE
@@ -155,22 +172,68 @@ Level 1 code/artifact inspection and Level 2 deterministic rerun/byte comparison
 **Confidence**  
 HIGH.
 
+### WR-036-AUD-04 — MEDIUM — Selected central and paired quantiles are not one coherent predictive distribution
+
+**Requirement**
+The Phase-5 interface must characterize season-total central expectation and uncertainty honestly enough for safe Phase-6 consumption.
+
+**Evidence**
+Paired draws apply `max(0, expected PPR/game + residual)` while `INDEPENDENT_PRODUCT` uses the unclipped WR-033 prediction. Independent replay found that the paired-draw mean differs from the selected central product by about 5.01 points on average in confirmation and by as much as 292.53 points. The paired mean was itself rejected as the central estimator.
+
+**Failure**
+The contract can expose a central expected value from one estimator and quantiles from another distribution without an explicit coherence state.
+
+**Impact**
+Phase 6 could mistakenly use the quantiles as calibrated tails around the selected central value and derive invalid tiers, confidence, or sensitivity.
+
+**Required remediation**
+Treat paired quantiles as experimental diagnostics only. Before stronger use, predeclare and chronologically validate a coherent distribution construction or calibration/recentering method whose relationship to the selected central estimator is explicit.
+
+**Validation needed**
+Chronological central/distribution coherence tests plus deterministic schema/consumer tests that prevent diagnostic quantiles from being promoted to tiers or rank penalties.
+
+**Confidence**
+HIGH.
+
+### WR-036-AUD-05 — MEDIUM — Raw central product has an unhandled negative/out-of-domain tail
+
+**Requirement**
+A Phase-6 input contract must safely represent expected fantasy points and deterministic fallback/coverage state.
+
+**Evidence**
+Six retained rows have negative `INDEPENDENT_PRODUCT` values. The largest observed case is Taysom Hill 2022: WR-033 expected active-game PPR about `-17.208` multiplied by 17 expected games yields about `-292.532` expected points, versus 145.8 realized points. A diagnostic zero clamp improves confirmation MAE from about 32.513 to 32.348, but that transform was not predeclared and is not adopted by this audit.
+
+**Failure**
+The proposed interface does not flag or quarantine invalid negative season expectations.
+
+**Impact**
+An extreme negative value could distort later replacement/FLEX/MSV calculations. Silently clamping in Phase 6 would be an unvalidated post-result change to the frozen transform.
+
+**Required remediation**
+As part of WR-035 remediation or before any Phase-6 scoring, freeze and validate a deterministic negative/out-of-domain policy. Until then, affected rows must fail closed rather than enter value calculations.
+
+**Validation needed**
+Prospective chronological revalidation plus edge-case tests for negative upstream predictions, position changes, and fallback/quarantine behavior.
+
+**Confidence**
+HIGH.
+
 ## Findings by severity
 
 - CRITICAL: none.
 - HIGH: `WR-036-AUD-01` unresolved and blocking.
-- MEDIUM: `WR-036-AUD-02`, `WR-036-AUD-03` unresolved; repair in the same WR-035 rework cycle.
+- MEDIUM: `WR-036-AUD-02`, `WR-036-AUD-03`, `WR-036-AUD-04`, and `WR-036-AUD-05` unresolved; repair or explicitly narrow the interface in the same WR-035 rework cycle.
 - LOW: none.
 
 ## Safe/unsafe downstream statement
 
 Until remediation is independently re-audited, no WR-035 Phase-5 output is approved as a frozen Phase-6 input contract.
 
-If WR-036-AUD-01 is resolved without changing full-cohort predictions and the protocol-fidelity findings are repaired, the evidence supports reconsidering `INDEPENDENT_PRODUCT` as the central season-total transform. Even then, Q4/D10/WR-Q4 empirical intervals and draw-derived rank intervals must remain explicitly low-confidence diagnostic/warning outputs, not calibrated guarantees.
+If WR-036-AUD-01 is resolved without changing full-cohort predictions, the protocol-fidelity findings are repaired, and an approved out-of-domain policy prevents negative central values from reaching Phase 6, the evidence supports reconsidering `INDEPENDENT_PRODUCT` as the central season-total transform. Even then, paired quantiles are experimental rather than a coherent distribution of that central estimator; Q4/D10/WR-Q4 empirical intervals and draw-derived rank intervals must remain explicitly low-confidence diagnostic/warning outputs, not calibrated guarantees.
 
 ## Recommended Manager action
 
-Do not merge PR #124. Move WR-035/WR-036 to rework/remediation, assign R&D a bounded correction on the same research branch/PR (or a Manager-approved replacement research branch if chronology requires a fresh lock), require full-cohort keyed WR-033 replay evidence plus the two protocol-fidelity fixes, rerun deterministic outputs/CI, and return the new immutable head for independent re-audit.
+Do not merge PR #124. Move WR-035/WR-036 to rework/remediation, assign R&D a bounded correction on the same research branch/PR (or a Manager-approved replacement research branch if chronology requires a fresh lock), require full-cohort keyed WR-033 replay evidence, the two protocol-fidelity fixes, an explicit central/distribution coherence contract, and a predeclared negative/out-of-domain policy. Rerun deterministic outputs/CI and return the new immutable head for independent re-audit.
 
 Auditor changed production files: NO.  
 Auditor changed canonical `.ai/shared/**`: NO.  
