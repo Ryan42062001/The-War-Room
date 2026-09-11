@@ -70,24 +70,20 @@ async function getPageWidth(page) {
 }
 
 async function openRecovery(page) {
-  const button = page.getByRole('button', {name:'Open draft recovery and system check'});
-  await page.waitForFunction(() => {
-    const control = document.getElementById('war-room-maintenance-btn');
-    if (!control) return false;
-    const style = window.getComputedStyle(control);
-    const visible = style.display !== 'none' && style.visibility !== 'hidden' && control.getClientRects().length > 0;
-    const layoutReady = document.body.classList.contains('draft-layout-efficiency-ready');
-    return visible || layoutReady;
+  await page.waitForFunction(() => Boolean(document.getElementById('war-room-maintenance-btn')));
+  const opened = await page.evaluate(() => {
+    const manage = document.getElementById('draft-manage');
+    const button = document.getElementById('war-room-maintenance-btn');
+    if (!manage || !button) return false;
+    manage.open = true;
+    const style = window.getComputedStyle(button);
+    const visible = style.display !== 'none' && style.visibility !== 'hidden' && button.getClientRects().length > 0;
+    if (!visible) return false;
+    button.click();
+    return true;
   });
-  if (!(await button.isVisible().catch(() => false))) {
-    const manage = page.locator('#draft-manage');
-    await manage.waitFor({state:'attached'});
-    if (!(await manage.evaluate(element => element.open))) {
-      await manage.locator('summary').click();
-    }
-    await button.waitFor({state:'visible'});
-  }
-  await button.click();
+  assert.equal(opened, true, 'current recovery control must be visible and clickable after opening Draft Management');
+  await page.waitForSelector('#war-room-maintenance-dialog[open]');
 }
 
 async function assertRecoveryContained(page, label, baselineDocumentWidth) {
