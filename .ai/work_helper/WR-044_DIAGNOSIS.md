@@ -60,6 +60,8 @@ The remediated test waits for two animation frames, `_saveTimer === null`, then 
 
 `.github/workflows/ci.yml` now executes five targeted repetitions of the persistence test and all three command-bar lifecycle suites before the existing phone and full-suite gates. This is a deterministic stress gate, not an automatic failure retry: any iteration fails the job immediately and visibly.
 
+The resilience gate runs three complete backup/offline-reload repetitions. Its recovery opener now opens Draft Management and clicks the current recovery control synchronously, after explicitly proving that control visible; it no longer treats the unrelated layout-ready class as permission to click a hidden descendant.
+
 ## Competing hypotheses
 
 | Hypothesis | Disposition | Evidence |
@@ -102,6 +104,7 @@ The local runner could not download the pinned Chromium archive because the CDN 
 | `34626238479` | Atomic single-browser-task remediation + five-repeat gate | PASS: 5/5 persistence, 5/5 command bar, phone, full `npm test`, syntax, and resilience. |
 | `34626824379` | First documentation head | Five-repeat persistence/primary command-bar gate passed; full suite exposed the same replacement-generation race in layout Escape focus/press, proving the helper had to cover adjacent command-bar suites. |
 | `34627286054`, attempt 3 | Expanded command lifecycle stress | Passed three complete targeted iterations, then exposed a focus/inspection generation gap in the WR-026 replacement-control assertion; setting commits themselves passed. |
+| `34628586503`, attempt 3 | Pre-final-head repeat | Five-iteration command/state stress, phone, and full `npm test` passed; the separate resilience gate exposed a hidden recovery control because its helper accepted layout readiness without opening the containing disclosure. |
 
 Final immutable-head run IDs and repeated full-suite attempts are recorded in PR #132 so recording them does not mutate the audited head.
 
