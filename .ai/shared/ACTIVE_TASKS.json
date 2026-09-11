@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-11T03:02:00Z",
+  "updated_at_utc": "2026-09-11T09:45:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": ["PLANNED","BLOCKED","ASSIGNED","IN_PROGRESS","MANAGER_REVIEW_READY","AUDIT_READY","MERGE_READY","REWORK_REQUIRED","MERGED","CLOSED"],
@@ -8,17 +8,17 @@
     {
       "task_id": "WR-035",
       "owner": "R&D",
-      "status": "AUDIT_READY",
+      "status": "REWORK_REQUIRED",
       "task_file": ".ai/manager/WR-035.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "346dd6ac862f20f320e55fde509e5c677d9a0ec7",
       "worker_checkpoint_sha": "9b4769899dd73f7c94679df6b6c67158e3ee39b6",
       "branch": "wr-035-season-total-distribution",
       "pr": 124,
-      "dependency": "INDEPENDENT",
+      "dependency": "HARD",
       "execution_mode": "WORK_MODE_PREFERRED",
       "audit_required": true,
-      "blocked_on": ["WR-036 independent audit"],
+      "blocked_on": ["WR-037 remediation", "WR-038 independent re-audit"],
       "allowed_path_prefixes": [".ai/research/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/"],
       "forbidden_exact_paths": [
@@ -26,18 +26,18 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "WR-036 independent audit of PR #124 exact head 9b4769899dd73f7c94679df6b6c67158e3ee39b6 -> Manager merge/rework decision"
+      "next_gate": "WR-037 bounded R&D remediation on PR #124 -> WR-038 independent re-audit -> Manager merge/freeze or further rework"
     },
     {
       "task_id": "WR-036",
       "owner": "Auditor",
-      "status": "ASSIGNED",
+      "status": "CLOSED",
       "task_file": ".ai/manager/WR-036.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
       "assignment_main_sha": "f99490a124e6f6f14a76bfd1b639fbdb61d4e1c4",
-      "worker_checkpoint_sha": null,
-      "branch": null,
-      "pr": 124,
+      "worker_checkpoint_sha": "d153d3d1960c1def42358479b611ab7d3423a5c1",
+      "branch": "audit/wr-036-pr124-9b47698",
+      "pr": 125,
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_PREFERRED",
       "audit_required": false,
@@ -49,7 +49,53 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "Auditor verdict -> Manager Phase-5 disposition; PASS required before PR #124 merge and Phase-6 activation"
+      "next_gate": "CLOSED with FAIL — REMEDIATION REQUIRED; findings route to WR-037 and WR-038"
+    },
+    {
+      "task_id": "WR-037",
+      "owner": "R&D",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-037.md",
+      "role_handoff": ".ai/research/HANDOFF.md",
+      "assignment_main_sha": "aa586cdc0b5b8bff8100fb7bed9bad867e20162f",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-035-season-total-distribution",
+      "pr": 124,
+      "dependency": "HARD",
+      "execution_mode": "WORK_MODE_PREFERRED",
+      "audit_required": true,
+      "blocked_on": [],
+      "allowed_path_prefixes": [".ai/research/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/"],
+      "forbidden_exact_paths": [
+        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
+      ],
+      "next_gate": "R&D publish one immutable remediated PR #124 head -> Manager activate WR-038"
+    },
+    {
+      "task_id": "WR-038",
+      "owner": "Auditor",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-038.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": null,
+      "pr": 124,
+      "dependency": "HARD",
+      "execution_mode": "WORK_MODE_PREFERRED",
+      "audit_required": false,
+      "blocked_on": ["WR-037 complete with immutable remediated PR #124 head"],
+      "allowed_path_prefixes": [".ai/auditor/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/"],
+      "forbidden_exact_paths": [
+        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
+      ],
+      "next_gate": "WR-037 completion -> exact-head WR-038 independent re-audit -> Manager Phase-5 disposition"
     }
   ]
 }
