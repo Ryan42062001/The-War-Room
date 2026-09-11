@@ -76,3 +76,22 @@ RATIONALE: WR-029 reproduced the accepted WR-025 Ridge benchmark exactly, then n
 EVIDENCE: `.ai/research/HISTORICAL_RANKING_SIGNAL_MANIFEST.md`; `.ai/research/POSITION_RISK_CALIBRATION.md`; WR-029 research merged through PR #121 after successful exact-head CI.
 ALTERNATIVES REJECTED: Promote sub-threshold age/draft interactions; adopt a kitchen-sink context model; apply direct risk penalties to rank; replace Ridge with Huber; admit depth/staff/route or other fields that failed rights, point-in-time, or coverage gates.
 REVISIT CONDITION: New rights-clean, cutoff-safe, predeclared evidence clears the applicable adoption gates or a later approved engine milestone formally revises the returning-player specification without contaminating WR-023.
+
+---
+
+## DECISION WR-D006
+
+DATE: 2026-09-10
+TASK: WR-034 — Availability / Expected-Games Model Research
+STATUS: ACTIVE — RESEARCH / DEVELOPMENT ARCHITECTURE ONLY
+DECISION:
+- For returning QB/RB/WR/TE, the accepted expected-games research layer is the WR-034 stats-only position-specific `RIDGE_FULL` candidate using completed prior-season/prior-two-season Player Summary Stats inputs under the frozen cutoff/provenance contract.
+- The output represents recorded-game availability/continuation expectation, not medical injury probability or causal injury prediction.
+- WR-034 empirical uncertainty remains explicit; the accepted 80% residual interval is broad and must not be presented as precise schedule forecasting.
+- WR-034 `LOGIT_FULL` probabilities for `<=8` and `>=14` recorded games are warning/explanation-only and do not directly modify WR-033 expected-PPR/game ordering.
+- Deterministic expected-games fallback is `PREV_RATE`, then training-position mean with an explicit fallback flag when prior-game history is unavailable.
+- WR-033 expected-performance ordering, rookies-separate boundary, WR-021/WR-023 frozen prospective contract, and WR-D001 production ranking authority remain unchanged.
+RATIONALE: Under the preregistered development/confirmation protocol, `RIDGE_FULL` materially improved expected-games MAE versus both the schedule-adjusted prior-games baseline and training-position mean on 2022–2025 confirmation; the repeated-player bootstrap difference versus PREV_RATE excluded zero and all four positions improved. Warning models separately cleared their frozen Brier/reliability gates. Applicability among high-value players is positive but weaker, particularly versus PREV_RATE for WR, so the result supports a separate continuation layer rather than a precision or ranking claim.
+EVIDENCE: WR-034 research merged through PR #123 at `346dd6ac862f20f320e55fde509e5c677d9a0ec7`; `.ai/research/AVAILABILITY_EXPECTED_GAMES.md`; `.ai/research/AVAILABILITY_EXPECTED_GAMES_PROTOCOL.md`; `.ai/research/HANDOFF.md`; exact final-head CI `34553207324`.
+ALTERNATIVES REJECTED: Treat prior games alone as the primary expectation; interpret the target as injury-only; silently refresh mutable player metadata after checksum failure; use the warning probabilities as automatic rank penalties; change WR-033 expected PPR/game based on availability results.
+REVISIT CONDITION: WR-035 season-total composition shows the accepted expected-games layer produces unstable or inferior downstream calibration, new rights-clean cutoff-safe evidence materially improves continuation modeling, or a later approved prospective gate revises the research architecture without contaminating WR-023.

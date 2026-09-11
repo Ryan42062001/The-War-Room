@@ -1,98 +1,122 @@
-# WR-031 — Independent Audit of WR-026 Phone Decision View
+# WR-031 — Independent Re-Audit of WR-026 Phone Decision View
 
 Task ID: WR-031  
 Role: Independent Auditor / QA  
 Audited PR: #120  
-Audited head: `ca7126a76df29ec1fa85020fe15acdca9c8c6c5b`  
-Audit-start/current-main checkpoint: `7071209d9de06e398d153c7590957669399e25b8`  
-Verdict: **FAIL — REMEDIATION REQUIRED**
+Audited head: `0640967d5793e8828c5acf5b16f5bc6f2fc251f5`  
+Current-main checkpoint: `7f0bd8d1febe578583996cfb4e8400e244a74bbf`  
+Prior failed head: `ca7126a76df29ec1fa85020fe15acdca9c8c6c5b`  
+Verdict: **PASS**
 
-## Scope and evidence
+## Re-audit scope
 
-PR #120 changes exactly 10 files: Builder handoff, CI workflow, phone/layout presentation JavaScript and CSS, package/test scripts, and service-worker cache registration. No ranking dataset, scoring logic, recommendation authority, draft-state engine, persistence schema, or ESPN-sync implementation file is changed.
+This re-audit is bounded to the WR-031 findings raised against the prior PR #120 head plus the required unchanged regression boundaries.
 
-Current `main` advanced after Builder finalization, but the advancement since `b89919121cfcc00fc9a02be5d82c1a892036e70b` is confined to `.ai/**` workflow/control-plane and research material. No WR-026 runtime file overlaps. Existing runtime evidence therefore remains usable under Workflow V3 `CONTROL_PLANE_ONLY` handling; Manager must still refresh mergeability/current-main integration state at the final merge gate.
+Current PR #120 remains open and unmerged at exact head `0640967d5793e8828c5acf5b16f5bc6f2fc251f5`, with 11 changed files and GitHub mergeability state `clean` / mergeable `true` at final refresh.
 
-Independent evidence verified:
-- PR #120 remains open and unmerged at audited head `ca7126a76df29ec1fa85020fe15acdca9c8c6c5b`.
-- Integration War Room CI run `34430059740`, job `102723486494`, completed SUCCESS on the audited candidate/merge ref.
-- CI independently shows successful dedicated WR-026 phone regression, artifact upload, full `npm test`, resilience syntax validation, and backup/offline reload validation.
-- CI artifact `10134135808` is tied to the audited head and contains phone/desktop screenshots plus deterministic report data.
-- Phone report: 320x700, 375x812, 390x844, 430x932 each expose one WR primary context by default, 8 compact cards, >=1 intersecting actionable card in the opening viewport, zero horizontal document overflow, no detected actionable-card occlusion, and visible recommendation/pressure/My Draft controls.
-- Desktop/tablet report: 768x1024, 820x900, 900x900, 1280x800, 1440x900 each show WR/RB/QB/TE, no phone compact-hidden state, no active phone presentation class, hidden phone navigator, and zero horizontal overflow.
-- Manual review of the retained Chromium screenshots confirms the phone composition is materially decision-first relative to the prior stacked multi-position flow and confirms no phone navigator is exposed in the retained 768x1024 desktop/tablet screenshot.
+The bounded remediation from the prior failed head changes only:
+- `.ai/builder/HANDOFF.md` — evidence only;
+- `js/war-room-layout-efficiency.js`;
+- `js/war-room-phone-decision-view.js`;
+- `package.json`;
+- `scripts/test-wr-026-audit-remediation.mjs`;
+- `service-worker.js`.
 
-A local independent rerun could not be obtained because the audit runner could not resolve GitHub DNS for repository checkout. Per Workflow V3 anti-loop, that path was not repeatedly retried. The audit therefore relies on independently inspected repository code, exact CI/job evidence, retained CI artifacts/report, and manual screenshot review.
+No ranking, scoring, recommendation-authority, draft-state, persistence-schema, ESPN-sync, or player-data authority implementation file is changed by the remediation. The full WR-026 PR remains presentation/test/CI/cache scoped.
 
-Physical-phone / Level-4 device validation: **NOT VERIFIED**. No physical-device evidence is claimed.
+The successful PR integration run tested generated merge ref `1ce36f17c04c13bf37183d86da4baff6fe3c5f18`, which merged exact remediated head `0640967d5793e8828c5acf5b16f5bc6f2fc251f5` into `b54e8f01e696ffa5ff9cca54dc09bb10e3f8fa12`. Current `main` is one later Manager control-plane commit, `7f0bd8d1febe578583996cfb4e8400e244a74bbf`, whose changed files are confined to `.ai/manager/**` and `.ai/shared/**`. Under Workflow V3 this is `CONTROL_PLANE_ONLY` advancement and does not invalidate the runtime integration evidence.
 
-## Findings
+## WR-031-AUD-01 disposition — RESOLVED
 
-### WR-031-AUD-01 — HIGH — Phone navigator and legacy position filter can desynchronize
+**Prior finding:** HIGH — phone navigator and legacy position filter could desynchronize.
 
-**Requirement**  
-WR-026 requires coherent phone access to existing position filters and a one-tap WR/RB/QB/TE phone navigator. WR-031 explicitly requires verification of the one-position-at-a-time phone flow and preserved filters.
+**Static verification:**  
+The remediated phone module now synchronizes phone context changes through the existing legacy `setPosFilter` path. WR/RB/QB/TE phone-tab selection updates the legacy position filter; legacy filter clicks update the active phone context; pressure-position buttons replace stale primary-position filter state with the intended context; active phone search temporarily drives the legacy filter to `ALL` and restores the selected phone context after search clears; Endgame clears incompatible primary-position filtering.
 
-**Evidence**  
-The existing filter path sets global `currentPosFilter` and applies position-board filtering. `applyPositionBoardFilters()` sets each `.position-column.hidden` from the active legacy filter. The WR-026 phone module listens to legacy filter clicks and updates its own `activePosition`, but its phone-nav `setActiveContext()` only changes `activePosition` / phone classes and never clears or updates `currentPosFilter` or the column `hidden` state.
+**Deterministic regression verification:**  
+The new `scripts/test-wr-026-audit-remediation.mjs` asserts the previously missing state tuple: active phone position, global legacy filter, active legacy filter button, board filter marker, and visible position columns. It covers:
+- QB legacy filter -> RB phone tab;
+- WR legacy filter -> TE phone tab;
+- stale legacy filter -> pressure-position jump;
+- search expansion across WR/RB/QB/TE;
+- restoration of the selected phone context after search clears.
 
-Deterministic sequence:
-1. At <=600px, tap the existing `QB` toolbar filter. Legacy filtering marks non-QB position columns hidden; WR-026 synchronizes its active phone context to QB.
-2. Tap the new phone `RB` tab.
-3. WR-026 changes its active context to RB, but the legacy filter remains QB and RB remains hidden by the existing board-filter state.
-4. The primary one-tap phone navigator is now contradictory to the underlying filter and can expose no usable RB decision column until the user separately resets/changes the legacy filter.
+The exact integration run executed this test through the full `npm test` graph and logged `WR-026 audit remediation regression passed.`
 
-The dedicated WR-026 regression tests only the forward direction (legacy QB filter -> phone context QB). It does not test phone-tab switching after a legacy filter is active, so CI can pass while this defect remains.
+**Result:** the prior HIGH finding is resolved. No contradictory filter/navigation state was found in the remediated implementation or exact-head CI evidence.
 
-**Failure**  
-Two simultaneously exposed phone navigation systems can enter incompatible state, breaking the required one-tap position-switch workflow.
+## WR-031-AUD-02 disposition — RESOLVED
 
-**Impact**  
-This is a common-path phone defect because the legacy position-filter controls remain exposed on phone. A user who uses one of them can subsequently see the new phone tabs fail to produce the selected position content. That undermines the core WR-026 decision-view interaction rather than a cosmetic edge case.
+**Prior finding:** MEDIUM — phone Draft Setup lost explicit open intent after Teams/Pick/Rounds command-bar reconstruction.
 
-**Remediation**  
-Make phone-context selection and the existing position filter one coherent source of visible-position state. A phone tab must either synchronize/clear the legacy filter through the existing supported filter path or the legacy filter must be made inert/appropriately hidden on phone while preserving its required functionality through the new navigator. Do not introduce new ranking/recommendation semantics.
+**Static verification:**  
+The layout coordinator now stores phone setup default/open intent outside the replaceable `<details>` instance using module-level state. A reconstructed disclosure derives `open` from retained user intent rather than treating every replacement as a fresh phone default. Escape clears the open intent, requests focus restoration, and maintains a bounded focus-stabilization window so focus is reassigned to a replacement summary if the command bar reconstructs.
 
-**Validation needed**  
-Add deterministic <=600px coverage for at least: `QB legacy filter -> RB phone tab`, `WR legacy filter -> TE phone tab`, a pressure-button position jump after a legacy filter, and search after such transitions. Assert selected phone context, legacy filter state, exactly one intended visible primary column outside search, and full search behavior.
+**Deterministic regression verification:**  
+The focused remediation test covers a fresh-draft phone state and verifies:
+- Draft Setup defaults collapsed on phone;
+- explicit open -> Teams change -> replacement remains open and usable;
+- explicit open -> Pick/slot change -> replacement remains open and usable;
+- explicit open -> Rounds change -> replacement remains open and usable;
+- Escape closes the disclosure and restores focus to the replacement summary;
+- at 820x900 the phone navigator is hidden and pre-progress Draft Setup retains the existing >600px open behavior.
 
-**Confidence**  
-HIGH. The conflicting state paths are explicit in the audited code and the missing transition is absent from the dedicated test.
+The existing layout-efficiency behavior regression also passed at 820x900, including disclosure/Escape/focus behavior.
 
-### WR-031-AUD-02 — MEDIUM — Phone Draft Setup loses open intent after a setting-triggered command-bar re-render
+**Result:** the prior MEDIUM finding is resolved.
 
-**Requirement**  
-WR-031 requires dynamic Draft Setup open/close/Escape verification. WR-026 requires Draft Setup to remain reachable on phone and preserve reasonable interaction state.
+## Independent CI and runtime evidence
 
-**Evidence**  
-On phone before draft progress, `ensureSetupDisclosure()` treats a newly created disclosure without `data-phone-defaulted` as a fresh default and unconditionally resets `setupEditing = false` and closes it. Changing Teams/Pick/Rounds through the command setup calls `applyDraftSettings()`, which calls `refreshDraftCommandBar()`. The command bar rebuilds itself with `bar.innerHTML = ...`, destroying the current disclosure; observers then create a new setup/disclosure. The new disclosure therefore re-enters the fresh-default branch and loses the user's prior open intent.
+Exact final head CI:
+- push War Room CI run `34539665290` — SUCCESS on `0640967d5793e8828c5acf5b16f5bc6f2fc251f5`;
+- pull-request War Room CI run `34539669442`, job `103079234003` — SUCCESS for exact head merged into `b54e8f01e696ffa5ff9cca54dc09bb10e3f8fa12`.
 
-The dedicated phone regression verifies collapsed default and a simple open/close click sequence, but it does not change a setting while the disclosure is open. The updated layout-efficiency test verifies Escape/focus behavior but does not cover this no-progress phone re-render sequence.
+The integration job independently shows successful execution of:
+- dedicated WR-026 phone-decision regression;
+- full `npm test`, including `test:wr026-audit-remediation`;
+- 717-player baseline validation;
+- Companion extension 164/164;
+- browser/draft/ESPN suites;
+- responsive overflow across 13 widths x Position/Overall with zero horizontal document overflow;
+- layout-efficiency and layout-efficiency-behavior guards;
+- command-bar, draft-awareness, live-sync-awareness, and draft-polish regressions;
+- scoring-correction regression;
+- deterministic draft-invariant torture harness;
+- persistence/recovery and failure-injection suites;
+- live mock fixtures;
+- resilience syntax and guarded full 717-player offline reload.
 
-**Failure**  
-While configuring a fresh draft on phone, changing one setup field can collapse Draft Setup as the command bar re-renders, forcing the user to reopen it before editing another field.
+Exact-head artifact `10176772623` is tied to the audited head and integration run. Its deterministic report confirms:
+- 320x700, 375x812, 390x844, 430x932: one WR context at default, 8 compact cards, at least one actionable card above the fold, zero horizontal overflow, no detected actionable-card occlusion, and recommendation/pressure/My Draft reachability;
+- 768x1024, 820x900, 900x900, 1280x800, 1440x900: phone navigator hidden, all WR/RB/QB/TE columns restored, no compact-hidden state, no active phone presentation class, and zero horizontal overflow.
 
-**Impact**  
-The setup remains recoverable and no draft-setting value is shown to be lost, so this is not a data/state-authority failure. It is nevertheless a deterministic regression in the explicitly required dynamic phone setup interaction.
+Manual inspection of the retained Chromium screenshots found no new visual release blocker and confirmed the phone decision composition and hidden phone navigator at the retained desktop/tablet guard.
 
-**Remediation**  
-Preserve explicit phone setup-open intent across command-bar reconstruction. Fresh initial phone defaulting should be distinguishable from a same-session replacement of a disclosure the user intentionally opened.
+A separate local checkout/test rerun could not be obtained because this audit runner could not resolve GitHub DNS. Per Workflow V3 anti-loop, that unavailable path was not repeatedly retried. This limitation does not create a product finding because exact repository code, exact-head push CI, exact integration CI, job logs, focused regression coverage, and retained artifacts were independently inspected.
 
-**Validation needed**  
-At <=600px with no draft progress: open Draft Setup, change Teams, assert replacement disclosure remains open and focused controls remain usable; repeat for Pick/Rounds as appropriate; then verify Escape closes and restores focus. Also verify >600px behavior remains unchanged.
+## Semantic boundary review
 
-**Confidence**  
-HIGH for the code-path defect; MEDIUM severity because recovery is immediate and authoritative settings are not shown to be lost.
+No remediation diff touches production ranking/scoring/recommendation-authority, draft-state, persistence-schema, ESPN-sync, or player-data authority files. The full successful regression graph includes dedicated scoring, draft invariant, persistence/recovery, ESPN, browser, and offline-reload gates. No semantic regression evidence was identified.
 
-## Non-findings / preserved boundaries
+## Findings after re-audit
 
-- No evidence of ranking/scoring/recommendation-authority modification in the PR scope.
-- No evidence of draft-state, persistence-schema, or ESPN-sync authority modification in the PR scope.
-- Phone decision-first layout, compact Show All/Top behavior, Endgame access, search expansion from the default all-filter state, Mine marking, target stars, My Draft, Manage, Overall reachability, Waiting/Near/On-the-Clock states, target sizing, overflow, and the required desktop/tablet guard viewports are covered by the inspected successful CI test and retained artifact report.
-- Exact current PR mergeability is not treated as a product finding: GitHub's raw PR state was recalculating/unknown after target advancement. Current target advancement is non-overlapping `.ai/**`; Manager must refresh the final tuple before any merge.
+- CRITICAL: none.
+- HIGH: none unresolved. `WR-031-AUD-01` RESOLVED.
+- MEDIUM: none unresolved. `WR-031-AUD-02` RESOLVED.
+- LOW: none.
+
+No new finding is manufactured solely because local repository checkout was unavailable or because physical-device validation was unavailable.
+
+## Level-4 status
+
+Physical-phone / Level-4 validation: **NOT VERIFIED**.
+
+Automated Chromium viewports and manual review of their retained screenshots are verified evidence, but they are not physical-device proof. Physical touch feel and browser-chrome effects therefore remain outside the verified level.
 
 ## Release decision
 
-The HIGH phone navigation/filter-state finding violates the required primary phone flow and blocks release readiness. PR #120 should return to Builder for bounded remediation on the same task/PR, followed by independent re-audit of the exact remediated head.
+The two prior blocking/remediation findings are resolved on the exact audited head. Required phone transitions, Draft Setup reconstruction intent, Escape/focus behavior, >600px preservation, semantic boundaries, and current CI evidence satisfy WR-031 acceptance criteria.
 
-Final verdict: **FAIL — REMEDIATION REQUIRED**
+Final verdict: **PASS**
+
+Auditor merged PR #120: **NO**.

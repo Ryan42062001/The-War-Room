@@ -2,68 +2,68 @@
 
 HANDOFF
 
-Task ID: WR-026 / WR-031 / WR-034
+Task ID: WR-026 / WR-031 / WR-034 / WR-035
 Role: Manager / Architect
-Status: WR-026 AUDIT_READY / WR-031 ASSIGNED FOR RE-AUDIT / WR-034 IN_PROGRESS FINALIZATION
+Status: WR-026 CLOSED / WR-031 CLOSED / WR-034 CLOSED / WR-035 ASSIGNED
 
-## Phone release lane
-WR-031 audit cycle 1 failed PR #120 head `ca7126a76df29ec1fa85020fe15acdca9c8c6c5b` on HIGH `WR-031-AUD-01` and MEDIUM `WR-031-AUD-02`.
+## Completed phone release lane
+WR-031 re-audit PASS is accepted against PR #120 exact head `0640967d5793e8828c5acf5b16f5bc6f2fc251f5`.
 
-Builder completed the bounded remediation on existing branch `wr-026-phone-decision-view` / PR #120.
+Verified release facts:
+- `WR-031-AUD-01` resolved;
+- `WR-031-AUD-02` resolved;
+- no unresolved CRITICAL/HIGH/MEDIUM findings;
+- exact-head and PR integration CI passed;
+- no ranking/scoring/recommendation-authority/draft-state/persistence-schema/ESPN-sync regression identified;
+- physical-phone Level-4 validation remains NOT VERIFIED.
 
-Current exact remediated head: `0640967d5793e8828c5acf5b16f5bc6f2fc251f5`.
-PR #120: OPEN / MERGEABLE.
-Observed PR-triggered War Room CI on that head: run `34539669442` — SUCCESS.
+Manager merged PR #120 at `d1d41f64bf00749a49e6161e4bfb5de977c58237`.
+Builder and Auditor are now IDLE.
 
-Builder handoff reports focused deterministic coverage for:
-- QB legacy filter -> RB phone tab;
-- WR legacy filter -> TE phone tab;
-- pressure-position jump after stale filter;
-- search expansion/restoration;
-- Draft Setup open intent across Teams/Pick/Rounds reconstruction;
-- Escape/focus restoration;
-- >600px preservation.
+## Phase-4 disposition
+WR-034 research is COMPLETE / ACCEPTED / MERGED via PR #123 at `346dd6ac862f20f320e55fde509e5c677d9a0ec7`.
 
-Manager disposition:
-- WR-026 -> `AUDIT_READY`;
-- Builder -> IDLE;
-- WR-031 dependency cleared -> Auditor reactivated;
-- Auditor must independently re-audit the exact remediated head before any merge;
-- physical-phone Level-4 remains unverified unless new evidence is obtained.
+Manager accepted `EXPECTED-GAMES MODEL SUPPORTED` with durable decision WR-D006:
+- stats-only position-specific `RIDGE_FULL` for returning-player recorded-game availability/continuation expectation;
+- broad empirical uncertainty retained explicitly;
+- `LOGIT_FULL` <=8 and >=14 probabilities remain warning/explanation-only;
+- deterministic fallback PREV_RATE -> training-position mean with explicit fallback state;
+- no medical-injury claim;
+- no change to WR-033 expected PPR/game or WR-D001 production authority.
 
-## Custom-engine research lane
-WR-034 branch materially advanced to `a0b39354398629da0822cc54357cde8932b926c2`.
+Important limitation: direct incremental benefit among the highest prior-PPR quartile is smaller than in the full cohort, and high-tier WR benefit versus PREV_RATE is approximately flat. Phase 5 must preserve this caveat and test downstream composition rather than assuming precision.
 
-The branch contains `.ai/research/AVAILABILITY_EXPECTED_GAMES.md` marked `COMPLETE — MANAGER REVIEW REQUIRED` plus generated expected-games evaluation/calibration/integrity evidence. The substantive research appears complete, but the required `.ai/research/HANDOFF.md` still contains the prior WR-029 handoff and no WR-034 pull request exists.
+## Phase-5 activation
+WR-035 — Season-Total Distribution / Composition Research is ASSIGNED to R&D.
 
-Manager disposition:
-- WR-034 remains `IN_PROGRESS`;
-- R&D stays ACTIVE only to finalize the required concise handoff, complete final verification/CI as required, and open the Manager-review-ready research PR;
-- do not expand WR-034 scope or begin Phase 5 from the R&D role;
-- once the PR/handoff are ready, Manager performs Phase-4 disposition.
+Branch: `wr-035-season-total-distribution`
+Assignment base: `346dd6ac862f20f320e55fde509e5c677d9a0ec7`
+Execution mode: `WORK_MODE_PREFERRED`
+Production authorization: NONE
+2026 outcomes: FORBIDDEN
 
-## Phase-6 advisory evidence
-The external War Room helper projection-to-draft-value architecture remains advisory only. Marginal starter assignment/MSV is retained as a leading future Phase-6 candidate, not frozen and not production-authorized. Phase 4/5 sequencing remains unchanged.
+Primary objective: determine the defensible season-total distribution/interface obtained from frozen WR-033 expected PPR/game plus accepted WR-034 expected games. Explicitly test the simple independence product against predeclared dependence-aware composition alternatives without retuning either upstream model.
+
+The external War Room helper MSV/assignment architecture remains Phase-6 advisory evidence only. Do not perform Phase-6 replacement/FLEX/value work under WR-035.
 
 ## Staffing decision
 Smallest legitimate active team:
-- Manager: IDLE after this reconciliation
-- Builder: IDLE — WR-026 remediation complete
+- Manager: IDLE after reconciliation
+- Builder: IDLE
 - Draft Strategy: IDLE
-- R&D: ACTIVE — WR-034 finalization only
-- Auditor: ACTIVE — WR-031 re-audit
+- R&D: ACTIVE — WR-035
+- Auditor: IDLE
 - Temporary Troubleshooting: NOT INSTANTIATED
 
 ## Exact next actions
-1. Auditor independently re-audits PR #120 exact head `0640967d5793e8828c5acf5b16f5bc6f2fc251f5`, with special focus on both prior findings and unchanged regression boundaries.
-2. R&D finalizes WR-034 handoff/PR and returns the exact final research head for Manager disposition.
-3. Manager reviews whichever completed handoff arrives first and reconciles that lane.
-4. Builder remains idle unless Auditor finds new remediation.
-5. Draft Strategy remains idle until a genuine recommendation-policy question exists.
+1. R&D executes WR-035 and returns a Manager-review-ready research PR/handoff.
+2. Manager disposes Phase 5 before any Phase-6 task is activated.
+3. Builder and Auditor remain idle until production or audit work is legitimately required.
+4. Draft Strategy remains idle until a recommendation-policy question arises.
 
 ## Production ranking authority
 UNCHANGED. WR-D001 remains active. WR-021 / WR-023 frozen artifacts remain untouched.
 
 ## Checkpoint / SHA
-Pre-reconciliation `main`: `b54e8f01e696ffa5ff9cca54dc09bb10e3f8fa12`.
-Current `main` will be the atomic Manager status reconciliation commit containing this handoff; verify on next refresh.
+Pre-reconciliation `main`: `346dd6ac862f20f320e55fde509e5c677d9a0ec7`.
+Current `main` will be the atomic Manager reconciliation commit containing this handoff; verify on next refresh.

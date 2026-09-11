@@ -4,19 +4,19 @@ HANDOFF
 
 Task ID: WR-031
 Role: Independent Auditor / QA
-Status: AUDIT COMPLETE — REMEDIATION REQUIRED
-Audited PR/head: PR #120 / `ca7126a76df29ec1fa85020fe15acdca9c8c6c5b`
-Scope verdict: Presentation/test/CI/cache scope only; no ranking, scoring, recommendation-authority, draft-state, persistence-schema, or ESPN-sync implementation file changed.
-Phone verdict: Material decision-first improvement verified, but primary phone navigation is not coherent after an existing position filter is used. HIGH finding `WR-031-AUD-01` blocks release.
-Desktop/tablet preservation verdict: Required 768/820/900/1280/1440 guards passed in independently inspected CI artifact data; phone-only CSS/state is inactive above 600px. No overlapping runtime change exists on current `main`.
-Semantic regression verdict: No semantic-authority regression identified in audited scope.
-Tests/evidence independently verified: PR integration CI run `34430059740` / job `102723486494` SUCCESS; dedicated WR-026 phone suite, full `npm test`, resilience, offline reload, retained screenshot/report artifact `10134135808` inspected. Local checkout rerun unavailable because audit runner GitHub DNS failed; anti-loop rule applied.
-Level-4 physical/manual status: NOT VERIFIED. Manual review was limited to retained Chromium screenshots; no physical-phone evidence is claimed.
-Findings by severity: HIGH — `WR-031-AUD-01` legacy position filter can desynchronize/break new one-tap phone tabs. MEDIUM — `WR-031-AUD-02` fresh-draft phone Draft Setup can collapse after a setting-triggered command-bar re-render. CRITICAL: none. LOW: none.
-Final verdict: FAIL — REMEDIATION REQUIRED
+Status: RE-AUDIT COMPLETE — PASS
+Audited PR/head: PR #120 / `0640967d5793e8828c5acf5b16f5bc6f2fc251f5`
+Scope verdict: PASS — bounded remediation and full PR remain presentation/test/CI/cache scoped; no ranking, scoring, recommendation-authority, draft-state, persistence-schema, ESPN-sync, or player-data authority implementation regression identified.
+Phone verdict: PASS — `WR-031-AUD-01` RESOLVED. Legacy position filters, phone tabs, pressure jumps, and search expansion/restoration now maintain coherent visible-position state; exact focused regression passed.
+Desktop/tablet preservation verdict: PASS — required 768/820/900/1280/1440 guards passed; phone navigator/state remains inactive above 600px; current-main advancement after the tested integration base is control-plane-only.
+Semantic regression verdict: PASS — scoring, recommendation, draft invariants, persistence/recovery, ESPN, browser, and offline-reload gates are green with no authority-file remediation changes.
+Tests/evidence independently verified: exact-head push CI `34539665290` SUCCESS; PR integration CI `34539669442` / job `103079234003` SUCCESS on merge ref `1ce36f17c04c13bf37183d86da4baff6fe3c5f18`; focused `test:wr026-audit-remediation`, dedicated phone tests, full `npm test`, semantic regression suites, and artifact `10176772623` inspected. Local checkout rerun was unavailable because the audit runner could not resolve GitHub DNS; Workflow V3 anti-loop applied without repeated retries.
+Level-4 physical/manual status: NOT VERIFIED on a physical phone. Retained Chromium screenshots were manually inspected; that is not Level-4 physical-device proof.
+Findings by severity: CRITICAL — none. HIGH — none unresolved; `WR-031-AUD-01` RESOLVED. MEDIUM — none unresolved; `WR-031-AUD-02` RESOLVED. LOW — none.
+Final verdict: PASS
 Recommended next role: Manager / Architect
-Exact next action: Manager route PR #120 back to Builder for bounded remediation of WR-031-AUD-01 and WR-031-AUD-02 on WR-026, require focused regression coverage for both paths plus normal relevant CI, then return the exact remediated head for independent re-audit. Do not merge PR #120 in its audited state.
-Checkpoint / SHA: audited implementation `ca7126a76df29ec1fa85020fe15acdca9c8c6c5b`; audit report commit `f78c009b73e7675c1fca178321c15c8e601ffa02`; audit branch `audit/wr-031-pr120-ca7126a`.
+Exact next action: Manager verify PR #120 still points to audited head `0640967d5793e8828c5acf5b16f5bc6f2fc251f5`, confirm target advancement remains non-overlapping/control-plane-only, then exercise the normal merge/reconciliation gate if otherwise satisfied. Auditor must not merge PR #120.
+Checkpoint / SHA: current `main` at final audit refresh `7f0bd8d1febe578583996cfb4e8400e244a74bbf`; audited implementation `0640967d5793e8828c5acf5b16f5bc6f2fc251f5`; audit report commit `da1fb6cc598b2ae6cb5473742b7e2b0e8e0a93bb`; audit branch `audit/wr-031-pr120-0640967`.
 
 Detailed evidence: `.ai/auditor/WR-031_PHONE_DECISION_AUDIT.md`
 
