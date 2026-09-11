@@ -2,34 +2,55 @@
 
 HANDOFF
 
-Task ID: WR-036  
+Task ID: WR-040  
 Role: Independent Auditor / QA  
-Status: AUDIT COMPLETE — REMEDIATION REQUIRED  
-Audited PR/head: PR #124 / `9b4769899dd73f7c94679df6b6c67158e3ee39b6`
+Status: COMPLETE — PASS WITH NON-BLOCKING FINDINGS  
+Audited WR-039 PR/head: PR #127 / `00a9e787e716d6697e6cd0d9252982a672abbbe0`  
+Audited machine-lock SHA-256: `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`  
+Audit branch: `wr-040-v2-evidence-contract-audit`
 
-Scope / integrity verdict: PARTIAL PASS / BLOCKED — all 22 PR files are research-only under `.ai/research/**`; current-main advancement is `CONTROL_PLANE_ONLY`; no production, WR-021/WR-023, canonical shared/Manager, Phase-6 value, or 2026-outcome scope violation was identified. Protocol/spec/machine lock were committed before result scoring commit. Blocking integrity gap: WR-035 accepted a replacement `players.csv`, but its WR-033 replay check verifies only aggregate metrics on 1,881 active rows, not keyed row-level predictions for all 3,508 season-total rows; 1,627 zero-game rows consume WR-033 predictions without exact replay verification.
+Contract frozen before scoring: YES — PR #127 is a single contract-freeze commit from starting main `6bc66fa6c779e558940ca6cc3f267441def62595`; only five `.ai/research/**` evidence files changed; no scoring/fitting/result artifact is present.
 
-Methodology / reproducibility verdict: BLOCKED — an independent exact-version replay reproduced every retained output byte-for-byte, all central formulas, chronological split, development gate, paired-challenger rejection, and MAE cluster bootstrap sign/seed/replicates. WR-034 replay is keyed across all 3,508 rows with max prediction delta about `2.19e-13`. However exact frozen WR-033 identity for the full scored cohort is not established: the replay reproduces the substituted-input run, not an immutable full-cohort WR-033 reference. Additional MEDIUM gaps: residual fallback skips the frozen same-position in-sample fallback; repeated-player contrasts omit predeclared RMSE/interval-score contrasts; paired quantiles are not a coherent distribution of the selected raw central transform; and six central rows are negative/out of domain.
+Source provenance sufficient: YES — the future source-instance contract requires exact acquisition/version/release/asset identity, byte SHA-256, schema/hash, row count, approved fields, cutoff semantics, mutability, acquisition code/command, custody identity, and fail-closed status.
 
-Distribution / high-value verdict: MATERIAL LIMITATION, CORRECTLY QUALIFIED — paired confirmation 80% coverage is about 82.7% pooled and 77.9%/83.6%/84.3%/81.8% for QB/RB/WR/TE, but Q4/D10/WR-Q4 coverage is only about 61.0%/50.0%/64.0%; draw-derived rank coverage is also weak. WR-035 appropriately treats high-value/rank quantiles as diagnostic/warning uncertainty rather than calibrated guarantees. This limitation is non-blocking only after the upstream replay blocker is remediated.
+Rights/retention sufficient: YES — independent review confirms the matrix is conservative about nflverse repository licensing versus underlying-data rights; exact future source instances still require per-instance rights decisions. License uncertainty, unavailable auditable custody, or changed mutable assets fail closed rather than silently substituting data.
 
-Phase-6 interface verdict: STRUCTURALLY SOUND BUT NOT APPROVED FOR CONSUMPTION — `season_total_transform_v1` separates central projection, uncertainty, availability warnings, provenance/fallback state, upstream IDs/hashes, cutoff/as-of, and transform version, and excludes live-draft/Phase-6 signals. No Phase-6 task should consume WR-035 as a frozen input until remediation and re-audit pass. Even after central approval, paired quantiles must remain experimental diagnostics unless coherence is separately validated; negative/out-of-domain rows must fail closed under a predeclared policy.
+Full-row keyed evidence requirement sufficient: YES — canonical row identity covers every considered player-season and explicitly includes zero-game, excluded, target-unavailable, train-only, scored, and fallback states; keyed feature, preprocessing/model, prediction/status, lineage, digest, and inclusion/exclusion evidence is mandatory. Aggregate metrics cannot substitute for row identity.
 
-CI attempt-2 disposition: PASS / NON-COUPLED PRIOR FLAKE — PR integration run `34556251098` attempt 2 succeeded on the same immutable PR head, including `npm test`, resilience syntax, and offline backup/reload. Attempt 1's command-bar UI timeout is not connected to PR #124's research-only diff and is recorded as flaky/non-coupled evidence, not a WR-035 finding.
+Raw/derived evidence durability sufficient: YES — rights-permitted raw bytes must be retained in project-controlled content-addressed immutable custody with a second retrievable copy and periodic verification. Rights-limited derived evidence is acceptable only with a lawful independently accessible reference; hashes alone are insufficient. Mutable URLs and expiring Actions artifacts are non-authoritative.
 
-Findings by severity: CRITICAL — none. HIGH — `WR-036-AUD-01` unresolved/blocking: full-cohort exact WR-033 replay not proven after mutable player-metadata substitution. MEDIUM — `WR-036-AUD-02`: residual-distribution fallback order differs from frozen protocol. `WR-036-AUD-03`: repeated-player bootstrap omits predeclared RMSE and interval-score contrasts. `WR-036-AUD-04`: paired quantiles are not a coherent distribution of the selected raw central estimator. `WR-036-AUD-05`: six raw central values are negative/out of domain with no approved fallback. LOW — none.
+Reproducibility lock sufficient: YES — future scoring must bind contract/source/cohort/feature/serializer/target/preprocessing/model/split/seed/environment/code/command/sentinel/artifact identities before evaluation.
 
-Final verdict: FAIL — REMEDIATION REQUIRED
+V1/v2 non-equivalence clear: YES — the contract does not claim the deleted WR-033 Players asset was reconstructed. WR-033 ideas can be re-versioned only; no inherited v1 input/fitted-state/prediction/replay identity is allowed. WR-035/WR-037 are historical failure-mode evidence only.
 
-Recommended next role: Manager / Architect -> bounded R&D remediation -> Independent Auditor re-audit.
+Prospective chronology sufficient: YES — source custody and its independent audit precede model-protocol freeze; model scoring/evaluation occurs later; full-row prediction evidence must be locked before target/outcome join; independent model-result and later composition audits remain required before Phase 6.
 
-Exact next action: Manager must not merge PR #124. Route WR-035 to bounded R&D rework requiring keyed exact WR-033 feature/prediction identity for all 3,508 scored rows (including zero-game rows), the frozen residual fallback order, missing repeated-player RMSE/interval-score contrasts, an explicit central/distribution coherence contract, and a predeclared negative/out-of-domain policy. Rerun deterministic artifacts and exact-head CI, then return a new immutable PR head for independent re-audit.
+2026 outcomes inspected by audited work: NO  
+WR-021/WR-023 changed by audited work: NO  
+WR-033/WR-034 historical records rewritten: NO  
+Production changed by audited work: NO  
+Phase-6 work performed: NO  
+Current-main target advancement: `CONTROL_PLANE_ONLY` — independently verified; no overlap with the five research files.
 
-Checkpoint / SHA: current `main` at audit refresh `aa586cdc0b5b8bff8100fb7bed9bad867e20162f`; audited implementation `9b4769899dd73f7c94679df6b6c67158e3ee39b6`; reconciled audit report commit `f2530d97d3ed4b3ee6260d2c5f6595d161931ec5`; audit branch `audit/wr-036-pr124-9b47698`.
+CI run `34613965662` disposition: **NON-BLOCKING** — overall run remains RED/FAILURE and must not be called successful. Attempt 1 passed phone validation and 164/164 extension tests before unchanged `test-command-bar` failed on a detached/hidden slot control. Attempt 2 on the same immutable head again passed phone validation and 164/164 extension tests, then failed unchanged `test:browser` because persisted production state existed where the harness expected `null`. These are two distinct production-browser failures in surfaces untouched by PR #127. No additional WR-039 retry is warranted by this audit.
 
-Detailed evidence: `.ai/auditor/WR-036_AUDIT.md`
+Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — `WR-040-AUD-01`: repository browser CI shows non-overlapping nondeterminism/state-isolation instability; it is outside the audited five-file research contract, does not block WR-040, and should remain separately visible rather than being represented as green CI.
 
-Production files changed by Auditor: NO  
-Canonical `.ai/shared/*` changed by Auditor: NO  
-Auditor modified PR #124: NO  
-Auditor merged PR #124: NO
+Final verdict: `PASS WITH NON-BLOCKING FINDINGS`
+
+Exact audited contract head authorized for next Manager decision: `00a9e787e716d6697e6cd0d9252982a672abbbe0`
+
+What Manager may authorize next: only the next **no-scoring exact source-custody checkpoint** governed by the accepted v2 evidence contract, including exact source acquisition/version/digest/schema/rights/cutoff/custody evidence and a frozen source snapshot for later independent source-custody audit.
+
+What remains forbidden: model fitting/scoring/tuning/comparison/evaluation; ranking or production changes; target/outcome joins before the pre-score prediction lock; 2026 regular-season outcome inspection; Phase-6 replacement/FLEX/MSV/value work; any claim of WR-033 exact replay identity; silent mutable-source substitution; and use of unaudited source instances.
+
+Recommended next role: Manager / Architect.
+
+Exact next action: Manager reconcile WR-040 against immutable PR #127 head `00a9e787e716d6697e6cd0d9252982a672abbbe0`. If the research-contract PR is accepted under the normal merge gate, Manager may create/authorize the bounded no-scoring source-custody task. Do not authorize model scoring until source custody passes independent audit and a later model protocol is frozen. Track the unrelated RED browser-CI reliability issue separately if repository CI reliability needs remediation.
+
+Checkpoint / SHA: canonical `main` at audit refresh `5fc4fa92608c8da27cf23433e8117da7d92ea4c0`; audited PR head `00a9e787e716d6697e6cd0d9252982a672abbbe0`; detailed report `.ai/auditor/WR-040_AUDIT.md`; audit branch `wr-040-v2-evidence-contract-audit`.
+
+Auditor modified PR #127: NO  
+Auditor merged PR #127: NO  
+Auditor changed production files: NO  
+Auditor changed canonical `.ai/shared/*`: NO
