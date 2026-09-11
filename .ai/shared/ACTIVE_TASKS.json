@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-11T15:24:00Z",
+  "updated_at_utc": "2026-09-11T15:43:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": ["PLANNED","BLOCKED","ASSIGNED","IN_PROGRESS","MANAGER_REVIEW_READY","AUDIT_READY","MERGE_READY","REWORK_REQUIRED","MERGED","CLOSED"],
@@ -21,12 +21,8 @@
       "blocked_on": [],
       "allowed_path_prefixes": [".ai/research/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/"],
-      "forbidden_exact_paths": [
-        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
-        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
-        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
-      ],
-      "next_gate": "CLOSED under WR-D007 as insufficiently provable; PR #124 preserved as historical research/blocker evidence and must remain unmerged"
+      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
+      "next_gate": "CLOSED under WR-D007 as insufficiently provable; PR #124 preserved as historical research/blocker evidence and remains unmerged"
     },
     {
       "task_id": "WR-036",
@@ -44,11 +40,7 @@
       "blocked_on": [],
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/"],
-      "forbidden_exact_paths": [
-        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
-        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
-        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
-      ],
+      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
       "next_gate": "CLOSED with FAIL — REMEDIATION REQUIRED; audit evidence merged via PR #125 at 793c091b6c68012e37c021be1bd753d4406c679b"
     },
     {
@@ -67,11 +59,7 @@
       "blocked_on": [],
       "allowed_path_prefixes": [".ai/research/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/"],
-      "forbidden_exact_paths": [
-        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
-        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
-        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
-      ],
+      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
       "next_gate": "CLOSED fail-closed: REMEDIATION BLOCKED — UPSTREAM IDENTITY NOT PROVABLE; superseded by WR-D007 / WR-039"
     },
     {
@@ -90,58 +78,46 @@
       "blocked_on": [],
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/"],
-      "forbidden_exact_paths": [
-        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
-        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
-        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
-      ],
-      "next_gate": "CLOSED without activation because WR-037 produced no valid remediated audit target; superseded by WR-040"
+      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
+      "next_gate": "CLOSED without activation because WR-037 produced no valid remediated v1 audit target; superseded by WR-040"
     },
     {
       "task_id": "WR-039",
       "owner": "R&D",
-      "status": "ASSIGNED",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-039.md",
       "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": null,
-      "worker_checkpoint_sha": null,
+      "assignment_main_sha": "6bc66fa6c779e558940ca6cc3f267441def62595",
+      "worker_checkpoint_sha": "00a9e787e716d6697e6cd0d9252982a672abbbe0",
       "branch": "wr-039-returning-player-v2-evidence-contract",
-      "pr": null,
+      "pr": 127,
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_PREFERRED",
       "audit_required": true,
       "blocked_on": [],
       "allowed_path_prefixes": [".ai/research/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", "src/", "public/"],
-      "forbidden_exact_paths": [
-        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
-        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
-        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
-      ],
-      "next_gate": "R&D freeze one immutable Returning-Player v2 evidence-contract PR/head without model scoring -> Manager activate WR-040"
+      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
+      "next_gate": "WR-040 independently audits immutable PR #127 head 00a9e787e716d6697e6cd0d9252982a672abbbe0; do not modify or merge the research head before audit"
     },
     {
       "task_id": "WR-040",
       "owner": "Auditor",
-      "status": "BLOCKED",
+      "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-040.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": null,
+      "assignment_main_sha": "068d8b98da86ca4125dc65a2fa2b0168b9f46928",
       "worker_checkpoint_sha": null,
       "branch": "wr-040-v2-evidence-contract-audit",
-      "pr": null,
+      "pr": 127,
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_PREFERRED",
       "audit_required": false,
-      "blocked_on": ["WR-039 complete with one immutable evidence-contract PR/head"],
+      "blocked_on": [],
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/", "src/", "public/"],
-      "forbidden_exact_paths": [
-        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
-        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
-        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
-      ],
-      "next_gate": "WR-039 immutable contract -> WR-040 independent audit -> Manager may authorize a new v2 scoring/evaluation task only after PASS-family verdict"
+      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
+      "next_gate": "Audit PR #127 exact head 00a9e787e716d6697e6cd0d9252982a672abbbe0, including source/rights/retention/reproducibility and CI-run disposition -> Manager decision"
     },
     {
       "task_id": "WR-041",
@@ -150,7 +126,7 @@
       "task_file": ".ai/manager/WR-041.md",
       "role_handoff": ".ai/manager/HANDOFF.md",
       "assignment_main_sha": "6bc66fa6c779e558940ca6cc3f267441def62595",
-      "worker_checkpoint_sha": "72d8888e70902c9910bdd60651a35f323ddacf6e",
+      "worker_checkpoint_sha": "e8b675020c3549a0f6de8793d05f7ab90d2ee5c7",
       "branch": "manager/wr-041-work-helper-role",
       "pr": 128,
       "dependency": "INDEPENDENT",
@@ -160,7 +136,7 @@
       "allowed_path_prefixes": [".ai/"],
       "forbidden_path_prefixes": ["src/", "public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "CLOSED after Manager exact-head CI and control-plane merge; Work Helper remains IDLE until a real troubleshooting assignment exists"
+      "next_gate": "CLOSED at merge 068d8b98da86ca4125dc65a2fa2b0168b9f46928; Work Helper remains IDLE until a real troubleshooting assignment exists"
     }
   ]
 }
