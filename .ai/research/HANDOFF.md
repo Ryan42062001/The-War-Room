@@ -8,7 +8,7 @@ Status: COMPLETE — MANAGER REVIEW REQUIRED
 Verified starting state: origin/main `f99490a124e6f6f14a76bfd1b639fbdb61d4e1c4`; control-plane-only advance from assignment base reconciled
 Branch / final SHA / PR: `wr-035-season-total-distribution` / exact final head recorded by PR after this handoff commit / PR #124
 Execution mode used: Work Mode; pinned isolated Python replay
-Frozen protocol/hash: pre-scoring commit `cf9eed2`; hashes recorded in `WR035_INTEGRITY.json`
+Frozen protocol/hash: remote pre-scoring commit `b9b353e712b297ffaa801141cb87954be622ebd3`; hashes recorded in `WR035_INTEGRITY.json`
 Upstream WR-033/WR-034 replay verification: WR-033 exact 1,881-row aggregate; WR-034 3,508 rows, maximum delta `2.19e-13`
 Baselines/candidates tested: independence product; paired empirical residual mean/draws; WR033 × PREV_RATE; schedule-adjusted prior total; training-position mean
 Independence-product results: confirmation MAE 32.513, RMSE 53.176, bias -1.979; supported over primary baselines
