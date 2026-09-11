@@ -2,63 +2,95 @@
 
 HANDOFF
 
-Task ID: WR-016
-Role: Implementation Engineer
-Status: IMPLEMENTATION COMPLETE — PR #114 RECONCILED / READY FOR INDEPENDENT AUDIT
-Parallel Work Wave: PW-002
+Task ID: WR-026
+Role: Implementation Engineer / Builder
+Status: REMEDIATION COMPLETE — AUDIT_READY / PR #120 OPEN
 
-## Assignment
-Draft-Day Layout Efficiency Implementation
-
-Manager task spec: `.ai/manager/WR-016.md`
-Production implementation authorization: WR-016 ONLY
-
-## Final reconciliation
-- Canonical `main`: `8931b30d4f4f387504b17ac07d837aa87a166948`
-- Prior completed PR head: `1ac362be96909bc638b06a49702b31167e2e2a09`
-- Reconciled implementation/test head: `9edb3f488f3928676a6c706736cb913358edb436`
-- Reconciliation commit uses `1ac362be...` and `8931b30d...` as parents.
-- Reconciliation tree was built from canonical main and overlaid only with the original WR-016 file set.
-- Manager/Auditor/shared canonical files from `8931b30d...` were preserved unchanged except this Builder-owned handoff.
-- GitHub reports PR #114 mergeable/clean against `8931b30d...`.
+## Verified starting state
+- Remediation requested by WR-031 for `WR-031-AUD-01` and `WR-031-AUD-02` only.
+- Branch: `wr-026-phone-decision-view`
+- PR: #120
+- Current `main` at remediation refresh/final verification: `b54e8f01e696ffa5ff9cca54dc09bb10e3f8fa12`.
+- Main advancement from the prior WR-026 reconciliation point is control-plane/research only relative to the WR-026 production surface.
 - Builder merge performed: NO.
 
-## Final verified CI chain
-Reconciled implementation state:
-- War Room CI run `34364443102` (#834), job `102509419384` — PASS on `9edb3f488f3928676a6c706736cb913358edb436`.
+## Remediation completed
+### WR-031-AUD-01 — phone position state coherence
+- Phone position tabs now drive the same legacy position-filter state used by the board instead of maintaining a conflicting independent restriction.
+- Legacy WR/RB/QB/TE filter clicks continue to update the active phone context.
+- Pressure-position jumps replace a stale legacy primary-position restriction with the intended phone context.
+- Phone search temporarily uses legacy `ALL` so matching players across primary positions remain visible, then restores the selected phone context when search clears.
+- K/DST Endgame clears incompatible primary-position filtering while preserving existing endgame filtering behavior.
 
-Administrative verification heads:
-- `48a98396e77433e713974ee0e5a487610c22ad27`: push #835 / job `102510861352` PASS; PR merge-ref #836 / job `102510882518` PASS.
-- `392004dd4017fa9424783b1c0aec3de4e4ef72fa`: push #837 / job `102512533610` PASS; PR merge-ref #838 / job `102512554581` PASS.
-- `6d1b8e6f215c64bf91306148a7a10f5c8dc62441`: push #841 / job `102514274771` PASS; PR merge-ref #842 / job `102514296519` PASS.
+### WR-031-AUD-02 — Draft Setup reconstruction intent
+- Explicit phone Draft Setup open intent is stored outside the replaceable `<details>` element so Teams/Pick/Rounds command-bar reconstruction no longer resets it to the phone default-collapsed state.
+- Escape still closes Draft Setup and stabilizes focus restoration across a short bounded reconstruction window so focus remains on the replacement summary.
+- >600px default/open behavior is preserved.
 
-All final runs passed the full `npm test`, resilience syntax, guarded restore, and full 717-player offline reload gates.
+## Focused regression coverage
+Added `scripts/test-wr-026-audit-remediation.mjs` and wired it into `npm test`.
 
-## Implementation outcome
-WR-016 remains bounded to layout efficiency. It does not change ranking, scoring, recommendation, draft-state, persistence-schema, or ESPN-sync authority semantics.
+Deterministic coverage includes:
+- QB legacy filter -> RB phone tab;
+- WR legacy filter -> TE phone tab;
+- stale legacy filter -> pressure-position jump;
+- search expansion across WR/RB/QB/TE and restoration after clear;
+- Draft Setup open -> Teams change -> replacement remains open;
+- Draft Setup open -> Pick change -> replacement remains open;
+- Draft Setup open -> Rounds change -> replacement remains open;
+- Escape closes and restores focus to the replacement summary;
+- 820x900 guard confirms phone navigator remains hidden and pre-progress Draft Setup remains open above 600px.
 
-Implemented:
-- coordinated normal-flow draft control hierarchy instead of overlapping sticky layers
-- non-persistent branding during live draft work
-- native `Manage` disclosure for low-frequency/destructive controls while preserving immediate session/Taken/Mine access
-- Draft Setup progressive disclosure before/after meaningful draft progress
-- My Draft remains one action away
-- responsive position-filter grouping and frequent/touch target sizing
-- automatic command-surface reveal on off-screen On-the-Clock transition
-- fail-open layout initialization after stylesheet readiness
-- immediate On-the-Clock prominence without stale height animation
-- recovery/maintenance workflows remain reachable through Manage
+## Files changed by this remediation
+- `js/war-room-phone-decision-view.js`
+- `js/war-room-layout-efficiency.js`
+- `scripts/test-wr-026-audit-remediation.mjs`
+- `package.json`
+- `service-worker.js`
+- `.ai/builder/HANDOFF.md` — evidence only
 
-## Validation status
-- Level 1 static/implementation review: COMPLETE
-- Level 2 automated regression: COMPLETE
-- Level 3 deterministic simulated layout/draft workflows: COMPLETE
-- Level 4 real-device/manual visual use: NOT VERIFIED IN THIS BUILDER SESSION
+No `.ai/shared/*`, `.ai/manager/*`, `.ai/auditor/*`, ranking, scoring, recommendation, draft-state, persistence, ESPN-sync, or player-data authority files were modified by this remediation.
 
-## Authoritative final metadata
-PR #114 is the authoritative record for the frozen latest branch head, exact-head CI, generated merge-ref SHA, and mergeability. A Git commit cannot contain its own SHA or CI IDs generated after it exists, so this handoff records the completed reconciliation and CI chain while the PR records the immutable newest head/CI tuple.
+## Tests actually observed
+Production/test checkpoint: `1cf2981b4a0d72b7138bd40d73b76a9a1a99adb7`.
+Final audit-ready branch head is authoritative in PR #120 and final Builder chat handoff because a commit cannot record its own resulting SHA.
+
+Final push War Room CI on the evidence-only final head was run to completion; one first-attempt `test-command-bar` DOM-detachment timeout was reproduced as nondeterministic because the identical final SHA passed the parallel PR integration run and the push retry without code changes.
+
+Observed passing gates include:
+- dedicated WR-026 phone decision view: 320x700, 375x812, 390x844, 430x932 plus desktop/tablet guards;
+- `test:layout-efficiency-behavior`, including Escape/focus contract at 820x900;
+- new `test:wr026-audit-remediation` — PASS;
+- full `npm test` — PASS;
+- Companion extension 164/164 — PASS;
+- browser/draft/ESPN suites — PASS;
+- responsive overflow: 13 widths x Position/Overall, zero horizontal overflow — PASS;
+- draft invariant torture harness — PASS;
+- persistence/recovery and failure injection — PASS;
+- resilience syntax and guarded full 717-player offline reload — PASS.
+
+## Validation boundary
+Physical-phone / Level-4 validation: NOT VERIFIED in this Builder session.
+
+Ranking/scoring/recommendation semantics changed: NO.
+Draft-state semantics changed: NO.
+Persistence semantics/schema changed: NO.
+ESPN sync authority changed: NO.
+Desktop/tablet redesign: NO.
+
+## Open findings
+None known from Builder remediation validation.
+
+## Blocking issues
+None known for WR-031 re-audit. Independent audit remains mandatory before merge.
 
 ## Recommended next role
-Independent Auditor / QA.
+Independent Auditor / QA — resume WR-031 against the exact final head recorded by PR #120.
 
-Do not merge PR #114 from the Builder role.
+## Exact next action
+Re-audit `WR-031-AUD-01` and `WR-031-AUD-02` on PR #120, verify final-head/current-main CI and scope, then return the canonical Auditor verdict to Manager.
+
+## Checkpoint / SHA
+See PR #120 exact `head_sha`; final Builder response records the immutable exact value after all branch writes are complete.
+
+Do not merge PR #120 from the Builder role.

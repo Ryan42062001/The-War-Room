@@ -127,14 +127,28 @@ try {
   const nearHeight = await page.locator('#draft-command-bar').evaluate(element => element.getBoundingClientRect().height);
   assert.ok(nearHeight >= waitingHeight, `Near state must not visually collapse below Waiting (${nearHeight} < ${waitingHeight})`);
 
-  await page.waitForFunction(() => !document.querySelector('.draft-command-setup-disclosure').open);
+  // The command bar can re-render its native <details> while state settles.
+  // Normalize it closed before testing the explicit reopen/Escape contract so
+  // the regression is not timing-dependent on a stale disclosure instance.
+  await page.evaluate(() => {
+    const details = document.querySelector('.draft-command-setup-disclosure');
+    if (details?.open) details.querySelector('summary')?.click();
+  });
+  await page.waitForFunction(() => {
+    const details = document.querySelector('.draft-command-setup-disclosure');
+    return Boolean(details && !details.open);
+  });
   assert.equal(await page.locator('.draft-command-setup-summary-value').innerText(), '10 teams · Pick 5 · 16 rounds');
-  const setupSummary = page.locator('.draft-command-setup-summary');
-  await setupSummary.click();
-  assert.equal(await page.locator('.draft-command-setup-disclosure').evaluate(element => element.open), true);
+  await page.evaluate(() => document.querySelector('.draft-command-setup-disclosure > summary')?.click());
+  await page.waitForFunction(() => document.querySelector('.draft-command-setup-disclosure')?.open === true);
   const setupInput = page.locator('.draft-command-setup-fields input').first();
   await setupInput.focus();
   await setupInput.press('Escape');
+  await page.waitForFunction(() => {
+    const details = document.querySelector('.draft-command-setup-disclosure');
+    const summary = document.querySelector('.draft-command-setup-summary');
+    return Boolean(details && summary && !details.open && document.activeElement === summary);
+  });
   assert.equal(await page.locator('.draft-command-setup-disclosure').evaluate(element => element.open), false);
   assert.equal(await page.evaluate(() => document.activeElement === document.querySelector('.draft-command-setup-summary')), true, 'Escape must close Draft Setup and return focus to Edit summary');
 

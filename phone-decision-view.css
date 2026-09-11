@@ -1,0 +1,210 @@
+/* =========================================================
+   WR-026 PHONE-ONLY DECISION VIEW
+   Hidden and inert above 600px. The desktop/tablet board remains unchanged.
+   ========================================================= */
+
+.phone-decision-nav,
+.phone-position-show-more {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  body[data-board-view="position"] #tier-nav {
+    display: none;
+  }
+
+  /* The command surface already establishes draft state, recommendation and
+     pressure. Remove duplicate empty/heading chrome so actionable players
+     arrive in the opening phone viewport. Meaningful awareness remains. */
+  body[data-board-view="position"] .position-board-header,
+  body[data-board-view="position"] #draft-awareness-strip:not(.has-targets):not(.has-alerts) {
+    display: none;
+  }
+
+  body[data-board-view="position"] #position-decision-strip {
+    display: none;
+  }
+
+  /* Draft Setup is progressive disclosure on phone. The explicit marker is
+     applied by the layout coordinator after a real disclosure toggle; this
+     prevents a freshly re-rendered command bar from flashing/focusing fields
+     before the phone collapsed state has been synchronized. */
+  .draft-command-setup-disclosure:not([data-phone-user-open="true"]) > .draft-command-setup {
+    display: none !important;
+  }
+
+  body[data-board-view="position"] .phone-decision-nav {
+    display: block;
+    margin: 3px 0 6px;
+    padding: 5px;
+    border: 1px solid rgba(240,199,94,.22);
+    border-radius: 9px;
+    background: linear-gradient(180deg,rgba(240,199,94,.055),rgba(255,255,255,.018));
+    scroll-margin-top: 8px;
+  }
+
+  .phone-decision-heading,
+  .phone-decision-help {
+    display: none;
+  }
+
+  .phone-position-tabs {
+    display: grid;
+    grid-template-columns: repeat(5,minmax(0,1fr));
+    gap: 4px;
+  }
+
+  .phone-position-tab {
+    min-width: 0;
+    min-height: 44px;
+    padding: 5px 2px;
+    border: 1px solid rgba(255,255,255,.11);
+    border-radius: 7px;
+    color: #c7cec9;
+    background: rgba(255,255,255,.03);
+    font: inherit;
+    font-size: .58rem;
+    font-weight: 900;
+    letter-spacing: .025em;
+    cursor: pointer;
+  }
+
+  .phone-position-tab.active {
+    border-color: rgba(240,199,94,.6);
+    color: #16130c;
+    background: #f0c75e;
+    box-shadow: 0 0 0 1px rgba(240,199,94,.14);
+  }
+
+  .phone-position-tab:focus-visible,
+  .phone-position-show-more:focus-visible {
+    outline: 2px solid #f0c75e;
+    outline-offset: 2px;
+  }
+
+  .phone-position-tab-endgame {
+    font-size: .5rem;
+  }
+
+  body[data-board-view="position"] #position-tier-grid > .position-column {
+    display: none !important;
+  }
+
+  body[data-board-view="position"] #position-tier-grid > .position-column.phone-position-active {
+    display: block !important;
+  }
+
+  body[data-board-view="position"].phone-decision-search-active #position-tier-grid > .position-column {
+    display: block !important;
+  }
+
+  body[data-board-view="position"] .position-column.phone-position-active {
+    width: 100%;
+    min-width: 0;
+  }
+
+  body[data-board-view="position"] .position-column.phone-position-active .position-column-header {
+    min-height: 38px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
+  body[data-board-view="position"] .position-column.phone-position-active .position-tier-block > summary {
+    min-height: 40px;
+  }
+
+  body[data-board-view="position"] .position-player-card {
+    min-height: 44px;
+  }
+
+  body[data-board-view="position"] .position-player-card.phone-compact-hidden,
+  body[data-board-view="position"] .position-tier-block.phone-tier-hidden {
+    display: none !important;
+  }
+
+  body[data-board-view="position"] .phone-position-show-more:not([hidden]) {
+    display: flex;
+    width: 100%;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    margin: 7px 0 9px;
+    padding: 7px 10px;
+    border: 1px solid rgba(240,199,94,.3);
+    border-radius: 8px;
+    color: #e7d18c;
+    background: rgba(240,199,94,.055);
+    font: inherit;
+    font-size: .58rem;
+    font-weight: 900;
+    letter-spacing: .025em;
+    cursor: pointer;
+  }
+
+  body[data-board-view="position"] #position-endgame-section {
+    display: none;
+  }
+
+  body[data-board-view="position"] #position-endgame-section.phone-endgame-active,
+  body[data-board-view="position"].phone-decision-search-active #position-endgame-section {
+    display: block;
+  }
+
+  body[data-board-view="position"].phone-decision-endgame-active #position-tier-grid {
+    display: none;
+  }
+
+  /* Phone controls are intentionally easier to tap. These overrides stay
+     entirely below the WR-026 600px boundary. */
+  .board-view-btn,
+  .toolbar .filterbtn,
+  .toolbar .myteam-toggle,
+  .mark-mode-btn,
+  .draft-manage-summary,
+  #tier-nav button,
+  .draft-session-control select {
+    min-height: 44px;
+  }
+
+  .toolbar #searchBox {
+    min-height: 44px;
+    height: 44px;
+  }
+
+  .position-filter-strip .filterbtn {
+    min-width: 44px;
+  }
+
+  .draft-command-pressure {
+    min-height: 44px;
+  }
+
+  .draft-target-star {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .draft-manage-actions > button {
+    min-height: 44px;
+  }
+
+  body[data-board-view="position"].phone-decision-search-active .phone-position-show-more {
+    display: none !important;
+  }
+}
+
+@media (max-width: 340px) {
+  .phone-position-tabs {
+    gap: 3px;
+  }
+
+  .phone-position-tab {
+    font-size: .54rem;
+  }
+
+  .phone-position-tab-endgame {
+    font-size: .46rem;
+  }
+}

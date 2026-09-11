@@ -1,7 +1,8 @@
 /* =========================================================
    DRAFT-DAY LAYOUT EFFICIENCY
    Presentation-only coordination for live controls, secondary
-   maintenance disclosure, and progressive Draft Setup disclosure.
+   maintenance disclosure, progressive Draft Setup disclosure,
+   and the phone-only WR-026 decision view.
    Does not change draft state, scoring, recommendations, or sync.
    ========================================================= */
 
@@ -13,8 +14,12 @@
   var MANAGE_ID = 'draft-manage';
   var MANAGE_ACTIONS_ID = 'draft-manage-actions';
   var SETUP_DISCLOSURE_CLASS = 'draft-command-setup-disclosure';
+  var PHONE_DECISION_SCRIPT_ID = 'war-room-phone-decision-script';
   var observer = null;
   var setupEditing = false;
+  var setupFocusSummaryRequested = false;
+  var setupFocusStabilizeFrames = 0;
+  var phoneSetupDefaulted = false;
   var syncQueued = false;
   var lastCommandMode = '';
   var layoutReady = false;
@@ -56,6 +61,30 @@
     link.addEventListener('load', onReady, {once:true});
     link.addEventListener('error', reportStyleFailure, {once:true});
     document.head.appendChild(link);
+  }
+
+  function loadPhoneDecisionView() {
+    // The phone module observes its own board/view/resize inputs. Do not call
+    // refresh from the broad WR-016 class observer or the two observers can
+    // feed each other while dynamic command-bar controls are being focused.
+    if (window.WarRoomPhoneDecisionView) return;
+    if (document.getElementById(PHONE_DECISION_SCRIPT_ID)) return;
+
+    var script = document.createElement('script');
+    script.id = PHONE_DECISION_SCRIPT_ID;
+    script.src = 'js/war-room-phone-decision-view.js?v=20260910-2';
+    script.async = false;
+    script.addEventListener('error', function() {
+      if (typeof window.reportWarRoomEnhancementFailure === 'function') {
+        window.reportWarRoomEnhancementFailure('phone decision view');
+      }
+    }, {once:true});
+    document.head.appendChild(script);
+  }
+
+  function isPhoneLayout() {
+    try { return window.matchMedia('(max-width: 600px)').matches; }
+    catch (error) { return window.innerWidth <= 600; }
   }
 
   function hasDraftProgress() {
@@ -178,20 +207,47 @@
   function configureSetupDisclosure(details) {
     if (!details || details.dataset.layoutEfficiencyReady === 'true') return;
     details.dataset.layoutEfficiencyReady = 'true';
+    var summary = details.querySelector('summary');
+
+    // Preserve explicit user intent independently from native <details> toggle
+    // timing. The command bar can replace this disclosure while draft state is
+    // updating, so a delayed/programmatic toggle must never redefine whether
+    // the user intended Draft Setup to stay open.
+    if (summary) {
+      summary.addEventListener('click', function() {
+        if (hasDraftProgress() || isPhoneLayout()) setupEditing = !details.open;
+      });
+    }
+
     details.addEventListener('keydown', function(event) {
       if (event.key !== 'Escape' || !details.open) return;
       event.preventDefault();
       setupEditing = false;
+      setupFocusSummaryRequested = true;
+      setupFocusStabilizeFrames = 3;
       details.open = false;
-      var summary = details.querySelector('summary');
-      if (summary) summary.focus();
+      var currentSummary = details.querySelector('summary');
+      if (currentSummary) currentSummary.focus();
+      // Reconcile focus across a short bounded settle window. The command bar
+      // can replace this <details> on a later presentation frame; keeping the
+      // request alive prevents focus from falling to body after that replacement.
+      scheduleSynchronize();
     });
     details.addEventListener('toggle', function() {
-      if (hasDraftProgress()) setupEditing = details.open;
+      var phone = isPhoneLayout();
+
+      // On phones the setup fields are intentionally progressive disclosure.
+      // Mark an open state only after the disclosure has actually toggled so
+      // a freshly re-rendered command bar cannot briefly expose fields before
+      // WR-026 applies its collapsed default.
+      if (phone && details.open) details.dataset.phoneUserOpen = 'true';
+      else details.removeAttribute('data-phone-user-open');
+
       if (!details.open) {
         var active = document.activeElement;
-        if (active && active !== details.querySelector('summary') && details.contains(active)) {
-          details.querySelector('summary').focus();
+        var currentSummary = details.querySelector('summary');
+        if (active && currentSummary && active !== currentSummary && details.contains(active)) {
+          currentSummary.focus();
         }
       }
     });
@@ -221,13 +277,41 @@
     if (value && value.textContent !== nextSummary) value.textContent = nextSummary;
 
     var progressed = hasDraftProgress();
+    var phone = isPhoneLayout();
     if (!progressed) {
-      setupEditing = false;
-      details.open = true;
+      if (phone) {
+        if (!phoneSetupDefaulted) {
+          setupEditing = false;
+          phoneSetupDefaulted = true;
+        }
+        details.dataset.phoneDefaulted = 'true';
+        details.open = Boolean(setupEditing);
+        if (setupEditing) details.dataset.phoneUserOpen = 'true';
+        else details.removeAttribute('data-phone-user-open');
+      } else {
+        setupEditing = false;
+        phoneSetupDefaulted = false;
+        details.open = true;
+        details.removeAttribute('data-phone-defaulted');
+        details.removeAttribute('data-phone-user-open');
+      }
       details.dataset.progress = 'false';
     } else {
+      details.removeAttribute('data-phone-defaulted');
+      if (!phone) details.removeAttribute('data-phone-user-open');
       if (details.dataset.progress !== 'true') details.open = Boolean(setupEditing);
       details.dataset.progress = 'true';
+    }
+
+    if (setupFocusSummaryRequested && !details.open) {
+      var focusSummary = details.querySelector('summary');
+      if (focusSummary) focusSummary.focus();
+      if (setupFocusStabilizeFrames > 0) {
+        setupFocusStabilizeFrames--;
+        window.requestAnimationFrame(scheduleSynchronize);
+      } else if (focusSummary && document.activeElement === focusSummary && focusSummary.isConnected) {
+        setupFocusSummaryRequested = false;
+      }
     }
   }
 
@@ -260,6 +344,7 @@
     ensureSetupDisclosure();
     updateHeaderState();
     revealUrgentCommandState();
+    loadPhoneDecisionView();
   }
 
   function scheduleSynchronize() {
@@ -308,7 +393,7 @@
   }
 
   window.WarRoomLayoutEfficiency = {
-    version: 1,
+    version: 2,
     refresh: scheduleSynchronize,
     hasDraftProgress: hasDraftProgress,
     readDraftSettings: readDraftSettings,
