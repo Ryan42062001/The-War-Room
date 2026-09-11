@@ -1,35 +1,33 @@
 import assert from 'node:assert/strict';
 
 /**
- * Commit a value to a control whose containing view may rerender on the same
- * animation frame. Resolving and dispatching in one browser task prevents a
- * test locator from spanning two different render generations.
+ * Open a disclosure and commit one control value in the same browser task.
+ * The bounded render-frame loop re-resolves the current generation; once it
+ * is open, input/change dispatch completes synchronously before rendering can
+ * replace that generation.
  */
-export async function commitRerenderingControl(page, selector, value) {
-  const result = await page.locator(selector).evaluate((input, nextValue) => {
-    const rect = input.getBoundingClientRect();
-    const style = getComputedStyle(input);
-    if (style.display === 'none' || style.visibility === 'hidden' || rect.width <= 0 || rect.height <= 0) {
-      return {committed:false, reason:'not-visible'};
+export async function commitDisclosureControl(page, disclosureSelector, controlSelector, value) {
+  const result = await page.evaluate(async ({disclosureSelector, controlSelector, value}) => {
+    for (let frame = 0; frame < 20; frame++) {
+      let details = document.querySelector(disclosureSelector);
+      if (details && !details.open) details.querySelector(':scope > summary')?.click();
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      details = document.querySelector(disclosureSelector);
+      const input = details?.querySelector(controlSelector);
+      if (!details?.open || !input) continue;
+      const rect = input.getBoundingClientRect();
+      const style = getComputedStyle(input);
+      if (style.display === 'none' || style.visibility === 'hidden' || rect.width <= 0 || rect.height <= 0) continue;
+      input.value = value;
+      input.dispatchEvent(new Event('input', {bubbles:true}));
+      input.dispatchEvent(new Event('change', {bubbles:true}));
+      return {committed:true, value:input.value, renderFrames:frame + 1};
     }
-    input.value = String(nextValue);
-    input.dispatchEvent(new Event('input', {bubbles:true}));
-    input.dispatchEvent(new Event('change', {bubbles:true}));
-    return {committed:true, value:input.value};
-  }, String(value));
-  assert.deepEqual(result, {committed:true, value:String(value)});
-}
-
-/** Open the currently mounted disclosure and prove it survived scheduled UI renders. */
-export async function openStableDisclosure(page, selector) {
-  await page.waitForFunction(async detailsSelector => {
-    let details = document.querySelector(detailsSelector);
-    if (!details) return false;
-    if (!details.open) details.querySelector(':scope > summary')?.click();
-    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-    details = document.querySelector(detailsSelector);
-    return Boolean(details?.open);
-  }, selector);
+    return {committed:false};
+  }, {disclosureSelector, controlSelector, value:String(value)});
+  assert.equal(result.committed, true, 'current disclosure generation never became editable');
+  assert.equal(result.value, String(value));
+  assert.ok(result.renderFrames >= 1 && result.renderFrames <= 20);
 }
 
 /**
