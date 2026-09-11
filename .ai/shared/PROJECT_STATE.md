@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — RETURNING-PLAYER V2 SOURCE CUSTODY
+Status: ACTIVE DEVELOPMENT — SOURCE CUSTODY CAPABILITY RECOVERY / CI REMEDIATION AUDIT
 Last verified: 2026-09-11
 Owner: Manager / Architect
 Workflow: V3
@@ -18,75 +18,73 @@ UNCHANGED under WR-D001:
 
 No custom ranking is production-authorized.
 
-## Frozen boundaries
-WR-021 / WR-023 remain accepted and frozen. No development work may inspect or substitute 2026 regular-season outcomes into the frozen prospective research chain.
+## Frozen research boundaries
+WR-021 / WR-023 remain accepted and frozen. No development work in this chain may inspect or substitute 2026 regular-season outcomes.
 
-WR-033 remains historical Returning-Player v1 under WR-D005. WR-034 remains accepted historical expected-games research under WR-D006. WR-D007 closed the v1 Phase-5 path as insufficiently provable and authorized the versioned v2 reset.
+WR-033 remains historical Returning-Player v1 under WR-D005. WR-034 remains accepted historical expected-games research under WR-D006. WR-D007 closed the v1 Phase-5 path as insufficiently provable. WR-D008 accepts the independently audited Returning-Player v2 evidence contract at WR-039 exact head `00a9e787e716d6697e6cd0d9252982a672abbbe0`, machine-lock SHA-256 `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`.
 
-## WR-D008 — v2 evidence contract ACCEPTED
-The prospective Returning-Player v2 evidence/provenance/rights/retention/reproducibility contract is accepted at exact audited WR-039 head:
+No model scoring is authorized.
 
-`00a9e787e716d6697e6cd0d9252982a672abbbe0`
+## WR-042 — BLOCKED / FAIL-CLOSED SOURCE CUSTODY
+R&D published immutable blocker PR #133 head:
 
-Machine-lock SHA-256:
-`3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`
+`1c3c6d768d58aa636194226f16b9822eebc8c19f`
 
-WR-040 independently returned:
-`PASS WITH NON-BLOCKING FINDINGS`.
+Disposition:
+`FAIL_CLOSED_CUSTODY_UNAVAILABLE`
 
-Audit head: `c68ef98b27f81e8e1fb26a36a1d2f8d5739b8824`.
-Audit PR #130 merged at `24c375775d58a0d8a4c178576efde5df64a3eedd`.
-Research PR #127 was then merged without rewriting the audited commit at `a0f090e5c8bbbf513e34c24a3fead7df2c094d44`; exact audited head `00a9e787...` is a direct parent of that merge.
+R&D identified provider metadata for 16 required source objects but could not establish the contract-required approved exact-byte acquisition plus project-controlled access-controlled immutable primary custody and independently retrievable project-controlled backup in the available execution environment.
 
-No CRITICAL/HIGH/MEDIUM contract findings remain. LOW `WR-040-AUD-01` records repository browser-CI nondeterminism outside the audited research surface.
+No source instance was admitted. No cohort/source-eligibility parse/use occurred. No 2026 outcomes, model fitting/scoring/evaluation, outcome join, production change, frozen-artifact change, or Phase-6 work occurred.
 
-The accepted contract does NOT authorize model scoring.
+PR #133 is blocker evidence, not an auditable custody success target.
 
-## WR-042 — ACTIVE / ASSIGNED TO R&D
-`Returning-Player v2 Exact Source-Custody Freeze`
+## WR-043 — REMAINS BLOCKED
+Do NOT activate WR-043 against PR #133. There is no admitted source-custody target to audit.
 
-R&D must now acquire, hash, rights-classify, retain, and freeze exact source instances under the accepted contract without fitting/scoring/evaluation or outcome joins.
+WR-043 may activate only after a later bounded R&D custody re-attempt produces one immutable admitted source-custody head.
 
-Only contract-v1.0.0 source classes are admitted:
-- `NFLVERSE_PLAYER_SUMMARY_STATS`
-- `NFLVERSE_PLAYERS_METADATA_MINIMAL`
-- `NFLVERSE_DRAFT_CAPITAL_MINIMAL`
+## WR-046 — ASSIGNED / SOURCE-CUSTODY CAPABILITY RECOVERY
+The WR-042 blocker is now routed to Work Helper / Super Troubleshooter as a cross-role execution/storage recovery task.
 
-Required evidence includes exact source/release/asset identity, byte SHA-256, schema/hash, row count, approved fields, cutoff semantics, per-instance rights disposition, project-controlled immutable custody, independently retrievable second copy, source-snapshot manifest/hash, and deterministic no-outcome cohort/source-eligibility evidence.
+Execution mode: `STANDARD_CHAT`.
 
-If exact lawful independently auditable custody cannot be established, WR-042 must fail closed rather than substitute or infer evidence.
+This task deliberately does not require Work-mode credits. Work Helper must establish or prove a reproducible rights-compatible capability for exact-byte acquisition, project-controlled access-controlled content-addressed primary custody, independently retrievable backup custody, later retrieval/digest verification, and overwrite/version-retention protection.
 
-No model protocol/scoring task may start from WR-042 alone.
+WR-046 does not admit Returning-Player sources and may not weaken WR-D008. If an external storage/account connection needs explicit user authorization, it must return the exact minimal action required rather than inventing credentials or evidence.
 
-## WR-043 — BLOCKED / INDEPENDENT SOURCE-CUSTODY AUDIT
-WR-043 may activate only after WR-042 publishes one immutable no-scoring source-custody PR/head.
+## WR-047 — BLOCKED / INDEPENDENT CAPABILITY AUDIT
+If WR-046 implements a usable custody capability, WR-047 must independently audit it before Manager allows R&D to use it for actual source custody.
 
-A PASS-family WR-043 verdict may authorize Manager to create a later **model-protocol freeze** task only. It still does not authorize scoring by itself.
+A PASS-family WR-047 verdict may authorize only a bounded R&D custody re-attempt. It does not admit sources or authorize model scoring.
 
-## Parallel repository-reliability lane
-### WR-044 — ACTIVE / ASSIGNED TO WORK HELPER
-LOW finding `WR-040-AUD-01` is now a bounded Work Helper / Super Troubleshooter assignment.
+## WR-044 — COMPLETE / AUDIT READY
+Work Helper completed browser-CI determinism/state-isolation remediation on PR #132 exact head:
 
-WR-044 investigates recurring browser-CI nondeterminism/state-isolation failures seen on research/audit-only changes, including command-bar detach/hidden interaction and unexpected persisted browser state.
+`e750748d938ed6bb8284eeec1cfda9eea77997ac`
 
-Work Helper has no fixed attempt ceiling. It may modify authorized CI/test-harness surfaces only and must not weaken assertions, mask failures with blanket retries, or change production/user-facing behavior. If production scope is required, it must stop with `ROOT CAUSE REQUIRES PRODUCTION SCOPE EXPANSION`.
+Scope is confined to `.ai/work_helper/**`, `.github/workflows/ci.yml`, and `scripts/**` test/CI harness files. No production/user-facing source or football research file is in the diff.
 
-### WR-045 — BLOCKED / INDEPENDENT CI REMEDIATION AUDIT
-Any WR-044 remediation must pass independent audit before Manager acceptance.
+Exact-head War Room CI run `34632427369` is `SUCCESS` on the final recorded attempt. The worker reports three consecutive exact-head successful attempts with targeted stress plus complete-suite validation. This evidence now requires independent WR-045 review.
+
+## WR-045 — ASSIGNED / INDEPENDENT CI REMEDIATION AUDIT
+Auditor must audit PR #132 exact head `e750748d938ed6bb8284eeec1cfda9eea77997ac` without modifying or merging it.
+
+Audit root-cause validity, assertion/coverage preservation, no retry masking, command-bar lifecycle determinism, persistence/state isolation, recovery/layout readiness, repeated validation evidence, CI accuracy, and no production drift.
 
 ## Phase 6
 Phase 6 replacement/cross-position draft value remains BLOCKED until a later v2 model + season-total path is independently accepted and Manager explicitly opens the gate.
 
 ## Current roles
-- Manager: IDLE after next-wave reconciliation
+- Manager: reconciling WR-042 / WR-044 returns
 - Builder: IDLE
 - Draft Strategy: IDLE
-- R&D: ACTIVE / ASSIGNED — WR-042
-- Auditor: IDLE / BLOCKED — WR-043 and WR-045
-- Work Helper: ACTIVE / ASSIGNED — WR-044
+- R&D: IDLE / WR-042 BLOCKED
+- Auditor: ACTIVATE — WR-045
+- Work Helper: ACTIVATE — WR-046 in STANDARD_CHAT
 
 ## Next gates
-1. WR-042 immutable no-scoring source-custody checkpoint -> WR-043 independent audit.
-2. WR-043 PASS-family -> Manager may create a model-protocol freeze task; scoring remains separately gated.
-3. In parallel, WR-044 CI/test-harness remediation -> WR-045 independent audit -> Manager acceptance.
-4. Production ranking authority remains WR-D001 throughout.
+1. WR-045 verdict on PR #132 exact head -> Manager acceptance/merge or remediation.
+2. WR-046 custody-capability recovery -> WR-047 audit if implemented, or Manager/user authorization if an external backend is the only remaining blocker.
+3. After WR-047 PASS-family, Manager may issue a bounded R&D source-custody re-attempt; WR-043 remains blocked until that later R&D task actually admits and freezes source custody.
+4. Model scoring remains forbidden throughout.
