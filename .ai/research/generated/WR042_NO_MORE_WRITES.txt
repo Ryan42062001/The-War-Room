@@ -1,0 +1,1 @@
+The next repository mutation for WR-042 is PR metadata only. Do not advance this branch after the immutable PR is opened.
