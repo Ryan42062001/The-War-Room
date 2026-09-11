@@ -4,7 +4,7 @@ HANDOFF
 
 Task IDs: WR-042 / WR-043 / WR-044 / WR-045 / WR-046 / WR-047
 Role: Manager / Architect
-Status: WR-042 FAIL-CLOSED BLOCKER / WR-045 AUDIT ACTIVATION / WR-046 STANDARD-CHAT RECOVERY
+Status: WR-042 FAIL-CLOSED BLOCKER / WR-045 COMPLETE PASS / WR-046 FREE BACKEND AUTHORIZED — USER PROVISIONING REQUIRED
 
 ## Canonical evidence architecture
 WR-D008 remains controlling for Returning-Player v2 evidence custody.
@@ -24,67 +24,60 @@ R&D published blocker PR #133 exact immutable head:
 Disposition:
 `FAIL_CLOSED_CUSTODY_UNAVAILABLE`
 
-The worker identified metadata for the required 16 provider objects but could not establish the contract-required exact downloaded-byte path into approved access-controlled project-controlled immutable primary custody plus an independently retrievable project-controlled backup.
+No source was admitted. Do not activate WR-043 against PR #133.
 
-No source was admitted. No cohort/source-eligibility parse/use occurred. No 2026 outcomes/model/outcome-join/production/Phase-6 work occurred.
-
-Do not activate WR-043 against PR #133. It is blocker evidence, not an admitted custody target.
-
-## WR-046 — ASSIGNED TO WORK HELPER / STANDARD CHAT
+## WR-046 — BACKEND ARCHITECTURE AUTHORIZED
 Task: `Source-Custody Capability Recovery`
 Assignment mode: `CROSS-ROLE RECOVERY`
 Execution mode: `STANDARD_CHAT`
-Branch after Manager integration: `wr-046-custody-capability-recovery`
+Branch: `wr-046-custody-capability-recovery`
+Current blocker PR: #135
 
-Purpose: solve the exact execution/storage capability gap without spending Work-mode credits and without transferring source-admission authority from R&D.
+The Manager approves a free-tier two-provider architecture without weakening WR-D008 / WR-039:
 
-Work Helper must prove or implement exact-byte acquisition, content-addressed access-controlled primary custody, independently retrievable backup custody, later retrieval/digest verification, and overwrite/version-retention protection using lawful non-sensitive fixture evidence.
+- Primary: private Backblaze B2 bucket with Object Lock and content-addressed SHA-256 keys.
+- Independent backup: private Cloudflare R2 bucket with Bucket Locks and identical content-addressed keys.
+- Retention for capability proof: indefinite storage-layer lock.
+- Authentication: least-privilege bucket-scoped credentials stored only in GitHub Actions protected secrets or equivalent secret storage.
+- GitHub Actions artifacts and mutable upstream URLs remain transport/cache only, never authority.
 
-It must not place potentially restricted source bytes into public GitHub, admit actual v2 sources, inspect 2026 outcomes, perform model work, or weaken WR-D008.
+The current WR-042 source set is only on the order of megabytes, so both providers' current 10 GB free allowances are materially larger than the present evidence footprint. Pricing is not part of evidence identity; if free-tier terms later change, the custody requirement remains.
 
-If an external backend/account connection requires explicit user authorization, return exactly:
-`CUSTODY BACKEND REQUIRED — USER AUTHORIZATION`
-with the minimum required action.
+### Required user provisioning
+Before WR-046 can complete live proof, the user must create:
+1. dedicated private Backblaze B2 bucket for The War Room with Object Lock enabled;
+2. dedicated private Cloudflare R2 bucket for The War Room with an indefinite lock rule covering custody objects;
+3. least-privilege B2 application key scoped to that bucket;
+4. least-privilege R2 API/S3 credential scoped to that bucket;
+5. corresponding protected GitHub Actions secrets and non-secret endpoint/bucket metadata.
 
-If the audited contract itself would have to change, return:
-`SOURCE CONTRACT VERSION BUMP REQUIRED`.
+Do not use or paste master/root credentials into repository files or chat.
+
+After provisioning, resume WR-046 on existing PR #135, replace the superseded AWS proposal with B2 + R2, and complete exact fixture upload -> direct retrieval from both providers -> SHA-256/size equality -> lock/retention verification. Then WR-047 may audit the immutable completed head.
 
 ## WR-047 — BLOCKED AUDIT
-If WR-046 implements a usable capability, WR-047 independently audits it before Manager may send R&D back to exact source custody.
+Do not activate until WR-046 produces a complete implemented custody proof.
 
-A PASS-family verdict authorizes only a bounded R&D custody re-attempt, not source admission or model scoring.
-
-## WR-044 — COMPLETE / AUDIT READY
-Work Helper completed PR #132 exact immutable head:
+## WR-044 / WR-045
+WR-044 target remains PR #132 exact head:
 `e750748d938ed6bb8284eeec1cfda9eea77997ac`
 
-Manager verified changed-file scope is limited to `.ai/work_helper/**`, `.github/workflows/ci.yml`, and `scripts/**` test/CI-harness files.
+WR-045 independently returned `PASS` on that exact head with no findings. Manager integration of WR-044/045 is still pending and may proceed separately after the custody lane is moving.
 
-Exact-head War Room CI run `34632427369` is `SUCCESS` on the final recorded attempt. PR #132 reports three consecutive exact-head successful attempts with targeted stress and complete-suite validation.
-
-Do not merge before independent audit.
-
-## WR-045 — ASSIGNED TO AUDITOR
-Audit target:
-PR #132 / `e750748d938ed6bb8284eeec1cfda9eea77997ac`
-
-Audit root cause, effective assertion/coverage preservation, absence of retry masking, command-bar generation handling, persistence/state isolation, recovery/layout readiness, repeated validation, exact-head CI accuracy, and no production drift.
-
-Auditor must not modify or merge PR #132.
-
-## Staffing after Manager integration
-- Manager: IDLE after reconciliation
+## Staffing
+- Manager: ACTIVE for WR-046 backend authorization / external-provisioning handoff
 - Builder: IDLE
 - Draft Strategy: IDLE
 - R&D: IDLE / WR-042 BLOCKED
-- Auditor: ACTIVE / ASSIGNED — WR-045
-- Work Helper: ACTIVE / ASSIGNED — WR-046 in STANDARD_CHAT
+- Auditor: IDLE after WR-045 PASS
+- Work Helper: BLOCKED only on WR-046 external backend provisioning
 - WR-043: BLOCKED
 - WR-047: BLOCKED
 
 ## Next gates
-1. WR-045 verdict on PR #132 exact head -> Manager acceptance/merge or remediation.
-2. WR-046 capability recovery -> WR-047 audit if implemented, or Manager/user action if explicit backend authorization remains.
-3. WR-047 PASS-family -> Manager may issue a bounded R&D exact source-custody re-attempt.
-4. WR-043 remains blocked until that later R&D task actually produces admitted immutable custody.
-5. Model scoring remains forbidden.
+1. User provisions approved B2 + R2 custody backends and protected GitHub Actions credentials.
+2. Work Helper resumes WR-046 in STANDARD_CHAT and completes live fixture proof.
+3. WR-047 independently audits exact completed WR-046 head.
+4. PASS-family WR-047 -> Manager may issue bounded R&D source-custody re-attempt.
+5. WR-043 remains blocked until R&D actually produces admitted immutable custody.
+6. Model scoring remains forbidden.
