@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-11T14:39:00Z",
+  "updated_at_utc": "2026-09-11T15:10:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": ["PLANNED","BLOCKED","ASSIGNED","IN_PROGRESS","MANAGER_REVIEW_READY","AUDIT_READY","MERGE_READY","REWORK_REQUIRED","MERGED","CLOSED"],
@@ -142,6 +142,25 @@
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
       "next_gate": "WR-039 immutable contract -> WR-040 independent audit -> Manager may authorize a new v2 scoring/evaluation task only after PASS-family verdict"
+    },
+    {
+      "task_id": "WR-041",
+      "owner": "Manager",
+      "status": "IN_PROGRESS",
+      "task_file": ".ai/manager/WR-041.md",
+      "role_handoff": ".ai/manager/HANDOFF.md",
+      "assignment_main_sha": "6bc66fa6c779e558940ca6cc3f267441def62595",
+      "worker_checkpoint_sha": null,
+      "branch": "manager/wr-041-work-helper-role",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT",
+      "audit_required": false,
+      "blocked_on": [],
+      "allowed_path_prefixes": [".ai/"],
+      "forbidden_path_prefixes": ["src/", "public/"],
+      "forbidden_exact_paths": [],
+      "next_gate": "Manager exact-head CI -> control-plane merge -> Work Helper remains IDLE until a real troubleshooting assignment exists"
     }
   ]
 }
