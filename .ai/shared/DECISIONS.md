@@ -117,3 +117,24 @@ RATIONALE: WR-037 exhaustively attempted recovery of the deleted frozen nflverse
 EVIDENCE: PR #124 final blocker head `701bd4924a8595f2e17d946b39b1189ac2ef7eea`; `.ai/research/WR037_UPSTREAM_IDENTITY_BLOCKER.md`; WR-037 R&D handoff; exact-head War Room CI run `34587084283` SUCCESS; WR-036 audit evidence merged via PR #125.
 ALTERNATIVES REJECTED: Treat active-row aggregate metric equality as proof of full-cohort WR-033 identity; continue remediating WR-036 findings 2–5 on an uncertifiable v1 base; represent newly sourced metadata as the deleted frozen asset; abandon all custom projection research solely because the historical upstream payload is unavailable.
 REVISIT CONDITION: A trustworthy exact copy of the deleted WR-033 upstream asset or a pre-existing complete keyed reference is recovered, or the v2 evidence-contract audit demonstrates that the authorized prospective architecture is itself not viable.
+
+---
+
+## DECISION WR-D008
+
+DATE: 2026-09-11
+TASK: WR-039 / WR-040 — Returning-Player v2 evidence-contract acceptance
+STATUS: ACTIVE — RESEARCH / DEVELOPMENT ARCHITECTURE ONLY
+DECISION:
+- Accept `wr-returning-player-v2-evidence-contract/1.0.0` at exact audited WR-039 head `00a9e787e716d6697e6cd0d9252982a672abbbe0` with machine-lock SHA-256 `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a` as the governing evidence/provenance/rights/retention/reproducibility architecture for the Returning-Player v2 research path.
+- Accept WR-040 final verdict `PASS WITH NON-BLOCKING FINDINGS`. No CRITICAL/HIGH/MEDIUM contract findings remain. LOW finding `WR-040-AUD-01` concerns repository browser-CI nondeterminism outside the audited research surface and is tracked separately under WR-044/WR-045.
+- The next authorized v2 research action is only a no-scoring exact source-custody checkpoint (WR-042) followed by independent source-custody audit (WR-043).
+- No model fitting, scoring, tuning, comparison, evaluation, ranking, target/outcome join, production change, 2026 regular-season outcome inspection, or Phase-6 work is authorized by this decision.
+- Before future scoring, the accepted chronology is: exact source custody -> independent custody audit -> Manager-authorized model-protocol freeze -> later scoring/evaluation with pre-outcome keyed prediction evidence -> independent model-result audit -> later season-total composition -> independent composition audit.
+- Exact source instances must be content-addressed and independently auditable. Mutable URLs or expiring CI artifacts cannot be sole authority. Raw bytes must be retained under project-controlled immutable custody where rights permit; rights-limited sources require a lawful independently verifiable evidence path or must fail closed.
+- Any semantic expansion of source classes, admitted columns, evidence requirements, or versioned contract meaning requires a new contract version plus Manager disposition and independent audit before affected scoring.
+- WR-D001 remains production ranking authority; WR-021/WR-023 remain frozen; WR-033/WR-034 remain historical v1 research components and are not rewritten.
+RATIONALE: WR-040 independently verified that the v2 contract directly addresses the provenance/custody failure that blocked WR-037, including exact source identity, full-row keyed evidence, durable custody, rights controls, deterministic locks, and prospective chronology. Accepting the contract while retaining separate source-custody/model-protocol/result audits preserves rigor without abandoning the custom projection research program.
+EVIDENCE: WR-039 PR #127 immutable head `00a9e787e716d6697e6cd0d9252982a672abbbe0`; machine lock `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`; WR-040 audit head `c68ef98b27f81e8e1fb26a36a1d2f8d5739b8824`; audit PR #130 merged at `24c375775d58a0d8a4c178576efde5df64a3eedd`; research PR #127 merged preserving the audited commit as a parent at `a0f090e5c8bbbf513e34c24a3fead7df2c094d44`; PR #130 unchanged-head CI retry run `34621843706` attempt 2 SUCCESS.
+ALTERNATIVES REJECTED: authorize scoring immediately after contract audit; skip independent exact-source custody; allow mutable-source reconstruction after results; treat rights uncertainty as non-blocking; reopen/relabel the uncertifiable WR-033 v1 replay chain.
+REVISIT CONDITION: WR-043 finds the accepted custody architecture cannot be satisfied in practice; a required new source/field demands a contract version bump; or later independently audited evidence justifies a new explicit architecture decision.
