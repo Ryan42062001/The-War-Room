@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — PHASE 5 REMEDIATION
+Status: ACTIVE DEVELOPMENT — RETURNING-PLAYER V2 EVIDENCE RESET
 Last verified: 2026-09-11
 Owner: Manager / Architect
 Workflow: V3
@@ -16,87 +16,86 @@ UNCHANGED under WR-D001:
 - broader FantasyPros PPR ECR fallback;
 - ESPN rank/ADP timing only.
 
+No custom ranking is production-authorized by the v2 research reset.
+
 ## Frozen prospective contract
 WR-021 and WR-023 remain accepted/frozen. No post-kickoff development may inspect 2026 regular-season outcomes or modify/substitute the frozen snapshot/protocol.
 
 ## Completed production phone lane
 WR-026 is COMPLETE / MERGED via PR #120. WR-031 re-audit PASS resolved prior findings. Physical-phone Level-4 remains NOT VERIFIED. Builder remains IDLE.
 
-## Returning-player architecture
-WR-033 remains frozen under WR-D005. WR-034 remains COMPLETE / ACCEPTED / MERGED under WR-D006 as the separate availability/continuation layer. No custom-ranking production authority is granted.
+## Historical returning-player research architecture
+WR-033 remains the historical Returning-Player v1 specification under WR-D005. WR-034 remains COMPLETE / ACCEPTED / MERGED under WR-D006 as the separate availability/continuation layer.
 
-## Phase 5 — season-total distribution
-WR-035 research remains on open PR #124. The previously audited immutable head was `9b4769899dd73f7c94679df6b6c67158e3ee39b6`.
+WR-033 history is NOT rewritten. Its later Phase-5 composition chain cannot be fully certified because the exact frozen upstream Players asset used by the v1 expected-performance path is no longer recoverable and no retained artifact contains complete keyed feature/prediction evidence for all scored rows.
 
-WR-036 independent audit returned:
+WR-034 remains independently well-proven on its own accepted evidence. Any future v2 reuse of WR-033 or WR-034 concepts must be explicitly versioned and may not claim unavailable v1 input identity.
+
+## Closed v1 Phase-5 path — insufficient evidence
+WR-035 / PR #124 originally proposed `INDEPENDENCE PRODUCT SUPPORTED`.
+
+WR-036 independently returned:
 `FAIL — REMEDIATION REQUIRED`.
 
-Manager disposition: ACCEPT THE AUDIT VERDICT; DO NOT MERGE PR #124. Route bounded remediation through WR-037, then independent re-audit through WR-038.
+WR-037 then executed the required fail-closed upstream-identity gate and returned:
+`REMEDIATION BLOCKED — UPSTREAM IDENTITY NOT PROVABLE`.
 
-### Blocking finding
-WR-035 did not prove exact frozen WR-033 identity for all 3,508 scored rows after substituting a mutable `players.csv`. Its replay gate checked aggregate active-row metrics across 1,881 rows rather than keyed row-level feature/prediction identity, while 1,627 zero-game rows still consumed WR-033 predictions.
+Verified WR-037 blocker target:
+- PR #124 final head: `701bd4924a8595f2e17d946b39b1189ac2ef7eea`;
+- exact-head War Room CI run `34587084283`: SUCCESS;
+- no remediation addendum or rescoring occurred;
+- WR-036 findings 2–5 were not attempted after the mandatory stop;
+- no 2026 outcomes, frozen-artifact changes, production changes, or Phase-6 work occurred.
 
-### Additional remediation findings from the final published WR-036 audit
-- frozen residual fallback order was not implemented exactly;
-- predeclared stable-player clustered RMSE and interval-score contrasts were missing;
-- paired uncertainty quantiles are not coherent with the selected raw central estimator unless explicitly narrowed/reworked;
-- six raw central season-total estimates are negative/out of domain without an approved deterministic policy.
+The core failure is evidentiary, not a demonstrated model-performance failure: the deleted frozen nflverse Players asset cannot be reconstructed and no retained artifact contains trustworthy keyed WR-033 features/predictions for the complete 3,508-row Phase-5 cohort, especially the 1,627 zero-game rows.
 
-### Evidence that remains useful
-- WR-034 replay is keyed across all 3,508 rows with maximum prediction delta about `2.19e-13`;
-- the paired dependence-aware challenger genuinely failed the frozen development gate;
-- deterministic replay reproduced the submitted substituted-input artifacts;
-- high-value uncertainty undercoverage remains explicitly qualified rather than overstated;
-- PR #124 remains research-only;
-- no 2026 outcomes or Phase-6 value work were identified.
+Under WR-D007:
+- WR-035 is CLOSED as insufficiently provable;
+- WR-037 is CLOSED fail-closed;
+- WR-038 is CLOSED without activation because no valid remediated v1 target exists;
+- PR #124 must remain unmerged and is preserved only as historical research/blocker evidence.
 
-## Audit evidence
-WR-036 audit evidence was integrated via PR #125.
+## Returning-Player v2 evidence reset
+Manager decision WR-D007 authorizes a new explicitly versioned v2 research path without weakening the v1 audit standard.
 
-Final audit branch/head before merge:
-- branch `audit/wr-036-pr124-9b47698`
-- `d153d3d1960c1def42358479b611ab7d3423a5c1`
+### WR-039 — ACTIVE / ASSIGNED TO R&D
+Objective: freeze a prospective Returning-Player v2 source/provenance/rights/retention/reproducibility contract BEFORE any new model scoring.
 
-Earlier checkpoint `16a48a2c5fde58d43504ebcaa7990ccd49c15086` exists but is two commits behind the final published audit head.
+Hard requirements include:
+- exact versioned source inventory and cutoff semantics;
+- rights/license/redistribution disposition;
+- durable non-expiring evidence retention;
+- exact raw-source retention where lawful, or independently auditable rights-compatible derived evidence where raw retention is not lawful;
+- complete keyed feature/preprocessing/prediction evidence for every future scored row, including zero-game rows;
+- deterministic machine lock, environment/code/source hashes, and fail-closed behavior;
+- explicit v1/v2 non-equivalence;
+- NO model scoring or 2026 outcome inspection in WR-039.
 
-PR #125 changed only:
-- `.ai/auditor/HANDOFF.md`
-- `.ai/auditor/WR-036_AUDIT.md`
+### WR-040 — BLOCKED INDEPENDENT CONTRACT AUDIT
+WR-040 may start only after WR-039 publishes one immutable evidence-contract PR/head.
 
-Its first integration CI attempt hit the already observed command-bar hidden/detached timeout. One bounded unchanged-head retry completed SUCCESS. Manager then squash-merged PR #125 at `793c091b6c68012e37c021be1bd753d4406c679b`.
+The Auditor must certify the contract/provenance architecture before Manager can authorize any v2 model scoring/evaluation task.
 
-## Active remediation
-WR-037 is ASSIGNED to R&D on the existing WR-035 research branch / PR #124.
+No new v2 scoring task exists yet.
 
-WR-037 must resolve the full current WR-036 finding set, including:
-1. exact keyed WR-033 feature/prediction identity for all 3,508 scored rows;
-2. frozen residual fallback fidelity;
-3. clustered MAE/RMSE/interval-score contrasts;
-4. central/distribution coherence or an explicitly narrowed diagnostic-only uncertainty contract;
-5. deterministic negative/out-of-domain output policy.
+## Phase 6
+Phase 6 replacement/cross-position draft value remains BLOCKED.
 
-A remediation addendum / machine lock must be committed before affected rescoring. No opportunistic model-family reopening or result-driven retuning is authorized.
-
-If full frozen WR-033 identity cannot be established, R&D must fail closed rather than relabel the substituted-input experiment as exact replay.
-
-## Re-audit
-WR-038 is BLOCKED until WR-037 publishes one immutable remediated PR #124 head. Auditor must then independently verify all remediated findings and regression-check the previously passing Phase-5 evidence.
-
-Phase 6 remains BLOCKED until WR-038 returns an acceptable PASS-family verdict and Manager separately accepts/merges/freezes Phase 5.
+It may not start until a later v2 expected-performance/season-total path has been scored under the audited evidence contract, independently audited, and explicitly accepted by Manager.
 
 ## Current roles
-- Manager: IDLE after reconciliation
+- Manager: ACTIVE for WR-D007 integration / then IDLE
 - Builder: IDLE
 - Draft Strategy: IDLE
-- R&D: ACTIVE/ASSIGNED — WR-037
-- Auditor: IDLE — WR-036 complete; WR-038 blocked
+- R&D: ASSIGNED — WR-039
+- Auditor: IDLE — WR-040 blocked
 - Temporary Troubleshooting: NOT INSTANTIATED
 
 ## Next gates
-- WR-037 bounded R&D remediation -> immutable PR #124 head.
-- Manager activates WR-038 only against that exact head.
-- WR-038 PASS-family verdict -> Manager Phase-5 merge/freeze decision.
-- FAIL -> further bounded remediation; do not activate Phase 6.
-- Only after Phase 5 is accepted/merged may Manager activate replacement/cross-position value validation.
+1. Integrate WR-D007 and close PR #124 unmerged as historical blocker evidence.
+2. WR-039 freezes one immutable prospective v2 evidence contract without scoring.
+3. Manager pins that exact contract head and activates WR-040.
+4. WR-040 PASS-family verdict -> Manager may create a new v2 scoring/evaluation research task.
+5. Only after later season-total acceptance may Phase 6 be activated.
 
-No custom-ranking production-authority change is authorized.
+Production authority remains WR-D001 throughout.
