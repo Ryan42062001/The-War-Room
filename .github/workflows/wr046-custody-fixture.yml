@@ -1,0 +1,39 @@
+name: WR-046 Custody Fixture Acquisition
+
+on:
+  push:
+    branches:
+      - wr-046-custody-capability-recovery
+    paths:
+      - '.github/workflows/wr046-custody-fixture.yml'
+      - 'scripts/custody/**'
+      - '.ai/work_helper/**'
+  pull_request:
+    paths:
+      - '.github/workflows/wr046-custody-fixture.yml'
+      - 'scripts/custody/**'
+      - '.ai/work_helper/**'
+
+permissions:
+  contents: read
+
+jobs:
+  exact-release-byte-fixture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Acquire jq release fixture by immutable GitHub asset ID
+        run: |
+          python3 scripts/custody/acquire_github_release_asset.py \
+            --repository jqlang/jq \
+            --asset-id 453012755 \
+            --expected-sha256 01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed \
+            --expected-size 14380 \
+            --output "$RUNNER_TEMP/wr046-jq-attestation.json"
+      - name: Independently verify fixture digest and byte size
+        run: |
+          test "$(sha256sum "$RUNNER_TEMP/wr046-jq-attestation.json" | awk '{print $1}')" = "01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed"
+          test "$(stat -c '%s' "$RUNNER_TEMP/wr046-jq-attestation.json")" = "14380"
+          rm -f "$RUNNER_TEMP/wr046-jq-attestation.json"
+      - name: Confirm fixture is not persisted as a GitHub artifact
+        run: echo 'Fixture bytes verified in-run and removed; no Actions artifact is uploaded or treated as custody.'
