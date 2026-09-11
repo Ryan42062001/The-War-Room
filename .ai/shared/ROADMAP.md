@@ -1,6 +1,6 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — PHASE 5 SEASON-TOTAL DISTRIBUTION
+Status: ACTIVE DEVELOPMENT — PHASE 5 INDEPENDENT AUDIT
 Last updated: 2026-09-10
 Owner: Manager / Architect
 Workflow: V3
@@ -17,6 +17,7 @@ FantasyPros remains production ranking authority under WR-D001. ESPN rank/ADP re
 - WR-029 — COMPLETE / ACCEPTED / no advanced enrichment family promoted
 - WR-033 — COMPLETE / CLOSED / Returning-Player v1 Specification Freeze
 - WR-034 — COMPLETE / ACCEPTED / expected-games model supported
+- WR-035 — COMPLETE RESEARCH / AUDIT PENDING / `INDEPENDENCE PRODUCT SUPPORTED` proposed
 
 ## Frozen returning-player architecture
 - cohort: returning QB/RB/WR/TE; rookies separate;
@@ -49,11 +50,13 @@ Transparent position + draft-capital prior remains benchmark unless a lawful chr
 ### Phase 4 — Availability / expected-games model — COMPLETE
 WR-034 accepted / merged via PR #123. `RIDGE_FULL` supported as a separate availability/continuation expectation; broad uncertainty required; warning models remain non-ranking.
 
-### Phase 5 — Season-total distribution — ACTIVE
-WR-035 assigned to R&D. Compose frozen WR-033 expected PPR/game with accepted WR-034 expected games without retuning either upstream layer. Explicitly test the simple independence product against predeclared dependence-aware alternatives and produce calibrated season-total uncertainty suitable for downstream value work.
+### Phase 5 — Season-total distribution — AUDIT PENDING
+WR-035 research on PR #124 proposes `INDEPENDENCE PRODUCT SUPPORTED`: frozen WR-033 expected PPR/game × accepted WR-034 expected games is the selected central transform; the predeclared dependence-aware mean failed to improve it. Pooled empirical distribution coverage passed, but high-value/Q4/D10 coverage is weak and must not be represented as a calibrated guarantee.
 
-### Phase 6 — Replacement / cross-position draft value — PLANNED
-Leading advisory candidate remains deterministic eligibility-constrained starter assignment / marginal starter value (MSV). Do not freeze until Phase 5 supplies an accepted season-total contract. FLEX/Superflex, bench policy, scoring scope, eligibility versioning, solver determinism, and tier gates remain explicit Phase-6 questions.
+WR-036 independently audits WR-035 before Manager merge/freeze. PR #124 remains unmerged. A first integration CI attempt failed in an existing command-bar UI test despite research-only diff and green base-main CI; immutable-head retry is pending and must be classified in the audit.
+
+### Phase 6 — Replacement / cross-position draft value — BLOCKED ON PHASE 5 AUDIT/DISPOSITION
+Leading advisory candidate remains deterministic eligibility-constrained starter assignment / marginal starter value (MSV). Do not freeze until WR-035 is independently audited and accepted. FLEX/Superflex, bench policy, scoring scope, eligibility versioning, solver determinism, below-frontier ordering, and tier gates remain explicit Phase-6 questions.
 
 ### Phase 7 — Complete historical replay — PLANNED
 Evaluate whole board/rank/tier/value/warning behavior across prior fake preseasons.
@@ -80,6 +83,6 @@ WR-026 / PR #120 — COMPLETE / MERGED. WR-031 re-audit — PASS. No unresolved 
 - Manager: IDLE after reconciliation
 - Builder: IDLE
 - Draft Strategy: IDLE
-- R&D: ACTIVE — WR-035
-- Auditor: IDLE
+- R&D: IDLE
+- Auditor: ACTIVE — WR-036
 - Temporary Troubleshooting: NOT INSTANTIATED
