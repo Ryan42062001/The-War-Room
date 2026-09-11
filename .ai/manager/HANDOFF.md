@@ -2,73 +2,79 @@
 
 HANDOFF
 
-Task ID: WR-035 / WR-036
+Task IDs: WR-035 / WR-036 / WR-037 / WR-038
 Role: Manager / Architect
-Status: WR-035 AUDIT_READY / WR-036 ASSIGNED
+Status: PHASE 5 REMEDIATION ACTIVE
 
-## WR-035 Manager review
-R&D completed WR-035 on PR #124 exact head `9b4769899dd73f7c94679df6b6c67158e3ee39b6` using Work Mode.
+## Manager disposition
+WR-036 independent audit of WR-035 / PR #124 returned:
+`FAIL — REMEDIATION REQUIRED`.
 
-Manager review disposition: PROVISIONALLY ACCEPT `INDEPENDENCE PRODUCT SUPPORTED` FOR INDEPENDENT AUDIT. DO NOT MERGE PR #124 YET.
+Manager accepts the audit verdict. PR #124 MUST NOT be merged. Phase 6 remains blocked.
 
-Verified Manager-review evidence:
-- PR #124 changes 22 files, all under `.ai/research/**`;
-- pre-scoring protocol commit `b9b353e712b297ffaa801141cb87954be622ebd3` precedes results commit `89a7a17c9c896aaaebe00dddeedb5954495e82f3`;
-- generated result contract selects `INDEPENDENT_PRODUCT`;
-- confirmation central MAE 32.513 versus 41.408 for WR033 × PREV_RATE and 42.709 for schedule-adjusted prior total;
-- dependence-aware challenger confirmation MAE 34.815 and repeated-player bootstrap delta +2.301, 95% CI [+1.806,+2.680], so added complexity is not promoted;
-- pooled empirical 80% distribution coverage is 82.7%, but high-value coverage is weak: Q4 61.0%, D10 50.0%, WR Q4 64.0%;
-- WR-033 replay matches the frozen aggregate exactly and WR-034 replay maximum prediction delta is ~`2.19e-13`;
-- generated integrity says no 2026 outcomes inspected, WR-021/WR-023 unchanged, WR-033/WR-034 unchanged, and production unchanged.
+## Audited target
+WR-035 audited PR/head:
+- PR #124
+- `9b4769899dd73f7c94679df6b6c67158e3ee39b6`
 
-These facts are sufficient to justify independent audit, not final freeze.
+Current published WR-036 audit evidence:
+- PR #125
+- branch `audit/wr-036-pr124-9b47698`
+- current PR head verified by Manager: `d153d3d1960c1def42358479b611ab7d3423a5c1`
 
-## CI disposition before audit
-PR integration War Room CI run `34556251098` attempt 1 FAILED in existing `scripts/test-command-bar.mjs`: Playwright could not fill `[data-command-setting="slot"]` because the element was hidden/detached during command-bar reconstruction.
+Earlier checkpoint `16a48a2c5fde58d43504ebcaa7990ccd49c15086` exists but is two commits behind the current PR #125 head. Use `d153d3d...` as the final published WR-036 checkpoint unless PR #125 moves again.
 
-Important context:
-- PR #124 changes only `.ai/research/**`, no production or test file;
-- base `main` commit `f99490a124e6f6f14a76bfd1b639fbdb61d4e1c4` passed the same full War Room CI in run `34554030426`;
-- Manager requested an immutable-head rerun of the failed PR integration job;
-- attempt 2 completed SUCCESS on the same exact PR head with no research-byte changes.
+PR #125 changes only `.ai/auditor/HANDOFF.md` and `.ai/auditor/WR-036_AUDIT.md`.
 
-The CI retry is therefore no longer a blocker. Auditor must still inspect and document attempt 1 versus attempt 2 and confirm no evidence couples the timeout to WR-035.
+## WR-036 findings to remediate
+HIGH:
+- `WR-036-AUD-01`: exact keyed frozen WR-033 feature/prediction identity is not established for all 3,508 scored rows after mutable player-metadata substitution. The prior gate checked aggregate metrics on 1,881 active rows; 1,627 zero-game rows still consume WR-033 predictions.
 
-## WR-036 independent audit
-WR-036 is assigned to Independent Auditor / QA.
+MEDIUM:
+- `WR-036-AUD-02`: frozen residual fallback order was not implemented exactly.
+- `WR-036-AUD-03`: repeated-player clustered comparison includes MAE but omits predeclared RMSE and interval-score contrasts.
+- `WR-036-AUD-04`: paired quantiles are not a coherent predictive distribution around the selected raw central estimator unless explicitly narrowed/reworked.
+- `WR-036-AUD-05`: six raw central season-total projections are negative/out of domain without an approved deterministic fallback/fail-closed policy.
 
-Target: PR #124 exact head `9b4769899dd73f7c94679df6b6c67158e3ee39b6`.
-Execution mode: `WORK_MODE_PREFERRED` because the audit spans preregistration chronology, statistical outputs, deterministic replay, provenance/integrity, high-value calibration caveats, and CI classification.
+Evidence still accepted as useful but not sufficient for Phase-5 freeze:
+- WR-034 keyed replay across all 3,508 rows, max delta about `2.19e-13`;
+- paired challenger genuinely fails development gate;
+- deterministic substituted-input replay;
+- high-value undercoverage is explicitly qualified;
+- PR #124 is research-only;
+- no 2026 outcomes / Phase-6 value work identified.
 
-Audit scope:
-- requirements versus `.ai/manager/WR-035.md`;
-- protocol frozen before scoring and no result-driven retuning;
-- exact WR-033/WR-034 replay/no-retuning;
-- candidate definitions and chronological development/confirmation gates;
-- independent-product central metrics and paired-residual challenger comparison;
-- repeated-player bootstrap correctness/evidence;
-- distribution coverage/width and high-value/Q4/D10/WR-Q4 limitations;
-- deterministic reproducibility and fallback behavior;
-- source/PIT/frozen 2026 boundary integrity;
-- Phase-6 input contract contains no draft strategy/value fields and does not overstate empirical quantiles as calibrated high-value guarantees;
-- PR scope remains research-only;
-- CI attempt-1 failure plus successful immutable-head retry classification.
+## CI note on audit PR
+PR #125 first integration CI attempt failed in the same existing `scripts/test-command-bar.mjs` hidden/detached slot-input timeout already observed on WR-035. Because PR #125 is Auditor-docs-only, Manager requested one bounded unchanged-head retry. Do not treat the initial timeout as coupled to Auditor evidence absent new contrary evidence.
 
-Auditor must not merge PR #124.
+## WR-037 — ACTIVE / ASSIGNED TO R&D
+Objective: bounded remediation on the existing WR-035 research branch / PR #124.
+
+Execution mode: `WORK_MODE_PREFERRED`.
+
+R&D must resolve the full current WR-036 finding set under `.ai/manager/WR-037.md`.
+
+Critical boundary: before any affected rescoring, commit a bounded remediation addendum / machine lock. Do not rewrite the original WR-035 history, opportunistically reopen model families, retune WR-033/WR-034, inspect 2026 outcomes, perform Phase-6 value work, or modify production.
+
+If exact frozen WR-033 identity for all 3,508 rows cannot be established, fail closed and return `REMEDIATION BLOCKED — UPSTREAM IDENTITY NOT PROVABLE` rather than fabricating replay equivalence.
+
+## WR-038 — BLOCKED RE-AUDIT
+Independent Auditor re-audit is preplanned but MUST NOT start until WR-037 publishes one immutable remediated PR #124 head.
+
+Manager must activate WR-038 against that exact head. A PASS-family WR-038 verdict is required before any Phase-5 merge/freeze decision.
 
 ## Staffing
 - Manager: IDLE after reconciliation
 - Builder: IDLE
 - Draft Strategy: IDLE
-- R&D: IDLE — WR-035 execution complete
-- Auditor: ACTIVE — WR-036
+- R&D: ACTIVE/ASSIGNED — WR-037
+- Auditor: IDLE — WR-036 complete; WR-038 blocked
 - Temporary Troubleshooting: NOT INSTANTIATED
 
 ## Next gate
-WR-036 final verdict -> Manager merge/rework decision on PR #124. Only an acceptable audit can unlock Phase 6.
+WR-037 completion -> Manager pins exact remediated PR #124 head -> activate WR-038 -> independent verdict -> Manager Phase-5 merge/freeze or further remediation.
+
+Phase 6 remains blocked throughout.
 
 ## Production authority
 UNCHANGED. WR-D001 remains active. No custom ranking is production-authorized.
-
-## Checkpoint
-Pre-reconciliation `main`: `1a45baf308277e42e7a631bc87624b5bab618d24`.
