@@ -1,0 +1,32 @@
+{
+  "assignment_main_sha": "142a9580fb408cd78ddae1026a67dd82f7d7b144",
+  "governing_contract_head": "00a9e787e716d6697e6cd0d9252982a672abbbe0",
+  "manifest_id": "wr042-cohort-source-eligibility-blocked-v1",
+  "next_allowed_action": "Resolve source-custody capability, then reacquire/freeze exact source bytes and rebuild this manifest before any model protocol or scoring.",
+  "outcome_fields_present": false,
+  "reason": "The audited contract requires source custody before parsing/cohort construction. Because no exact source instance was admitted into project-controlled two-copy custody, constructing cohort rows from mutable/unretained sources would violate chronology and fail-closed rules.",
+  "row_count": 0,
+  "rows": [],
+  "schema_version": "1.0.0",
+  "source_snapshot_hash_reference": "98b9734a389d8fbd7f80c6ed0372e55efcd4ce4c82525c0fd0701b96dfcc7009",
+  "source_snapshot_id": "wr042-source-snapshot-blocked-v1",
+  "stable_row_key": {
+    "canonical_encoding": "UTF-8 JSON array with no whitespace",
+    "duplicate_policy": "FATAL",
+    "ordered_fields": [
+      "target_season:int",
+      "player_id_namespace:utf8",
+      "player_id:utf8",
+      "position:enum[QB,RB,WR,TE]",
+      "cohort_version:utf8"
+    ]
+  },
+  "status": "NOT_CONSTRUCTED_FAIL_CLOSED",
+  "task_id": "WR-042",
+  "validation": {
+    "duplicate_key_check": "NOT_RUN_NO_ADMITTED_SOURCE_ROWS",
+    "inclusion_exclusion_reason_check": "NOT_RUN_NO_ADMITTED_SOURCE_ROWS",
+    "missing_key_check": "NOT_RUN_NO_ADMITTED_SOURCE_ROWS",
+    "source_admission_precondition": "FAILED"
+  }
+}
