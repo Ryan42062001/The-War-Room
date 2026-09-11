@@ -1,0 +1,7 @@
+{
+  "task_id": "WR-042",
+  "final_scope": ".ai/research/** only",
+  "disposition": "FAIL_CLOSED_CUSTODY_UNAVAILABLE",
+  "immutable_head_is_defined_by_pr_metadata": true,
+  "no_further_branch_writes_after_pr_publication": true
+}
