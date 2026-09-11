@@ -1,0 +1,1 @@
+WR-042 blocker evidence is complete. Publish the current branch head as the immutable PR target without further branch writes.
