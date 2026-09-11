@@ -71,16 +71,22 @@ async function getPageWidth(page) {
 
 async function openRecovery(page) {
   await page.waitForFunction(() => Boolean(document.getElementById('war-room-maintenance-btn')));
-  const opened = await page.evaluate(() => {
-    const manage = document.getElementById('draft-manage');
-    const button = document.getElementById('war-room-maintenance-btn');
-    if (!manage || !button) return false;
-    manage.open = true;
-    const style = window.getComputedStyle(button);
-    const visible = style.display !== 'none' && style.visibility !== 'hidden' && button.getClientRects().length > 0;
-    if (!visible) return false;
-    button.click();
-    return true;
+  const opened = await page.evaluate(async () => {
+    for (let frame = 0; frame < 20; frame += 1) {
+      const manage = document.getElementById('draft-manage');
+      if (manage) manage.open = true;
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      const currentManage = document.getElementById('draft-manage');
+      const button = document.getElementById('war-room-maintenance-btn');
+      if (!currentManage || !button) continue;
+      currentManage.open = true;
+      const style = window.getComputedStyle(button);
+      const visible = style.display !== 'none' && style.visibility !== 'hidden' && button.getClientRects().length > 0;
+      if (!visible) continue;
+      button.click();
+      return true;
+    }
+    return false;
   });
   assert.equal(opened, true, 'current recovery control must be visible and clickable after opening Draft Management');
   await page.waitForSelector('#war-room-maintenance-dialog[open]');
