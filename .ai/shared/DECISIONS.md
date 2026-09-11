@@ -95,3 +95,25 @@ RATIONALE: Under the preregistered development/confirmation protocol, `RIDGE_FUL
 EVIDENCE: WR-034 research merged through PR #123 at `346dd6ac862f20f320e55fde509e5c677d9a0ec7`; `.ai/research/AVAILABILITY_EXPECTED_GAMES.md`; `.ai/research/AVAILABILITY_EXPECTED_GAMES_PROTOCOL.md`; `.ai/research/HANDOFF.md`; exact final-head CI `34553207324`.
 ALTERNATIVES REJECTED: Treat prior games alone as the primary expectation; interpret the target as injury-only; silently refresh mutable player metadata after checksum failure; use the warning probabilities as automatic rank penalties; change WR-033 expected PPR/game based on availability results.
 REVISIT CONDITION: WR-035 season-total composition shows the accepted expected-games layer produces unstable or inferior downstream calibration, new rights-clean cutoff-safe evidence materially improves continuation modeling, or a later approved prospective gate revises the research architecture without contaminating WR-023.
+
+---
+
+## DECISION WR-D007
+
+DATE: 2026-09-11
+TASK: WR-037 blocker disposition / Returning-Player v2 evidence reset
+STATUS: ACTIVE — RESEARCH / DEVELOPMENT ARCHITECTURE ONLY
+DECISION:
+- Close the WR-035 / WR-037 v1 Phase-5 composition path as `INSUFFICIENT EVIDENCE — UPSTREAM IDENTITY NOT PROVABLE` under the frozen WR-033 provenance contract.
+- PR #124 must not be merged as an accepted Phase-5 result. Preserve it only as historical research/blocker evidence and close it unmerged.
+- Do not weaken or retroactively redefine frozen-WR-033 replay equivalence. The substituted-input WR-035 experiment may remain informative research evidence but is not certified as exact frozen-WR-033 composition.
+- Authorize a new explicitly versioned Returning-Player v2 research path beginning with WR-039, which must freeze a prospective source/provenance/retention/reproducibility contract before any new model scoring.
+- Require full-row keyed feature/preprocessing/prediction evidence for every scored row in future v2 research, including zero-game rows. Aggregate metric equality is never sufficient evidence of exact input/prediction identity.
+- Future evidence retention may not depend on an expiring CI artifact or mutable external URL as the sole authority. Exact source bytes should be retained under project-controlled immutable storage when rights permit; when raw retention is not permitted, a rights-compatible derived evidence package must still allow independent exact input/output verification.
+- WR-040 must independently audit the frozen WR-039 evidence contract before Manager may authorize any new v2 scoring/evaluation task.
+- WR-033 / WR-D005 and WR-034 / WR-D006 remain historical research decisions and are not rewritten. Any reuse by v2 must be explicitly versioned and must not claim identity with unavailable v1 upstream inputs unless independently provable.
+- Phase 6 remains blocked until a later v2 season-total path is independently accepted. WR-D001 production ranking authority remains unchanged throughout.
+RATIONALE: WR-037 exhaustively attempted recovery of the deleted frozen nflverse Players asset and trustworthy full-cohort keyed WR-033 evidence but could not prove exact identity for all 3,508 season-total rows, especially 1,627 zero-game rows. Preserving the original audit standard avoids moving the evidentiary goalposts, while a prospectively frozen v2 contract allows the custom-engine research program to continue with stronger evidence custody.
+EVIDENCE: PR #124 final blocker head `701bd4924a8595f2e17d946b39b1189ac2ef7eea`; `.ai/research/WR037_UPSTREAM_IDENTITY_BLOCKER.md`; WR-037 R&D handoff; exact-head War Room CI run `34587084283` SUCCESS; WR-036 audit evidence merged via PR #125.
+ALTERNATIVES REJECTED: Treat active-row aggregate metric equality as proof of full-cohort WR-033 identity; continue remediating WR-036 findings 2–5 on an uncertifiable v1 base; represent newly sourced metadata as the deleted frozen asset; abandon all custom projection research solely because the historical upstream payload is unavailable.
+REVISIT CONDITION: A trustworthy exact copy of the deleted WR-033 upstream asset or a pre-existing complete keyed reference is recovered, or the v2 evidence-contract audit demonstrates that the authorized prospective architecture is itself not viable.

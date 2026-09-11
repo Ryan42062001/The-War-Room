@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-11T09:48:00Z",
+  "updated_at_utc": "2026-09-11T14:39:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": ["PLANNED","BLOCKED","ASSIGNED","IN_PROGRESS","MANAGER_REVIEW_READY","AUDIT_READY","MERGE_READY","REWORK_REQUIRED","MERGED","CLOSED"],
@@ -8,7 +8,7 @@
     {
       "task_id": "WR-035",
       "owner": "R&D",
-      "status": "REWORK_REQUIRED",
+      "status": "CLOSED",
       "task_file": ".ai/manager/WR-035.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "346dd6ac862f20f320e55fde509e5c677d9a0ec7",
@@ -17,8 +17,8 @@
       "pr": 124,
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_PREFERRED",
-      "audit_required": true,
-      "blocked_on": ["WR-037 remediation", "WR-038 independent re-audit"],
+      "audit_required": false,
+      "blocked_on": [],
       "allowed_path_prefixes": [".ai/research/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/"],
       "forbidden_exact_paths": [
@@ -26,7 +26,7 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "WR-037 bounded R&D remediation on PR #124 -> WR-038 independent re-audit -> Manager merge/freeze or further rework"
+      "next_gate": "CLOSED under WR-D007 as insufficiently provable; PR #124 preserved as historical research/blocker evidence and must remain unmerged"
     },
     {
       "task_id": "WR-036",
@@ -49,21 +49,21 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "CLOSED with FAIL — REMEDIATION REQUIRED; audit evidence merged via PR #125 at 793c091b6c68012e37c021be1bd753d4406c679b; findings route to WR-037 and WR-038"
+      "next_gate": "CLOSED with FAIL — REMEDIATION REQUIRED; audit evidence merged via PR #125 at 793c091b6c68012e37c021be1bd753d4406c679b"
     },
     {
       "task_id": "WR-037",
       "owner": "R&D",
-      "status": "ASSIGNED",
+      "status": "CLOSED",
       "task_file": ".ai/manager/WR-037.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "aa586cdc0b5b8bff8100fb7bed9bad867e20162f",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "701bd4924a8595f2e17d946b39b1189ac2ef7eea",
       "branch": "wr-035-season-total-distribution",
       "pr": 124,
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_PREFERRED",
-      "audit_required": true,
+      "audit_required": false,
       "blocked_on": [],
       "allowed_path_prefixes": [".ai/research/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/"],
@@ -72,12 +72,12 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "R&D publish one immutable remediated PR #124 head -> Manager activate WR-038"
+      "next_gate": "CLOSED fail-closed: REMEDIATION BLOCKED — UPSTREAM IDENTITY NOT PROVABLE; superseded by WR-D007 / WR-039"
     },
     {
       "task_id": "WR-038",
       "owner": "Auditor",
-      "status": "BLOCKED",
+      "status": "CLOSED",
       "task_file": ".ai/manager/WR-038.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
       "assignment_main_sha": null,
@@ -87,7 +87,7 @@
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_PREFERRED",
       "audit_required": false,
-      "blocked_on": ["WR-037 complete with immutable remediated PR #124 head"],
+      "blocked_on": [],
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/"],
       "forbidden_exact_paths": [
@@ -95,7 +95,53 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "WR-037 completion -> exact-head WR-038 independent re-audit -> Manager Phase-5 disposition"
+      "next_gate": "CLOSED without activation because WR-037 produced no valid remediated audit target; superseded by WR-040"
+    },
+    {
+      "task_id": "WR-039",
+      "owner": "R&D",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-039.md",
+      "role_handoff": ".ai/research/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": "wr-039-returning-player-v2-evidence-contract",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "WORK_MODE_PREFERRED",
+      "audit_required": true,
+      "blocked_on": [],
+      "allowed_path_prefixes": [".ai/research/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", "src/", "public/"],
+      "forbidden_exact_paths": [
+        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
+      ],
+      "next_gate": "R&D freeze one immutable Returning-Player v2 evidence-contract PR/head without model scoring -> Manager activate WR-040"
+    },
+    {
+      "task_id": "WR-040",
+      "owner": "Auditor",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-040.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": "wr-040-v2-evidence-contract-audit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "WORK_MODE_PREFERRED",
+      "audit_required": false,
+      "blocked_on": ["WR-039 complete with one immutable evidence-contract PR/head"],
+      "allowed_path_prefixes": [".ai/auditor/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/", "src/", "public/"],
+      "forbidden_exact_paths": [
+        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
+      ],
+      "next_gate": "WR-039 immutable contract -> WR-040 independent audit -> Manager may authorize a new v2 scoring/evaluation task only after PASS-family verdict"
     }
   ]
 }
