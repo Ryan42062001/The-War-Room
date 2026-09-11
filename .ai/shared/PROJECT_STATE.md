@@ -36,7 +36,7 @@ Manager disposition: ACCEPT THE AUDIT VERDICT; DO NOT MERGE PR #124. Route bound
 ### Blocking finding
 WR-035 did not prove exact frozen WR-033 identity for all 3,508 scored rows after substituting a mutable `players.csv`. Its replay gate checked aggregate active-row metrics across 1,881 rows rather than keyed row-level feature/prediction identity, while 1,627 zero-game rows still consumed WR-033 predictions.
 
-### Additional remediation findings from the current published WR-036 audit head
+### Additional remediation findings from the final published WR-036 audit
 - frozen residual fallback order was not implemented exactly;
 - predeclared stable-player clustered RMSE and interval-score contrasts were missing;
 - paired uncertainty quantiles are not coherent with the selected raw central estimator unless explicitly narrowed/reworked;
@@ -51,15 +51,19 @@ WR-035 did not prove exact frozen WR-033 identity for all 3,508 scored rows afte
 - no 2026 outcomes or Phase-6 value work were identified.
 
 ## Audit evidence
-Published WR-036 audit PR: #125.
-Current published audit PR head verified by Manager: `d153d3d1960c1def42358479b611ab7d3423a5c1`.
-Earlier audit checkpoint `16a48a2c5fde58d43504ebcaa7990ccd49c15086` exists but is two commits behind the current PR head and is not the final published checkpoint.
+WR-036 audit evidence was integrated via PR #125.
 
-PR #125 changes only:
+Final audit branch/head before merge:
+- branch `audit/wr-036-pr124-9b47698`
+- `d153d3d1960c1def42358479b611ab7d3423a5c1`
+
+Earlier checkpoint `16a48a2c5fde58d43504ebcaa7990ccd49c15086` exists but is two commits behind the final published audit head.
+
+PR #125 changed only:
 - `.ai/auditor/HANDOFF.md`
 - `.ai/auditor/WR-036_AUDIT.md`
 
-Its first integration CI attempt hit the already observed command-bar hidden/detached timeout; Manager requested one bounded unchanged-head retry before integrating the audit evidence.
+Its first integration CI attempt hit the already observed command-bar hidden/detached timeout. One bounded unchanged-head retry completed SUCCESS. Manager then squash-merged PR #125 at `793c091b6c68012e37c021be1bd753d4406c679b`.
 
 ## Active remediation
 WR-037 is ASSIGNED to R&D on the existing WR-035 research branch / PR #124.
