@@ -17,14 +17,16 @@ WR-035 audited PR/head:
 - PR #124
 - `9b4769899dd73f7c94679df6b6c67158e3ee39b6`
 
-Current published WR-036 audit evidence:
+Final published WR-036 audit evidence before merge:
 - PR #125
 - branch `audit/wr-036-pr124-9b47698`
-- current PR head verified by Manager: `d153d3d1960c1def42358479b611ab7d3423a5c1`
+- final published head `d153d3d1960c1def42358479b611ab7d3423a5c1`
 
-Earlier checkpoint `16a48a2c5fde58d43504ebcaa7990ccd49c15086` exists but is two commits behind the current PR #125 head. Use `d153d3d...` as the final published WR-036 checkpoint unless PR #125 moves again.
+Earlier checkpoint `16a48a2c5fde58d43504ebcaa7990ccd49c15086` exists but is two commits behind the final published head.
 
-PR #125 changes only `.ai/auditor/HANDOFF.md` and `.ai/auditor/WR-036_AUDIT.md`.
+PR #125 changed only `.ai/auditor/HANDOFF.md` and `.ai/auditor/WR-036_AUDIT.md`.
+
+Its first CI attempt hit the known command-bar hidden/detached timeout. One bounded unchanged-head retry completed SUCCESS. Manager verified target advancement was control-plane-only/non-overlapping and squash-merged PR #125 at `793c091b6c68012e37c021be1bd753d4406c679b`.
 
 ## WR-036 findings to remediate
 HIGH:
@@ -43,9 +45,6 @@ Evidence still accepted as useful but not sufficient for Phase-5 freeze:
 - high-value undercoverage is explicitly qualified;
 - PR #124 is research-only;
 - no 2026 outcomes / Phase-6 value work identified.
-
-## CI note on audit PR
-PR #125 first integration CI attempt failed in the same existing `scripts/test-command-bar.mjs` hidden/detached slot-input timeout already observed on WR-035. Because PR #125 is Auditor-docs-only, Manager requested one bounded unchanged-head retry. Do not treat the initial timeout as coupled to Auditor evidence absent new contrary evidence.
 
 ## WR-037 — ACTIVE / ASSIGNED TO R&D
 Objective: bounded remediation on the existing WR-035 research branch / PR #124.
