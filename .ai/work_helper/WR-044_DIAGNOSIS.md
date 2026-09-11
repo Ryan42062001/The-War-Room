@@ -61,7 +61,7 @@ The remediated test waits for two animation frames, `_saveTimer === null`, then 
 
 `.github/workflows/ci.yml` now executes five targeted repetitions of the persistence test and all three command-bar lifecycle suites before the existing phone and full-suite gates. This is a deterministic stress gate, not an automatic failure retry: any iteration fails the job immediately and visibly.
 
-The resilience gate runs three complete backup/offline-reload repetitions. Its recovery opener now opens Draft Management and clicks the current recovery control synchronously, after explicitly proving that control visible; it no longer treats the unrelated layout-ready class as permission to click a hidden descendant.
+The resilience gate runs three complete backup/offline-reload repetitions. Its recovery opener uses a bounded animation-frame settle loop that repeatedly opens Draft Management, re-resolves the current recovery control, proves it visible, and clicks that same control; it no longer treats the unrelated layout-ready class—or a pre-layout `details.open` assignment—as permission to click a hidden descendant.
 
 ## Competing hypotheses
 
@@ -107,6 +107,7 @@ The local runner could not download the pinned Chromium archive because the CDN 
 | `34627286054`, attempt 3 | Expanded command lifecycle stress | Passed three complete targeted iterations, then exposed a focus/inspection generation gap in the WR-026 replacement-control assertion; setting commits themselves passed. |
 | `34628586503`, attempt 3 | Pre-final-head repeat | Five-iteration command/state stress, phone, and full `npm test` passed; the separate resilience gate exposed a hidden recovery control because its helper accepted layout readiness without opening the containing disclosure. |
 | `34630281641` | Resilience-remediation candidate | Targeted stress and phone passed; full `npm test` exposed an off-screen setup race immediately after the layout test's intentional Escape focus restoration. |
+| `34630708418`, attempt 3 | First resilience stress candidate | Command/state stress and full `npm test` passed; resilience iteration 2 proved that checking client rects in the same task as `details.open = true` can precede layout. |
 
 Final immutable-head run IDs and repeated full-suite attempts are recorded in PR #132 so recording them does not mutate the audited head.
 
