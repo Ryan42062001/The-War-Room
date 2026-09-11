@@ -3,6 +3,7 @@ import {createRequire} from 'node:module';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import {waitForWarRoomQuiescence} from './browser-test-helpers.mjs';
 const {chromium} = createRequire(import.meta.url)('playwright');
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(.:)/, '$1')), '..');
@@ -683,6 +684,11 @@ await page.getByPlaceholder('Search player or team...').fill('');
 await page.evaluate(() => setBoardView('position', {persist:false}));
 
 const sessionBefore = await page.locator('#draftSessionSelect option').count();
+// Separate the session lifecycle scenario from debounced saves scheduled by
+// earlier board/recommendation assertions on this deliberately long-lived page.
+await waitForWarRoomQuiescence(page);
+await page.locator('#draft-manage > summary').click();
+assert.equal(await page.locator('#draft-manage').getAttribute('open'), '');
 await page.getByRole('button', {name:'New Draft'}).click();
 assert.equal(await page.locator('#draftSessionSelect option').count(), sessionBefore + 1);
 assert.equal(await page.locator('tr.drafted-mine,tr.drafted-other').count(), 0);
@@ -690,6 +696,9 @@ const draftToDelete = await page.locator('#draftSessionSelect').inputValue();
 await page.getByRole('button', {name:'Delete selected draft'}).click();
 assert.equal(await page.getByRole('button', {name:/Confirm deletion of/}).innerText(), 'Confirm Delete');
 await page.getByRole('button', {name:/Confirm deletion of/}).click();
+// Prove the deleted key stays absent after all resulting render/save work has
+// drained, rather than racing the assertion against a pending autosave.
+await waitForWarRoomQuiescence(page);
 assert.equal(await page.locator('#draftSessionSelect option').count(), sessionBefore);
 assert.notEqual(await page.locator('#draftSessionSelect').inputValue(), draftToDelete);
 assert.equal(await page.evaluate(id => localStorage.getItem('draft-state-v1:' + id), draftToDelete), null);

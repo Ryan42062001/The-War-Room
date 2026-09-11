@@ -3,6 +3,7 @@ import {createRequire} from 'node:module';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import {commitRerenderingControl} from './browser-test-helpers.mjs';
 
 const {chromium} = createRequire(import.meta.url)('playwright');
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(.:)/, '$1')), '..');
@@ -86,9 +87,10 @@ try {
     const style = getComputedStyle(input);
     return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
   });
-  const slotInput = page.locator('[data-command-setting="slot"]');
-  await slotInput.fill('6');
-  await slotInput.dispatchEvent('change');
+  // The command bar intentionally replaces its children on scheduled renders.
+  // Commit against one render generation instead of holding a locator across
+  // the replacement boundary.
+  await commitRerenderingControl(page, '[data-command-setting="slot"]', 6);
   await page.waitForFunction(() => document.body.getAttribute('data-draft-command-mode') === 'waiting');
   await page.waitForFunction(() => Number(document.getElementById('pcSlot').value) === 6);
 
