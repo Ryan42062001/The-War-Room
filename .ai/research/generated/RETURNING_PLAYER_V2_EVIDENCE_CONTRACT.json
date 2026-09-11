@@ -1,0 +1,234 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "wr-returning-player-v2-evidence-contract",
+  "contract_version": "1.0.0",
+  "task_id": "WR-039",
+  "status": "FROZEN_PRE_SCORING_PENDING_INDEPENDENT_AUDIT",
+  "starting_main_sha": "6bc66fa6c779e558940ca6cc3f267441def62595",
+  "scope": {
+    "lineage": "returning_player_v2",
+    "model_scoring_performed": false,
+    "model_fitting_performed": false,
+    "outcomes_2026_inspected": false,
+    "production_authority_changed": false,
+    "phase_6_work_performed": false
+  },
+  "normative_artifacts": [
+    {
+      "path": ".ai/research/RETURNING_PLAYER_V2_EVIDENCE_CONTRACT.md",
+      "sha256": "0606d11bf227b36412e7fd14f2c0272a6aac119895187870675a9df023efb5b7"
+    },
+    {
+      "path": ".ai/research/RETURNING_PLAYER_V2_SOURCE_RIGHTS_RETENTION.md",
+      "sha256": "41b5193565ab94a271be729598c7060bbca2788030a7f5271bf97232cc464ac5"
+    }
+  ],
+  "frozen_sentinels": [
+    {
+      "path": ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+      "sha256": "9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d"
+    },
+    {
+      "path": ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+      "sha256": "f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c"
+    },
+    {
+      "path": ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json",
+      "sha256": "98db25bab2d65ce2a8573e3fdd595c2fd21a13c71cca354467f012030a0481fa"
+    }
+  ],
+  "source_classes": [
+    {
+      "id": "NFLVERSE_PLAYER_SUMMARY_STATS",
+      "provider": "nflverse/nflverse-data",
+      "acquisition_method": "exact versioned stats_player release asset",
+      "retention": "CONDITIONAL_RAW_CUSTODY",
+      "fallback": "FAIL_CLOSED_OR_NEW_AUDITED_SNAPSHOT"
+    },
+    {
+      "id": "NFLVERSE_PLAYERS_METADATA_MINIMAL",
+      "provider": "nflverse/nflverse-data and nflverse/nflverse-players",
+      "acquisition_method": "exact versioned players release asset",
+      "retention": "MINIMAL_EXTRACT_CUSTODY_WITH_RESTRICTED_RAW_WHEN_APPROVED",
+      "fallback": "FAIL_CLOSED"
+    },
+    {
+      "id": "NFLVERSE_DRAFT_CAPITAL_MINIMAL",
+      "provider": "nflverse/nflverse-data with upstream PFR courtesy caveat",
+      "acquisition_method": "exact versioned draft_picks release asset",
+      "retention": "RESTRICTED_RAW_CUSTODY_PENDING_RIGHTS_REVIEW",
+      "fallback": "EXCLUDE_FEATURE_CLASS_OR_NEW_AUDITED_SCHEMA"
+    }
+  ],
+  "required_source_instance_fields": [
+    "source_instance_id",
+    "source_class",
+    "provider",
+    "repository",
+    "acquisition_method",
+    "canonical_endpoint",
+    "acquired_at_utc",
+    "release_tag",
+    "release_id",
+    "asset_id",
+    "asset_name",
+    "provider_updated_at",
+    "sha256",
+    "byte_size",
+    "media_type",
+    "compression_type",
+    "ordered_schema",
+    "schema_sha256",
+    "row_count",
+    "approved_columns",
+    "target_season_cutoff",
+    "availability_semantics",
+    "mutability_classification",
+    "license_id",
+    "license_url",
+    "attribution",
+    "upstream_rights_caveat",
+    "retention_disposition",
+    "retained_object_uri_or_derived_package_id",
+    "retained_object_sha256",
+    "acquisition_code_sha",
+    "acquisition_command",
+    "status",
+    "status_reason"
+  ],
+  "cutoff_policy": {
+    "historical_fake_preseason": "predictors must be known before frozen target-season cutoff; target-season Week 1+ data prohibited",
+    "future_run": "UTC cutoff committed before acquisition",
+    "mutable_metadata": "requires an as-of snapshot or exclusion",
+    "post_cutoff_generated_asset": "allowed only for fields proven fixed and cutoff-safe"
+  },
+  "custody_policy": {
+    "authoritative_identity": "SHA-256 of exact bytes",
+    "primary": "project-controlled content-addressed immutable storage",
+    "backup": "second independently retrievable project-controlled copy",
+    "minimum_retention": "model life plus seven years after retirement",
+    "integrity_check": "quarterly and immediately before every audit or rerun",
+    "non_authoritative": [
+      "mutable third-party URL",
+      "expiring CI or Actions artifact",
+      "filename without byte digest"
+    ],
+    "rights_limited_rule": "derived evidence is admissible only with a lawful independently accessible reference; hashes alone are insufficient"
+  },
+  "stable_row_key": {
+    "ordered_fields": [
+      "target_season:int",
+      "player_id_namespace:utf8",
+      "player_id:utf8",
+      "position:enum[QB,RB,WR,TE]",
+      "cohort_version:utf8"
+    ],
+    "canonical_encoding": "UTF-8 JSON array with no whitespace",
+    "duplicate_policy": "FATAL"
+  },
+  "required_cohort_statuses": [
+    "SCORED",
+    "TRAIN_ONLY",
+    "EXCLUDED",
+    "TARGET_UNAVAILABLE",
+    "FALLBACK"
+  ],
+  "full_row_evidence": {
+    "coverage": "every considered player-season including zero-game and excluded rows",
+    "feature_fields": [
+      "exact ordered pre-transform feature values",
+      "per-field missingness",
+      "source-instance and source-field lineage",
+      "feature schema version",
+      "transform code SHA",
+      "canonical row-feature SHA-256"
+    ],
+    "preprocessing_and_model_fields": [
+      "complete ordered training keys and digest",
+      "preprocessing class/version/parameters/state digest",
+      "model family/version/hyperparameters/fitted state digest",
+      "split and fold identity",
+      "target definition",
+      "seed and cutoff",
+      "environment lock digest",
+      "code SHA and deterministic command"
+    ],
+    "prediction_fields": [
+      "stable row key",
+      "model/fold/position identity",
+      "exact lossless prediction",
+      "prediction status",
+      "fallback identity",
+      "feature hash",
+      "preprocessing-state digest",
+      "model-state digest",
+      "prediction-row digest",
+      "inclusion/exclusion reason"
+    ],
+    "outcome_join": "targets live in a separate access-controlled table joined only after the pre-score prediction lock"
+  },
+  "serializer": {
+    "preferred": "RFC 8785 JSON",
+    "fallback": "versioned ordered typed-array encoding with explicit nulls and lossless decimal or UTF-8 strings",
+    "display_rounded_float_forbidden": true
+  },
+  "fail_closed_conditions": [
+    "missing duplicate extra or reordered cohort keys",
+    "source schema feature preprocessing model environment or code digest mismatch",
+    "unapproved non-finite value",
+    "missing inclusion or exclusion reason",
+    "prediction lacking feature preprocessing or model lineage",
+    "evaluation row lacking a pre-score prediction row",
+    "target-season information in predictor lineage",
+    "missing retained bytes or independently auditable rights-compatible reference",
+    "new bytes substituted at a locked mutable URL"
+  ],
+  "future_reproducibility_lock_must_bind": [
+    "this contract ID version and hash",
+    "audited source-snapshot manifest and retained-object verification",
+    "cohort rules manifest and ordered keys",
+    "feature schema definitions transforms and serializer",
+    "target definition",
+    "preprocessing specification and export format",
+    "candidate models hyperparameters and selection gates",
+    "chronological split logic",
+    "all seeds and deterministic-compute settings",
+    "dependency runtime OS architecture locale timezone and numeric libraries",
+    "repository code SHA and clean-tree assertion",
+    "commands and output paths",
+    "frozen sentinel hashes",
+    "2026 outcome prohibition",
+    "artifact hash inventory"
+  ],
+  "required_chronology": [
+    "WR-039 evidence contract freeze",
+    "WR-040 independent contract audit",
+    "no-scoring exact source-custody checkpoint",
+    "independent source-custody audit",
+    "model-protocol freeze before fitting or scoring",
+    "later model scoring and evaluation",
+    "independent model-result audit",
+    "later season-total composition",
+    "independent composition audit before Phase 6"
+  ],
+  "reuse_disposition": {
+    "WR-033": "re-version documented candidate ideas only; no input fitted-state prediction or replay identity",
+    "WR-034": "may remain separately versioned availability_v1_wr034 only when exact accepted artifacts and hashes are bound; refit is new",
+    "WR-029": "reuse governance principles only; no inherited source or model identity",
+    "WR-025": "research lineage and candidate rationale only; no full-cohort keyed identity",
+    "WR-035_WR-037": "historical failure-mode evidence only; no accepted Phase-5 or v2 authority"
+  },
+  "required_v2_identifiers": [
+    "source_snapshot_id",
+    "cohort_version",
+    "feature_schema_version",
+    "preprocessing_spec_version",
+    "model_protocol_version",
+    "model_fit_id",
+    "prediction_surface_id",
+    "evaluation_run_id",
+    "evidence_package_id"
+  ],
+  "authorization_after_wr040_pass": "Manager decision on a no-scoring source-custody checkpoint only",
+  "self_hash_rule": "adjacent sidecar contains SHA-256 of these exact UTF-8 JSON file bytes followed by two spaces, basename, and LF"
+}
