@@ -52,6 +52,7 @@ The remediated test waits for two animation frames, `_saveTimer === null`, then 
 
 - `scripts/test-command-bar.mjs` uses the atomic disclosure/control commit but retains all state-preservation, settings, mode, ESPN-guard, and pressure assertions.
 - `scripts/test-layout-efficiency-behavior.mjs` uses atomic current-generation Escape dispatch and retains its exact close/focus postconditions.
+- After that focus contract is proved, its urgent-transition setup blurs the summary and performs a bounded animation-frame scroll/verification in one browser task, preventing late focus/layout settlement from undoing the off-screen precondition.
 - `scripts/test-wr-026-audit-remediation.mjs` uses the shared atomic commit for teams, slot, and rounds and retains its replacement-control visibility, value, and focus assertions.
 - `scripts/test-browser.mjs` preserves the deleted-state `null` assertion and moves it after the queue-drain boundary. It also directly contains the already-effective Draft Management disclosure assertion previously injected by its wrapper.
 - `scripts/run-test-browser.mjs` removes only the now-redundant runtime injection of that same disclosure assertion. Other historical compatibility transformations remain unchanged.
@@ -105,6 +106,7 @@ The local runner could not download the pinned Chromium archive because the CDN 
 | `34626824379` | First documentation head | Five-repeat persistence/primary command-bar gate passed; full suite exposed the same replacement-generation race in layout Escape focus/press, proving the helper had to cover adjacent command-bar suites. |
 | `34627286054`, attempt 3 | Expanded command lifecycle stress | Passed three complete targeted iterations, then exposed a focus/inspection generation gap in the WR-026 replacement-control assertion; setting commits themselves passed. |
 | `34628586503`, attempt 3 | Pre-final-head repeat | Five-iteration command/state stress, phone, and full `npm test` passed; the separate resilience gate exposed a hidden recovery control because its helper accepted layout readiness without opening the containing disclosure. |
+| `34630281641` | Resilience-remediation candidate | Targeted stress and phone passed; full `npm test` exposed an off-screen setup race immediately after the layout test's intentional Escape focus restoration. |
 
 Final immutable-head run IDs and repeated full-suite attempts are recorded in PR #132 so recording them does not mutate the audited head.
 
