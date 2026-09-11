@@ -20,6 +20,18 @@ export async function commitRerenderingControl(page, selector, value) {
   assert.deepEqual(result, {committed:true, value:String(value)});
 }
 
+/** Open the currently mounted disclosure and prove it survived scheduled UI renders. */
+export async function openStableDisclosure(page, selector) {
+  await page.waitForFunction(async detailsSelector => {
+    let details = document.querySelector(detailsSelector);
+    if (!details) return false;
+    if (!details.open) details.querySelector(':scope > summary')?.click();
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    details = document.querySelector(detailsSelector);
+    return Boolean(details?.open);
+  }, selector);
+}
+
 /**
  * Establish a persistence boundary between scenarios. War Room autosave is a
  * 400 ms debounce and command rendering is requestAnimationFrame-driven. The

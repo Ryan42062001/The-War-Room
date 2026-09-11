@@ -3,7 +3,7 @@ import {createRequire} from 'node:module';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
-import {commitRerenderingControl} from './browser-test-helpers.mjs';
+import {commitRerenderingControl, openStableDisclosure} from './browser-test-helpers.mjs';
 
 const {chromium} = createRequire(import.meta.url)('playwright');
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(.:)/, '$1')), '..');
@@ -76,10 +76,7 @@ try {
   assert.ok(onClock.height >= initial.height + 20, `expected clock bar ${onClock.height}px to be visibly taller than waiting ${initial.height}px`);
   assert.deepEqual(onClock.drafted.sort(), draftedNames.slice().sort());
 
-  await page.evaluate(() => {
-    const details = document.querySelector('.draft-command-setup-disclosure');
-    if (details && !details.open) details.querySelector('summary')?.click();
-  });
+  await openStableDisclosure(page, '.draft-command-setup-disclosure');
   await page.waitForFunction(() => {
     const input = document.querySelector('[data-command-setting="slot"]');
     if (!input) return false;
