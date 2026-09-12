@@ -3,6 +3,7 @@ import {createRequire} from 'node:module';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import {commitDisclosureControl} from './browser-test-helpers.mjs';
 
 const {chromium} = createRequire(import.meta.url)('playwright');
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(.:)/, '$1')), '..');
@@ -75,20 +76,14 @@ try {
   assert.ok(onClock.height >= initial.height + 20, `expected clock bar ${onClock.height}px to be visibly taller than waiting ${initial.height}px`);
   assert.deepEqual(onClock.drafted.sort(), draftedNames.slice().sort());
 
-  await page.evaluate(() => {
-    const details = document.querySelector('.draft-command-setup-disclosure');
-    if (details && !details.open) details.querySelector('summary')?.click();
-  });
-  await page.waitForFunction(() => {
-    const input = document.querySelector('[data-command-setting="slot"]');
-    if (!input) return false;
-    const rect = input.getBoundingClientRect();
-    const style = getComputedStyle(input);
-    return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
-  });
-  const slotInput = page.locator('[data-command-setting="slot"]');
-  await slotInput.fill('6');
-  await slotInput.dispatchEvent('change');
+  // The command bar intentionally replaces its children on scheduled renders.
+  // Settle, resolve, and commit against one render generation.
+  await commitDisclosureControl(
+    page,
+    '.draft-command-setup-disclosure',
+    '[data-command-setting="slot"]',
+    6
+  );
   await page.waitForFunction(() => document.body.getAttribute('data-draft-command-mode') === 'waiting');
   await page.waitForFunction(() => Number(document.getElementById('pcSlot').value) === 6);
 

@@ -70,24 +70,26 @@ async function getPageWidth(page) {
 }
 
 async function openRecovery(page) {
-  const button = page.getByRole('button', {name:'Open draft recovery and system check'});
-  await page.waitForFunction(() => {
-    const control = document.getElementById('war-room-maintenance-btn');
-    if (!control) return false;
-    const style = window.getComputedStyle(control);
-    const visible = style.display !== 'none' && style.visibility !== 'hidden' && control.getClientRects().length > 0;
-    const layoutReady = document.body.classList.contains('draft-layout-efficiency-ready');
-    return visible || layoutReady;
-  });
-  if (!(await button.isVisible().catch(() => false))) {
-    const manage = page.locator('#draft-manage');
-    await manage.waitFor({state:'attached'});
-    if (!(await manage.evaluate(element => element.open))) {
-      await manage.locator('summary').click();
+  await page.waitForFunction(() => Boolean(document.getElementById('war-room-maintenance-btn')));
+  const opened = await page.evaluate(async () => {
+    for (let frame = 0; frame < 20; frame += 1) {
+      const manage = document.getElementById('draft-manage');
+      if (manage) manage.open = true;
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      const currentManage = document.getElementById('draft-manage');
+      const button = document.getElementById('war-room-maintenance-btn');
+      if (!currentManage || !button) continue;
+      currentManage.open = true;
+      const style = window.getComputedStyle(button);
+      const visible = style.display !== 'none' && style.visibility !== 'hidden' && button.getClientRects().length > 0;
+      if (!visible) continue;
+      button.click();
+      return true;
     }
-    await button.waitFor({state:'visible'});
-  }
-  await button.click();
+    return false;
+  });
+  assert.equal(opened, true, 'current recovery control must be visible and clickable after opening Draft Management');
+  await page.waitForSelector('#war-room-maintenance-dialog[open]');
 }
 
 async function assertRecoveryContained(page, label, baselineDocumentWidth) {

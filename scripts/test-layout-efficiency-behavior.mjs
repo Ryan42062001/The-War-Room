@@ -3,6 +3,7 @@ import {createRequire} from 'node:module';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import {pressDisclosureControl} from './browser-test-helpers.mjs';
 
 const {chromium} = createRequire(import.meta.url)('playwright');
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(.:)/, '$1')), '..');
@@ -141,9 +142,12 @@ try {
   assert.equal(await page.locator('.draft-command-setup-summary-value').innerText(), '10 teams · Pick 5 · 16 rounds');
   await page.evaluate(() => document.querySelector('.draft-command-setup-disclosure > summary')?.click());
   await page.waitForFunction(() => document.querySelector('.draft-command-setup-disclosure')?.open === true);
-  const setupInput = page.locator('.draft-command-setup-fields input').first();
-  await setupInput.focus();
-  await setupInput.press('Escape');
+  await pressDisclosureControl(
+    page,
+    '.draft-command-setup-disclosure',
+    '.draft-command-setup-fields input',
+    'Escape'
+  );
   await page.waitForFunction(() => {
     const details = document.querySelector('.draft-command-setup-disclosure');
     const summary = document.querySelector('.draft-command-setup-summary');
@@ -155,8 +159,17 @@ try {
   // Put the command surface off-screen before the urgent transition. The
   // presentation layer must reveal On-the-Clock without relying on a board-
   // obscuring sticky overlay.
-  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-  await page.waitForFunction(() => document.getElementById('draft-command-bar').getBoundingClientRect().bottom < 0);
+  const commandBarOffscreen = await page.evaluate(async () => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    for (let frame = 0; frame < 20; frame += 1) {
+      window.scrollTo(0, document.documentElement.scrollHeight);
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      const bar = document.getElementById('draft-command-bar');
+      if (bar && bar.getBoundingClientRect().bottom < 0) return true;
+    }
+    return false;
+  });
+  assert.equal(commandBarOffscreen, true, 'command bar must be off-screen before urgent transition');
   await page.evaluate(() => {
     [...document.querySelectorAll('tr.draftrow')].slice(2, 4).forEach((row, offset) => {
       const pick = offset + 3;
