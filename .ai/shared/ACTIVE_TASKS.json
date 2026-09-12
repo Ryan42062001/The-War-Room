@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-12T01:58:00Z",
+  "updated_at_utc": "2026-09-12T02:05:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": [
@@ -204,7 +204,7 @@
       "allowed_path_prefixes": [".ai/work_helper/", ".github/workflows/", "scripts/"],
       "forbidden_path_prefixes": ["src/", "public/", ".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/research/"],
       "forbidden_exact_paths": [],
-      "next_gate": "CLOSED — WR-045 PASS accepted; PR #132 merged preserving exact audited head as parent at 71c3fa75af203ff2347bf726dd30f8e0706a3212"
+      "next_gate": "CLOSED — WR-045 PASS accepted and exact audited head merged; post-integration residual discovered later is separately assigned to WR-048"
     },
     {
       "task_id": "WR-045",
@@ -223,7 +223,7 @@
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/work_helper/", ".ai/research/", "src/", "public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "CLOSED — PASS with no findings; audit evidence merged at 490283ac6897d631c3d08b67879be14751ab5638 and exact audited WR-044 head merged at 71c3fa75af203ff2347bf726dd30f8e0706a3212"
+      "next_gate": "CLOSED — exact-head PASS remains valid for audited WR-044 target; later integrated residual is routed independently to WR-048/049"
     },
     {
       "task_id": "WR-046",
@@ -262,6 +262,44 @@
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/work_helper/", ".ai/research/", "src/", "public/"],
       "forbidden_exact_paths": [],
       "next_gate": "Audit PR #135 exact head 64ba4aff697c1f45472045b52f374b01ee9e1695 -> PASS-family allows Manager to issue bounded R&D exact source-custody re-attempt only"
+    },
+    {
+      "task_id": "WR-048",
+      "owner": "Work Helper",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-048.md",
+      "role_handoff": ".ai/work_helper/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": "wr-048-browser-persistence-residual",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "WORK_MODE_HIGH_VALUE",
+      "audit_required": true,
+      "blocked_on": [],
+      "allowed_path_prefixes": [".ai/work_helper/", ".github/workflows/", "scripts/"],
+      "forbidden_path_prefixes": ["src/", "public/", ".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/research/"],
+      "forbidden_exact_paths": [],
+      "next_gate": "Resolve PR #138 run 34666574060 persistence residual without weakening strict null assertion -> WR-049 independent audit"
+    },
+    {
+      "task_id": "WR-049",
+      "owner": "Auditor",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-049.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": "wr-049-browser-persistence-residual-audit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "WORK_MODE_PREFERRED",
+      "audit_required": false,
+      "blocked_on": ["WR-048 complete with one immutable post-integration persistence remediation PR/head"],
+      "allowed_path_prefixes": [".ai/auditor/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/work_helper/", ".ai/research/", "src/", "public/"],
+      "forbidden_exact_paths": [],
+      "next_gate": "WR-048 immutable remediation target -> WR-049 independent audit -> Manager acceptance/merge decision"
     }
   ]
 }
