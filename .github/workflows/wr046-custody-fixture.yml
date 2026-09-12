@@ -110,6 +110,18 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Bind current credential identities to this live proof
+        run: |
+          python3 scripts/custody/attest_credential_scopes.py \
+            > "$RUNNER_TEMP/wr046-live-credential-binding.json"
+          {
+            echo '### WR-046 current-credential binding for live custody proof'
+            echo '```json'
+            cat "$RUNNER_TEMP/wr046-live-credential-binding.json"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/wr046-live-credential-binding.json"
+
       - name: Acquire lawful non-sensitive fixture
         run: |
           python3 scripts/custody/acquire_github_release_asset.py \
@@ -145,5 +157,6 @@ jobs:
         run: |
           rm -f "$RUNNER_TEMP/wr046-jq-attestation.json"
           rm -f "$RUNNER_TEMP/wr046-custody-proof.json"
-          echo 'Local fixture/report removed; no GitHub Actions artifact is used as durable custody.'
+          rm -f "$RUNNER_TEMP/wr046-live-credential-binding.json"
+          echo 'Local fixture/reports removed; no GitHub Actions artifact is used as durable custody.'
 
