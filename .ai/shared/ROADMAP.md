@@ -1,6 +1,6 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — WR-047 CUSTODY AUDIT / WR-048 CI RESIDUAL REMEDIATION
+Status: ACTIVE DEVELOPMENT — CUSTODY CREDENTIAL-SCOPE REMEDIATION QUEUED / WR-048 CI RESIDUAL ACTIVE
 Last updated: 2026-09-12
 Owner: Manager / Architect
 
@@ -30,10 +30,11 @@ WR-041 established Work Helper / Super Troubleshooter as a permanent privileged 
 - WR-043 — BLOCKED / independent source-custody audit; no admitted target yet
 - WR-044 — CLOSED / exact audited browser-CI remediation merged
 - WR-045 — CLOSED / PASS on exact WR-044 target
-- WR-046 — AUDIT_READY / B2+R2 custody capability complete on PR #135
-- WR-047 — ASSIGNED / independent audit of PR #135 exact head
-- WR-048 — ASSIGNED / post-integration browser persistence residual
+- WR-046 — REWORK_REQUIRED / credential-scope attestation gap
+- WR-047 — CLOSED / FAIL — REMEDIATION REQUIRED
+- WR-048 — IN_PROGRESS / post-integration browser persistence residual
 - WR-049 — BLOCKED / independent audit of WR-048 remediation
+- WR-050 — BLOCKED / fresh audit of remediated WR-046 credential scopes
 
 ## Historical returning-player architecture
 The historical v1 architecture remains documented under WR-D005 / WR-D006. WR-D007 does not rewrite it and does not claim newly sourced metadata reproduces the deleted WR-033 upstream asset.
@@ -60,7 +61,7 @@ WR-034 / WR-D006 accepted as historical stats-only availability/continuation evi
 ### Phase 5A — v1 season-total composition — CLOSED / INSUFFICIENT EVIDENCE
 WR-035 / PR #124 remains closed unmerged. WR-037 returned `REMEDIATION BLOCKED — UPSTREAM IDENTITY NOT PROVABLE`. WR-038 was never activated.
 
-### Phase 5B — Returning-Player v2 evidence reset — ACTIVE / CUSTODY CAPABILITY AUDIT
+### Phase 5B — Returning-Player v2 evidence reset — ACTIVE / CREDENTIAL-SCOPE REMEDIATION
 WR-D007 authorized the v2 reset. WR-D008 accepts the independently audited prospective evidence contract.
 
 #### WR-039 — Prospective evidence contract — COMPLETE / ACCEPTED / MERGED
@@ -76,25 +77,28 @@ R&D blocker target: PR #133 / `1c3c6d768d58aa636194226f16b9822eebc8c19f`. No sou
 #### WR-043 — Independent source-custody audit — BLOCKED
 Wait for a later R&D custody target that actually admits and freezes sources.
 
-#### WR-046 — Source-custody capability recovery — AUDIT_READY
-Work Helper completed B2 primary + R2 independent-backup proof on PR #135 exact head `64ba4aff697c1f45472045b52f374b01ee9e1695`.
+#### WR-046 — Source-custody capability recovery — REWORK_REQUIRED
+PR #135 exact audited head `64ba4aff697c1f45472045b52f374b01ee9e1695` passed custody mechanics but lacks independently attested provider-side least-privilege scope evidence for the exact configured credentials.
 
-Live proof run `34665473257` demonstrated exact fixture acquisition, Backblaze B2 custody with COMPLIANCE retention + Legal Hold, Cloudflare R2 independent backup with bucket-wide indefinite Bucket Lock, direct retrieval from both providers, and byte-identical digest equality. No actual v2 source was admitted and no model/2026-outcome/production work occurred.
+Remediation is bounded to provider-issued privacy-safe authorization metadata for B2 and both Cloudflare credentials. If a credential is broader than approved, re-scope/replace it and repeat live proof; otherwise preserve the existing live proof.
 
-#### WR-047 — Independent capability audit — ASSIGNED
-Audit exactly PR #135 head `64ba4aff697c1f45472045b52f374b01ee9e1695`. PASS-family authorizes only a bounded R&D exact-source custody re-attempt.
+#### WR-047 — Independent capability audit — CLOSED / FAIL
+Audit head `03309c9e6cf39b13742e278d787559d94813670f`; audit evidence merged at `2f6cbd64d845813307a67207045e1e852fdad774`.
+
+Only blocking finding: HIGH `WR-047-AUD-01` — actual provider-side least-privilege credential scopes were asserted but not independently attested.
+
+#### WR-050 — Fresh credential-scope re-audit — BLOCKED
+Activate only after WR-046 publishes one immutable remediated head. PASS-family WR-050 is the next custody capability acceptance gate.
 
 ### Repository validation reliability lane — ACTIVE / POST-INTEGRATION RESIDUAL
 #### WR-044 — Exact-head remediation — CLOSED / MERGED
-Exact audited remediation head `e750748d938ed6bb8284eeec1cfda9eea77997ac` received WR-045 PASS and was merged as a direct parent of `71c3fa75af203ff2347bf726dd30f8e0706a3212`.
+Exact audited remediation head `e750748d938ed6bb8284eeec1cfda9eea77997ac` received WR-045 PASS and was merged.
 
 #### WR-045 — Exact-head audit — CLOSED / PASS
-Audit head `d575cf81e4ebcb29733ed333ca782ce72d2f43c1`; evidence merged at `490283ac6897d631c3d08b67879be14751ab5638`. The exact-head verdict remains historical evidence for the target reviewed.
+Historical exact-target verdict remains valid for the target reviewed.
 
-#### WR-048 — Post-integration persistence determinism residual — ASSIGNED
-Manager PR #138 on the integrated WR-044 baseline failed the mandatory stress gate immediately in iteration `1/5` at `npm run test:browser`: strict deleted-key assertion expected `null` but observed a newly autosaved version-2 state. Trigger run `34666574060`, job `103479540784`.
-
-This demonstrates the integrated persistence/state-isolation guarantee remains insufficient. WR-048 must trace and fix the residual causal lifecycle without weakening assertions, blanket retries, storage clearing, or production behavior.
+#### WR-048 — Post-integration persistence determinism residual — IN_PROGRESS
+Work Helper is active on PR #139. Do not interrupt it to resume WR-046. Current draft evidence indicates the failing corrupt-recovery null assertion can race a later valid autosave successor; final diagnosis/remediation is not yet accepted.
 
 #### WR-049 — Independent residual audit — BLOCKED
 Activate only after WR-048 publishes one immutable remediation target.
@@ -109,15 +113,11 @@ Leading advisory candidate remains deterministic eligibility-constrained starter
 ### Phase 11 — WR-023 2026 prospective validation — FROZEN / EVENT-DRIVEN
 ### Phase 12 — Production-ranking promotion decision — FUTURE / CONDITIONAL
 
-## Phone UX lane
-WR-026 / PR #120 — COMPLETE / MERGED. WR-031 re-audit — PASS. Physical-phone Level-4 remains unverified.
-
 ## Current roles
-- Manager: parallel-lane reconciliation
+- Manager: IDLE after reconciliation
 - Builder: IDLE
 - Draft Strategy: IDLE
 - R&D: IDLE / WR-042 BLOCKED
-- Auditor: ACTIVE WR-047
-- Work Helper: ACTIVE WR-048
-- WR-043: BLOCKED
-- WR-049: BLOCKED
+- Auditor: IDLE / WR-049 + WR-050 BLOCKED
+- Work Helper: ACTIVE / WR-048
+- WR-046: REWORK_REQUIRED / queued behind WR-048
