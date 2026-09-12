@@ -2,7 +2,7 @@
 
 Task: WR-053 — Independent Audit of Current-Credential Live Custody Proof  
 Role: Independent Auditor / QA  
-Audit mode: Fast Refresh, expanded for exact provider/live-proof/lineage/CI evidence  
+Audit mode: Fast Refresh, expanded for exact lineage/provider/CI evidence  
 Target PR: #135  
 Exact audited WR-046 final evidence head: `0be4a508d68009c89ef318738acb286233a3a850`  
 Prior WR-050 audited head: `81fbc857625a810522460661c7b63591c20714d7`  
@@ -15,46 +15,27 @@ Audit branch: `wr-053-current-credential-live-proof-audit`
 
 `PASS`
 
-WR-050 remains historically correct as `FAIL — REMEDIATION REQUIRED` for the evidence available at its exact target. WR-053 does not overwrite or reinterpret that result.
+WR-050 remains historically correct as `FAIL — REMEDIATION REQUIRED` for the evidence available at its exact target. WR-053 does not overwrite or reinterpret WR-050.
 
-The one fresh current-credential live proof authorized by Manager closes `WR-050-AUD-01`: within the same successful live-provider GitHub Actions job, the workflow first authenticated/fingerprinted the exact configured current credentials using the accepted privacy-safe identity anchors and then exercised the unchanged B2/R2 custody mechanics using that same job environment. The emitted B2 key-ID SHA-256, R2 access-key-ID SHA-256, and Cloudflare configuration-token ID match the current-scope evidence accepted by WR-050 exactly.
+The new Manager-authorized path-B evidence closes `WR-050-AUD-01`: in one successful live-provider job, the exact configured current credentials were first bound to the privacy-safe identity anchors already accepted by WR-050 and were then exercised through the unchanged B2/R2 custody proof in the same job/environment.
 
-No CRITICAL, HIGH, MEDIUM, or LOW findings remain in the bounded WR-053 scope.
+Findings: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — none.
 
-## Audit objective
+## 1. Exact target and historical preservation
 
-Determine independently whether Manager remediation path B was executed exactly once and supplies the missing current-credential-to-live-provider binding required to close:
-
-`WR-050-AUD-01 — HIGH — Prior live-provider proof cannot be independently bound to the newly scope-attested current credentials.`
-
-This is a custody-capability lineage audit only. It is not source admission, source parsing, model protocol, model fitting/scoring/evaluation, ranking authorization, production authorization, or Phase-6 authorization.
-
-## Repository / target identity
-
-Independent checks establish:
+Independent target checks establish:
 
 - PR #135 is the WR-046 custody-capability recovery PR.
-- Exact final target head is `0be4a508d68009c89ef318738acb286233a3a850`.
-- Fresh live execution occurred at exact implementation/remediation head `2739f4240600c726f880870051d6874cfa1e408b`.
-- Historical WR-050 evidence remains preserved on canonical history through merge `589f332c967e900bf352f740753535e5e33cf22f`.
-- The WR-053 audit branch was created from that exact canonical baseline.
+- Exact final audited PR head is `0be4a508d68009c89ef318738acb286233a3a850`.
+- Fresh live execution occurred at `2739f4240600c726f880870051d6874cfa1e408b`.
+- Historical WR-050 evidence remains preserved through merge `589f332c967e900bf352f740753535e5e33cf22f`.
+- Historical WR-050 audit remains `FAIL — REMEDIATION REQUIRED` with `WR-050-AUD-01` HIGH against `81fbc857625a810522460661c7b63591c20714d7`.
 
-## Historical WR-050 preservation
+Historical WR-050 preservation verdict: PASS.
 
-Verdict: PASS.
+## 2. Complete bounded remediation delta
 
-`.ai/auditor/WR-050_AUDIT.md` and the inherited Auditor handoff preserve the historical WR-050 result exactly:
-
-- target: PR #135 / `81fbc857625a810522460661c7b63591c20714d7`;
-- verdict: `FAIL — REMEDIATION REQUIRED`;
-- blocking finding: `WR-050-AUD-01` HIGH;
-- cause: the accepted historical live proof had no privacy-safe credential identity anchors, so it could not independently be inherited by the newly scope-attested current credentials.
-
-WR-053 relies on new evidence created after WR-050. It does not claim the prior WR-050 evidence was sufficient at the time.
-
-## Complete bounded remediation delta
-
-Compared exactly:
+Exact compare:
 
 `81fbc857625a810522460661c7b63591c20714d7`
 
@@ -62,224 +43,215 @@ Compared exactly:
 
 `0be4a508d68009c89ef318738acb286233a3a850`
 
-Independent compare result:
+Independent result:
 
-- status: ahead;
-- commits: exactly 3;
-- changed material surfaces: exactly 3:
+- exactly 3 commits;
+- exactly 3 changed material surfaces:
   1. `.github/workflows/wr046-custody-fixture.yml`;
   2. `.ai/work_helper/WR-046_CURRENT_CREDENTIAL_LIVE_PROOF.md`;
   3. `.ai/work_helper/HANDOFF.md`.
 
-No custody Python implementation script changed in this bounded remediation. No credential policy/scope artifact changed. No production/user-facing file changed. No `.ai/research/**` file changed. No source, model, scoring, ranking, frozen football artifact, Manager/shared control-plane semantic, or accepted WR039/WR-D008 contract surface changed.
+No custody Python implementation changed. No credential scope evidence or policy changed. No production/user-facing source changed. No `.ai/research/**` file changed. No Returning-Player source, model, scoring, ranking, frozen research artifact, WR039 contract, or WR-D008 semantic changed.
 
 Bounded-delta verdict: PASS.
 
-## Workflow remediation mechanics
+## 3. Workflow mechanics and identity-binding step
 
-The prior and final workflow versions were compared directly.
-
-The fresh live-provider job retains the existing marker gate and unchanged custody sequence. The bounded change adds one privacy-safe binding step immediately after checkout and before fixture/custody operations:
+The live-provider job retains the existing push-marker gate and unchanged custody sequence. The bounded remediation adds one non-mutating privacy-safe identity-binding step immediately after checkout and before live fixture/custody operations:
 
 `python3 scripts/custody/attest_credential_scopes.py > "$RUNNER_TEMP/wr046-live-credential-binding.json"`
 
-The report is printed for independent evidence and then removed during cleanup.
+The same report is removed during cleanup.
 
-The existing live proof remains gated to a push whose head commit contains `[wr046-live-proof]`. The separate scope-attestation job remains gated to `[wr046-scope-attest]`. Pull-request and ordinary unmarked executions cannot enter the live-provider job under this condition.
+The live provider job remains gated to a push whose head commit contains `[wr046-live-proof]`. The separate scope-only job remains independently gated to `[wr046-scope-attest]`.
 
-No retry loop, credential substitution, credential mutation, weaker bucket/retention/lock check, or provider bypass was introduced.
+No retry loop, credential substitution, credential mutation, provider bypass, retention weakening, or lock weakening was introduced.
 
 Custody-mechanic preservation verdict: PASS.
 
-## Current credential identity anchors
+## 4. Accepted current credential anchors
 
-WR-050 accepted current-scope evidence anchored the exact configured credentials privacy-safely as:
+WR-050 accepted the following current credential identity anchors:
 
 - Backblaze B2 key-ID SHA-256: `b744e565dc21cc4ec402f3ec7a24026bf4f9ce9711e659992f2be21a27ccac5a`;
 - Cloudflare R2 access-key-ID SHA-256: `17e95438e19777a414ee85d57c32d44466199a973c51e5b6f57e42a5384585bd`;
 - Cloudflare configuration-token ID: `207e45b2deb2a0fd1d8bd3c57354a0dc`.
 
-These accepted current-scope anchors were not changed by WR-053.
+The WR-053 bounded delta did not alter that accepted scope evidence.
 
-## Fresh live-provider execution
+## 5. Exactly one fresh current-credential live proof
 
 Run: `34723578709`  
-Event/head: marked push / `2739f4240600c726f880870051d6874cfa1e408b`  
+Head: `2739f4240600c726f880870051d6874cfa1e408b`  
+Event: push  
 Run attempt: 1  
 Conclusion: SUCCESS
 
 Jobs:
 
-- `103633687229` — `contract-preflight` — SUCCESS;
-- `103633709551` — `live-b2-r2-custody-proof` — SUCCESS;
-- separate `credential-scope-attestation` — SKIPPED.
+- contract-preflight `103633687229` — SUCCESS;
+- live B2/R2 custody proof `103633709551` — SUCCESS;
+- separate credential-scope job — SKIPPED.
 
-The triggering commit is the marked live-proof commit:
+The triggering commit message is:
 
 `WR-046 execute current credential proof [wr046-live-proof]`
 
-### Same-job credential binding
+Raw live-job logs independently confirm checkout of exact head `2739f4240600c726f880870051d6874cfa1e408b` and one configured GitHub Actions secret environment used throughout the job.
 
-Raw job `103633709551` shows the live-provider job checked out exact head `2739f4240600c726f880870051d6874cfa1e408b` and received the configured credential environment through GitHub Actions secrets.
+## 6. Same-job current credential binding
 
-Before any fixture/custody operation, the job ran the existing `scripts/custody/attest_credential_scopes.py` using those configured environment values.
+Before fixture acquisition or custody work, job `103633709551` ran the accepted credential-attestation implementation using the configured job credentials.
 
-The same-job output independently established:
+The emitted B2 identity was:
 
-Backblaze B2:
+`b744e565dc21cc4ec402f3ec7a24026bf4f9ce9711e659992f2be21a27ccac5a`
 
-- `application_key_id_sha256` = `b744e565dc21cc4ec402f3ec7a24026bf4f9ce9711e659992f2be21a27ccac5a`;
-- configured key authenticated successfully through Backblaze v4 authorization;
-- one allowed bucket only: `War-Room-Custody-Primary`;
-- exact `custody/` prefix;
+It authenticated successfully through Backblaze v4 authorization and also reconfirmed:
+
+- only bucket `War-Room-Custody-Primary`;
+- exact prefix `custody/`;
 - exact accepted seven-capability envelope;
-- all fail-closed scope checks true.
+- configured-key authentication true;
+- forbidden capabilities absent;
+- all fail-closed checks true.
 
-Cloudflare R2 object credential:
+The emitted R2 object access-key identity was:
 
-- `access_key_id_sha256` = `17e95438e19777a414ee85d57c32d44466199a973c51e5b6f57e42a5384585bd`.
+`17e95438e19777a414ee85d57c32d44466199a973c51e5b6f57e42a5384585bd`
 
-Cloudflare configuration token:
-
-- provider token ID = `207e45b2deb2a0fd1d8bd3c57354a0dc`;
-- provider verification status = active.
-
-Report:
-
-- `secret_values_present: false`.
-
-All three identity anchors match the previously accepted WR-050 current-scope anchors exactly.
-
-Crucially, the attestation and subsequent B2/R2 live operations occur in the same Actions job under the same configured secret environment, with no credential-changing step between identity binding and custody execution. Therefore the live operations are now independently bound to the accepted current credential identities without revealing the reusable secrets.
-
-Current credential-anchor binding verdict: PASS.
-
-## B2 current credential / live proof
-
-Verdict: PASS.
-
-The exact current B2 key ID is bound by SHA-256 before live operations and the configured B2 secret remains masked. The same job then exercises the existing B2 custody object path and directly retrieves/proves the primary object under the unchanged mechanics.
-
-The live report records:
-
-- bucket: `War-Room-Custody-Primary`;
-- exact object key: `custody/sha256/01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed/raw`;
-- retrieved byte size: `14380`;
-- retrieved SHA-256: `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`;
-- retention mode: `COMPLIANCE`;
-- Legal Hold: `ON`;
-- retain-until: `2034-11-29T01:38:02Z`;
-- B2 version ID present.
-
-The retain-until value is present and future-valid relative to the September 2026 audit date.
-
-## R2 current credential / live proof
-
-Verdict: PASS.
-
-The exact current R2 object access-key ID is bound by SHA-256 before live operations and the configured R2 secret remains masked. The same job directly retrieves/proves the independent R2 backup under unchanged mechanics.
-
-The live report records:
-
-- bucket: `war-room-custody-backup`;
-- exact object key: `custody/sha256/01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed/raw`;
-- retrieved byte size: `14380`;
-- retrieved SHA-256: `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`;
-- Bucket Lock rule condition: `Indefinite`;
-- lock rule prefix: empty string, therefore bucket-wide and covering the custody object;
-- lock rule ID present.
-
-## Cloudflare configuration-token identity binding
-
-Verdict: PASS.
-
-The same live job verifies the configured Bucket-Lock read token before live custody operations and emits provider token ID:
+The configured Cloudflare lock-read token self-verified as active token ID:
 
 `207e45b2deb2a0fd1d8bd3c57354a0dc`
 
-That is exactly the token ID accepted by WR-050's current-scope audit. Its accepted provider-console policy remains the read-only `Workers R2 Storage:Read` envelope and was not altered by the WR-053 delta.
+The identity report recorded `secret_values_present: false`.
 
-The live proof subsequently verifies the R2 Bucket Lock state as `Indefinite`. WR-053 did not reopen the already accepted current-scope policy because the bounded delta did not change the credential or scope evidence.
+All three values exactly match WR-050's accepted current-scope anchors. The subsequent live B2/R2 operations occurred in the same job/environment with no intervening credential-changing step.
 
-## Fixture identity and lawful/non-sensitive use
+Current credential-anchor binding verdict: PASS.
 
-Verdict: PASS.
+This new same-job evidence closes the exact lineage gap identified by WR-050 without claiming that WR-050's earlier evidence was sufficient.
 
-The preflight/live logs identify the deterministic public fixture as:
+## 7. Fixture identity
+
+The fresh live job acquired and verified the deterministic public non-sensitive fixture:
 
 - repository: `jqlang/jq`;
 - asset ID: `453012755`;
 - byte size: `14380`;
 - SHA-256: `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`;
-- acquisition verification: true.
+- acquisition result: `verified: true`.
 
-This fixture is a public non-sensitive GitHub release asset used only as a custody mechanics fixture. It is not Returning-Player source data and contains no 2026 regular-season outcome evidence used for research.
+Content-addressed object key:
 
-## Direct retrieval / digest / byte-size proof
+`custody/sha256/01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed/raw`
 
-Verdict: PASS.
+The fixture is not Returning-Player source data and does not inspect 2026 regular-season outcomes.
+
+Fixture identity verdict: PASS.
+
+## 8. B2 current credential / live proof
+
+The same current B2 credential identity bound above was used by the live proof.
+
+Provider/live evidence records:
+
+- bucket `War-Room-Custody-Primary`;
+- exact content-addressed object key;
+- direct retrieved byte size `14380`;
+- direct retrieved SHA-256 `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`;
+- retention mode `COMPLIANCE`;
+- Legal Hold `ON`;
+- retain-until `2034-11-29T22:45:28Z`;
+- provider version ID present.
+
+The retain-until value is present and future-valid relative to the September 2026 audit date.
+
+B2 current credential/live proof verdict: PASS.
+
+B2 retention/Legal Hold verdict: PASS.
+
+## 9. R2 current credential / live proof
+
+The same current R2 object credential identity bound above was used by the live proof.
+
+Provider/live evidence records:
+
+- bucket `war-room-custody-backup`;
+- exact content-addressed object key;
+- direct retrieved byte size `14380`;
+- direct retrieved SHA-256 `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`;
+- Bucket Lock rule condition `Indefinite`;
+- lock rule ID `my-rule`;
+- lock prefix `""`, therefore bucket-wide and covering the custody object.
+
+R2 current credential/live proof verdict: PASS.
+
+R2 Bucket Lock verdict: PASS.
+
+## 10. Cloudflare configuration-token binding
+
+The configured lock-read token was verified in the same live job before custody operations and emitted token ID:
+
+`207e45b2deb2a0fd1d8bd3c57354a0dc`
+
+That is exactly the current config-token identity accepted by WR-050. The bounded remediation did not alter its already accepted read-only policy envelope.
+
+Config-token identity binding verdict: PASS.
+
+## 11. Direct retrieval / digest equality
 
 The normalized live report independently records:
 
-- original fixture size = 14380;
-- B2 retrieved size = 14380;
-- R2 retrieved size = 14380;
+- original fixture size `14380`;
+- B2 retrieved size `14380`;
+- R2 retrieved size `14380`;
 - `all_three_byte_sizes_equal: true`;
-- original fixture SHA-256 = expected fixture digest;
-- B2 retrieved SHA-256 = same digest;
-- R2 retrieved SHA-256 = same digest;
+- original SHA-256 equals expected fixture digest;
+- B2 retrieved SHA-256 equals the same digest;
+- R2 retrieved SHA-256 equals the same digest;
 - `all_three_sha256_equal: true`.
 
-The object key is content-addressed from that same SHA-256.
+Direct retrieval/digest verdict: PASS.
 
-No GitHub Actions artifact is used as the custody authority. Runner-local fixture/proof/binding files are removed after the live proof.
+No GitHub Actions artifact is used as custody authority.
 
-## B2 retention / Legal Hold
+## 12. Single-live-run requirement
 
-Verdict: PASS.
-
-Provider proof records:
-
-- mode `COMPLIANCE`;
-- Legal Hold `ON`;
-- retain-until `2034-11-29T01:38:02Z`;
-- version identity present.
-
-No WR-053 change weakened B2 retention mechanics.
-
-## R2 Bucket Lock
-
-Verdict: PASS.
-
-Provider proof records:
-
-- condition `Indefinite`;
-- lock rule prefix `""`, covering the bucket and therefore the custody object;
-- lock rule ID present.
-
-No WR-053 change weakened R2 lock mechanics.
-
-## Exactly-one fresh live-provider run
-
-Verdict: PASS.
-
-Manager authorized exactly one current-credential live provider execution.
+Manager authorized exactly one fresh current-credential provider execution.
 
 Independent evidence establishes:
 
-1. the marked live-proof commit is `2739f4240600c726f880870051d6874cfa1e408b` with message containing exactly the required `[wr046-live-proof]` marker;
-2. run `34723578709` executed that marked push and is still `run_attempt: 1`;
-3. compare `2739f424... -> 0be4a508...` shows exactly one descendant commit, final evidence commit `0be4a508d68009c89ef318738acb286233a3a850`;
-4. that final commit message is `WR-046 freeze current-credential live proof evidence` and contains no live-proof marker;
-5. final-head custody run `34723691232` is a pull-request run, and its job record shows:
-   - preflight SUCCESS;
-   - credential-scope job SKIPPED;
-   - live-provider job SKIPPED;
-6. the workflow live-provider condition requires a marked push, so the unmarked final commit, pull-request validation, and workflow-dispatch paths cannot independently enter the live-provider job under the checked-in condition.
+1. `2739f4240600c726f880870051d6874cfa1e408b` is the marked `[wr046-live-proof]` commit;
+2. run `34723578709` executed that marked push and remains `run_attempt: 1`;
+3. exact compare `2739f424... -> 0be4a508...` shows only one descendant commit;
+4. that descendant/final commit is `0be4a508d68009c89ef318738acb286233a3a850`, message `WR-046 freeze current-credential live proof evidence`, with no live-proof marker;
+5. final-head custody run `34723691232` is a pull-request run where preflight succeeds but both provider jobs are skipped;
+6. the checked-in workflow requires a marked push for the live-provider job.
 
 No second current-credential live B2/R2 provider execution was found or enabled after the authorized run merely to manufacture evidence.
 
-## Final-head custody validation
+Single-live-run verdict: PASS.
+
+## 13. Secret/privacy safety
+
+Raw live-job logs were inspected directly.
+
+The following configured sensitive values remain masked as `***` where used:
+
+- B2 key ID;
+- B2 application key;
+- R2 access-key ID;
+- R2 secret access key;
+- Cloudflare config-read token.
+
+Only privacy-safe identifier hashes/non-secret provider IDs are emitted. The identity report records `secret_values_present: false`; custody output records secrets not logged/reported. Runner-local fixture, custody report, and credential-binding report are removed during cleanup.
+
+No reusable credential was observed in audited repository evidence or logs. No Actions artifact is custody authority.
+
+Secret/privacy verdict: PASS.
+
+## 14. Final-head custody validation
 
 Run: `34723691232`  
 Exact PR head: `0be4a508d68009c89ef318738acb286233a3a850`  
@@ -293,85 +265,55 @@ Jobs:
 - credential-scope attestation `103634010175` — SKIPPED;
 - live B2/R2 custody proof `103634010131` — SKIPPED.
 
-The preflight validates the checked-in custody Python tooling and deterministic fixture identity at the final evidence head. It performs no provider credential operation and is correctly classified as evidence-only final-head validation, not a second live proof.
+This is evidence-only final-head validation and is not a second provider execution.
 
 Final-head custody validation verdict: PASS.
 
-## Ordinary War Room CI
+## 15. Final-head War Room CI
 
 Run: `34723691235`  
 Exact PR head: `0be4a508d68009c89ef318738acb286233a3a850`  
 Event: pull_request  
 Conclusion: SUCCESS
 
-Job `103633985330` completed successfully. Raw logs confirm:
+Job `103633985330` completed successfully. Raw logs independently confirm:
 
-- full `npm test` completed successfully;
-- extension engine: 164/164 pass, 0 fail, 0 skipped;
-- browser suite passed;
-- responsive/layout gates passed;
-- draft invariant torture harness passed;
-- persistence/recovery integration passed;
-- recovery-failure injection passed;
-- live mock fixtures passed;
-- resilience syntax and offline/recovery validation passed.
-
-The previous unrelated browser persistence failure observed during WR-050 is not present at the exact WR-053 final head.
+- full `npm test` success;
+- extension engine 164/164 pass, 0 fail, 0 skipped;
+- browser suite success;
+- responsive/layout success;
+- draft invariants success;
+- persistence/recovery integration success;
+- recovery-failure injection success;
+- live mock fixtures success;
+- resilience syntax and offline/recovery validation success.
 
 Final-head ordinary CI verdict: PASS.
 
-## Secret / privacy safety
+## 16. WR039 / WR-D008 preservation and boundaries
 
-Verdict: PASS.
+The bounded WR-053 remediation changes no `.ai/research/**` artifact and does not alter the accepted WR039/WR-D008 evidence architecture.
 
-Raw live-job logs were inspected directly.
+Confirmed boundaries:
 
-- `WR_CUSTODY_B2_KEY_ID`, B2 application key, R2 access-key ID, R2 secret access key, and Cloudflare config-read token are masked by Actions where present.
-- The privacy-safe binding report exposes only the accepted identifier hashes/provider token ID, provider scope metadata, and non-secret endpoints/resources.
-- `secret_values_present: false` in the identity report.
-- `secrets_in_report: false` / `secrets_logged: false` in custody proof output.
-- runner-local fixture, live proof, and credential-binding reports are removed.
-- no reusable bearer token, application-key secret, S3 secret, password, or other reusable credential was observed in the audited repository text or job logs.
-- no Actions artifact is used as the custody authority.
+- Returning-Player source admission/parsing: NO;
+- Returning-Player v2 source used in fixture: NO;
+- 2026 regular-season outcome inspection for research: NO;
+- model fitting/scoring/tuning/evaluation: NO;
+- ranking work: NO;
+- production/user-facing change: NO;
+- `.ai/research/**` semantic change: NO;
+- WR039/WR-D008 weakening: NO;
+- credential replacement/re-scope introduced by remediation: NO;
+- custody-mechanic weakening: NO.
 
-## Credential replacement / re-scope
+WR039 / WR-D008 preservation verdict: PASS.
 
-No credential replacement or scope-policy change is present in the bounded three-file remediation delta. The purpose of path B is stronger: the current credential identities accepted under WR-050 are freshly fingerprinted/verified and then exercised live in the same job, so closure no longer depends on proving continuity back to the older historical live job.
+## 17. WR-050-AUD-01 disposition
 
-Credential-change relevance verdict: PASS for WR-053. No newly introduced credential replacement/re-scope is evidenced or required for the path-B proof.
+`WR-050-AUD-01 — HIGH` is CLOSED by new evidence.
 
-## WR039 / WR-D008 preservation
-
-Verdict: PASS.
-
-The accepted WR-D008 evidence architecture remains unchanged. WR-053 changes no `.ai/research/**` artifact and does not expand source classes, admitted columns, evidence semantics, or scoring authority.
-
-The controlling chronology remains:
-
-exact source custody -> independent custody audit -> later Manager-authorized model-protocol freeze -> later scoring/evaluation -> later independent result audit.
-
-WR-053 authorizes none of the later stages by itself.
-
-## Boundary verification
-
-Returning-Player source admission/parsing: NO.  
-Returning-Player v2 source used in live fixture: NO.  
-2026 regular-season outcomes inspected for research: NO.  
-Model fitting: NO.  
-Model scoring: NO.  
-Model tuning/evaluation: NO.  
-Ranking work: NO.  
-Production/user-facing change: NO.  
-`.ai/research/**` semantic change: NO.  
-WR039/WR-D008 weakening: NO.  
-Credential replacement/re-scope introduced by bounded remediation: NO.  
-Custody-mechanic weakening: NO.
-
-## WR-050-AUD-01 disposition
-
-`WR-050-AUD-01 — HIGH` is CLOSED by new independent evidence.
-
-The closure does not mean WR-050 was wrong. WR-050 correctly failed the evidence then available. The new path-B evidence supplies the missing binding prospectively: accepted current credential identity anchors and live B2/R2 custody exercise now occur together in one successful provider job.
+WR-050 remains historically correct for its earlier evidence set. WR-053 supplies the previously missing current-credential-to-live-provider binding by proving the accepted current credential identities and live B2/R2 custody operations together in one successful job.
 
 ## Findings by severity
 
@@ -385,7 +327,7 @@ LOW — none.
 This `PASS` authorizes Manager only to:
 
 1. verify PR #135 still identifies exact audited head `0be4a508d68009c89ef318738acb286233a3a850` and accept/merge that exact head under the normal integration gate;
-2. reconcile WR-046 / historical WR-050 / WR-053 while preserving WR-050 as historical FAIL evidence and recording WR-053 as the later closing audit;
+2. reconcile WR-046 / historical WR-050 / WR-053 while preserving WR-050 as historical FAIL evidence and WR-053 as the later closing audit;
 3. issue the bounded WR-042 Returning-Player v2 exact-source custody retry under the unchanged WR039/WR-D008 no-scoring contract.
 
 This audit does NOT authorize:
@@ -401,9 +343,9 @@ This audit does NOT authorize:
 
 Auditor modified PR #135: NO.  
 Auditor merged PR #135: NO.  
-Auditor modified custody objects or credentials: NO.  
+Auditor modified credentials/custody objects: NO.  
 Auditor modified workflow/scripts/Work Helper evidence: NO.  
 Auditor changed production files: NO.  
 Auditor changed `.ai/shared/**`: NO.  
 Auditor changed `.ai/research/**`: NO.  
-Auditor writes for WR-053 are limited to `.ai/auditor/**`.
+WR-053 writes are limited to `.ai/auditor/**`.
