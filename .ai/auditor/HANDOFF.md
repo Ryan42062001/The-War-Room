@@ -2,62 +2,47 @@
 
 HANDOFF
 
-Task ID: WR-047  
+Task ID: WR-049  
 Role: Independent Auditor / QA  
-Status: COMPLETE — FAIL — REMEDIATION REQUIRED  
-Audited PR/head: PR #135 / `64ba4aff697c1f45472045b52f374b01ee9e1695`  
-Live-provider implementation/proof lineage: `4cade5204631f5f2875d664f862dcb4fa0a85200`  
-Canonical main / audit baseline: `68969e1435c69b72f5e9ac1599d95bf6f3716d09`  
-Audit branch: `wr-047-custody-capability-audit`
+Status: COMPLETE — PASS  
+Audited WR-048 PR/head: PR #139 / `f93f4b6b17ab158974763069d9882e5782a526dd`  
+Canonical main / audit baseline: `77a685907d02c42df87bccedd305d79abf762a24`  
+Audit branch: `wr-049-browser-persistence-residual-audit`
 
-Exact live evidence independently verified:
-- workflow `WR-046 Custody Fixture Proof`;
-- run `34665473257` — SUCCESS;
-- preflight job `103476355038` — SUCCESS;
-- live B2/R2 job `103476377218` — SUCCESS.
+Trigger characterization accurate: YES — runs `34666574060` / `103479540784` and `34666754287` / `103480078959` both reproduced the same strict corrupt-recovery assertion after a new valid version-2 successor had been written to the active key. The observed values were not the seeded corrupt `[]` payload.
 
-Exact-byte acquisition verdict: PASS — `jqlang/jq` release asset ID `453012755` was acquired through the immutable GitHub asset API and independently recomputed as SHA-256 `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`, size `14380`. Official provider metadata independently identifies the same asset/name/size/digest.
+Root cause supported: YES — unchanged production recovery quarantines/backups and removes the corrupt active value; subsequent normal recommendation-audit work schedules the existing 400 ms persistence debounce; `saveState()` legitimately writes a valid version-2 successor to the same active draft key. Trigger payload content and timestamps support that causal chain.
 
-Content-addressed identity verdict: PASS — B2 and R2 use `custody/sha256/01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed/raw`.
+Strict null assertion preserved: YES — exact `assert.equal(corruptDraftRecovery.original, null)` remains and now observes storage immediately after the actual production corrupt-recovery operation returns, at the atomic quarantine/removal linearization boundary. It is not weakened or made advisory.
 
-B2 primary custody verdict: PASS — genuine Backblaze B2 bucket `War-Room-Custody-Primary`, endpoint `s3.us-east-005.backblazeb2.com`, independent retrieval, exact digest/size, and provider version identity were proven.
+Startup successor-state coverage: PASS — the real startup/reload path is separately retained and verifies the corrupt raw `[]` is gone, recovery backup remains, board is clean, and any later occupant of the active key is a valid version-2 successor with array-valued recommendation-audit state.
 
-B2 retention / Legal Hold verdict: PASS — live proof independently read `COMPLIANCE`, retain-until `2034-11-29T01:38:02Z`, and Legal Hold `ON`. Backblaze documentation independently confirms Compliance retention cannot be shortened/removed by users and the S3-Compatible API uses application keys rather than the master application key.
+Adjacent layout-generation remediation: PASS — the redundant generation-racy pre-open sequence was removed, while the current-generation Escape helper remains strict and the close/focus-restoration assertions remain. Separate real-keyboard Manage disclosure Escape/focus coverage remains active.
 
-R2 independent-backup verdict: PASS — genuine Cloudflare R2 bucket `war-room-custody-backup` on a distinct provider independently returned the exact fixture bytes.
+No masking/retry weakening: YES — the added 10x persistence loop and existing 5x determinism loop execute fail-fast under `bash -e`. No blanket retry, `continue-on-error`, skip, catch-and-pass, timeout inflation, storage-clearing workaround, or assertion softening/removal was introduced.
 
-R2 indefinite-lock verdict: PASS — live Cloudflare configuration read returned an enabled `Indefinite` rule with empty prefix, which covers the bucket-wide custody object. Official Cloudflare documentation confirms no/empty prefix applies to all objects and Indefinite blocks deletion/overwrite until rule removal.
+Targeted repeat evidence sufficient: YES — exact-head run `34668044160`, attempts/jobs `103483882657`, `103484987497`, and `103486225658` each passed all 10/10 targeted persistence lifecycle executions.
 
-Retrieval/digest verdict: PASS — original/B2/R2 SHA-256 equality and byte-size equality were independently enforced and reported true; both provider downloads recomputed exact SHA and `14380` bytes.
+Full CI evidence sufficient: YES — each same exact-head attempt passed all 5/5 complete determinism cycles, phone validation, full `npm test`, resilience syntax, and 3/3 recovery/resilience lifecycle executions. Raw logs show extension tests 164/164 passed with 0 skipped and the broad browser/layout/draft/persistence/recovery gates remained enabled.
 
-No-master/root verdict: PASS — runtime uses B2 application-key/S3 credentials, R2 S3 credentials, and a Cloudflare Bearer token; no root/master interface is present. Backblaze master keys are not supported by the S3-Compatible API used successfully by the proof.
+Changed-file scope verdict: PASS — PR #139 changes exactly three `.ai/work_helper/**` files, `.github/workflows/ci.yml`, `scripts/test-browser.mjs`, and `scripts/test-layout-efficiency-behavior.mjs`.
 
-Credential-scope verdict: FAIL — the workflow proves which permissions it exercised and Work Helper/Manager evidence states the intended least-privilege policy, but no privacy-safe provider-issued current authorization metadata is frozen for the exact configured credentials. The audit therefore cannot independently prove absence of broader B2 bucket/prefix/capabilities or broader Cloudflare object/config-write/admin scope.
+Production behavior unchanged: YES — no production/user-facing implementation file changed.  
+Custody/research surfaces unchanged: YES — no custody implementation/workflow, `.ai/research/**`, football-model/frozen artifact, ranking/scoring data, or Returning-Player evidence contract changed.  
+2026 regular-season outcomes/model work: NO.
 
-Secret/privacy verdict: PASS — all five credential values remain masked in live logs; normalization reports only environment-variable names; proof errors are sanitized; no secret value or protected raw source bytes were observed in PR content. Run `34665473257` has no Actions artifacts, and runner-local proof files were removed.
+Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — none.
 
-Contract-preservation verdict: PASS — WR-039 / WR-D008, `.ai/research/**`, WR-021/WR-023, frozen football-model artifacts, and source-class semantics are unchanged. No actual Returning-Player v2 source was admitted or parsed.
+Final verdict: `PASS`
 
-No-source/no-model/no-production verdict: PASS — no 2026 regular-season outcomes, fitting/scoring/tuning/comparison/evaluation/ranking, Phase-6 work, or production/user-facing changes occurred.
+Recommended next role: Manager / Architect.
 
-Browser-CI separation verdict: PASS — PR #135 changes no browser-test or production/browser lifecycle file. Exact-final-head War Room CI RED `34665599880` independently reproduces the separately assigned WR-048 persistence residual and is not custody-proof authority. The exact-head custody preflight is green and the live provider proof is browser-independent.
+Exact next action: Manager verify PR #139 still identifies exact audited head `f93f4b6b17ab158974763069d9882e5782a526dd`, then perform the normal WR-048 acceptance/merge/reconciliation gate. If reconciliation or target advancement materially changes audited CI/test implementation, apply the canonical target-advancement validation before relying on this audit. This PASS does not authorize source-custody progression, R&D activation, model fitting/scoring/evaluation, ranking changes, 2026-outcome use, or production behavior changes.
 
-Final-head lineage verdict: PASS — compare from live proof head `4cade5204631f5f2875d664f862dcb4fa0a85200` to final audited head `64ba4aff697c1f45472045b52f374b01ee9e1695` changes only three `.ai/work_helper/**` evidence files; custody implementation/workflow is unchanged.
+Detailed report: `.ai/auditor/WR-049_AUDIT.md`.
 
-Findings by severity: CRITICAL — none. HIGH — `WR-047-AUD-01`: actual provider-side least-privilege credential scopes are asserted but not independently attested. MEDIUM — none. LOW — none.
-
-`WR-047-AUD-01` remediation: capture privacy-safe provider-issued current scope evidence for the exact B2 application key (bucket, capabilities, `namePrefix`) and both Cloudflare credentials (resource scope + permission groups), with no secret values. Fail if broader than the Manager-approved contract. Repeat live B2/R2 proof only if a credential/policy is changed.
-
-Final verdict: `FAIL — REMEDIATION REQUIRED`
-
-Recommended next role: Manager / Architect, then bounded Work Helper credential-scope evidence remediation if authorized.
-
-Exact Manager action authorized next: do NOT issue the R&D exact-source custody re-attempt and do NOT activate WR-043. Manager may authorize only a bounded WR-046 remediation to freeze provider-issued non-secret credential-scope evidence (and, only if scope changes are required, re-run the live provider proof), followed by fresh independent audit. All source-admission/model/2026-outcome/production restrictions remain in force.
-
-Detailed report: `.ai/auditor/WR-047_AUDIT.md`.
-
-Auditor modified PR #135: NO  
-Auditor merged PR #135: NO  
+Auditor modified PR #139: NO  
+Auditor merged PR #139: NO  
 Auditor changed production files: NO  
 Auditor changed canonical `.ai/shared/**`: NO  
 Auditor changed `.ai/research/**`: NO
