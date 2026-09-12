@@ -2,22 +2,26 @@
 
 HANDOFF
 
-Task ID: WR-044
+Task ID: WR-048
 Role: Work Helper / Super Troubleshooter
 Assignment mode: WORKFLOW / CI TROUBLESHOOTING
 Status: COMPLETE — AUDIT REQUIRED
-Starting main SHA: `142a9580fb408cd78ddae1026a67dd82f7d7b144`
-Final PR/head: PR #132; exact immutable head recorded in PR metadata after publication
-Failure classes reproduced: command-bar replacement-generation detach/hidden/edit/Escape race across three suites; pending debounced autosave versus session-delete/storage assertion race; resilience recovery control hidden inside a closed Draft Management disclosure; post-focus scroll setup racing browser focus/layout settlement
-Root cause(s): independent test-harness lifecycle defects—non-atomic interaction across a deliberately replaced DOM subtree, missing requestAnimationFrame/autosave quiescence around a destructive scenario in a long-lived page, false resilience readiness that did not prove its nested control visible, and an off-screen test precondition issued while the just-focused command summary could still restore the viewport
-Files changed: `.github/workflows/ci.yml`; `.ai/work_helper/HANDOFF.md`; `.ai/work_helper/TROUBLESHOOTING_LOG.md`; `.ai/work_helper/WR-044_DIAGNOSIS.md`; `scripts/browser-test-helpers.mjs`; `scripts/run-test-browser.mjs`; `scripts/test-browser.mjs`; `scripts/test-command-bar.mjs`; `scripts/test-layout-efficiency-behavior.mjs`; `scripts/test-resilience.mjs`; `scripts/test-wr-026-audit-remediation.mjs`
-Assertions/coverage weakened: NO
+Starting main SHA: `68969e1435c69b72f5e9ac1599d95bf6f3716d09`
+Trigger PR/run/job: Manager PR #138; run `34666574060`, job `103479540784`; independent repeat run `34666754287`, job `103480078959`
+Residual reproduced: YES — both runs failed iteration 1 at the same strict corrupt-recovery key assertion with a newly autosaved version-2 successor
+Root cause: `readDraftSessionPayload()` atomically removed/quarantined corrupt `[]`; subsequent recommendation auditing scheduled the normal 400 ms `saveState()` debounce, which legitimately wrote new valid state to the same active key before the timing-dependent assertion
+Competing hypotheses: executable integration drift, hidden timer, service worker/storage callback, and later user-session delete race ruled out; details in `.ai/work_helper/WR-048_DIAGNOSIS.md`
+Files changed: `.ai/work_helper/WR-048_DIAGNOSIS.md`; `.ai/work_helper/HANDOFF.md`; `.ai/work_helper/TROUBLESHOOTING_LOG.md`; `.github/workflows/ci.yml`; `scripts/test-browser.mjs`
+Strict null assertion preserved: YES — exact equality now executes synchronously at the corrupt-recovery operation boundary
+Retry/timeout masking introduced: NO
 Production behavior changed: NO
-Targeted repeat evidence: run `34626238479` passed 5/5 persistence-lifecycle and 5/5 command-bar-lifecycle repetitions; final-head repetitions recorded on PR #132
-Full-suite repeat evidence: checkpoint run `34625637031` PASS and stress-checkpoint run `34626238479` PASS; three consecutive immutable-final-head attempts recorded on PR #132
-Exact-head CI: recorded on PR #132 after immutable-head validation
+2026 outcomes/model work: NO
+Targeted repeat evidence: final-head 10/10 persistence-recovery executions recorded on WR-048 PR
+Full determinism repeat evidence: final-head 5/5 complete boundary iterations recorded on WR-048 PR
+Exact-head full CI evidence: three consecutive exact-head executions recorded on WR-048 PR
 Durable troubleshooting log updated: YES
-Blocking issues: none for independent audit; local browser execution was unavailable because the Chromium CDN timed out/returned 502, so browser evidence is repository-native CI evidence
+Final PR/head: exact immutable target recorded in WR-048 PR metadata
+Blocking issues: none for independent audit
 Recommended next role: Independent Auditor / QA
-Exact next action: activate WR-045 against the exact immutable PR #132 head; independently verify root causes, effective assertion preservation, five-repeat stress gate, three full-suite passes, and zero production drift
-Checkpoint / SHA: exact final SHA is recorded in PR #132 because committing it here would move the target
+Exact next action: activate WR-049 against the exact immutable WR-048 PR head; verify causal trace, strict-null boundary, successor assertions, repeat gates, no masking, and zero production drift
+Checkpoint / SHA: exact final SHA is recorded in WR-048 PR metadata because committing it here would move the target
