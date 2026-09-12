@@ -41,6 +41,8 @@ jobs:
           node --check scripts/workflow-ci-classify.mjs
           node --check scripts/workflow-preflight.mjs
           node --check scripts/workflow-finish-check.mjs
+          node --check scripts/workflow-live-state-check.mjs
+          node --check scripts/workflow-user-actions.mjs
       - name: Validate canonical active-task state
         run: node scripts/workflow-state-check.mjs
       - name: Report CI scope

@@ -1,6 +1,6 @@
 {
-  "schema_version": 2,
-  "updated_at_utc": "2026-09-12T23:30:00Z",
+  "schema_version": 3,
+  "updated_at_utc": "2026-09-12T23:50:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -71,14 +71,14 @@
     {
       "task_id": "WR-051",
       "owner": "Manager",
-      "worker_slot": "manager-workflow-v31-refresh",
+      "worker_slot": "manager-workflow-v311-refresh",
       "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-051.md",
       "role_handoff": ".ai/manager/HANDOFF.md",
       "assignment_main_sha": "2e13dcaa85c5daa15f570f23ca7df184c45ec634",
       "worker_checkpoint_sha": null,
       "branch": "manager/wr-051-workflow-v31-refresh",
-      "pr": null,
+      "pr": 148,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT",
       "audit_required": true,
@@ -96,7 +96,7 @@
     {
       "task_id": "WR-052",
       "owner": "Auditor",
-      "worker_slot": "auditor-workflow-v31-refresh",
+      "worker_slot": "auditor-workflow-v311-refresh",
       "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-052.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
@@ -113,10 +113,14 @@
       "blocked_on": [],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
+      "audit_target_task": "WR-051",
+      "audit_target_pr": 148,
+      "audit_target_branch": "manager/wr-051-workflow-v31-refresh",
+      "audit_target_sha": null,
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/work_helper/", ".ai/research/", "src/", "public/", ".github/", "scripts/"],
       "forbidden_exact_paths": [],
-      "next_gate": "Audit exact refreshed WR-051 PR/head and self-publish audit PR; PASS-family permits Manager merge"
+      "next_gate": "Manager live-state check pins exact PR #148 head -> Auditor executes exact-target audit and self-publishes audit PR; PASS-family permits Manager merge"
     }
   ]
 }

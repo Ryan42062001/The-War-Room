@@ -11,25 +11,61 @@ const ACTIVE = new Set([
   'PLANNED', 'BLOCKED', 'ASSIGNED', 'IN_PROGRESS', 'MANAGER_REVIEW_READY',
   'AUDIT_READY', 'MERGE_READY', 'REWORK_REQUIRED', 'MERGED'
 ]);
+const RUNNABLE = new Set([
+  'ASSIGNED', 'IN_PROGRESS', 'MANAGER_REVIEW_READY', 'AUDIT_READY',
+  'MERGE_READY', 'REWORK_REQUIRED'
+]);
 const BLOCKER_TYPES = new Set(['NONE', 'USER_ACTION', 'UPSTREAM_TASK', 'EXTERNAL_SERVICE', 'TECHNICAL', 'AUDIT']);
+const DEPENDENCIES = new Set(['INDEPENDENT', 'SOFT', 'HARD']);
 const SHA = /^[0-9a-f]{40}$/;
+const WR = /^WR-\d{3}$/;
 
-if (registry.schema_version !== 2) errors.push(`schema_version must be 2, got ${registry.schema_version}`);
+if (registry.schema_version !== 3) errors.push(`schema_version must be 3, got ${registry.schema_version}`);
 if (registry.active_only !== true) errors.push('active_only must be true');
 if (!Array.isArray(registry.tasks)) errors.push('tasks must be an array');
 
 const tasks = Array.isArray(registry.tasks) ? registry.tasks : [];
 const ids = new Set();
+const seenBranch = new Map();
+const seenSlot = new Map();
+const seenPr = new Map();
+
+function claimUnique(map, value, label, field) {
+  if (value == null || value === '') return;
+  if (map.has(value)) errors.push(`${label}: ${field} duplicates ${map.get(value)} (${value})`);
+  else map.set(value, label);
+}
+
+function prefixOverlap(a, b) {
+  if (!a || !b) return null;
+  if (a.startsWith(b)) return a;
+  if (b.startsWith(a)) return b;
+  return null;
+}
+function wholePrefixForbidden(task, prefix) {
+  return (task.forbidden_path_prefixes || []).some(forbidden => prefix.startsWith(forbidden));
+}
+function effectiveWriteOverlap(a, b) {
+  for (const left of a.allowed_path_prefixes || []) {
+    for (const right of b.allowed_path_prefixes || []) {
+      const overlap = prefixOverlap(left, right);
+      if (!overlap) continue;
+      if (wholePrefixForbidden(a, overlap) || wholePrefixForbidden(b, overlap)) continue;
+      return overlap;
+    }
+  }
+  return null;
+}
+
 for (const task of tasks) {
   const label = task.task_id || '<missing task_id>';
-  if (!/^WR-\d{3}$/.test(label)) errors.push(`${label}: task_id must match WR-###`);
+  if (!WR.test(label)) errors.push(`${label}: task_id must match WR-###`);
   if (ids.has(label)) errors.push(`${label}: duplicate task_id`);
   ids.add(label);
 
-  if (!ACTIVE.has(task.status)) {
-    errors.push(`${label}: active-only registry cannot contain status ${task.status}`);
-  }
+  if (!ACTIVE.has(task.status)) errors.push(`${label}: active-only registry cannot contain status ${task.status}`);
   if (!BLOCKER_TYPES.has(task.blocker_type)) errors.push(`${label}: invalid blocker_type ${task.blocker_type}`);
+  if (!DEPENDENCIES.has(task.dependency)) errors.push(`${label}: dependency must be INDEPENDENT, SOFT, or HARD`);
   if (typeof task.user_action_required !== 'boolean') errors.push(`${label}: user_action_required must be boolean`);
   if (!Array.isArray(task.blocked_on_tasks)) errors.push(`${label}: blocked_on_tasks must be array`);
   if (!Array.isArray(task.blocked_on)) errors.push(`${label}: blocked_on must be array`);
@@ -46,12 +82,23 @@ for (const task of tasks) {
     errors.push(`${label}: user_action_required needs USER_ACTION or EXTERNAL_SERVICE blocker_type`);
   }
 
-  for (const key of ['assignment_main_sha', 'worker_checkpoint_sha']) {
+  for (const key of ['assignment_main_sha', 'worker_checkpoint_sha', 'audit_target_sha']) {
     if (task[key] != null && !SHA.test(task[key])) errors.push(`${label}: ${key} must be null or 40-char lowercase SHA`);
   }
   if (task.pr != null && (!Number.isInteger(task.pr) || task.pr <= 0)) errors.push(`${label}: pr must be null or positive integer`);
   if (task.branch != null && typeof task.branch !== 'string') errors.push(`${label}: branch must be null or string`);
   if (task.worker_slot != null && typeof task.worker_slot !== 'string') errors.push(`${label}: worker_slot must be null or string`);
+
+  claimUnique(seenBranch, task.branch, label, 'branch');
+  claimUnique(seenSlot, task.worker_slot, label, 'worker_slot');
+  claimUnique(seenPr, task.pr, label, 'pr');
+
+  if (task.owner === 'Auditor' && ['ASSIGNED', 'IN_PROGRESS', 'MANAGER_REVIEW_READY', 'AUDIT_READY', 'MERGE_READY'].includes(task.status)) {
+    if (!WR.test(task.audit_target_task || '')) errors.push(`${label}: active Auditor assignment requires audit_target_task`);
+    if (!Number.isInteger(task.audit_target_pr) || task.audit_target_pr <= 0) errors.push(`${label}: active Auditor assignment requires positive audit_target_pr`);
+    if (typeof task.audit_target_branch !== 'string' || !task.audit_target_branch) errors.push(`${label}: active Auditor assignment requires audit_target_branch`);
+    if (task.audit_target_sha == null) warnings.push(`${label}: audit_target_sha is not frozen in registry; Manager must pin exact live PR head before audit execution`);
+  }
 
   if (typeof task.task_file !== 'string' || !fs.existsSync(path.join(root, task.task_file))) {
     errors.push(`${label}: task_file missing: ${task.task_file}`);
@@ -72,6 +119,33 @@ for (const task of tasks) {
   for (const dependency of task.blocked_on_tasks || []) {
     if (dependency === task.task_id) errors.push(`${task.task_id}: cannot block on itself`);
     if (!ids.has(dependency)) errors.push(`${task.task_id}: blocked_on_tasks references non-active ${dependency}`);
+  }
+}
+
+const graph = new Map(tasks.map(task => [task.task_id, task.blocked_on_tasks || []]));
+const visiting = new Set();
+const visited = new Set();
+function visit(id, trail = []) {
+  if (visiting.has(id)) {
+    errors.push(`dependency cycle detected: ${[...trail, id].join(' -> ')}`);
+    return;
+  }
+  if (visited.has(id)) return;
+  visiting.add(id);
+  for (const dep of graph.get(id) || []) if (graph.has(dep)) visit(dep, [...trail, id]);
+  visiting.delete(id);
+  visited.add(id);
+}
+for (const id of graph.keys()) visit(id);
+
+for (let i = 0; i < tasks.length; i += 1) {
+  for (let j = i + 1; j < tasks.length; j += 1) {
+    const a = tasks[i];
+    const b = tasks[j];
+    if (!RUNNABLE.has(a.status) || !RUNNABLE.has(b.status)) continue;
+    if (a.dependency === 'HARD' || b.dependency === 'HARD') continue;
+    const overlap = effectiveWriteOverlap(a, b);
+    if (overlap) errors.push(`${a.task_id}/${b.task_id}: unsafe parallel write-prefix overlap at ${overlap}; serialize or narrow scopes`);
   }
 }
 
