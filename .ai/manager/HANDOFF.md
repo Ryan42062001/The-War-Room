@@ -4,7 +4,7 @@ HANDOFF
 
 Task IDs: WR-042 / WR-043 / WR-044 / WR-045 / WR-046 / WR-047
 Role: Manager / Architect
-Status: WR-042 FAIL-CLOSED BLOCKER / WR-045 COMPLETE PASS / WR-046 FREE BACKEND AUTHORIZED — USER PROVISIONING REQUIRED
+Status: WR-044/045 CLOSED / WR-046 AUDIT_READY / WR-047 ASSIGNED / WR-042 BLOCKED
 
 ## Canonical evidence architecture
 WR-D008 remains controlling for Returning-Player v2 evidence custody.
@@ -17,67 +17,111 @@ Machine-lock SHA-256:
 
 No model scoring is authorized.
 
-## WR-042 — BLOCKED / FAIL CLOSED
-R&D published blocker PR #133 exact immutable head:
-`1c3c6d768d58aa636194226f16b9822eebc8c19f`
-
-Disposition:
-`FAIL_CLOSED_CUSTODY_UNAVAILABLE`
-
-No source was admitted. Do not activate WR-043 against PR #133.
-
-## WR-046 — BACKEND ARCHITECTURE AUTHORIZED
-Task: `Source-Custody Capability Recovery`
-Assignment mode: `CROSS-ROLE RECOVERY`
-Execution mode: `STANDARD_CHAT`
-Branch: `wr-046-custody-capability-recovery`
-Current blocker PR: #135
-
-The Manager approves a free-tier two-provider architecture without weakening WR-D008 / WR-039:
-
-- Primary: private Backblaze B2 bucket with Object Lock and content-addressed SHA-256 keys.
-- Independent backup: private Cloudflare R2 bucket with Bucket Locks and identical content-addressed keys.
-- Retention for capability proof: indefinite storage-layer lock.
-- Authentication: least-privilege bucket-scoped credentials stored only in GitHub Actions protected secrets or equivalent secret storage.
-- GitHub Actions artifacts and mutable upstream URLs remain transport/cache only, never authority.
-
-The current WR-042 source set is only on the order of megabytes, so both providers' current 10 GB free allowances are materially larger than the present evidence footprint. Pricing is not part of evidence identity; if free-tier terms later change, the custody requirement remains.
-
-### Required user provisioning
-Before WR-046 can complete live proof, the user must create:
-1. dedicated private Backblaze B2 bucket for The War Room with Object Lock enabled;
-2. dedicated private Cloudflare R2 bucket for The War Room with an indefinite lock rule covering custody objects;
-3. least-privilege B2 application key scoped to that bucket;
-4. least-privilege R2 API/S3 credential scoped to that bucket;
-5. corresponding protected GitHub Actions secrets and non-secret endpoint/bucket metadata.
-
-Do not use or paste master/root credentials into repository files or chat.
-
-After provisioning, resume WR-046 on existing PR #135, replace the superseded AWS proposal with B2 + R2, and complete exact fixture upload -> direct retrieval from both providers -> SHA-256/size equality -> lock/retention verification. Then WR-047 may audit the immutable completed head.
-
-## WR-047 — BLOCKED AUDIT
-Do not activate until WR-046 produces a complete implemented custody proof.
-
-## WR-044 / WR-045
-WR-044 target remains PR #132 exact head:
+## WR-044 / WR-045 — CLOSED
+WR-044 browser-CI remediation exact audited head:
 `e750748d938ed6bb8284eeec1cfda9eea77997ac`
 
-WR-045 independently returned `PASS` on that exact head with no findings. Manager integration of WR-044/045 is still pending and may proceed separately after the custody lane is moving.
+WR-045 audit head:
+`d575cf81e4ebcb29733ed333ca782ce72d2f43c1`
+
+Final audit verdict:
+`PASS`
+
+Findings: none.
+
+Audit evidence merged at:
+`490283ac6897d631c3d08b67879be14751ab5638`
+
+PR #132 was then merged with a merge commit preserving the exact audited WR-044 head as a direct parent:
+`71c3fa75af203ff2347bf726dd30f8e0706a3212`
+
+The audit-evidence PR itself reproduced the exact pre-fix command-bar detach/hidden failure on current main before WR-044 integration, confirming the known dependency rather than introducing an Auditor-surface regression.
+
+## WR-046 — COMPLETE / AUDIT READY
+Target:
+PR #135 exact final evidence head:
+`64ba4aff697c1f45472045b52f374b01ee9e1695`
+
+Successful live-provider implementation/proof lineage head:
+`4cade5204631f5f2875d664f862dcb4fa0a85200`
+
+Successful live proof workflow:
+`WR-046 Custody Fixture Proof`
+Run `34665473257`
+- contract-preflight job `103476355038`: SUCCESS
+- live B2/R2 job `103476377218`: SUCCESS
+
+Fixture:
+- provider: `jqlang/jq`
+- asset: `jq-attestation.json`
+- asset ID: `453012755`
+- expected SHA-256: `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`
+- byte size: `14380`
+- content-addressed custody key: `custody/sha256/01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed/raw`
+
+Primary Backblaze B2 evidence:
+- bucket `War-Room-Custody-Primary`
+- region `us-east-005`
+- retention mode `COMPLIANCE`
+- retain-until `2034-11-29T01:38:02Z`
+- Legal Hold ON
+- independent retrieval reproduced hash + size.
+
+Independent Cloudflare R2 evidence:
+- bucket `war-room-custody-backup`
+- jurisdiction `default`
+- Bucket Lock condition `Indefinite`
+- empty prefix / bucket-wide coverage
+- independent retrieval reproduced hash + size.
+
+Cross-provider proof:
+- original/B2/R2 SHA-256 equality: YES
+- original/B2/R2 byte-size equality: YES
+- secrets logged: NO
+- secrets in retained report: NO
+- actual Returning-Player v2 source used: NO
+
+Credential surface was least-privilege and scoped. No master/root credentials were committed. No `.ai/research/**` was written, no 2026 outcomes/model work occurred, and no production/user-facing behavior changed.
+
+Do not merge PR #135 before WR-047 audit.
+
+## WR-047 — ASSIGNED
+Audit exactly:
+PR #135 / `64ba4aff697c1f45472045b52f374b01ee9e1695`
+
+Audit branch:
+`wr-047-custody-capability-audit`
+
+Audit must independently verify the WR-042 blocker reconstruction, exact-byte acquisition, deterministic SHA-256/size verification, Backblaze primary custody and retention/Legal Hold, independent R2 backup and indefinite Bucket Lock, direct retrieval/digest equality, least-privilege secret/configuration handling, public-log/repository leakage boundaries, and preservation of the audited WR-039 / WR-D008 contract.
+
+The general War Room CI failures seen on the WR-046 final evidence head were in the unrelated browser-CI failure classes subsequently closed by WR-044/045. Do not treat those historical unrelated failures as custody-proof failures, but independently verify that WR-046 itself did not alter browser-test logic to manufacture that distinction.
+
+WR-047 returns exactly one:
+- `PASS`
+- `PASS WITH NON-BLOCKING FINDINGS`
+- `FAIL — REMEDIATION REQUIRED`
+
+A PASS-family result authorizes only Manager to issue a bounded R&D source-custody re-attempt. It does not admit sources and does not authorize model scoring.
+
+## WR-042 / WR-043
+WR-042 remains blocked at fail-closed blocker head:
+`1c3c6d768d58aa636194226f16b9822eebc8c19f`
+
+Do not activate R&D yet.
+
+WR-043 remains blocked until a later R&D source-custody retry actually admits and freezes one immutable no-scoring source-custody target.
 
 ## Staffing
-- Manager: ACTIVE for WR-046 backend authorization / external-provisioning handoff
+- Manager: IDLE after WR-047 activation reconciliation
 - Builder: IDLE
 - Draft Strategy: IDLE
 - R&D: IDLE / WR-042 BLOCKED
-- Auditor: IDLE after WR-045 PASS
-- Work Helper: BLOCKED only on WR-046 external backend provisioning
+- Auditor: ACTIVE / ASSIGNED WR-047
+- Work Helper: IDLE after WR-046 completion
 - WR-043: BLOCKED
-- WR-047: BLOCKED
 
 ## Next gates
-1. User provisions approved B2 + R2 custody backends and protected GitHub Actions credentials.
-2. Work Helper resumes WR-046 in STANDARD_CHAT and completes live fixture proof.
-3. WR-047 independently audits exact completed WR-046 head.
-4. PASS-family WR-047 -> Manager may issue bounded R&D source-custody re-attempt.
-5. WR-043 remains blocked until R&D actually produces admitted immutable custody.
-6. Model scoring remains forbidden.
+1. WR-047 verdict on PR #135 exact head `64ba4aff697c1f45472045b52f374b01ee9e1695`.
+2. PASS-family -> Manager may issue bounded R&D exact-source custody re-attempt using the audited capability.
+3. Later admitted R&D source-custody target -> WR-043 independent source-custody audit.
+4. Model scoring remains forbidden.
