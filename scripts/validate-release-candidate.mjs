@@ -10,7 +10,15 @@ const tracked = execFileSync('git', ['ls-files'], {cwd:root, encoding:'utf8'})
 assert.equal(tracked.includes('README.txt'), false, 'Obsolete README.txt scaffold must not be tracked.');
 assert.equal(tracked.some(file => file === 'node_modules' || file.startsWith('node_modules/')), false, 'node_modules must never be tracked.');
 const workflows = tracked.filter(file => file.startsWith('.github/workflows/')).sort();
-assert.deepEqual(workflows, ['.github/workflows/ci.yml'], 'Only the permanent CI workflow should be tracked.');
+const approvedWorkflows = [
+  '.github/workflows/ci.yml',
+  '.github/workflows/wr046-custody-fixture.yml',
+].sort();
+assert.deepEqual(
+  workflows,
+  approvedWorkflows,
+  'Only the permanent CI workflow and Manager-approved WR-046 custody workflow should be tracked.',
+);
 
 const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 const packageLock = JSON.parse(fs.readFileSync(path.join(root, 'package-lock.json'), 'utf8'));
