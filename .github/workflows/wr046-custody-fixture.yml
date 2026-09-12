@@ -1,4 +1,4 @@
-name: WR-046 Custody Fixture Acquisition
+name: WR-046 Custody Fixture Proof
 
 on:
   push:
@@ -13,16 +13,26 @@ on:
       - '.github/workflows/wr046-custody-fixture.yml'
       - 'scripts/custody/**'
       - '.ai/work_helper/**'
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  exact-release-byte-fixture:
+  contract-preflight:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Acquire jq release fixture by immutable GitHub asset ID
+
+      - name: Validate custody tooling
+        run: |
+          python3 -m py_compile \
+            scripts/custody/acquire_github_release_asset.py \
+            scripts/custody/prove_b2_r2_custody.py
+          python3 scripts/custody/prove_b2_r2_custody.py --self-test
+          aws --version
+
+      - name: Preserve exact release-byte acquisition proof
         run: |
           python3 scripts/custody/acquire_github_release_asset.py \
             --repository jqlang/jq \
@@ -30,10 +40,58 @@ jobs:
             --expected-sha256 01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed \
             --expected-size 14380 \
             --output "$RUNNER_TEMP/wr046-jq-attestation.json"
-      - name: Independently verify fixture digest and byte size
-        run: |
           test "$(sha256sum "$RUNNER_TEMP/wr046-jq-attestation.json" | awk '{print $1}')" = "01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed"
           test "$(stat -c '%s' "$RUNNER_TEMP/wr046-jq-attestation.json")" = "14380"
           rm -f "$RUNNER_TEMP/wr046-jq-attestation.json"
-      - name: Confirm fixture is not persisted as a GitHub artifact
-        run: echo 'Fixture bytes verified in-run and removed; no Actions artifact is uploaded or treated as custody.'
+          echo 'Fixture bytes verified in-run and removed; no Actions artifact is uploaded or treated as custody.'
+
+  live-b2-r2-custody-proof:
+    if: github.event_name == 'workflow_dispatch'
+    needs: contract-preflight
+    runs-on: ubuntu-latest
+    env:
+      WR_CUSTODY_B2_KEY_ID: ${{ secrets.WR_CUSTODY_B2_KEY_ID }}
+      WR_CUSTODY_B2_APPLICATION_KEY: ${{ secrets.WR_CUSTODY_B2_APPLICATION_KEY }}
+      WR_CUSTODY_R2_ACCESS_KEY_ID: ${{ secrets.WR_CUSTODY_R2_ACCESS_KEY_ID }}
+      WR_CUSTODY_R2_SECRET_ACCESS_KEY: ${{ secrets.WR_CUSTODY_R2_SECRET_ACCESS_KEY }}
+      WR_CUSTODY_R2_CONFIG_READ_TOKEN: ${{ secrets.WR_CUSTODY_R2_CONFIG_READ_TOKEN }}
+      WR_CUSTODY_B2_BUCKET: ${{ vars.WR_CUSTODY_B2_BUCKET }}
+      WR_CUSTODY_B2_ENDPOINT: ${{ vars.WR_CUSTODY_B2_ENDPOINT }}
+      WR_CUSTODY_R2_BUCKET: ${{ vars.WR_CUSTODY_R2_BUCKET }}
+      WR_CUSTODY_R2_ENDPOINT: ${{ vars.WR_CUSTODY_R2_ENDPOINT }}
+      WR_CUSTODY_R2_ACCOUNT_ID: ${{ vars.WR_CUSTODY_R2_ACCOUNT_ID }}
+      WR_CUSTODY_R2_JURISDICTION: ${{ vars.WR_CUSTODY_R2_JURISDICTION }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Acquire lawful non-sensitive fixture
+        run: |
+          python3 scripts/custody/acquire_github_release_asset.py \
+            --repository jqlang/jq \
+            --asset-id 453012755 \
+            --expected-sha256 01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed \
+            --expected-size 14380 \
+            --output "$RUNNER_TEMP/wr046-jq-attestation.json"
+
+      - name: Prove B2 primary and R2 independent backup custody
+        run: |
+          python3 scripts/custody/prove_b2_r2_custody.py \
+            --fixture "$RUNNER_TEMP/wr046-jq-attestation.json" \
+            --report "$RUNNER_TEMP/wr046-custody-proof.json"
+
+      - name: Publish privacy-safe proof summary
+        run: |
+          {
+            echo '### WR-046 B2 + R2 custody fixture proof'
+            echo '```json'
+            cat "$RUNNER_TEMP/wr046-custody-proof.json"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/wr046-custody-proof.json"
+
+      - name: Remove local fixture and report
+        if: always()
+        run: |
+          rm -f "$RUNNER_TEMP/wr046-jq-attestation.json"
+          rm -f "$RUNNER_TEMP/wr046-custody-proof.json"
+          echo 'Local fixture/report removed; no GitHub Actions artifact is used as durable custody.'

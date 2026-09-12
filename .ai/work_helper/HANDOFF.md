@@ -5,80 +5,119 @@ HANDOFF
 Task ID: WR-046  
 Role: Work Helper / Super Troubleshooter / Cross-Functional Operator  
 Assignment mode: CROSS-ROLE RECOVERY  
-Status: BLOCKED — CUSTODY BACKEND REQUIRED — USER AUTHORIZATION  
-Starting main SHA: `2ec3ecb1e387f5bfdd52efe712cf575a9d5d9f85`  
+Status: BLOCKED — CREDENTIALS REQUIRED — ADD GITHUB ACTIONS SECRETS  
+Original starting main SHA: `2ec3ecb1e387f5bfdd52efe712cf575a9d5d9f85`  
+Continuation canonical main: `ad32bf945ee799fe953614a810d032894e68cb47`  
 WR-042 blocker head reviewed: `1c3c6d768d58aa636194226f16b9822eebc8c19f`  
 Branch: `wr-046-custody-capability-recovery`  
 PR: `#135`
 
-## Root capability gaps
+## Reconciliation
 
-WR-042's local/download limitation is recoverable: GitHub-hosted Actions can acquire an exact public GitHub release asset by immutable asset ID and independently verify downloaded SHA-256 + byte size before use.
+Manager PR #136 authorized the B2 + R2 backend. The existing WR-046 history and current Manager main were merged without rewriting either line at checkpoint:
 
-The remaining unresolved capability is an approved War Room-specific durable backend that provides:
-- access-controlled project-controlled content-addressed primary custody;
-- an independently retrievable second project-controlled copy;
-- native or equivalent overwrite/version-retention protection;
-- deterministic later retrieval of both copies;
-- secure automation authentication without committed secrets.
+`0d6555e143b9aa8baf5333ef5add10fb3e31764f`
+
+The earlier exact-byte acquisition proof remains intact at `61e31f6d9ce92fef6d56c5cabd08faa0217ca7f2`.
 
 ## Chosen custody architecture
 
-GitHub Actions exact-byte acquisition/verifier + two private AWS S3 Object-Lock buckets in different regions, both Versioning/Object Lock enabled and addressed by SHA-256, authenticated from GitHub Actions via OIDC with short-lived credentials.
+- Primary: private Backblaze B2 bucket, content-addressed SHA-256 object key, COMPLIANCE retention plus Legal Hold.
+- Independent backup: private Cloudflare R2 bucket, same content-addressed key, covered by an indefinite Bucket Lock.
+- GitHub Actions: transport/execution only; no Actions artifact is custody authority.
+- Both stored copies must be directly retrieved and independently SHA-256/byte-size verified.
 
-Primary and backup are explicit independently retrievable objects. Completion requires immediate fresh retrieval of each copy, byte-size/SHA-256 equality against the acquired fixture, and observed Object Lock/version-retention state. Quarterly and pre-audit/rerun verification follow the frozen WR-039 contract.
+## Credential contract
 
-## Fixture acquisition proof
+### Backblaze B2 bucket-scoped application key
 
-Lawful fixture: public `jqlang/jq` `jq-attestation.json`, asset ID `453012755`.
+Required capabilities only:
+- `writeFiles`
+- `readFiles`
+- `writeFileRetentions`
+- `readFileRetentions`
+- `writeFileLegalHolds`
+- `readFileLegalHolds`
 
-Expected and observed:
-- SHA-256: `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`;
-- byte size: `14380`.
+Prefer an additional filename-prefix restriction to `custody/` when creating the key.
 
-Exact-head transport proof:
+Do not grant delete, governance bypass, bucket-write, bucket-retention-write, master-key, list-files, or account-wide bucket enumeration permissions. This implementation does not need them.
+
+### Cloudflare R2 object credential
+
+R2 S3 **Object Read & Write**, scoped only to the dedicated War Room bucket.
+
+### Cloudflare R2 lock-verification token
+
+Separate Cloudflare API token:
+- `Account > Workers R2 Storage > Read`;
+- scoped only to the account owning the War Room R2 bucket;
+- no edit/write permissions and no zone permissions.
+
+Cloudflare does not expose Bucket Lock configuration through the bucket-scoped S3 Object credential, so this separate read-only account-resource token is required only to verify the live lock rule.
+
+## Exact GitHub Actions secrets
+
+Add values directly in GitHub. Never paste values into chat.
+
+- `WR_CUSTODY_B2_KEY_ID`
+- `WR_CUSTODY_B2_APPLICATION_KEY`
+- `WR_CUSTODY_R2_ACCESS_KEY_ID`
+- `WR_CUSTODY_R2_SECRET_ACCESS_KEY`
+- `WR_CUSTODY_R2_CONFIG_READ_TOKEN`
+
+## Exact non-secret GitHub Actions variables
+
+- `WR_CUSTODY_B2_BUCKET`
+- `WR_CUSTODY_B2_ENDPOINT`
+- `WR_CUSTODY_R2_BUCKET`
+- `WR_CUSTODY_R2_ENDPOINT`
+- `WR_CUSTODY_R2_ACCOUNT_ID`
+- `WR_CUSTODY_R2_JURISDICTION`
+
+Bucket/account/endpoint/jurisdiction identifiers do not authenticate and are intentionally variables rather than secrets.
+
+## Lawful fixture
+
+`jqlang/jq` `jq-attestation.json`  
+Asset ID: `453012755`  
+SHA-256: `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`  
+Byte size: `14380`
+
+Previously proven acquisition evidence remains valid:
 - commit `61e31f6d9ce92fef6d56c5cabd08faa0217ca7f2`;
 - Actions run `34642610497`;
 - job `103405723000`;
-- result `SUCCESS`;
-- scripted verification and independent `sha256sum` / `stat` verification both passed;
-- fixture removed after check;
-- no Actions artifact used for custody.
+- result `SUCCESS`.
 
-## Primary custody proof
+## Implemented workflow contract
 
-NOT EXECUTED — dedicated backend authorization required.
+Workflow path: `.github/workflows/wr046-custody-fixture.yml`  
+UI name: `WR-046 Custody Fixture Proof`
 
-## Independent backup proof
+Normal push/PR:
+- syntax/self-test only;
+- repeats exact acquisition verification;
+- does not consume external credentials.
 
-NOT EXECUTED — dedicated backend authorization required.
+Manual `workflow_dispatch` on `wr-046-custody-capability-recovery`:
+1. acquire and verify fixture;
+2. upload/verify B2 content-addressed object;
+3. apply/verify B2 COMPLIANCE retention and Legal Hold;
+4. verify R2 indefinite Bucket Lock;
+5. upload/verify identical R2 object;
+6. retrieve both copies independently;
+7. recompute SHA-256 and byte size;
+8. emit only privacy-safe evidence;
+9. delete runner-local copies/report.
 
-## Digest / retrieval proof
+## Proof status
 
-Acquisition-side exact-byte verification: PASS.  
-Durable primary/backup later retrieval: NOT EXECUTED — backend required.
-
-## Immutability / version-retention proof
-
-Architecture selected: S3 Versioning + Object Lock COMPLIANCE, with retention extended as required by the contract.  
-Live proof: NOT EXECUTED — backend required.
-
-## External authorization required
-
-Authorize/provision:
-1. one private War Room primary S3 bucket with Versioning + Object Lock;
-2. one private War Room backup S3 bucket in a different region with Versioning + Object Lock;
-3. a GitHub OIDC IAM role trusted only for the approved `Ryan42062001/The-War-Room` Actions identity and least-privilege access to both buckets.
-
-Do not provide AWS access keys or secrets. After provisioning, only the non-secret primary bucket/region, backup bucket/region, and role ARN are needed to resume WR-046.
-
-## Files changed
-
-- `.github/workflows/wr046-custody-fixture.yml`
-- `scripts/custody/acquire_github_release_asset.py`
-- `.ai/work_helper/WR046_CUSTODY_CAPABILITY_RECOVERY.md`
-- `.ai/work_helper/HANDOFF.md`
-- `.ai/work_helper/TROUBLESHOOTING_LOG.md`
+Primary B2 proof: NOT YET EXECUTED — protected GitHub configuration not yet confirmed populated.  
+B2 retention / Legal Hold proof: NOT YET EXECUTED.  
+Independent R2 proof: NOT YET EXECUTED.  
+R2 Bucket Lock proof: NOT YET EXECUTED.  
+Dual retrieval/digest proof: NOT YET EXECUTED.
 
 ## Integrity
 
@@ -91,12 +130,14 @@ Production behavior changed: **NO**
 WR-D008 / WR-039 weakened: **NO**  
 `SOURCE CONTRACT VERSION BUMP REQUIRED`: **NO**
 
-## Blocking issues
+## Current blocker / next action
 
-Only the external immutable two-copy custody backend and its OIDC trust/configuration remain. No complete primary/backup fixture proof can be honestly produced before that authorization.
+The external buckets exist. The remaining blocker is only protected GitHub Actions credentials plus non-secret repository variables.
 
-Recommended next role: **Manager / Architect**. Do not activate WR-047 yet.
+User action: populate the five secrets and six variables directly in GitHub, then resume **this same WR-046 task**. Do not provide any credential value to chat.
 
-Exact next action: authorize the dedicated two-bucket S3 Object-Lock + GitHub OIDC backend, then resume WR-046 for the complete fixture custody/retrieval/retention proof. After WR-046 produces one immutable completed head, Manager may activate independent WR-047 against that exact target.
+After configuration, Work Helper should dispatch `WR-046 Custody Fixture Proof` on `wr-046-custody-capability-recovery`, verify the complete live proof, update this handoff/report, freeze one immutable completed PR #135 head, and return to Manager for WR-047 activation.
 
-Checkpoint / SHA: PR `#135`; exact branch head after this handoff commit is authoritative in PR metadata.
+Recommended next role right now: Manager / Architect only for awareness; **do not activate WR-047 yet**.
+
+Checkpoint / SHA: current exact branch head after the credential-contract implementation commit is authoritative in PR #135 metadata.

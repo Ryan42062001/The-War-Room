@@ -29,7 +29,7 @@ For each durable entry prefer:
 
 **Symptom:** WR-042 could identify release objects and provider digests but had no execution/storage path that satisfied exact-byte acquisition plus project-controlled immutable primary and independently retrievable backup custody.
 
-**Bounded conclusion:** Separate the problem into two layers. GitHub-hosted Actions can be a reproducible exact-byte acquisition/hash-verification runner even when the normal chat/container environment has no outbound network, but the runner and its temporary filesystem are transport only. Durable custody still requires an explicitly authorized access-controlled backend with retention/immutability semantics.
+**Bounded conclusion:** Separate the problem into transport and custody layers. GitHub-hosted Actions can be a reproducible exact-byte acquisition/hash-verification runner even when the normal chat/container environment has no outbound network, but the runner and its temporary filesystem are transport only. Durable custody requires explicitly authorized access-controlled storage with independently auditable retention controls.
 
 **Decisive evidence:** WR-046 fixture run `34642610497`, job `103405723000`, acquired public jq release asset ID `453012755`, reproduced SHA-256 `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed` and byte size `14380`, independently rechecked both, then removed the file without an Actions artifact.
 
@@ -37,11 +37,15 @@ For each durable entry prefer:
 - Do not treat a mutable provider URL or provider-reported digest alone as custody.
 - Do not treat GitHub Actions artifacts as the durable primary or backup when the evidence contract forbids that authority role.
 - Do not put rights-restricted raw data in The War Room's public Git repository.
-- Do not reuse another project's private backend/repository merely because it is technically accessible; project isolation is part of trustworthy custody.
-- Do not call an ordinary object-store bucket immutable merely because the application promises not to overwrite it. Prefer native version-retention/Object-Lock controls when the contract requires independently auditable overwrite protection.
+- Do not reuse another project's private backend merely because it is technically accessible; project isolation is part of trustworthy custody.
+- Do not call an ordinary object-store bucket immutable merely because the application promises not to overwrite it. Require native/equivalent retention evidence.
 
-**Recovery pattern:** Use an acquisition runner that pins an immutable provider asset identifier and expected digest/size, computes downloaded-byte identity before parse/use, then writes content-addressed copies to two independently retrievable protected stores. Authenticate cloud storage with short-lived federated credentials (for example GitHub OIDC) rather than committed/static access keys. Immediately re-download both copies and recompute identity; schedule periodic and pre-audit verification.
+**Recovery pattern:** Pin an immutable provider asset identifier and expected digest/size, compute exact downloaded-byte identity before parse/use, then write the same content-addressed object to two independently retrievable protected stores. Immediately retrieve both copies and recompute identity. Verify storage-layer retention controls separately from object existence. Keep Actions/logs as execution evidence, never as sole custody.
 
-**Future prevention/reuse:** Provision custody infrastructure before assigning a source-admission R&D task whose contract requires retained raw bytes. Verify the backend itself with a lawful fixture and independent audit first; only then allow R&D to admit research sources.
+**Least-privilege lesson:** Object-data and storage-configuration APIs may use different authorization planes. Cloudflare R2 bucket-scoped Object Read & Write credentials can handle S3 object transfer, but Bucket Lock configuration verification uses the Cloudflare REST API and therefore needs a separate account-resource **read-only** R2 configuration token. Split those credentials rather than broadening the routine object credential to administrative write access.
 
-**Checkpoint:** WR-046 draft PR `#135`; fixture transport proof commit `61e31f6d9ce92fef6d56c5cabd08faa0217ca7f2`. Full custody remains blocked on explicit backend authorization.
+For Backblaze B2, verify object-level retention and Legal Hold using explicit per-file read/write retention capabilities. Do not grant delete or governance-bypass capabilities merely to make an integration convenient.
+
+**Future prevention/reuse:** Provision and fixture-audit custody infrastructure before assigning source-admission work. Define exact secret names, non-secret resource metadata, retention verification calls, and provider permission scopes before source bytes are admitted.
+
+**Checkpoint:** WR-046 draft PR `#135`; exact acquisition proof commit `61e31f6d9ce92fef6d56c5cabd08faa0217ca7f2`; Manager B2/R2 authorization integrated into WR-046 history at `0d6555e143b9aa8baf5333ef5add10fb3e31764f`. Live custody proof remains blocked only on protected GitHub Actions configuration.
