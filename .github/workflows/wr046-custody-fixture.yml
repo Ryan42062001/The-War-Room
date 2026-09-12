@@ -18,6 +18,7 @@ on:
 # Branch pushes run provider jobs only with explicit markers:
 # [wr046-live-proof] for custody mechanics; [wr046-scope-attestation] for scope metadata.
 # Ordinary pushes and pull requests remain preflight-only.
+# WR-050 path B: one current-credential live proof.
 permissions:
   contents: read
 
