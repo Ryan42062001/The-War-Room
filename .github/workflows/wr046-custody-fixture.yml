@@ -30,6 +30,7 @@ jobs:
         run: |
           python3 -m py_compile \
             scripts/custody/acquire_github_release_asset.py \
+            scripts/custody/attest_credential_scopes.py \
             scripts/custody/ensure_b2_custody_object.py \
             scripts/custody/run_normalized_custody_proof.py \
             scripts/custody/prove_b2_r2_custody.py
@@ -48,6 +49,42 @@ jobs:
           test "$(stat -c '%s' "$RUNNER_TEMP/wr046-jq-attestation.json")" = "14380"
           rm -f "$RUNNER_TEMP/wr046-jq-attestation.json"
           echo 'Fixture bytes verified in-run and removed; no Actions artifact is uploaded or treated as custody.'
+
+
+  credential-scope-attestation:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' &&
+       github.ref == 'refs/heads/wr-046-custody-capability-recovery' &&
+       contains(github.event.head_commit.message, '[wr046-scope-attestation]'))
+    needs: contract-preflight
+    runs-on: ubuntu-latest
+    env:
+      WR_CUSTODY_B2_KEY_ID: ${{ secrets.WR_CUSTODY_B2_KEY_ID }}
+      WR_CUSTODY_B2_APPLICATION_KEY: ${{ secrets.WR_CUSTODY_B2_APPLICATION_KEY }}
+      WR_CUSTODY_B2_BUCKET: ${{ vars.WR_CUSTODY_B2_BUCKET }}
+      WR_CUSTODY_R2_ACCESS_KEY_ID: ${{ secrets.WR_CUSTODY_R2_ACCESS_KEY_ID }}
+      WR_CUSTODY_R2_CONFIG_READ_TOKEN: ${{ secrets.WR_CUSTODY_R2_CONFIG_READ_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Capture privacy-safe provider authorization
+        run: |
+          python3 scripts/custody/attest_credential_scopes.py \
+            > "$RUNNER_TEMP/wr046-credential-scope.json"
+          {
+            echo '### WR-046 provider credential-scope attestation'
+            echo '```json'
+            cat "$RUNNER_TEMP/wr046-credential-scope.json"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/wr046-credential-scope.json"
+
+      - name: Remove local attestation
+        if: always()
+        run: |
+          rm -f "$RUNNER_TEMP/wr046-credential-scope.json"
+          echo 'Local attestation removed; no secret or durable credential authority is stored on the runner.'
 
   live-b2-r2-custody-proof:
     if: >-
