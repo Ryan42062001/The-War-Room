@@ -140,8 +140,6 @@ try {
     return Boolean(details && !details.open);
   });
   assert.equal(await page.locator('.draft-command-setup-summary-value').innerText(), '10 teams · Pick 5 · 16 rounds');
-  await page.evaluate(() => document.querySelector('.draft-command-setup-disclosure > summary')?.click());
-  await page.waitForFunction(() => document.querySelector('.draft-command-setup-disclosure')?.open === true);
   await pressDisclosureControl(
     page,
     '.draft-command-setup-disclosure',

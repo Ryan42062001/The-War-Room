@@ -222,21 +222,50 @@ assert.deepEqual(normalizedPersistence.autoDraft, [2,3]);
 assert.ok(normalizedPersistence.diag.includes('<img src=x onerror=alert(1)>'));
 assert.equal(normalizedPersistence.diagImages, 0);
 
-await persistencePage.evaluate(() => {
-  localStorage.setItem('draft-state-v1:good', '[]');
+const corruptDraftRecovery = await persistencePage.evaluate(() => {
+  const key = 'draft-state-v1:good';
+  localStorage.setItem(key, '[]');
+  const recovery = readDraftSessionPayload('good');
+  return {
+    status:recovery.status,
+    original:localStorage.getItem(key),
+    backup:recovery.backupKey
+  };
 });
-await persistencePage.reload({waitUntil:'load'});
-await persistencePage.waitForSelector('tr.draftrow', {state:'attached'});
-const corruptDraftRecovery = await persistencePage.evaluate(() => ({
-  original:localStorage.getItem('draft-state-v1:good'),
-  backup:Array.from({length:localStorage.length}, (_, index) => localStorage.key(index))
-    .find(key => key && key.startsWith('draft-state-v1:good:corrupt-backup:')) || null,
-  drafted:document.querySelectorAll('tr.drafted-mine,tr.drafted-other').length
-}));
+assert.equal(corruptDraftRecovery.status, 'corrupt');
 assert.equal(corruptDraftRecovery.original, null);
 assert.ok(corruptDraftRecovery.backup);
-assert.equal(corruptDraftRecovery.drafted, 0);
 assert.ok(corruptDraftRecovery.backup.startsWith('draft-state-v1:good:corrupt-backup:'));
+
+// Preserve the startup recovery path independently from the atomic quarantine
+// invariant. Normal post-load recommendation work may legitimately autosave a
+// new valid payload to the active key, so it must not be confused with the
+// corrupt value that readDraftSessionPayload() removed.
+await persistencePage.evaluate(() => localStorage.setItem('draft-state-v1:good', '[]'));
+await persistencePage.reload({waitUntil:'load'});
+await persistencePage.waitForSelector('tr.draftrow', {state:'attached'});
+await waitForWarRoomQuiescence(persistencePage);
+const corruptDraftStartup = await persistencePage.evaluate(() => {
+  const raw = localStorage.getItem('draft-state-v1:good');
+  let successor = null;
+  if (raw !== null) {
+    try { successor = JSON.parse(raw); } catch (error) { successor = null; }
+  }
+  return {
+    raw,
+    successor,
+    backup:Array.from({length:localStorage.length}, (_, index) => localStorage.key(index))
+      .find(key => key && key.startsWith('draft-state-v1:good:corrupt-backup:')) || null,
+    drafted:document.querySelectorAll('tr.drafted-mine,tr.drafted-other').length
+  };
+});
+assert.notEqual(corruptDraftStartup.raw, '[]');
+assert.ok(corruptDraftStartup.backup);
+assert.equal(corruptDraftStartup.drafted, 0);
+if (corruptDraftStartup.raw !== null) {
+  assert.equal(corruptDraftStartup.successor?.version, 2);
+  assert.ok(Array.isArray(corruptDraftStartup.successor?.recommendationAudit));
+}
 
 const storageFailureStartup = await persistencePage.evaluate(() => {
   localStorage.clear();
