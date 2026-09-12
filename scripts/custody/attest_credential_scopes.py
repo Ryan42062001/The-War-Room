@@ -87,13 +87,19 @@ def attest_b2() -> dict[str, Any]:
     storage = ((payload.get("apiInfo") or {}).get("storageApi") or {})
     allowed = storage.get("allowed") or {}
     capabilities = set(allowed.get("capabilities") or [])
-    provider_key_id = str(payload.get("applicationKeyId") or "")
-    provider_bucket = allowed.get("bucketName")
+    # v4 moved bucket identity into allowed.buckets so multi-bucket keys can be
+    # represented. Authentication success itself binds this response to the
+    # configured application-key ID; v4 does not echo that ID in the response.
+    buckets = allowed.get("buckets") or []
+    if not isinstance(buckets, list):
+        raise RuntimeError("Backblaze authorization returned invalid allowed.buckets")
+    bucket_names = [item.get("name") for item in buckets if isinstance(item, dict)]
     prefix = allowed.get("namePrefix")
 
     checks = {
-        "configured_key_matches_provider": provider_key_id == key_id,
-        "bucket_exact": provider_bucket == expected_bucket,
+        "configured_key_authenticated": True,
+        "one_bucket_only": len(buckets) == 1,
+        "bucket_exact": bucket_names == [expected_bucket],
         "name_prefix_exact": prefix == "custody/",
         "required_capabilities_present": REQUIRED_B2_CAPABILITIES <= capabilities,
         "capabilities_exact": capabilities == REQUIRED_B2_CAPABILITIES,
@@ -104,9 +110,12 @@ def attest_b2() -> dict[str, Any]:
     return {
         "provider": "Backblaze B2",
         "authorization_endpoint": B2_AUTHORIZE_URL,
-        "application_key_id_sha256": sha256_text(provider_key_id),
-        "bucket_id": allowed.get("bucketId"),
-        "bucket_name": provider_bucket,
+        "application_key_id_sha256": sha256_text(key_id),
+        "buckets": [
+            {"id": item.get("id"), "name": item.get("name")}
+            for item in buckets
+            if isinstance(item, dict)
+        ],
         "name_prefix": prefix,
         "capabilities": sorted(capabilities),
         "checks": checks,
