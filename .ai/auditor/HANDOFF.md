@@ -2,47 +2,51 @@
 
 HANDOFF
 
-Task ID: WR-049  
+Task ID: WR-050  
 Role: Independent Auditor / QA  
-Status: COMPLETE — PASS  
-Audited WR-048 PR/head: PR #139 / `f93f4b6b17ab158974763069d9882e5782a526dd`  
-Canonical main / audit baseline: `77a685907d02c42df87bccedd305d79abf762a24`  
-Audit branch: `wr-049-browser-persistence-residual-audit`
+Status: COMPLETE — FAIL — REMEDIATION REQUIRED  
+Audited WR-046 PR/head: PR #135 / `81fbc857625a810522460661c7b63591c20714d7`  
+Prior failed-audit WR-046 head: `64ba4aff697c1f45472045b52f374b01ee9e1695`  
+Prior live-provider lineage head: `4cade5204631f5f2875d664f862dcb4fa0a85200`  
+Canonical main / audit baseline: `41358f892a1abac76cd81561f8d88dbaf6305920`  
+Audit branch: `wr-050-custody-credential-scope-reaudit`
 
-Trigger characterization accurate: YES — runs `34666574060` / `103479540784` and `34666754287` / `103480078959` both reproduced the same strict corrupt-recovery assertion after a new valid version-2 successor had been written to the active key. The observed values were not the seeded corrupt `[]` payload.
+Complete remediation delta verdict: PASS — `64ba4aff...` -> `81fbc857...` is exactly 10 commits and six relevant changed surfaces: `.ai/work_helper/HANDOFF.md`, `.ai/work_helper/WR-046_CREDENTIAL_SCOPE_ATTESTATION.md`, both Cloudflare scope-evidence `.png.b64` files, `.github/workflows/wr046-custody-fixture.yml`, and `scripts/custody/attest_credential_scopes.py`. No production, browser implementation, `.ai/research/**`, source, model, scoring, ranking, or accepted contract surface changed.
 
-Root cause supported: YES — unchanged production recovery quarantines/backups and removes the corrupt active value; subsequent normal recommendation-audit work schedules the existing 400 ms persistence debounce; `saveState()` legitimately writes a valid version-2 successor to the same active draft key. Trigger payload content and timestamps support that causal chain.
+Historical WR-047 preservation verdict: PASS — `.ai/auditor/WR-047_AUDIT.md` remains the historical `FAIL — REMEDIATION REQUIRED` against exact head `64ba4aff...`; WR-047-AUD-01 was not rewritten away.
 
-Strict null assertion preserved: YES — exact `assert.equal(corruptDraftRecovery.original, null)` remains and now observes storage immediately after the actual production corrupt-recovery operation returns, at the atomic quarantine/removal linearization boundary. It is not weakened or made advisory.
+B2 current-scope verdict: PASS — exact configured B2 key authenticates through v4 `b2_authorize_account` and provider run `34704284392` / job `103581427069` proves exactly one bucket `War-Room-Custody-Primary`, exact `custody/` prefix, exactly the seven approved capabilities, and no additional authority. Current key identity is frozen only as SHA-256 `b744e565...`; reusable secret remains masked.
 
-Startup successor-state coverage: PASS — the real startup/reload path is separately retained and verifies the corrupt raw `[]` is gone, recovery backup remains, board is clean, and any later occupant of the active key is a valid version-2 successor with array-valued recommendation-audit state.
+Cloudflare object-token current-scope verdict: PASS for the frozen current policy envelope — provider-console evidence records only `war-room-custody-backup` with `Object Read & Write`, which Cloudflare documents as object read/write/list rather than bucket configuration/admin authority. Current access-key identifier is frozen only as SHA-256 `17e95438...`.
 
-Adjacent layout-generation remediation: PASS — the redundant generation-racy pre-open sequence was removed, while the current-generation Escape helper remains strict and the close/focus-restoration assertions remain. Separate real-keyboard Manage disclosure Escape/focus coverage remains active.
+Cloudflare config-token current-scope verdict: PASS for the frozen current policy envelope — the exact bearer token self-verifies active as token ID `207e45b2deb2a0fd1d8bd3c57354a0dc`; provider-console policy evidence records one required account resource with `Workers R2 Storage:Read` only and no write/admin authority capable of changing Bucket Lock.
 
-No masking/retry weakening: YES — the added 10x persistence loop and existing 5x determinism loop execute fail-fast under `bash -e`. No blanket retry, `continue-on-error`, skip, catch-and-pass, timeout inflation, storage-clearing workaround, or assertion softening/removal was introduced.
+Secret/privacy verdict: PASS for inspected repository text, provider reports, and workflow logs — all reusable values remain masked; scope output exposes only hashes/non-secret IDs; runner-local report is deleted; no Actions artifact is custody. Cloudflare policy captures are committed as base64 PNG evidence, with the config-token capture explicitly redacted. No reusable credential was observed in the audited textual/log surfaces.
 
-Targeted repeat evidence sufficient: YES — exact-head run `34668044160`, attempts/jobs `103483882657`, `103484987497`, and `103486225658` each passed all 10/10 targeted persistence lifecycle executions.
+Credential-change verdict: NOT INDEPENDENTLY ESTABLISHED — Work Helper states no credential changed, but the accepted historical live job `103476377218` masked all credential values and emitted no B2 key-ID hash, R2 access-key/token ID/hash, or Cloudflare config-token ID. Current scope job emits those privacy-safe identifiers only now. Git secret values/history are not in repository history, so the frozen evidence cannot independently compare historical-live credential identity to current scoped credential identity.
 
-Full CI evidence sufficient: YES — each same exact-head attempt passed all 5/5 complete determinism cycles, phone validation, full `npm test`, resilience syntax, and 3/3 recovery/resilience lifecycle executions. Raw logs show extension tests 164/164 passed with 0 skipped and the broad browser/layout/draft/persistence/recovery gates remained enabled.
+Live-proof lineage verdict: FAIL — because credential continuity is unproved and no current-credential live proof was run, the prior live proof cannot yet be inherited under the Manager credential-change rule. This is `WR-050-AUD-01` HIGH.
 
-Changed-file scope verdict: PASS — PR #139 changes exactly three `.ai/work_helper/**` files, `.github/workflows/ci.yml`, `scripts/test-browser.mjs`, and `scripts/test-layout-efficiency-behavior.mjs`.
+Provider-scope run: `34704284392`; preflight `103581403628` SUCCESS; scope job `103581427069` SUCCESS; live custody intentionally SKIPPED.
 
-Production behavior unchanged: YES — no production/user-facing implementation file changed.  
-Custody/research surfaces unchanged: YES — no custody implementation/workflow, `.ai/research/**`, football-model/frozen artifact, ranking/scoring data, or Returning-Player evidence contract changed.  
-2026 regular-season outcomes/model work: NO.
+Final-head custody workflow: run `34706149657` SUCCESS; preflight `103586441996` SUCCESS; credential-scope and live-provider jobs SKIPPED. This validates final-head preflight, not current-credential live custody.
 
-Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — none.
+Ordinary War Room CI relevance verdict: OUTSIDE WR-046 REMEDIATION — run `34706149641` is genuinely RED at browser persistence/sanitization assertion `normalizedPersistence.diag.includes('<img src=x onerror=alert(1)>')` after extension engine 164/164. The complete six-file WR-046 remediation delta touches no browser test/production persistence/sanitization surface and the failure does not mask the dedicated provider-scope evidence. It remains a separate Manager/browser-CI concern.
 
-Final verdict: `PASS`
+WR039 / WR-D008 preservation verdict: PASS — WR-D008 still controls exact-source custody chronology and still forbids model fitting/scoring/tuning/evaluation/ranking, 2026 outcome inspection, production changes, and Phase 6. No `.ai/research/**` semantic change or source admission/parsing occurred.
 
-Recommended next role: Manager / Architect.
+Findings by severity: CRITICAL — none. HIGH — `WR-050-AUD-01`: prior live-provider proof cannot be independently bound to the newly scope-attested current credentials. MEDIUM — none. LOW — none.
 
-Exact next action: Manager verify PR #139 still identifies exact audited head `f93f4b6b17ab158974763069d9882e5782a526dd`, then perform the normal WR-048 acceptance/merge/reconciliation gate. If reconciliation or target advancement materially changes audited CI/test implementation, apply the canonical target-advancement validation before relying on this audit. This PASS does not authorize source-custody progression, R&D activation, model fitting/scoring/evaluation, ranking changes, 2026-outcome use, or production behavior changes.
+Final verdict: `FAIL — REMEDIATION REQUIRED`
 
-Detailed report: `.ai/auditor/WR-049_AUDIT.md`.
+Recommended next role: Manager / Architect, then bounded Work Helper lineage remediation if authorized.
 
-Auditor modified PR #139: NO  
-Auditor merged PR #139: NO  
+Exact Manager action authorized next: do NOT reactivate WR-042 and do NOT activate WR-043. Manager may authorize only a bounded WR-046 remediation that either (A) freezes authoritative privacy-safe provider/GitHub evidence proving credential identity continuity from the accepted historical live proof to the current scope proof, or (B) runs one live B2/R2 custody proof with the current scope-attested credentials under unchanged custody mechanics. Then route the immutable evidence to fresh independent re-audit. No model fitting/scoring, 2026 outcomes, ranking changes, production changes, Phase 6, or source admission is authorized.
+
+Detailed report: `.ai/auditor/WR-050_AUDIT.md`.
+
+Auditor modified PR #135: NO  
+Auditor merged PR #135: NO  
 Auditor changed production files: NO  
 Auditor changed canonical `.ai/shared/**`: NO  
 Auditor changed `.ai/research/**`: NO
