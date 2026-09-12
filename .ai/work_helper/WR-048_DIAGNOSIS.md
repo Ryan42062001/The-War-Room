@@ -49,6 +49,8 @@ This does not clear storage to manufacture success. It puts the strict absence a
 
 `.github/workflows/ci.yml` adds ten fail-fast `npm run test:browser` persistence-recovery iterations before the existing five complete determinism iterations. Every iteration is mandatory; this is stress coverage, not retry-on-failure.
 
+The first repeated candidate run also exposed an adjacent retained WR-044 race in `test-layout-efficiency-behavior.mjs`: the test separately clicked the setup summary and waited for `open` before calling the generation-safe Escape helper. A render could replace/collapse the disclosure between those operations. The redundant pre-open sequence is removed; `pressDisclosureControl()` itself opens, re-resolves, verifies the current control, and dispatches Escape in one browser task. The existing close and exact focus-restoration assertions remain unchanged.
+
 ## Competing hypotheses
 
 | Hypothesis | Disposition | Evidence |
@@ -60,6 +62,10 @@ This does not clear storage to manufacture success. It puts the strict absence a
 | Integrated control-plane changes altered behavior | Ruled out | Exact compare from WR-044 target to baseline contains no executable changes. |
 | The corrupt value was not removed | Ruled out | The later value is valid version 2 with a new `savedAt` and recommendation record, not the seeded `[]`; production quarantine precedes it. |
 | CI needs more time/retries | Ruled out | More delay increases the probability of observing the valid successor and therefore cannot make the old invariant correct. |
+
+## Candidate-run evidence
+
+Run `34667441730`, attempt 1 passed all 10 targeted persistence runs, all five complete determinism iterations, full `npm test`, and resilience. Attempt 2 again passed all 10 persistence runs and the first complete cycle, then failed at the redundant layout pre-open wait in cycle 2. This discriminating failure did not involve persistence and justified the bounded adjacent harness repair above.
 
 ## Assertion and scope proof
 
