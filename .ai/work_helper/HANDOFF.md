@@ -11,7 +11,7 @@ Trigger PR/run/job: Manager PR #138; run `34666574060`, job `103479540784`; inde
 Residual reproduced: YES — both runs failed iteration 1 at the same strict corrupt-recovery key assertion with a newly autosaved version-2 successor
 Root cause: `readDraftSessionPayload()` atomically removed/quarantined corrupt `[]`; subsequent recommendation auditing scheduled the normal 400 ms `saveState()` debounce, which legitimately wrote new valid state to the same active key before the timing-dependent assertion
 Competing hypotheses: executable integration drift, hidden timer, service worker/storage callback, and later user-session delete race ruled out; details in `.ai/work_helper/WR-048_DIAGNOSIS.md`
-Files changed: `.ai/work_helper/WR-048_DIAGNOSIS.md`; `.ai/work_helper/HANDOFF.md`; `.ai/work_helper/TROUBLESHOOTING_LOG.md`; `.github/workflows/ci.yml`; `scripts/test-browser.mjs`
+Files changed: `.ai/work_helper/WR-048_DIAGNOSIS.md`; `.ai/work_helper/HANDOFF.md`; `.ai/work_helper/TROUBLESHOOTING_LOG.md`; `.github/workflows/ci.yml`; `scripts/test-browser.mjs`; `scripts/test-layout-efficiency-behavior.mjs`
 Strict null assertion preserved: YES — exact equality now executes synchronously at the corrupt-recovery operation boundary
 Retry/timeout masking introduced: NO
 Production behavior changed: NO
