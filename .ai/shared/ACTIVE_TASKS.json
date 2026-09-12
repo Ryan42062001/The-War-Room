@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-12T02:05:00Z",
+  "updated_at_utc": "2026-09-12T02:35:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": [
@@ -162,11 +162,11 @@
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_HIGH_VALUE",
       "audit_required": true,
-      "blocked_on": ["WR-047 PASS-family acceptance of the WR-046 custody capability"],
+      "blocked_on": ["WR-046 credential-scope remediation and WR-050 PASS-family re-audit"],
       "allowed_path_prefixes": [".ai/research/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", "src/", "public/"],
       "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
-      "next_gate": "WR-047 independent capability audit -> Manager may issue bounded R&D exact source-custody re-attempt; WR-043 remains blocked until an admitted custody target exists"
+      "next_gate": "WR-046 bounded credential-scope remediation -> WR-050 independent re-audit -> Manager may issue bounded R&D exact source-custody re-attempt; WR-043 remains blocked until an admitted custody target exists"
     },
     {
       "task_id": "WR-043",
@@ -228,7 +228,7 @@
     {
       "task_id": "WR-046",
       "owner": "Work Helper",
-      "status": "AUDIT_READY",
+      "status": "REWORK_REQUIRED",
       "task_file": ".ai/manager/WR-046.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
       "assignment_main_sha": "ad32bf945ee799fe953614a810d032894e68cb47",
@@ -238,22 +238,22 @@
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT",
       "audit_required": true,
-      "blocked_on": [],
+      "blocked_on": ["WR-048 must complete before the single Work Helper role resumes this bounded credential-scope remediation"],
       "allowed_path_prefixes": [".ai/work_helper/", ".github/workflows/", "scripts/"],
       "forbidden_path_prefixes": ["src/", "public/", ".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/research/"],
       "forbidden_exact_paths": [],
-      "next_gate": "WR-047 independently audits PR #135 exact head 64ba4aff697c1f45472045b52f374b01ee9e1695 before Manager may reactivate R&D"
+      "next_gate": "After WR-048 completes, freeze provider-issued privacy-safe scope evidence for the exact B2 and Cloudflare credentials; if any policy changes, rerun live proof -> immutable PR #135 remediated head -> WR-050 independent re-audit"
     },
     {
       "task_id": "WR-047",
       "owner": "Auditor",
-      "status": "ASSIGNED",
+      "status": "CLOSED",
       "task_file": ".ai/manager/WR-047.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": null,
-      "worker_checkpoint_sha": null,
+      "assignment_main_sha": "68969e1435c69b72f5e9ac1599d95bf6f3716d09",
+      "worker_checkpoint_sha": "03309c9e6cf39b13742e278d787559d94813670f",
       "branch": "wr-047-custody-capability-audit",
-      "pr": 135,
+      "pr": 140,
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_PREFERRED",
       "audit_required": false,
@@ -261,18 +261,18 @@
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/work_helper/", ".ai/research/", "src/", "public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "Audit PR #135 exact head 64ba4aff697c1f45472045b52f374b01ee9e1695 -> PASS-family allows Manager to issue bounded R&D exact source-custody re-attempt only"
+      "next_gate": "CLOSED — FAIL — REMEDIATION REQUIRED; HIGH WR-047-AUD-01 requires provider-issued least-privilege scope attestation before R&D reactivation; audit evidence merged at 2f6cbd64d845813307a67207045e1e852fdad774"
     },
     {
       "task_id": "WR-048",
       "owner": "Work Helper",
-      "status": "ASSIGNED",
+      "status": "IN_PROGRESS",
       "task_file": ".ai/manager/WR-048.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": null,
+      "assignment_main_sha": "68969e1435c69b72f5e9ac1599d95bf6f3716d09",
       "worker_checkpoint_sha": null,
       "branch": "wr-048-browser-persistence-residual",
-      "pr": null,
+      "pr": 139,
       "dependency": "INDEPENDENT",
       "execution_mode": "WORK_MODE_HIGH_VALUE",
       "audit_required": true,
@@ -280,7 +280,7 @@
       "allowed_path_prefixes": [".ai/work_helper/", ".github/workflows/", "scripts/"],
       "forbidden_path_prefixes": ["src/", "public/", ".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/research/"],
       "forbidden_exact_paths": [],
-      "next_gate": "Resolve PR #138 run 34666574060 persistence residual without weakening strict null assertion -> WR-049 independent audit"
+      "next_gate": "Resolve post-integration persistence residual without weakening strict recovery assertions -> one immutable final head -> WR-049 independent audit"
     },
     {
       "task_id": "WR-049",
@@ -300,6 +300,25 @@
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/work_helper/", ".ai/research/", "src/", "public/"],
       "forbidden_exact_paths": [],
       "next_gate": "WR-048 immutable remediation target -> WR-049 independent audit -> Manager acceptance/merge decision"
+    },
+    {
+      "task_id": "WR-050",
+      "owner": "Auditor",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-050.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": "wr-050-custody-credential-scope-reaudit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "WORK_MODE_PREFERRED",
+      "audit_required": false,
+      "blocked_on": ["WR-046 remediated with one immutable credential-scope evidence head after WR-047-AUD-01"],
+      "allowed_path_prefixes": [".ai/auditor/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/work_helper/", ".ai/research/", "src/", "public/"],
+      "forbidden_exact_paths": [],
+      "next_gate": "WR-046 remediated immutable head -> WR-050 fresh independent re-audit -> PASS-family only then permits Manager to reactivate bounded R&D source custody"
     }
   ]
 }

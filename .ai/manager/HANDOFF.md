@@ -2,9 +2,9 @@
 
 HANDOFF
 
-Task IDs: WR-042 / WR-043 / WR-044 / WR-045 / WR-046 / WR-047 / WR-048 / WR-049
+Task IDs: WR-042 / WR-043 / WR-046 / WR-047 / WR-048 / WR-049 / WR-050
 Role: Manager / Architect
-Status: WR-047 ASSIGNED / WR-048 ASSIGNED IN PARALLEL / WR-042 BLOCKED
+Status: WR-047 CLOSED FAIL / WR-046 REWORK_REQUIRED / WR-048 IN_PROGRESS / R&D BLOCKED
 
 ## Canonical evidence architecture
 WR-D008 remains controlling for Returning-Player v2 evidence custody.
@@ -17,91 +17,77 @@ Machine-lock SHA-256:
 
 No model scoring is authorized.
 
-## WR-046 — COMPLETE / AUDIT READY
-Audit target:
-PR #135 exact head `64ba4aff697c1f45472045b52f374b01ee9e1695`.
+## WR-047 — CLOSED / FAIL — REMEDIATION REQUIRED
+Audited target:
+PR #135 / `64ba4aff697c1f45472045b52f374b01ee9e1695`.
 
-Live provider implementation/proof lineage:
-`4cade5204631f5f2875d664f862dcb4fa0a85200`.
+Audit branch/head:
+`wr-047-custody-capability-audit` / `03309c9e6cf39b13742e278d787559d94813670f`.
 
-Successful `WR-046 Custody Fixture Proof` run `34665473257`:
-- preflight job `103476355038`: SUCCESS;
-- live B2/R2 job `103476377218`: SUCCESS.
+Audit evidence merged via PR #140 at:
+`2f6cbd64d845813307a67207045e1e852fdad774`.
 
-Lawful fixture:
-- `jqlang/jq` `jq-attestation.json`;
-- asset ID `453012755`;
-- SHA-256 `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`;
-- byte size `14380`.
+Final verdict:
+`FAIL — REMEDIATION REQUIRED`.
 
-Backblaze B2 observed state:
-- bucket `War-Room-Custody-Primary`;
-- `COMPLIANCE` retain-until `2034-11-29T01:38:02Z`;
-- Legal Hold ON;
-- direct retrieval hash/size match.
+Everything material in the custody mechanics passed except one HIGH finding:
+`WR-047-AUD-01 — Actual provider-side least-privilege credential scopes are asserted but not independently attested.`
 
-Cloudflare R2 observed state:
-- bucket `war-room-custody-backup`;
-- bucket-wide `Indefinite` Bucket Lock;
-- direct retrieval hash/size match.
+Passed independently:
+- exact-byte acquisition;
+- content-addressed identity;
+- B2 primary custody/retrieval;
+- B2 COMPLIANCE retention + Legal Hold;
+- R2 independent backup/retrieval;
+- R2 bucket-wide indefinite lock;
+- original/B2/R2 digest and byte-size equality;
+- no master/root runtime credential;
+- secret/privacy handling;
+- contract preservation;
+- no actual source admission, 2026 outcomes, model work, production change;
+- browser-CI separation;
+- live-proof-to-final-head lineage.
 
-Original/B2/R2 SHA-256 and size equality were true. Secrets were not committed/logged. No actual v2 source was admitted/parsed, no 2026 outcomes/model work occurred, and production behavior was unchanged.
+## WR-046 — REWORK_REQUIRED / BOUNDED CREDENTIAL-SCOPE ATTESTATION
+Do not redo the custody architecture.
 
-Do not merge PR #135 before WR-047.
+Required remediation is only to freeze privacy-safe provider-issued current scope evidence for the exact configured credentials:
+1. B2 application key: dedicated bucket, approved capability set, `custody/` prefix or narrower, no delete/governance/admin/master authority.
+2. Cloudflare R2 object credential: dedicated bucket resource scope, intended object permission only, no lock/config/admin authority.
+3. Cloudflare Bucket-Lock read token: required resource scope, read-only configuration permission, no write/admin ability to alter/remove locks.
 
-## WR-047 — ASSIGNED / INDEPENDENT CUSTODY CAPABILITY AUDIT
-Audit exactly PR #135 / `64ba4aff697c1f45472045b52f374b01ee9e1695`.
+If any credential is broader than the approved contract, replace/re-scope it and repeat the live B2/R2 proof. If scopes are already correct, preserve the existing live proof and add only the missing provider-issued evidence.
 
-Verify exact-byte acquisition, B2 primary immutability/retention/Legal Hold, independent R2 backup and indefinite Bucket Lock, direct retrieval/digest equality, least-privilege credentials/privacy boundaries, and preservation of WR-039/WR-D008 semantics.
+The single Work Helper role is currently active on WR-048. Resume WR-046 only after WR-048 returns control to Manager.
 
-A PASS-family result authorizes only Manager to issue a bounded R&D exact-source custody re-attempt. It does not admit sources or authorize scoring.
-
-## WR-044 / WR-045 — EXACT TARGET CLOSED; POST-INTEGRATION RESIDUAL DISCOVERED
-WR-044 exact remediation head `e750748d938ed6bb8284eeec1cfda9eea77997ac` received independent WR-045 `PASS` with no findings at audit head `d575cf81e4ebcb29733ed333ca782ce72d2f43c1`.
-
-Audit evidence merged at `490283ac6897d631c3d08b67879be14751ab5638` and WR-044 was merged preserving the exact audited commit as a direct parent of `71c3fa75af203ff2347bf726dd30f8e0706a3212`.
-
-That exact-head audit remains valid for the target reviewed. It is not treated as a blanket guarantee after new evidence.
-
-## WR-048 — ASSIGNED / POST-INTEGRATION PERSISTENCE RESIDUAL
-Trigger:
-- Manager PR #138;
-- trigger head `56ba186f97a14458117071f4106077aba757c441`;
-- War Room CI run `34666574060`;
-- job `103479540784`;
-- mandatory `Stress browser determinism boundaries` failed on iteration `1/5` inside `npm run test:browser`.
-
-Observed failure:
-strict deleted-key assertion expected `null`, but the persisted key contained a newly autosaved version-2 state. This is materially the persistence/state-isolation class WR-044 intended to eliminate.
-
-Do not rerun merely to obtain green. WR-048 must trace the remaining causal lifecycle and remediate it without weakening the strict assertion, clearing storage to manufacture success, adding blanket retries, unjustified timeout inflation, coverage reduction, or production changes.
-
-Execution mode: `WORK_MODE_HIGH_VALUE`.
-
-Work Helper has no fixed attempt limit while each attempt remains materially evidence-driven.
-
-## WR-049 — BLOCKED / INDEPENDENT RESIDUAL AUDIT
-Activate only after WR-048 publishes one immutable remediation PR/head. Audit root cause, strict assertion preservation, absence of retry/masking, repeated targeted/full-CI proof, and no production/custody/research drift.
+## WR-050 — BLOCKED / FRESH CREDENTIAL-SCOPE RE-AUDIT
+Activate only after WR-046 publishes one immutable remediated PR #135 head. PASS-family WR-050 is required before R&D may be reactivated.
 
 ## WR-042 / WR-043
-WR-042 remains blocked at fail-closed blocker head `1c3c6d768d58aa636194226f16b9822eebc8c19f`. Do not reactivate R&D until WR-047 PASS-family and a Manager-issued bounded retry.
+WR-042 remains blocked at fail-closed blocker head `1c3c6d768d58aa636194226f16b9822eebc8c19f`.
 
-WR-043 remains blocked until that later R&D retry actually admits and freezes source custody.
+Do not issue a bounded R&D retry until WR-050 PASS-family.
 
-## Parallel staffing
+WR-043 remains blocked until a later R&D custody retry actually admits and freezes a source-custody target.
+
+## WR-048 / WR-049 browser-CI lane
+WR-048 remains ACTIVE / IN_PROGRESS on PR #139 for the post-integration persistence residual. Do not interrupt it to resume WR-046.
+
+WR-049 remains blocked until WR-048 publishes one immutable remediation target.
+
+## Staffing
 - Manager: IDLE after reconciliation
 - Builder: IDLE
 - Draft Strategy: IDLE
 - R&D: IDLE / WR-042 BLOCKED
-- Auditor: ACTIVE / WR-047
+- Auditor: IDLE; WR-049 and WR-050 both BLOCKED
 - Work Helper: ACTIVE / WR-048
-- WR-043: BLOCKED
-- WR-049: BLOCKED
+- WR-046: REWORK_REQUIRED but queued behind WR-048
 
 ## Next gates
-1. WR-047 verdict on exact custody capability target.
-2. In parallel, WR-048 remediation -> WR-049 audit.
-3. WR-047 PASS-family -> bounded R&D exact source-custody retry may be issued by Manager.
-4. WR-049 PASS-family -> Manager may accept/merge residual CI remediation.
-5. WR-043 waits for an admitted R&D source-custody target.
+1. WR-048 completion -> WR-049 independent audit.
+2. After WR-048 returns control, Work Helper resumes bounded WR-046 credential-scope remediation.
+3. WR-046 immutable remediated head -> WR-050 independent re-audit.
+4. WR-050 PASS-family -> Manager may issue bounded R&D exact-source custody retry.
+5. WR-043 still waits for actual admitted custody.
 6. Model scoring remains forbidden.
