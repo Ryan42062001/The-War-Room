@@ -3,64 +3,55 @@
 HANDOFF
 
 Task ID: WR-046  
-Role: Work Helper / Super Troubleshooter / Cross-Functional Operator  
-Status: REMEDIATION COMPLETE — INDEPENDENT AUDIT REQUIRED  
-Starting canonical main: `77a685907d02c42df87bccedd305d79abf762a24`  
+Role: Work Helper / Super Troubleshooter  
+Status: BOUNDED WR-050 REMEDIATION COMPLETE — FRESH INDEPENDENT RE-AUDIT REQUIRED  
 Branch: `wr-046-custody-capability-recovery`  
 PR: `#135`  
-Prior audited head: `64ba4aff697c1f45472045b52f374b01ee9e1695`  
-Prior live-proof lineage: `4cade5204631f5f2875d664f862dcb4fa0a85200`
+WR-050 audited head: `81fbc857625a810522460661c7b63591c20714d7`  
+Live implementation/remediation head: `2739f4240600c726f880870051d6874cfa1e408b`
 
-## WR-047 finding addressed
+## Finding addressed
 
-`WR-047-AUD-01 — HIGH` is remediated with provider-issued, privacy-safe evidence for the exact configured B2 credential and provider-console plus provider-verification evidence for both Cloudflare credentials.
+`WR-050-AUD-01 — HIGH` is addressed through Manager-selected path B: exactly one fresh live B2/R2 custody fixture proof using the current, already scope-attested credentials and unchanged custody mechanics.
 
-Evidence report: `.ai/work_helper/WR-046_CREDENTIAL_SCOPE_ATTESTATION.md`.
+Detailed evidence: `.ai/work_helper/WR-046_CURRENT_CREDENTIAL_LIVE_PROOF.md`.
 
-## Provider disposition
+## Exact live execution
 
-Backblaze B2:
-- exact configured key authenticated;
-- one bucket only: `War-Room-Custody-Primary`;
-- exact prefix: `custody/`;
-- exact approved seven-capability set;
-- delete, governance bypass, bucket/account administration, and master authority absent.
+Workflow run `34723578709`: **SUCCESS**  
+Preflight job `103633687229`: **SUCCESS**  
+Live-provider job `103633709551`: **SUCCESS**
 
-Cloudflare R2 object credential:
-- exact configured identifier hash bound to provider-console evidence;
-- dedicated `war-room-custody-backup` bucket only;
-- `Object Read & Write`;
-- no configuration-write or account-admin authority.
+The live job emitted the same accepted privacy-safe anchors:
+- B2 key-ID SHA-256: `b744e565dc21cc4ec402f3ec7a24026bf4f9ce9711e659992f2be21a27ccac5a`;
+- R2 access-key-ID SHA-256: `17e95438e19777a414ee85d57c32d44466199a973c51e5b6f57e42a5384585bd`;
+- Cloudflare config-token ID: `207e45b2deb2a0fd1d8bd3c57354a0dc`.
 
-Cloudflare configuration token:
-- exact provider token ID verified active;
-- one account resource;
-- `Workers R2 Storage:Read` only;
-- no permission capable of altering/removing Bucket Lock.
+All three exactly match the accepted current-scope attestation.
 
-No credential changed.
+## Live proof result
 
-## Exact execution evidence
+- lawful fixture asset ID `453012755`;
+- SHA-256 `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`;
+- byte size `14380`;
+- B2 content-addressed object verified;
+- B2 `COMPLIANCE` retention through `2034-11-29T22:45:28Z`;
+- B2 Legal Hold `ON`;
+- R2 Bucket Lock `Indefinite`, bucket-wide;
+- direct B2 and R2 retrieval matched;
+- original/B2/R2 digest equality: `true`;
+- original/B2/R2 byte-size equality: `true`;
+- reusable secrets logged or reported: `false`.
 
-Attested head: `344127c5d822b2f8009627054bfd8a1f7e75abef`  
-Workflow run: `34704284392` — `SUCCESS`  
-Preflight job: `103581403628` — `SUCCESS`  
-Credential-scope job: `103581427069` — `SUCCESS`  
-Live-custody job: `SKIPPED` because credentials were unchanged.
+No credential was replaced or re-scoped. No repeated live attempt was performed.
 
-The workflow report recorded `secret_values_present: false`; all secret environment values were masked; the local report was removed.
+## Boundary integrity
 
-## Scope integrity
-
-Returning-Player source work: **NO**  
-2026 outcomes inspected: **NO**  
-Model/scoring/ranking work: **NO**  
+Source/model/ranking/2026-outcome work: **NO**  
 Production/user-facing change: **NO**  
-`.ai/research/**` change: **NO**  
-WR-D008 / WR-039 semantic change: **NO**
+WR039 / WR-D008 change: **NO**  
+Custody requirement weakening: **NO**
 
 ## ACTIVATE NOW
 
-Manager / Architect should activate **WR-050 — Independent Auditor / QA** against the final immutable PR #135 remediation head and run `34704284392` / job `103581427069`.
-
-Work Helper does not merge or self-certify.
+Manager / Architect should route PR #135's final immutable head to a fresh independent re-audit. Work Helper does not merge, self-certify, reactivate WR-042, or activate WR-043.
