@@ -15,8 +15,9 @@ on:
       - '.ai/work_helper/**'
   workflow_dispatch:
 
-# A branch push runs the live provider proof only when its commit message contains
-# the explicit [wr046-live-proof] marker; ordinary pushes and PRs remain preflight-only.
+# Branch pushes run provider jobs only with explicit markers:
+# [wr046-live-proof] for custody mechanics; [wr046-scope-attestation] for scope metadata.
+# Ordinary pushes and pull requests remain preflight-only.
 permissions:
   contents: read
 
