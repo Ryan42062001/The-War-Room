@@ -2,45 +2,62 @@
 
 HANDOFF
 
-Task ID: WR-045  
+Task ID: WR-047  
 Role: Independent Auditor / QA  
-Status: COMPLETE — PASS  
-Audited PR/head: PR #132 / `e750748d938ed6bb8284eeec1cfda9eea77997ac`  
-Canonical main / audit baseline: `2ec3ecb1e387f5bfdd52efe712cf575a9d5d9f85`  
-Audit branch: `wr-045-browser-ci-audit`
+Status: COMPLETE — FAIL — REMEDIATION REQUIRED  
+Audited PR/head: PR #135 / `64ba4aff697c1f45472045b52f374b01ee9e1695`  
+Live-provider implementation/proof lineage: `4cade5204631f5f2875d664f862dcb4fa0a85200`  
+Canonical main / audit baseline: `68969e1435c69b72f5e9ac1599d95bf6f3716d09`  
+Audit branch: `wr-047-custody-capability-audit`
 
-Root-cause verdict: PASS — original command-bar DOM-generation and persistence/autosave lifecycle failures were independently reproduced from CI evidence and are supported by the unchanged application lifecycle code. Intermediate WR-044 RED stress checkpoints independently discriminate incomplete fixes from the final remediation.
+Exact live evidence independently verified:
+- workflow `WR-046 Custody Fixture Proof`;
+- run `34665473257` — SUCCESS;
+- preflight job `103476355038` — SUCCESS;
+- live B2/R2 job `103476377218` — SUCCESS.
 
-Command-bar lifecycle verdict: PASS — setting edits now re-resolve the current visible disclosure/control generation and commit value + events in one bounded browser task. Existing mode/canonical-setting postconditions remain strict. No detached-element errors are ignored and no timeout increase is used as the fix.
+Exact-byte acquisition verdict: PASS — `jqlang/jq` release asset ID `453012755` was acquired through the immutable GitHub asset API and independently recomputed as SHA-256 `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`, size `14380`. Official provider metadata independently identifies the same asset/name/size/digest.
 
-Persistence lifecycle verdict: PASS — `test:browser` now drains render/debounced-save work before the session lifecycle and after deletion, then retains the exact deleted-key `=== null` assertion. The helper waits for application quiescence; it does not cancel pending saves or clear storage to manufacture success.
+Content-addressed identity verdict: PASS — B2 and R2 use `custody/sha256/01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed/raw`.
 
-Recovery/layout/focus verdict: PASS — adjacent races are made generation/readiness-aware: Escape dispatch/focus restoration is tested against the current control generation, WR-026 current-control focus remains strict with a real keyboard Escape path retained, recovery requires an actually visible current maintenance control and open dialog, and off-screen layout preconditions are explicitly proven before urgent reveal.
+B2 primary custody verdict: PASS — genuine Backblaze B2 bucket `War-Room-Custody-Primary`, endpoint `s3.us-east-005.backblazeb2.com`, independent retrieval, exact digest/size, and provider version identity were proven.
 
-Assertions/coverage intact: YES — no meaningful assertion was deleted, skipped, softened, or masked. The Draft Management disclosure assertion was moved from runtime injection into source-native `test-browser.mjs`; the security/XSS assertion remains; normal `npm test` remains active after the additive stress gate.
+B2 retention / Legal Hold verdict: PASS — live proof independently read `COMPLIANCE`, retain-until `2034-11-29T01:38:02Z`, and Legal Hold `ON`. Backblaze documentation independently confirms Compliance retention cannot be shortened/removed by users and the S3-Compatible API uses application keys rather than the master application key.
 
-Retry/masking verdict: PASS — no blanket test retry, `continue-on-error`, catch-and-pass, or unjustified global/Playwright timeout increase was introduced. CI stress loops are fail-fast required repetitions, not retries: 5x repaired browser/command/layout/WR026 gates plus 3x resilience lifecycle validation.
+R2 independent-backup verdict: PASS — genuine Cloudflare R2 bucket `war-room-custody-backup` on a distinct provider independently returned the exact fixture bytes.
 
-Exact-head CI disposition: PASS — War Room CI run `34632427369` has three consecutive successful executions/attempts on exact immutable head `e750748d938ed6bb8284eeec1cfda9eea77997ac`. Independently inspected evidence confirms the stress gate, phone validation, full `npm test`, resilience syntax, and backup/offline recovery checks passed. Attempt 3 raw logs show all five determinism iterations passed, extension unit tests 164/164 passed with 0 skipped, broad browser/layout/draft/persistence regression gates remained enabled, and all three resilience lifecycle iterations passed.
+R2 indefinite-lock verdict: PASS — live Cloudflare configuration read returned an enabled `Indefinite` rule with empty prefix, which covers the bucket-wide custody object. Official Cloudflare documentation confirms no/empty prefix applies to all objects and Indefinite blocks deletion/overwrite until rule removal.
 
-Production behavior changed by audited work: NO — PR #132 changes only Work Helper evidence, CI workflow, and browser-test/harness scripts; no user-facing production module is changed.
+Retrieval/digest verdict: PASS — original/B2/R2 SHA-256 equality and byte-size equality were independently enforced and reported true; both provider downloads recomputed exact SHA and `14380` bytes.
 
-WR-042 / WR-046 source-custody work altered: NO.  
-Football-model research or frozen artifacts altered: NO.  
-Current-main advancement since PR base: `CONTROL_PLANE_ONLY` — independently verified; no overlap with audited implementation, production, research, or custody files.
+No-master/root verdict: PASS — runtime uses B2 application-key/S3 credentials, R2 S3 credentials, and a Cloudflare Bearer token; no root/master interface is present. Backblaze master keys are not supported by the S3-Compatible API used successfully by the proof.
 
-Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — none.
+Credential-scope verdict: FAIL — the workflow proves which permissions it exercised and Work Helper/Manager evidence states the intended least-privilege policy, but no privacy-safe provider-issued current authorization metadata is frozen for the exact configured credentials. The audit therefore cannot independently prove absence of broader B2 bucket/prefix/capabilities or broader Cloudflare object/config-write/admin scope.
 
-Final verdict: `PASS`
+Secret/privacy verdict: PASS — all five credential values remain masked in live logs; normalization reports only environment-variable names; proof errors are sanitized; no secret value or protected raw source bytes were observed in PR content. Run `34665473257` has no Actions artifacts, and runner-local proof files were removed.
 
-Recommended next role: Manager / Architect.
+Contract-preservation verdict: PASS — WR-039 / WR-D008, `.ai/research/**`, WR-021/WR-023, frozen football-model artifacts, and source-class semantics are unchanged. No actual Returning-Player v2 source was admitted or parsed.
 
-Exact next action: Manager verify PR #132 still identifies audited implementation head `e750748d938ed6bb8284eeec1cfda9eea77997ac`, then perform the normal merge/reconciliation gate. Canonical-main advancement to `2ec3ecb1e387f5bfdd52efe712cf575a9d5d9f85` is control-plane-only. If reconciliation changes implementation/test content or produces a materially different target, apply Workflow V3 target-advancement validation before relying on this audit. Auditor must not merge PR #132. After reconciliation, Manager may resume paused WR-046 source-custody work under its own gate.
+No-source/no-model/no-production verdict: PASS — no 2026 regular-season outcomes, fitting/scoring/tuning/comparison/evaluation/ranking, Phase-6 work, or production/user-facing changes occurred.
 
-Checkpoint: detailed audit report `.ai/auditor/WR-045_AUDIT.md`, report commit `0d26cd5b4d5d8c73a1c8495e7916a799c582bfeb`, audit branch `wr-045-browser-ci-audit`. Exact final audit branch head is the commit containing this handoff and is reported to Manager after final branch verification.
+Browser-CI separation verdict: PASS — PR #135 changes no browser-test or production/browser lifecycle file. Exact-final-head War Room CI RED `34665599880` independently reproduces the separately assigned WR-048 persistence residual and is not custody-proof authority. The exact-head custody preflight is green and the live provider proof is browser-independent.
 
-Auditor modified PR #132: NO  
-Auditor merged PR #132: NO  
+Final-head lineage verdict: PASS — compare from live proof head `4cade5204631f5f2875d664f862dcb4fa0a85200` to final audited head `64ba4aff697c1f45472045b52f374b01ee9e1695` changes only three `.ai/work_helper/**` evidence files; custody implementation/workflow is unchanged.
+
+Findings by severity: CRITICAL — none. HIGH — `WR-047-AUD-01`: actual provider-side least-privilege credential scopes are asserted but not independently attested. MEDIUM — none. LOW — none.
+
+`WR-047-AUD-01` remediation: capture privacy-safe provider-issued current scope evidence for the exact B2 application key (bucket, capabilities, `namePrefix`) and both Cloudflare credentials (resource scope + permission groups), with no secret values. Fail if broader than the Manager-approved contract. Repeat live B2/R2 proof only if a credential/policy is changed.
+
+Final verdict: `FAIL — REMEDIATION REQUIRED`
+
+Recommended next role: Manager / Architect, then bounded Work Helper credential-scope evidence remediation if authorized.
+
+Exact Manager action authorized next: do NOT issue the R&D exact-source custody re-attempt and do NOT activate WR-043. Manager may authorize only a bounded WR-046 remediation to freeze provider-issued non-secret credential-scope evidence (and, only if scope changes are required, re-run the live provider proof), followed by fresh independent audit. All source-admission/model/2026-outcome/production restrictions remain in force.
+
+Detailed report: `.ai/auditor/WR-047_AUDIT.md`.
+
+Auditor modified PR #135: NO  
+Auditor merged PR #135: NO  
 Auditor changed production files: NO  
 Auditor changed canonical `.ai/shared/**`: NO  
 Auditor changed `.ai/research/**`: NO
