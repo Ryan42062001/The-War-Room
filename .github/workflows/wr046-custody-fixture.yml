@@ -30,6 +30,7 @@ jobs:
         run: |
           python3 -m py_compile \
             scripts/custody/acquire_github_release_asset.py \
+            scripts/custody/ensure_b2_custody_object.py \
             scripts/custody/prove_b2_r2_custody.py
           python3 scripts/custody/prove_b2_r2_custody.py --self-test
           aws --version
@@ -78,6 +79,11 @@ jobs:
             --expected-sha256 01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed \
             --expected-size 14380 \
             --output "$RUNNER_TEMP/wr046-jq-attestation.json"
+
+      - name: Ensure least-privilege B2 content-addressed object
+        run: |
+          python3 scripts/custody/ensure_b2_custody_object.py \
+            --fixture "$RUNNER_TEMP/wr046-jq-attestation.json"
 
       - name: Prove B2 primary and R2 independent backup custody
         run: |
