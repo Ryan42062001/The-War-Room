@@ -13,6 +13,10 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Stress browser determinism boundaries
         run: |
+          for iteration in 1 2 3 4 5 6 7 8 9 10; do
+            echo "Persistence recovery iteration ${iteration}/10"
+            npm run test:browser
+          done
           for iteration in 1 2 3 4 5; do
             echo "Determinism iteration ${iteration}/5: persistence lifecycle"
             npm run test:browser
