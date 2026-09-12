@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at_utc": "2026-09-12T02:35:00Z",
+  "updated_at_utc": "2026-09-12T12:02:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "lifecycle_states": [
@@ -204,7 +204,7 @@
       "allowed_path_prefixes": [".ai/work_helper/", ".github/workflows/", "scripts/"],
       "forbidden_path_prefixes": ["src/", "public/", ".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/research/"],
       "forbidden_exact_paths": [],
-      "next_gate": "CLOSED — WR-045 PASS accepted and exact audited head merged; post-integration residual discovered later is separately assigned to WR-048"
+      "next_gate": "CLOSED — WR-045 PASS accepted and exact audited head merged; post-integration residual later closed under WR-048/049"
     },
     {
       "task_id": "WR-045",
@@ -223,7 +223,7 @@
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/work_helper/", ".ai/research/", "src/", "public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "CLOSED — exact-head PASS remains valid for audited WR-044 target; later integrated residual is routed independently to WR-048/049"
+      "next_gate": "CLOSED — exact-head PASS remains valid for audited WR-044 target; later integrated residual closed under WR-048/049"
     },
     {
       "task_id": "WR-046",
@@ -238,11 +238,11 @@
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT",
       "audit_required": true,
-      "blocked_on": ["WR-048 must complete before the single Work Helper role resumes this bounded credential-scope remediation"],
+      "blocked_on": [],
       "allowed_path_prefixes": [".ai/work_helper/", ".github/workflows/", "scripts/"],
       "forbidden_path_prefixes": ["src/", "public/", ".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/research/"],
       "forbidden_exact_paths": [],
-      "next_gate": "After WR-048 completes, freeze provider-issued privacy-safe scope evidence for the exact B2 and Cloudflare credentials; if any policy changes, rerun live proof -> immutable PR #135 remediated head -> WR-050 independent re-audit"
+      "next_gate": "Freeze provider-issued privacy-safe scope evidence for the exact B2 and Cloudflare credentials; if any policy changes, rerun live proof -> immutable PR #135 remediated head -> WR-050 independent re-audit"
     },
     {
       "task_id": "WR-047",
@@ -266,11 +266,11 @@
     {
       "task_id": "WR-048",
       "owner": "Work Helper",
-      "status": "IN_PROGRESS",
+      "status": "CLOSED",
       "task_file": ".ai/manager/WR-048.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
       "assignment_main_sha": "68969e1435c69b72f5e9ac1599d95bf6f3716d09",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "f93f4b6b17ab158974763069d9882e5782a526dd",
       "branch": "wr-048-browser-persistence-residual",
       "pr": 139,
       "dependency": "INDEPENDENT",
@@ -280,26 +280,26 @@
       "allowed_path_prefixes": [".ai/work_helper/", ".github/workflows/", "scripts/"],
       "forbidden_path_prefixes": ["src/", "public/", ".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/research/"],
       "forbidden_exact_paths": [],
-      "next_gate": "Resolve post-integration persistence residual without weakening strict recovery assertions -> one immutable final head -> WR-049 independent audit"
+      "next_gate": "CLOSED — WR-049 PASS accepted; exact audited head merged as parent of canonical merge 62cbb22df817a156a8396bedfd0a7f4d7f399532"
     },
     {
       "task_id": "WR-049",
       "owner": "Auditor",
-      "status": "BLOCKED",
+      "status": "CLOSED",
       "task_file": ".ai/manager/WR-049.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": null,
-      "worker_checkpoint_sha": null,
+      "assignment_main_sha": "77a685907d02c42df87bccedd305d79abf762a24",
+      "worker_checkpoint_sha": "2f4e584c5b76647ee21846a83787ca9b2bfcce10",
       "branch": "wr-049-browser-persistence-residual-audit",
-      "pr": null,
+      "pr": 142,
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_PREFERRED",
       "audit_required": false,
-      "blocked_on": ["WR-048 complete with one immutable post-integration persistence remediation PR/head"],
+      "blocked_on": [],
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/work_helper/", ".ai/research/", "src/", "public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "WR-048 immutable remediation target -> WR-049 independent audit -> Manager acceptance/merge decision"
+      "next_gate": "CLOSED — PASS with no findings; audit evidence merged at 98a4964e7f9d6392d97e2b7282de55eb6f477020 and WR-048 merged at 62cbb22df817a156a8396bedfd0a7f4d7f399532"
     },
     {
       "task_id": "WR-050",

@@ -1,6 +1,6 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — CUSTODY CREDENTIAL-SCOPE REMEDIATION QUEUED / WR-048 CI RESIDUAL ACTIVE
+Status: ACTIVE DEVELOPMENT — CUSTODY CREDENTIAL-SCOPE REMEDIATION / WR-050 RE-AUDIT GATE
 Last updated: 2026-09-12
 Owner: Manager / Architect
 
@@ -30,10 +30,10 @@ WR-041 established Work Helper / Super Troubleshooter as a permanent privileged 
 - WR-043 — BLOCKED / independent source-custody audit; no admitted target yet
 - WR-044 — CLOSED / exact audited browser-CI remediation merged
 - WR-045 — CLOSED / PASS on exact WR-044 target
-- WR-046 — REWORK_REQUIRED / credential-scope attestation gap
+- WR-046 — REWORK_REQUIRED / credential-scope attestation gap; now unblocked for Work Helper
 - WR-047 — CLOSED / FAIL — REMEDIATION REQUIRED
-- WR-048 — IN_PROGRESS / post-integration browser persistence residual
-- WR-049 — BLOCKED / independent audit of WR-048 remediation
+- WR-048 — CLOSED / ACCEPTED / MERGED
+- WR-049 — CLOSED / PASS
 - WR-050 — BLOCKED / fresh audit of remediated WR-046 credential scopes
 
 ## Historical returning-player architecture
@@ -77,7 +77,7 @@ R&D blocker target: PR #133 / `1c3c6d768d58aa636194226f16b9822eebc8c19f`. No sou
 #### WR-043 — Independent source-custody audit — BLOCKED
 Wait for a later R&D custody target that actually admits and freezes sources.
 
-#### WR-046 — Source-custody capability recovery — REWORK_REQUIRED
+#### WR-046 — Source-custody capability recovery — REWORK_REQUIRED / UNBLOCKED
 PR #135 exact audited head `64ba4aff697c1f45472045b52f374b01ee9e1695` passed custody mechanics but lacks independently attested provider-side least-privilege scope evidence for the exact configured credentials.
 
 Remediation is bounded to provider-issued privacy-safe authorization metadata for B2 and both Cloudflare credentials. If a credential is broader than approved, re-scope/replace it and repeat live proof; otherwise preserve the existing live proof.
@@ -90,18 +90,28 @@ Only blocking finding: HIGH `WR-047-AUD-01` — actual provider-side least-privi
 #### WR-050 — Fresh credential-scope re-audit — BLOCKED
 Activate only after WR-046 publishes one immutable remediated head. PASS-family WR-050 is the next custody capability acceptance gate.
 
-### Repository validation reliability lane — ACTIVE / POST-INTEGRATION RESIDUAL
+### Repository validation reliability lane — CLOSED / ACCEPTED
 #### WR-044 — Exact-head remediation — CLOSED / MERGED
 Exact audited remediation head `e750748d938ed6bb8284eeec1cfda9eea77997ac` received WR-045 PASS and was merged.
 
 #### WR-045 — Exact-head audit — CLOSED / PASS
 Historical exact-target verdict remains valid for the target reviewed.
 
-#### WR-048 — Post-integration persistence determinism residual — IN_PROGRESS
-Work Helper is active on PR #139. Do not interrupt it to resume WR-046. Current draft evidence indicates the failing corrupt-recovery null assertion can race a later valid autosave successor; final diagnosis/remediation is not yet accepted.
+#### WR-048 — Post-integration persistence determinism residual — CLOSED / ACCEPTED / MERGED
+Exact remediation head: `f93f4b6b17ab158974763069d9882e5782a526dd`.
 
-#### WR-049 — Independent residual audit — BLOCKED
-Activate only after WR-048 publishes one immutable remediation target.
+The residual was traced to an incorrect test invariant around corrupt-payload recovery versus a later valid version-2 autosave successor. The strict null assertion remains at the atomic recovery boundary, later successor-state coverage remains, and no retry/masking/timeout workaround was introduced.
+
+Exact-head CI run `34668044160` passed three consecutive attempts with 10/10 targeted persistence runs and 5/5 complete determinism cycles per attempt plus full test and resilience gates.
+
+Merged at canonical merge `62cbb22df817a156a8396bedfd0a7f4d7f399532`, preserving the exact audited implementation commit as a parent.
+
+#### WR-049 — Independent residual audit — CLOSED / PASS
+Audit head: `2f4e584c5b76647ee21846a83787ca9b2bfcce10`.
+
+Final verdict: `PASS`; no findings at any severity.
+
+Audit evidence merged at `98a4964e7f9d6392d97e2b7282de55eb6f477020` before WR-048 acceptance.
 
 ### Phase 6 — Replacement / cross-position draft value — BLOCKED ON ACCEPTED V2 SEASON-TOTAL PATH
 Leading advisory candidate remains deterministic eligibility-constrained starter assignment / marginal starter value (MSV). Do not activate Phase 6 until the v2 evidence/source/model/season-total chain is independently accepted and Manager explicitly opens the gate.
@@ -118,6 +128,6 @@ Leading advisory candidate remains deterministic eligibility-constrained starter
 - Builder: IDLE
 - Draft Strategy: IDLE
 - R&D: IDLE / WR-042 BLOCKED
-- Auditor: IDLE / WR-049 + WR-050 BLOCKED
-- Work Helper: ACTIVE / WR-048
-- WR-046: REWORK_REQUIRED / queued behind WR-048
+- Auditor: IDLE / WR-050 BLOCKED
+- Work Helper: AVAILABLE FOR WR-046 bounded credential-scope remediation
+- WR-043: BLOCKED
