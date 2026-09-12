@@ -3,233 +3,183 @@
 Task: `WR-046`  
 Role: Work Helper / Super Troubleshooter / Cross-Functional Operator  
 Assignment mode: `CROSS-ROLE RECOVERY`  
-Status: `BLOCKED — CREDENTIALS REQUIRED — ADD GITHUB ACTIONS SECRETS`  
-Original WR-046 starting main: `2ec3ecb1e387f5bfdd52efe712cf575a9d5d9f85`  
+Status: `COMPLETE — AUDIT REQUIRED`  
 Continuation canonical main: `ad32bf945ee799fe953614a810d032894e68cb47`  
-WR-042 blocker head reviewed: `1c3c6d768d58aa636194226f16b9822eebc8c19f`  
 Branch: `wr-046-custody-capability-recovery`  
 PR: `#135`  
 Governing WR-039 contract head: `00a9e787e716d6697e6cd0d9252982a672abbbe0`  
 Governing machine-lock SHA-256: `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`
 
-## Continuation reconciliation
+## Result
 
-Manager PR #136 advanced canonical `main` to `ad32bf945ee799fe953614a810d032894e68cb47` and authorized the Backblaze B2 + Cloudflare R2 architecture. The existing WR-046 branch had diverged only because it already contained the earlier acquisition proof and Work Helper evidence.
+WR-046 recovered a live, independently retrievable, storage-layer-locked two-provider custody capability without admitting any Returning-Player v2 source.
 
-The histories were reconciled without rewriting or discarding WR-046 evidence. Merge checkpoint:
+Successful implementation/live-proof head:
 
-`0d6555e143b9aa8baf5333ef5add10fb3e31764f`
+`4cade5204631f5f2875d664f862dcb4fa0a85200`
 
-Parents:
-- prior WR-046 blocker/evidence head `c3233b82106c6018daa13654db04297f74498aa8`;
-- Manager-authorized main `ad32bf945ee799fe953614a810d032894e68cb47`.
+Successful GitHub Actions evidence:
+- workflow: `WR-046 Custody Fixture Proof`;
+- run: `34665473257`;
+- preflight job: `103476355038` — `SUCCESS`;
+- live provider job: `103476377218` — `SUCCESS`.
 
-The proven acquisition commit `61e31f6d9ce92fef6d56c5cabd08faa0217ca7f2` therefore remains in branch history.
-
-## Proven exact-byte acquisition evidence retained
-
-Lawful fixture: public `jqlang/jq` release object `jq-attestation.json`.
-
-Frozen identity:
-- GitHub release asset ID: `453012755`;
+Lawful non-sensitive fixture:
+- source object: public `jqlang/jq` release asset `jq-attestation.json`;
+- immutable release asset ID: `453012755`;
 - SHA-256: `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`;
 - byte size: `14380`.
 
-Previously observed exact-head proof:
-- commit `61e31f6d9ce92fef6d56c5cabd08faa0217ca7f2`;
-- workflow run `34642610497`;
-- job `103405723000`;
-- conclusion: `SUCCESS`;
-- scripted download-byte verification plus independent `sha256sum` / `stat` verification passed;
-- fixture was removed after verification;
-- no Actions artifact was used as custody.
-
-This evidence is transport/acquisition proof only and is deliberately preserved.
-
-## Manager-approved custody architecture
-
-### Primary — Backblaze B2
-
-Private War Room-dedicated B2 bucket with Object Lock enabled.
-
-Object key:
-
-`custody/sha256/<sha256>/raw`
-
-For the WR-046 fixture the exact key is:
+Content-addressed custody key used on both providers:
 
 `custody/sha256/01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed/raw`
 
-The workflow applies and verifies:
-- COMPLIANCE Object Lock retention;
-- 3,000-day retention target for the capability fixture;
-- Legal Hold `ON` for indefinite preservation;
-- exact object metadata SHA-256;
-- fresh retrieval and downloaded-byte SHA-256 / byte-size equality.
+## Primary custody proof — Backblaze B2
 
-Legal Hold and compliance retention are separate controls. Legal Hold supplies the indefinite/unknown-lifetime preservation component; compliance retention supplies a fixed non-shortenable retention window.
+Provider: Backblaze B2  
+Bucket: `War-Room-Custody-Primary`  
+Region: `us-east-005`
 
-### Independent backup — Cloudflare R2
+Observed live proof from run `34665473257`:
+- exact content-addressed object existed and was directly readable;
+- retention mode: `COMPLIANCE`;
+- retain-until: `2034-11-29T01:38:02Z`;
+- Legal Hold: `ON`;
+- independently retrieved SHA-256: `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`;
+- independently retrieved byte size: `14380`.
 
-Private War Room-dedicated R2 bucket with an already-configured indefinite Bucket Lock covering the custody key.
+The successful run read the live per-object retention and Legal Hold state after placement; this is storage-layer evidence, not an application promise.
 
-The workflow:
-- verifies the live Bucket Lock configuration **before upload**;
-- requires an enabled `Indefinite` rule whose prefix covers the content-addressed key;
-- uploads the identical fixture under the same content-addressed key;
-- retrieves it independently and recomputes SHA-256 / byte size;
-- verifies the indefinite lock rule again after upload.
+## Independent backup proof — Cloudflare R2
 
-B2 and R2 are separate providers and are directly retrieved independently. GitHub Actions remains only the acquisition/execution layer.
+Provider: Cloudflare R2  
+Bucket: `war-room-custody-backup`  
+Jurisdiction: `default`
 
-## Least-privilege credential contract
+Observed live proof from run `34665473257`:
+- Bucket Lock rule condition: `Indefinite`;
+- observed lock rule ID: `my-rule`;
+- observed prefix: empty, therefore bucket-wide coverage of the custody key;
+- identical content-addressed object was independently retrieved;
+- independently retrieved SHA-256: `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`;
+- independently retrieved byte size: `14380`.
 
-### Backblaze B2 application key
+The workflow verified an enabled indefinite lock rule covering the object key before/after object handling and then directly retrieved the R2 copy.
 
-Create/use a **standard application key restricted to only the War Room B2 bucket**. If Backblaze offers a file-name-prefix restriction for the key, additionally restrict it to `custody/`.
+## Cross-provider byte identity
 
-Required capabilities, and only these capabilities for the implemented workflow:
+Privacy-safe proof output recorded:
+- `all_three_sha256_equal: true`;
+- `all_three_byte_sizes_equal: true`;
+- expected/original SHA-256 = B2 retrieval SHA-256 = R2 retrieval SHA-256;
+- expected/original size = B2 retrieval size = R2 retrieval size = `14380`.
 
-1. `writeFiles` — upload the content-addressed object.
-2. `readFiles` — `HeadObject` and `GetObject` metadata/content verification.
-3. `writeFileRetentions` — apply/extend COMPLIANCE retention on the exact object version.
-4. `readFileRetentions` — read back and verify retention mode/date.
-5. `writeFileLegalHolds` — set Legal Hold `ON`.
-6. `readFileLegalHolds` — read back and verify Legal Hold state.
+GitHub Actions is execution/transport only. No Actions artifact is custody authority, and runner-local fixture/report files were removed after proof.
 
-Not required by this workflow:
+## Credential architecture actually proven
+
+### Backblaze B2
+
+The application key is restricted to the dedicated B2 bucket and `custody/` filename prefix. Provisioned capabilities:
+- `listAllBucketNames` — retained for Backblaze S3-compatible client interoperability on a bucket-restricted key;
+- `readFiles`;
+- `writeFiles`;
+- `readFileRetentions`;
+- `writeFileRetentions`;
+- `readFileLegalHolds`;
+- `writeFileLegalHolds`.
+
+Not granted/required:
+- `listFiles`;
 - `deleteFiles`;
 - `bypassGovernance`;
-- `writeBuckets`;
-- `writeBucketRetentions`;
-- `readBucketRetentions`;
-- `listFiles`;
-- `listAllBucketNames`;
-- master application key.
+- bucket administration;
+- master-key use by the workflow.
 
-The workflow intentionally issues direct object calls and does not list buckets/files or change bucket-level Object Lock configuration. Successful per-version retention/legal-hold writes and reads are the live object-level lock proof.
+### Cloudflare R2
 
-### Cloudflare R2 object credential
+Object-plane credential:
+- R2 S3 `Object Read & Write`;
+- scoped only to the dedicated War Room R2 bucket.
 
-Create/use an R2 S3 credential with:
+Configuration-plane verifier:
+- separate Cloudflare API token with `Account > Workers R2 Storage > Read` only;
+- no R2 configuration edit/admin permission;
+- used only to read the live Bucket Lock configuration.
 
-**Object Read & Write**, scoped to **only the War Room R2 bucket**.
+### GitHub Actions configuration
 
-This corresponds to bucket-resource object read/write/list access. It is used only for `PutObject`, `HeadObject`, and `GetObject`. No account-wide R2 write/admin credential is needed.
+Protected secret names:
+- `WR_CUSTODY_B2_KEY_ID`;
+- `WR_CUSTODY_B2_APPLICATION_KEY`;
+- `WR_CUSTODY_R2_ACCESS_KEY_ID`;
+- `WR_CUSTODY_R2_SECRET_ACCESS_KEY`;
+- `WR_CUSTODY_R2_CONFIG_READ_TOKEN`.
 
-### Cloudflare R2 lock-configuration read token
+Non-secret variable names:
+- `WR_CUSTODY_B2_BUCKET`;
+- `WR_CUSTODY_B2_ENDPOINT`;
+- `WR_CUSTODY_R2_BUCKET`;
+- `WR_CUSTODY_R2_ENDPOINT`;
+- `WR_CUSTODY_R2_ACCOUNT_ID`;
+- `WR_CUSTODY_R2_JURISDICTION`.
 
-Cloudflare's bucket-scoped Object Read & Write credentials are supported by the S3-compatible API, not the Cloudflare REST configuration API. Automated verification of Bucket Lock therefore requires a **separate read-only Cloudflare API token**.
+No credential value was committed or intentionally printed. GitHub logs masked all five credentials. The final successful run additionally reported `secrets_logged: false` / `secrets_in_report: false`.
 
-Minimum token:
-- permission: `Account > Workers R2 Storage > Read`;
-- resource: only the Cloudflare account that owns the War Room R2 bucket;
-- no edit/write permissions;
-- no zone permissions.
+## Troubleshooting performed during live recovery
 
-This permission is account-resource scoped by Cloudflare and cannot be reduced to a single-bucket configuration-read token. It is used only for:
+Two bounded provider-integration issues were discovered and repaired before the successful run:
 
-`GET /accounts/{account_id}/r2/buckets/{bucket_name}/lock`
+1. Run `34665273432`: Backblaze S3 `HeadObject` returned `403` for the not-yet-present content-addressed object under the tightly scoped key. Instead of broadening to `listFiles`, WR-046 added an exact-key seed/write path that attempts the immutable content-addressed `PutObject` on an ambiguous missing-object probe, then leaves the main proof responsible for independent metadata/retention/hold/retrieval verification.
+2. Run `34665380248`: B2 placement succeeded, then AWS SigV4 rejected the R2 Access Key ID because the copied GitHub secret contained surrounding newline whitespace. WR-046 added a wrapper that strips only surrounding whitespace from the known token-like custody configuration values in the child-process environment and reports only the affected environment-variable name. The final run recorded that only `WR_CUSTODY_R2_ACCESS_KEY_ID` required normalization.
 
-Routine object transfer remains bucket-scoped through the separate S3 credential.
+Successful retry: run `34665473257`, job `103476377218`.
 
-## Exact GitHub Actions configuration
+## Workflow behavior
 
-### Protected secrets
+Workflow path: `.github/workflows/wr046-custody-fixture.yml`.
 
-Add these directly in the GitHub repository's Actions secrets. Do not paste their values into chat, PR comments, repository files, logs, or artifacts.
+Because GitHub does not expose `workflow_dispatch` for a workflow that exists only on a non-default PR branch, WR-046 added an explicit branch-only live-proof trigger. The live provider job runs only when either:
+- `workflow_dispatch` is available; or
+- a push is to `wr-046-custody-capability-recovery` and its commit message contains the explicit marker `[wr046-live-proof]`.
 
-- `WR_CUSTODY_B2_KEY_ID`
-- `WR_CUSTODY_B2_APPLICATION_KEY`
-- `WR_CUSTODY_R2_ACCESS_KEY_ID`
-- `WR_CUSTODY_R2_SECRET_ACCESS_KEY`
-- `WR_CUSTODY_R2_CONFIG_READ_TOKEN`
+Ordinary PR/push runs remain preflight-only and do not invoke the external custody providers.
 
-All five are treated as credentials/secrets by WR-046.
+Live lifecycle proven:
+1. acquire the lawful fixture by immutable GitHub release asset ID;
+2. verify expected SHA-256 and byte size;
+3. ensure the B2 content-addressed object exists;
+4. verify B2 COMPLIANCE retention and Legal Hold;
+5. independently retrieve and hash B2;
+6. verify R2 indefinite Bucket Lock through the read-only configuration token;
+7. place/verify the same R2 content-addressed object;
+8. independently retrieve and hash R2;
+9. require cross-provider digest/size equality;
+10. emit only privacy-safe evidence and delete runner-local copies.
 
-### Non-secret repository Actions variables
+## Preserved acquisition evidence
 
-- `WR_CUSTODY_B2_BUCKET`
-- `WR_CUSTODY_B2_ENDPOINT`
-- `WR_CUSTODY_R2_BUCKET`
-- `WR_CUSTODY_R2_ENDPOINT`
-- `WR_CUSTODY_R2_ACCOUNT_ID`
-- `WR_CUSTODY_R2_JURISDICTION`
+The earlier transport-only exact-byte proof remains preserved:
+- commit `61e31f6d9ce92fef6d56c5cabd08faa0217ca7f2`;
+- workflow run `34642610497`;
+- job `103405723000`;
+- result: `SUCCESS`.
 
-Expected formats:
-- B2 endpoint: `https://s3.<region>.backblazeb2.com`.
-- R2 endpoint: the exact provider endpoint for the bucket jurisdiction, normally `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`.
-- R2 jurisdiction: `default`, `eu`, `us`, `fedramp`, or the provider-supported jurisdiction applicable to the bucket.
+Manager B2/R2 authorization was reconciled into WR-046 history at merge checkpoint `0d6555e143b9aa8baf5333ef5add10fb3e31764f` without rewriting prior evidence.
 
-These values identify storage resources/endpoints but do not authenticate to them. They are appropriate as repository variables, not secrets.
-
-## Implemented proof tooling
-
-### `.github/workflows/wr046-custody-fixture.yml`
-
-The workflow now has two layers:
-
-1. `contract-preflight` — runs on normal branch/PR changes with no external secrets. It syntax-checks custody scripts, runs deterministic self-tests, confirms AWS CLI availability, and repeats the already-proven exact fixture acquisition/hash/size check.
-2. `live-b2-r2-custody-proof` — runs **only on `workflow_dispatch`**. It consumes the protected credentials and non-secret variables, acquires the lawful fixture, executes the B2/R2 lifecycle proof, emits only a privacy-safe JSON summary, and removes runner-local fixture/report bytes. No Actions artifact is uploaded.
-
-### `scripts/custody/prove_b2_r2_custody.py`
-
-The proof script:
-- fail-closes on missing configuration;
-- verifies the fixture before storage;
-- derives the same SHA-256 content-addressed key for both providers;
-- handles an existing matching object idempotently by verifying it before any lock extension;
-- applies/verifies B2 COMPLIANCE retention + Legal Hold;
-- verifies R2 indefinite Bucket Lock via the read-only REST token;
-- retrieves B2 and R2 independently into fresh temporary paths;
-- recomputes SHA-256 and byte size for both;
-- emits no credential values and sanitizes provider errors against configured secrets;
-- never uploads or parses a Returning-Player v2 source.
-
-## Live proof status
-
-Primary B2 fixture proof: **NOT YET EXECUTED — GitHub Actions credentials/configuration not yet confirmed populated.**
-
-B2 retention / Legal Hold proof: **NOT YET EXECUTED.**
-
-Independent R2 backup proof: **NOT YET EXECUTED.**
-
-R2 Bucket Lock proof: **NOT YET EXECUTED.**
-
-Independent retrieval/digest proof: **NOT YET EXECUTED.**
-
-The repository implementation can be completed and preflight-tested before credentials exist. The live provider proof must not be fabricated.
-
-## Exact workflow to run after GitHub configuration is populated
-
-GitHub Actions workflow:
-
-`.github/workflows/wr046-custody-fixture.yml`
-
-UI name:
-
-`WR-046 Custody Fixture Proof`
-
-Run `workflow_dispatch` on branch:
-
-`wr-046-custody-capability-recovery`
-
-The live job must reach `SUCCESS` before WR-046 can be marked complete/audit-required.
-
-## Integrity
+## Integrity / scope confirmation
 
 - `.ai/research/**` written: **NO**.
 - Actual Returning-Player v2 sources admitted or parsed: **NO**.
 - Protected/raw Returning-Player bytes placed in GitHub: **NO**.
-- Credential values committed or requested in chat: **NO**.
 - 2026 regular-season outcomes inspected: **NO**.
 - Model fitting/scoring/tuning/comparison/ranking/evaluation: **NO**.
 - Production/user-facing behavior changed: **NO**.
-- WR-D008 / WR-039 semantics weakened: **NO**.
+- WR-D008 / audited WR-039 semantics weakened: **NO**.
 - `SOURCE CONTRACT VERSION BUMP REQUIRED`: **NO**.
 
-## Current gate
+## Gate / handoff
 
-Repository-side implementation is ready for normal CI/preflight validation. Live proof is blocked only on the protected GitHub Actions configuration values.
+WR-046 is `COMPLETE — AUDIT REQUIRED`.
 
-Do not activate WR-047 yet. After the user adds the secrets/variables directly in GitHub, resume this same WR-046 task, dispatch the live workflow, capture privacy-safe live evidence, update the Work Helper reports, and publish one immutable completed head for WR-047.
+Work Helper does **not** self-certify or self-activate WR-047. Manager / Architect should activate WR-047 for independent Auditor / QA review of PR #135 and the immutable live-run evidence above.
