@@ -1,9 +1,9 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WORKFLOW V3.1.1 REFRESH AUDIT + RETURNING-PLAYER V2 SOURCE-CUSTODY RETRY
+Status: ACTIVE DEVELOPMENT — WORKFLOW V3.1.1 FINAL RE-AUDIT + RETURNING-PLAYER V2 SOURCE-CUSTODY RETRY
 Last verified: 2026-09-12
 Owner: Manager / Architect
-Workflow: V3.1.1 refreshed candidate under WR-051 / WR-052 until audited merge
+Workflow: V3.1.1 refreshed candidate under WR-051 / WR-052 until audited merge and post-merge canary
 
 ## Canonical repository
 Repository: `Ryan42062001/The-War-Room`
@@ -30,31 +30,39 @@ WR-042 is ASSIGNED for a fresh bounded exact-source custody retry on `wr-042-v2-
 WR-043 remains BLOCKED until the fresh WR-042 retry publishes one admitted immutable no-scoring custody target.
 
 ## Workflow V3.1.1 lane
-WR-051 now includes the nine V3.1 upgrades plus four V3.1.1 safeguards:
-- static parallel/collision safety checks;
-- machine-readable Auditor target task/PR/branch metadata plus exact live SHA pinning before audit;
-- read-only GitHub live-state Manager gate;
-- generated user-action queue.
+WR-051 contains the nine V3.1 upgrades plus four V3.1.1 safeguards: static parallel/collision safety checks; machine-readable Auditor target metadata plus exact live SHA pinning; read-only GitHub live-state Manager gate; and generated user-action queue.
 
-The active registry is schema v3. `workflow-live-state-check` is deliberately not an always-on network CI dependency; Governance CI syntax-checks it while the Manager uses it at readiness/merge gates.
+Historical audit lineage is preserved:
+- PR #149: WR-052 `FAIL — REMEDIATION REQUIRED` on `b987f8c81b7ce8af4eed18a994e8bb0bb6e89d13`; HIGH `WR-052-AUD-01` found relationship-unaware HARD collision exemption; LOW `WR-052-AUD-02` preserved intermittent browser-focus signal.
+- The collision HIGH was technically remediated with relationship-aware pairwise HARD serialization and regression coverage.
+- PR #150: fresh WR-052 re-audit `FAIL — REMEDIATION REQUIRED` on `745e0bf11388293988a34cb802a4c38657e3c4e2`; new HIGH `WR-052-REAUD-AUD-01` found that the active registry still named the historical audit branch/spec rather than the actual fresh re-audit lane.
 
-WR-052 independently audits the exact refreshed WR-051 target. PASS-family is required before merge. Because WR-051 changes CI/workflow scripts, canonical-main post-merge full CI/canary is required before WR-051 closes.
+That state-integrity finding is now reconciled in the current candidate. `ACTIVE_TASKS.json` records WR-052 as:
+- task file `.ai/manager/WR-052_REAUDIT_2.md`;
+- branch `wr-052-workflow-v311-final-reaudit`;
+- worker slot `auditor-workflow-v311-final-reaudit`;
+- target task WR-051 / PR #148 / implementation branch `manager/wr-051-workflow-v31-refresh`.
+
+Historical audit branches and PRs remain immutable evidence. The final re-audit branch is fresh from canonical baseline and must not reuse prior verdict state.
+
+Because WR-051 changes CI/workflow scripts, exact-head Full CI is required before the final WR-052 re-audit, and canonical-main Full CI/canary is required after any PASS-family merge before WR-051 / WR-052 may close.
 
 ## Repository-validation lane
-WR-048 remediation and WR-049 independent PASS remain CLOSED / ACCEPTED / MERGED. Their browser/persistence fixes remain in the full CI matrix.
+WR-048 remediation and WR-049 independent PASS remain CLOSED / ACCEPTED / MERGED. Their browser/persistence fixes remain in the full CI matrix. Historical WR-052-AUD-02 stays preserved as a non-blocking residual.
 
 ## Current roles
-- Manager: WR-051 V3.1.1 refreshed candidate / integration owner
+- Manager: WR-051 V3.1.1 reconciliation / integration owner
 - Builder: IDLE
 - Draft Strategy: IDLE
 - R&D: WR-042 ASSIGNED for bounded source-custody retry
-- Auditor: WR-052 ASSIGNED; WR-043 BLOCKED on WR-042 admitted target
+- Auditor: WR-052 ASSIGNED on `wr-052-workflow-v311-final-reaudit`; WR-043 BLOCKED on WR-042 admitted target
 - Work Helper: IDLE after accepted WR-046 custody capability integration
 
 ## Next gates
-1. Freeze final WR-051 V3.1.1 exact head and complete exact-head full CI.
-2. Run live-state gate and pin PR #148 exact head for WR-052.
-3. WR-052 independently self-publishes audit of that exact head.
-4. PASS-family -> Manager merge WR-051 -> canonical-main post-merge canary -> close workflow upgrade.
-5. WR-042 bounded exact-source custody retry may proceed independently; WR-043 waits for admitted custody.
-6. Model scoring remains forbidden throughout.
+1. Complete exact-head Governance + Full CI on the reconciled PR #148 head.
+2. Run live-state gate and verify registry task file / branch / worker slot match the real WR-052 final re-audit lane.
+3. Externally pin PR #148 exact head for WR-052.
+4. WR-052 independently self-publishes the final re-audit from `wr-052-workflow-v311-final-reaudit`.
+5. PASS-family -> Manager merge exact audited WR-051 head -> canonical-main Full CI/canary -> close workflow upgrade.
+6. WR-042 bounded exact-source custody retry may proceed independently; WR-043 waits for admitted custody.
+7. Model scoring remains forbidden throughout.
