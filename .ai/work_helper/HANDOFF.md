@@ -4,8 +4,9 @@ HANDOFF
 
 Task ID: WR-056  
 Role: Work Helper / Super Troubleshooter  
-Status: IMPLEMENTATION CI GREEN — LIVE VALIDATION BOOTSTRAP BLOCKED  
-Canonical implementation base: `a9d126abaa4f30d381aa1f5aa4478ac884bfed5f`  
+Status: COMPLETE — INDEPENDENT AUDIT REQUIRED  
+Current canonical main: `12c1ad636762b723b925a0e9d7bb2a1463f5cb77`  
+Immutable implementation SHA: `806454c412f12e3ba34fd921cb234c88a3501272`  
 Branch: `wr-056-runtime-path-remediation-impl`  
 Historical diagnosis: PR #156 / `f1d4ece46dd89f4f1395d24b57af1b042757ecbd`
 
@@ -55,17 +56,29 @@ Exact-head War Room CI run `34737295736`: **PASS**. Jobs:
 `103670840316`, `103671710464`, and `103671727942`. WR-046 preflight run
 `34737295735`, job `103670840315`: **PASS**.
 
-## Live-validation blocker
+## Controlled live validation
 
-The new manual workflow is not present on canonical default-branch main, so
-GitHub does not register or expose its `workflow_dispatch` entry point. The one
-permitted live jq run was not attempted. No trigger was widened and no audit was
-bypassed.
+- workflow run `34758553282`, attempt `2`: **PASS**;
+- trusted-custody job `103737047171`: **PASS**;
+- exact checked-out implementation: `806454c412f12e3ba34fd921cb234c88a3501272`;
+- frozen jq manifest SHA-256:
+  `8e69050cefb9df413b589133aaadcd1a8f952e1fc0cf94502020dee8b69f8547`;
+- protected custody result: `PASS`, one lawful jq source, `secrets_logged=false`;
+- all credential values masked; privacy-safe summary published;
+- runner-local source/evidence cleanup passed; no Actions artifact created.
+
+The fail-closed PASS covers current credential binding, immutable acquisition and
+byte verification, B2 content-addressed custody with COMPLIANCE retention and
+Legal Hold, R2 backup with Indefinite Bucket Lock, direct retrieval, and
+three-copy digest/size equality.
+
+Temporary workflow registration was removed by merged PR #161. Post-cleanup main
+CI run `34763533209` is fully green: classify `103740383000`, governance
+`103740406024`, test `103740421775`.
 
 ## Next gate
 
-Manager must provide a reviewed bootstrap path that places/registers the trusted
-workflow on the default branch (or explicitly authorize an equivalently narrow
-invocation mechanism). Then Work Helper performs exactly one controlled live jq
-validation, freezes its privacy-safe evidence, and returns the final immutable
-head for Independent Auditor / QA. Do not activate WR-042 or WR-043.
+Manager activates a fresh Independent Auditor / QA lane against PR #158's frozen
+implementation SHA `806454c412f12e3ba34fd921cb234c88a3501272`, including live
+run `34758553282` attempt `2` and job `103737047171`. Do not activate WR-042 or
+WR-043 until the audit returns a PASS-family verdict.

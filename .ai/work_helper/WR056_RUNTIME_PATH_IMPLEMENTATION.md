@@ -7,7 +7,7 @@ Accepted diagnosis: PR #156 / `f1d4ece46dd89f4f1395d24b57af1b042757ecbd`
 
 ## Disposition
 
-**IMPLEMENTATION CI GREEN — CONTROLLED LIVE VALIDATION BLOCKED BY WORKFLOW-DISPATCH BOOTSTRAP**
+**COMPLETE — INDEPENDENT AUDIT REQUIRED**
 
 The approved runtime bridge is implemented without changing WR039 / WR-D008 evidence semantics or the accepted WR-046 / WR-053 provider controls. No Returning-Player source is included in this task.
 
@@ -153,22 +153,47 @@ Candidate implementation head: `8cf417f543e8e2e6f30793b68a53037cbbc09265`.
 - WR-046 Custody Fixture Proof run `34737295735`, preflight job
   `103670840315`: **PASS**; live jobs correctly skipped for a pull-request event.
 
-## Controlled-live bootstrap finding
+## Controlled live validation — immutable evidence
 
-The one authorized live jq validation has **not** been dispatched. GitHub only
-registers and exposes a `workflow_dispatch` workflow when its workflow file is
-present on the repository default branch. The trusted workflow exists at the
-candidate PR head but `.github/workflows/wr042-source-custody.yml` is absent from
-canonical `main` `a9d126abaa4f30d381aa1f5aa4478ac884bfed5f` (provider API returns 404).
-Consequently there is no valid Actions `Run workflow` entry point yet.
+Manager's temporary, fail-closed workflow-registration bootstrap enabled the
+single authorized live execution without merging or rewriting PR #158. The
+controlled lawful jq validation completed successfully:
 
-Adding a push or pull-request live trigger would weaken the approved manual,
-explicit-confirmation design. Merging PR #158 merely to bootstrap its own
-pre-merge validation would bypass the required independent audit. Neither action
-was taken. No provider call and no live-validation attempt was consumed.
+- workflow: `WR-042 Trusted Source Custody`;
+- run: `34758553282`;
+- attempt: `2`;
+- job: `103737047171` (`trusted-custody`): **PASS**;
+- checked-out workflow implementation SHA:
+  `806454c412f12e3ba34fd921cb234c88a3501272`;
+- manifest path: `.ai/work_helper/WR056_LIVE_FIXTURE_MANIFEST.json`;
+- manifest SHA-256:
+  `8e69050cefb9df413b589133aaadcd1a8f952e1fc0cf94502020dee8b69f8547`;
+- manifest ID: `wr056-lawful-live-fixture-v1`;
+- source count: `1`;
+- result: `PASS`;
+- secrets logged: `false`.
 
-Manager disposition is required to establish the workflow on the default branch
-through an independently reviewed bootstrap/control-plane change, or to approve
-another narrowly bounded invocation mechanism. Once the workflow is registered,
-the single live run must use the frozen jq manifest and candidate implementation
-identity recorded above. WR-042 and WR-043 remain blocked.
+Every job step passed: safety confirmation, immutable implementation checkout,
+offline bridge validation, current credential-identity binding, exact-manifest
+protected custody, privacy-safe evidence publication, and always-run cleanup.
+The environment log masks all five protected credential values as `***`.
+Cleanup confirmed removal of runner-local manifest/source/report files, and no
+Actions artifact was created.
+
+Because `run_source_manifest_custody.py` returns `PASS` only after its fail-closed
+provider proof completes, this successful result binds the frozen jq bytes
+(`01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`,
+`14380` bytes) to the existing B2 content-addressed object, B2 COMPLIANCE
+retention and Legal Hold, R2 backup with Indefinite Bucket Lock, independent
+provider retrievals, and original/B2/R2 digest-and-size equality. Current
+credential anchors were generated in the same job immediately before custody.
+
+The bootstrap was removed through PR #161. Canonical main
+`12c1ad636762b723b925a0e9d7bb2a1463f5cb77` records that cleanup, and post-merge
+War Room CI run `34763533209` is fully green (classify `103740383000`, governance
+`103740406024`, test `103740421775`). The historical live proof remains bound to
+the exact PR #158 implementation SHA above.
+
+No further custody run is required or authorized. PR #158 remains open for a
+fresh Independent Auditor / QA review. WR-042 and WR-043 remain blocked pending
+that audit.
