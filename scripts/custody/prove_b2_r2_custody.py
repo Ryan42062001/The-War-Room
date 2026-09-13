@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Prove WR-046 custody against Backblaze B2 primary and Cloudflare R2 backup.
+"""Prove custody against Backblaze B2 primary and Cloudflare R2 backup.
 
-This script handles only the lawful non-sensitive WR-046 fixture. It never admits
-Returning-Player v2 research sources. It uploads by a content-addressed SHA-256
+This script retains the lawful WR-046 defaults and accepts a preverified object
+identity from the trusted WR-056 manifest bridge. It never admits research
+sources. It uploads by a content-addressed SHA-256
 key, verifies storage-layer immutability controls, retrieves both copies
 independently, and emits a privacy-safe JSON report.
 
@@ -56,6 +57,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--fixture", type=Path)
     parser.add_argument("--report", type=Path)
+    parser.add_argument("--expected-sha256", default=EXPECTED_FIXTURE_SHA256)
+    parser.add_argument("--expected-size", type=int, default=EXPECTED_FIXTURE_SIZE)
+    parser.add_argument("--task-id", default="WR-046")
+    parser.add_argument("--source-id", default="jqlang-jq-attestation")
+    parser.add_argument("--content-type", default="application/json")
     parser.add_argument("--self-test", action="store_true")
     return parser.parse_args()
 
@@ -252,11 +258,33 @@ def find_indefinite_rule(rules: list[dict[str, Any]], object_key: str) -> dict[s
     return None
 
 
-def verify_fixture(fixture: Path) -> None:
-    ensure_digest(fixture, EXPECTED_FIXTURE_SHA256, EXPECTED_FIXTURE_SIZE, "fixture")
+def verify_fixture(fixture: Path, expected_sha: str, expected_size: int) -> None:
+    ensure_digest(fixture, expected_sha, expected_size, "fixture")
 
 
-def prove_b2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path) -> dict[str, Any]:
+def report_fixture_identity(
+    task_id: str, source_id: str, expected_sha: str, expected_size: int
+) -> dict[str, Any]:
+    if (
+        task_id == "WR-046"
+        and source_id == "jqlang-jq-attestation"
+        and expected_sha == EXPECTED_FIXTURE_SHA256
+        and expected_size == EXPECTED_FIXTURE_SIZE
+    ):
+        return {
+            "name": "jqlang/jq jq-attestation.json",
+            "asset_id": 453012755,
+            "sha256": expected_sha,
+            "byte_size": expected_size,
+        }
+    return {
+        "source_id": source_id,
+        "sha256": expected_sha,
+        "byte_size": expected_size,
+    }
+
+
+def prove_b2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path, expected_sha: str, expected_size: int, content_type: str) -> dict[str, Any]:
     bucket = cfg["WR_CUSTODY_B2_BUCKET"]
     endpoint = cfg["WR_CUSTODY_B2_ENDPOINT"].rstrip("/")
     region = parse_b2_region(endpoint)
@@ -274,7 +302,7 @@ def prove_b2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path) -> dic
 
     if head is not None:
         version_id = head.get("VersionId")
-        if metadata_sha(head) != EXPECTED_FIXTURE_SHA256:
+        if metadata_sha(head) != expected_sha:
             raise RuntimeError("B2 existing object metadata SHA-256 does not match content-addressed key")
         precheck = tempdir / "b2-existing-prelock.bin"
         run_aws(
@@ -284,7 +312,7 @@ def prove_b2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path) -> dic
             access_key=access_key,
             secret_key=secret_key,
         )
-        ensure_digest(precheck, EXPECTED_FIXTURE_SHA256, EXPECTED_FIXTURE_SIZE, "B2 existing object")
+        ensure_digest(precheck, expected_sha, expected_size, "B2 existing object")
         precheck.unlink(missing_ok=True)
     else:
         retain_until = iso_z(retention_datetime(B2_RETENTION_DAYS))
@@ -298,9 +326,9 @@ def prove_b2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path) -> dic
                 "--body",
                 str(fixture),
                 "--content-type",
-                "application/json",
+                content_type,
                 "--metadata",
-                f"wr-sha256={EXPECTED_FIXTURE_SHA256}",
+                f"wr-sha256={expected_sha}",
                 "--object-lock-mode",
                 "COMPLIANCE",
                 "--object-lock-retain-until-date",
@@ -325,7 +353,7 @@ def prove_b2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path) -> dic
     if head is None:
         raise RuntimeError("B2 head-object unexpectedly missing after upload")
     version_id = head.get("VersionId")
-    if metadata_sha(head) != EXPECTED_FIXTURE_SHA256:
+    if metadata_sha(head) != expected_sha:
         raise RuntimeError("B2 object metadata SHA-256 missing or incorrect after upload")
 
     target_until = retention_datetime(B2_RETENTION_DAYS)
@@ -409,7 +437,7 @@ def prove_b2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path) -> dic
         secret_key=secret_key,
     )
     identity = ensure_digest(
-        retrieved, EXPECTED_FIXTURE_SHA256, EXPECTED_FIXTURE_SIZE, "B2 retrieved copy"
+        retrieved, expected_sha, expected_size, "B2 retrieved copy"
     )
     retrieved.unlink(missing_ok=True)
 
@@ -428,7 +456,7 @@ def prove_b2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path) -> dic
     }
 
 
-def prove_r2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path) -> dict[str, Any]:
+def prove_r2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path, expected_sha: str, expected_size: int, content_type: str) -> dict[str, Any]:
     bucket = cfg["WR_CUSTODY_R2_BUCKET"]
     endpoint = cfg["WR_CUSTODY_R2_ENDPOINT"].rstrip("/")
     account_id = cfg["WR_CUSTODY_R2_ACCOUNT_ID"]
@@ -451,7 +479,7 @@ def prove_r2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path) -> dic
         allow_not_found=True,
     )
     if head is not None:
-        if metadata_sha(head) != EXPECTED_FIXTURE_SHA256:
+        if metadata_sha(head) != expected_sha:
             raise RuntimeError("R2 existing object metadata SHA-256 does not match content-addressed key")
         existing = tempdir / "r2-existing-prewrite.bin"
         run_aws(
@@ -461,7 +489,7 @@ def prove_r2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path) -> dic
             access_key=access_key,
             secret_key=secret_key,
         )
-        ensure_digest(existing, EXPECTED_FIXTURE_SHA256, EXPECTED_FIXTURE_SIZE, "R2 existing object")
+        ensure_digest(existing, expected_sha, expected_size, "R2 existing object")
         existing.unlink(missing_ok=True)
     else:
         run_aws(
@@ -474,9 +502,9 @@ def prove_r2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path) -> dic
                 "--body",
                 str(fixture),
                 "--content-type",
-                "application/json",
+                content_type,
                 "--metadata",
-                f"wr-sha256={EXPECTED_FIXTURE_SHA256}",
+                f"wr-sha256={expected_sha}",
             ],
             endpoint=endpoint,
             region="auto",
@@ -491,7 +519,7 @@ def prove_r2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path) -> dic
         access_key=access_key,
         secret_key=secret_key,
     )
-    if head_after is None or metadata_sha(head_after) != EXPECTED_FIXTURE_SHA256:
+    if head_after is None or metadata_sha(head_after) != expected_sha:
         raise RuntimeError("R2 object metadata SHA-256 missing or incorrect after upload")
 
     retrieved = tempdir / "r2-retrieved.bin"
@@ -503,7 +531,7 @@ def prove_r2(fixture: Path, key: str, cfg: dict[str, str], tempdir: Path) -> dic
         secret_key=secret_key,
     )
     identity = ensure_digest(
-        retrieved, EXPECTED_FIXTURE_SHA256, EXPECTED_FIXTURE_SIZE, "R2 retrieved copy"
+        retrieved, expected_sha, expected_size, "R2 retrieved copy"
     )
     retrieved.unlink(missing_ok=True)
 
@@ -572,32 +600,38 @@ def main() -> int:
     if args.fixture is None or args.report is None:
         raise SystemExit("--fixture and --report are required unless --self-test is used")
 
+    expected_sha = args.expected_sha256.lower()
+    if not SHA256_RE.fullmatch(expected_sha) or args.expected_size < 0:
+        raise RuntimeError("invalid expected object identity")
+    if not re.fullmatch(r"[A-Za-z0-9._:-]{1,128}", args.task_id):
+        raise RuntimeError("invalid task ID")
+    if not re.fullmatch(r"[A-Za-z0-9._:-]{1,200}", args.source_id):
+        raise RuntimeError("invalid source ID")
     cfg = require_environment()
-    verify_fixture(args.fixture)
-    key = f"{OBJECT_PREFIX}/{EXPECTED_FIXTURE_SHA256}/raw"
+    verify_fixture(args.fixture, expected_sha, args.expected_size)
+    key = f"{OBJECT_PREFIX}/{expected_sha}/raw"
 
     with tempfile.TemporaryDirectory(prefix="wr046-custody-") as tmp:
         tempdir = Path(tmp)
-        b2 = prove_b2(args.fixture, key, cfg, tempdir)
-        r2 = prove_r2(args.fixture, key, cfg, tempdir)
+        b2 = prove_b2(args.fixture, key, cfg, tempdir, expected_sha, args.expected_size, args.content_type)
+        r2 = prove_r2(args.fixture, key, cfg, tempdir, expected_sha, args.expected_size, args.content_type)
 
     if (
-        b2["retrieved_sha256"] != EXPECTED_FIXTURE_SHA256
-        or r2["retrieved_sha256"] != EXPECTED_FIXTURE_SHA256
-        or b2["retrieved_byte_size"] != EXPECTED_FIXTURE_SIZE
-        or r2["retrieved_byte_size"] != EXPECTED_FIXTURE_SIZE
+        b2["retrieved_sha256"] != expected_sha
+        or r2["retrieved_sha256"] != expected_sha
+        or b2["retrieved_byte_size"] != args.expected_size
+        or r2["retrieved_byte_size"] != args.expected_size
     ):
         raise RuntimeError("final two-provider identity equality check failed")
 
+    fixture_identity = report_fixture_identity(
+        args.task_id, args.source_id, expected_sha, args.expected_size
+    )
+
     report = {
         "schema_version": 1,
-        "task_id": "WR-046",
-        "fixture": {
-            "name": "jqlang/jq jq-attestation.json",
-            "asset_id": 453012755,
-            "sha256": EXPECTED_FIXTURE_SHA256,
-            "byte_size": EXPECTED_FIXTURE_SIZE,
-        },
+        "task_id": args.task_id,
+        "fixture": fixture_identity,
         "content_addressed_object_key": key,
         "primary": b2,
         "independent_backup": r2,
@@ -611,11 +645,11 @@ def main() -> int:
     print(
         json.dumps(
             {
-                "task_id": "WR-046",
+                "task_id": args.task_id,
                 "result": "PASS",
                 "content_addressed_object_key": key,
-                "sha256": EXPECTED_FIXTURE_SHA256,
-                "byte_size": EXPECTED_FIXTURE_SIZE,
+                "sha256": expected_sha,
+                "byte_size": args.expected_size,
                 "b2_retention_mode": b2["retention_mode"],
                 "b2_legal_hold": b2["legal_hold"],
                 "r2_lock_condition": r2["lock_rule_condition"],

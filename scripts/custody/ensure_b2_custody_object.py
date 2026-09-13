@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Ensure the lawful WR-046 fixture exists in Backblaze B2 with immutable controls.
+"""Ensure a preverified content-addressed object exists in B2 with immutable controls.
 
-This helper exists because S3-compatible HEAD requests against a not-yet-existing
+The default arguments preserve the lawful WR-046 fixture behavior. This helper
+exists because S3-compatible HEAD requests against a not-yet-existing
 object can be reported as forbidden under tightly scoped credentials. It keeps the
 credential least-privileged: probe first, and on 403/404 attempt the exact
 content-addressed PutObject. The main proof script then independently verifies the
@@ -31,6 +32,9 @@ SECRET_NAMES = ("WR_CUSTODY_B2_KEY_ID", "WR_CUSTODY_B2_APPLICATION_KEY")
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--fixture", required=True, type=Path)
+    parser.add_argument("--expected-sha256", default=EXPECTED_SHA256)
+    parser.add_argument("--expected-size", type=int, default=EXPECTED_SIZE)
+    parser.add_argument("--content-type", default="application/json")
     return parser.parse_args()
 
 
@@ -102,8 +106,12 @@ def iso_z(value: dt.datetime) -> str:
 
 def main() -> int:
     args = parse_args()
+    expected_sha = args.expected_sha256.lower()
+    if not re.fullmatch(r"[0-9a-f]{64}", expected_sha) or args.expected_size < 0:
+        raise RuntimeError("invalid expected object identity")
+    object_key = f"custody/sha256/{expected_sha}/raw"
     digest, size = sha256_and_size(args.fixture)
-    if digest != EXPECTED_SHA256 or size != EXPECTED_SIZE:
+    if digest != expected_sha or size != args.expected_size:
         raise RuntimeError(f"fixture identity mismatch: sha256={digest} bytes={size}")
 
     bucket = require("WR_CUSTODY_B2_BUCKET")
@@ -116,14 +124,14 @@ def main() -> int:
     region = match.group(1)
 
     probe = run_aws(
-        ["head-object", "--bucket", bucket, "--key", OBJECT_KEY],
+        ["head-object", "--bucket", bucket, "--key", object_key],
         endpoint=endpoint,
         region=region,
         key_id=key_id,
         app_key=app_key,
     )
     if probe.returncode == 0:
-        print(json.dumps({"b2_seed": "existing-object", "object_key": OBJECT_KEY}, sort_keys=True))
+        print(json.dumps({"b2_seed": "existing-object", "object_key": object_key}, sort_keys=True))
         return 0
 
     detail = sanitize(probe.stderr or "")
@@ -137,13 +145,13 @@ def main() -> int:
             "--bucket",
             bucket,
             "--key",
-            OBJECT_KEY,
+            object_key,
             "--body",
             str(args.fixture),
             "--content-type",
-            "application/json",
+            args.content_type,
             "--metadata",
-            f"wr-sha256={EXPECTED_SHA256}",
+            f"wr-sha256={expected_sha}",
             "--object-lock-mode",
             "COMPLIANCE",
             "--object-lock-retain-until-date",
@@ -165,9 +173,9 @@ def main() -> int:
         json.dumps(
             {
                 "b2_seed": "uploaded",
-                "object_key": OBJECT_KEY,
-                "sha256": EXPECTED_SHA256,
-                "byte_size": EXPECTED_SIZE,
+                "object_key": object_key,
+                "sha256": expected_sha,
+                "byte_size": args.expected_size,
                 "retention_mode": "COMPLIANCE",
                 "legal_hold_requested": "ON",
                 "secrets_logged": False,
