@@ -38,11 +38,14 @@ jobs:
       - name: Validate workflow helper syntax
         run: |
           node --check scripts/workflow-state-check.mjs
+          node --check scripts/test-workflow-state-collisions.mjs
           node --check scripts/workflow-ci-classify.mjs
           node --check scripts/workflow-preflight.mjs
           node --check scripts/workflow-finish-check.mjs
           node --check scripts/workflow-live-state-check.mjs
           node --check scripts/workflow-user-actions.mjs
+      - name: Test workflow state collision regression
+        run: node scripts/test-workflow-state-collisions.mjs
       - name: Validate canonical active-task state
         run: node scripts/workflow-state-check.mjs
       - name: Report CI scope
