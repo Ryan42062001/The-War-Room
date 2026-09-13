@@ -9,28 +9,32 @@ Workflow: V3.1.1 CANONICAL
 - WR-056 — CLOSED. PR #158 merged at exact audited head; canonical merge `a49ed620a6de125975f324bf7c38f399286cefd7`.
 - WR-058 — CLOSED. Independent verdict `PASS`, no findings; audit PR #163 merged.
 - WR-056 post-merge canonical-main canary `34769306210` — `SUCCESS`.
+- WR-057 — CLOSED. Accepted `RAW_CUSTODY_NOT_ESTABLISHED — EXCLUDE_SOURCE` for PFR-derived nflverse `draft_picks.csv`; PR #165 exact head `21f109266e6a23fd983776a5bd70148648c4645d`, exact-head CI `34775753884` PASS, merged as `bc23851f64158d27c6faf7e93719bbd869b516e1`.
 
-The accepted runtime bridge remains bounded by the frozen WR-056/WR-058 evidence. Do not rerun lawful custody merely to reconfirm an already accepted gate.
+The accepted WR-057 disposition is conservative project governance, not legal advice. `draft_picks.csv` must not be acquired, parsed, custodied, or used, and no silent draft-data provider substitution is authorized.
 
 ## Active lanes
 
-- WR-042 — BLOCKED only on WR-057. Historical PR #153 / `98e32ed106350906a3bad3352099549d1c7f140f` remains immutable fail-closed evidence and must not be reused.
-- WR-043 — BLOCKED on a future admitted WR-042 target.
-- WR-054 — ASSIGNED / resumed. Reconcile preserved branch tip `13a755d217202b8533ecfe5e2e4fa013f50a3396` and dangling child `2f32468688ac983a4e2d27b09d0f65a739478622` against current main while preserving WR-056 CI behavior.
-- WR-055 — BLOCKED on WR-054.
-- WR-057 — ASSIGNED to R&D for the `draft_picks.csv` raw-custody/retention rights disposition.
+- WR-042 — ASSIGNED on fresh branch `wr-042-v2-source-custody-retry-2`. Use the accepted WR-056 runtime bridge for remaining rights-compatible source instances only; explicitly carry the WR-057 draft-source exclusion into the source snapshot. Historical PR #153 remains immutable and must not be reused.
+- WR-043 — BLOCKED on a future admitted immutable WR-042 no-scoring target.
+- WR-054 — AUDIT_READY on PR #166 exact head `a6fac435d7b4c791635a654a9971ba7a9fc6460d`. Exact-head War Room CI `34775840832` is fully green and includes the preserved WR-056 custody regression.
+- WR-055 — ASSIGNED to independently audit exactly PR #166 / `a6fac435d7b4c791635a654a9971ba7a9fc6460d` on `wr-055-workflow-v32-lane-identity-audit`.
 
 ## Parallel routing
 
-WR-054 and WR-057 are independent and may run simultaneously:
-- WR-054 writes Manager/shared/workflow-helper/CI surfaces.
-- WR-057 writes only `.ai/research/**`.
+WR-042 and WR-055 are independent for execution and may run simultaneously:
+
+- WR-042 writes only `.ai/research/**`;
+- WR-055 writes only `.ai/auditor/**`.
+
+Do not move WR-054 PR #166 while WR-055 audits it.
 
 ## Next routing
 
-1. R&D executes WR-057 and returns one authoritative fail-closed rights/retention disposition to Manager.
-2. Manager resumes WR-054, reconciles the preserved implementation onto current main, runs exact-head Full CI, then activates WR-055 on one immutable target.
-3. After WR-057 acceptance, Manager creates a fresh WR-042 retry branch using the accepted WR-056 custody runtime bridge.
-4. WR-043 activates only if that later WR-042 retry admits one immutable no-scoring target.
+1. Independent Auditor executes WR-055 and publishes a fresh Auditor-only report/handoff/PR with a PASS-family or FAIL verdict.
+2. R&D executes the fresh WR-042 custody retry, excluding `draft_picks.csv`, with no scoring or 2026 outcome inspection.
+3. PASS-family WR-055 authorizes Manager to merge only exact audited WR-054 head `a6fac435d7b4c791635a654a9971ba7a9fc6460d`, then require canonical-main post-merge CI before V3.2 closure.
+4. If WR-042 admits one immutable no-scoring source snapshot, Manager activates WR-043 on that exact target. If not, preserve fail-closed evidence.
+5. Even after a successful custody audit, no model-protocol/scoring stage may silently omit draft capital. A versioned contract/feature-schema governance task is required before scoring if the path proceeds without the excluded source.
 
-No Returning-Player source admission, 2026 outcome inspection, model scoring/tuning, ranking change, or Phase-6 work is authorized outside those explicit future gates.
+No 2026 regular-season outcome inspection, model fitting/scoring/tuning/comparison/evaluation, production ranking change, or Phase-6 work is authorized by this handoff.
