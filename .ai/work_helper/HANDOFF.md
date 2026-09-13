@@ -4,52 +4,45 @@ HANDOFF
 
 Task ID: WR-056  
 Role: Work Helper / Super Troubleshooter  
-Assignment mode: WORKFLOW / PROTECTED-RUNTIME TROUBLESHOOTING  
-Status: DIAGNOSIS COMPLETE — REMEDIATION SURFACE EXPANSION REQUIRED  
-Canonical base: `5b3545a84365c336fb58fc706a1c89897efd4d77`  
-Branch: `wr-056-runtime-path-remediation`
+Status: IMPLEMENTED — CONTROLLED LIVE VALIDATION REQUIRED  
+Canonical implementation base: `791a5c817e8f11aaee24b66ac8b52f7681a8d136`  
+Branch: `wr-056-runtime-path-remediation-impl`  
+Historical diagnosis: PR #156 / `f1d4ece46dd89f4f1395d24b57af1b042757ecbd`
 
-## Root cause
+## Implementation
 
-WR-042 did not fail because accepted B2/R2 custody was unavailable. It failed because the repository exposes only a WR-046 branch-locked, jq-fixture-hardcoded secret-bearing workflow and fixture-hardcoded proof helpers. No trusted manifest-driven bridge exists; the R&D/local runtime correctly has no custody secrets; the connected GitHub tool surface cannot dispatch a protected workflow; and WR-042 lacked workflow/script write authority.
+The approved trusted manifest-to-custody bridge is implemented within the exact Manager-authorized paths. It verifies immutable manifest identity, enforces strict source/rights/season allowlists, acquires immutable release assets, verifies downloaded bytes before provider handling, and reuses the accepted B2/R2 custody proof with narrowly parameterized identity inputs.
 
-Historical PR #153 correctly failed closed and remains closed unmerged.
+Detailed evidence: `.ai/work_helper/WR056_RUNTIME_PATH_IMPLEMENTATION.md`.
 
-## Required expansion
+## Validation
 
-Manager should authorize exactly:
+- source-manifest regression suite: PASS three consecutive local runs;
+- existing custody proof self-test: PASS;
+- Python compilation: PASS;
+- workflow YAML parsing: PASS;
+- exact-head CI: pending publication;
+- controlled live jq fixture: pending one manual dispatch.
 
-- `.github/workflows/wr042-source-custody.yml`;
-- `scripts/custody/run_source_manifest_custody.py`;
-- narrow parameterization of:
-  - `scripts/custody/prove_b2_r2_custody.py`;
-  - `scripts/custody/ensure_b2_custody_object.py`;
-- `scripts/custody/test_source_manifest_custody.py`;
-- only the test-registration change in `.github/workflows/ci.yml`.
+Safe fixture manifest:
 
-Purpose: a default-branch-controlled, manually dispatched, hashed-manifest-as-data bridge using protected credentials and the unchanged accepted custody semantics.
+- path: `.ai/work_helper/WR056_LIVE_FIXTURE_MANIFEST.json`
+- SHA-256: `8e69050cefb9df413b589133aaadcd1a8f952e1fc0cf94502020dee8b69f8547`
+- source: public non-sensitive jq release asset only.
 
-Detailed diagnosis: `.ai/work_helper/WR056_RUNTIME_PATH_DIAGNOSIS.md`.
+## Preservation and boundaries
 
-## Required validation
-
-- deterministic offline manifest/security/failure/cleanup tests;
-- WR-046 fixture regression unchanged;
-- exactly one controlled live validation with the lawful jq fixture through the new bridge;
-- no Returning-Player source in WR-056;
-- independent WR-058 audit of the immutable implementation/live-evidence head.
-
-## Boundaries and blockers
-
-Accepted WR-046 / WR-053 behavior remains valid: **YES**  
-WR039 / WR-D008 change required: **NO**  
-Source admitted/downloaded/parsed: **NO**  
+WR-046 workflow modified: **NO**  
+WR-046 default proof identity/report semantics preserved: **YES**  
+B2 COMPLIANCE / Legal Hold requirements preserved: **YES**  
+R2 Indefinite Bucket Lock requirement preserved: **YES**  
+WR039 / WR-D008 semantics changed: **NO**  
+Returning-Player source admitted/downloaded/parsed: **NO**  
 2026 outcomes inspected: **NO**  
 Model/scoring/ranking/production work: **NO**  
-Secrets accessed/exposed: **NO**
+Secrets accessed locally or committed: **NO**
 
-Separate blocker: `draft_picks.csv` rights disposition remains WR-057. WR-043 remains blocked.
+## Next gate
 
-## Next action
+Publish one immutable implementation PR/head and observe exact-head CI. Then perform exactly one controlled live validation using the manifest above. After both pass, Manager creates and binds the fresh independent audit lane. Do not activate WR-042 or WR-043.
 
-Manager / Architect should approve the exact surface expansion above and return WR-056 to Work Helper for implementation. After implementation and one controlled non-source live validation, activate Independent Auditor / QA for WR-058. Do not activate WR-043.

@@ -1,0 +1,108 @@
+name: WR-042 Trusted Source Custody
+run-name: WR-042 custody bridge — ${{ inputs.manifest_commit_sha }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      manifest_commit_sha:
+        description: Exact 40-character commit containing the inert manifest
+        required: true
+        type: string
+      manifest_path:
+        description: Approved .ai/research/generated or .ai/work_helper JSON path
+        required: true
+        type: string
+      manifest_sha256:
+        description: Exact SHA-256 of the manifest bytes
+        required: true
+        type: string
+      safety_confirmation:
+        description: Type I_CONFIRM_ELIGIBLE_PRE2026_CUSTODY_ONLY
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wr042-trusted-source-custody
+  cancel-in-progress: false
+
+jobs:
+  trusted-custody:
+    runs-on: ubuntu-latest
+    env:
+      WR_CUSTODY_B2_KEY_ID: ${{ secrets.WR_CUSTODY_B2_KEY_ID }}
+      WR_CUSTODY_B2_APPLICATION_KEY: ${{ secrets.WR_CUSTODY_B2_APPLICATION_KEY }}
+      WR_CUSTODY_R2_ACCESS_KEY_ID: ${{ secrets.WR_CUSTODY_R2_ACCESS_KEY_ID }}
+      WR_CUSTODY_R2_SECRET_ACCESS_KEY: ${{ secrets.WR_CUSTODY_R2_SECRET_ACCESS_KEY }}
+      WR_CUSTODY_R2_CONFIG_READ_TOKEN: ${{ secrets.WR_CUSTODY_R2_CONFIG_READ_TOKEN }}
+      WR_CUSTODY_B2_BUCKET: ${{ vars.WR_CUSTODY_B2_BUCKET }}
+      WR_CUSTODY_B2_ENDPOINT: ${{ vars.WR_CUSTODY_B2_ENDPOINT }}
+      WR_CUSTODY_R2_BUCKET: ${{ vars.WR_CUSTODY_R2_BUCKET }}
+      WR_CUSTODY_R2_ENDPOINT: ${{ vars.WR_CUSTODY_R2_ENDPOINT }}
+      WR_CUSTODY_R2_ACCOUNT_ID: ${{ vars.WR_CUSTODY_R2_ACCOUNT_ID }}
+      WR_CUSTODY_R2_JURISDICTION: ${{ vars.WR_CUSTODY_R2_JURISDICTION }}
+      GITHUB_TOKEN: ${{ github.token }}
+      WR_WORKFLOW_SHA: ${{ github.workflow_sha }}
+    steps:
+      - name: Validate dispatch safety confirmation
+        env:
+          SAFETY_CONFIRMATION: ${{ inputs.safety_confirmation }}
+        run: |
+          test "$SAFETY_CONFIRMATION" = "I_CONFIRM_ELIGIBLE_PRE2026_CUSTODY_ONLY"
+
+      - name: Check out the immutable workflow implementation
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+
+      - name: Validate trusted custody bridge
+        run: |
+          python3 -m py_compile \
+            scripts/custody/acquire_github_release_asset.py \
+            scripts/custody/ensure_b2_custody_object.py \
+            scripts/custody/prove_b2_r2_custody.py \
+            scripts/custody/run_source_manifest_custody.py
+          python3 scripts/custody/test_source_manifest_custody.py
+          python3 scripts/custody/prove_b2_r2_custody.py --self-test
+          aws --version
+
+      - name: Bind current credential identities
+        run: |
+          python3 scripts/custody/attest_credential_scopes.py \
+            > "$RUNNER_TEMP/wr042-credential-binding.json"
+
+      - name: Execute exact manifest through protected custody
+        env:
+          MANIFEST_COMMIT_SHA: ${{ inputs.manifest_commit_sha }}
+          MANIFEST_PATH: ${{ inputs.manifest_path }}
+          MANIFEST_SHA256: ${{ inputs.manifest_sha256 }}
+        run: |
+          python3 scripts/custody/run_source_manifest_custody.py \
+            --manifest-repository "${GITHUB_REPOSITORY}" \
+            --manifest-commit "${MANIFEST_COMMIT_SHA}" \
+            --manifest-path "${MANIFEST_PATH}" \
+            --manifest-sha256 "${MANIFEST_SHA256}" \
+            --report "$RUNNER_TEMP/wr042-custody-report.json"
+
+      - name: Publish privacy-safe evidence
+        if: success()
+        run: |
+          {
+            echo '### Trusted source-custody execution'
+            echo
+            echo "Workflow implementation SHA: ${WR_WORKFLOW_SHA}"
+            echo 'Current credential identity anchors:'
+            cat "$RUNNER_TEMP/wr042-credential-binding.json"
+            echo 'Custody result:'
+            cat "$RUNNER_TEMP/wr042-custody-report.json"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove all runner-local evidence and source bytes
+        if: always()
+        run: |
+          find "$RUNNER_TEMP" -maxdepth 1 -type f \
+            \( -name 'wr042-*' -o -name '*.custody.json' \) -delete
+          echo 'Runner-local manifest, source bytes, and reports removed; no Actions artifact created.'
