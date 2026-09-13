@@ -2,40 +2,46 @@
 
 HANDOFF
 
-Task ID: WR-039
-Role: R&D
-Status: COMPLETE — AUDIT REQUIRED
-Starting main SHA: `6bc66fa6c779e558940ca6cc3f267441def62595`
-Final PR/head: recorded on the task PR after publication; audit the immutable head named there
-Execution mode used: Work Mode, Full Refresh
-Human-readable contract path: `.ai/research/RETURNING_PLAYER_V2_EVIDENCE_CONTRACT.md`
-Machine-readable lock path/hash: `.ai/research/generated/RETURNING_PLAYER_V2_EVIDENCE_CONTRACT.json`; SHA-256 `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`
-Source inventory complete: YES — three admissible source classes are specified; exact per-asset instances must be acquired and frozen only in a later no-scoring custody checkpoint after WR-040
-Rights/retention matrix: `.ai/research/RETURNING_PLAYER_V2_SOURCE_RIGHTS_RETENTION.md`; SHA-256 `41b5193565ab94a271be729598c7060bbca2788030a7f5271bf97232cc464ac5`
-Raw-byte retention policy: project-controlled content-addressed immutable primary plus independent backup where rights permit; at least model life plus seven years; mutable URLs and expiring CI artifacts are never authority
-Full-row keyed feature/prediction retention policy: mandatory for every considered row, including zero-game, excluded, target-unavailable, and fallback rows; aggregate metric equality is insufficient
-Stable key: canonical no-whitespace UTF-8 JSON array `(target_season, player_id_namespace, player_id, position, cohort_version)`; duplicates fail closed
-Environment/code/version lock: future audited locks must bind source/cohort/feature/target/preprocessing/model/split/seed/environment/code/command/sentinel/artifact identities before scoring
-Prospective chronology frozen: WR-039 contract -> WR-040 audit -> no-scoring exact source custody -> custody audit -> model-protocol freeze -> later scoring -> result audit -> later composition -> composition audit before Phase 6
-WR-033 reuse/re-version disposition: documented candidate structure and feature ideas may be re-versioned; v1 inputs, fitted state, predictions, and replay identity may not be claimed
-WR-034 reuse/re-version disposition: may remain a separately named `availability_v1_wr034` dependency only when its accepted exact artifacts/hashes are bound and independently available; any refit is new
-2026 outcomes inspected: NO
-Model scoring performed: NO
-Production changed: NO
-WR-021/WR-023 changed: NO
-Phase-6 work performed: NO
-Blocking issues: none for contract audit; no source class is score-ready until a later exact custody checkpoint passes independent audit
-Recommended next role: Independent Auditor / QA
-Exact next action: execute WR-040 against the exact immutable task-PR head; a PASS authorizes only a Manager decision on the no-scoring source-custody checkpoint
-Checkpoint / SHA: exact final branch SHA and exact-head CI disposition are recorded in the PR because recording them in this committed file would move the audited head
+Task ID: WR-042  
+Role: R&D  
+Status: BLOCKED — FAIL-CLOSED RETRY TARGET FOR MANAGER DISPOSITION  
+Branch: `wr-042-v2-source-custody-retry`  
+Canonical retry base: `e24df6ab7c76be16b00e590ecab0bf71b0f05f28`  
+Execution mode requested: `WORK_MODE_HIGH_VALUE`  
+Execution mode used: canonical repository/GitHub fallback; Work mode and accepted custody-secret execution were not exposed in this chat runtime  
+Governing contract: WR-D008; audited WR-039 head `00a9e787e716d6697e6cd0d9252982a672abbbe0`; machine lock `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`
 
-## Evidence summary
+Historical PR #133 remains CLOSED UNMERGED and untouched at `1c3c6d768d58aa636194226f16b9822eebc8c19f`.
 
-- Human contract SHA-256: `0606d11bf227b36412e7fd14f2c0272a6aac119895187870675a9df023efb5b7`.
-- Machine lock sidecar: `.ai/research/generated/RETURNING_PLAYER_V2_EVIDENCE_CONTRACT.sha256`.
-- Frozen sentinel identities were verified without modification:
-  - WR-021 snapshot: `9e100543d90ce20286a102618e0f244a90090785b456fb9493791cbba5dd0a6d`;
-  - WR-023 protocol: `f6ef7484c28bafce45f0e841fc1cee0b67860c7741d0c8d4038248957e43a32c`;
-  - WR-023 manifest: `98db25bab2d65ce2a8573e3fdd595c2fd21a13c71cca354467f012030a0481fa`.
-- Rights evidence was reviewed from the official nflverse-data license/description, nflverse Players producer documentation, and nflreadr's upstream-rights caveat. The classifications are deliberately conservative and require per-instance acceptance before use.
-- WR-D007 remains controlling: WR-035/WR-037 are historical evidence only and Returning-Player v2 is explicitly non-equivalent to v1.
+Retry disposition: FAIL CLOSED. Required exact instances: 16. Admitted: 0. Rejected: 1. Unavailable: 15.
+
+Source snapshot ID: `wr042-v2-source-custody-retry-fail-closed-20260913`  
+Source snapshot SHA-256: `22ea0b4c3837eaed2fffe51ea0b8a0ed0414f6da7c1121d6dd0a39f69c5eb492`  
+Cohort/source-eligibility SHA-256: `bc6ef0945d7ae17ac73a64400773d14836c1f6fa9f0c858cca6ab3e8b9a3b256`
+
+Primary execution blocker: exact provider bytes could not be acquired into an execution context that also has the accepted WR-046/WR-053 B2/R2 credentials. The accepted workflow is fixture-specific, the connected GitHub action set exposes no workflow-dispatch action, and WR-042 is forbidden from modifying workflow/custody-script surfaces.
+
+Rights blocker: `draft_picks.csv` remains `RESTRICTED_RAW_CUSTODY_PENDING_RIGHTS_REVIEW`; no Manager raw-retention acceptance was found in the refreshed canonical repository.
+
+Accepted custody capability remains valid: WR-053 PASS; current-credential live proof run `34723578709`; privacy-safe B2/R2 credential identity evidence retained. No credentials were replaced, rescoped, exposed, or copied.
+
+Task-specific B2 placements/retrievals: 0. B2 source COMPLIANCE/Legal-Hold attestations: 0.  
+Task-specific R2 placements/retrievals: 0.  
+Original/B2/R2 digest/size equality proofs: 0.
+
+2026 regular-season outcome bytes/rows/content inspected: NO  
+Any 2026 asset downloaded/parsed: NO  
+Required source parsed before admission: NO  
+Model fitting/scoring/tuning/comparison/evaluation: NO  
+Outcome join: NO  
+Rankings/recommendations: NO  
+Production changed: NO  
+WR-021 / WR-023 changed: NO  
+WR-033 / WR-034 history rewritten: NO  
+Phase-6 work: NO
+
+Changed scope for this retry: `.ai/research/**` only.
+
+Exact immutable final commit SHA and PR number are recorded in the retry PR/final worker return because this committed handoff cannot self-reference the SHA of the commit that contains it.
+
+Recommended next role: Manager / Architect. Do **not** activate WR-043 because no admitted immutable source-custody target exists. Manager must provide an authorized source-acquisition + accepted-credential execution route and resolve the `draft_picks.csv` rights condition. If that requires changing source classes/semantic fields or weakening custody semantics: `SOURCE CONTRACT VERSION BUMP REQUIRED`.
