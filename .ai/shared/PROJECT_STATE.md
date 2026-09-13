@@ -1,92 +1,68 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WR-046 CREDENTIAL-SCOPE REMEDIATION / WR-050 RE-AUDIT GATE
+Status: ACTIVE DEVELOPMENT — WORKFLOW V3.1.1 FINAL RE-AUDIT + RETURNING-PLAYER V2 SOURCE-CUSTODY RETRY
 Last verified: 2026-09-12
 Owner: Manager / Architect
-Workflow: V3
+Workflow: V3.1.1 refreshed candidate under WR-051 / WR-052 until audited merge and post-merge canary
 
 ## Canonical repository
 Repository: `Ryan42062001/The-War-Room`
 Branch: `main`
-Fast-path task index: `.ai/shared/ACTIVE_TASKS.json`
+Canonical baseline for this refresh: `2e13dcaa85c5daa15f570f23ca7df184c45ec634`
+Fast-path current-work index: `.ai/shared/ACTIVE_TASKS.json` (schema v3 active-only on WR-051 candidate)
 
 ## Production ranking authority
-UNCHANGED under WR-D001:
-- FantasyPros Top-20 Experts 2026 PPR ECR primary;
-- broader FantasyPros PPR ECR fallback;
-- ESPN rank/ADP timing only.
-
-No custom ranking is production-authorized.
+UNCHANGED under WR-D001: FantasyPros Top-20 Experts 2026 PPR ECR primary; broader FantasyPros PPR ECR fallback; ESPN rank/ADP timing only. No custom ranking is production-authorized.
 
 ## Frozen research boundaries
-WR-021 / WR-023 remain accepted and frozen. No work in this chain may inspect or substitute 2026 regular-season outcomes.
+WR-021 / WR-023 remain frozen. WR-033 / WR-D005 and WR-034 / WR-D006 remain historical v1 evidence. WR-D007 closed the unprovable v1 Phase-5 path. WR-D008 accepts the independently audited Returning-Player v2 evidence contract at WR-039 exact head `00a9e787e716d6697e6cd0d9252982a672abbbe0`, machine-lock SHA-256 `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`.
 
-WR-033 remains historical Returning-Player v1 under WR-D005. WR-034 remains historical expected-games research under WR-D006. WR-D007 closed the v1 Phase-5 path as insufficiently provable. WR-D008 accepts the independently audited Returning-Player v2 evidence contract at WR-039 exact head `00a9e787e716d6697e6cd0d9252982a672abbbe0`, machine-lock SHA-256 `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`.
+No model fitting, scoring, tuning, comparison, outcome join, production ranking change, or 2026 regular-season outcome use is authorized.
 
-No model scoring is authorized.
+## Custody capability lane — ACCEPTED / INTEGRATED
+WR-053 independently returned `PASS` with no findings on WR-046 exact final head `0be4a508d68009c89ef318738acb286233a3a850`, closing the credential-to-live-proof continuity gap. Audit evidence merged through PR #146 at `6916c17c40724a7605a0a3f1fbea85373806f07e`.
 
-## WR-042 — BLOCKED / FAIL-CLOSED SOURCE CUSTODY
-R&D blocker PR #133 exact head `1c3c6d768d58aa636194226f16b9822eebc8c19f` remains fail closed. No source was admitted.
+The exact audited custody capability was integrated through Manager PR #147 after green exact-head CI at canonical merge `2e13dcaa85c5daa15f570f23ca7df184c45ec634`. Historical WR-047 and WR-050 FAIL verdicts remain preserved. WR-046 / WR-050 / WR-053 are historical closed evidence and intentionally absent from the active-only registry.
 
-WR-042 is blocked on WR-046 credential-scope remediation plus WR-050 PASS-family re-audit. Do not reactivate R&D before that gate.
+## WR-042 / WR-043
+WR-042 is ASSIGNED for a fresh bounded exact-source custody retry on `wr-042-v2-source-custody-retry`. Historical blocker PR #133 / `1c3c6d768d58aa636194226f16b9822eebc8c19f` remains immutable with 0 sources admitted.
 
-## WR-043 — BLOCKED
-Do not activate WR-043 against blocker PR #133. It may activate only after a later R&D custody retry admits and freezes one immutable no-scoring source-custody target.
+WR-043 remains BLOCKED until the fresh WR-042 retry publishes one admitted immutable no-scoring custody target.
 
-## WR-046 — REWORK_REQUIRED / UNBLOCKED
-PR #135 exact audited head `64ba4aff697c1f45472045b52f374b01ee9e1695` proved the custody mechanics but failed WR-047 overall because actual provider-side least-privilege credential scopes were not independently attested.
+## Workflow V3.1.1 lane
+WR-051 contains the nine V3.1 upgrades plus four V3.1.1 safeguards: static parallel/collision safety checks; machine-readable Auditor target metadata plus exact live SHA pinning; read-only GitHub live-state Manager gate; and generated user-action queue.
 
-The remediation is bounded to provider-issued privacy-safe authorization metadata for the exact configured B2 application key and both Cloudflare credentials. If any credential is broader than the approved envelope, replace/re-scope it and repeat live provider proof; otherwise preserve the existing proof.
+Historical audit lineage is preserved:
+- PR #149: WR-052 `FAIL — REMEDIATION REQUIRED` on `b987f8c81b7ce8af4eed18a994e8bb0bb6e89d13`; HIGH `WR-052-AUD-01` found relationship-unaware HARD collision exemption; LOW `WR-052-AUD-02` preserved intermittent browser-focus signal.
+- The collision HIGH was technically remediated with relationship-aware pairwise HARD serialization and regression coverage.
+- PR #150: fresh WR-052 re-audit `FAIL — REMEDIATION REQUIRED` on `745e0bf11388293988a34cb802a4c38657e3c4e2`; new HIGH `WR-052-REAUD-AUD-01` found that the active registry still named the historical audit branch/spec rather than the actual fresh re-audit lane.
 
-WR-048 is now closed, so the Work Helper may resume WR-046 immediately.
+That state-integrity finding is now reconciled in the current candidate. `ACTIVE_TASKS.json` records WR-052 as:
+- task file `.ai/manager/WR-052_REAUDIT_2.md`;
+- branch `wr-052-workflow-v311-final-reaudit`;
+- worker slot `auditor-workflow-v311-final-reaudit`;
+- target task WR-051 / PR #148 / implementation branch `manager/wr-051-workflow-v31-refresh`.
 
-## WR-047 — CLOSED / FAIL — REMEDIATION REQUIRED
-Audit target: PR #135 / `64ba4aff697c1f45472045b52f374b01ee9e1695`.
+Historical audit branches and PRs remain immutable evidence. The final re-audit branch is fresh from canonical baseline and must not reuse prior verdict state.
 
-Audit head: `03309c9e6cf39b13742e278d787559d94813670f`.
-Audit evidence merged through PR #140 at `2f6cbd64d845813307a67207045e1e852fdad774`.
+Because WR-051 changes CI/workflow scripts, exact-head Full CI is required before the final WR-052 re-audit, and canonical-main Full CI/canary is required after any PASS-family merge before WR-051 / WR-052 may close.
 
-Only blocking finding:
-`WR-047-AUD-01 — HIGH — Actual provider-side least-privilege credential scopes are asserted but not independently attested.`
-
-All custody mechanics, retention/lock, retrieval/digest, privacy, contract-preservation, no-source/no-model/no-production, and browser-separation checks passed.
-
-## WR-050 — BLOCKED / FRESH RE-AUDIT
-WR-050 independently re-audits the remediated WR-046 credential-scope evidence. PASS-family WR-050 is required before Manager may issue a bounded R&D exact-source custody retry.
-
-## WR-048 — CLOSED / ACCEPTED / MERGED
-Exact remediation head: `f93f4b6b17ab158974763069d9882e5782a526dd`.
-
-The residual was traced to an incorrect test invariant: corrupt payload quarantine/removal was correct, while later normal recommendation-audit activity scheduled the existing 400 ms autosave and legitimately wrote a valid version-2 successor to the same active key.
-
-The accepted remediation preserves the strict null assertion at the atomic recovery boundary and separately validates startup/reload successor semantics.
-
-Three consecutive exact-head CI attempts in run `34668044160` passed the required targeted persistence, determinism, phone, full test, and resilience gates.
-
-## WR-049 — CLOSED / PASS
-Audit head: `2f4e584c5b76647ee21846a83787ca9b2bfcce10`.
-
-Final verdict: `PASS` with no findings at any severity.
-
-Audit evidence merged at `98a4964e7f9d6392d97e2b7282de55eb6f477020`.
-
-WR-048 exact audited head was then merged with a merge commit preserving it as a canonical parent at `62cbb22df817a156a8396bedfd0a7f4d7f399532`.
-
-## Phase 6
-Phase 6 replacement/cross-position draft value remains BLOCKED until a later v2 model + season-total path is independently accepted and Manager explicitly opens the gate.
+## Repository-validation lane
+WR-048 remediation and WR-049 independent PASS remain CLOSED / ACCEPTED / MERGED. Their browser/persistence fixes remain in the full CI matrix. Historical WR-052-AUD-02 stays preserved as a non-blocking residual.
 
 ## Current roles
-- Manager: IDLE after reconciliation
+- Manager: WR-051 V3.1.1 reconciliation / integration owner
 - Builder: IDLE
 - Draft Strategy: IDLE
-- R&D: IDLE / WR-042 BLOCKED
-- Auditor: IDLE / WR-050 BLOCKED
-- Work Helper: AVAILABLE FOR WR-046 bounded credential-scope remediation
-- WR-043: BLOCKED
+- R&D: WR-042 ASSIGNED for bounded source-custody retry
+- Auditor: WR-052 ASSIGNED on `wr-052-workflow-v311-final-reaudit`; WR-043 BLOCKED on WR-042 admitted target
+- Work Helper: IDLE after accepted WR-046 custody capability integration
 
 ## Next gates
-1. WR-046 bounded credential-scope remediation.
-2. WR-046 immutable remediated head -> WR-050 independent re-audit.
-3. WR-050 PASS-family -> Manager may issue bounded R&D exact-source custody retry.
-4. WR-043 waits for actual admitted source custody.
-5. Model scoring remains forbidden throughout.
+1. Complete exact-head Governance + Full CI on the reconciled PR #148 head.
+2. Run live-state gate and verify registry task file / branch / worker slot match the real WR-052 final re-audit lane.
+3. Externally pin PR #148 exact head for WR-052.
+4. WR-052 independently self-publishes the final re-audit from `wr-052-workflow-v311-final-reaudit`.
+5. PASS-family -> Manager merge exact audited WR-051 head -> canonical-main Full CI/canary -> close workflow upgrade.
+6. WR-042 bounded exact-source custody retry may proceed independently; WR-043 waits for admitted custody.
+7. Model scoring remains forbidden throughout.

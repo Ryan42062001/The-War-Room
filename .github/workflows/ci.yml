@@ -1,7 +1,59 @@
 name: War Room CI
+
 on: [push, pull_request]
+
 jobs:
+  classify:
+    runs-on: ubuntu-latest
+    outputs:
+      full_ci: ${{ steps.scope.outputs.full_ci }}
+      scope: ${{ steps.scope.outputs.scope }}
+      reason: ${{ steps.scope.outputs.reason }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - id: scope
+        name: Classify CI scope
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_HEAD: ${{ github.sha }}
+          FORCE_FULL_CI: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'force-full-ci') }}
+        run: node scripts/workflow-ci-classify.mjs
+
+  governance:
+    needs: classify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Validate workflow helper syntax
+        run: |
+          node --check scripts/workflow-state-check.mjs
+          node --check scripts/test-workflow-state-collisions.mjs
+          node --check scripts/workflow-ci-classify.mjs
+          node --check scripts/workflow-preflight.mjs
+          node --check scripts/workflow-finish-check.mjs
+          node --check scripts/workflow-live-state-check.mjs
+          node --check scripts/workflow-user-actions.mjs
+      - name: Test workflow state collision regression
+        run: node scripts/test-workflow-state-collisions.mjs
+      - name: Validate canonical active-task state
+        run: node scripts/workflow-state-check.mjs
+      - name: Report CI scope
+        run: echo "CI scope ${{ needs.classify.outputs.scope }} — ${{ needs.classify.outputs.reason }}"
+
   test:
+    needs: [classify, governance]
+    if: needs.classify.outputs.full_ci == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
