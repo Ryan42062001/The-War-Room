@@ -2,42 +2,36 @@
 
 HANDOFF
 
-Current workflow task: WR-051 — Workflow V3.1.1
-Implementation PR: #148
-Canonical baseline: `2e13dcaa85c5daa15f570f23ca7df184c45ec634`
+Workflow: V3.1.1 — CANONICAL
+Canonical workflow integration: `8a678cc16eac9f9f91da50ce3af7ead729040423`
+Mandatory post-merge canary: `34731656414` — SUCCESS
 
-## Current audit lane
-WR-052 is assigned to the final state-reconciliation re-audit.
+## Workflow foundation — CLOSED / ACCEPTED
+WR-051 and WR-052 are closed after final independent `PASS`, exact audited integration, and successful canonical-main Full CI/canary.
 
-Machine-authoritative identity:
-- task file: `.ai/manager/WR-052_REAUDIT_2.md`
-- branch: `wr-052-workflow-v311-final-reaudit`
-- worker slot: `auditor-workflow-v311-final-reaudit`
-- target task: WR-051
-- target PR: #148
-- target implementation branch: `manager/wr-051-workflow-v31-refresh`
+Final lineage:
+- WR-051 exact audited head: `1006f02e833ecbf7435c01a9f4366ff5fde329aa` / PR #148;
+- final WR-052 audit head: `c687840cacd83e52be58956aafec9f51d8ae3af9` / PR #151 / `PASS`;
+- audit evidence merge: `f26172e3923f94c9eb49eb6bf692f6fe5c676d4d`;
+- audited implementation merge: `8a678cc16eac9f9f91da50ce3af7ead729040423`;
+- post-merge canary jobs: classify `103655428837`, governance `103655443614`, full test `103655458755` — all SUCCESS.
 
-The final re-audit branch was created from canonical baseline and must not reuse earlier audit verdict state.
+Historical PR #149 and #150 FAIL verdicts remain preserved. Both historical HIGH findings were independently verified closed by final PR #151; historical LOW browser-focus evidence remains non-blocking and is not rewritten.
 
-## Preserved audit history
-PR #149 is the first WR-052 failed audit. Its HIGH collision finding was later technically remediated; its LOW browser-focus residual remains historical and non-blocking.
+The active-only registry must no longer include WR-051 or WR-052.
 
-PR #150 is the second WR-052 failed audit. It confirmed the collision fix and found that the active registry still pointed to the prior audit lane.
+## Current active lane
+WR-042 is ASSIGNED to R&D on `wr-042-v2-source-custody-retry` for the bounded exact-source custody retry under accepted WR039 / WR-D008 evidence semantics and the accepted WR-046/WR-053 custody capability.
 
-Both historical audit PRs/branches remain evidence and are not the current lane.
+Historical blocker PR #133 / `1c3c6d768d58aa636194226f16b9822eebc8c19f` remains immutable with 0 sources admitted.
 
-## Current reconciliation
-`ACTIVE_TASKS.json`, `.ai/shared/PROJECT_STATE.md`, `.ai/shared/ROADMAP.md`, this handoff, and `.ai/manager/WR-052_REAUDIT_2.md` must all identify the same final WR-052 lane above.
+WR-043 remains BLOCKED until WR-042 publishes one admitted immutable no-scoring source-custody target. Do not activate WR-043 against historical blocker evidence.
 
-Before Auditor execution:
-1. exact-head Governance and Full CI must pass on PR #148;
-2. live branch/PR state must be verified;
-3. Manager must externally pin PR #148's exact live head;
-4. Auditor must audit only that pinned head and self-publish a new Auditor-only PR.
+## Boundaries
+No model fitting, scoring, tuning, comparison, 2026 regular-season outcome use, production ranking change, Phase-6 work, or weakening of WR039 / WR-D008 is authorized.
 
-PASS-family permits merge only of the exact audited PR #148 head, followed by the required main-branch canary before workflow closure.
-
-## Other active work
-WR-042 remains assigned on `wr-042-v2-source-custody-retry`.
-WR-043 remains blocked until WR-042 produces an admitted immutable custody target.
-No later football-model phase is authorized by this workflow task.
+## Routing
+1. R&D executes WR-042 only.
+2. If WR-042 produces a valid admitted immutable custody target, route that exact target to WR-043 independent audit.
+3. If source acquisition/rights/custody cannot satisfy the contract, fail closed and preserve zero/partial admission evidence as applicable.
+4. Future workflow enhancements, if desired, must be a new V3.2 task rather than reopening WR-051/052.
