@@ -2,61 +2,55 @@
 
 HANDOFF
 
-Task ID: WR-053  
+Task ID: WR-052  
 Role: Independent Auditor / QA  
-Status: COMPLETE — PASS  
-Audited WR-046 PR/head: PR #135 / `0be4a508d68009c89ef318738acb286233a3a850`  
-Fresh-live implementation/remediation head: `2739f4240600c726f880870051d6874cfa1e408b`  
-Prior WR-050 audited head: `81fbc857625a810522460661c7b63591c20714d7`  
-Historical WR-050 audit head: `c1d45f34dd3a3e6db75f7909bb996eb74fac02bc`  
-Historical WR-050 evidence merge / audit baseline: `589f332c967e900bf352f740753535e5e33cf22f`  
-Audit branch: `wr-053-current-credential-live-proof-audit`
+Status: COMPLETE — FAIL — REMEDIATION REQUIRED  
+Audited target: PR #148 / `b987f8c81b7ce8af4eed18a994e8bb0bb6e89d13`  
+Assignment baseline: `2e13dcaa85c5daa15f570f23ca7df184c45ec634`  
+Manager live-state pin: PR #148 comment `5649599314`  
+Audit branch: `wr-052-workflow-v31-refresh-audit`  
+Audit PR: #149
 
-Historical WR-050 preservation: PASS — WR-050 remains historical `FAIL — REMEDIATION REQUIRED` with `WR-050-AUD-01` HIGH against exact head `81fbc857...`. WR-053 does not rewrite or reinterpret that audit; it evaluates the new Manager-selected path-B evidence.
+Final verdict: `FAIL — REMEDIATION REQUIRED`
 
-Bounded remediation delta: PASS — `81fbc857... -> 0be4a508...` is exactly three commits and exactly three changed material surfaces: `.github/workflows/wr046-custody-fixture.yml`, `.ai/work_helper/WR-046_CURRENT_CREDENTIAL_LIVE_PROOF.md`, and `.ai/work_helper/HANDOFF.md`. No custody Python script, credential scope evidence, production, source, model, ranking, `.ai/research/**`, WR039, or WR-D008 semantic changed.
+Blocking finding: `WR-052-AUD-01 — HIGH — HARD dependency exemption suppresses collision checking for unrelated runnable tasks.`
 
-Current credential-anchor binding: PASS — fresh run `34723578709`, live job `103633709551`, checks out exact head `2739f4240600c726f880870051d6874cfa1e408b`, then in the same job/environment executes the accepted privacy-safe credential attestation before the live custody operations. Emitted anchors exactly match WR-050 current-scope evidence:
-- B2 key-ID SHA-256 `b744e565dc21cc4ec402f3ec7a24026bf4f9ce9711e659992f2be21a27ccac5a`;
-- R2 access-key-ID SHA-256 `17e95438e19777a414ee85d57c32d44466199a973c51e5b6f57e42a5384585bd`;
-- Cloudflare config-token ID `207e45b2deb2a0fd1d8bd3c57354a0dc`.
+The audited `workflow-state-check.mjs` skips a runnable pair whenever either participant has dependency class `HARD`, without requiring an explicit dependency/serialization relationship between the pair. An unrelated HARD task can therefore suppress detection of a real allowed write-prefix overlap. This fails the V3.1.1 requirement to detect unsafe runnable write-prefix collision while exempting only explicitly HARD-dependent tasks.
 
-B2 current credential/live proof: PASS — exact current key identity is bound before live use; primary direct retrieval is 14380 bytes with SHA-256 `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed` at the content-addressed custody key; retention is `COMPLIANCE`; Legal Hold is `ON`; fresh-run retain-until is `2034-11-29T22:45:28Z`; provider version identity is present.
+Required remediation: make the HARD exemption relationship-aware (or otherwise prove explicit pairwise serialization) and add adversarial coverage proving: unrelated overlapping runnable tasks are rejected; explicit HARD-dependent pairs are not unnecessarily serialized; unrelated non-overlapping scopes pass; and overlap wholly forbidden to one participant passes.
 
-R2 current credential/live proof: PASS — exact current access-key identity is bound before live use; independent backup direct retrieval is 14380 bytes with the same SHA-256 at the same content-addressed key; Bucket Lock condition is `Indefinite` with an empty lock prefix covering the entire bucket.
+Low residual: `WR-052-AUD-02 — LOW — preserved intermittent Draft Setup Escape/focus determinism failure.` First full-test job `103642031864` failed once after earlier same-attempt passes. The single controlled rerun used the identical PR merge tree `bfd9fafcb28f143970881b0fb26fbb0ae2f595ef`; the exact layout/focus suite then passed all five determinism iterations and the complete matrix passed. This is credible intermittent browser/focus harness evidence, not a demonstrated deterministic V3.1.1 regression, and does not independently require product/layout remediation for WR-051.
 
-Config-token identity binding: PASS — the exact configured lock-read token self-verifies in the same live job as active token ID `207e45b2deb2a0fd1d8bd3c57354a0dc`, exactly matching WR-050 current-scope evidence. Its already accepted read-only policy was not changed by the bounded remediation.
+Other audit results:
+- exact target/live state: PASS;
+- current schema-v3 four-task registry coherence: PASS;
+- Auditor target metadata and external SHA pinning: PASS;
+- read-only live GitHub state-check contract: PASS;
+- generated user-action view: PASS;
+- path-aware CI and fail-upward behavior: PASS;
+- post-merge canonical-main canary design: PASS, execution not applicable under this FAIL;
+- external-authority evidence contract: PASS;
+- atomic Manager reconciliation contract/current snapshot: PASS;
+- custody/history preservation: PASS;
+- browser/persistence preservation: PASS with LOW residual above;
+- production/model/research boundaries: PASS.
 
-Fixture identity: PASS — public `jqlang/jq` asset ID `453012755`, 14380 bytes, SHA-256 `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`, acquisition verification true. Returning-Player v2 source was not used.
+Historical preservation: WR-047 and WR-050 remain historical `FAIL — REMEDIATION REQUIRED`; later WR-053 PASS is separate and did not rewrite those verdicts. Closed WR-046 / WR-050 / WR-053 remain absent from the active-only registry and preserved in durable evidence.
 
-Direct retrieval/digest: PASS — original/B2/R2 byte sizes are equal and original/B2/R2 SHA-256 values are equal. Exact object key is `custody/sha256/01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed/raw`.
+WR-042 preservation: fresh branch `wr-042-v2-source-custody-retry` exists from canonical main; historical blocker PR #133 remains at `1c3c6d768d58aa636194226f16b9822eebc8c19f`; WR-043 remains blocked until WR-042 produces one admitted immutable no-scoring source-custody target.
 
-Single-live-run requirement: PASS — the only marked live-proof commit is `2739f424...`; run `34723578709` remains attempt 1; the sole descendant through final target is the unmarked evidence-freeze commit `0be4a508...`; final-head custody run `34723691232` has preflight SUCCESS while both provider jobs are SKIPPED. No second live-provider execution was found or enabled.
+Findings by severity: CRITICAL — none. HIGH — WR-052-AUD-01. MEDIUM — none. LOW — WR-052-AUD-02.
 
-Secret/privacy: PASS — reusable B2/R2/Cloudflare values remain Actions-masked; emitted evidence contains only privacy-safe hashes/non-secret token ID/provider metadata; reports state secrets absent/not logged; runner-local binding/proof files are removed; no Actions artifact is custody authority.
+Exact Manager action authorized next: do not merge PR #148 at `b987f8c81b7ce8af4eed18a994e8bb0bb6e89d13`. Route narrow WR-051 remediation for WR-052-AUD-01, produce a new immutable PR #148 head, run Full CI/Governance on that exact head, run live-state verification and externally pin the new SHA, then route a fresh WR-052 independent re-audit. Preserve the LOW browser residual; no product/layout change is required solely from that one intermittent failure.
 
-Final-head custody validation: PASS — run `34723691232` is SUCCESS at exact head `0be4a508...`; preflight succeeds; credential-scope and live-provider jobs skip, making it evidence-only validation rather than a second provider proof.
+No production, ranking, model, research, custody, WR-043 activation, or Phase 6 authorization is granted.
 
-Final-head War Room CI: PASS — run `34723691235` is SUCCESS at exact head `0be4a508...`. Raw logs show full `npm test` success, extension 164/164 with 0 skipped, browser/layout/responsive, invariants, persistence/recovery, recovery-failure, live fixtures, resilience syntax, and offline/recovery validation all passing.
+Detailed report: `.ai/auditor/WR-052_AUDIT.md`.
 
-WR039 / WR-D008 preservation: PASS — no `.ai/research/**` semantic change, Returning-Player source admission/parsing, 2026 regular-season outcome research, model fitting/scoring/tuning/evaluation, ranking work, production change, credential re-scope, or custody-mechanic weakening occurred.
-
-`WR-050-AUD-01` disposition: CLOSED by new evidence. WR-050 remains historically correct for its earlier evidence set; WR-053 proves the accepted current credential identities and live custody exercise together in one successful provider job.
-
-Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — none.
-
-Final verdict: `PASS`
-
-Recommended next role: Manager / Architect.
-
-Exact Manager action authorized next: verify PR #135 still identifies exact audited head `0be4a508d68009c89ef318738acb286233a3a850`; accept/merge that exact head under the normal integration gate; reconcile WR-046 / historical WR-050 / WR-053; then issue the bounded WR-042 exact-source custody retry under unchanged WR039/WR-D008 boundaries. Do not activate WR-043 until WR-042 later produces an admitted immutable source-custody target. This PASS does not authorize model fitting/scoring/tuning/evaluation, 2026 outcomes, ranking changes, production changes, or Phase 6.
-
-Detailed report: `.ai/auditor/WR-053_AUDIT.md`.
-
-Auditor modified PR #135: NO  
-Auditor merged PR #135: NO  
-Auditor changed credentials/custody objects: NO  
-Auditor changed workflow/scripts/Work Helper evidence: NO  
-Auditor changed production files: NO  
+Auditor modified PR #148: NO  
+Auditor merged PR #148: NO  
+Auditor changed workflow implementation: NO  
 Auditor changed canonical `.ai/shared/**`: NO  
-Auditor changed `.ai/research/**`: NO
+Auditor changed Manager/research/Work Helper files: NO  
+Auditor changed production/tests/credentials: NO  
+Auditor writes are limited to `.ai/auditor/**`.
