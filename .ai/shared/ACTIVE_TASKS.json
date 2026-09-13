@@ -1,67 +1,36 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-13T02:20:00Z",
+  "updated_at_utc": "2026-09-13T02:50:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "lifecycle_states": [
-    "PLANNED",
-    "BLOCKED",
-    "ASSIGNED",
-    "IN_PROGRESS",
-    "MANAGER_REVIEW_READY",
-    "AUDIT_READY",
-    "MERGE_READY",
-    "REWORK_REQUIRED",
-    "MERGED",
-    "CLOSED"
-  ],
-  "blocker_types": [
-    "NONE",
-    "USER_ACTION",
-    "UPSTREAM_TASK",
-    "EXTERNAL_SERVICE",
-    "TECHNICAL",
-    "AUDIT"
-  ],
+  "lifecycle_states": ["PLANNED","BLOCKED","ASSIGNED","IN_PROGRESS","MANAGER_REVIEW_READY","AUDIT_READY","MERGE_READY","REWORK_REQUIRED","MERGED","CLOSED"],
+  "blocker_types": ["NONE","USER_ACTION","UPSTREAM_TASK","EXTERNAL_SERVICE","TECHNICAL","AUDIT"],
   "tasks": [
     {
       "task_id": "WR-042",
       "owner": "R&D",
-      "worker_slot": "rnd-custody-retry",
-      "status": "ASSIGNED",
+      "worker_slot": "rnd-custody-retry-next",
+      "status": "BLOCKED",
       "task_file": ".ai/manager/WR-042.md",
       "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": "2e13dcaa85c5daa15f570f23ca7df184c45ec634",
-      "worker_checkpoint_sha": null,
-      "branch": "wr-042-v2-source-custody-retry",
+      "assignment_main_sha": "e24df6ab7c76be16b00e590ecab0bf71b0f05f28",
+      "worker_checkpoint_sha": "98e32ed106350906a3bad3352099549d1c7f140f",
+      "branch": null,
       "pr": null,
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_HIGH_VALUE",
       "audit_required": true,
-      "blocker_type": "NONE",
+      "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on_tasks": ["WR-056"],
+      "blocked_on": ["WR-056 must resolve the runtime-path blocker from fail-closed PR #153 and receive independent acceptance"],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/research/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/auditor/",
-        ".ai/work_helper/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [
-        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
-        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
-        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
-      ],
-      "next_gate": "Bounded exact-source custody retry -> one immutable admitted no-scoring custody target -> WR-043 independent audit"
+      "allowed_path_prefixes": [".ai/research/"],
+      "forbidden_path_prefixes": [".ai/shared/",".ai/manager/",".ai/auditor/",".ai/work_helper/","src/","public/"],
+      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
+      "next_gate": "Preserve fail-closed PR #153 -> accept WR-056 remediation -> Manager assigns fresh WR-042 retry"
     },
     {
       "task_id": "WR-043",
@@ -79,27 +48,14 @@
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-042"
-      ],
-      "blocked_on": [
-        "WR-042 must publish one admitted immutable no-scoring source-custody target"
-      ],
+      "blocked_on_tasks": ["WR-042"],
+      "blocked_on": ["WR-042 must publish one admitted immutable no-scoring source-custody target"],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/auditor/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/research/",
-        ".ai/work_helper/",
-        "src/",
-        "public/"
-      ],
+      "allowed_path_prefixes": [".ai/auditor/"],
+      "forbidden_path_prefixes": [".ai/shared/",".ai/manager/",".ai/research/",".ai/work_helper/","src/","public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "Wait for admitted WR-042 custody target; do not audit historical blocker PR #133"
+      "next_gate": "Wait for an admitted WR-042 target; do not audit PR #153"
     },
     {
       "task_id": "WR-054",
@@ -121,21 +77,10 @@
       "blocked_on": [],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": true,
-      "allowed_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        "scripts/",
-        ".github/workflows/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/research/",
-        ".ai/auditor/",
-        ".ai/work_helper/",
-        "src/",
-        "public/"
-      ],
+      "allowed_path_prefixes": [".ai/shared/",".ai/manager/","scripts/workflow-",".github/workflows/ci.yml"],
+      "forbidden_path_prefixes": [".ai/research/",".ai/auditor/",".ai/work_helper/","src/","public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "Implement lane-identity enforcement + regression coverage -> exact-head Full CI -> WR-055 independent audit"
+      "next_gate": "Implement lane-identity enforcement -> exact-head Full CI -> WR-055 independent audit"
     },
     {
       "task_id": "WR-055",
@@ -153,29 +98,39 @@
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-054"
-      ],
-      "blocked_on": [
-        "WR-054 must publish one immutable exact-head V3.2 lane-identity target"
-      ],
+      "blocked_on_tasks": ["WR-054"],
+      "blocked_on": ["WR-054 must publish one immutable exact-head V3.2 target"],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/auditor/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/research/",
-        ".ai/work_helper/",
-        "src/",
-        "public/",
-        ".github/",
-        "scripts/"
-      ],
+      "allowed_path_prefixes": [".ai/auditor/"],
+      "forbidden_path_prefixes": [".ai/shared/",".ai/manager/",".ai/research/",".ai/work_helper/","src/","public/",".github/","scripts/"],
       "forbidden_exact_paths": [],
       "next_gate": "Wait for WR-054 exact target and Manager audit activation"
+    },
+    {
+      "task_id": "WR-056",
+      "owner": "Work Helper",
+      "worker_slot": "work-helper-runtime-path-remediation",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-056.md",
+      "role_handoff": ".ai/work_helper/HANDOFF.md",
+      "assignment_main_sha": "f697e69e274b20cfb0956c821348448938820fb6",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-056-runtime-path-remediation",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT",
+      "audit_required": true,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": true,
+      "post_merge_canary_required": true,
+      "allowed_path_prefixes": [".ai/work_helper/"],
+      "forbidden_path_prefixes": [".ai/shared/",".ai/manager/",".ai/auditor/",".ai/research/","src/","public/"],
+      "forbidden_exact_paths": [],
+      "next_gate": "Diagnose and remediate the PR #153 runtime-path blocker; request explicit implementation-surface expansion only if required"
     }
   ]
 }
