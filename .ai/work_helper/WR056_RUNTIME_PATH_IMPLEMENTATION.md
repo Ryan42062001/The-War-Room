@@ -7,7 +7,7 @@ Accepted diagnosis: PR #156 / `f1d4ece46dd89f4f1395d24b57af1b042757ecbd`
 
 ## Disposition
 
-**IMPLEMENTED — CONTROLLED LIVE VALIDATION REQUIRED**
+**REMEDIATION SURFACE EXPANSION REQUIRED**
 
 The approved runtime bridge is implemented without changing WR039 / WR-D008 evidence semantics or the accepted WR-046 / WR-053 provider controls. No Returning-Player source is included in this task.
 
@@ -108,7 +108,26 @@ Model/scoring/ranking/production work: **NO**
 Phase-6 work: **NO**  
 Research/Auditor/shared/Manager files modified: **NO**
 
-## Remaining gate
+## Exact-head CI discovery
 
-Exact-head CI must pass, followed by the single controlled live fixture dispatch. Manager should bind a fresh independent audit lane only after those results are frozen. WR-042 and WR-043 remain blocked.
+Candidate head `dd37c7a716fd5195d78f5340a3770832d8907d41` produced:
 
+- WR-046 Custody Fixture Proof run `34736597963`: **PASS**;
+- War Room CI run `34736597965` governance job `103669034154`: **PASS**, including the new custody regressions;
+- War Room CI test job `103669054609`: **FAIL** at `npm run test:release`.
+
+The release validator failed before unrelated application tests because `scripts/validate-release-candidate.mjs` contains an exact two-workflow allowlist. It expected only `ci.yml` and `wr046-custody-fixture.yml`, and correctly detected the newly authorized `wr042-source-custody.yml` as an unapproved third workflow from its current perspective.
+
+That validator is outside the active WR-056 write authority. Retrying cannot change this deterministic result.
+
+## Additional minimum expansion required
+
+Authorize exactly:
+
+- `scripts/validate-release-candidate.mjs`
+
+Purpose: add `.github/workflows/wr042-source-custody.yml` to the permanent workflow allowlist. No other validator behavior should change.
+
+Required regression: `npm run test:release` must pass with exactly the three approved workflow paths and must still fail for any fourth/unapproved workflow. Full exact-head CI must then pass before the one controlled live jq dispatch.
+
+The live provider validation has **not** been dispatched because the implementation head is not yet release-valid. Manager should approve the single-path expansion and return WR-056 to Work Helper. WR-042 and WR-043 remain blocked.
