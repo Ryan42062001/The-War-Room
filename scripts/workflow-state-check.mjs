@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -56,6 +57,42 @@ function effectiveWriteOverlap(a, b) {
   }
   return null;
 }
+function explicitlySerializedHardPair(a, b) {
+  return (
+    a.dependency === 'HARD' && (a.blocked_on_tasks || []).includes(b.task_id)
+  ) || (
+    b.dependency === 'HARD' && (b.blocked_on_tasks || []).includes(a.task_id)
+  );
+}
+function parallelWriteCollision(a, b) {
+  if (!RUNNABLE.has(a.status) || !RUNNABLE.has(b.status)) return null;
+  if (explicitlySerializedHardPair(a, b)) return null;
+  return effectiveWriteOverlap(a, b);
+}
+function runCollisionRegressionChecks() {
+  const task = (task_id, overrides = {}) => ({
+    task_id,
+    status: 'ASSIGNED',
+    dependency: 'INDEPENDENT',
+    blocked_on_tasks: [],
+    allowed_path_prefixes: ['src/'],
+    forbidden_path_prefixes: [],
+    ...overrides
+  });
+  const unrelatedHard = task('WR-901', { dependency: 'HARD' });
+  const unrelatedPeer = task('WR-902');
+  assert.equal(parallelWriteCollision(unrelatedHard, unrelatedPeer), 'src/', 'unrelated HARD task must not suppress overlap');
+
+  const explicitHard = task('WR-901', { dependency: 'HARD', blocked_on_tasks: ['WR-902'] });
+  assert.equal(parallelWriteCollision(explicitHard, unrelatedPeer), null, 'explicit HARD-dependent pair must be serialized');
+
+  const nonOverlap = task('WR-902', { allowed_path_prefixes: ['docs/'] });
+  assert.equal(parallelWriteCollision(task('WR-901'), nonOverlap), null, 'unrelated non-overlapping tasks must remain allowed');
+
+  const forbiddenOverlap = task('WR-901', { forbidden_path_prefixes: ['src/'] });
+  assert.equal(parallelWriteCollision(forbiddenOverlap, unrelatedPeer), null, 'wholly forbidden overlap must remain allowed');
+}
+runCollisionRegressionChecks();
 
 for (const task of tasks) {
   const label = task.task_id || '<missing task_id>';
@@ -142,9 +179,7 @@ for (let i = 0; i < tasks.length; i += 1) {
   for (let j = i + 1; j < tasks.length; j += 1) {
     const a = tasks[i];
     const b = tasks[j];
-    if (!RUNNABLE.has(a.status) || !RUNNABLE.has(b.status)) continue;
-    if (a.dependency === 'HARD' || b.dependency === 'HARD') continue;
-    const overlap = effectiveWriteOverlap(a, b);
+    const overlap = parallelWriteCollision(a, b);
     if (overlap) errors.push(`${a.task_id}/${b.task_id}: unsafe parallel write-prefix overlap at ${overlap}; serialize or narrow scopes`);
   }
 }
