@@ -7,7 +7,7 @@ Accepted diagnosis: PR #156 / `f1d4ece46dd89f4f1395d24b57af1b042757ecbd`
 
 ## Disposition
 
-**REMEDIATION SURFACE EXPANSION REQUIRED**
+**IMPLEMENTATION CI GREEN — CONTROLLED LIVE VALIDATION BLOCKED BY WORKFLOW-DISPATCH BOOTSTRAP**
 
 The approved runtime bridge is implemented without changing WR039 / WR-D008 evidence semantics or the accepted WR-046 / WR-053 provider controls. No Returning-Player source is included in this task.
 
@@ -130,4 +130,45 @@ Purpose: add `.github/workflows/wr042-source-custody.yml` to the permanent workf
 
 Required regression: `npm run test:release` must pass with exactly the three approved workflow paths and must still fail for any fourth/unapproved workflow. Full exact-head CI must then pass before the one controlled live jq dispatch.
 
-The live provider validation has **not** been dispatched because the implementation head is not yet release-valid. Manager should approve the single-path expansion and return WR-056 to Work Helper. WR-042 and WR-043 remain blocked.
+## Authorized validator remediation and exact-head evidence
+
+Manager authorization PR #159 was reconciled through merge commit
+`38e332be05e93413a9adc8a9f3a0dec52b058a6c`. The only newly authorized
+implementation edit added `.github/workflows/wr042-source-custody.yml` to the
+strict permanent-workflow allowlist in `scripts/validate-release-candidate.mjs`.
+The existing exact `assert.deepEqual` comparison remains intact.
+
+Focused release regression:
+
+- `npm run test:release` with exactly the three approved workflows: **PASS**;
+- the same regression with staged `.github/workflows/unapproved-fourth.yml`:
+  **EXPECTED FAIL**, naming the unapproved path in the strict equality error.
+
+Candidate implementation head: `8cf417f543e8e2e6f30793b68a53037cbbc09265`.
+
+- War Room CI run `34737295736`: **PASS**;
+- classify job `103670840316`: **PASS**;
+- governance job `103671710464`: **PASS**, including `Test trusted source-custody bridge`;
+- full test job `103671727942`: **PASS**, including browser stress and `npm test`;
+- WR-046 Custody Fixture Proof run `34737295735`, preflight job
+  `103670840315`: **PASS**; live jobs correctly skipped for a pull-request event.
+
+## Controlled-live bootstrap finding
+
+The one authorized live jq validation has **not** been dispatched. GitHub only
+registers and exposes a `workflow_dispatch` workflow when its workflow file is
+present on the repository default branch. The trusted workflow exists at the
+candidate PR head but `.github/workflows/wr042-source-custody.yml` is absent from
+canonical `main` `a9d126abaa4f30d381aa1f5aa4478ac884bfed5f` (provider API returns 404).
+Consequently there is no valid Actions `Run workflow` entry point yet.
+
+Adding a push or pull-request live trigger would weaken the approved manual,
+explicit-confirmation design. Merging PR #158 merely to bootstrap its own
+pre-merge validation would bypass the required independent audit. Neither action
+was taken. No provider call and no live-validation attempt was consumed.
+
+Manager disposition is required to establish the workflow on the default branch
+through an independently reviewed bootstrap/control-plane change, or to approve
+another narrowly bounded invocation mechanism. Once the workflow is registered,
+the single live run must use the frozen jq manifest and candidate implementation
+identity recorded above. WR-042 and WR-043 remain blocked.
