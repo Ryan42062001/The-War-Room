@@ -2,54 +2,52 @@
 
 HANDOFF
 
-Task ID: WR-052  
+Task ID: WR-058  
 Role: Independent Auditor / QA  
 Status: COMPLETE — PASS  
-Audit type: Workflow V3.1.1 final state-reconciliation re-audit  
-Audit branch: `wr-052-workflow-v311-final-reaudit`  
-Assignment baseline: `2e13dcaa85c5daa15f570f23ca7df184c45ec634`  
-Audited PR/head: PR #148 / `1006f02e833ecbf7435c01a9f4366ff5fde329aa`  
-Manager exact-target pin: PR #148 comment `5649917316`
+Audit branch: `wr-058-wr056-runtime-path-audit`  
+Assignment baseline: `51abd53474ae968ab97d8d41fd63a4dc72071a18`  
+Audited target: WR-056 / PR #158  
+Frozen evidence head: `05aacfce26eb4329aef1b116f2266c322cf3d50c`  
+Live-proven implementation SHA: `806454c412f12e3ba34fd921cb234c88a3501272`
 
 Final verdict: `PASS`
 
-Historical `WR-052-AUD-01 — HIGH`: CLOSED and not regressed. The relationship-aware HARD collision fix remains unchanged and exact-head Governance passed the focused regression.
+Independent target lineage: PASS — PR #158 remains open at exact head `05aacfce...`; compare `806454c... -> 05aacfce...` is exactly one commit changing only `.ai/work_helper/HANDOFF.md` and `.ai/work_helper/WR056_RUNTIME_PATH_IMPLEMENTATION.md`.
 
-Historical `WR-052-AUD-02 — LOW`: preserved as non-blocking historical browser-focus evidence. No product/layout change is present in the final reconciliation; exact-head full CI passed.
+Implementation-head CI: PASS — War Room CI `34738136302` is SUCCESS for `806454c...`; classify `103673099189`, governance `103673123574`, and full test `103673145497` all succeeded. Governance independently ran the WR-056 custody regressions and provider self-test successfully.
 
-Historical `WR-052-REAUD-AUD-01 — HIGH`: CLOSED. At the exact audited target, `ACTIVE_TASKS.json` now records the real current WR-052 lane:
-- task file `.ai/manager/WR-052_REAUDIT_2.md`;
-- branch `wr-052-workflow-v311-final-reaudit`;
-- worker slot `auditor-workflow-v311-final-reaudit`;
-- target task WR-051;
-- target PR #148;
-- target implementation branch `manager/wr-051-workflow-v31-refresh`.
+Immutable manifest binding: PASS — the live workflow checked out exact implementation `806454c...`, used the same exact commit for `.ai/work_helper/WR056_LIVE_FIXTURE_MANIFEST.json`, and used manifest SHA-256 `8e69050cefb9df413b589133aaadcd1a8f952e1fc0cf94502020dee8b69f8547`. Independent recomputation of the exact repository bytes matches that digest.
 
-The fresh task spec, Manager handoff, project state, roadmap, and registry agree on that identity. The task spec permits nullable `audit_target_sha` while ASSIGNED when Manager externally pins the live immutable head; comment `5649917316` pins `1006f02e833ecbf7435c01a9f4366ff5fde329aa` after live-state verification.
+Controlled live custody: PASS — run `34758553282`, attempt 2, trusted-custody job `103737047171` is SUCCESS. The job binds current credential identities before execution, processes exactly one lawful jq fixture, returns `PASS` / `secrets_logged=false`, publishes privacy-safe evidence, and completes cleanup.
 
-Final reconciliation delta from prior target `745e0bf11388293988a34cb802a4c38657e3c4e2` changes only five Manager/shared control-plane files: `.ai/manager/HANDOFF.md`, `.ai/manager/WR-052_REAUDIT_2.md`, `.ai/shared/ACTIVE_TASKS.json`, `.ai/shared/PROJECT_STATE.md`, and `.ai/shared/ROADMAP.md`. No workflow scripts, product/tests, ranking/model, research, custody, credentials, WR039/WR-D008, or Phase-6 surfaces changed.
+Fail-closed history: PASS — earlier dispatch `34758046160` stopped at the exact confirmation gate before checkout/provider work because of leading spaces. Attempt 1 of `34758553282` later failed on invalid newline formatting in the R2 AWS credential header, published no PASS evidence, and still ran cleanup. Attempt 2 is the first complete custody proof. No fail-closed failure was treated as successful evidence.
 
-Historical audit preservation: PR #149 remains open/unmerged at `99c17f914e5d91236d4fd7a6f7c5862fbb6a9d69`; PR #150 remains open/unmerged at `4af9bc509913b948f1e749959a02cac48cd50346`. Neither prior FAIL lane was reused.
+Custody controls: PASS — audited code requires immutable release-asset acquisition, downloaded-byte digest/size verification before provider handling, content-addressed B2 keying, B2 COMPLIANCE retention + Legal Hold, R2 Indefinite Bucket Lock coverage, independent direct retrieval from both providers, and original/B2/R2 digest-and-size equality before PASS.
 
-Exact-head War Room CI run `34729890967`: SUCCESS.
-- classify `103650609169` — SUCCESS;
-- governance `103650629947` — SUCCESS;
-- full test `103650649019` — SUCCESS.
+Credential/resource binding and privacy: PASS — same-job Backblaze authorization requires exact bucket/prefix/capability scope and forbidden-capability absence; Cloudflare token verification requires active provider identity; R2 object operations use the same protected job credentials/resource variables. All five protected credential values remain masked in raw logs. No reusable secret was observed.
 
-Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — no new LOW.
+Cleanup/no artifact: PASS — workflow always-run cleanup succeeds and run `34758553282` has zero GitHub Actions artifacts.
 
-Detailed report: `.ai/auditor/WR-052_FINAL_REAUDIT.md`.
-Report commit: `819d604f892c82bd8dffaf6ea721a27c62ba94e3`.
+WR-046 preservation: PASS — PR #158 does not change `.github/workflows/wr046-custody-fixture.yml`; its blob is identical at accepted WR-053/WR-046 head `0be4a508...` and WR-056 live implementation `806454c...`. Parameterized helpers retain WR-046 defaults and the regression suite checks the original report identity.
+
+Bootstrap cleanup: PASS — PR #161 merged at `12c1ad636762b723b925a0e9d7bb2a1463f5cb77`, removing only the temporary fail-closed registration stub and temporary validator allowance. Post-cleanup main CI `34763533209` is fully green: `103740383000`, `103740406024`, `103740421775`.
+
+Scope boundaries: PASS — no Returning-Player source, no 2026 outcome use, no admission, model/scoring/ranking work, production/user-facing change, or WR039/WR-D008 semantic broadening occurred.
+
+Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — none.
+
+Detailed report: `.ai/auditor/WR-058_AUDIT.md`.  
+Report commit: `53073441854c2523cdcdd84eb9842d211ca68b62`.
 
 Recommended next role: Manager / Architect.
 
-Exact next authorized action: verify PR #148 still has exact audited head `1006f02e833ecbf7435c01a9f4366ff5fde329aa`, then Manager may merge only that exact head under the normal gate. Mandatory canonical-main Full CI/canary must pass before WR-051 / WR-052 closure.
+Exact Manager action authorized next: verify PR #158 still identifies exact audited evidence head `05aacfce26eb4329aef1b116f2266c322cf3d50c`; accept WR-056 under the canonical gate and decide merge/post-merge-canary sequencing. WR-042 remains blocked on this audit plus the separate WR-057 rights disposition. WR-043 remains blocked on a future admitted WR-042 target.
 
-This PASS does not itself merge PR #148, close WR-051/WR-052, activate WR-043, authorize model scoring/ranking changes/2026 outcomes/production changes, or start Phase 6.
+This PASS does not itself merge PR #158, activate WR-042/WR-043, resolve WR-057, admit any Returning-Player source, inspect 2026 outcomes, or authorize model/ranking/production work.
 
-Auditor modified PR #148: NO  
-Auditor modified Manager/shared state: NO  
-Auditor modified workflow/scripts: NO  
-Auditor modified research/Work Helper evidence: NO  
-Auditor modified production/tests/credentials: NO  
-Auditor modified PR #149 or #150: NO
+Auditor modified PR #158: NO  
+Auditor merged PR #158: NO  
+Auditor changed `.ai/shared/**` or `.ai/manager/**`: NO  
+Auditor changed `.ai/work_helper/**` or `.ai/research/**`: NO  
+Auditor changed workflows/scripts/tests/production/credentials: NO
