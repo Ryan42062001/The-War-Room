@@ -11,6 +11,7 @@ AUDIT REQUIRED: YES
 POST-MERGE CANARY REQUIRED: YES
 
 Accepted diagnosis: PR #156 / `f1d4ece46dd89f4f1395d24b57af1b042757ecbd`.
+Current implementation checkpoint: PR #158 / `589ec9bdb77613600a7caddb6169999aab248276`.
 
 Authorized writes:
 - `.ai/work_helper/`
@@ -20,7 +21,10 @@ Authorized writes:
 - `scripts/custody/prove_b2_r2_custody.py`
 - `scripts/custody/ensure_b2_custody_object.py`
 - `scripts/custody/test_source_manifest_custody.py`
+- `scripts/validate-release-candidate.mjs`
 
-Implement only the accepted PR #156 remediation. Add deterministic regression coverage and one controlled non-sensitive fixture validation before independent audit.
+The final path is authorized only to recognize the new WR-042 custody workflow in the existing strict release-workflow inventory. Preserve all other release checks and continue rejecting any additional workflow.
+
+After that update, rerun full exact-head CI. If green, perform exactly one controlled jq fixture validation, freeze the resulting evidence, and return to Manager for independent audit routing.
 
 Do not modify research, Auditor, football, ranking, model, or production surfaces.

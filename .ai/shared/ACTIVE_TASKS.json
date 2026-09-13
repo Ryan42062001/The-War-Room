@@ -114,10 +114,10 @@
       "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-056_IMPL.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "2f228f0cf5a1c6caca3194d4d6df06dbd0fd7cc8",
-      "worker_checkpoint_sha": "f1d4ece46dd89f4f1395d24b57af1b042757ecbd",
+      "assignment_main_sha": "791a5c817e8f11aaee24b66ac8b52f7681a8d136",
+      "worker_checkpoint_sha": "589ec9bdb77613600a7caddb6169999aab248276",
       "branch": "wr-056-runtime-path-remediation-impl",
-      "pr": null,
+      "pr": 158,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT",
       "audit_required": true,
@@ -127,10 +127,10 @@
       "blocked_on": [],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": true,
-      "allowed_path_prefixes": [".ai/work_helper/",".github/workflows/wr042-source-custody.yml",".github/workflows/ci.yml","scripts/custody/run_source_manifest_custody.py","scripts/custody/prove_b2_r2_custody.py","scripts/custody/ensure_b2_custody_object.py","scripts/custody/test_source_manifest_custody.py"],
+      "allowed_path_prefixes": [".ai/work_helper/",".github/workflows/wr042-source-custody.yml",".github/workflows/ci.yml","scripts/custody/run_source_manifest_custody.py","scripts/custody/prove_b2_r2_custody.py","scripts/custody/ensure_b2_custody_object.py","scripts/custody/test_source_manifest_custody.py","scripts/validate-release-candidate.mjs"],
       "forbidden_path_prefixes": [".ai/shared/",".ai/manager/",".ai/auditor/",".ai/research/","src/","public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "Implement accepted PR #156 remediation -> deterministic CI + controlled fixture validation -> freeze target -> independent audit"
+      "next_gate": "Update only the release validator allowlist -> exact-head Full CI -> exactly one lawful jq fixture validation -> freeze target -> independent audit"
     }
   ]
 }
