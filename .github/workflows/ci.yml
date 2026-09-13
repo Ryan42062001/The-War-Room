@@ -39,6 +39,8 @@ jobs:
         run: |
           node --check scripts/workflow-state-check.mjs
           node --check scripts/test-workflow-state-collisions.mjs
+          node --check scripts/workflow-task-contract.mjs
+          node --check scripts/workflow-lane-identity-test.mjs
           node --check scripts/workflow-ci-classify.mjs
           node --check scripts/workflow-preflight.mjs
           node --check scripts/workflow-finish-check.mjs
@@ -46,6 +48,8 @@ jobs:
           node --check scripts/workflow-user-actions.mjs
       - name: Test workflow state collision regression
         run: node scripts/test-workflow-state-collisions.mjs
+      - name: Test workflow lane identity regression
+        run: node scripts/workflow-lane-identity-test.mjs
       - name: Validate canonical active-task state
         run: node scripts/workflow-state-check.mjs
       - name: Test trusted source-custody bridge

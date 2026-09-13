@@ -1,10 +1,18 @@
 # War Room Team Workflow
 
 Status: ACTIVE — WORKFLOW V3.1.1
-Last updated: 2026-09-12
+Last updated: 2026-09-13
 Owner: Manager / Architect
 
 This is the canonical workflow for **The War Room**, the live fantasy-football **DRAFT** assistant. Repository state overrides stale chat memory. If older workflow guidance conflicts with this file, this file wins unless Manager records a newer approved workflow change.
+
+## V3.2 candidate — lane identity enforcement
+
+WR-054 is evaluating a bounded Workflow V3.2 safety upgrade. V3.1.1 remains canonical until WR-054 receives independent WR-055 PASS-family audit, merges, and passes its canonical-main post-merge canary.
+
+The candidate requires task-scoped preflight and finish checks to fail closed when the checked-out branch does not equal the branch assigned in `ACTIVE_TASKS.json`, including detached HEAD. Static workflow state validation additionally binds each active task spec's `TASK ID`, `STATUS`, `TARGET BRANCH`, `EXECUTION MODE`, and dependency class to registry truth while permitting descriptive dependency suffix text after the machine token.
+
+The V3.2 candidate must preserve all accepted WR-056 trusted source-custody CI behavior and existing V3.1.1 collision, audit-target, live-state, and Manager-authority guarantees.
 
 ## Project identity boundary
 - **The War Room** = live fantasy-football draft assistant.

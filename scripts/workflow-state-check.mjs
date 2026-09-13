@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { validateTaskSpecContract } from './workflow-task-contract.mjs';
 
 const root = process.cwd();
 const registryPath = path.join(root, '.ai/shared/ACTIVE_TASKS.json');
@@ -36,7 +37,6 @@ function claimUnique(map, value, label, field) {
   if (map.has(value)) errors.push(`${label}: ${field} duplicates ${map.get(value)} (${value})`);
   else map.set(value, label);
 }
-
 function prefixOverlap(a, b) {
   if (!a || !b) return null;
   if (a.startsWith(b)) return a;
@@ -58,11 +58,8 @@ function effectiveWriteOverlap(a, b) {
   return null;
 }
 function explicitlySerializedHardPair(a, b) {
-  return (
-    a.dependency === 'HARD' && (a.blocked_on_tasks || []).includes(b.task_id)
-  ) || (
-    b.dependency === 'HARD' && (b.blocked_on_tasks || []).includes(a.task_id)
-  );
+  return (a.dependency === 'HARD' && (a.blocked_on_tasks || []).includes(b.task_id)) ||
+    (b.dependency === 'HARD' && (b.blocked_on_tasks || []).includes(a.task_id));
 }
 function parallelWriteCollision(a, b) {
   if (!RUNNABLE.has(a.status) || !RUNNABLE.has(b.status)) return null;
@@ -82,13 +79,10 @@ function runCollisionRegressionChecks() {
   const unrelatedHard = task('WR-901', { dependency: 'HARD' });
   const unrelatedPeer = task('WR-902');
   assert.equal(parallelWriteCollision(unrelatedHard, unrelatedPeer), 'src/', 'unrelated HARD task must not suppress overlap');
-
   const explicitHard = task('WR-901', { dependency: 'HARD', blocked_on_tasks: ['WR-902'] });
   assert.equal(parallelWriteCollision(explicitHard, unrelatedPeer), null, 'explicit HARD-dependent pair must be serialized');
-
   const nonOverlap = task('WR-902', { allowed_path_prefixes: ['docs/'] });
   assert.equal(parallelWriteCollision(task('WR-901'), nonOverlap), null, 'unrelated non-overlapping tasks must remain allowed');
-
   const forbiddenOverlap = task('WR-901', { forbidden_path_prefixes: ['src/'] });
   assert.equal(parallelWriteCollision(forbiddenOverlap, unrelatedPeer), null, 'wholly forbidden overlap must remain allowed');
 }
@@ -99,7 +93,6 @@ for (const task of tasks) {
   if (!WR.test(label)) errors.push(`${label}: task_id must match WR-###`);
   if (ids.has(label)) errors.push(`${label}: duplicate task_id`);
   ids.add(label);
-
   if (!ACTIVE.has(task.status)) errors.push(`${label}: active-only registry cannot contain status ${task.status}`);
   if (!BLOCKER_TYPES.has(task.blocker_type)) errors.push(`${label}: invalid blocker_type ${task.blocker_type}`);
   if (!DEPENDENCIES.has(task.dependency)) errors.push(`${label}: dependency must be INDEPENDENT, SOFT, or HARD`);
@@ -108,24 +101,15 @@ for (const task of tasks) {
   if (!Array.isArray(task.blocked_on)) errors.push(`${label}: blocked_on must be array`);
   if (typeof task.external_authority_evidence_required !== 'boolean') errors.push(`${label}: external_authority_evidence_required must be boolean`);
   if (typeof task.post_merge_canary_required !== 'boolean') errors.push(`${label}: post_merge_canary_required must be boolean`);
-
-  if (['BLOCKED', 'REWORK_REQUIRED'].includes(task.status) && task.blocker_type === 'NONE') {
-    errors.push(`${label}: ${task.status} requires non-NONE blocker_type`);
-  }
-  if (!['BLOCKED', 'REWORK_REQUIRED'].includes(task.status) && task.blocker_type !== 'NONE') {
-    errors.push(`${label}: blocker_type must be NONE when status is ${task.status}`);
-  }
-  if (task.user_action_required && !['USER_ACTION', 'EXTERNAL_SERVICE'].includes(task.blocker_type)) {
-    errors.push(`${label}: user_action_required needs USER_ACTION or EXTERNAL_SERVICE blocker_type`);
-  }
-
+  if (['BLOCKED', 'REWORK_REQUIRED'].includes(task.status) && task.blocker_type === 'NONE') errors.push(`${label}: ${task.status} requires non-NONE blocker_type`);
+  if (!['BLOCKED', 'REWORK_REQUIRED'].includes(task.status) && task.blocker_type !== 'NONE') errors.push(`${label}: blocker_type must be NONE when status is ${task.status}`);
+  if (task.user_action_required && !['USER_ACTION', 'EXTERNAL_SERVICE'].includes(task.blocker_type)) errors.push(`${label}: user_action_required needs USER_ACTION or EXTERNAL_SERVICE blocker_type`);
   for (const key of ['assignment_main_sha', 'worker_checkpoint_sha', 'audit_target_sha']) {
     if (task[key] != null && !SHA.test(task[key])) errors.push(`${label}: ${key} must be null or 40-char lowercase SHA`);
   }
   if (task.pr != null && (!Number.isInteger(task.pr) || task.pr <= 0)) errors.push(`${label}: pr must be null or positive integer`);
   if (task.branch != null && typeof task.branch !== 'string') errors.push(`${label}: branch must be null or string`);
   if (task.worker_slot != null && typeof task.worker_slot !== 'string') errors.push(`${label}: worker_slot must be null or string`);
-
   claimUnique(seenBranch, task.branch, label, 'branch');
   claimUnique(seenSlot, task.worker_slot, label, 'worker_slot');
   claimUnique(seenPr, task.pr, label, 'pr');
@@ -141,15 +125,9 @@ for (const task of tasks) {
     errors.push(`${label}: task_file missing: ${task.task_file}`);
   } else {
     const text = fs.readFileSync(path.join(root, task.task_file), 'utf8');
-    if (!text.includes(`TASK ID: ${label}`)) errors.push(`${label}: task_file does not declare matching TASK ID`);
-    const match = text.match(/^STATUS:\s*([A-Z_]+)/m);
-    if (!match) warnings.push(`${label}: task_file has no machine-readable STATUS line`);
-    else if (match[1] !== task.status) errors.push(`${label}: registry status ${task.status} != task_file status ${match[1]}`);
+    errors.push(...validateTaskSpecContract(task, text).errors);
   }
-
-  if (typeof task.role_handoff === 'string' && !fs.existsSync(path.join(root, task.role_handoff))) {
-    errors.push(`${label}: role_handoff path missing: ${task.role_handoff}`);
-  }
+  if (typeof task.role_handoff === 'string' && !fs.existsSync(path.join(root, task.role_handoff))) errors.push(`${label}: role_handoff path missing: ${task.role_handoff}`);
 }
 
 for (const task of tasks) {
@@ -184,13 +162,6 @@ for (let i = 0; i < tasks.length; i += 1) {
   }
 }
 
-const result = {
-  schema_version: registry.schema_version,
-  active_task_count: tasks.length,
-  errors,
-  warnings,
-  ok: errors.length === 0
-};
-
+const result = { schema_version: registry.schema_version, active_task_count: tasks.length, errors, warnings, ok: errors.length === 0 };
 console.log(JSON.stringify(result, null, 2));
 process.exitCode = result.ok ? 0 : 2;

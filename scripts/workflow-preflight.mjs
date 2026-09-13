@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
+import { branchIdentityError } from './workflow-task-contract.mjs';
 
 function args() {
   const out = { task: null, target: null, json: false };
@@ -53,6 +54,7 @@ if (task.user_action_required) throw new Error(`${task.task_id} requires user ac
 const target = resolveTarget(cwd, options.target, registry.canonical_branch || 'main');
 const head = git(cwd, ['rev-parse', 'HEAD']);
 const branch = git(cwd, ['branch', '--show-current'], true) || '(detached)';
+const laneError = branchIdentityError(task, branch);
 const branchFiles = lines(git(cwd, ['diff', '--name-only', `${target}...HEAD`], true));
 let targetAdvanceFiles = [];
 if (task.assignment_main_sha && git(cwd, ['rev-parse', '--verify', task.assignment_main_sha], true)) {
@@ -67,7 +69,9 @@ const result = {
   registry_status: task.status,
   blocker_type: task.blocker_type,
   user_action_required: task.user_action_required,
+  assigned_branch: task.branch ?? null,
   branch, head, target,
+  branch_identity_error: laneError,
   assignment_main_sha: task.assignment_main_sha,
   target_advance_class: advanceClass,
   target_advance_files: targetAdvanceFiles,
@@ -78,7 +82,7 @@ const result = {
   external_authority_evidence_required: Boolean(task.external_authority_evidence_required),
   post_merge_canary_required: Boolean(task.post_merge_canary_required),
   next_gate: task.next_gate,
-  ok: scope.forbidden.length === 0 && scope.outsideAllowlist.length === 0
+  ok: !laneError && scope.forbidden.length === 0 && scope.outsideAllowlist.length === 0
 };
 
 if (options.json) console.log(JSON.stringify(result, null, 2));
@@ -86,10 +90,12 @@ else {
   console.log(`WORKFLOW PREFLIGHT — ${result.task_id}`);
   console.log(`status: ${result.registry_status}`);
   console.log(`slot: ${result.worker_slot || 'default'}`);
+  console.log(`assigned branch: ${result.assigned_branch || '<none>'}`);
   console.log(`branch: ${result.branch}`);
   console.log(`head: ${result.head}`);
   console.log(`target: ${result.target}`);
   console.log(`target advance: ${result.target_advance_class}`);
+  if (result.branch_identity_error) console.log(`LANE IDENTITY: ${result.branch_identity_error}`);
   if (result.forbidden_files.length) console.log(`FORBIDDEN: ${result.forbidden_files.join(', ')}`);
   if (result.outside_allowlist_files.length) console.log(`OUTSIDE ALLOWLIST: ${result.outside_allowlist_files.join(', ')}`);
   console.log(`audit required: ${result.audit_required ? 'YES' : 'NO'}`);
