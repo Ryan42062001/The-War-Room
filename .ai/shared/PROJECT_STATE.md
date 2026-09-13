@@ -1,9 +1,9 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WR-042 FAIL-CLOSED / WR-056 IMPLEMENTATION ACTIVE / WORKFLOW V3.2 HARDENING ACTIVE
+Status: ACTIVE DEVELOPMENT — WR-042 FAIL-CLOSED / WR-056 IMPLEMENTATION ACTIVE / WORKFLOW V3.2 HARDENING PAUSED
 Last verified: 2026-09-13
 Owner: Manager / Architect
-Workflow: V3.1.1 CANONICAL; WR-054/055 form the separately audited V3.2 candidate lane.
+Workflow: V3.1.1 CANONICAL; WR-054/055 remain the separately audited V3.2 candidate lane.
 
 ## Current canonical baseline
 Repository: `Ryan42062001/The-War-Room`
@@ -28,14 +28,16 @@ Only the exact workflow/custody/test surfaces recorded in the active registry an
 A fresh independent audit lane will be created only after WR-056 freezes one validated implementation target.
 
 ## Workflow V3.2 lane
-WR-054 remains ASSIGNED and WR-055 remains BLOCKED on WR-054. This lane remains independent of WR-056 and WR-042.
+WR-054 is temporarily BLOCKED on WR-056 because both tasks require `.github/workflows/ci.yml`. The collision checker correctly rejected parallel execution.
+
+WR-056 has roadmap priority because it unblocks Returning-Player v2. WR-055 remains BLOCKED on WR-054. Resume V3.2 hardening after WR-056 releases the shared CI surface.
 
 ## Current next gates
 1. Work Helper implements WR-056 on the fresh implementation branch.
-2. WR-054 continues independently.
-3. Freeze and independently audit the WR-056 implementation target.
-4. Separately disposition the remaining source-use issue from WR-042 PR #153.
-5. Only after those gates pass, create a fresh WR-042 retry branch.
-6. Activate WR-043 only if that later retry produces one admitted immutable no-scoring target.
+2. Freeze and independently audit the WR-056 implementation target.
+3. Separately disposition the remaining source-use issue from WR-042 PR #153.
+4. Only after those gates pass, create a fresh WR-042 retry branch.
+5. Activate WR-043 only if that later retry produces one admitted immutable no-scoring target.
+6. Resume WR-054/055 after WR-056 releases the shared CI path.
 
 No model fitting, scoring, tuning, comparison, 2026 regular-season outcome use, production ranking change, or Phase-6 work is authorized.
