@@ -2,7 +2,7 @@
 
 TASK ID: WR-056
 ROLE: Work Helper
-STATUS: AUDIT_READY
+STATUS: CLOSED
 DATE: 2026-09-13
 DEPENDENCY: INDEPENDENT
 EXECUTION MODE: STANDARD_CHAT
@@ -15,33 +15,24 @@ Accepted diagnosis: PR #156 / `f1d4ece46dd89f4f1395d24b57af1b042757ecbd`.
 Frozen evidence head: PR #158 / `05aacfce26eb4329aef1b116f2266c322cf3d50c`.
 Live-proven implementation SHA: `806454c412f12e3ba34fd921cb234c88a3501272`.
 
-Authorized implementation writes were:
-- `.ai/work_helper/`
-- `.github/workflows/wr042-source-custody.yml`
-- `.github/workflows/ci.yml`
-- `scripts/custody/run_source_manifest_custody.py`
-- `scripts/custody/prove_b2_r2_custody.py`
-- `scripts/custody/ensure_b2_custody_object.py`
-- `scripts/custody/test_source_manifest_custody.py`
-- `scripts/validate-release-candidate.mjs`
+## Accepted evidence
 
-The release-validator expansion was authorized only to recognize the new WR-042 custody workflow in the existing strict workflow inventory while preserving rejection of any additional workflow.
-
-## Frozen validation evidence
 - exact implementation-head War Room CI `34738136302`: PASS;
 - controlled lawful jq custody workflow `34758553282`, attempt `2`, job `103737047171`: PASS;
-- live workflow checkout and manifest commit: exact implementation SHA `806454c412f12e3ba34fd921cb234c88a3501272`;
-- manifest SHA-256: `8e69050cefb9df413b589133aaadcd1a8f952e1fc0cf94502020dee8b69f8547`;
-- protected result: PASS, one lawful jq fixture source, `secrets_logged=false`;
+- manifest SHA-256 `8e69050cefb9df413b589133aaadcd1a8f952e1fc0cf94502020dee8b69f8547`;
 - runner cleanup: PASS; no Actions artifact created;
-- temporary default-branch bootstrap removed by merged PR #161;
-- post-cleanup canonical main `12c1ad636762b723b925a0e9d7bb2a1463f5cb77`, CI `34763533209`: PASS.
+- temporary bootstrap cleanup PR #161 merged;
+- post-cleanup main CI `34763533209`: PASS;
+- WR-058 independent audit PR #163: `PASS`, no findings;
+- PR #158 merged at exact audited head as canonical merge `a49ed620a6de125975f324bf7c38f399286cefd7`;
+- mandatory canonical-main post-merge canary `34769306210`: `SUCCESS`.
 
-The final evidence-only commit from `806454c412f12e3ba34fd921cb234c88a3501272` to `05aacfce26eb4329aef1b116f2266c322cf3d50c` changes only `.ai/work_helper/HANDOFF.md` and `.ai/work_helper/WR056_RUNTIME_PATH_IMPLEMENTATION.md`.
+## Final disposition
 
-## Current gate
-WR-056 is frozen and AUDIT_READY. Manager assigns WR-058 to independently audit PR #158 exact head `05aacfce26eb4329aef1b116f2266c322cf3d50c` and independently bind the successful live proof to implementation SHA `806454c412f12e3ba34fd921cb234c88a3501272`.
+CLOSED — accepted trusted WR-042 custody runtime bridge.
 
-Do not modify or merge PR #158 while WR-058 is active. Do not rerun custody unless Manager explicitly authorizes remediation validation after a FAIL-family verdict.
+The accepted implementation preserves WR-046 behavior, WR039 / WR-D008 boundaries, secret masking, fail-closed semantics, content-addressed B2 custody with COMPLIANCE retention and Legal Hold, R2 Indefinite Bucket Lock, independent retrieval, three-copy digest/size equality, and runner-local cleanup.
 
-Do not modify research, Auditor, football, ranking, model, or production surfaces. WR-042 and WR-043 remain blocked pending the required gates.
+No Returning-Player source was admitted during WR-056 validation. No 2026 outcome, model/scoring/ranking, or production/user-facing work occurred.
+
+Historical Work Helper evidence remains under `.ai/work_helper/**`. Future source admission authority remains with R&D/Manager under WR-042.

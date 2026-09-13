@@ -4,28 +4,33 @@ HANDOFF
 
 Workflow: V3.1.1 CANONICAL
 
+## Accepted closures
+
+- WR-056 — CLOSED. PR #158 merged at exact audited head; canonical merge `a49ed620a6de125975f324bf7c38f399286cefd7`.
+- WR-058 — CLOSED. Independent verdict `PASS`, no findings; audit PR #163 merged.
+- WR-056 post-merge canonical-main canary `34769306210` — `SUCCESS`.
+
+The accepted runtime bridge remains bounded by the frozen WR-056/WR-058 evidence. Do not rerun lawful custody merely to reconfirm an already accepted gate.
+
 ## Active lanes
-- WR-042 — BLOCKED after fail-closed PR #153 / head `98e32ed106350906a3bad3352099549d1c7f140f`; do not reactivate yet.
+
+- WR-042 — BLOCKED only on WR-057. Historical PR #153 / `98e32ed106350906a3bad3352099549d1c7f140f` remains immutable fail-closed evidence and must not be reused.
 - WR-043 — BLOCKED on a future admitted WR-042 target.
-- WR-054 — temporarily BLOCKED until WR-056 is independently accepted and the overlapping CI surface is released.
+- WR-054 — ASSIGNED / resumed. Reconcile preserved branch tip `13a755d217202b8533ecfe5e2e4fa013f50a3396` and dangling child `2f32468688ac983a4e2d27b09d0f65a739478622` against current main while preserving WR-056 CI behavior.
 - WR-055 — BLOCKED on WR-054.
-- WR-056 — AUDIT_READY on PR #158. Frozen evidence head `05aacfce26eb4329aef1b116f2266c322cf3d50c`; live-proven implementation SHA `806454c412f12e3ba34fd921cb234c88a3501272`.
-- WR-058 — ASSIGNED to Independent Auditor / QA on `wr-058-wr056-runtime-path-audit` against PR #158 exact head `05aacfce26eb4329aef1b116f2266c322cf3d50c`.
+- WR-057 — ASSIGNED to R&D for the `draft_picks.csv` raw-custody/retention rights disposition.
 
-## WR-056 immutable evidence
-- exact implementation-head CI `34738136302`: PASS;
-- controlled lawful jq custody run `34758553282`, attempt `2`, job `103737047171`: PASS;
-- live workflow checkout / manifest implementation SHA `806454c412f12e3ba34fd921cb234c88a3501272`;
-- manifest SHA-256 `8e69050cefb9df413b589133aaadcd1a8f952e1fc0cf94502020dee8b69f8547`;
-- temporary bootstrap cleanup PR #161 merged;
-- canonical main `12c1ad636762b723b925a0e9d7bb2a1463f5cb77` post-cleanup CI `34763533209`: PASS;
-- final PR #158 evidence-only commit after the live-proven SHA changes only `.ai/work_helper/HANDOFF.md` and `.ai/work_helper/WR056_RUNTIME_PATH_IMPLEMENTATION.md`.
+## Parallel routing
 
-PR #158 remains open and must not be modified or merged while WR-058 audits it.
+WR-054 and WR-057 are independent and may run simultaneously:
+- WR-054 writes Manager/shared/workflow-helper/CI surfaces.
+- WR-057 writes only `.ai/research/**`.
 
 ## Next routing
-1. Independent Auditor executes WR-058 and publishes an immutable Auditor report/handoff/PR with PASS-family or FAIL verdict.
-2. On PASS-family, Manager accepts WR-056 and decides merge/canary sequencing; WR-054 may resume only after the shared CI surface is released.
-3. WR-042 still requires both accepted WR-056/WR-058 disposition and the separate `draft_picks.csv` rights disposition identified as WR-057 in `.ai/manager/WR-042.md`; do not create a fresh WR-042 retry until both gates are satisfied.
-4. WR-043 remains blocked until a later WR-042 retry actually admits one immutable no-scoring target.
-5. Do not rerun custody, inspect 2026 outcomes, admit Returning-Player sources, or perform model/scoring/ranking work during WR-058.
+
+1. R&D executes WR-057 and returns one authoritative fail-closed rights/retention disposition to Manager.
+2. Manager resumes WR-054, reconciles the preserved implementation onto current main, runs exact-head Full CI, then activates WR-055 on one immutable target.
+3. After WR-057 acceptance, Manager creates a fresh WR-042 retry branch using the accepted WR-056 custody runtime bridge.
+4. WR-043 activates only if that later WR-042 retry admits one immutable no-scoring target.
+
+No Returning-Player source admission, 2026 outcome inspection, model scoring/tuning, ranking change, or Phase-6 work is authorized outside those explicit future gates.
