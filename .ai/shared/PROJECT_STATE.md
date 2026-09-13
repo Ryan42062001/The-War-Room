@@ -1,14 +1,14 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WORKFLOW V3.1.1 CANONICAL / RETURNING-PLAYER V2 SOURCE-CUSTODY RETRY ACTIVE
+Status: ACTIVE DEVELOPMENT — WORKFLOW V3.1.1 CANONICAL / V3.2 LANE-IDENTITY HARDENING ACTIVE / RETURNING-PLAYER V2 SOURCE-CUSTODY RETRY ACTIVE
 Last verified: 2026-09-13
 Owner: Manager / Architect
-Workflow: V3.1.1 — CANONICAL
+Workflow: V3.1.1 — CANONICAL; WR-054 is a separately audited V3.2 candidate
 
 ## Canonical repository
 Repository: `Ryan42062001/The-War-Room`
 Branch: `main`
-Workflow integration commit: `8a678cc16eac9f9f91da50ce3af7ead729040423`
+Canonical head at WR-054 assignment: `e24df6ab7c76be16b00e590ecab0bf71b0f05f28`
 Fast-path current-work index: `.ai/shared/ACTIVE_TASKS.json` — schema v3, active-only.
 
 ## Workflow V3.1.1 — ACCEPTED / CANONICAL
@@ -17,16 +17,21 @@ Final independently audited implementation:
 - final WR-052 verdict `PASS` via PR #151 / audit head `c687840cacd83e52be58956aafec9f51d8ae3af9`;
 - audit evidence merged at `f26172e3923f94c9eb49eb6bf692f6fe5c676d4d`;
 - exact audited implementation merged at `8a678cc16eac9f9f91da50ce3af7ead729040423`;
-- canonical-main post-merge Full CI/canary `34731656414` — SUCCESS.
+- canonical-main post-merge Full CI/canary `34731656414` — SUCCESS;
+- atomic closure merge `e24df6ab7c76be16b00e590ecab0bf71b0f05f28`.
 
-Canary jobs `103655428837`, `103655443614`, and `103655458755` all passed. This included static state/collision validation, browser determinism stress, WR-026 phone validation, full `npm test`, resilience syntax, and backup/offline lifecycle.
+Historical workflow FAIL evidence remains preserved in PR #149 / #150. Final PR #151 closed both historical HIGH findings without rewriting them; historical LOW `WR-052-AUD-02` remains non-blocking evidence.
 
-WR-051 and WR-052 are CLOSED and intentionally absent from the active-only registry.
+## Workflow V3.2 lane-identity hardening — ACTIVE
+WR-054 is ASSIGNED to Manager on `manager/wr-054-workflow-v32-lane-identity`.
 
-Historical audit evidence remains preserved rather than rewritten:
-- PR #149 — historical WR-052 `FAIL — REMEDIATION REQUIRED`; HIGH `WR-052-AUD-01` and LOW `WR-052-AUD-02`;
-- PR #150 — historical re-audit `FAIL — REMEDIATION REQUIRED`; HIGH `WR-052-REAUD-AUD-01`;
-- final PR #151 independently verified both HIGH findings CLOSED; the historical LOW remains non-blocking evidence.
+The bounded upgrade closes two related gaps:
+- local preflight/finish currently do not fail when the checked-out branch differs from the registry-assigned task branch;
+- static state validation does not yet bind core task-spec lane fields (TARGET BRANCH / EXECUTION MODE / dependency class) back to registry truth.
+
+WR-055 is BLOCKED until WR-054 publishes one immutable exact-head implementation target with Full CI. Independent PASS-family plus a canonical-main canary are required before V3.2 becomes canonical.
+
+This lane is independent of WR-042 and must not alter `.ai/research/**`, source-custody semantics, football model authority, or production behavior.
 
 ## Production ranking authority
 UNCHANGED under WR-D001: FantasyPros Top-20 Experts 2026 PPR ECR primary; broader FantasyPros PPR ECR fallback; ESPN rank/ADP timing only. No custom ranking/model is production-authorized.
@@ -42,7 +47,9 @@ WR-053 returned `PASS` with no findings on WR-046 exact final head `0be4a508d680
 Historical WR-047 and WR-050 FAIL verdicts remain preserved.
 
 ## Active Returning-Player v2 lane
-WR-042 is ASSIGNED for the fresh bounded exact-source custody retry on `wr-042-v2-source-custody-retry`. Historical blocker PR #133 / `1c3c6d768d58aa636194226f16b9822eebc8c19f` remains immutable with 0 sources admitted.
+WR-042 is ASSIGNED for the fresh bounded exact-source custody retry on `wr-042-v2-source-custody-retry`.
+
+Historical blocker PR #133 / `1c3c6d768d58aa636194226f16b9822eebc8c19f` is CLOSED UNMERGED and remains immutable fail-closed evidence with 0 sources admitted.
 
 WR-043 remains BLOCKED until WR-042 publishes one admitted immutable no-scoring custody target.
 
@@ -50,15 +57,17 @@ WR-043 remains BLOCKED until WR-042 publishes one admitted immutable no-scoring 
 WR-048 / WR-049 remain CLOSED / ACCEPTED / MERGED. Their browser/persistence protections remain in Full CI.
 
 ## Current roles
-- Manager: routing/integration owner under canonical V3.1.1
+- Manager: WR-054 ASSIGNED for bounded V3.2 lane-identity hardening; normal routing/integration authority retained
 - Builder: IDLE
 - Draft Strategy: IDLE
 - R&D: WR-042 ASSIGNED
-- Auditor: WR-043 BLOCKED on WR-042 admitted target
+- Auditor: WR-043 BLOCKED on WR-042; WR-055 BLOCKED on WR-054
 - Work Helper: IDLE / available for cross-layer escalation
 
 ## Next gates
-1. R&D executes only the bounded WR-042 exact-source custody retry under WR039 / WR-D008 and accepted custody capability.
-2. If WR-042 admits and freezes one valid immutable no-scoring custody target, route that exact target to WR-043 independent audit.
-3. If custody/admission cannot satisfy contract, fail closed without weakening the contract.
-4. Model scoring, tuning, outcome use, production ranking changes, and Phase 6 remain forbidden until later explicit authorization.
+1. R&D executes WR-042 independently.
+2. Manager implements WR-054 without touching the WR-042 research lane.
+3. WR-054 exact-head Full CI -> activate WR-055 independent audit.
+4. WR-055 PASS-family -> merge exact audited WR-054 head -> canonical-main canary -> V3.2 closure.
+5. WR-042 admitted immutable target -> activate WR-043.
+6. Model scoring, tuning, outcome use, production ranking changes, and Phase 6 remain forbidden until later explicit authorization.
