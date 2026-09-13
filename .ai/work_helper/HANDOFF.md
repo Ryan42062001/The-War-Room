@@ -2,54 +2,54 @@
 
 HANDOFF
 
-Task ID: WR-046  
+Task ID: WR-056  
 Role: Work Helper / Super Troubleshooter  
-Status: COMPLETE — WR-053 INDEPENDENT AUDIT PASS / MANAGER INTEGRATION  
-Branch: `wr-046-custody-capability-recovery`  
-PR: `#135`  
-Exact audited implementation/evidence head: `0be4a508d68009c89ef318738acb286233a3a850`  
-Fresh live implementation head: `2739f4240600c726f880870051d6874cfa1e408b`  
-WR-053 audit head: `63d685686a6abe5ccebd8a31de277771798c95d3`  
-WR-053 audit PR: `#146`  
-WR-053 verdict: `PASS`
+Assignment mode: WORKFLOW / PROTECTED-RUNTIME TROUBLESHOOTING  
+Status: DIAGNOSIS COMPLETE — REMEDIATION SURFACE EXPANSION REQUIRED  
+Canonical base: `5b3545a84365c336fb58fc706a1c89897efd4d77`  
+Branch: `wr-056-runtime-path-remediation`
 
-## Accepted result
+## Root cause
 
-WR-053 independently closed historical `WR-050-AUD-01` by verifying that the same live provider job first bound the current least-privilege credential identities to the accepted privacy-safe anchors and then exercised the unchanged B2/R2 custody proof.
+WR-042 did not fail because accepted B2/R2 custody was unavailable. It failed because the repository exposes only a WR-046 branch-locked, jq-fixture-hardcoded secret-bearing workflow and fixture-hardcoded proof helpers. No trusted manifest-driven bridge exists; the R&D/local runtime correctly has no custody secrets; the connected GitHub tool surface cannot dispatch a protected workflow; and WR-042 lacked workflow/script write authority.
 
-Fresh live proof run `34723578709` / live job `103633709551` passed with:
-- B2 current credential anchor matched accepted scope evidence;
-- R2 object-credential anchor matched accepted scope evidence;
-- Cloudflare config-token ID matched accepted scope evidence;
-- lawful fixture asset ID `453012755`, SHA-256 `01e9619236573939473c0f2eb2c5c38dc0f066fbdc89a5357a6f3f2954e00eed`, byte size `14380`;
-- B2 `COMPLIANCE` retention and Legal Hold `ON`;
-- R2 Bucket Lock `Indefinite` with bucket-wide coverage;
-- direct B2/R2 retrieval with exact SHA-256 and byte-size equality;
-- no reusable secret disclosure;
-- exactly one fresh live-provider execution.
+Historical PR #153 correctly failed closed and remains closed unmerged.
 
-Final-head validation at `0be4a508d68009c89ef318738acb286233a3a850` also passed:
-- WR-046 Custody Fixture Proof `34723691232` — SUCCESS, provider jobs skipped;
-- War Room CI `34723691235` — SUCCESS.
+## Required expansion
 
-Detailed evidence:
-- `.ai/work_helper/WR-046_CREDENTIAL_SCOPE_ATTESTATION.md`
-- `.ai/work_helper/WR-046_CURRENT_CREDENTIAL_LIVE_PROOF.md`
-- `.ai/auditor/WR-053_AUDIT.md`
+Manager should authorize exactly:
 
-## Boundary integrity
+- `.github/workflows/wr042-source-custody.yml`;
+- `scripts/custody/run_source_manifest_custody.py`;
+- narrow parameterization of:
+  - `scripts/custody/prove_b2_r2_custody.py`;
+  - `scripts/custody/ensure_b2_custody_object.py`;
+- `scripts/custody/test_source_manifest_custody.py`;
+- only the test-registration change in `.github/workflows/ci.yml`.
 
-Returning-Player source admission/parsing: NO  
-2026 regular-season outcome inspection: NO  
-Model fitting/scoring/tuning/evaluation: NO  
-Ranking work: NO  
-Production/user-facing change: NO  
-WR039 / WR-D008 weakening: NO
+Purpose: a default-branch-controlled, manually dispatched, hashed-manifest-as-data bridge using protected credentials and the unchanged accepted custody semantics.
 
-## Other completed Work Helper history
+Detailed diagnosis: `.ai/work_helper/WR056_RUNTIME_PATH_DIAGNOSIS.md`.
 
-WR-044 and WR-048 browser/persistence troubleshooting remain completed historical evidence. Their durable lessons are retained in `.ai/work_helper/TROUBLESHOOTING_LOG.md` and task-specific diagnosis files.
+## Required validation
 
-## Next gate
+- deterministic offline manifest/security/failure/cleanup tests;
+- WR-046 fixture regression unchanged;
+- exactly one controlled live validation with the lawful jq fixture through the new bridge;
+- no Returning-Player source in WR-056;
+- independent WR-058 audit of the immutable implementation/live-evidence head.
 
-Manager may integrate the exact audited WR-046 head while preserving it as an immutable parent, reconcile WR-046 / WR-050 / WR-053, and then issue only the bounded WR-042 exact-source custody retry. WR-043 remains blocked until WR-042 later produces an admitted immutable no-scoring source-custody target.
+## Boundaries and blockers
+
+Accepted WR-046 / WR-053 behavior remains valid: **YES**  
+WR039 / WR-D008 change required: **NO**  
+Source admitted/downloaded/parsed: **NO**  
+2026 outcomes inspected: **NO**  
+Model/scoring/ranking/production work: **NO**  
+Secrets accessed/exposed: **NO**
+
+Separate blocker: `draft_picks.csv` rights disposition remains WR-057. WR-043 remains blocked.
+
+## Next action
+
+Manager / Architect should approve the exact surface expansion above and return WR-056 to Work Helper for implementation. After implementation and one controlled non-source live validation, activate Independent Auditor / QA for WR-058. Do not activate WR-043.
