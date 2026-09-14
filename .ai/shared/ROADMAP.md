@@ -17,16 +17,16 @@ Owner: Manager / Architect
 - WR-056 — CLOSED / trusted custody runtime bridge accepted and merged.
 - WR-057 — CLOSED / `RAW_CUSTODY_NOT_ESTABLISHED — EXCLUDE_SOURCE` for PFR-derived nflverse `draft_picks.csv`.
 - WR-058 — CLOSED / independent custody-bridge audit PASS.
-- WR-059 — BLOCKED / evidence remediation waits for an independently accepted retained-version read path.
+- WR-059 — BLOCKED / evidence remediation waits for independently accepted retained-version read infrastructure.
 - WR-061 — CLOSED / immutable fail-closed historical checkpoint, PR #176 unmerged.
-- WR-062 — CLOSED / never activated because WR-061 never produced a successful live proof.
-- WR-063 — ASSIGNED / Work Helper resumes in `WORK_MODE_HIGH_VALUE` on PR #178 using a separately provisioned dedicated B2 read-only credential. The next protected run must independently prove the actual bucket/prefix/capability boundary before any version listing/download and then live-prove all four authoritative objects.
-- WR-064 — BLOCKED on successful WR-063 four-object protected proof / fresh independent audit gate.
+- WR-062 — CLOSED / never activated.
+- WR-063 — AUDIT_READY / PR #178 frozen at `9db29b082cb61b5ef902b56bb5c745fc8ee739b2`; protected proof at implementation head `b2c193cfc11811b32039d00480351ac4f5bc98a1`, run `34906157295`, passed all four authoritative objects with zero provider mutations, cleanup PASS, and zero raw artifacts.
+- WR-064 — ASSIGNED / fresh Independent Auditor audit of exact frozen WR-063 target.
 - WR-060 — BLOCKED on WR-059 / fresh independent audit of the eventual complete source-snapshot/cohort remediation target.
 
-Sequence: `resume WR-063 with dedicated B2 read credential -> successful protected four-object proof -> WR-064 independent audit -> exact WR-063 integration + main canary -> resume WR-059 -> WR-060 independent evidence re-audit`.
+Sequence: `WR-064 independent audit -> exact WR-063 integration + mandatory main canary -> resume WR-059 -> WR-060 independent evidence re-audit`.
 
-The dedicated B2 read credential must prove bucket `War-Room-Custody-Primary`, prefix `custody/sha256/` or a strictly narrower compatible boundary, `listFiles` + `readFiles`, and no mutation capability. Existing shared custody credentials remain unchanged and are not used by the WR-063 B2 read path.
+The dedicated B2 read credential proved the required bucket/prefix boundary, `listFiles` + `readFiles`, and absence of mutation authority. Existing shared mutation-capable custody credentials were not used by WR-063.
 
 `draft_picks.csv` remains excluded and no silent replacement provider is authorized. A later versioned contract/feature-schema governance gate remains mandatory before any model path could proceed without draft-capital semantics.
 
