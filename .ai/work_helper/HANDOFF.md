@@ -13,7 +13,7 @@ Branch: `wr-061-retained-object-read-path`
 
 The missing non-mutating retained-object path is implemented as a separate permanent
 workflow and standalone retriever. It is hard-coded to the four WR-061 identities,
-uses only B2/R2 `GetObject`, verifies every retrieval immediately, isolates provider
+uses only B2 authorization/download GETs and R2 `GetObject`, verifies every retrieval immediately, isolates provider
 secrets from the later consumer step, publishes no raw artifact, and always cleans
 runner-temporary bytes. Existing mutation-capable custody workflows/scripts were not
 modified or invoked.
@@ -32,6 +32,11 @@ Detailed evidence: `.ai/work_helper/WR061_RETAINED_OBJECT_READ_PATH.md`.
 The final `[wr061-live-proof]` push is the protected provider validation. Because its
 run/job IDs are created after the immutable triggering commit, Manager must bind the
 Actions IDs and exact PR head externally before WR-062 activation.
+
+The first exact-head protected run `34889550688` / job `104128551088` failed closed
+on the B2 S3-compatibility transport, cleaned temporary state, and created no artifact.
+That run was not retried. The subsequent candidate uses Backblaze's native v4
+authorization/download GET sequence; independent audit must inspect both lineages.
 
 ## Preservation
 

@@ -9,12 +9,16 @@ under RUNNER_TEMP for a later no-credentials consumer step and are never printed
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import os
 import re
 import shutil
 import subprocess
+import urllib.error
+import urllib.parse
+import urllib.request
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Mapping, Sequence
@@ -44,6 +48,8 @@ EXPECTED_B2_BUCKET = "War-Room-Custody-Primary"
 EXPECTED_R2_BUCKET = "war-room-custody-backup"
 B2_ENDPOINT_RE = re.compile(r"^https://s3\.([a-z0-9-]+)\.backblazeb2\.com/?$")
 R2_ENDPOINT_RE = re.compile(r"^https://[0-9a-f]{32}\.r2\.cloudflarestorage\.com/?$")
+B2_DOWNLOAD_RE = re.compile(r"^https://f[0-9]+\.backblazeb2\.com/?$")
+B2_AUTHORIZE_URL = "https://api.backblazeb2.com/b2api/v4/b2_authorize_account"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 SECRET_NAMES = (
     "WR_CUSTODY_B2_KEY_ID",
@@ -173,6 +179,56 @@ def get_object(*, provider: str, endpoint: str, region: str, bucket: str,
         raise ContractError(f"{provider} GetObject failed with exit code {result.returncode}")
 
 
+def b2_authorize_and_download(*, config: Mapping[str, str], item: RetainedObject,
+                              destination: Path) -> None:
+    basic = base64.b64encode(
+        f"{config['WR_CUSTODY_B2_KEY_ID']}:{config['WR_CUSTODY_B2_APPLICATION_KEY']}".encode()
+    ).decode("ascii")
+    authorize_request = urllib.request.Request(
+        B2_AUTHORIZE_URL,
+        headers={"Authorization": f"Basic {basic}", "Accept": "application/json"},
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(authorize_request, timeout=60) as response:
+            payload = json.loads(response.read())
+    except urllib.error.HTTPError as exc:
+        raise ContractError(f"B2 authorization failed with HTTP {exc.code}") from exc
+    except (urllib.error.URLError, json.JSONDecodeError) as exc:
+        raise ContractError("B2 authorization failed closed") from exc
+    storage = ((payload.get("apiInfo") or {}).get("storageApi") or {})
+    allowed = storage.get("allowed") or {}
+    buckets = allowed.get("buckets") or []
+    bucket_names = [value.get("name") for value in buckets if isinstance(value, dict)]
+    capabilities = set(allowed.get("capabilities") or [])
+    if bucket_names != [EXPECTED_B2_BUCKET] or allowed.get("namePrefix") != "custody/":
+        raise ContractError("B2 authorization is outside the exact bucket/prefix boundary")
+    if "readFiles" not in capabilities:
+        raise ContractError("B2 authorization lacks readFiles")
+    download_url = str(storage.get("downloadUrl") or "").rstrip("/")
+    token = str(storage.get("authorizationToken") or "")
+    if not B2_DOWNLOAD_RE.fullmatch(download_url) or not token:
+        raise ContractError("B2 authorization returned an invalid download boundary")
+    url = (
+        f"{download_url}/file/{urllib.parse.quote(EXPECTED_B2_BUCKET, safe='')}"
+        f"/{urllib.parse.quote(item.custody_key, safe='/')}"
+    )
+    request = urllib.request.Request(
+        url,
+        headers={"Authorization": token, "Accept": "application/octet-stream"},
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=120) as response, destination.open("wb") as output:
+            shutil.copyfileobj(response, output, length=1024 * 1024)
+    except urllib.error.HTTPError as exc:
+        destination.unlink(missing_ok=True)
+        raise ContractError(f"B2 download failed with HTTP {exc.code}") from exc
+    except (urllib.error.URLError, OSError) as exc:
+        destination.unlink(missing_ok=True)
+        raise ContractError("B2 download failed closed") from exc
+
+
 def execute(output_dir: Path, report_path: Path) -> dict:
     validate_allowlist()
     config = require_environment()
@@ -184,8 +240,6 @@ def execute(output_dir: Path, report_path: Path) -> dict:
     report_path.unlink(missing_ok=True)
     output_dir.mkdir(parents=True, mode=0o700)
     report_path.parent.mkdir(parents=True, exist_ok=True)
-    b2_match = B2_ENDPOINT_RE.fullmatch(config["WR_CUSTODY_B2_ENDPOINT"])
-    assert b2_match
     results: list[dict] = []
     try:
         for item in ALLOWLIST:
@@ -198,13 +252,7 @@ def execute(output_dir: Path, report_path: Path) -> dict:
             }
             b2_path = output_dir / f"{item.season}.b2.raw"
             r2_path = output_dir / f"{item.season}.r2.raw"
-            get_object(
-                provider="B2", endpoint=config["WR_CUSTODY_B2_ENDPOINT"],
-                region=b2_match.group(1), bucket=config["WR_CUSTODY_B2_BUCKET"],
-                key=item.custody_key, destination=b2_path,
-                access_key=config["WR_CUSTODY_B2_KEY_ID"],
-                secret_key=config["WR_CUSTODY_B2_APPLICATION_KEY"],
-            )
+            b2_authorize_and_download(config=config, item=item, destination=b2_path)
             row["b2"] = verify_file(b2_path, item, "B2")
             get_object(
                 provider="R2", endpoint=config["WR_CUSTODY_R2_ENDPOINT"],
@@ -223,7 +271,10 @@ def execute(output_dir: Path, report_path: Path) -> dict:
             "task_id": "WR-061",
             "result": "PASS",
             "objects": results,
-            "provider_operations": {"B2": ["GetObject"], "R2": ["GetObject"]},
+            "provider_operations": {
+                "B2": ["b2_authorize_account", "b2_download_file_by_name"],
+                "R2": ["GetObject"],
+            },
             "provider_mutation_operations": 0,
             "raw_storage": "runner-temporary-only",
             "raw_actions_artifacts": 0,

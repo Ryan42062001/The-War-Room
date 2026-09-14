@@ -23,8 +23,10 @@ WR-061 adds a separate path with these invariants:
 1. The four 2013–2016 asset IDs, SHA-256 digests, byte sizes, buckets, and
    content-addressed keys are compiled into the reviewed retriever. There is no
    runtime object, URL, key, digest, size, prefix, bucket, or season input.
-2. The retriever invokes only `aws s3api get-object`, once per provider per exact
-   object. It neither imports nor invokes any existing custody helper.
+2. The retriever uses Backblaze v4 `b2_authorize_account` plus
+   `b2_download_file_by_name`, and R2 `aws s3api get-object`, once per exact object.
+   Every network request is GET-only. It neither imports nor invokes an existing
+   custody helper.
 3. Provider secrets exist only in the retrieval step environment. The AWS subprocess
    receives a minimal environment; stdout and provider stderr are not relayed.
 4. Every B2 and R2 file is hashed and sized immediately after retrieval. A mismatch
@@ -53,7 +55,7 @@ Every key is exactly `custody/sha256/<SHA-256>/raw`.
 
 The focused suite proves mutated key/digest/size/asset and duplicate identities are
 rejected; verification accepts only exact bytes; command construction is only
-`aws s3api get-object`; credentials are absent from command arguments; mutating
+GET-only Backblaze requests and R2 `aws s3api get-object`; credentials are absent from command arguments; mutating
 operations and old helpers are absent; provider failure cleans partial bytes; secrets
 are step-scoped; no artifact upload exists; and cleanup is unconditional.
 
@@ -69,6 +71,17 @@ node scripts/workflow-state-check.mjs
 
 The release guard accepted exactly four approved permanent workflows and rejected a
 deliberately staged unapproved fifth workflow, which was then removed.
+
+## First protected-path finding and remediation
+
+Exact-head run `34889550688`, job `104128551088`, failed closed before any R2
+request when the first implementation attempted B2 through its S3-compatibility
+endpoint. Cleanup passed and no artifact was created. The credential is the accepted
+Backblaze application key whose actual scope was established through Backblaze v4;
+the transport was corrected to the provider-native GET-only sequence already proven
+for that credential family: `b2_authorize_account` followed by
+`b2_download_file_by_name`. No object identity, provider authority, custody semantic,
+or R2 path changed. The failed run is preserved and is not rerun.
 
 ## Protected live-proof contract
 

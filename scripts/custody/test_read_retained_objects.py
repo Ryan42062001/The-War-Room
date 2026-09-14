@@ -86,6 +86,16 @@ def test_get_command_is_exactly_read_only() -> None:
     assert "SECRET_SENTINEL" not in captured[0]
 
 
+def test_b2_transport_is_get_only() -> None:
+    tree = ast.parse(MODULE_PATH.read_text(encoding="utf-8"))
+    request_methods = [
+        node.value.value for node in ast.walk(tree)
+        if isinstance(node, ast.keyword) and node.arg == "method"
+        and isinstance(node.value, ast.Constant)
+    ]
+    assert request_methods and set(request_methods) == {"GET"}
+
+
 def test_static_provider_boundary() -> None:
     source = MODULE_PATH.read_text(encoding="utf-8")
     tree = ast.parse(source)
@@ -124,7 +134,7 @@ def test_cleanup_on_provider_failure() -> None:
         raw = Path(temp) / "raw"
         report = Path(temp) / "report.json"
         with patch.dict(os.environ, environment, clear=True), patch.object(
-            read, "get_object", side_effect=read.ContractError("synthetic GET failure")
+            read, "b2_authorize_and_download", side_effect=read.ContractError("synthetic GET failure")
         ):
             expect_contract(lambda: read.execute(raw, report), "synthetic GET failure")
         assert not raw.exists()
@@ -158,6 +168,7 @@ def main() -> int:
     test_exact_allowlist()
     test_verifier()
     test_get_command_is_exactly_read_only()
+    test_b2_transport_is_get_only()
     test_static_provider_boundary()
     test_cleanup_on_provider_failure()
     test_workflow_security_contract()
