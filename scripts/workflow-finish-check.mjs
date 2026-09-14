@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
+import { branchIdentityError } from './workflow-task-contract.mjs';
 
 function parseArgs() {
   const out = { task: null, target: null, prBody: null, json: false };
@@ -54,6 +55,8 @@ if (task.user_action_required) throw new Error(`${task.task_id} still requires u
 
 const target = resolveTarget(cwd, options.target, registry.canonical_branch || 'main');
 const head = git(cwd, ['rev-parse', 'HEAD']);
+const branch = git(cwd, ['branch', '--show-current'], true) || '(detached)';
+const laneError = branchIdentityError(task, branch);
 const branchFiles = lines(git(cwd, ['diff', '--name-only', `${target}...HEAD`], true));
 let targetAdvanceFiles = [];
 if (task.assignment_main_sha && git(cwd, ['rev-parse', '--verify', task.assignment_main_sha], true)) {
@@ -70,6 +73,7 @@ const prBody = validatePrBody(options.prBody, Boolean(task.external_authority_ev
 
 let disposition = task.audit_required ? 'AUDIT_READY_CANDIDATE' : 'MANAGER_REVIEW_READY_CANDIDATE';
 const blockers = [];
+if (laneError) blockers.push(`Lane identity: ${laneError}`);
 if (!branchFiles.length) blockers.push('No task-branch changes detected relative to target');
 if (forbidden.length) blockers.push(`Forbidden paths changed: ${forbidden.join(', ')}`);
 if (outsideAllowlist.length) blockers.push(`Files outside allowlist: ${outsideAllowlist.join(', ')}`);
@@ -82,6 +86,9 @@ if (blockers.length) disposition = 'REWORK_REQUIRED';
 const result = {
   task_id: task.task_id,
   head, target,
+  assigned_branch: task.branch ?? null,
+  branch,
+  branch_identity_error: laneError,
   target_advance_class: advance,
   audit_required: Boolean(task.audit_required),
   external_authority_evidence_required: Boolean(task.external_authority_evidence_required),
@@ -100,6 +107,8 @@ const result = {
 if (options.json) console.log(JSON.stringify(result, null, 2));
 else {
   console.log(`WORKFLOW FINISH CHECK — ${result.task_id}`);
+  console.log(`assigned branch: ${result.assigned_branch || '<none>'}`);
+  console.log(`branch: ${result.branch}`);
   console.log(`target advance: ${result.target_advance_class}`);
   console.log(`handoff: ${result.handoff_exists ? 'present' : 'missing'}`);
   console.log(`audit required: ${result.audit_required ? 'YES' : 'NO'}`);
