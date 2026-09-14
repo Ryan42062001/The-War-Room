@@ -2,7 +2,7 @@
 
 ## Status
 
-Implementation complete; protected provider proof pending.
+Implementation published on PR #178; protected provider proof pending.
 
 ## Root cause and remediation design
 
