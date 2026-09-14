@@ -2,42 +2,48 @@
 
 HANDOFF
 
-Task ID: WR-057
+Task ID: WR-042
 Role: R&D
-Status: COMPLETE — MANAGER REVIEW REQUIRED
-Canonical main at task refresh: `98d0ec3cc65840669aa06b93336132923cbdbddf`
-Branch: `wr-057-draft-picks-rights-disposition`
-Execution mode: `WORK_MODE_PREFERRED`; normal chat/web/repository fallback used
-Primary artifact: `.ai/research/WR057_DRAFT_PICKS_RIGHTS_DISPOSITION.md`
+Status: COMPLETE — INDEPENDENT AUDIT REQUIRED
+Canonical main at task refresh: `7f1200388e2f6b7565b3d2aaf1ba407f006c9030`
+Branch: `wr-042-v2-source-custody-retry-2`
+PR: [#168](https://github.com/Ryan42062001/The-War-Room/pull/168)
+Manifest implementation commit: `cc9005ae4bd9065cf80f1c184f31974904165c54`
+Manifest SHA-256: `d2196293ff34543b063e737efb175f579967bf37f5dc91b41c08dd45dfe44d26`
+Successful custody run/job: [34871882486 / 104069521779](https://github.com/Ryan42062001/The-War-Room/actions/runs/34871882486/job/104069521779)
 
 ## Disposition
 
-**`RAW_CUSTODY_NOT_ESTABLISHED — EXCLUDE_SOURCE`**
+**PASS — 15 exact rights-eligible source instances admitted to the no-scoring custody snapshot.**
 
-The current authoritative evidence does not establish the full upstream rights chain required to retain the PFR-derived nflverse `draft_picks.csv` bytes as an independently auditable source for later predictive-model research.
+- 14 nflverse player-summary CSV assets covering 2012–2025.
+- 1 exact nflverse players metadata asset, separately versioned after upstream replacement.
+- All passed exact provider acquisition, pre-custody digest/size checks, B2 COMPLIANCE plus Legal Hold, R2 Indefinite Bucket Lock, independent retrieval, and three-copy equality.
+- Current credential binding passed; secrets remained masked.
+- Runner-local bytes/evidence were removed and no Actions artifact became evidence authority.
 
-Key evidence:
-- nflverse-data is published under CC BY 4.0, but the license grants only rights the licensor has authority to grant and preserves third-party-rights limitations;
-- nflreadr states accessed NFL data belong to their respective owners and are governed by those owners' terms;
-- nflverse identifies `draft_picks` as provided by / courtesy of Pro Football Reference;
-- Sports Reference's current Terms expressly restrict using Site data for AI/ML training and for machine-learning methods that predict/classify/label/score;
-- no authoritative evidence was found of separate upstream permission covering War Room's required private raw retention, Auditor access, derived minimal-column retention, and intended predictive-model use.
+## Exclusion
 
-This is a conservative research-governance finding, not legal advice and not a declaration that historical draft facts are legally unusable.
+`draft_picks.csv` remains excluded under accepted WR-057. It was not acquired, downloaded, parsed, custodied, used, or replaced with another provider. Draft-capital semantics require a later Manager-controlled contract/feature-schema versioning gate.
 
 ## Boundaries
 
-Returning-Player source downloaded/admitted/custodied: NO
-`draft_picks.csv` parsed: NO
-2026 regular-season outcomes inspected: NO
+2026 outcomes inspected: NO
+Source parsing/model input construction: NO
 Model fit/score/tune/compare/evaluate: NO
-Outcome join: NO
-Ranking/recommendation/production changes: NO
-WR-039 / WR-D008 semantics changed: NO
+Outcome joins: NO
+Rankings/recommendations/production changes: NO
 Phase-6 work: NO
+Frozen WR-021/WR-023 modified: NO
+WR039/WR-D008 semantics changed: NO
+
+## Primary artifacts
+
+- `.ai/research/WR042_V2_SOURCE_CUSTODY_SNAPSHOT.md`
+- `.ai/research/WR042_V2_SOURCE_RIGHTS_CUSTODY_MATRIX.md`
+- `.ai/research/generated/WR042_SOURCE_CUSTODY_MANIFEST.json`
+- `.ai/research/generated/WR042_V2_SOURCE_CUSTODY_RESULT.json`
 
 ## Next action
 
-Manager / Architect reviews and accepts or rejects the WR-057 disposition. Until Manager accepts it, WR-042 remains BLOCKED. If accepted, `draft_picks.csv` must remain excluded from custody/use; any future draft-capital source/schema requires the appropriate versioned contract and governance gates. WR-057 does not self-activate WR-042 or WR-043.
-
-Exact immutable branch head and PR are recorded at publication and must not be inferred from this committed handoff because adding a self-reference would move the target.
+Manager / Architect should freeze the final immutable PR #168 head and activate Independent Auditor / QA for WR-043 against that exact head. WR-042 does not proceed to protocol or scoring and does not self-activate WR-043.
