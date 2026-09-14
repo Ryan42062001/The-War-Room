@@ -10,13 +10,13 @@ Historical WR-042 PR #168 remains closed unmerged after WR-043 `FAIL — REMEDIA
 
 WR-061 is a closed immutable fail-closed checkpoint; WR-062 was never activated.
 
-## WR-063 successful completion
+## WR-063 / WR-064 accepted closure
 
-WR-063 PR #178 is frozen for independent audit at exact final head:
+WR-063 exact audited implementation target:
 
 `9db29b082cb61b5ef902b56bb5c745fc8ee739b2`
 
-Successful protected live-proof implementation head:
+Successful protected proof implementation head:
 
 `b2c193cfc11811b32039d00480351ac4f5bc98a1`
 
@@ -26,40 +26,38 @@ Protected proof authority:
 - preflight job `104183183462` — PASS;
 - protected job `104183220181` — PASS.
 
-The dedicated B2 key passed provider-issued bucket `War-Room-Custody-Primary`, prefix `custody/sha256/`, required `listFiles`/`readFiles`, and no-mutation gates before listing/downloading. Shared mutation-capable B2 custody credentials were not used.
+WR-064 independently audited exact PR #178 head `9db29b08...` and returned `PASS` with no findings. Audit PR #182 exact head: `3c25c4af7b582596d039f3798245e71b4b7a3fed`.
 
-All four authoritative 2013–2016 objects passed exact-name version discovery, immutable-ID B2 retrieval, exact-key R2 retrieval, authoritative SHA-256/byte-size verification, and B2/R2 equality. Provider mutation operations: `0`. Consumer provider credentials: absent. Cleanup: PASS. Raw Actions artifacts: `0`.
+Audit evidence merged at `4b3f5c6a2afa6ecc11baafc8bfcbe820a714dd94`.
 
-For 2013, provider metadata shows one latest exact-name `upload` version and immutable-ID retrieval reproduces the authoritative bytes. Missing retained upload, current hide marker, and incorrect custody key are ruled out. The historical by-name HTTP 404 transport cause remains `UNDETERMINED_FROM_HISTORICAL_STATUS_ONLY`; no unsupported cause is asserted.
+Manager then integrated only exact audited WR-063 head `9db29b08...`; canonical integration commit:
 
-Manager independently compared proof head `b2c193cf...` with final PR head `9db29b08...`. The sole later commit changes only `.ai/work_helper/HANDOFF.md` and `.ai/work_helper/WR063_RETAINED_VERSION_READ_RECOVERY.md`; no implementation/runtime file changed after the successful proof.
+`8a75f4a712e17bf3b5e91527fa6047b6bb107eb5`
 
-Final-head validation:
+Mandatory canonical-main canary War Room CI `34908351788` completed SUCCESS. Governance passed including WR-063 retained-version boundary coverage, and full tests passed browser determinism, phone decision view, `npm test`, resilience, and backup/offline reload.
 
-- War Room CI `34906412868` — SUCCESS;
-- WR-046 Custody Fixture Proof `34906412744` — SUCCESS;
-- WR-063 ordinary PR run `34906412756` — contract preflight SUCCESS, protected job skipped by trigger design.
+WR-063 and WR-064 are accepted and CLOSED.
 
 ## Active lanes
 
 - WR-042 — BLOCKED on WR-059.
-- WR-059 — BLOCKED on WR-064 acceptance, exact WR-063 integration, and canonical-main canary.
+- WR-059 — ASSIGNED to R&D; resume bounded source-snapshot + cohort remediation.
 - WR-060 — BLOCKED on eventual WR-059 immutable evidence target.
-- WR-063 — AUDIT_READY at exact PR #178 head `9db29b082cb61b5ef902b56bb5c745fc8ee739b2`.
-- WR-064 — ASSIGNED to Independent Auditor / QA on `wr-064-retained-object-version-read-audit`.
 
-## Routing sequence
+## WR-059 resume contract
 
-1. Auditor independently executes WR-064 against exact frozen PR #178 head `9db29b08...` and protected proof run/job evidence.
-2. Auditor publishes only `.ai/auditor/**` and returns one canonical verdict.
-3. PASS-family permits Manager to merge only exact audited WR-063 head `9db29b08...`.
-4. WR-063 requires mandatory canonical-main post-merge canary.
-5. Only after accepted canary may Manager resume WR-059.
-6. Completed WR-059 still requires WR-060 independent re-audit.
+R&D may use the accepted retained-version read infrastructure only for no-scoring evidence reconstruction. It must preserve the exact 15 historical custody identities, keep `draft_picks.csv` excluded with no substitute provider, and fail closed on any retained-byte identity mismatch.
+
+Required outputs remain:
+
+1. complete versioned WR-039-compliant source snapshot with deterministic `source_snapshot_id` and canonical hash; and
+2. deterministic no-scoring cohort/source-eligibility artifact with stable ordered keys, duplicate rejection, full declared coverage, source lineage, `cohort_version`, and canonical digest.
+
+R&D writes only `.ai/research/**` and returns one immutable WR-059 PR/head. Manager then freezes that exact target and activates WR-060 fresh independent re-audit.
 
 ## Boundaries
 
-No upstream reacquisition, provider mutation, credential-value disclosure, 2026 regular-season outcomes, target joins, model fitting/scoring/tuning/comparison/evaluation, rankings, production changes, or Phase-6 work.
+No upstream source-byte reacquisition, provider mutation, credential-value disclosure, 2026 regular-season outcomes, target joins, model fitting/scoring/tuning/comparison/evaluation, rankings, production changes, or Phase-6 work.
 
 ## Manager transaction rule
 
