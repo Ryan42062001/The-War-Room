@@ -92,6 +92,9 @@ jobs:
           PY
       - name: Publish privacy-safe retained-version evidence
         run: |
+          echo 'WR-063 privacy-safe provider evidence follows:'
+          cat "$RUNNER_TEMP/wr063-report.json"
+          cat "$RUNNER_TEMP/wr063-boundary.json"
           {
             echo '### WR-063 protected retained-version proof'
             echo
