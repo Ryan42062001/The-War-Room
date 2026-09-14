@@ -6,7 +6,7 @@ Task ID: WR-063
 
 Role: Work Helper / Super Troubleshooter / Cross-Functional Operator
 
-Status: IMPLEMENTED — PROTECTED LIVE PROOF PENDING
+Status: FAIL CLOSED — EXISTING B2 CREDENTIAL LACKS VERSION-LIST CAPABILITY
 
 Starting canonical main: `a37207dbdfc33b37e13b0518232f17106a25a1df`
 
@@ -26,7 +26,17 @@ Detailed evidence: `.ai/work_helper/WR063_RETAINED_VERSION_READ_RECOVERY.md`.
 - focused WR-063 regression suite: PASS;
 - release-candidate guard with the Manager-approved permanent workflow: PASS;
 - staged unapproved additional workflow rejection: PASS;
-- protected live proof: pending exact implementation head.
+- PR: #178;
+- executed implementation head: `15a35b3626929090b374eff5fdf4da4d0dfd32ce`;
+- protected run/job: `34901593729` / `104168617065`;
+- contract preflight job `104168574295`: PASS;
+- B2 authorization: PASS, then fail closed because provider-issued capabilities
+  omit `listFiles`;
+- B2 version-list/read operations: 0 / 0;
+- R2 HEAD/GET operations: 0 / 0;
+- provider mutations: 0;
+- cleanup: PASS;
+- raw Actions artifacts: 0.
 
 ## Boundaries
 
@@ -44,7 +54,8 @@ Model/scoring/ranking/production work: **NO**
 
 ## Next gate
 
-Freeze the exact implementation head, obtain one complete protected four-object
-proof, record provider-issued version evidence and CI, then return the immutable
-PR/head to Manager for WR-064 Independent Auditor / QA activation. Do not merge or
-self-certify.
+Return the immutable fail-closed PR/head to Manager. Do **not** activate WR-064:
+the required four-object proof does not exist. Manager must decide whether to
+authorize a separately governed addition of Backblaze `listFiles` to the exact
+credential or close retained-version reconstruction as unprovable. WR-063 did not
+change credential scope and does not self-certify.
