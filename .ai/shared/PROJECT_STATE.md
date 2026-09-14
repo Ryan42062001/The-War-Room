@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / WR-043 FAIL ACCEPTED / WR-059 REMEDIATION ACTIVE
+Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / WR-059 BLOCKED ON GET-ONLY READ-PATH GATE
 Last verified: 2026-09-14
 Owner: Manager / Architect
 Workflow: V3.2 CANONICAL
@@ -8,25 +8,28 @@ Workflow: V3.2 CANONICAL
 ## Current accepted baseline
 
 Repository: `Ryan42062001/The-War-Room`
-Canonical main after WR-043 audit evidence merge: `60628ac9ea671ad1ecdb0c26f8ad200e8afed19c`.
+Canonical main before this routing transaction: `f77af0040c9c0c5413f6d88cb58872fb587c6a52`.
 
-Workflow V3.2 remains canonical. The atomic Manager reconciliation rule is active.
+Workflow V3.2 remains canonical. Atomic Manager reconciliation is mandatory.
 
 ## Returning-Player v2 lane
 
-Historical WR-042 PR #168 is CLOSED UNMERGED at exact head `614445a20c2c15fbc3d8c107644a5244ddb52076` after WR-043 returned `FAIL — REMEDIATION REQUIRED`.
+Historical WR-042 PR #168 remains CLOSED UNMERGED after WR-043 `FAIL — REMEDIATION REQUIRED`. Positive custody evidence for the exact 15 retained byte identities remains preserved. `draft_picks.csv` remains excluded under WR-057.
 
-WR-043 independently preserved the positive custody evidence for the exact 15 retained source byte identities, including immutable provider asset identity, downloaded SHA/size verification, B2 COMPLIANCE + Legal Hold, R2 Indefinite Bucket Lock, direct retrieval, three-copy equality, credential masking, cleanup, and zero Actions artifacts.
+WR-059 was authorized to reconstruct missing WR-039 source-snapshot/cohort evidence from exact retained 2013–2016 B2/R2 objects, but R&D correctly failed closed because the existing protected WR-042/WR-046 execution paths are mutation-capable and provide no separately reviewable non-mutating retained-object read mode.
 
-The blocking findings are evidence-contract gaps rather than a raw-custody failure:
+This is an execution-path blocker, not a raw-custody or source-identity failure.
 
-- `WR-043-AUD-01 — HIGH`: no complete WR-039-compliant source-snapshot artifact exists for the 15 retained identities;
-- `WR-043-AUD-02 — HIGH`: no deterministic no-scoring cohort/source-eligibility artifact with full ordered stable-key coverage exists.
+## Active infrastructure gate
 
-`draft_picks.csv` remains excluded under accepted WR-057 and was not acquired, parsed, custodied, used, or silently replaced.
+- WR-059 — BLOCKED. Do not advance its branch until the read path is independently accepted.
+- WR-061 — ASSIGNED to Work Helper. Build and live-prove a separately reviewable GET-only retained-object path for exactly four pinned 2013–2016 custody keys, using the existing secret set while isolating secrets from R&D consumer code.
+- WR-062 — BLOCKED on WR-061. Fresh independent audit of the exact implementation/live-proof target.
+- WR-060 — remains BLOCKED on the eventual completed WR-059 evidence package.
+- WR-042 — remains BLOCKED on WR-059 remediation.
 
-WR-059 is ASSIGNED to R&D for bounded remediation using the exact retained/reference identities where possible. It must not silently refresh or substitute upstream objects. WR-060 is BLOCKED pending one immutable WR-059 remediation target and will provide the fresh independent audit.
+## Next gate
 
-## Current next gate
+Work Helper executes WR-061 only. WR-061 must be independently audited by WR-062; only an exact audited integration plus canonical-main post-merge canary may unblock WR-059.
 
-R&D executes WR-059 only. No model-protocol freeze, model fitting/scoring/tuning/comparison/evaluation, target/outcome join, 2026 regular-season outcome inspection, ranking/production change, or Phase-6 work is authorized.
+No 2026 regular-season outcome inspection, target joins, model fitting/scoring/tuning/comparison/evaluation, rankings, production changes, or Phase-6 work is authorized.
