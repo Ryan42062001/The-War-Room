@@ -1,0 +1,121 @@
+name: WR-063 Version-Aware Retained Object Read
+
+on:
+  push:
+    branches: [wr-063-retained-object-version-read-recovery]
+    paths:
+      - '.github/workflows/wr063-retained-version-read.yml'
+      - 'scripts/custody/read_retained_versions.py'
+      - 'scripts/custody/test_read_retained_versions.py'
+      - '.ai/work_helper/**'
+  pull_request:
+    paths:
+      - '.github/workflows/wr063-retained-version-read.yml'
+      - 'scripts/custody/read_retained_versions.py'
+      - 'scripts/custody/test_read_retained_versions.py'
+      - '.ai/work_helper/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wr063-retained-version-read
+  cancel-in-progress: false
+
+jobs:
+  contract-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@v7
+        with: {node-version: 22}
+      - name: Validate version-aware non-mutating implementation
+        run: |
+          python3 -m py_compile scripts/custody/read_retained_versions.py scripts/custody/test_read_retained_versions.py
+          python3 scripts/custody/test_read_retained_versions.py
+          npm run test:release
+          aws --version
+
+  protected-retained-version-read:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' &&
+       github.ref == 'refs/heads/wr-063-retained-object-version-read-recovery' &&
+       contains(github.event.head_commit.message, '[wr063-live-proof]'))
+    needs: contract-preflight
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out reviewed WR-063 implementation
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+      - name: Resolve versions and retrieve exact retained objects
+        env:
+          WR_CUSTODY_B2_READ_KEY_ID: ${{ secrets.WR_CUSTODY_B2_READ_KEY_ID }}
+          WR_CUSTODY_B2_READ_APPLICATION_KEY: ${{ secrets.WR_CUSTODY_B2_READ_APPLICATION_KEY }}
+          WR_CUSTODY_R2_ACCESS_KEY_ID: ${{ secrets.WR_CUSTODY_R2_ACCESS_KEY_ID }}
+          WR_CUSTODY_R2_SECRET_ACCESS_KEY: ${{ secrets.WR_CUSTODY_R2_SECRET_ACCESS_KEY }}
+          WR_CUSTODY_B2_BUCKET: ${{ vars.WR_CUSTODY_B2_BUCKET }}
+          WR_CUSTODY_B2_ENDPOINT: ${{ vars.WR_CUSTODY_B2_ENDPOINT }}
+          WR_CUSTODY_R2_BUCKET: ${{ vars.WR_CUSTODY_R2_BUCKET }}
+          WR_CUSTODY_R2_ENDPOINT: ${{ vars.WR_CUSTODY_R2_ENDPOINT }}
+        run: |
+          echo "::add-mask::${WR_CUSTODY_B2_READ_KEY_ID}"
+          echo "::add-mask::${WR_CUSTODY_B2_READ_APPLICATION_KEY}"
+          echo "::add-mask::${WR_CUSTODY_R2_ACCESS_KEY_ID}"
+          echo "::add-mask::${WR_CUSTODY_R2_SECRET_ACCESS_KEY}"
+          python3 scripts/custody/read_retained_versions.py \
+            --output-dir "$RUNNER_TEMP/wr063-raw" \
+            --report "$RUNNER_TEMP/wr063-report.json"
+      - name: Provider-secret isolation proof and safe consumer boundary
+        run: |
+          test -z "${WR_CUSTODY_B2_READ_KEY_ID:-}"
+          test -z "${WR_CUSTODY_B2_READ_APPLICATION_KEY:-}"
+          test -z "${WR_CUSTODY_B2_KEY_ID:-}"
+          test -z "${WR_CUSTODY_B2_APPLICATION_KEY:-}"
+          test -z "${WR_CUSTODY_R2_ACCESS_KEY_ID:-}"
+          test -z "${WR_CUSTODY_R2_SECRET_ACCESS_KEY:-}"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          report = json.loads((Path(os.environ['RUNNER_TEMP']) / 'wr063-report.json').read_text())
+          assert report['result'] == 'PASS' and len(report['objects']) == 4
+          assert report['provider_mutation_operations'] == 0
+          boundary = {'task_id': 'WR-063', 'consumer_boundary': 'PASS',
+                      'provider_credentials_present': False, 'verified_input_count': 4,
+                      'raw_output_published': False}
+          (Path(os.environ['RUNNER_TEMP']) / 'wr063-boundary.json').write_text(
+              json.dumps(boundary, indent=2, sort_keys=True) + '\n')
+          PY
+      - name: Publish privacy-safe retained-version evidence
+        run: |
+          echo 'WR-063 privacy-safe provider evidence follows:'
+          cat "$RUNNER_TEMP/wr063-report.json"
+          cat "$RUNNER_TEMP/wr063-boundary.json"
+          {
+            echo '### WR-063 protected retained-version proof'
+            echo
+            echo "Workflow implementation SHA: ${GITHUB_SHA}"
+            echo '```json'
+            cat "$RUNNER_TEMP/wr063-report.json"
+            cat "$RUNNER_TEMP/wr063-boundary.json"
+            echo '```'
+            echo 'Raw-byte Actions artifact count: 0'
+            echo 'Provider mutation operation count: 0'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Remove runner-temporary retained bytes and reports
+        if: always()
+        run: |
+          rm -rf "$RUNNER_TEMP/wr063-raw"
+          rm -f "$RUNNER_TEMP/wr063-report.json" "$RUNNER_TEMP/wr063-boundary.json"
+          test ! -e "$RUNNER_TEMP/wr063-raw"
+          test ! -e "$RUNNER_TEMP/wr063-report.json"
+          test ! -e "$RUNNER_TEMP/wr063-boundary.json"
+          {
+            echo
+            echo 'Cleanup: PASS'
+            echo 'Raw-byte Actions artifacts: 0 (workflow contains no artifact-upload action)'
+          } >> "$GITHUB_STEP_SUMMARY"

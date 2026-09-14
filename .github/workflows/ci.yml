@@ -61,6 +61,12 @@ jobs:
             scripts/custody/test_source_manifest_custody.py
           python3 scripts/custody/test_source_manifest_custody.py
           python3 scripts/custody/prove_b2_r2_custody.py --self-test
+      - name: Test WR-063 retained-version read boundary
+        run: |
+          python3 -m py_compile \
+            scripts/custody/read_retained_versions.py \
+            scripts/custody/test_read_retained_versions.py
+          python3 scripts/custody/test_read_retained_versions.py
       - name: Report CI scope
         run: echo "CI scope ${{ needs.classify.outputs.scope }} — ${{ needs.classify.outputs.reason }}"
 
