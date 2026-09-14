@@ -2,41 +2,48 @@
 
 HANDOFF
 
-Task ID: WR-043  
+Task ID: WR-064  
 Role: Independent Auditor / QA  
-Status: COMPLETE — FAIL — REMEDIATION REQUIRED  
-Audit branch: `wr-043-v2-source-custody-audit`  
-Assignment baseline: `f61a51e964149e4bf56b2404379e377de7cd5f1e`  
-Audited target: WR-042 / PR #168  
-Frozen audited head: `614445a20c2c15fbc3d8c107644a5244ddb52076`  
-Executed manifest commit: `cc9005ae4bd9065cf80f1c184f31974904165c54`  
-Manifest SHA-256: `d2196293ff34543b063e737efb175f579967bf37f5dc91b41c08dd45dfe44d26`  
-Protected run/job: `34871882486` / `104069521779`
+Status: COMPLETE — PASS  
+Audit branch: `wr-064-retained-object-version-read-audit`  
+Assignment baseline: `67b1347c715e207ea45f1de83effd7b69e59a2db`  
+Audited target: WR-063 / PR #178  
+Frozen audited head: `9db29b082cb61b5ef902b56bb5c745fc8ee739b2`  
+Protected-proof implementation head: `b2c193cfc11811b32039d00480351ac4f5bc98a1`  
+Protected run: `34906157295`  
+Preflight job: `104183183462` — PASS  
+Protected retained-version job: `104183220181` — PASS
 
-Final verdict: `FAIL — REMEDIATION REQUIRED`
+Final verdict: `PASS`
 
-Positive custody evidence preserved: exact 15 immutable GitHub release-asset identities passed downloaded-byte SHA/size verification; B2 COMPLIANCE retention + Legal Hold, R2 Indefinite Bucket Lock coverage, direct retrieval from both providers, and three-copy SHA/size equality are credibly established by the protected live run and audited fail-closed bridge. Run has zero Actions artifacts and protected values remained masked.
+Target discipline: PASS — PR #178 remained open/unmerged at exact frozen head `9db29b08...`. The successful proof ran at `b2c193cf...`; the final frozen target is exactly one evidence-only commit later, changing only `.ai/work_helper/HANDOFF.md` and `.ai/work_helper/WR063_RETAINED_VERSION_READ_RECOVERY.md`. No runtime/workflow/script implementation changed after proof.
 
-WR-057 exclusion: PASS — `draft_picks.csv` remained excluded; it was not acquired, parsed, custodied, used, or silently replaced.
+Authoritative identities: PASS — the hard-coded 2013–2016 asset IDs, SHA-256 values, byte sizes, and content-addressed keys exactly match the executed WR-042 manifest. The historical incorrect WR-061 2014–2016 digests are explicitly rejected and covered by fail-closed regressions.
 
-Boundary audit: PASS — no 2026 regular-season outcomes, target/outcome join, model fitting/scoring/tuning/comparison/evaluation, ranking/production change, WR039/WR-D008 semantic change, or Phase-6 work was introduced by PR #168.
+Dedicated B2 authority: PASS — protected provider evidence binds the dedicated key to bucket `War-Room-Custody-Primary`, prefix `custody/sha256/`, required `listFiles` + `readFiles`, and no mutation-capable `write*`, `delete*`, or `bypassGovernance` authority. Shared mutation-capable B2 custody credentials were not used.
 
-Blocking findings:
+Retained-version recovery: PASS — B2 version discovery is bounded by each full exact custody key, non-exact filenames are rejected, only upload versions are candidates, immutable B2 file IDs are required, and all four B2 downloads reproduce authoritative SHA-256/size. Exact-key R2 HEAD/GET reproduces the same authoritative bytes and all B2/R2 equality checks pass.
 
-- `WR-043-AUD-01 — HIGH`: frozen WR-042 evidence does not contain the complete WR-039 source-snapshot record/manifest. The committed runtime manifest omits required ordered schema/schema SHA, row count, approved columns, target-season cutoff/availability semantics, detailed release/acquisition identity, rights/attribution, retained-object URI/digest, acquisition-code identity, content-addressed source-instance ID, and versioned `source_snapshot_id`. The pinned `d2196293...` hash is valid for the minimal custody execution input, not the required complete source-snapshot artifact.
-- `WR-043-AUD-02 — HIGH`: no deterministic WR-042 cohort/source-eligibility manifest or full ordered cohort-key coverage evidence exists at the frozen target. WR-043 therefore cannot verify the required pre-scoring cohort boundary.
+2013 reconciliation: PASS — provider metadata and immutable-ID retrieval rule out retained-upload absence, a current hide marker, and wrong canonical key. The historical by-name 404 transport cause remains `UNDETERMINED_FROM_HISTORICAL_STATUS_ONLY`; no unsupported cause is invented.
 
-Detailed report: `.ai/auditor/WR-043_AUDIT.md`.  
-Report commit: `cb1bba25c96b7de074f02be7001aec3a59589916`.
+Non-mutation / privacy: PASS — protected evidence records zero provider mutation operations; mutation-capable custody helpers are neither modified nor invoked; credentials are masked and absent from consumer execution; raw bytes are runner-temporary only; success/failure cleanup is enforced; run `34906157295` has zero Actions artifacts; no upstream source-byte reacquisition or provider substitution occurred.
+
+Validation: PASS — final-target War Room CI `34906412868` is SUCCESS at exact `9db29b08...`, including WR-056 custody and WR-063 fail-closed Governance regressions plus the full test job. WR-046 Custody Fixture Proof `34906412744` is SUCCESS at the same exact frozen head.
+
+Boundaries: PASS — no 2026 regular-season outcomes, target/outcome joins, model fitting/scoring/tuning/comparison/evaluation, ranking/recommendation changes, production changes, or Phase-6 work.
+
+Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — none.
+
+Detailed report: `.ai/auditor/WR-064_AUDIT.md`.  
+Report commit: `42098a86548b147082ad102ca429c14d1d19d0d5`.
 
 Recommended next role: Manager / Architect.
 
-Required next action: create a bounded remediation lane that preserves the 15 exact already-custodied identities and freezes a complete WR-039-compliant source snapshot plus deterministic no-scoring cohort/source-eligibility artifact from the exact retained/reference bytes. Do not silently refresh or substitute upstream objects. Route the remediated immutable target to a fresh independent audit.
+Exact Manager action authorized next: re-verify PR #178 still points to exact audited head `9db29b082cb61b5ef902b56bb5c745fc8ee739b2`; integrate only that exact head if otherwise merge-ready; then require and accept the mandatory canonical-main post-merge canary before WR-059 resumes.
 
-This FAIL does not authorize WR-042 completion/merge acceptance as the source-custody gate, model-protocol freeze, fitting/scoring/tuning/evaluation, target joins, production/ranking changes, 2026-outcome inspection, or Phase-6 work.
+This PASS does not merge PR #178, resume WR-059, activate downstream work, inspect 2026 outcomes, authorize model/scoring work, alter rankings/production, or begin Phase 6.
 
-Auditor modified PR #168: NO  
-Auditor modified WR-042 research evidence: NO  
-Auditor modified custody runtime/workflows: NO  
-Auditor changed Manager/shared state: NO  
-Auditor changed production/model/ranking/credentials: NO
+Auditor modified PR #178: NO  
+Auditor modified WR-063 implementation/evidence: NO  
+Auditor modified Manager/shared/research/custody runtime: NO  
+Auditor merged PR #178: NO
