@@ -6,56 +6,38 @@ Task ID: WR-063
 
 Role: Work Helper / Super Troubleshooter / Cross-Functional Operator
 
-Status: FAIL CLOSED — EXISTING B2 CREDENTIAL LACKS VERSION-LIST CAPABILITY
+Status: COMPLETE — INDEPENDENT AUDIT REQUIRED
 
-Starting canonical main: `a37207dbdfc33b37e13b0518232f17106a25a1df`
+Starting canonical main: `019d6ccb31ba39fc7577080126de7e02751016ae`
 
 Branch: `wr-063-retained-object-version-read-recovery`
 
-## Implementation
+PR: #178
 
-WR-063 replaces WR-061's mistaken 2014–2016 pins with the authoritative executed
-WR-042 identities and replaces B2 by-name retrieval with exact-full-key-bounded
-version discovery plus immutable file-ID retrieval. R2 remains exact-key HEAD/GET.
-The consumer boundary receives verified raw bytes without provider credentials.
+Implementation proof head: `b2c193cfc11811b32039d00480351ac4f5bc98a1`
 
-Detailed evidence: `.ai/work_helper/WR063_RETAINED_VERSION_READ_RECOVERY.md`.
+## Disposition
 
-## Validation
+The dedicated B2 credential passed the provider-issued bucket, prefix, required
+read-capability, and no-mutation gates before any listing/download. All four
+authoritative WR-042 objects were resolved by exact-name version metadata,
+downloaded from B2 by immutable file ID and from R2 by exact key, and reproduced
+the authoritative SHA-256 and byte size with B2/R2 byte equality.
 
-- focused WR-063 regression suite: PASS;
-- release-candidate guard with the Manager-approved permanent workflow: PASS;
-- staged unapproved additional workflow rejection: PASS;
-- PR: #178;
-- executed implementation head: `15a35b3626929090b374eff5fdf4da4d0dfd32ce`;
-- protected run/job: `34901593729` / `104168617065`;
-- contract preflight job `104168574295`: PASS;
-- B2 authorization: PASS, then fail closed because provider-issued capabilities
-  omit `listFiles`;
-- B2 version-list/read operations: 0 / 0;
-- R2 HEAD/GET operations: 0 / 0;
-- provider mutations: 0;
-- cleanup: PASS;
-- raw Actions artifacts: 0.
+Protected run `34906157295`: preflight job `104183183462` PASS; protected job
+`104183220181` PASS. Cleanup PASS; raw Actions artifacts 0; provider mutations 0;
+consumer credentials absent. Detailed identities are in the task report.
 
-## Boundaries
+The 2013 provider record is one latest upload predating the historical by-name
+404, and immutable-ID retrieval matches the authoritative bytes. This rules out
+retained-version absence, a current hide marker, and a wrong key. The original
+transport cause remains `UNDETERMINED_FROM_HISTORICAL_STATUS_ONLY`.
 
-Provider mutation operations: **0 by construction**
-
-Raw Actions artifacts: **0 by construction**
-
-Existing mutation-capable custody helpers invoked: **NO**
-
-Returning-Player source reacquired or parsed: **NO**
-
-2026 outcomes inspected: **NO**
-
-Model/scoring/ranking/production work: **NO**
+Focused tests and release guard: PASS. Shared mutation-capable B2 credentials were
+not used. No source reacquisition, research parsing, 2026 outcomes, target/model/
+scoring/ranking/production, or Phase-6 work occurred.
 
 ## Next gate
 
-Return the immutable fail-closed PR/head to Manager. Do **not** activate WR-064:
-the required four-object proof does not exist. Manager must decide whether to
-authorize a separately governed addition of Backblaze `listFiles` to the exact
-credential or close retained-version reconstruction as unprovable. WR-063 did not
-change credential scope and does not self-certify.
+Manager should freeze PR #178's final head and activate Independent Auditor / QA
+for WR-064. Work Helper does not merge or self-certify.

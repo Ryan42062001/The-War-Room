@@ -2,79 +2,69 @@
 
 ## Status
 
-`FAIL CLOSED — EXISTING B2 CREDENTIAL LACKS VERSION-LIST CAPABILITY`
+`COMPLETE — INDEPENDENT AUDIT REQUIRED`
 
-## Root cause and remediation design
+## Root cause and remediation
 
-WR-061 combined two independent failures. Its 2014–2016 identities differed from
-the authoritative executed WR-042 manifest/result, while its 2013 read addressed
-only the current by-name view. Backblaze documents that a by-name download returns
-the newest version and returns 404 when that version is hidden; a retained upload
-version can instead be resolved with `b2_list_file_versions` and downloaded by its
-immutable file ID.
+WR-061 combined incorrect Manager pins for 2014–2016 with a 2013 B2 by-name
+HTTP 404. WR-063 uses the authoritative executed WR-042 identities and a dedicated
+read-only B2 credential. It attests the provider boundary before any object
+operation, issues one exact-full-key-bounded `b2_list_file_versions` call per
+object, requires exact file-name equality, and downloads the upload by immutable
+file ID. R2 remains exact-key `HeadObject` plus `GetObject`.
 
-WR-063 therefore hard-codes the four authoritative WR-042 identities, authorizes
-the existing least-privilege B2 key, executes one exact-full-key-bounded version
-query per identity, filters to exact file-name equality, and downloads only a
-matching `upload` version by immutable file ID. R2 remains exact-key `HeadObject`
-plus `GetObject`. Every download is hashed and sized before consumer access.
+The historical 2013 response retained only HTTP 404, so its transport-level cause
+cannot now be proven. Provider metadata proves the authoritative upload was the
+sole and latest exact-name version, uploaded at `1789404431144` before the WR-061
+failure at `2026-09-14T19:59:39.8902883Z`; immutable-ID retrieval reproduces its
+authoritative bytes. The 404 is therefore reconciled as a false-negative for
+retained-version existence. Missing upload, a current hide marker, and an
+incorrect custody key are ruled out; no unobserved cause is asserted.
 
-The protected proof fails closed unless provider-issued version metadata directly
-reconciles the earlier 2013 by-name 404. No hide state is presumed.
+## Provider boundary
 
-## Security construction
+- Bucket `War-Room-Custody-Primary`: PASS.
+- Prefix `custody/sha256/`: PASS.
+- `listFiles` and `readFiles`: present.
+- Mutation-capable capabilities: absent.
+- Shared mutation-capable B2 credentials: absent.
+- Dedicated key identity anchor SHA-256:
+  `8d5e5657e1a3010c341318237ca91d86153d4ed4dd4161a6bd38677c578c14dc`.
 
-- Fixed four-row identity set; no runtime bucket/key/URL selectors.
-- B2 operations: authorize, exact-key version metadata read, immutable-version GET.
-- R2 operations: exact-key HEAD and GET.
-- No mutation-capable custody helper is imported or invoked.
-- Credentials exist only on the trusted retrieval step.
-- Raw bytes and privacy-safe report exist only below `RUNNER_TEMP` and are removed
-  on success or failure.
-- No artifact-upload action exists; raw artifact count is structurally zero.
-- Mismatched downloads are deleted immediately.
+Provider read-only metadata capabilities and `shareFiles` are also present; none
+can mutate the governed state. The gate rejects every `write*`, `delete*`, and
+`bypassGovernance` capability before listing or download.
 
-## Offline regression evidence
+## Protected proof
 
-- authoritative four-row identity equality: PASS;
-- rejected WR-061 2014–2016 identities: PASS;
-- exact-full-key version-query boundary: PASS;
-- non-exact version-name rejection: PASS;
-- hide record excluded as source bytes: PASS;
-- immutable-version digest/size gate: PASS;
-- R2 operation set limited to HEAD/GET: PASS;
-- mutation helper/operation absence: PASS;
-- consumer secret isolation: PASS;
-- cleanup on failure: PASS;
-- permanent-workflow release guard: PASS;
-- staged unapproved workflow rejection: PASS.
+Implementation head: `b2c193cfc11811b32039d00480351ac4f5bc98a1`
 
-## Protected execution evidence
+Run `34906157295`; preflight job `104183183462`; protected job `104183220181`.
+All completed successfully.
 
-- PR: #178.
-- Executed implementation head: `15a35b3626929090b374eff5fdf4da4d0dfd32ce`.
-- Protected workflow run/job: `34901593729` / `104168617065`.
-- Contract preflight job: `104168574295` — PASS.
-- Existing B2 credential authentication: PASS.
-- Provider-issued capability gate: FAIL CLOSED before version listing because
-  `listFiles` is absent.
-- Existing accepted credential capabilities remain exactly:
-  `listAllBucketNames`, `readFiles`, `writeFiles`, `readFileRetentions`,
-  `writeFileRetentions`, `readFileLegalHolds`, `writeFileLegalHolds`.
-- B2 exact-key version queries issued: 0.
-- B2/R2 object downloads: 0 / 0.
-- Provider mutation operations: 0.
-- Cleanup: PASS.
-- Raw Actions artifacts: 0.
+| Season | B2 immutable ID suffix | SHA-256 | Bytes | Versions | B2 | R2 | Equal |
+|---|---|---|---:|---:|---|---|---|
+| 2013 | `4_zca47a42fe60b9e24a40f0e16_f1073038c409e28f4_d20260914_m164711_c005_v0501047_t0010_u01789404431144` | `dbc7804c32c8dbf46120bfe4e724cdd926537509caa8a1bb96cd3b6e159b21f8` | 792070 | 1 upload | PASS | PASS | PASS |
+| 2014 | `4_zca47a42fe60b9e24a40f0e16_f1197eb704ed62208_d20260914_m164723_c005_v0501015_t0046_u01789404443541` | `7046a0fd69b979d0649feb679a42f82f6e8e175d19587857d3e9371f09427cd6` | 816553 | 1 upload | PASS | PASS | PASS |
+| 2015 | `4_zca47a42fe60b9e24a40f0e16_f104f9e9e97823443_d20260914_m164735_c005_v0501050_t0002_u01789404455665` | `b977be5bc8cad6b02dfb755e78974b4486a505fa272f683add499b968878e3eb` | 815021 | 1 upload | PASS | PASS | PASS |
+| 2016 | `4_zca47a42fe60b9e24a40f0e16_f10725166a5a4cb1e_d20260914_m164747_c005_v0501050_t0022_u01789404467880` | `041473e5860ca6cfcba7a29e98b2ddfc3f01db0df2469d5b44e44135603e2424` | 819194 | 1 upload | PASS | PASS | PASS |
 
-The failure is not an object-identity result. No retained-version metadata was
-available, so the 2013 by-name 404 remains unreconciled and no claim is made about
-whether a hide marker exists. The correct bounded next decision belongs to the
-Manager: either authorize a separately governed credential-scope change that adds
-the Backblaze `listFiles` capability, or close the reconstruction path as
-unprovable. WR-063 itself is not authorized to change credentials.
+Provider operations were limited to B2 authorization, exact-key version listing,
+immutable-ID GET, and R2 HEAD/GET. Mutation count: 0. Consumer credentials: absent.
+Cleanup: PASS. Raw Actions artifacts: 0.
 
-## Boundaries
+## Regression and boundaries
 
-No Returning-Player upstream reacquisition, research parsing, 2026 outcomes,
-targets, models, scoring, ranking, production behavior, or Phase-6 work occurred.
+Focused fail-closed tests and the release guard pass. Coverage includes exact
+identities and names, mutation/wrong-prefix/insufficient-capability rejection,
+immutable selection, mismatch deletion, R2 HEAD/GET limitation, consumer
+isolation, and cleanup. No upstream reacquisition, Returning-Player parsing, 2026
+outcomes, targets, models, scoring, rankings, production behavior, or Phase-6
+work occurred.
+
+## Remaining uncertainty
+
+Only the original transport-level reason for the historical by-name 404 is
+unrecoverable from the preserved status-only evidence. It is not needed to prove
+the retained bytes or version-aware recovery path and is not represented as a
+provider hide event.
