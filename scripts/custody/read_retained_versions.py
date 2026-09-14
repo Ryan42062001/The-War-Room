@@ -222,6 +222,18 @@ def choose_upload_version(versions: Sequence[dict], item: RetainedObject) -> tup
     return selected, visibility
 
 
+def reconcile_2013_by_name_404(version: Mapping[str, object]) -> dict:
+    """Bound the old 404 without inferring an unpreserved transport cause."""
+    if version.get("latest_action") != "upload" or version.get("selected_file_id") != version.get("latest_file_id"):
+        raise ContractError("2013 exact-name latest upload identity is not provider-proven")
+    return {
+        "disposition": "HISTORICAL_BY_NAME_FALSE_NEGATIVE_FOR_RETAINED_VERSION_EXISTENCE",
+        "evidence": "provider exact-name version metadata identifies the latest action as upload; immutable file-ID retrieval reproduces the authoritative SHA-256 and byte size",
+        "transport_cause": "UNDETERMINED_FROM_HISTORICAL_STATUS_ONLY",
+        "excluded_causes": ["missing retained upload", "current hide marker", "incorrect authoritative custody key"],
+    }
+
+
 def download_b2_version(auth: Mapping[str, str], file_id: str, destination: Path) -> None:
     url = f"{auth['download_url']}/b2api/v4/b2_download_file_by_id?" + urllib.parse.urlencode({"fileId": file_id})
     request = urllib.request.Request(url, headers={"Authorization": auth["token"]}, method="GET")
@@ -302,8 +314,7 @@ def execute(output_dir: Path, report_path: Path) -> dict:
                                            "selected_upload_timestamp": selected.get("uploadTimestamp"),
                                            "selected_action": selected.get("action"), **visibility},
                             "b2": b2, "r2": r2, "b2_r2_equal": True})
-        if results[0]["b2_version"]["latest_action"] != "hide":
-            raise ContractError("2013 prior by-name 404 is not reconciled by current provider version state")
+        reconciliation = reconcile_2013_by_name_404(results[0]["b2_version"])
         report = {"schema_version": 1, "task_id": "WR-063", "result": "PASS",
                   "dedicated_b2_authorization_boundary": auth["boundary"],
                   "objects": results,
@@ -311,7 +322,7 @@ def execute(output_dir: Path, report_path: Path) -> dict:
                                           "R2": ["HeadObject", "GetObject"]},
                   "provider_mutation_operations": 0, "consumer_credentials_present": False,
                   "raw_storage": "runner-temporary-only", "raw_actions_artifacts": 0,
-                  "2013_by_name_404_reconciliation": "latest exact-name B2 version is provider-reported hide action"}
+                  "2013_by_name_404_reconciliation": reconciliation}
         report_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         return report
     except BaseException:

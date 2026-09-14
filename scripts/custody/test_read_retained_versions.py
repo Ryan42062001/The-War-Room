@@ -108,6 +108,21 @@ def test_dedicated_b2_authorization_boundary() -> None:
         rejects(lambda: read.authorize_b2(config), "lacks required")
 
 
+def test_bounded_2013_reconciliation() -> None:
+    result = read.reconcile_2013_by_name_404({
+        "latest_action": "upload", "latest_file_id": "immutable-id",
+        "selected_file_id": "immutable-id",
+    })
+    assert result["transport_cause"] == "UNDETERMINED_FROM_HISTORICAL_STATUS_ONLY"
+    assert "missing retained upload" in result["excluded_causes"]
+    rejects(lambda: read.reconcile_2013_by_name_404({
+        "latest_action": "hide", "latest_file_id": "hide-id", "selected_file_id": "upload-id",
+    }), "not provider-proven")
+    rejects(lambda: read.reconcile_2013_by_name_404({
+        "latest_action": "upload", "latest_file_id": "newer-id", "selected_file_id": "older-id",
+    }), "not provider-proven")
+
+
 def test_verify_deletes_mismatch() -> None:
     payload = b"good"
     item = read.RetainedObject(2000, 1, hashlib.sha256(payload).hexdigest(), len(payload),
@@ -174,7 +189,7 @@ def test_cleanup_on_failure() -> None:
 
 def main() -> int:
     test_authoritative_identity_set(); test_exact_version_boundary_and_selection()
-    test_dedicated_b2_authorization_boundary()
+    test_dedicated_b2_authorization_boundary(); test_bounded_2013_reconciliation()
     test_verify_deletes_mismatch(); test_r2_only_head_get(); test_static_nonmutation_and_workflow()
     test_cleanup_on_failure()
     print("WR-063 retained-version fail-closed regressions: PASS")
