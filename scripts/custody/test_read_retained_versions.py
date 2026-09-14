@@ -83,10 +83,21 @@ def test_dedicated_b2_authorization_boundary() -> None:
     assert auth["boundary"]["shared_mutation_capable_credentials_used"] is False
     assert "dedicated-id" not in json.dumps(auth["boundary"])
 
-    mutation = json.loads(json.dumps(base))
-    mutation["apiInfo"]["storageApi"]["allowed"]["capabilities"].append("writeFiles")
-    with patch.object(read, "request_json", return_value=mutation):
-        rejects(lambda: read.authorize_b2(config), "unauthorized capability")
+    read_only_extras = json.loads(json.dumps(base))
+    read_only_extras["apiInfo"]["storageApi"]["allowed"]["capabilities"].extend([
+        "listBuckets", "readBuckets", "readBucketRetentions", "shareFiles",
+    ])
+    with patch.object(read, "request_json", return_value=read_only_extras):
+        extra_auth = read.authorize_b2(config)
+    assert extra_auth["boundary"]["mutation_capabilities_absent"] is True
+
+    for mutation_name in ("writeFiles", "deleteFiles", "writeFileRetentions",
+                          "writeFileLegalHolds", "writeBuckets", "deleteKeys",
+                          "bypassGovernance"):
+        mutation = json.loads(json.dumps(base))
+        mutation["apiInfo"]["storageApi"]["allowed"]["capabilities"].append(mutation_name)
+        with patch.object(read, "request_json", return_value=mutation):
+            rejects(lambda: read.authorize_b2(config), "mutation-capable")
     wrong_prefix = json.loads(json.dumps(base))
     wrong_prefix["apiInfo"]["storageApi"]["allowed"]["namePrefix"] = "custody/"
     with patch.object(read, "request_json", return_value=wrong_prefix):

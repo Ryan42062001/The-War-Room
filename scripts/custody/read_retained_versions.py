@@ -137,17 +137,17 @@ def authorize_b2(config: Mapping[str, str]) -> dict:
         raise ContractError("B2 authorization prefix is not exactly custody/sha256/")
     capabilities = set(allowed.get("capabilities") or [])
     required_capabilities = {"listFiles", "readFiles"}
-    permitted_capabilities = {
-        "listAllBucketNames", "listFiles", "readFiles",
-        "readFileRetentions", "readFileLegalHolds",
-    }
     if not required_capabilities.issubset(capabilities):
         raise ContractError("B2 authorization lacks required read-only capability")
-    unauthorized_capabilities = capabilities - permitted_capabilities
-    if unauthorized_capabilities:
+    mutation_capabilities = {
+        capability for capability in capabilities
+        if capability.startswith(("write", "delete"))
+        or capability in {"bypassGovernance"}
+    }
+    if mutation_capabilities:
         raise ContractError(
-            "B2 authorization contains unauthorized capability: "
-            + ", ".join(sorted(unauthorized_capabilities))
+            "B2 authorization contains mutation-capable authority: "
+            + ", ".join(sorted(mutation_capabilities))
         )
     api_url = str(storage.get("apiUrl") or "").rstrip("/")
     download_url = str(storage.get("downloadUrl") or "").rstrip("/")
@@ -169,7 +169,7 @@ def authorize_b2(config: Mapping[str, str]) -> dict:
                 "name_prefix": prefix,
                 "capabilities": sorted(capabilities),
                 "required_capabilities_present": True,
-                "unauthorized_capabilities_absent": True,
+                "mutation_capabilities_absent": True,
                 "shared_mutation_capable_credentials_used": False,
             }}
 
