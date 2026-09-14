@@ -7,6 +7,7 @@ import ast
 import copy
 import hashlib
 import importlib.util
+import json
 import os
 import subprocess
 import sys
@@ -96,6 +97,54 @@ def test_b2_transport_is_get_only() -> None:
     assert request_methods and set(request_methods) == {"GET"}
 
 
+def test_backblaze_v4_response_binding() -> None:
+    payload = b"retained-v4-fixture"
+    digest = hashlib.sha256(payload).hexdigest()
+    item = read.RetainedObject(
+        2001, 2, digest, len(payload), f"custody/sha256/{digest}/raw"
+    )
+    config = {
+        "WR_CUSTODY_B2_KEY_ID": "id",
+        "WR_CUSTODY_B2_APPLICATION_KEY": "secret",
+    }
+
+    class Response:
+        def __init__(self, body):
+            self.body = body
+            self.sent = False
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_):
+            return False
+
+        def read(self, *_):
+            if self.sent:
+                return b""
+            self.sent = True
+            return self.body
+
+    authorize = json.dumps({
+        "authorizationToken": "provider-token",
+        "apiInfo": {"storageApi": {
+            "downloadUrl": "https://f005.backblazeb2.com",
+            "allowed": {
+                "buckets": [{"name": read.EXPECTED_B2_BUCKET}],
+                "namePrefix": "custody/",
+                "capabilities": ["readFiles"],
+            },
+        }},
+    }).encode()
+    responses = iter((Response(authorize), Response(payload)))
+    with tempfile.TemporaryDirectory(prefix="wr061-v4-") as temp, patch.object(
+        read.urllib.request, "urlopen", side_effect=lambda *_a, **_k: next(responses)
+    ):
+        destination = Path(temp) / "raw"
+        read.b2_authorize_and_download(config=config, item=item, destination=destination)
+        assert destination.read_bytes() == payload
+
+
 def test_static_provider_boundary() -> None:
     source = MODULE_PATH.read_text(encoding="utf-8")
     tree = ast.parse(source)
@@ -169,6 +218,7 @@ def main() -> int:
     test_verifier()
     test_get_command_is_exactly_read_only()
     test_b2_transport_is_get_only()
+    test_backblaze_v4_response_binding()
     test_static_provider_boundary()
     test_cleanup_on_provider_failure()
     test_workflow_security_contract()

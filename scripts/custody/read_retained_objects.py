@@ -206,7 +206,7 @@ def b2_authorize_and_download(*, config: Mapping[str, str], item: RetainedObject
     if "readFiles" not in capabilities:
         raise ContractError("B2 authorization lacks readFiles")
     download_url = str(storage.get("downloadUrl") or "").rstrip("/")
-    token = str(storage.get("authorizationToken") or "")
+    token = str(payload.get("authorizationToken") or "")
     if not B2_DOWNLOAD_RE.fullmatch(download_url) or not token:
         raise ContractError("B2 authorization returned an invalid download boundary")
     url = (

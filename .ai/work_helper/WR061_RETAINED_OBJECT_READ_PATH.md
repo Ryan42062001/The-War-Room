@@ -83,6 +83,12 @@ for that credential family: `b2_authorize_account` followed by
 `b2_download_file_by_name`. No object identity, provider authority, custody semantic,
 or R2 path changed. The failed run is preserved and is not rerun.
 
+Native-v4 run `34889871310`, job `104129607200`, then failed closed after
+authorization because the parser looked for the authorization token under
+`apiInfo.storageApi`; Backblaze v4 places it at the response root. Cleanup passed and
+no artifact or object download occurred. The field binding was corrected and locked
+with a synthetic v4 response regression before another live attempt.
+
 ## Protected live-proof contract
 
 The final implementation commit is marked `[wr061-live-proof]`. The branch-scoped

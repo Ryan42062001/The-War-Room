@@ -38,6 +38,11 @@ on the B2 S3-compatibility transport, cleaned temporary state, and created no ar
 That run was not retried. The subsequent candidate uses Backblaze's native v4
 authorization/download GET sequence; independent audit must inspect both lineages.
 
+Native-v4 run `34889871310` / job `104129607200` also failed closed, this time on
+the authorization-token schema location before object download. Cleanup passed and no
+artifact was created. The root-level v4 token binding now has a deterministic response
+regression; this distinct corrected candidate requires fresh live proof.
+
 ## Preservation
 
 Existing WR-042/WR-046 workflows modified: NO
