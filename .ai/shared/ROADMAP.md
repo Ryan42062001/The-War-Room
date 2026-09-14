@@ -18,15 +18,15 @@ Owner: Manager / Architect
 - WR-057 — CLOSED / `RAW_CUSTODY_NOT_ESTABLISHED — EXCLUDE_SOURCE` for PFR-derived nflverse `draft_picks.csv`.
 - WR-058 — CLOSED / independent custody-bridge audit PASS.
 - WR-059 — BLOCKED / evidence remediation waits for an independently accepted retained-version read path.
-- WR-061 — CLOSED / fail-closed pre-audit checkpoint. PR #176 remains closed unmerged; useful GET-only architecture preserved as historical evidence. Manager pinning was wrong for 2014–2016 and 2013 by-name B2 retrieval returned 404.
-- WR-062 — CLOSED / never activated because WR-061 never produced a successful live-proof target.
-- WR-063 — ASSIGNED / Work Helper Work-mode recovery. Reconcile authoritative WR-042 identities, diagnose exact-key B2 historical version state with non-mutating provider reads, establish version-aware B2 retrieval plus exact R2 reads, and live-prove all four authoritative objects.
-- WR-064 — BLOCKED on WR-063 / fresh independent audit of the retained-version recovery path and protected four-object proof.
+- WR-061 — CLOSED / immutable fail-closed historical checkpoint, PR #176 unmerged.
+- WR-062 — CLOSED / never activated because WR-061 never produced a successful live proof.
+- WR-063 — BLOCKED / Work Helper version-aware implementation reached protected B2 authorization but the existing custody credential lacks `listFiles`. Manager chose a dedicated bucket/prefix-restricted read-only B2 credential rather than widening the mutation-capable shared custody credential.
+- WR-064 — BLOCKED on successful WR-063 four-object protected proof / fresh independent audit gate.
 - WR-060 — BLOCKED on WR-059 / fresh independent audit of the eventual complete source-snapshot/cohort remediation target.
 
-Sequence: `WR-063 Work-mode recovery/live proof -> WR-064 independent audit -> exact WR-063 integration + main canary -> resume WR-059 -> WR-060 independent evidence re-audit`.
+Sequence: `user provisions dedicated B2 read-only key -> resume WR-063 Work-mode protected proof -> WR-064 independent audit -> exact WR-063 integration + main canary -> resume WR-059 -> WR-060 independent evidence re-audit`.
 
-The authoritative 2013–2016 retained identities are the exact values in the executed WR-042 manifest/result. Historical mistaken WR-061 2014–2016 pins are retired.
+The dedicated B2 read credential must be restricted to `War-Room-Custody-Primary` + `custody/sha256/`, include `listFiles`/`readFiles`, and contain no provider-mutation authority. Existing shared custody credentials remain unchanged.
 
 `draft_picks.csv` remains excluded and no silent replacement provider is authorized. A later versioned contract/feature-schema governance gate remains mandatory before any model path could proceed without draft-capital semantics.
 
