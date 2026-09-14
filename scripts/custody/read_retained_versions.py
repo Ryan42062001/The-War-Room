@@ -53,7 +53,7 @@ R2_ENDPOINT_RE = re.compile(r"^https://[0-9a-f]{32}\.r2\.cloudflarestorage\.com/
 B2_DOWNLOAD_RE = re.compile(r"^https://f[0-9]+\.backblazeb2\.com/?$")
 B2_API_RE = re.compile(r"^https://api[0-9]*\.backblazeb2\.com/?$")
 SECRET_NAMES = (
-    "WR_CUSTODY_B2_KEY_ID", "WR_CUSTODY_B2_APPLICATION_KEY",
+    "WR_CUSTODY_B2_READ_KEY_ID", "WR_CUSTODY_B2_READ_APPLICATION_KEY",
     "WR_CUSTODY_R2_ACCESS_KEY_ID", "WR_CUSTODY_R2_SECRET_ACCESS_KEY",
 )
 CONFIG_NAMES = (
@@ -124,7 +124,7 @@ def request_json(url: str, *, token: str, payload: dict | None = None) -> dict:
 
 def authorize_b2(config: Mapping[str, str]) -> dict:
     basic = base64.b64encode(
-        f"{config['WR_CUSTODY_B2_KEY_ID']}:{config['WR_CUSTODY_B2_APPLICATION_KEY']}".encode()
+        f"{config['WR_CUSTODY_B2_READ_KEY_ID']}:{config['WR_CUSTODY_B2_READ_APPLICATION_KEY']}".encode()
     ).decode()
     payload = request_json(B2_AUTHORIZE_URL, token=f"Basic {basic}")
     storage = ((payload.get("apiInfo") or {}).get("storageApi") or {})
@@ -132,11 +132,23 @@ def authorize_b2(config: Mapping[str, str]) -> dict:
     buckets = allowed.get("buckets") or []
     if [value.get("name") for value in buckets if isinstance(value, dict)] != [EXPECTED_B2_BUCKET]:
         raise ContractError("B2 authorization is outside the exact bucket boundary")
-    if allowed.get("namePrefix") != "custody/":
-        raise ContractError("B2 authorization is outside the custody prefix")
+    prefix = allowed.get("namePrefix")
+    if prefix != "custody/sha256/":
+        raise ContractError("B2 authorization prefix is not exactly custody/sha256/")
     capabilities = set(allowed.get("capabilities") or [])
-    if not {"listFiles", "readFiles"}.issubset(capabilities):
+    required_capabilities = {"listFiles", "readFiles"}
+    permitted_capabilities = {
+        "listAllBucketNames", "listFiles", "readFiles",
+        "readFileRetentions", "readFileLegalHolds",
+    }
+    if not required_capabilities.issubset(capabilities):
         raise ContractError("B2 authorization lacks required read-only capability")
+    unauthorized_capabilities = capabilities - permitted_capabilities
+    if unauthorized_capabilities:
+        raise ContractError(
+            "B2 authorization contains unauthorized capability: "
+            + ", ".join(sorted(unauthorized_capabilities))
+        )
     api_url = str(storage.get("apiUrl") or "").rstrip("/")
     download_url = str(storage.get("downloadUrl") or "").rstrip("/")
     token = str(payload.get("authorizationToken") or "")
@@ -147,7 +159,19 @@ def authorize_b2(config: Mapping[str, str]) -> dict:
     if not bucket_id:
         raise ContractError("B2 authorization did not bind the allowed bucket ID")
     return {"api_url": api_url, "download_url": download_url, "token": token,
-            "bucket_id": bucket_id}
+            "bucket_id": bucket_id, "boundary": {
+                "status": "PASS",
+                "application_key_id_sha256": hashlib.sha256(
+                    config["WR_CUSTODY_B2_READ_KEY_ID"].encode()
+                ).hexdigest(),
+                "bucket_name": EXPECTED_B2_BUCKET,
+                "bucket_id": bucket_id,
+                "name_prefix": prefix,
+                "capabilities": sorted(capabilities),
+                "required_capabilities_present": True,
+                "unauthorized_capabilities_absent": True,
+                "shared_mutation_capable_credentials_used": False,
+            }}
 
 
 def list_exact_versions(auth: Mapping[str, str], item: RetainedObject) -> list[dict]:
@@ -281,6 +305,7 @@ def execute(output_dir: Path, report_path: Path) -> dict:
         if results[0]["b2_version"]["latest_action"] != "hide":
             raise ContractError("2013 prior by-name 404 is not reconciled by current provider version state")
         report = {"schema_version": 1, "task_id": "WR-063", "result": "PASS",
+                  "dedicated_b2_authorization_boundary": auth["boundary"],
                   "objects": results,
                   "provider_operations": {"B2": ["b2_authorize_account", "b2_list_file_versions", "b2_download_file_by_id"],
                                           "R2": ["HeadObject", "GetObject"]},

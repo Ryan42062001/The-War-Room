@@ -68,6 +68,35 @@ def test_exact_version_boundary_and_selection() -> None:
                                                   "token": "t", "bucket_id": "b"}, item), "non-exact")
 
 
+def test_dedicated_b2_authorization_boundary() -> None:
+    config = {"WR_CUSTODY_B2_READ_KEY_ID": "dedicated-id",
+              "WR_CUSTODY_B2_READ_APPLICATION_KEY": "dedicated-secret"}
+    base = {"authorizationToken": "provider-token", "apiInfo": {"storageApi": {
+        "apiUrl": "https://api001.backblazeb2.com",
+        "downloadUrl": "https://f005.backblazeb2.com",
+        "allowed": {"buckets": [{"id": "bucket-id", "name": read.EXPECTED_B2_BUCKET}],
+                    "namePrefix": "custody/sha256/",
+                    "capabilities": ["listFiles", "readFiles"]}}}}
+    with patch.object(read, "request_json", return_value=base):
+        auth = read.authorize_b2(config)
+    assert auth["boundary"]["status"] == "PASS"
+    assert auth["boundary"]["shared_mutation_capable_credentials_used"] is False
+    assert "dedicated-id" not in json.dumps(auth["boundary"])
+
+    mutation = json.loads(json.dumps(base))
+    mutation["apiInfo"]["storageApi"]["allowed"]["capabilities"].append("writeFiles")
+    with patch.object(read, "request_json", return_value=mutation):
+        rejects(lambda: read.authorize_b2(config), "unauthorized capability")
+    wrong_prefix = json.loads(json.dumps(base))
+    wrong_prefix["apiInfo"]["storageApi"]["allowed"]["namePrefix"] = "custody/"
+    with patch.object(read, "request_json", return_value=wrong_prefix):
+        rejects(lambda: read.authorize_b2(config), "prefix")
+    insufficient = json.loads(json.dumps(base))
+    insufficient["apiInfo"]["storageApi"]["allowed"]["capabilities"] = ["readFiles"]
+    with patch.object(read, "request_json", return_value=insufficient):
+        rejects(lambda: read.authorize_b2(config), "lacks required")
+
+
 def test_verify_deletes_mismatch() -> None:
     payload = b"good"
     item = read.RetainedObject(2000, 1, hashlib.sha256(payload).hexdigest(), len(payload),
@@ -106,6 +135,11 @@ def test_static_nonmutation_and_workflow() -> None:
     assert "actions/upload-artifact" not in workflow
     assert "read_retained_versions.py" in workflow
     assert "Provider-secret isolation proof" in workflow
+    assert "WR_CUSTODY_B2_READ_KEY_ID" in workflow
+    assert "WR_CUSTODY_B2_READ_APPLICATION_KEY" in workflow
+    trusted = workflow[:workflow.index("Provider-secret isolation proof")]
+    assert "secrets.WR_CUSTODY_B2_KEY_ID" not in trusted
+    assert "secrets.WR_CUSTODY_B2_APPLICATION_KEY" not in trusted
     assert "if: always()" in workflow
     for helper in ("prove_b2_r2_custody", "ensure_b2_custody_object", "run_source_manifest_custody"):
         assert helper not in workflow
@@ -114,8 +148,8 @@ def test_static_nonmutation_and_workflow() -> None:
 
 
 def test_cleanup_on_failure() -> None:
-    environment = {"RUNNER_TEMP": "", "WR_CUSTODY_B2_KEY_ID": "id",
-        "WR_CUSTODY_B2_APPLICATION_KEY": "secret", "WR_CUSTODY_R2_ACCESS_KEY_ID": "rid",
+    environment = {"RUNNER_TEMP": "", "WR_CUSTODY_B2_READ_KEY_ID": "id",
+        "WR_CUSTODY_B2_READ_APPLICATION_KEY": "secret", "WR_CUSTODY_R2_ACCESS_KEY_ID": "rid",
         "WR_CUSTODY_R2_SECRET_ACCESS_KEY": "rsecret", "WR_CUSTODY_B2_BUCKET": read.EXPECTED_B2_BUCKET,
         "WR_CUSTODY_B2_ENDPOINT": "https://s3.us-east-005.backblazeb2.com",
         "WR_CUSTODY_R2_BUCKET": read.EXPECTED_R2_BUCKET,
@@ -129,6 +163,7 @@ def test_cleanup_on_failure() -> None:
 
 def main() -> int:
     test_authoritative_identity_set(); test_exact_version_boundary_and_selection()
+    test_dedicated_b2_authorization_boundary()
     test_verify_deletes_mismatch(); test_r2_only_head_get(); test_static_nonmutation_and_workflow()
     test_cleanup_on_failure()
     print("WR-063 retained-version fail-closed regressions: PASS")

@@ -54,8 +54,8 @@ jobs:
           persist-credentials: false
       - name: Resolve versions and retrieve exact retained objects
         env:
-          WR_CUSTODY_B2_KEY_ID: ${{ secrets.WR_CUSTODY_B2_KEY_ID }}
-          WR_CUSTODY_B2_APPLICATION_KEY: ${{ secrets.WR_CUSTODY_B2_APPLICATION_KEY }}
+          WR_CUSTODY_B2_READ_KEY_ID: ${{ secrets.WR_CUSTODY_B2_READ_KEY_ID }}
+          WR_CUSTODY_B2_READ_APPLICATION_KEY: ${{ secrets.WR_CUSTODY_B2_READ_APPLICATION_KEY }}
           WR_CUSTODY_R2_ACCESS_KEY_ID: ${{ secrets.WR_CUSTODY_R2_ACCESS_KEY_ID }}
           WR_CUSTODY_R2_SECRET_ACCESS_KEY: ${{ secrets.WR_CUSTODY_R2_SECRET_ACCESS_KEY }}
           WR_CUSTODY_B2_BUCKET: ${{ vars.WR_CUSTODY_B2_BUCKET }}
@@ -63,8 +63,8 @@ jobs:
           WR_CUSTODY_R2_BUCKET: ${{ vars.WR_CUSTODY_R2_BUCKET }}
           WR_CUSTODY_R2_ENDPOINT: ${{ vars.WR_CUSTODY_R2_ENDPOINT }}
         run: |
-          echo "::add-mask::${WR_CUSTODY_B2_KEY_ID}"
-          echo "::add-mask::${WR_CUSTODY_B2_APPLICATION_KEY}"
+          echo "::add-mask::${WR_CUSTODY_B2_READ_KEY_ID}"
+          echo "::add-mask::${WR_CUSTODY_B2_READ_APPLICATION_KEY}"
           echo "::add-mask::${WR_CUSTODY_R2_ACCESS_KEY_ID}"
           echo "::add-mask::${WR_CUSTODY_R2_SECRET_ACCESS_KEY}"
           python3 scripts/custody/read_retained_versions.py \
@@ -72,6 +72,8 @@ jobs:
             --report "$RUNNER_TEMP/wr063-report.json"
       - name: Provider-secret isolation proof and safe consumer boundary
         run: |
+          test -z "${WR_CUSTODY_B2_READ_KEY_ID:-}"
+          test -z "${WR_CUSTODY_B2_READ_APPLICATION_KEY:-}"
           test -z "${WR_CUSTODY_B2_KEY_ID:-}"
           test -z "${WR_CUSTODY_B2_APPLICATION_KEY:-}"
           test -z "${WR_CUSTODY_R2_ACCESS_KEY_ID:-}"
