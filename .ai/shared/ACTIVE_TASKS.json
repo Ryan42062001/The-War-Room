@@ -102,19 +102,19 @@
       "allowed_path_prefixes": [".ai/shared/", ".ai/manager/", "scripts/workflow-", ".github/workflows/ci.yml"],
       "forbidden_path_prefixes": [".ai/research/", ".ai/auditor/", ".ai/work_helper/", "src/", "public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "WR-055 PASS is accepted and PR #166 is merged at exact audited head; wait for canonical-main post-merge canary 34872984380 before closure/canonical V3.2 declaration"
+      "next_gate": "WR-055 independently audits PR #166 exact head a6fac435d7b4c791635a654a9971ba7a9fc6460d; PASS-family -> Manager merge exact audited head -> canonical-main post-merge canary"
     },
     {
       "task_id": "WR-055",
       "owner": "Auditor",
       "worker_slot": "auditor-workflow-v32-lane-identity",
-      "status": "MERGED",
+      "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-055.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
       "assignment_main_sha": "bc23851f64158d27c6faf7e93719bbd869b516e1",
-      "worker_checkpoint_sha": "a22e02e629c875cba18d918314d1077425ee1e40",
+      "worker_checkpoint_sha": null,
       "branch": "wr-055-workflow-v32-lane-identity-audit",
-      "pr": 169,
+      "pr": null,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT",
       "audit_required": false,
@@ -131,7 +131,7 @@
       "audit_target_pr": 166,
       "audit_target_branch": "manager/wr-054-workflow-v32-lane-identity",
       "audit_target_sha": "a6fac435d7b4c791635a654a9971ba7a9fc6460d",
-      "next_gate": "Audit PASS accepted and evidence merged; wait for WR-054 canonical-main canary before Manager removes WR-054/055 from active-only registry"
+      "next_gate": "Independently audit the frozen WR-054 target and publish report + Auditor handoff + immutable Auditor-only PR; PASS-family authorizes only Manager integration and required post-merge canary"
     }
   ]
 }
