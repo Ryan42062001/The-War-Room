@@ -17,16 +17,18 @@ Owner: Manager / Architect
 - WR-056 — CLOSED / trusted custody runtime bridge accepted and merged.
 - WR-057 — CLOSED / `RAW_CUSTODY_NOT_ESTABLISHED — EXCLUDE_SOURCE` for PFR-derived nflverse `draft_picks.csv`.
 - WR-058 — CLOSED / independent custody-bridge audit PASS.
-- WR-059 — BLOCKED / evidence remediation waits for independently accepted retained-version read infrastructure.
+- WR-059 — ASSIGNED / R&D source-snapshot + cohort evidence remediation resumed on accepted retained-version infrastructure.
+- WR-060 — BLOCKED on WR-059 / fresh independent audit of the eventual complete source-snapshot/cohort remediation target.
 - WR-061 — CLOSED / immutable fail-closed historical checkpoint, PR #176 unmerged.
 - WR-062 — CLOSED / never activated.
-- WR-063 — AUDIT_READY / PR #178 frozen at `9db29b082cb61b5ef902b56bb5c745fc8ee739b2`; protected proof at implementation head `b2c193cfc11811b32039d00480351ac4f5bc98a1`, run `34906157295`, passed all four authoritative objects with zero provider mutations, cleanup PASS, and zero raw artifacts.
-- WR-064 — ASSIGNED / fresh Independent Auditor audit of exact frozen WR-063 target.
-- WR-060 — BLOCKED on WR-059 / fresh independent audit of the eventual complete source-snapshot/cohort remediation target.
+- WR-063 — CLOSED / exact PR #178 head `9db29b082cb61b5ef902b56bb5c745fc8ee739b2` independently accepted and merged; protected proof run `34906157295` PASS.
+- WR-064 — CLOSED / independent audit PASS, no findings; audit PR #182 head `3c25c4af7b582596d039f3798245e71b4b7a3fed`.
 
-Sequence: `WR-064 independent audit -> exact WR-063 integration + mandatory main canary -> resume WR-059 -> WR-060 independent evidence re-audit`.
+WR-063 exact-head integration commit `8a75f4a712e17bf3b5e91527fa6047b6bb107eb5` passed mandatory canonical-main canary War Room CI `34908351788` across Governance and full tests.
 
-The dedicated B2 read credential proved the required bucket/prefix boundary, `listFiles` + `readFiles`, and absence of mutation authority. Existing shared mutation-capable custody credentials were not used by WR-063.
+Sequence: `resume WR-059 -> immutable remediation target -> WR-060 independent evidence re-audit`.
+
+The dedicated B2 read credential and accepted WR-063 path provide bounded, version-aware, non-mutating retained-object reads for the four authoritative 2013–2016 identities. Existing shared mutation-capable custody credentials remain outside that read path.
 
 `draft_picks.csv` remains excluded and no silent replacement provider is authorized. A later versioned contract/feature-schema governance gate remains mandatory before any model path could proceed without draft-capital semantics.
 
