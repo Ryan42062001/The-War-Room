@@ -1,7 +1,7 @@
 {
   "schema_version": "wr-custody-source-manifest-v1",
   "task_id": "WR-042",
-  "manifest_id": "wr042-v2-source-custody-20260913",
+  "manifest_id": "wr042-v2-source-custody-20260914",
   "sources": [
     {"source_id":"nflverse-player-summary-2012","source_class":"NFLVERSE_PLAYER_SUMMARY_STATS","rights_state":"RAW_CUSTODY_ALLOWED_WITH_ATTRIBUTION","provider":"github_release_asset","repository":"nflverse/nflverse-data","asset_id":512980777,"filename":"stats_player_regpost_2012.csv","season":2012,"expected_sha256":"18d0d3ccbac3ba5489098629b74d58074b5297c8cf2c5de4ec06f809f2dffafc","expected_size_bytes":801261,"content_type":"text/csv"},
     {"source_id":"nflverse-player-summary-2013","source_class":"NFLVERSE_PLAYER_SUMMARY_STATS","rights_state":"RAW_CUSTODY_ALLOWED_WITH_ATTRIBUTION","provider":"github_release_asset","repository":"nflverse/nflverse-data","asset_id":512983282,"filename":"stats_player_regpost_2013.csv","season":2013,"expected_sha256":"dbc7804c32c8dbf46120bfe4e724cdd926537509caa8a1bb96cd3b6e159b21f8","expected_size_bytes":792070,"content_type":"text/csv"},
@@ -17,6 +17,6 @@
     {"source_id":"nflverse-player-summary-2023","source_class":"NFLVERSE_PLAYER_SUMMARY_STATS","rights_state":"RAW_CUSTODY_ALLOWED_WITH_ATTRIBUTION","provider":"github_release_asset","repository":"nflverse/nflverse-data","asset_id":513240669,"filename":"stats_player_regpost_2023.csv","season":2023,"expected_sha256":"b55110bdda4b1cb9c4f115991f5c5838824826cd76cfe4c60721af42ed4db766","expected_size_bytes":855110,"content_type":"text/csv"},
     {"source_id":"nflverse-player-summary-2024","source_class":"NFLVERSE_PLAYER_SUMMARY_STATS","rights_state":"RAW_CUSTODY_ALLOWED_WITH_ATTRIBUTION","provider":"github_release_asset","repository":"nflverse/nflverse-data","asset_id":513241318,"filename":"stats_player_regpost_2024.csv","season":2024,"expected_sha256":"e12c0dd3877e70bd18460f7b03afe83ae0e60aa6aba0c141e6fff9699de7ccb3","expected_size_bytes":877377,"content_type":"text/csv"},
     {"source_id":"nflverse-player-summary-2025","source_class":"NFLVERSE_PLAYER_SUMMARY_STATS","rights_state":"RAW_CUSTODY_ALLOWED_WITH_ATTRIBUTION","provider":"github_release_asset","repository":"nflverse/nflverse-data","asset_id":513244170,"filename":"stats_player_regpost_2025.csv","season":2025,"expected_sha256":"a4cd28b5209608d87967c4e0db9720fc617c3f9aafe0a3a097461586ea90fd6d","expected_size_bytes":888037,"content_type":"text/csv"},
-    {"source_id":"nflverse-players-metadata-20260913","source_class":"NFLVERSE_PLAYERS_METADATA_MINIMAL","rights_state":"RAW_CUSTODY_ALLOWED_WITH_ATTRIBUTION_AND_MINIMIZATION","provider":"github_release_asset","repository":"nflverse/nflverse-data","asset_id":561225038,"filename":"players.csv","season":null,"expected_sha256":"7979e313731125dab60a26e8790f41696187edb77545e788732b9f7c8b61eb6d","expected_size_bytes":7287149,"content_type":"text/csv"}
+    {"source_id":"nflverse-players-metadata-20260914","source_class":"NFLVERSE_PLAYERS_METADATA_MINIMAL","rights_state":"RAW_CUSTODY_ALLOWED_WITH_ATTRIBUTION_AND_MINIMIZATION","provider":"github_release_asset","repository":"nflverse/nflverse-data","asset_id":563580371,"filename":"players.csv","season":null,"expected_sha256":"03a823a0e2344aff9a4ef67bdd62005d3e1d7ab62a98c790ce19a8a557d1c221","expected_size_bytes":7260242,"content_type":"text/csv"}
   ]
 }
