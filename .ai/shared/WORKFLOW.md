@@ -8,7 +8,7 @@ This is the canonical workflow for **The War Room**, the live fantasy-football *
 
 ## V3.2 — lane identity enforcement
 
-WR-054 implemented the bounded Workflow V3.2 safety upgrade, WR-055 independently returned a PASS-family verdict, and canonical-main post-merge canary `34872984380` completed `SUCCESS`. V3.2 is therefore canonical.
+WR-054 implemented the bounded Workflow V3.2 safety upgrade, WR-055 independently returned `PASS`, and canonical-main post-merge canary `34872984380` completed `SUCCESS`. V3.2 is canonical.
 
 Task-scoped preflight and finish checks fail closed when the checked-out branch does not equal the branch assigned in `ACTIVE_TASKS.json`, including detached HEAD. Static workflow state validation additionally binds each active task spec's `TASK ID`, `STATUS`, `TARGET BRANCH`, `EXECUTION MODE`, and dependency class to registry truth while permitting descriptive dependency suffix text after the machine token.
 
