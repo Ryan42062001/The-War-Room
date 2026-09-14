@@ -33,6 +33,12 @@ Preserve the exact 15 retained/reference identities and produce:
 
 Do not silently reacquire or substitute a mutable upstream object. If exact retained/reference bytes cannot support the required evidence, fail closed for that source and return control to Manager.
 
+## WR-059 retained-object read authorization
+
+Manager explicitly authorizes WR-059 to use the existing protected custody environment for **read-only evidence reconstruction** from exactly four already-custodied player-summary identities: seasons 2013, 2014, 2015, and 2016, pinned in `.ai/manager/WR-059.md` by asset ID, SHA-256, byte size, and content-addressed custody key.
+
+This authorization permits read-only B2/R2 retrieval and ephemeral parsing only after exact digest/size verification. It does not permit upstream source-byte refresh, asset substitution, recustody, provider-object mutation, custody-policy/retention/lock changes, raw-byte commits, or Actions artifacts. Provider metadata lookup is lineage-only. If existing protected tooling cannot perform the retrieval without workflow/runtime or credential-policy changes, R&D must fail closed and return that execution-path blocker to Manager rather than expanding scope.
+
 ## Boundaries
 
 `draft_picks.csv` remains excluded under WR-057. No 2026 regular-season outcome inspection, targets, model fitting/scoring/tuning/comparison/evaluation, rankings, production changes, or Phase-6 work.
