@@ -20,17 +20,17 @@ Owner: Manager / Architect
 - WR-059 — BLOCKED / evidence remediation waits for an independently accepted retained-version read path.
 - WR-061 — CLOSED / immutable fail-closed historical checkpoint, PR #176 unmerged.
 - WR-062 — CLOSED / never activated because WR-061 never produced a successful live proof.
-- WR-063 — BLOCKED / Work Helper version-aware implementation reached protected B2 authorization but the existing custody credential lacks `listFiles`. Manager chose a dedicated bucket/prefix-restricted read-only B2 credential rather than widening the mutation-capable shared custody credential.
+- WR-063 — ASSIGNED / Work Helper resumes in `WORK_MODE_HIGH_VALUE` on PR #178 using a separately provisioned dedicated B2 read-only credential. The next protected run must independently prove the actual bucket/prefix/capability boundary before any version listing/download and then live-prove all four authoritative objects.
 - WR-064 — BLOCKED on successful WR-063 four-object protected proof / fresh independent audit gate.
 - WR-060 — BLOCKED on WR-059 / fresh independent audit of the eventual complete source-snapshot/cohort remediation target.
 
-Sequence: `user provisions dedicated B2 read-only key -> resume WR-063 Work-mode protected proof -> WR-064 independent audit -> exact WR-063 integration + main canary -> resume WR-059 -> WR-060 independent evidence re-audit`.
+Sequence: `resume WR-063 with dedicated B2 read credential -> successful protected four-object proof -> WR-064 independent audit -> exact WR-063 integration + main canary -> resume WR-059 -> WR-060 independent evidence re-audit`.
 
-The dedicated B2 read credential must be restricted to `War-Room-Custody-Primary` + `custody/sha256/`, include `listFiles`/`readFiles`, and contain no provider-mutation authority. Existing shared custody credentials remain unchanged.
+The dedicated B2 read credential must prove bucket `War-Room-Custody-Primary`, prefix `custody/sha256/` or a strictly narrower compatible boundary, `listFiles` + `readFiles`, and no mutation capability. Existing shared custody credentials remain unchanged and are not used by the WR-063 B2 read path.
 
 `draft_picks.csv` remains excluded and no silent replacement provider is authorized. A later versioned contract/feature-schema governance gate remains mandatory before any model path could proceed without draft-capital semantics.
 
-No model protocol, fitting, scoring, tuning, comparison, evaluation, target join, 2026 regular-season outcome use, production ranking change, or Phase-6 work is authorized by these tasks.
+No model protocol, fitting, scoring, tuning, comparison, evaluation, target join, 2026 regular-season outcome use, production ranking change, provider mutation, or Phase-6 work is authorized by these tasks.
 
 ## Future phases
 
