@@ -2,7 +2,7 @@
 
 ## Status
 
-Implementation published on PR #178; protected provider proof pending.
+`FAIL CLOSED — EXISTING B2 CREDENTIAL LACKS VERSION-LIST CAPABILITY`
 
 ## Root cause and remediation design
 
@@ -49,10 +49,30 @@ reconciles the earlier 2013 by-name 404. No hide state is presumed.
 - permanent-workflow release guard: PASS;
 - staged unapproved workflow rejection: PASS.
 
-## Live proof evidence
+## Protected execution evidence
 
-Pending exact-head protected execution. This section will be frozen with run/job
-IDs and privacy-safe per-season version/digest/size results after execution.
+- PR: #178.
+- Executed implementation head: `15a35b3626929090b374eff5fdf4da4d0dfd32ce`.
+- Protected workflow run/job: `34901593729` / `104168617065`.
+- Contract preflight job: `104168574295` — PASS.
+- Existing B2 credential authentication: PASS.
+- Provider-issued capability gate: FAIL CLOSED before version listing because
+  `listFiles` is absent.
+- Existing accepted credential capabilities remain exactly:
+  `listAllBucketNames`, `readFiles`, `writeFiles`, `readFileRetentions`,
+  `writeFileRetentions`, `readFileLegalHolds`, `writeFileLegalHolds`.
+- B2 exact-key version queries issued: 0.
+- B2/R2 object downloads: 0 / 0.
+- Provider mutation operations: 0.
+- Cleanup: PASS.
+- Raw Actions artifacts: 0.
+
+The failure is not an object-identity result. No retained-version metadata was
+available, so the 2013 by-name 404 remains unreconciled and no claim is made about
+whether a hide marker exists. The correct bounded next decision belongs to the
+Manager: either authorize a separately governed credential-scope change that adds
+the Backblaze `listFiles` capability, or close the reconstruction path as
+unprovable. WR-063 itself is not authorized to change credentials.
 
 ## Boundaries
 
