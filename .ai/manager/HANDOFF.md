@@ -4,44 +4,46 @@ HANDOFF
 
 Workflow: V3.2 CANONICAL
 
-## Accepted audit result
+## Accepted upstream state
 
-WR-043 is CLOSED with final verdict `FAIL — REMEDIATION REQUIRED`. Audit PR #172 exact head `d3f1c5fba872528e06f49d0a7f92b6a3a9e3f1a2` was merged as canonical evidence at `60628ac9ea671ad1ecdb0c26f8ad200e8afed19c`; canonical-main CI `34876585824` is `SUCCESS`.
+WR-043 is CLOSED with `FAIL — REMEDIATION REQUIRED`; historical WR-042 PR #168 remains closed unmerged. Positive custody evidence for the exact 15 retained byte identities remains valid. `draft_picks.csv` remains excluded under WR-057.
 
-Historical audited WR-042 target:
+Canonical main before this routing transaction: `f77af0040c9c0c5413f6d88cb58872fb587c6a52`.
 
-- PR #168 — CLOSED UNMERGED;
-- exact head `614445a20c2c15fbc3d8c107644a5244ddb52076`;
-- executed manifest commit `cc9005ae4bd9065cf80f1c184f31974904165c54`;
-- manifest SHA-256 `d2196293ff34543b063e737efb175f579967bf37f5dc91b41c08dd45dfe44d26`;
-- custody run/job `34871882486` / `104069521779`.
+## New execution-path blocker
 
-Positive custody evidence for the 15 exact byte identities remains valid and should be reused where possible. The failure is limited to missing WR-039 source-snapshot and cohort/source-eligibility evidence.
+R&D returned:
+
+`EXISTING_PROTECTED_EXECUTION_PATH_HAS_NO_NON-MUTATING_RETAINED-OBJECT_READ_MODE`
+
+The existing WR-042/WR-046 protected jobs route through custody routines capable of PUT/retention/Legal-Hold mutation. R&D correctly stopped rather than widening WR-059.
 
 ## Active lanes
 
-- WR-042 — BLOCKED on WR-059 remediation. Do not advance historical PR #168.
-- WR-059 — ASSIGNED to R&D on `wr-059-v2-source-snapshot-cohort-remediation`.
-- WR-060 — BLOCKED on WR-059; future independent re-audit branch `wr-060-v2-source-snapshot-cohort-reaudit`.
+- WR-042 — BLOCKED on WR-059 remediation.
+- WR-059 — BLOCKED pending independently accepted GET-only retained-object path.
+- WR-061 — ASSIGNED to Work Helper on `wr-061-retained-object-read-path`.
+- WR-062 — BLOCKED on WR-061; future audit branch `wr-062-retained-object-read-path-audit`.
+- WR-060 — BLOCKED on the eventual immutable WR-059 source-snapshot/cohort target.
 
-## WR-059 required outcome
+## WR-061 authorization
 
-Preserve the exact 15 retained/reference identities and produce:
+Work Helper may create only the narrowly scoped GET-only path defined in `.ai/manager/WR-061.md`. It must be limited to the four exact 2013–2016 retained custody identities already pinned by asset ID, SHA-256, byte size, and custody key; use the existing secret set; isolate secrets to trusted retrieval code; forbid provider mutation operations; verify exact B2/R2 bytes; clean raw runner-local bytes; publish no raw-byte artifacts; and provide a safe no-secrets consumer boundary for later WR-059 reconstruction.
 
-1. one complete WR-039-compliant source-snapshot artifact with versioned `source_snapshot_id`, canonical hash, exact per-source schema/row/approved-column/cutoff/lineage/rights/retained-object/acquisition-code evidence; and
-2. one deterministic no-scoring cohort/source-eligibility artifact under a versioned `cohort_version`, canonical ordered stable keys, explicit eligibility/availability reasons, duplicate-key rejection, and canonical digest bound to the source snapshot.
+Existing mutation-capable custody workflows/scripts are frozen and must not be modified by WR-061.
 
-Do not silently reacquire or substitute a mutable upstream object. If exact retained/reference bytes cannot support the required evidence, fail closed for that source and return control to Manager.
+## Routing sequence
 
-## WR-059 retained-object read authorization
-
-Manager explicitly authorizes WR-059 to use the existing protected custody environment for **read-only evidence reconstruction** from exactly four already-custodied player-summary identities: seasons 2013, 2014, 2015, and 2016, pinned in `.ai/manager/WR-059.md` by asset ID, SHA-256, byte size, and content-addressed custody key.
-
-This authorization permits read-only B2/R2 retrieval and ephemeral parsing only after exact digest/size verification. It does not permit upstream source-byte refresh, asset substitution, recustody, provider-object mutation, custody-policy/retention/lock changes, raw-byte commits, or Actions artifacts. Provider metadata lookup is lineage-only. If existing protected tooling cannot perform the retrieval without workflow/runtime or credential-policy changes, R&D must fail closed and return that execution-path blocker to Manager rather than expanding scope.
+1. Work Helper publishes immutable WR-061 implementation + tests + protected four-object live proof.
+2. Manager freezes exact WR-061 PR/head/run evidence and activates WR-062.
+3. WR-062 independently audits. PASS-family only.
+4. Manager merges only the exact audited WR-061 head and requires canonical-main post-merge canary because workflows/custody infrastructure are affected.
+5. Only after accepted canary does Manager resume WR-059.
+6. Completed WR-059 still requires WR-060 independent re-audit before any later model/contract decision.
 
 ## Boundaries
 
-`draft_picks.csv` remains excluded under WR-057. No 2026 regular-season outcome inspection, targets, model fitting/scoring/tuning/comparison/evaluation, rankings, production changes, or Phase-6 work.
+No 2026 regular-season outcomes, target joins, model fitting/scoring/tuning/comparison/evaluation, rankings, production changes, or Phase-6 work.
 
 ## Manager transaction rule
 
