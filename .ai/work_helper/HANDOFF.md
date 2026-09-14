@@ -5,7 +5,7 @@ HANDOFF
 Task ID: WR-061
 Role: Work Helper / Super Troubleshooter / Cross-Functional Operator
 Assignment mode: DIAGNOSIS + REMEDIATION
-Status: IMPLEMENTED — PROTECTED LIVE PROOF AND INDEPENDENT AUDIT REQUIRED
+Status: FAIL CLOSED — SAFE PRE-AUDIT LIVE PROOF BLOCKED
 Starting canonical SHA: `1ddf15b7e5f97e1857926bd9016a626e7fb3a702`
 Branch: `wr-061-retained-object-read-path`
 
@@ -29,9 +29,12 @@ Detailed evidence: `.ai/work_helper/WR061_RETAINED_OBJECT_READ_PATH.md`.
 - Workflow V3.2 static state check: PASS;
 - workflow YAML parse and staged diff check: PASS.
 
-The final `[wr061-live-proof]` push is the protected provider validation. Because its
-run/job IDs are created after the immutable triggering commit, Manager must bind the
-Actions IDs and exact PR head externally before WR-062 activation.
+Protected attempts remained fail-closed:
+
+- `34889550688` / `104128551088`: B2 S3 GET failed; cleanup PASS;
+- `34889871310` / `104129607200`: v4 token parser failed before download; cleanup PASS;
+- `34890179111` / `104130645764`: corrected native B2 GET returned HTTP 404 for
+  the exact WR-061 2013 key; cleanup PASS.
 
 The first exact-head protected run `34889550688` / job `104128551088` failed closed
 on the B2 S3-compatibility transport, cleaned temporary state, and created no artifact.
@@ -41,7 +44,12 @@ authorization/download GET sequence; independent audit must inspect both lineage
 Native-v4 run `34889871310` / job `104129607200` also failed closed, this time on
 the authorization-token schema location before object download. Cleanup passed and no
 artifact was created. The root-level v4 token binding now has a deterministic response
-regression; this distinct corrected candidate requires fresh live proof.
+regression. The corrected third attempt established the retained-state blocker and
+was not retried.
+
+Historical WR-042 custody evidence also proves WR-061's 2014–2016 digests/keys differ
+from the actual accepted retained identities. The exact task allowlist cannot be
+silently replaced. No R2 read occurred because every attempt stopped at B2 first.
 
 ## Preservation
 
@@ -57,8 +65,9 @@ WR-039 / WR-D008 semantics changed: NO
 
 ## Next gate
 
-Freeze the exact PR/head and successful protected run/job evidence, then activate
-Independent Auditor / QA for WR-062. Do not activate WR-059 before WR-062 PASS-family,
-exact integration, and the mandatory canonical-main canary.
+Manager reconciles WR-061's four exact pins against WR-042's accepted retained
+identities and determines why the matching 2013 B2 name returns 404. A revised task
+must explicitly authorize any corrected keys or version-addressed read. Keep WR-059
+and WR-062 blocked; do not integrate the implementation as a successful path.
 
-`INDEPENDENT AUDIT REQUIRED`
+`SAFE PRE-AUDIT LIVE PROOF BLOCKED — CANONICAL IDENTITY / RETAINED-STATE RECONCILIATION REQUIRED`

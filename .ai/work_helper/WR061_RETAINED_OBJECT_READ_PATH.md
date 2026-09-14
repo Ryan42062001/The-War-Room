@@ -89,17 +89,41 @@ authorization because the parser looked for the authorization token under
 no artifact or object download occurred. The field binding was corrected and locked
 with a synthetic v4 response regression before another live attempt.
 
-## Protected live-proof contract
+## Protected live-proof result
 
-The final implementation commit is marked `[wr061-live-proof]`. The branch-scoped
-push trigger runs the secretless preflight and exactly one protected read job against
-that same immutable commit. Its Actions summary is the privacy-safe live report and
-contains all four B2/R2 digest/size results, equality, consumer-secret isolation,
-zero mutation operations, zero raw artifacts, and cleanup.
+No successful four-object proof can be produced under the exact Manager-pinned
+allowlist. Three materially distinct live attempts were fail-closed:
 
-Run/job identifiers cannot be self-referentially embedded in the commit that triggers
-them. Manager must bind the externally immutable Actions run/job IDs to the exact PR
-head before activating WR-062.
+| Head | Run | Job | Result | Cleanup/artifact |
+|---|---:|---:|---|---|
+| `8c9bdcb95762ea0ee6ae18747f0ad7bde6fad18e` | 34889550688 | 104128551088 | B2 S3 compatibility GET failed | cleanup PASS; zero artifacts |
+| `bfff2f5692f6d09ee6c63bb2a6674eecee7f5671` | 34889871310 | 104129607200 | native v4 token field binding failed before download | cleanup PASS; zero artifacts |
+| `7ec951c1fcdfd93d34ff36c2e876477c35ead32b` | 34890179111 | 104130645764 | native B2 exact 2013 key returned HTTP 404 | cleanup PASS; zero artifacts |
+
+The second failure was remediated and regression-locked. The third is provider-state
+evidence, not a transient test failure, and was not retried.
+
+## Canonical identity contradiction
+
+The historical WR-042 accepted result at head
+`614445a20c2c15fbc3d8c107644a5244ddb52076`, artifact
+`.ai/research/generated/WR042_V2_SOURCE_CUSTODY_RESULT.json`, binds the actual
+custodied keys below. WR-061 matches 2013 but pins different digests/keys for all
+other required seasons:
+
+| Season | WR-061 digest | WR-042 retained digest | Match |
+|---|---|---|---|
+| 2013 | `dbc7804c32c8dbf46120bfe4e724cdd926537509caa8a1bb96cd3b6e159b21f8` | same | YES, but B2 GET returned 404 |
+| 2014 | `7046a0b75b845b3f70317a2c612eeaa3dad558895677525e64023cf49f867cd6` | `7046a0fd69b979d0649feb679a42f82f6e8e175d19587857d3e9371f09427cd6` | NO |
+| 2015 | `b977be3ec44102f766503b430fe1e158fed437e89c2d1857554aa85b0128e3eb` | `b977be5bc8cad6b02dfb755e78974b4486a505fa272f683add499b968878e3eb` | NO |
+| 2016 | `041473c2435ed408c4afab0661037dfcc9d2b830e922bd8fdb46fb3460c72424` | `041473e5860ca6cfcba7a29e98b2ddfc3f01db0df2469d5b44e44135603e2424` | NO |
+
+Changing the compiled allowlist to the WR-042 identities would contradict the exact
+WR-061 Manager authorization. Provider listing/version discovery and upstream
+reacquisition are also outside the authorized GET/download-only contract. Therefore
+the implementation cannot truthfully produce the required four-object proof without
+a corrected Manager task/allowlist plus an explanation or remediation of the missing
+2013 retained B2 name.
 
 ## Boundaries and remaining uncertainty
 
@@ -110,8 +134,7 @@ head before activating WR-062.
 - No 2026 outcome, model, scoring, ranking, production, or Phase-6 work occurred.
 - WR-039 / WR-D008 and accepted WR-046 / WR-053 semantics are unchanged.
 
-Provider-live facts require independent inspection of the protected run. Work Helper
-does not self-certify. WR-059 remains blocked until WR-062 audits the exact target and
-Manager completes integration plus the required canonical-main canary.
+WR-059 remains blocked. WR-062 must not be activated against this failed live-proof
+target. Manager must reconcile the exact four identities and retained B2 state first.
 
-`INDEPENDENT AUDIT REQUIRED`
+`SAFE PRE-AUDIT LIVE PROOF BLOCKED — CANONICAL IDENTITY / RETAINED-STATE RECONCILIATION REQUIRED`
