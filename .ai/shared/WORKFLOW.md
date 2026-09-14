@@ -1,18 +1,18 @@
 # War Room Team Workflow
 
-Status: ACTIVE — WORKFLOW V3.1.1
-Last updated: 2026-09-13
+Status: ACTIVE — WORKFLOW V3.2
+Last updated: 2026-09-14
 Owner: Manager / Architect
 
 This is the canonical workflow for **The War Room**, the live fantasy-football **DRAFT** assistant. Repository state overrides stale chat memory. If older workflow guidance conflicts with this file, this file wins unless Manager records a newer approved workflow change.
 
-## V3.2 candidate — lane identity enforcement
+## V3.2 — lane identity enforcement
 
-WR-054 is evaluating a bounded Workflow V3.2 safety upgrade. V3.1.1 remains canonical until WR-054 receives independent WR-055 PASS-family audit, merges, and passes its canonical-main post-merge canary.
+WR-054 implemented the bounded Workflow V3.2 safety upgrade, WR-055 independently returned `PASS`, and canonical-main post-merge canary `34872984380` completed `SUCCESS`. V3.2 is canonical.
 
-The candidate requires task-scoped preflight and finish checks to fail closed when the checked-out branch does not equal the branch assigned in `ACTIVE_TASKS.json`, including detached HEAD. Static workflow state validation additionally binds each active task spec's `TASK ID`, `STATUS`, `TARGET BRANCH`, `EXECUTION MODE`, and dependency class to registry truth while permitting descriptive dependency suffix text after the machine token.
+Task-scoped preflight and finish checks fail closed when the checked-out branch does not equal the branch assigned in `ACTIVE_TASKS.json`, including detached HEAD. Static workflow state validation additionally binds each active task spec's `TASK ID`, `STATUS`, `TARGET BRANCH`, `EXECUTION MODE`, and dependency class to registry truth while permitting descriptive dependency suffix text after the machine token.
 
-The V3.2 candidate must preserve all accepted WR-056 trusted source-custody CI behavior and existing V3.1.1 collision, audit-target, live-state, and Manager-authority guarantees.
+V3.2 preserves all accepted WR-056 trusted source-custody CI behavior and existing V3.1.1 collision, audit-target, live-state, and Manager-authority guarantees.
 
 ## Project identity boundary
 - **The War Room** = live fantasy-football draft assistant.
@@ -129,6 +129,8 @@ Audited CI/browser/test-harness/persistence/shared-infrastructure/build/release 
 
 ## Atomic Manager reconciliation
 One logical Manager transition should land as one logical Git transaction whenever tooling supports it. Prefer one tree/commit or one squash/merge transaction for coordinated active registry, project state, roadmap, Manager handoff, and task-spec changes. If tooling cannot make it atomic, disclose the limitation, minimize the inconsistency window, and reconcile immediately before routing more work.
+
+When using repository APIs, do not implement one logical Manager transition as sequential per-file commits if an atomic Git tree/commit path is available. Prepare all coordinated file contents against one verified canonical parent, create one tree and one commit, then move the Manager branch once. This prevents CI from evaluating transient half-applied registry/task-spec states.
 
 ## Canonical-document scope
 - `ACTIVE_TASKS.json`: active machine control-plane index.
