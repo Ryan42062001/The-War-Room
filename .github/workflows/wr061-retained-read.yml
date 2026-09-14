@@ -1,0 +1,139 @@
+name: WR-061 GET-Only Retained Object Read
+
+on:
+  push:
+    branches:
+      - wr-061-retained-object-read-path
+    paths:
+      - '.github/workflows/wr061-retained-read.yml'
+      - 'scripts/custody/read_retained_objects.py'
+      - 'scripts/custody/test_read_retained_objects.py'
+      - '.ai/work_helper/**'
+  pull_request:
+    paths:
+      - '.github/workflows/wr061-retained-read.yml'
+      - 'scripts/custody/read_retained_objects.py'
+      - 'scripts/custody/test_read_retained_objects.py'
+      - '.ai/work_helper/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wr061-retained-object-read
+  cancel-in-progress: false
+
+jobs:
+  contract-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Validate GET-only implementation
+        run: |
+          python3 -m py_compile \
+            scripts/custody/read_retained_objects.py \
+            scripts/custody/test_read_retained_objects.py
+          python3 scripts/custody/test_read_retained_objects.py
+          npm run test:release
+          aws --version
+
+  protected-retained-read:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' &&
+       github.ref == 'refs/heads/wr-061-retained-object-read-path' &&
+       contains(github.event.head_commit.message, '[wr061-live-proof]'))
+    needs: contract-preflight
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out reviewed WR-061 implementation
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+
+      - name: Retrieve and verify exact retained objects
+        env:
+          WR_CUSTODY_B2_KEY_ID: ${{ secrets.WR_CUSTODY_B2_KEY_ID }}
+          WR_CUSTODY_B2_APPLICATION_KEY: ${{ secrets.WR_CUSTODY_B2_APPLICATION_KEY }}
+          WR_CUSTODY_R2_ACCESS_KEY_ID: ${{ secrets.WR_CUSTODY_R2_ACCESS_KEY_ID }}
+          WR_CUSTODY_R2_SECRET_ACCESS_KEY: ${{ secrets.WR_CUSTODY_R2_SECRET_ACCESS_KEY }}
+          WR_CUSTODY_B2_BUCKET: ${{ vars.WR_CUSTODY_B2_BUCKET }}
+          WR_CUSTODY_B2_ENDPOINT: ${{ vars.WR_CUSTODY_B2_ENDPOINT }}
+          WR_CUSTODY_R2_BUCKET: ${{ vars.WR_CUSTODY_R2_BUCKET }}
+          WR_CUSTODY_R2_ENDPOINT: ${{ vars.WR_CUSTODY_R2_ENDPOINT }}
+        run: |
+          echo "::add-mask::${WR_CUSTODY_B2_KEY_ID}"
+          echo "::add-mask::${WR_CUSTODY_B2_APPLICATION_KEY}"
+          echo "::add-mask::${WR_CUSTODY_R2_ACCESS_KEY_ID}"
+          echo "::add-mask::${WR_CUSTODY_R2_SECRET_ACCESS_KEY}"
+          python3 scripts/custody/read_retained_objects.py \
+            --output-dir "$RUNNER_TEMP/wr061-raw" \
+            --report "$RUNNER_TEMP/wr061-read-report.json"
+
+      - name: Provider-secret isolation proof and safe consumer boundary
+        run: |
+          test -z "${WR_CUSTODY_B2_KEY_ID:-}"
+          test -z "${WR_CUSTODY_B2_APPLICATION_KEY:-}"
+          test -z "${WR_CUSTODY_R2_ACCESS_KEY_ID:-}"
+          test -z "${WR_CUSTODY_R2_SECRET_ACCESS_KEY:-}"
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          raw = Path(os.environ["RUNNER_TEMP"]) / "wr061-raw"
+          report_path = Path(os.environ["RUNNER_TEMP"]) / "wr061-read-report.json"
+          report = json.loads(report_path.read_text(encoding="utf-8"))
+          assert report["result"] == "PASS"
+          assert len(report["objects"]) == 4
+          for item in report["objects"]:
+              for provider in ("b2", "r2"):
+                  path = raw / f"{item['season']}.{provider}.raw"
+                  digest = hashlib.sha256(path.read_bytes()).hexdigest()
+                  assert digest == item[provider]["sha256"] == item["expected_sha256"]
+                  assert path.stat().st_size == item[provider]["byte_size"] == item["expected_byte_size"]
+          boundary = {
+              "schema_version": 1,
+              "task_id": "WR-061",
+              "consumer_boundary": "PASS",
+              "provider_credentials_present": False,
+              "verified_input_count": 4,
+              "raw_output_published": False,
+          }
+          target = Path(os.environ["RUNNER_TEMP"]) / "wr061-consumer-boundary.json"
+          target.write_text(json.dumps(boundary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          PY
+
+      - name: Publish privacy-safe GET-only evidence
+        run: |
+          {
+            echo '### WR-061 protected GET-only retained-object proof'
+            echo
+            echo "Workflow implementation SHA: ${GITHUB_SHA}"
+            echo '```json'
+            cat "$RUNNER_TEMP/wr061-read-report.json"
+            cat "$RUNNER_TEMP/wr061-consumer-boundary.json"
+            echo '```'
+            echo 'Raw-byte Actions artifact count: 0'
+            echo 'Provider mutation operation count: 0'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove runner-temporary retained bytes and reports
+        if: always()
+        run: |
+          rm -rf "$RUNNER_TEMP/wr061-raw"
+          rm -f "$RUNNER_TEMP/wr061-read-report.json"
+          rm -f "$RUNNER_TEMP/wr061-consumer-boundary.json"
+          test ! -e "$RUNNER_TEMP/wr061-raw"
+          test ! -e "$RUNNER_TEMP/wr061-read-report.json"
+          test ! -e "$RUNNER_TEMP/wr061-consumer-boundary.json"
+          {
+            echo
+            echo 'Cleanup: PASS'
+            echo 'Raw-byte Actions artifacts: 0 (workflow contains no artifact-upload action)'
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -14,6 +14,7 @@ const approvedWorkflows = [
   '.github/workflows/ci.yml',
   '.github/workflows/wr042-source-custody.yml',
   '.github/workflows/wr046-custody-fixture.yml',
+  '.github/workflows/wr061-retained-read.yml',
 ].sort();
 assert.deepEqual(
   workflows,
