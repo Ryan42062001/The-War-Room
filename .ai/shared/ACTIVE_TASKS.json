@@ -1,11 +1,29 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-14T18:52:00Z",
+  "updated_at_utc": "2026-09-14T20:18:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "lifecycle_states": ["PLANNED","BLOCKED","ASSIGNED","IN_PROGRESS","MANAGER_REVIEW_READY","AUDIT_READY","MERGE_READY","REWORK_REQUIRED","MERGED","CLOSED"],
-  "blocker_types": ["NONE","USER_ACTION","UPSTREAM_TASK","EXTERNAL_SERVICE","TECHNICAL","AUDIT"],
+  "lifecycle_states": [
+    "PLANNED",
+    "BLOCKED",
+    "ASSIGNED",
+    "IN_PROGRESS",
+    "MANAGER_REVIEW_READY",
+    "AUDIT_READY",
+    "MERGE_READY",
+    "REWORK_REQUIRED",
+    "MERGED",
+    "CLOSED"
+  ],
+  "blocker_types": [
+    "NONE",
+    "USER_ACTION",
+    "UPSTREAM_TASK",
+    "EXTERNAL_SERVICE",
+    "TECHNICAL",
+    "AUDIT"
+  ],
   "tasks": [
     {
       "task_id": "WR-042",
@@ -48,14 +66,14 @@
       "audit_required": true,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": ["WR-062"],
-      "blocked_on": ["R&D confirmed the existing protected custody execution path has no non-mutating retained-object read mode. WR-061 must establish the bounded GET-only path and WR-062 must independently PASS it before WR-059 resumes."],
+      "blocked_on_tasks": ["WR-064"],
+      "blocked_on": ["WR-061 failed closed before audit. WR-063 must reconcile authoritative WR-042 retained identities and establish a protected non-mutating version-aware B2/R2 read path; WR-064 must independently PASS it before WR-059 resumes."],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [".ai/research/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/work_helper/", "src/", "public/"],
       "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
-      "next_gate": "WR-061 GET-only retained-object path -> WR-062 independent audit -> Manager resumes WR-059 on the accepted path"
+      "next_gate": "WR-063 retained-version recovery -> WR-064 independent audit -> exact integration + canonical-main canary -> resume WR-059"
     },
     {
       "task_id": "WR-060",
@@ -83,15 +101,15 @@
       "next_gate": "Wait for WR-059 immutable target; Manager will freeze exact PR/head before activation"
     },
     {
-      "task_id": "WR-061",
+      "task_id": "WR-063",
       "owner": "Work Helper",
-      "worker_slot": "work-helper-retained-read-path",
+      "worker_slot": "work-helper-retained-version-recovery",
       "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-061.md",
+      "task_file": ".ai/manager/WR-063.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "f77af0040c9c0c5413f6d88cb58872fb587c6a52",
+      "assignment_main_sha": "1ddf15b7e5f97e1857926bd9016a626e7fb3a702",
       "worker_checkpoint_sha": null,
-      "branch": "wr-061-retained-object-read-path",
+      "branch": "wr-063-retained-object-version-read-recovery",
       "pr": null,
       "dependency": "INDEPENDENT",
       "execution_mode": "WORK_MODE_HIGH_VALUE",
@@ -102,35 +120,35 @@
       "blocked_on": [],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": true,
-      "allowed_path_prefixes": [".ai/work_helper/", ".github/workflows/wr061-retained-read.yml", "scripts/custody/read_retained_objects.py", "scripts/custody/test_read_retained_objects.py", "scripts/validate-release-candidate.mjs", ".github/workflows/ci.yml"],
+      "allowed_path_prefixes": [".ai/work_helper/", ".github/workflows/wr063-retained-version-read.yml", "scripts/custody/read_retained_versions.py", "scripts/custody/test_read_retained_versions.py", "scripts/validate-release-candidate.mjs", ".github/workflows/ci.yml"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/research/", "src/", "public/"],
       "forbidden_exact_paths": [".github/workflows/wr042-source-custody.yml", ".github/workflows/wr046-custody-fixture.yml", "scripts/custody/acquire_github_release_asset.py", "scripts/custody/attest_credential_scopes.py", "scripts/custody/ensure_b2_custody_object.py", "scripts/custody/prove_b2_r2_custody.py", "scripts/custody/run_normalized_custody_proof.py", "scripts/custody/run_source_manifest_custody.py"],
-      "next_gate": "Publish one immutable GET-only retained-object implementation/live-proof target -> WR-062 independent audit"
+      "next_gate": "Publish immutable authoritative-identity/version-aware retained-object read implementation + successful four-object protected live proof -> WR-064 independent audit"
     },
     {
-      "task_id": "WR-062",
+      "task_id": "WR-064",
       "owner": "Auditor",
-      "worker_slot": "auditor-retained-read-path",
+      "worker_slot": "auditor-retained-version-recovery",
       "status": "BLOCKED",
-      "task_file": ".ai/manager/WR-062.md",
+      "task_file": ".ai/manager/WR-064.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
       "assignment_main_sha": null,
       "worker_checkpoint_sha": null,
-      "branch": "wr-062-retained-object-read-path-audit",
+      "branch": "wr-064-retained-object-version-read-audit",
       "pr": null,
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_PREFERRED",
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": ["WR-061"],
-      "blocked_on": ["WR-061 must publish one immutable GET-only retained-object implementation and protected live-proof target"],
+      "blocked_on_tasks": ["WR-063"],
+      "blocked_on": ["WR-063 must publish one immutable implementation plus successful protected four-object live proof using the authoritative WR-042 retained identities"],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [".ai/auditor/"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/", ".ai/work_helper/", "scripts/", ".github/", "src/", "public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes WR-061 exact PR/head/live-proof evidence and activates WR-062; PASS-family permits exact integration plus canonical-main canary before WR-059 resumes"
+      "next_gate": "Manager freezes exact WR-063 PR/head/live proof and activates WR-064; PASS-family permits exact integration plus canonical-main canary before WR-059 resumes"
     }
   ]
 }
