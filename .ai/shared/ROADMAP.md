@@ -12,7 +12,7 @@ Owner: Manager / Architect
 
 ## Phase 5B — Returning-Player v2 evidence reset — ACTIVE
 
-- WR-042 — CLOSED / historical exact 15-source custody authority preserved; PR #168 remains closed unmerged and immutable.
+- WR-042 — CLOSED / historical exact 15-source custody authority preserved.
 - WR-043 — CLOSED / historical `FAIL — REMEDIATION REQUIRED` that motivated the reset.
 - WR-056 — CLOSED / trusted custody runtime bridge accepted.
 - WR-057 — CLOSED / `draft_picks.csv` excluded because raw custody was not established.
@@ -30,62 +30,41 @@ Owner: Manager / Architect
 - WR-069 — CLOSED / accepted retained safe-consumer parser evidence.
 - WR-070 — CLOSED / independent audit PASS.
 - WR-071 — CLOSED / independent audit `PASS`, no findings.
-- WR-072 — ASSIGNED / Returning-Player v2 pre-score model-protocol + ordered feature-schema freeze.
-- WR-073 — BLOCKED / fresh independent audit of the exact future Manager-frozen WR-072 target.
+- WR-072 — AUDIT_READY / exact pre-score model-protocol + ordered feature-schema candidate frozen at PR #207 head `d75e58052dd555cd5b3f952fc2b3556287d75f9a`.
+- WR-073 — ASSIGNED / fresh independent audit of that exact frozen WR-072 target.
 
 ### Accepted source-snapshot + cohort checkpoint
 
-- WR-059 accepted head `db8b21a65f2decf900902481f110758cc33f0aa6`;
-- WR-071 audit head `96a712ba2cf6a016ddbfdc0ea14cabba282bee04` / PASS, no findings;
-- audit evidence merge `0eb20f940fcfe455da3129a54525a73e39c966c6`;
-- WR-059 integration merge `2777ec44ca5b5f2fef77c07d17e4fa75b6013262`;
-- post-integration CI `35009576671` classify/Governance SUCCESS.
-
-Accepted source snapshot:
-
-- `wr-returning-player-v2-source-snapshot/1.2.0-wr059`;
-- SHA-256 `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`;
-- retained identities 15;
-- admitted stats 14;
-- failed-closed metadata 1;
-- admitted metadata 0;
+- source snapshot `wr-returning-player-v2-source-snapshot/1.2.0-wr059` / `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`;
+- cohort `returning-player-v2-cohort/1.2.0-wr059` / `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4`;
+- 5,176 unique historical keys / zero duplicates;
+- admitted stats 14 / admitted metadata 0 / failed-closed metadata 1;
 - `draft_picks.csv` excluded.
 
-Accepted cohort:
+### Frozen WR-072 pre-score candidate
 
-- `returning-player-v2-cohort/1.2.0-wr059`;
-- SHA-256 `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4`;
-- 5,176 unique historical keys;
-- zero duplicates;
-- membership, ordering, and prior-season stats lineage unchanged.
+- PR #207 / head `d75e58052dd555cd5b3f952fc2b3556287d75f9a`;
+- machine-lock SHA-256 `d2fb326875c954446b23e2761df0feaad4b814aa49dd0465277979a3c9d9bd73`;
+- model protocol `returning-player-v2-model-protocol/1.0.0-wr072`;
+- feature schema `returning-player-v2-feature-schema/1.0.0-wr072`;
+- preprocessing `returning-player-v2-preprocessing/1.0.0-wr072`;
+- serializer `returning-player-v2-evidence-serializer/1.0.0-wr072`;
+- target `returning-player-v2-expected-ppr-pg-target/1.0.0-wr072`;
+- candidate `returning-player-v2-ridge-stats-only-a100/1.0.0-wr072`;
+- exactly 28 stats-only predictors, zero metadata/draft-capital predictors;
+- exact-head CI `35013128300` SUCCESS.
 
 ### Current critical path
 
-`WR-072 pre-score model-protocol + feature-schema freeze -> Manager exact target freeze -> WR-073 fresh independent audit -> PASS-family only: later separately assigned scoring/evaluation task -> independent model-result audit -> later season-total composition -> independent composition audit -> Phase 6 eligibility decision`
+`WR-073 fresh independent protocol audit -> PASS-family only: Manager disposition/integration -> later separately assigned scoring/evaluation task -> independent model-result audit -> season-total composition -> independent composition audit -> Phase 6 eligibility decision`
 
-WR-072 is specification/evidence only. It may reuse v1 ideas only through new v2 identities and may use only admitted source semantics. Failed-closed metadata and excluded draft capital cannot enter the feature schema without a future separately versioned source-contract/custody/audit gate.
-
-No fitting, scoring, tuning, prediction, evaluation, target join, 2026 regular-season outcome use, ranking/production change, source reacquisition/mutation, season-total composition, or Phase-6 work is authorized.
+No fitting, scoring, tuning, prediction, evaluation, outcome join, 2026 regular-season outcome use, production-ranking change, season-total composition, or Phase-6 work is authorized before PASS-family WR-073 and Manager acceptance.
 
 ## Infrastructure roadmap — ACTIVE PARALLEL PILOT
 
 ### WR-074 — Self-hosted heavy-CI runner pilot + hardening — ASSIGNED
 
-Work Helper owns a bounded evaluation of the user-operated self-hosted runner for heavyweight browser/test CI.
-
-Because The War Room repository is public, the pilot must treat fork PR code as untrusted. The self-hosted runner must not execute arbitrary fork pull-request heads. Use a dedicated custom runner label, least-privilege permissions, clean-workspace/preflight controls, and a trusted event/ref boundary. Keep B2/R2/provider secrets and retained raw source bytes off the runner.
-
-During the pilot:
-
-- keep `classify` on GitHub-hosted runners;
-- keep `governance` on GitHub-hosted runners;
-- keep custody/protected-proof/credential-bearing workflows GitHub-hosted;
-- preserve the existing GitHub-hosted heavy-test path as fallback/reference;
-- benchmark and compare the self-hosted heavy workload against comparable GitHub-hosted evidence;
-- require repeat-run/cleanup evidence;
-- do not change product/research semantics.
-
-WR-074 branch: `wr-074-self-hosted-heavy-ci-runner-pilot`.
+Work Helper owns a bounded pilot of the user-operated self-hosted runner for heavyweight browser/test CI. The public-repository security boundary remains mandatory: arbitrary fork PR heads cannot execute locally; classify/Governance and custody/protected-proof/credential-bearing workflows remain GitHub-hosted; dedicated label, least privilege, clean workspace, no custody/provider secrets, repeat-run evidence, benchmark parity, and hosted fallback/reference are required.
 
 ### WR-075 — Independent self-hosted runner audit — BLOCKED
 
@@ -95,7 +74,7 @@ Sequence:
 
 `WR-074 hardened pilot -> Manager exact freeze -> WR-075 fresh independent audit -> PASS-family only: Manager adoption decision / canonical CI routing`
 
-This infrastructure lane is deliberately non-blocking and may proceed in parallel with WR-072/073. It must not weaken or alter Returning-Player v2 chronology.
+This infrastructure lane is deliberately non-blocking and independent of WR-073.
 
 ## Future phases
 
