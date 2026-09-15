@@ -1,13 +1,60 @@
 # WR-059 Returning-Player v2 Source Snapshot Evidence
 
-Status: `COMPLETE — MANAGER FREEZE / WR-060 AUDIT REQUIRED`
+Status: `REMEDIATED — MANAGER EXACT-TARGET FREEZE REQUIRED`
 
-Source snapshot ID: `wr-returning-player-v2-source-snapshot/1.1.0-wr059`  
-Canonical SHA-256: `f6ee530c7733b1aa9d984a3e874015ca9a3dd7cebda5ffc558df4cb159c591b9`
+Source snapshot ID: `wr-returning-player-v2-source-snapshot/1.2.0-wr059`  
+Canonical SHA-256: `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`
 
-## Scope
+## Bounded remediation disposition
 
-This checkpoint remediates `WR-043-AUD-01` only. It does not redo custody, reacquire provider bytes, authorize model work, or change the accepted WR-039/WR-D008 source contract.
+Remediation path: **PATH B — FAIL CLOSED**
+
+This checkpoint resolves only `WR-060-AUD-01`. The historical audited `1.1.0-wr059` artifacts remain immutable failed-audit evidence and are not rewritten.
+
+Affected retained metadata identity:
+
+- source class: `NFLVERSE_PLAYERS_METADATA_MINIMAL`
+- source ID: `nflverse-players-metadata-20260914`
+- asset ID: `563580371`
+- asset name: `players.csv`
+- exact SHA-256: `03a823a0e2344aff9a4ef67bdd62005d3e1d7ab62a98c790ce19a8a557d1c221`
+- exact byte size: `7260242`
+
+The retained bytes and accepted WR-069 deterministic parser evidence remain preserved, but this metadata source is now **FAILED_CLOSED / UNAVAILABLE** because its exact provider-issued `release_id` and full `provider_updated_at` timestamp cannot be independently reproduced.
+
+## Path A research — evidence classification
+
+### VERIFIED FACT
+
+1. A fresh read-only request to the exact historical GitHub release-asset endpoint:
+
+   `https://api.github.com/repos/nflverse/nflverse-data/releases/assets/563580371`
+
+   returned `404 Not Found`.
+
+2. The current authoritative `players` release endpoint:
+
+   `https://api.github.com/repos/nflverse/nflverse-data/releases/tags/players`
+
+   currently identifies release ID `69785162`, but its `players.csv` is replacement asset `565719859`, SHA-256 `507f8cf03ffc8a82b841212582000163eb713ced15c9f83f851afb42da0af259`, byte size `7290797`, updated `2026-09-15T13:05:25Z`.
+
+   That current asset is **not** historical asset `563580371` and is not accepted as equivalent.
+
+3. Historical WR-042 commit `cc9005ae4bd9065cf80f1c184f31974904165c54` persists the replacement historical identity as asset ID `563580371`, exact SHA-256 `03a823a0e2344aff9a4ef67bdd62005d3e1d7ab62a98c790ce19a8a557d1c221`, and byte size `7260242`, but it does not persist an exact provider-issued release ID or full provider-update timestamp.
+
+4. Accepted WR-042 run/job `34871882486 / 104069521779` succeeded for all 15 custody identities. Its log explicitly records that runner-local source bytes/reports were deleted and **no Actions artifact was created**.
+
+5. WR-060 independently found the same provenance gap and returned HIGH finding `WR-060-AUD-01`.
+
+### UNKNOWN
+
+The exact provider-issued release ID and full provider-update timestamp for historical asset `563580371` remain unknown from independently reproducible authoritative evidence.
+
+### Disposition
+
+Current mutable provider state cannot prove those missing fields for the deleted historical asset. Inferring the timestamp from `2026-09-14`, borrowing the current release ID, or substituting asset `565719859` would violate the Manager remediation contract. Path B is therefore required.
+
+## Preserved accepted authority
 
 The authoritative byte custody remains WR-042:
 
@@ -16,60 +63,36 @@ The authoritative byte custody remains WR-042:
 - custody manifest SHA-256: `d2196293ff34543b063e737efb175f579967bf37f5dc91b41c08dd45dfe44d26`
 - protected run/job: `34871882486 / 104069521779`
 
-WR-069/WR-070 supply the accepted deterministic privacy-safe parser evidence:
+Accepted deterministic privacy-safe parser evidence remains WR-069/070:
 
 - audited WR-069 head: `5d4fc5fce3567a9894ddf3c08243f0ce6c087543`
 - derived artifact: `.ai/work_helper/WR069_RETAINED_DERIVED_EVIDENCE.json`
 - artifact SHA-256: `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`
 - WR-070: `PASS — no findings`
 
-## Snapshot contents
+All 15 historical custody identities remain unchanged. This remediation changes **admission**, not retained byte identity.
 
-The machine artifact contains all **15** admitted exact retained source instances: 14 annual `NFLVERSE_PLAYER_SUMMARY_STATS` assets for 2012–2025 plus the exact retained `players.csv` metadata asset.
+## Admission and failure totals
 
-For each admitted source it records:
-
-- content-addressed `source_instance_id`;
-- provider/repository/acquisition identity;
-- protected acquisition-batch UTC authority;
-- release/tag/release ID/asset ID/filename/provider-update identity;
-- exact SHA-256 and byte size;
-- UTF-8 CSV / uncompressed media state;
-- complete ordered raw columns;
-- complete ordered `(column,type,nullable)` schema;
-- WR-067 canonical schema hash;
-- physical row count;
-- approved columns;
-- cutoff and availability semantics;
-- provider mutability and retained-as-of evidence;
-- CC BY 4.0 attribution and upstream-rights caveats;
-- retained content-addressed object key/digest;
-- acquisition-code identity and command/path;
-- explicit `ADMITTED` status/reason.
-
-The stats assets bind release tag `stats_player` / release ID `236670328`. Exact provider-update timestamps are preserved from accepted repository provenance. The replacement `players.csv` preserves the exact accepted asset ID/hash/size and WR-043's verified provider-update **date** (`2026-09-14`). The accepted repository evidence did not persist a sub-day provider-update timestamp, so the machine artifact records day precision explicitly rather than inventing a time.
-
-That precision limitation does not weaken byte identity: exact asset ID, SHA-256, byte size, retained object key, dual-provider custody equality, and WR-069 full-file parser evidence remain authoritative.
-
-## Admission and exclusion
-
-- admitted retained source instances: **15**
-- failed-closed retained source instances: **0**
+- exact retained custody identities preserved: **15**
+- admitted source instances: **14**
+- failed-closed retained source instances: **1**
+- admitted player-summary sources: **14**
+- admitted players-metadata sources: **0**
+- failed-closed players-metadata sources: **1**
 - policy-excluded source classes: **1**
 - `draft_picks.csv`: **EXCLUDED** under WR-057
 
-`draft_picks.csv` was not acquired, downloaded, parsed, custodied, used, or replaced in WR-059.
+The failed-closed `players.csv` is unavailable for v2 metadata-feature use under this checkpoint and remains irrelevant to historical cohort membership.
 
-The retained `players.csv` is admitted as an exact metadata snapshot, but it is explicitly **not used to rewrite historical cohort membership**.
-
-## Canonicalization
+## Canonical artifact
 
 Machine path:
 
 `.ai/research/generated/WR059_RETURNING_PLAYER_V2_SOURCE_SNAPSHOT.json`
 
-The canonical file is UTF-8 JSON with sorted object keys, compact separators, `ensure_ascii=false`, and one final LF. SHA-256 is computed over those exact bytes including the final LF. The adjacent sidecar records the exact digest.
+Canonicalization is UTF-8 JSON, sorted object keys, compact separators, `ensure_ascii=false`, and one final LF. SHA-256 is over the exact bytes including that LF. The adjacent sidecar is exact.
 
 ## Boundaries
 
-No provider access or provider mutation occurred during this remediation. No retained raw bytes were retrieved. No upstream source was reacquired or substituted. No 2026 regular-season outcome table, target/outcome join, fitting, scoring, tuning, model comparison, evaluation, prediction, ranking change, production change, or Phase-6 work occurred.
+The remediation used read-only provider/repository metadata research only. No provider mutation, retained raw-byte access, raw custody redo, source refresh/reacquisition/substitution, `draft_picks.csv`, 2026 regular-season outcome-table inspection, target/outcome join, fitting, scoring, tuning, comparison, evaluation, prediction, ranking change, production change, or Phase-6 work occurred.
