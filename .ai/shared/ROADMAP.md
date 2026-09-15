@@ -17,7 +17,7 @@ Owner: Manager / Architect
 - WR-056 — CLOSED / trusted custody runtime bridge accepted and merged.
 - WR-057 — CLOSED / `RAW_CUSTODY_NOT_ESTABLISHED — EXCLUDE_SOURCE` for PFR-derived nflverse `draft_picks.csv`.
 - WR-058 — CLOSED / independent custody-bridge audit PASS.
-- WR-059 — BLOCKED / PR #184 frozen fail-closed at `3c02f5a9a3ea858235772e7f2d065604632e7ee7`; waits for the fresh WR-069/WR-070 parser gate and main canary before resuming.
+- WR-059 — BLOCKED / PR #184 frozen fail-closed at `3c02f5a9a3ea858235772e7f2d065604632e7ee7`; waits for WR-070 parser audit, exact audited WR-069 integration, and mandatory main canary before resuming.
 - WR-060 — BLOCKED on WR-059 / mandatory fresh independent audit of the eventual complete remediation target.
 - WR-061 — CLOSED / immutable fail-closed historical checkpoint, PR #176 unmerged.
 - WR-062 — CLOSED / never activated.
@@ -25,10 +25,10 @@ Owner: Manager / Architect
 - WR-064 — CLOSED / independent audit PASS, no findings.
 - WR-065 — CLOSED / PR #186 frozen fail-closed at `d4e5ddeaf9f3b0d56846145f8dc3ffe9cf48df7f`; parser correctly stopped before provider access because CSV typed-schema semantics were not executable.
 - WR-066 — CLOSED / never activated.
-- WR-067 — CLOSED / exact PR #188 head `1e6b2105bce98408d3fb41f4aa07fcaa7ef6ca04` accepted and integrated; versioned deterministic CSV schema-inference clarification is canonical.
-- WR-068 — CLOSED / independent audit PASS, no findings; all 49 conformance cases reproduced independently with zero mismatches.
-- WR-069 — ASSIGNED / fresh successor safe-consumer retained-evidence parser implementation and protected live proof under the accepted WR-067 contract.
-- WR-070 — BLOCKED on WR-069 / fresh independent parser audit.
+- WR-067 — CLOSED / exact PR #188 head `1e6b2105bce98408d3fb41f4aa07fcaa7ef6ca04` accepted and integrated; deterministic CSV schema-inference clarification is canonical.
+- WR-068 — CLOSED / independent audit PASS, no findings; all 49 conformance cases independently reproduced.
+- WR-069 — AUDIT_READY / PR #192 frozen at exact head `5d4fc5fce3567a9894ddf3c08243f0ce6c087543`; protected 15-object proof PASS.
+- WR-070 — ASSIGNED / fresh independent parser audit in Work mode preferred.
 
 Accepted WR-067 clarification authority:
 
@@ -39,15 +39,30 @@ Accepted WR-067 clarification authority:
 - 49 synthetic cases: 33 PASS / 16 FATAL
 - WR-068 audit head `a5ccce36012a5cf06d93bccf99d1834eaa268142`
 - audit verdict `PASS`, no findings
-- audit evidence merge `07c89a4560d11e2a53538ca195ccd430af7cd905`
 - exact contract integration `abff69901a040bec378c6562845adde9780f1da5`
-- canonical-main Governance `34919117910` SUCCESS
+
+Frozen WR-069 audit target:
+
+- PR #192 head `5d4fc5fce3567a9894ddf3c08243f0ce6c087543`
+- protected implementation SHA `56f6581cd62fd474f4422bc5f7d353f48498a853`
+- protected run `34922718568`
+- protected job `104234179073`
+- input count `15`
+- B2/R2 authoritative verification `15/15`
+- provider mutations `0`
+- consumer provider credentials present `false`
+- conformance `49/49`, zero mismatches
+- derived evidence SHA-256 `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`
+- historical inventory total `1668`
+- cleanup PASS
+- raw Actions artifact count `0`
+- final-head War Room CI `34923188673` SUCCESS with full test lane
 
 Sequence:
 
-`WR-069 safe-consumer parser implementation/live proof -> WR-070 independent parser audit -> exact audited integration + mandatory main canary -> resume WR-059 on fresh branch -> complete immutable WR-059 target -> WR-060 independent evidence re-audit`
+`WR-070 independent parser audit -> exact audited WR-069 integration -> mandatory canonical-main canary -> resume WR-059 on fresh branch -> complete immutable WR-059 target -> WR-060 independent evidence re-audit`
 
-WR-069/WR-070 are evidence-infrastructure gates only. No model protocol, fitting, scoring, tuning, comparison, evaluation, target joins, 2026 regular-season outcome use, production ranking change, provider mutation, or Phase-6 work is authorized.
+WR-069/WR-070 remain evidence-infrastructure gates only. No model protocol, fitting, scoring, tuning, comparison, evaluation, target joins, 2026 regular-season outcome use, production ranking change, provider mutation, or Phase-6 work is authorized.
 
 `draft_picks.csv` remains excluded and no silent replacement provider is authorized. A later versioned contract/feature-schema governance gate remains mandatory before any model path could proceed without draft-capital semantics.
 
