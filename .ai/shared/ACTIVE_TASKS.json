@@ -1,11 +1,29 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-15T15:32:00Z",
+  "updated_at_utc": "2026-09-15T15:54:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "lifecycle_states": ["PLANNED","BLOCKED","ASSIGNED","IN_PROGRESS","MANAGER_REVIEW_READY","AUDIT_READY","MERGE_READY","REWORK_REQUIRED","MERGED","CLOSED"],
-  "blocker_types": ["NONE","USER_ACTION","UPSTREAM_TASK","EXTERNAL_SERVICE","TECHNICAL","AUDIT"],
+  "lifecycle_states": [
+    "PLANNED",
+    "BLOCKED",
+    "ASSIGNED",
+    "IN_PROGRESS",
+    "MANAGER_REVIEW_READY",
+    "AUDIT_READY",
+    "MERGE_READY",
+    "REWORK_REQUIRED",
+    "MERGED",
+    "CLOSED"
+  ],
+  "blocker_types": [
+    "NONE",
+    "USER_ACTION",
+    "UPSTREAM_TASK",
+    "EXTERNAL_SERVICE",
+    "TECHNICAL",
+    "AUDIT"
+  ],
   "tasks": [
     {
       "task_id": "WR-042",
@@ -23,20 +41,37 @@
       "audit_required": true,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": ["WR-059"],
-      "blocked_on": ["WR-059 is at the mandatory WR-060 independent re-audit gate. Historical WR-042 custody evidence remains preserved; WR-042 does not resume independently before Manager disposition of WR-059/WR-060."],
+      "blocked_on_tasks": [
+        "WR-059"
+      ],
+      "blocked_on": [
+        "WR-059 is in bounded metadata-provenance rework after WR-060 FAIL. Historical WR-042 custody evidence remains preserved; WR-042 does not resume independently before WR-059 remediation, WR-071 fresh audit, and Manager disposition."
+      ],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [".ai/research/"],
-      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/work_helper/", "src/", "public/"],
-      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
-      "next_gate": "WR-060 fresh independent audit of frozen WR-059 target -> Manager disposition."
+      "allowed_path_prefixes": [
+        ".ai/research/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/work_helper/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [
+        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
+      ],
+      "next_gate": "WR-059 bounded metadata-provenance remediation -> Manager exact target freeze -> WR-071 fresh independent re-audit -> Manager disposition."
     },
     {
       "task_id": "WR-059",
       "owner": "R&D",
       "worker_slot": "rnd-source-snapshot-cohort-remediation",
-      "status": "AUDIT_READY",
+      "status": "REWORK_REQUIRED",
       "task_file": ".ai/manager/WR-059.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "82ac95d8d85dfe0dff58e387aecdcc49f082ffec",
@@ -46,45 +81,69 @@
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT",
       "audit_required": true,
-      "blocker_type": "NONE",
+      "blocker_type": "AUDIT",
       "user_action_required": false,
       "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on": [
+        "WR-060-AUD-01 HIGH: admitted replacement players.csv provenance lacks an independently reproducible exact release ID and full provider-update timestamp required by the frozen WR-039 source-instance contract."
+      ],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [".ai/research/"],
-      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/work_helper/", "src/", "public/"],
-      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
-      "next_gate": "WR-060 independently audits exact PR #196/head e871c861f8ba3c339af5b7a022892522b45b844f and frozen source-snapshot/cohort hashes."
+      "allowed_path_prefixes": [
+        ".ai/research/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/work_helper/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [
+        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
+      ],
+      "next_gate": "R&D bounded metadata-provenance remediation on PR #196 -> Manager freezes one new immutable head plus regenerated canonical hashes -> WR-071 fresh independent re-audit."
     },
     {
-      "task_id": "WR-060",
+      "task_id": "WR-071",
       "owner": "Auditor",
-      "worker_slot": "auditor-source-snapshot-cohort-reaudit",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-060.md",
+      "worker_slot": "auditor-source-snapshot-cohort-reaudit-2",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-071.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": "8ded5ed8e32e3a0688e53b544048fcf7ffd3b4dd",
+      "assignment_main_sha": null,
       "worker_checkpoint_sha": null,
-      "branch": "wr-060-v2-source-snapshot-cohort-reaudit",
+      "branch": "wr-071-v2-source-snapshot-cohort-reaudit-2",
       "pr": null,
-      "audit_target_task": "WR-059",
-      "audit_target_pr": 196,
-      "audit_target_branch": "wr-059-v2-source-snapshot-cohort-remediation-2",
-      "audit_target_sha": "e871c861f8ba3c339af5b7a022892522b45b844f",
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_PREFERRED",
       "audit_required": false,
-      "blocker_type": "NONE",
+      "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on_tasks": [
+        "WR-059"
+      ],
+      "blocked_on": [
+        "WR-059 must publish one new immutable remediated PR #196 head resolving WR-060-AUD-01 before WR-071 activation."
+      ],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [".ai/auditor/"],
-      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/", ".ai/work_helper/", "src/", "public/"],
+      "allowed_path_prefixes": [
+        ".ai/auditor/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        "src/",
+        "public/"
+      ],
       "forbidden_exact_paths": [],
-      "next_gate": "Audit exact frozen WR-059 PR #196/head and canonical artifact hashes; PASS-family returns to Manager only."
+      "next_gate": "Do not activate until Manager freezes a new remediated WR-059 PR/head and regenerated source-snapshot/cohort hashes."
     }
   ]
 }

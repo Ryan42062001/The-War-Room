@@ -12,41 +12,46 @@ Owner: Manager / Architect
 
 ## Phase 5B — Returning-Player v2 evidence reset — ACTIVE
 
-- WR-042 — BLOCKED / historical PR #168 remains closed unmerged after WR-043 audit failure. Exact 15-source raw custody evidence remains preserved and must not be reacquired.
-- WR-043 — CLOSED / `FAIL — REMEDIATION REQUIRED`; two HIGH evidence-contract findings are the sole WR-059 remediation objective.
+- WR-042 — BLOCKED / exact 15-source raw custody evidence remains preserved and must not be reacquired.
+- WR-043 — CLOSED / `FAIL — REMEDIATION REQUIRED`; its two HIGH findings remain the reason WR-059 exists.
 - WR-056 — CLOSED / trusted custody runtime bridge accepted and merged.
 - WR-057 — CLOSED / `RAW_CUSTODY_NOT_ESTABLISHED — EXCLUDE_SOURCE` for PFR-derived nflverse `draft_picks.csv`.
 - WR-058 — CLOSED / independent custody-bridge audit PASS.
-- WR-059 — AUDIT_READY / PR #196 frozen at exact head `e871c861f8ba3c339af5b7a022892522b45b844f`; complete no-scoring source-snapshot/cohort remediation candidate published; historical PR #184 remains closed-unmerged evidence only.
-- WR-060 — ASSIGNED / mandatory fresh independent re-audit of exact WR-059 PR #196/head in `WORK_MODE_PREFERRED`.
+- WR-059 — REWORK_REQUIRED / PR #196 remains open and unmerged. WR-060 independently passed the cohort/custody work but found one HIGH replacement-`players.csv` provenance defect.
+- WR-060 — CLOSED / audit PR #198, immutable head `5ae432ca8e7c32dad56701a9792cb55d59150611`, verdict `FAIL — REMEDIATION REQUIRED`, one HIGH finding `WR-060-AUD-01`, no CRITICAL/MEDIUM/LOW findings; audit evidence merged at `acf599e31ad8638f8e1ba399ea2e4328e5ff7bd0`.
 - WR-061 — CLOSED / immutable fail-closed historical checkpoint, PR #176 unmerged.
 - WR-062 — CLOSED / never activated.
-- WR-063 — CLOSED / accepted retained-version read recovery; protected proof run `34906157295` PASS.
+- WR-063 — CLOSED / accepted retained-version read recovery.
 - WR-064 — CLOSED / independent audit PASS, no findings.
-- WR-065 — CLOSED / PR #186 frozen fail-closed at `d4e5ddeaf9f3b0d56846145f8dc3ffe9cf48df7f`.
+- WR-065 — CLOSED / fail-closed parser checkpoint.
 - WR-066 — CLOSED / never activated.
 - WR-067 — CLOSED / deterministic CSV schema-inference clarification accepted and integrated.
 - WR-068 — CLOSED / independent audit PASS, no findings.
-- WR-069 — CLOSED / exact audited PR #192 head `5d4fc5fce3567a9894ddf3c08243f0ce6c087543` accepted and integrated at `82ac95d8d85dfe0dff58e387aecdcc49f082ffec`.
-- WR-070 — CLOSED / audit PR #194 head `434988473daf188f4b4efe3207df40b56977e9fd`; verdict `PASS`, no findings.
+- WR-069 — CLOSED / accepted retained safe-consumer parser evidence.
+- WR-070 — CLOSED / independent audit PASS, no findings.
+- WR-071 — BLOCKED / fresh independent re-audit of the next Manager-frozen remediated WR-059 target.
 
-Frozen WR-059 audit authority:
+### WR-060 result preserved
 
-- PR #196 head `e871c861f8ba3c339af5b7a022892522b45b844f`;
-- exact-head War Room CI `34988624368` SUCCESS for classify/Governance;
-- source snapshot `wr-returning-player-v2-source-snapshot/1.1.0-wr059`;
-- source snapshot SHA-256 `f6ee530c7733b1aa9d984a3e874015ca9a3dd7cebda5ffc558df4cb159c591b9`;
-- cohort `returning-player-v2-cohort/1.1.0-wr059`;
-- cohort SHA-256 `d6927509968ac3a371591a69fd665861e9546a0868f1e7b1c5db6c31cc887354`;
-- declared coverage 5,176/5,176 keys, duplicates 0;
-- 2014–2017 closure 1,668 and 2018–2025 frozen identities 3,508;
-- `draft_picks.csv` excluded; no provider/raw-byte access or model/scoring activity.
+Independently reproduced positive evidence:
+
+- source snapshot hash `f6ee530c7733b1aa9d984a3e874015ca9a3dd7cebda5ffc558df4cb159c591b9`;
+- cohort hash `d6927509968ac3a371591a69fd665861e9546a0868f1e7b1c5db6c31cc887354`;
+- 15/15 historical custody identities;
+- 5,176/5,176 ordered unique cohort keys;
+- 1,668 keys for 2014–2017 and 3,508 for 2018–2025;
+- zero duplicates and exact prior-season source lineage;
+- `draft_picks.csv` exclusion and all no-reacquisition/no-model boundaries.
+
+Blocking defect:
+
+`WR-060-AUD-01 — HIGH` — replacement `players.csv` lacks independently reproducible exact release ID and full provider-update timestamp required for an admitted WR-039 source instance.
 
 Current sequence:
 
-`WR-060 independent re-audit -> Manager verdict disposition -> if PASS-family, audit evidence merge -> reverify exact WR-059 head -> integrate only audited target -> any required canonical-main canary -> later versioned contract/feature-schema governance gate before model work`
+`WR-059 bounded metadata-provenance remediation on PR #196 -> Manager freezes new immutable head + new canonical artifact identities/hashes -> WR-071 fresh independent audit -> Manager disposition -> later versioned contract/feature-schema governance gate before model work`
 
-No model fitting, scoring, tuning, evaluation, target joins, 2026 regular-season outcome use, ranking/production change, provider mutation, or Phase-6 work is authorized.
+No model fitting, scoring, tuning, evaluation, target joins, 2026 regular-season outcome use, ranking/production change, provider mutation, source reacquisition, or Phase-6 work is authorized.
 
 ## Future phases
 
