@@ -4,94 +4,90 @@ HANDOFF
 
 Workflow: V3.2 CANONICAL
 
-## WR-059 Manager freeze
+## WR-059 / WR-071 accepted disposition
 
-R&D completed the bounded post-WR-060 remediation on existing PR #196.
+Returning-Player v2 exact source-snapshot + cohort evidence is now accepted.
 
-Historical failed-audit head remains immutable evidence:
+WR-071 final verdict:
 
-`e871c861f8ba3c339af5b7a022892522b45b844f`
+`PASS`
 
-New exact frozen WR-059 target:
+Findings:
 
-`db8b21a65f2decf900902481f110758cc33f0aa6`
+- CRITICAL: none
+- HIGH: none
+- MEDIUM: none
+- LOW: none
 
-Manager verification:
+Accepted target/evidence:
 
-- PR #196 remains open and unmerged;
-- new head is exactly one commit ahead of the historical failed head and zero behind;
-- changed scope is exactly the same eight `.ai/research/**` WR-059 paths;
-- exact-head War Room CI `34998074580` — SUCCESS for classify and Governance; product test skipped as evidence-only;
-- remediation path `B_FAIL_CLOSED`;
-- no raw retained bytes reacquired;
-- no provider mutation, source substitution, inferred sub-day timestamp, `draft_picks.csv`, 2026 outcomes, targets, model/scoring/ranking/production, or Phase-6 work.
+- WR-059 PR #196 audited head `db8b21a65f2decf900902481f110758cc33f0aa6`;
+- source snapshot `wr-returning-player-v2-source-snapshot/1.2.0-wr059`;
+- source snapshot SHA-256 `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`;
+- cohort `returning-player-v2-cohort/1.2.0-wr059`;
+- cohort SHA-256 `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4`;
+- 15 retained historical identities;
+- 14 admitted stats sources;
+- 1 failed-closed metadata source;
+- 0 admitted metadata sources;
+- 5,176 unique historical cohort keys, zero duplicates;
+- `draft_picks.csv` remains excluded.
 
-Frozen source snapshot:
+Audit/integration evidence:
 
-- ID `wr-returning-player-v2-source-snapshot/1.2.0-wr059`;
-- SHA-256 `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`;
-- retained identities 15;
-- admitted 14;
-- failed closed 1;
-- admitted stats sources 14;
-- admitted metadata sources 0.
+- WR-071 PR #202 / immutable head `96a712ba2cf6a016ddbfdc0ea14cabba282bee04`;
+- WR-071 exact-head CI `35009298684` SUCCESS;
+- audit evidence merge `0eb20f940fcfe455da3129a54525a73e39c966c6`;
+- WR-059 integration merge `2777ec44ca5b5f2fef77c07d17e4fa75b6013262`;
+- post-integration CI `35009576671` classify/Governance SUCCESS, product test skipped.
 
-The failed-closed source is `NFLVERSE_PLAYERS_METADATA_MINIMAL` / historical asset `563580371`, retained SHA-256 `03a823a0e2344aff9a4ef67bdd62005d3e1d7ab62a98c790ce19a8a557d1c221`, byte size `7260242`. Exact historical `release_id` and full `provider_updated_at` remain unresolved and are represented as unavailable rather than inferred.
+WR-042, WR-059, and WR-071 are closed and removed from the active-only registry. Historical WR-042 PR #168 remains closed/unmerged and immutable.
 
-Frozen cohort/source eligibility:
+## WR-072 assignment
 
-- ID `returning-player-v2-cohort/1.2.0-wr059`;
-- SHA-256 `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4`;
-- 5,176 / 5,176 historical membership rows;
-- unique 5,176;
-- duplicates 0;
-- 2014–2017 = 1,668;
-- 2018–2025 = 3,508;
-- changed historical membership rows 0;
-- ordering unchanged;
-- prior-season stats lineage unchanged.
+Next role: Research & Development.
 
-The cohort is re-versioned solely because its exact source-snapshot binding changed.
+Task:
 
-## WR-071 activation
-
-WR-071 is now `ASSIGNED` as the fresh independent Auditor / QA lane.
+`WR-072 — Returning-Player v2 Model-Protocol + Feature-Schema Freeze`
 
 Execution mode:
 
 `STANDARD_CHAT`
 
-Do not wait for Work credits.
-
 Assigned branch:
 
-`wr-071-v2-source-snapshot-cohort-reaudit-2`
+`wr-072-v2-model-protocol-feature-schema`
 
-Audit exactly:
+WR-072 is the mandatory pre-score checkpoint from the accepted WR-039/040 chronology. It must freeze a new v2 protocol and ordered feature schema before any model result exists.
 
-- WR-059 PR #196;
-- head `db8b21a65f2decf900902481f110758cc33f0aa6`;
-- source snapshot `wr-returning-player-v2-source-snapshot/1.2.0-wr059` / `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`;
-- cohort `returning-player-v2-cohort/1.2.0-wr059` / `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4`.
+Mandatory boundary:
 
-The Auditor must independently verify Path B fail-closed consistency, WR-039 preservation, exact canonical hashes and bindings, unchanged 5,176-key cohort/ordering/lineage, exact retained source identities, `draft_picks.csv` exclusion, and all no-reacquisition/no-model boundaries.
+- accepted stats sources: 14;
+- admitted metadata sources: 0;
+- historical `players.csv` metadata source: failed closed;
+- `draft_picks.csv`: excluded.
 
-Auditor writes only `.ai/auditor/**`, publishes an Auditor-only PR, and returns exactly one verdict:
+Therefore the feature schema may use only semantics supported by admitted source authority. No age/birth-date/rookie-season/current-metadata/draft-capital feature may be introduced unless a later separately versioned source-contract/custody/audit gate explicitly authorizes it.
 
-- `PASS`
-- `PASS WITH NON-BLOCKING FINDINGS`
-- `FAIL — REMEDIATION REQUIRED`
+WR-072 must predeclare exact target semantics, chronology/cutoffs, ordered predictors and lineage, preprocessing, candidate hyperparameters, baselines, chronological splits, seeds/determinism, future adoption gates, full-row evidence serialization, fail-closed rules, environment lock, and outcome isolation.
 
-Auditor does not merge WR-059.
+WR-072 must not fit, score, tune, compare, predict, evaluate, join outcomes, inspect 2026 regular-season outcomes, reacquire sources, mutate providers, change rankings/production, compose season totals, or begin Phase 6.
 
-## Blocked lanes
+R&D writes only `.ai/research/**`, publishes its own PR, and returns exact immutable head/artifact IDs/hashes/CI to Manager. R&D does not activate WR-073.
 
-WR-042 remains BLOCKED pending WR-071 verdict and Manager disposition.
+## WR-073
 
-Do not merge WR-059 before PASS-family. Do not begin model/scoring work, Phase 6, or any downstream feature-schema/model path.
+WR-073 is pre-created as the BLOCKED fresh independent audit gate on branch:
 
-The self-hosted heavy-CI runner remains roadmap-only and must not be activated during WR-071.
+`wr-073-v2-model-protocol-feature-schema-audit`
+
+Manager activates it only after independently freezing one immutable WR-072 target and exact protocol/feature-schema hashes.
+
+## Other roadmap
+
+The self-hosted heavy-CI runner is now eligible for a future separate infrastructure task because WR-059/071 is stable, but it is non-blocking and not part of the current WR-072/073 critical path.
 
 ## Boundaries
 
-`draft_picks.csv` remains excluded under WR-057. No source reacquisition/refresh/substitution, provider mutation, reusable credential disclosure, 2026 outcome-table use, targets, scoring, tuning, evaluation, predictions, rankings, production changes, or Phase-6 work.
+WR-D001 remains production ranking authority. No scoring/evaluation/production/Phase-6 authorization exists yet.
