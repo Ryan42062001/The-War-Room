@@ -6,7 +6,6 @@ on:
     paths:
       - '.github/workflows/wr069-retained-safe-consumer-parser.yml'
       - 'scripts/custody/wr069_retained_safe_consumer.py'
-      - 'scripts/custody/wr069_retained_provider.py'
       - 'scripts/custody/test_wr069_retained_safe_consumer.py'
       - 'scripts/validate-release-candidate.mjs'
       - '.github/workflows/ci.yml'
@@ -15,7 +14,6 @@ on:
     paths:
       - '.github/workflows/wr069-retained-safe-consumer-parser.yml'
       - 'scripts/custody/wr069_retained_safe_consumer.py'
-      - 'scripts/custody/wr069_retained_provider.py'
       - 'scripts/custody/test_wr069_retained_safe_consumer.py'
       - 'scripts/validate-release-candidate.mjs'
       - '.github/workflows/ci.yml'
@@ -44,7 +42,6 @@ jobs:
         run: |
           python3 -m py_compile \
             scripts/custody/wr069_retained_safe_consumer.py \
-            scripts/custody/wr069_retained_provider.py \
             scripts/custody/test_wr069_retained_safe_consumer.py
           python3 scripts/custody/wr069_retained_safe_consumer.py authority --repo-root .
           python3 scripts/custody/wr069_retained_safe_consumer.py conformance \
@@ -101,7 +98,7 @@ jobs:
           echo "::add-mask::${WR_CUSTODY_B2_READ_APPLICATION_KEY}"
           echo "::add-mask::${WR_CUSTODY_R2_ACCESS_KEY_ID}"
           echo "::add-mask::${WR_CUSTODY_R2_SECRET_ACCESS_KEY}"
-          python3 scripts/custody/wr069_retained_provider.py \
+          python3 scripts/custody/wr069_retained_safe_consumer.py provider \
             --repo-root . \
             --output-dir "$RUNNER_TEMP/wr069-raw" \
             --manifest "$RUNNER_TEMP/wr069-verified-input-manifest.json" \
