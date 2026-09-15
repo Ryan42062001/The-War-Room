@@ -2,42 +2,36 @@
 
 HANDOFF
 
-Task ID: WR-063
+Task ID: WR-069
 
 Role: Work Helper / Super Troubleshooter / Cross-Functional Operator
 
 Status: COMPLETE — INDEPENDENT AUDIT REQUIRED
 
-Starting canonical main: `019d6ccb31ba39fc7577080126de7e02751016ae`
+Starting canonical main: `4d0e265bf67ff85558c21485cd2329ba19c1ba79`
 
-Branch: `wr-063-retained-object-version-read-recovery`
+Branch: `wr-069-retained-safe-consumer-parser-v2`
 
-PR: #178
+Live-proof implementation SHA: `56f6581cd62fd474f4422bc5f7d353f48498a853`
 
-Implementation proof head: `b2c193cfc11811b32039d00480351ac4f5bc98a1`
+Protected run/job: `34922718568` / `104234179073`
+
+Privacy-safe evidence commit: `d39085321af0e17dcfd55de91e9faf958b658c28`
 
 ## Disposition
 
-The dedicated B2 credential passed the provider-issued bucket, prefix, required
-read-capability, and no-mutation gates before any listing/download. All four
-authoritative WR-042 objects were resolved by exact-name version metadata,
-downloaded from B2 by immutable file ID and from R2 by exact key, and reproduced
-the authoritative SHA-256 and byte size with B2/R2 byte equality.
+The accepted WR-067 CSV contract was implemented exactly and reproduced 49/49 synthetic conformance cases with zero mismatches. The protected proof consumed exactly the 15 already-custodied WR-042 identities and performed no upstream reacquisition or provider mutation.
 
-Protected run `34906157295`: preflight job `104183183462` PASS; protected job
-`104183220181` PASS. Cleanup PASS; raw Actions artifacts 0; provider mutations 0;
-consumer credentials absent. Detailed identities are in the task report.
+All 15 exact identities passed B2 digest/size, R2 digest/size, and B2/R2 byte-equality verification. The dedicated B2 read-only bucket/prefix/capability boundary passed; mutation authority was absent and provider mutation count was zero.
 
-The 2013 provider record is one latest upload predating the historical by-name
-404, and immutable-ID retrieval matches the authoritative bytes. This rules out
-retained-version absence, a current hide marker, and a wrong key. The original
-transport cause remains `UNDETERMINED_FROM_HISTORICAL_STATUS_ONLY`.
+All provider access completed before consumer execution. Deliberate provider-authority injection failed closed. The clean consumer ran with provider credential presence `false`, independently re-hashed/re-sized all 15 inputs, and completed retained-source derivation successfully.
 
-Focused tests and release guard: PASS. Shared mutation-capable B2 credentials were
-not used. No source reacquisition, research parsing, 2026 outcomes, target/model/
-scoring/ranking/production, or Phase-6 work occurred.
+Derived evidence SHA-256 is `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`. Historical inventories close the missing WR-059 target seasons 2014–2017 with counts `410`, `412`, `423`, and `423` respectively, using only historical Y-1 source bytes. Current players metadata was not used to rewrite historical cohort membership.
+
+Cleanup PASS. Raw Actions artifact count `0`. No `.ai/research/**`, accepted WR-063 runtime, mutation-capable custody helper, 2026 outcome, target/model/scoring/ranking/production, or Phase-6 surface was changed.
+
+Detailed evidence is in `.ai/work_helper/WR069_RETAINED_SAFE_CONSUMER_PARSER.md`, `.ai/work_helper/WR069_RETAINED_DERIVED_EVIDENCE.json`, its SHA sidecar, and `.ai/work_helper/WR069_PROTECTED_PROOF_SUMMARY.json`.
 
 ## Next gate
 
-Manager should freeze PR #178's final head and activate Independent Auditor / QA
-for WR-064. Work Helper does not merge or self-certify.
+Manager should freeze the exact final WR-069 PR/head and activate WR-070 for fresh Independent Auditor / QA review. Work Helper does not merge or self-certify and must not activate WR-070.

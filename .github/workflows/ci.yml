@@ -67,6 +67,12 @@ jobs:
             scripts/custody/read_retained_versions.py \
             scripts/custody/test_read_retained_versions.py
           python3 scripts/custody/test_read_retained_versions.py
+      - name: Test WR-069 retained safe-consumer boundary
+        run: |
+          python3 -m py_compile \
+            scripts/custody/wr069_retained_safe_consumer.py \
+            scripts/custody/test_wr069_retained_safe_consumer.py
+          python3 scripts/custody/test_wr069_retained_safe_consumer.py
       - name: Report CI scope
         run: echo "CI scope ${{ needs.classify.outputs.scope }} — ${{ needs.classify.outputs.reason }}"
 

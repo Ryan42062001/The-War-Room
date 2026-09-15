@@ -1,0 +1,214 @@
+name: WR-069 Retained Safe Consumer Parser
+
+on:
+  push:
+    branches: [wr-069-retained-safe-consumer-parser-v2]
+    paths:
+      - '.github/workflows/wr069-retained-safe-consumer-parser.yml'
+      - 'scripts/custody/wr069_retained_safe_consumer.py'
+      - 'scripts/custody/test_wr069_retained_safe_consumer.py'
+      - 'scripts/validate-release-candidate.mjs'
+      - '.github/workflows/ci.yml'
+      - '.ai/work_helper/**'
+  pull_request:
+    paths:
+      - '.github/workflows/wr069-retained-safe-consumer-parser.yml'
+      - 'scripts/custody/wr069_retained_safe_consumer.py'
+      - 'scripts/custody/test_wr069_retained_safe_consumer.py'
+      - 'scripts/validate-release-candidate.mjs'
+      - '.github/workflows/ci.yml'
+      - '.ai/work_helper/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wr069-retained-safe-consumer-parser-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  contract-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Validate WR-069 implementation and accepted authority
+        run: |
+          python3 -m py_compile \
+            scripts/custody/wr069_retained_safe_consumer.py \
+            scripts/custody/test_wr069_retained_safe_consumer.py
+          python3 scripts/custody/wr069_retained_safe_consumer.py authority --repo-root .
+          python3 scripts/custody/wr069_retained_safe_consumer.py conformance \
+            --contract .ai/research/generated/RETURNING_PLAYER_V2_CSV_SCHEMA_INFERENCE_CONTRACT.json \
+            --corpus .ai/research/generated/RETURNING_PLAYER_V2_CSV_SCHEMA_INFERENCE_CONFORMANCE.json
+          python3 scripts/custody/test_wr069_retained_safe_consumer.py
+      - name: Regress accepted custody and retained-read boundaries
+        run: |
+          python3 scripts/custody/test_source_manifest_custody.py
+          python3 scripts/custody/test_read_retained_versions.py
+      - name: Validate release guard and provider CLI
+        run: |
+          npm run test:release
+          aws --version
+
+  protected-retained-safe-consumer:
+    if: >-
+      (github.event_name == 'workflow_dispatch' &&
+       github.ref == 'refs/heads/wr-069-retained-safe-consumer-parser-v2') ||
+      (github.event_name == 'push' &&
+       github.ref == 'refs/heads/wr-069-retained-safe-consumer-parser-v2' &&
+       contains(github.event.head_commit.message, '[wr069-live-proof]'))
+    needs: contract-preflight
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out reviewed WR-069 implementation
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Prepare accepted contract copies in runner temp
+        run: |
+          mkdir -p "$RUNNER_TEMP/wr069-contract"
+          cp .ai/research/generated/RETURNING_PLAYER_V2_CSV_SCHEMA_INFERENCE_CONTRACT.json "$RUNNER_TEMP/wr069-contract/contract.json"
+          cp .ai/research/generated/RETURNING_PLAYER_V2_CSV_SCHEMA_INFERENCE_CONFORMANCE.json "$RUNNER_TEMP/wr069-contract/conformance.json"
+          python3 scripts/custody/wr069_retained_safe_consumer.py conformance \
+            --contract "$RUNNER_TEMP/wr069-contract/contract.json" \
+            --corpus "$RUNNER_TEMP/wr069-contract/conformance.json"
+      - name: Resolve and verify all 15 retained objects
+        env:
+          WR_CUSTODY_B2_READ_KEY_ID: ${{ secrets.WR_CUSTODY_B2_READ_KEY_ID }}
+          WR_CUSTODY_B2_READ_APPLICATION_KEY: ${{ secrets.WR_CUSTODY_B2_READ_APPLICATION_KEY }}
+          WR_CUSTODY_R2_ACCESS_KEY_ID: ${{ secrets.WR_CUSTODY_R2_ACCESS_KEY_ID }}
+          WR_CUSTODY_R2_SECRET_ACCESS_KEY: ${{ secrets.WR_CUSTODY_R2_SECRET_ACCESS_KEY }}
+          WR_CUSTODY_B2_BUCKET: ${{ vars.WR_CUSTODY_B2_BUCKET }}
+          WR_CUSTODY_B2_ENDPOINT: ${{ vars.WR_CUSTODY_B2_ENDPOINT }}
+          WR_CUSTODY_R2_BUCKET: ${{ vars.WR_CUSTODY_R2_BUCKET }}
+          WR_CUSTODY_R2_ENDPOINT: ${{ vars.WR_CUSTODY_R2_ENDPOINT }}
+        run: |
+          echo "::add-mask::${WR_CUSTODY_B2_READ_KEY_ID}"
+          echo "::add-mask::${WR_CUSTODY_B2_READ_APPLICATION_KEY}"
+          echo "::add-mask::${WR_CUSTODY_R2_ACCESS_KEY_ID}"
+          echo "::add-mask::${WR_CUSTODY_R2_SECRET_ACCESS_KEY}"
+          python3 scripts/custody/wr069_retained_safe_consumer.py provider \
+            --repo-root . \
+            --output-dir "$RUNNER_TEMP/wr069-raw" \
+            --manifest "$RUNNER_TEMP/wr069-verified-input-manifest.json" \
+            --manifest-sidecar "$RUNNER_TEMP/wr069-verified-input-manifest.sha256" \
+            --report "$RUNNER_TEMP/wr069-provider-report.json"
+      - name: Deliberate provider-authority injection must fail closed
+        run: |
+          set +e
+          env -i PATH="$PATH" RUNNER_TEMP="$RUNNER_TEMP" LANG=C.UTF-8 WR_CUSTODY_R2_ENDPOINT=deliberate-injection \
+            python3 scripts/custody/wr069_retained_safe_consumer.py consumer \
+              --manifest "$RUNNER_TEMP/wr069-verified-input-manifest.json" \
+              --manifest-sidecar "$RUNNER_TEMP/wr069-verified-input-manifest.sha256" \
+              --contract "$RUNNER_TEMP/wr069-contract/contract.json" \
+              --corpus "$RUNNER_TEMP/wr069-contract/conformance.json" \
+              --derived "$RUNNER_TEMP/wr069-injection-derived.json" \
+              --derived-sidecar "$RUNNER_TEMP/wr069-injection-derived.sha256" \
+              --report "$RUNNER_TEMP/wr069-injection-report.json" \
+              --implementation-sha "$GITHUB_SHA"
+          status=$?
+          set -e
+          test "$status" -eq 2
+          test ! -e "$RUNNER_TEMP/wr069-injection-derived.json"
+          test ! -e "$RUNNER_TEMP/wr069-injection-report.json"
+      - name: Safe consumer with empty provider environment
+        run: |
+          env -i PATH="$PATH" RUNNER_TEMP="$RUNNER_TEMP" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+            python3 scripts/custody/wr069_retained_safe_consumer.py consumer \
+              --manifest "$RUNNER_TEMP/wr069-verified-input-manifest.json" \
+              --manifest-sidecar "$RUNNER_TEMP/wr069-verified-input-manifest.sha256" \
+              --contract "$RUNNER_TEMP/wr069-contract/contract.json" \
+              --corpus "$RUNNER_TEMP/wr069-contract/conformance.json" \
+              --derived "$RUNNER_TEMP/wr069-derived-evidence.json" \
+              --derived-sidecar "$RUNNER_TEMP/wr069-derived-evidence.sha256" \
+              --report "$RUNNER_TEMP/wr069-consumer-report.json" \
+              --implementation-sha "$GITHUB_SHA"
+      - name: Stage only privacy-safe derived evidence
+        run: |
+          mkdir -p .ai/work_helper
+          cp "$RUNNER_TEMP/wr069-derived-evidence.json" .ai/work_helper/WR069_RETAINED_DERIVED_EVIDENCE.json
+          cp "$RUNNER_TEMP/wr069-derived-evidence.sha256" .ai/work_helper/WR069_RETAINED_DERIVED_EVIDENCE.sha256
+          python3 - <<'PY'
+          import json, os, pathlib
+          root = pathlib.Path(os.environ['RUNNER_TEMP'])
+          provider = json.loads((root / 'wr069-provider-report.json').read_text())
+          consumer = json.loads((root / 'wr069-consumer-report.json').read_text())
+          summary = {
+              'schema_version':'wr069-protected-proof-summary-v1','task_id':'WR-069',
+              'workflow_run_id':os.environ['GITHUB_RUN_ID'],'implementation_sha':os.environ['GITHUB_SHA'],'result':'PASS',
+              'verified_input_count':provider['verified_input_count'],'b2_boundary':provider['b2_boundary'],'objects':provider['objects'],
+              'provider_mutation_operations':provider['provider_mutation_operations'],'upstream_source_access':provider['upstream_source_access'],
+              'consumer_provider_credential_presence':consumer['consumer_provider_credential_presence'],
+              'consumer_rehash_resize_pass_count':consumer['consumer_rehash_resize_pass_count'],'conformance':consumer['conformance'],
+              'parser_derivation':consumer['parser_derivation'],'derived_evidence_sha256':consumer['derived_evidence_sha256'],
+              'source_summaries':consumer['source_summaries'],'historical_inventory_counts':consumer['historical_inventory_counts'],
+              'historical_inventory_total_count':consumer['historical_inventory_total_count'],'raw_actions_artifacts':0,'cleanup':'PENDING'}
+          pathlib.Path('.ai/work_helper/WR069_PROTECTED_PROOF_SUMMARY.json').write_text(
+              json.dumps(summary,sort_keys=True,separators=(',',':'),ensure_ascii=False)+'\n',encoding='utf-8')
+          PY
+      - name: Publish privacy-safe proof summary to job summary
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          d=json.loads(pathlib.Path('.ai/work_helper/WR069_PROTECTED_PROOF_SUMMARY.json').read_text())
+          concise={'task_id':d['task_id'],'workflow_run_id':d['workflow_run_id'],'implementation_sha':d['implementation_sha'],
+            'result':d['result'],'verified_input_count':d['verified_input_count'],'b2_bucket':d['b2_boundary']['bucket_name'],
+            'b2_prefix':d['b2_boundary']['name_prefix'],'b2_required_capabilities_present':d['b2_boundary']['required_capabilities_present'],
+            'b2_mutation_capabilities_absent':d['b2_boundary']['mutation_capabilities_absent'],
+            'provider_mutation_operations':d['provider_mutation_operations'],'consumer_provider_credential_presence':d['consumer_provider_credential_presence'],
+            'consumer_rehash_resize_pass_count':d['consumer_rehash_resize_pass_count'],'conformance':d['conformance'],
+            'parser_derivation':d['parser_derivation'],'derived_evidence_sha256':d['derived_evidence_sha256'],
+            'historical_inventory_counts':d['historical_inventory_counts'],'historical_inventory_total_count':d['historical_inventory_total_count'],
+            'raw_actions_artifacts':0}
+          print(json.dumps(concise,sort_keys=True))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as out:
+              out.write('### WR-069 protected retained safe-consumer proof\n\n```json\n'+json.dumps(concise,indent=2,sort_keys=True)+'\n```\n')
+          PY
+      - name: Remove runner-temporary retained bytes and temporary reports
+        if: always()
+        run: |
+          rm -rf "$RUNNER_TEMP/wr069-raw" "$RUNNER_TEMP/wr069-contract"
+          rm -f "$RUNNER_TEMP/wr069-verified-input-manifest.json" "$RUNNER_TEMP/wr069-verified-input-manifest.sha256" \
+            "$RUNNER_TEMP/wr069-provider-report.json" "$RUNNER_TEMP/wr069-consumer-report.json" \
+            "$RUNNER_TEMP/wr069-derived-evidence.json" "$RUNNER_TEMP/wr069-derived-evidence.sha256" \
+            "$RUNNER_TEMP/wr069-injection-derived.json" "$RUNNER_TEMP/wr069-injection-derived.sha256" "$RUNNER_TEMP/wr069-injection-report.json"
+          test ! -e "$RUNNER_TEMP/wr069-raw"
+          test ! -e "$RUNNER_TEMP/wr069-contract"
+          test ! -e "$RUNNER_TEMP/wr069-verified-input-manifest.json"
+          test ! -e "$RUNNER_TEMP/wr069-provider-report.json"
+          test ! -e "$RUNNER_TEMP/wr069-consumer-report.json"
+          test ! -e "$RUNNER_TEMP/wr069-derived-evidence.json"
+          if test -f .ai/work_helper/WR069_PROTECTED_PROOF_SUMMARY.json; then
+            python3 - <<'PY'
+          import json, pathlib
+          p=pathlib.Path('.ai/work_helper/WR069_PROTECTED_PROOF_SUMMARY.json'); d=json.loads(p.read_text()); d['cleanup']='PASS'
+          p.write_text(json.dumps(d,sort_keys=True,separators=(',',':'),ensure_ascii=False)+'\n',encoding='utf-8')
+          PY
+          fi
+          { echo; echo 'Cleanup: PASS'; echo 'Raw-byte Actions artifacts: 0 (workflow contains no artifact-upload action)'; } >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit privacy-safe WR-069 evidence to task branch
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .ai/work_helper/WR069_RETAINED_DERIVED_EVIDENCE.json \
+            .ai/work_helper/WR069_RETAINED_DERIVED_EVIDENCE.sha256 \
+            .ai/work_helper/WR069_PROTECTED_PROOF_SUMMARY.json
+          test -z "$(git diff --cached --name-only | grep -vE '^\.ai/work_helper/(WR069_RETAINED_DERIVED_EVIDENCE\.json|WR069_RETAINED_DERIVED_EVIDENCE\.sha256|WR069_PROTECTED_PROOF_SUMMARY\.json)$' || true)"
+          if git diff --cached --quiet; then
+            echo "Privacy-safe derived evidence already matches branch contents."
+          else
+            git commit -m "WR-069: publish protected derived evidence"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
