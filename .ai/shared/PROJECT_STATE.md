@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / WR-072 PRE-SCORE PROTOCOL FREEZE ACTIVE
+Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / WR-072 PRE-SCORE PROTOCOL FREEZE + WR-074 SELF-HOSTED CI PILOT ACTIVE
 Last verified: 2026-09-15
 Owner: Manager / Architect
 Workflow: V3.2 CANONICAL
@@ -59,7 +59,7 @@ Evidence:
 
 WR-042, WR-059, and WR-071 are complete and removed from the active-only registry. Historical WR-042 PR #168 remains closed/unmerged and immutable; no source reacquisition is needed or authorized.
 
-## Active gates
+## Returning-Player v2 active gates
 
 ### WR-072 — ASSIGNED
 
@@ -75,10 +75,30 @@ Execution mode: `STANDARD_CHAT`.
 
 Fresh independent audit of the exact Manager-frozen WR-072 protocol/feature-schema target. It remains blocked until WR-072 publishes and Manager freezes one immutable head plus exact artifact IDs/hashes and CI.
 
+## Parallel infrastructure lane
+
+### WR-074 — ASSIGNED
+
+`WR-074 — Self-Hosted Heavy-CI Runner Pilot + Hardening`
+
+Owner: Work Helper. Execution mode: `STANDARD_CHAT`. Assignment mode: `WORKFLOW / CI TROUBLESHOOTING — DIAGNOSIS + REMEDIATION`.
+
+This is a non-blocking parallel infrastructure pilot. It may evaluate the user's local self-hosted GitHub Actions runner for the heavyweight War Room test workload while keeping canonical Governance and sensitive custody/protected-proof lanes on GitHub-hosted runners.
+
+The repository is public, so arbitrary fork pull-request code must never execute on the self-hosted runner. The pilot must use a dedicated runner label, least-privilege workflow permissions, clean-workspace controls, no custody/provider secrets, and a trusted event/ref boundary. The existing GitHub-hosted CI path remains fallback/reference during the pilot.
+
+WR-074 may write only `.ai/work_helper/**`, bounded `.github/workflows/**`, and `scripts/ci/**` if a dedicated helper is necessary. It does not modify research, production, custody scripts, Manager/shared state, or WR-072/073 artifacts.
+
+### WR-075 — BLOCKED
+
+Fresh independent audit of the exact Manager-frozen WR-074 pilot. It remains blocked until Work Helper publishes one immutable candidate with exact run/security/parity evidence and Manager freezes it.
+
+No self-hosted CI configuration is canonical merely because WR-074 executes successfully; PASS-family WR-075 plus Manager disposition is required.
+
 ## Boundaries
 
 No model fitting, scoring, tuning, comparison, predictions, evaluation, target/outcome joins, 2026 regular-season outcome inspection, source reacquisition/refresh/substitution, provider mutation, `draft_picks.csv`, failed-closed metadata use, ranking/production change, season-total composition, or Phase-6 work is authorized.
 
 WR-D001 production ranking authority remains unchanged. WR-033/WR-D005 and WR-034/WR-D006 remain historical v1 research architecture only; WR-072 may reuse ideas only through new v2 versioned identities.
 
-The self-hosted heavy-CI runner remains a future non-blocking infrastructure candidate and does not alter the WR-072/073 evidence chronology.
+WR-074/075 is independent of the WR-072/073 evidence chronology and may not weaken, block, or rewrite it.
