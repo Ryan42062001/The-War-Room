@@ -1,0 +1,95 @@
+name: WR-074 Self-Hosted Heavy CI Pilot
+
+on:
+  push:
+    branches:
+      - wr-074-self-hosted-heavy-ci-runner-pilot
+
+permissions:
+  contents: read
+
+jobs:
+  trust-gate:
+    name: trusted-ref-gate
+    runs-on: ubuntu-latest
+    outputs:
+      approved: ${{ steps.gate.outputs.approved }}
+    steps:
+      - id: gate
+        name: Enforce trusted pilot trigger
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REPOSITORY: ${{ github.repository }}
+          REF_NAME: ${{ github.ref }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          set -euo pipefail
+          test "$EVENT_NAME" = "push"
+          test "$REPOSITORY" = "Ryan42062001/The-War-Room"
+          test "$REF_NAME" = "refs/heads/wr-074-self-hosted-heavy-ci-runner-pilot"
+          test "$ACTOR" = "Ryan42062001"
+          echo "approved=true" >> "$GITHUB_OUTPUT"
+          echo "WR-074 trusted same-repository branch/actor gate: PASS"
+
+  heavy-pilot:
+    name: self-hosted-heavy-parity
+    needs: trust-gate
+    if: needs.trust-gate.outputs.approved == 'true'
+    runs-on: [self-hosted, war-room-heavy-ci]
+    timeout-minutes: 45
+    steps:
+      - name: Check out exact trusted push SHA
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          clean: true
+          fetch-depth: 1
+
+      - name: Set up Node 22 with canonical npm cache strategy
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Harden and verify persistent workspace
+        run: node scripts/ci/wr074-pilot.mjs preflight
+
+      - name: Record sanitized runner environment evidence
+        run: node scripts/ci/wr074-pilot.mjs environment
+
+      - name: Install exact lockfile dependencies
+        run: npm ci
+
+      - name: Prepare Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Stress browser determinism boundaries
+        run: node scripts/ci/wr074-pilot.mjs stress
+
+      - name: Test WR-026 phone decision view
+        run: npm run test:phone-decision-view
+
+      - name: Upload WR-026 phone review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wr-074-phone-review-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            artifacts/wr-026-phone-*.png
+            artifacts/wr-026-desktop-*.png
+            artifacts/wr-026-phone-decision-report.json
+          if-no-files-found: ignore
+
+      - name: Run canonical npm aggregate
+        run: npm test
+
+      - name: Validate resilience syntax
+        run: node --check service-worker.js && node --check js/war-room-resilience.js && node --check scripts/test-resilience.mjs
+
+      - name: Test backup and offline reload
+        run: node scripts/ci/wr074-pilot.mjs resilience
+
+      - name: Remove persistent-workspace residue
+        if: always()
+        run: node scripts/ci/wr074-pilot.mjs cleanup
