@@ -4,90 +4,80 @@ HANDOFF
 
 Workflow: V3.2 CANONICAL
 
-## WR-059 / WR-071 accepted disposition
+## Returning-Player v2 lane
 
-Returning-Player v2 exact source-snapshot + cohort evidence is now accepted.
+WR-059 / WR-071 source-snapshot + cohort evidence is accepted.
 
-WR-071 final verdict:
+Accepted evidence:
 
-`PASS`
-
-Findings:
-
-- CRITICAL: none
-- HIGH: none
-- MEDIUM: none
-- LOW: none
-
-Accepted target/evidence:
-
-- WR-059 PR #196 audited head `db8b21a65f2decf900902481f110758cc33f0aa6`;
-- source snapshot `wr-returning-player-v2-source-snapshot/1.2.0-wr059`;
-- source snapshot SHA-256 `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`;
-- cohort `returning-player-v2-cohort/1.2.0-wr059`;
-- cohort SHA-256 `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4`;
-- 15 retained historical identities;
-- 14 admitted stats sources;
-- 1 failed-closed metadata source;
-- 0 admitted metadata sources;
-- 5,176 unique historical cohort keys, zero duplicates;
-- `draft_picks.csv` remains excluded.
-
-Audit/integration evidence:
-
-- WR-071 PR #202 / immutable head `96a712ba2cf6a016ddbfdc0ea14cabba282bee04`;
-- WR-071 exact-head CI `35009298684` SUCCESS;
+- WR-059 audited head `db8b21a65f2decf900902481f110758cc33f0aa6`;
+- source snapshot `wr-returning-player-v2-source-snapshot/1.2.0-wr059` / `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`;
+- cohort `returning-player-v2-cohort/1.2.0-wr059` / `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4`;
+- WR-071 audit PR #202 / head `96a712ba2cf6a016ddbfdc0ea14cabba282bee04` / `PASS`, no findings;
 - audit evidence merge `0eb20f940fcfe455da3129a54525a73e39c966c6`;
 - WR-059 integration merge `2777ec44ca5b5f2fef77c07d17e4fa75b6013262`;
-- post-integration CI `35009576671` classify/Governance SUCCESS, product test skipped.
+- post-integration CI `35009576671` classify/Governance SUCCESS.
 
-WR-042, WR-059, and WR-071 are closed and removed from the active-only registry. Historical WR-042 PR #168 remains closed/unmerged and immutable.
+WR-072 remains assigned to R&D on branch `wr-072-v2-model-protocol-feature-schema` in `STANDARD_CHAT` as the mandatory no-scoring protocol/feature-schema freeze. WR-073 remains blocked pending one immutable Manager-frozen WR-072 target.
 
-## WR-072 assignment
+No model fitting, scoring, tuning, prediction, evaluation, target/outcome join, production-ranking change, season-total composition, or Phase-6 authorization exists yet.
 
-Next role: Research & Development.
+## Parallel infrastructure assignment — WR-074
+
+Next infrastructure role: Work Helper / Super Troubleshooter / Cross-Functional Operator.
 
 Task:
 
-`WR-072 — Returning-Player v2 Model-Protocol + Feature-Schema Freeze`
+`WR-074 — Self-Hosted Heavy-CI Runner Pilot + Hardening`
 
 Execution mode:
 
 `STANDARD_CHAT`
 
+Assignment mode:
+
+`WORKFLOW / CI TROUBLESHOOTING — DIAGNOSIS + REMEDIATION`
+
 Assigned branch:
 
-`wr-072-v2-model-protocol-feature-schema`
+`wr-074-self-hosted-heavy-ci-runner-pilot`
 
-WR-072 is the mandatory pre-score checkpoint from the accepted WR-039/040 chronology. It must freeze a new v2 protocol and ordered feature schema before any model result exists.
+WR-074 is non-blocking and independent of WR-072/073.
 
-Mandatory boundary:
+Purpose: evaluate the user's local self-hosted GitHub Actions runner for the heavyweight War Room browser/test workload without making it canonical before audit.
 
-- accepted stats sources: 14;
-- admitted metadata sources: 0;
-- historical `players.csv` metadata source: failed closed;
-- `draft_picks.csv`: excluded.
+Security boundary:
 
-Therefore the feature schema may use only semantics supported by admitted source authority. No age/birth-date/rookie-season/current-metadata/draft-capital feature may be introduced unless a later separately versioned source-contract/custody/audit gate explicitly authorizes it.
+- The War Room repository is public.
+- Arbitrary fork PR code must never execute on the self-hosted runner.
+- Do not use `pull_request_target` to execute untrusted PR-head code.
+- Use a dedicated runner label, preferred `war-room-heavy-ci`, plus `self-hosted`.
+- Keep `classify` and `governance` GitHub-hosted.
+- Keep custody/protected-proof/credential-bearing workflows GitHub-hosted.
+- Do not inject B2/R2/provider secrets or retained raw source bytes.
+- Use least-privilege workflow permissions and clean-workspace controls.
+- Preserve GitHub-hosted heavy CI as fallback/reference during the pilot.
 
-WR-072 must predeclare exact target semantics, chronology/cutoffs, ordered predictors and lineage, preprocessing, candidate hyperparameters, baselines, chronological splits, seeds/determinism, future adoption gates, full-row evidence serialization, fail-closed rules, environment lock, and outcome isolation.
+Work Helper may write only:
 
-WR-072 must not fit, score, tune, compare, predict, evaluate, join outcomes, inspect 2026 regular-season outcomes, reacquire sources, mutate providers, change rankings/production, compose season totals, or begin Phase 6.
+- `.ai/work_helper/**`;
+- bounded `.github/workflows/**` for the runner pilot;
+- `scripts/ci/**` only if a dedicated helper is necessary.
 
-R&D writes only `.ai/research/**`, publishes its own PR, and returns exact immutable head/artifact IDs/hashes/CI to Manager. R&D does not activate WR-073.
+Do not modify Manager/shared, Auditor, Research, product code, ranking/model/data logic, or custody scripts.
 
-## WR-073
+Required return evidence includes exact runner labels, trusted trigger boundary, workflow permissions, clean-workspace/preflight behavior, exact pilot run IDs/head/result, parity with the canonical heavy test commands, comparable GitHub-hosted benchmark, repeated-run evidence, fallback/reference evidence, changed files, and unresolved operational risk.
 
-WR-073 is pre-created as the BLOCKED fresh independent audit gate on branch:
+If the dedicated label is missing or the runner is offline/incompatible, fail closed and return the exact user action required rather than weakening routing security.
 
-`wr-073-v2-model-protocol-feature-schema-audit`
+Work Helper opens its own PR and does not merge it or activate WR-075.
 
-Manager activates it only after independently freezing one immutable WR-072 target and exact protocol/feature-schema hashes.
+## WR-075
 
-## Other roadmap
+WR-075 is pre-created and BLOCKED on branch:
 
-The self-hosted heavy-CI runner is now eligible for a future separate infrastructure task because WR-059/071 is stable, but it is non-blocking and not part of the current WR-072/073 critical path.
+`wr-075-self-hosted-heavy-ci-runner-audit`
 
-## Boundaries
+Manager activates it only after independently freezing one immutable WR-074 target with exact run/security evidence.
 
-WR-D001 remains production ranking authority. No scoring/evaluation/production/Phase-6 authorization exists yet.
+PASS-family WR-075 plus Manager disposition is required before the self-hosted configuration becomes canonical CI infrastructure.
