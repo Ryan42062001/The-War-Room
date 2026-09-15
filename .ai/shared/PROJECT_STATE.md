@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / WR-067 CSV SCHEMA CONTRACT CLARIFICATION ACTIVE
+Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / WR-068 CONTRACT AUDIT ACTIVE
 Last verified: 2026-09-15
 Owner: Manager / Architect
 Workflow: V3.2 CANONICAL
@@ -17,45 +17,39 @@ Accepted WR-063/WR-064 retained-version infrastructure remains canonical: exact 
 
 ## Frozen fail-closed checkpoints
 
-WR-059 PR #184 remains CLOSED UNMERGED at exact head `3c02f5a9a3ea858235772e7f2d065604632e7ee7`, exact-head CI `34911364983` SUCCESS. It preserves the incomplete WR-039 source-snapshot/cohort evidence state and is not a passing WR-060 target.
+WR-059 PR #184 remains CLOSED UNMERGED at exact head `3c02f5a9a3ea858235772e7f2d065604632e7ee7`, exact-head CI `34911364983` SUCCESS. It is not a passing WR-060 target.
 
-WR-065 PR #186 is now the immutable fail-closed parser checkpoint at exact head `d4e5ddeaf9f3b0d56846145f8dc3ffe9cf48df7f`, exact-head War Room CI `34913200700` SUCCESS. Net diff is limited to `.ai/work_helper/HANDOFF.md` and `.ai/work_helper/WR065_SAFE_CONSUMER_PARSER_BLOCKER.md`.
+WR-065 PR #186 remains CLOSED UNMERGED at exact head `d4e5ddeaf9f3b0d56846145f8dc3ffe9cf48df7f`, exact-head War Room CI `34913200700` SUCCESS. WR-065 stopped before provider access because accepted WR-039 did not define executable deterministic CSV type/nullability inference semantics. WR-066 was never activated and is closed without a verdict.
 
-WR-065 correctly stopped before provider access because the accepted WR-039 / WR-D008 contract requires ordered `(column,type,nullable)` raw schema evidence but does not freeze an executable deterministic CSV type/nullability inference algorithm. B2 reads, R2 reads, provider mutations, upstream source access, raw-byte materialization, raw-byte artifacts, and consumer execution were all zero.
+## Frozen WR-067 contract target
 
-WR-066 was never activated and is closed without an audit verdict. Do not audit PR #186 as though it were a completed parser implementation.
+Manager has frozen WR-067 PR #188 at exact head:
+
+`1e6b2105bce98408d3fb41f4aa07fcaa7ef6ca04`
+
+Exact-head War Room CI `34917306768` — SUCCESS.
+
+The target changes exactly six `.ai/research/**` files and publishes a separately versioned no-scoring clarification:
+
+- clarification ID: `wr-returning-player-v2-csv-schema-inference-addendum`
+- version: `1.0.0`
+- predecessor: `wr-returning-player-v2-evidence-contract/1.0.0`
+- machine-lock SHA-256: `48d4ace7375a59ab28ad79b2777bd7de4a9c4871cea49e83447371131f60dddb`
+- conformance corpus SHA-256: `1f70d5e31ed5a62e00e5b02e06f6271e9c30b36951389d9607c50fdf5f71ffe1`
+- conformance cases: 49 (33 PASS / 16 FATAL)
+
+The clarification freezes strict UTF-8 CSV grammar, exact null/empty semantics, the closed `boolean|int64|decimal|utf8` type vocabulary, complete-file inference and promotion, observed nullability, physical row counting, fatal conditions, and version-bound canonical typed-schema hashing. It does not rewrite WR-039 v1.0.0.
 
 ## Active gates
 
-- WR-067 — ASSIGNED to R&D for a versioned, no-scoring raw-CSV schema-inference contract clarification.
-- WR-068 — BLOCKED pending one immutable WR-067 contract target.
-- WR-059 — BLOCKED pending WR-067/WR-068 acceptance and a later fresh safe-consumer parser implementation/audit/canary sequence.
+- WR-067 — AUDIT_READY at exact PR #188/head above.
+- WR-068 — ASSIGNED to Independent Auditor / QA for fresh contract audit of that exact frozen target.
+- WR-059 — BLOCKED pending WR-068 PASS-family plus a later fresh safe-consumer parser implementation/audit/canary sequence.
 - WR-060 — BLOCKED pending a later complete immutable WR-059 remediation target.
 - WR-042 — BLOCKED on WR-059 remediation.
 
-## WR-067 contract boundary
-
-WR-067 may clarify only the evidence-contract semantics necessary to derive deterministic raw CSV `(column,type,nullable)` schema evidence. It must version the clarification rather than retroactively reinterpret accepted WR-039.
-
-The contract must freeze at minimum:
-
-- CSV parsing/record semantics and encoding assumptions;
-- canonical raw type vocabulary;
-- deterministic lexical type inference or an exact parser/library/version authority;
-- null-token and empty-field semantics;
-- nullable semantics;
-- integer/decimal/boolean/date/datetime/string handling;
-- leading-zero and identifier handling;
-- non-finite numeric handling;
-- mixed-type promotion/coercion rules;
-- malformed-row/header failure behavior;
-- ordered typed-schema canonical encoding and SHA-256 procedure;
-- synthetic conformance vectors sufficient for independent reproduction.
-
-It must not parse retained provider bytes, inspect 2026 outcomes, fit/score/evaluate models, change source classes/rights/custody, or alter production/rankings.
-
 ## Next gate
 
-R&D publishes one immutable WR-067 contract-clarification target. Manager freezes the exact PR/head and activates WR-068. PASS-family audit allows Manager to accept the versioned clarification and create a fresh successor safe-consumer parser task; it does not itself resume WR-059 or authorize scoring.
+WR-068 must independently reproduce all 49 synthetic conformance cases and determine whether the written semantics are unambiguous and source-independent. PASS-family authorizes only Manager acceptance of the exact WR-067 clarification and creation of a fresh successor parser implementation/audit lane. It does not authorize retained-byte parsing, WR-059 resumption, model/scoring work, or production changes.
 
-No upstream source-byte reacquisition, provider mutation, credential disclosure, `draft_picks.csv` use/replacement, 2026 regular-season outcome-table inspection, target join, model fitting/scoring/tuning/comparison/evaluation, ranking/production change, or Phase-6 work is authorized.
+No retained provider bytes, upstream reacquisition, provider mutation, credential disclosure, `draft_picks.csv` use/replacement, 2026 regular-season outcome-table inspection, target join, model fitting/scoring/tuning/comparison/evaluation, ranking/production change, or Phase-6 work is authorized.
