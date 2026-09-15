@@ -31,7 +31,14 @@ STATS_APPROVED_COLUMNS = (
     "receiving_yards", "receiving_tds", "passing_epa", "rushing_epa", "receiving_epa",
     "target_share", "air_yards_share", "wopr",
 )
-PLAYERS_APPROVED_COLUMNS = ("gsis_id", "display_name", "football_name", "birth_date", "rookie_season", "mfl_id")
+# WR-039 permits a minimal Players-metadata view. Stable external IDs such as mfl_id
+# are not required-presence columns; historical lineage explicitly treats them as
+# optional when present. Raw-schema evidence still covers every retained column.
+PLAYERS_REQUIRED_APPROVED_COLUMNS = ("gsis_id", "birth_date", "rookie_season")
+PLAYERS_OPTIONAL_APPROVED_COLUMNS = ("display_name",)
+PLAYERS_APPROVED_COLUMN_ORDER = (
+    "gsis_id", "display_name", "birth_date", "rookie_season",
+)
 APPROVED_VIEW_COUNTS = {
     2012: 417, 2013: 410, 2014: 412, 2015: 423, 2016: 423, 2017: 419,
     2018: 444, 2019: 437, 2020: 435, 2021: 475, 2022: 446, 2023: 421,
@@ -60,18 +67,22 @@ PROVIDER_AWS_ENV = frozenset({
     "AWS_ENDPOINT_URL", "AWS_ENDPOINT_URL_S3", "AWS_PROFILE", "AWS_SHARED_CREDENTIALS_FILE",
 })
 
+
 class ContractError(RuntimeError):
     pass
+
 
 class CsvFatal(ContractError):
     def __init__(self, code: str):
         super().__init__(code)
         self.code = code
 
+
 @dataclass(frozen=True)
 class Field:
     text: str
     quoted: bool
+
 
 @dataclass(frozen=True)
 class SchemaResult:
@@ -210,12 +221,15 @@ def tokenize_csv(data: bytes) -> list[list[Field]]:
         raise CsvFatal("CSV_INVALID_UTF8") from exc
     records: list[list[Field]] = []; row: list[Field] = []; buf: list[str] = []
     state = "FIELD_START"; i = 0; just_delimiter = False
+
     def emit_field(quoted: bool) -> None:
         nonlocal buf
         row.append(Field("".join(buf), quoted)); buf = []
+
     def emit_record() -> None:
         nonlocal row
         records.append(row); row = []
+
     while i < len(text):
         ch = text[i]
         if state == "QUOTED":
@@ -256,9 +270,11 @@ def tokenize_csv(data: bytes) -> list[list[Field]]:
         raise ContractError("unexpected unterminated row state")
     return records
 
+
 INT_RE = re.compile(r"^-?(?:0|[1-9][0-9]*)$")
 DEC_RE = re.compile(r"^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?$")
 INT64_MIN = -(2**63); INT64_MAX = 2**63 - 1
+
 
 def classify_non_null(text: str) -> str:
     if text in ("true", "false"): return "boolean"
@@ -343,6 +359,47 @@ def load_read_module(repo_root: Path):
     return module
 
 
+def candidate_upload_versions(versions: Sequence[Mapping[str, object]], source: Mapping[str, object]) -> list[Mapping[str, object]]:
+    """Return exact-key immutable upload candidates compatible with authority metadata.
+
+    The accepted WR-063 exact-key lister already rejects non-exact names. Provider
+    metadata digests, when present, are rejection gates only; downloaded bytes are
+    always independently hashed before a version is admitted.
+    """
+    expected_size = int(source["expected_size_bytes"])
+    expected_sha = str(source["expected_sha256"])
+    ordered = sorted(versions, key=lambda value: int(value.get("uploadTimestamp", -1)), reverse=True)
+    candidates: list[Mapping[str, object]] = []
+    for value in ordered:
+        if value.get("action") != "upload" or not value.get("fileId"):
+            continue
+        size = value.get("contentLength", value.get("size"))
+        if int(size or -1) != expected_size:
+            continue
+        info = value.get("fileInfo") or {}
+        metadata_digest = info.get("wr-sha256") or info.get("sha256")
+        if metadata_digest not in (None, expected_sha):
+            continue
+        candidates.append(value)
+    return candidates
+
+
+def retrieve_authoritative_b2(read, auth: Mapping[str, str], source: Mapping[str, object], destination: Path,
+                              versions: Sequence[Mapping[str, object]]) -> dict:
+    candidates = candidate_upload_versions(versions, source)
+    if not candidates:
+        raise ContractError(f"B2 has no size/metadata-compatible immutable upload for {source['source_id']}")
+    attempted = 0
+    for candidate in candidates:
+        attempted += 1
+        destination.unlink(missing_ok=True)
+        read.download_b2_version(auth, str(candidate["fileId"]), destination)
+        if sha256_file(destination) == (source["expected_sha256"], source["expected_size_bytes"]):
+            return {"selected": candidate, "candidate_count": len(candidates), "attempted_candidate_count": attempted}
+        destination.unlink(missing_ok=True)
+    raise ContractError(f"B2 authoritative retained upload absent for {source['source_id']}")
+
+
 def provider_phase(repo_root: Path, output_dir: Path, manifest_path: Path, manifest_sidecar: Path, report_path: Path) -> None:
     output_dir = require_child_of_runner_temp(output_dir); manifest_path = require_child_of_runner_temp(manifest_path)
     manifest_sidecar = require_child_of_runner_temp(manifest_sidecar); report_path = require_child_of_runner_temp(report_path)
@@ -353,24 +410,24 @@ def provider_phase(repo_root: Path, output_dir: Path, manifest_path: Path, manif
         for source in sources:
             local = output_dir / f"{source['expected_sha256']}.raw"; r2_tmp = output_dir / f"{source['expected_sha256']}.r2.raw"
             item = read.RetainedObject(source["season"], source["asset_id"], source["expected_sha256"], source["expected_size_bytes"], source["custody_key"])
-            versions = read.list_exact_versions(auth, item); selected, visibility = read.choose_upload_version(versions, item)
-            if selected.get("action") != "upload": raise ContractError("B2 selected version is not an upload")
-            read.download_b2_version(auth, selected["fileId"], local)
-            if sha256_file(local) != (source["expected_sha256"], source["expected_size_bytes"]):
-                local.unlink(missing_ok=True); raise ContractError(f"B2 authoritative identity mismatch for {source['source_id']}")
+            versions = read.list_exact_versions(auth, item)
+            selection = retrieve_authoritative_b2(read, auth, source, local, versions)
+            selected = selection["selected"]
             read.r2_read(config, item, r2_tmp)
             if sha256_file(r2_tmp) != (source["expected_sha256"], source["expected_size_bytes"]):
                 r2_tmp.unlink(missing_ok=True); local.unlink(missing_ok=True); raise ContractError(f"R2 authoritative identity mismatch for {source['source_id']}")
             equal = local.read_bytes() == r2_tmp.read_bytes(); r2_tmp.unlink(missing_ok=True)
             if not equal:
                 local.unlink(missing_ok=True); raise ContractError(f"B2/R2 byte inequality for {source['source_id']}")
+            ordered = sorted(versions, key=lambda value: int(value.get("uploadTimestamp", -1)), reverse=True)
             manifest_sources.append({**source, "local_path": str(local)})
             report_objects.append({
                 "source_id": source["source_id"], "sha256": source["expected_sha256"], "byte_size": source["expected_size_bytes"],
                 "b2_digest_size": "PASS", "r2_digest_size": "PASS", "b2_r2_equal": True,
-                "b2_exact_version_count": len(versions), "b2_selected_action": "upload",
+                "b2_exact_version_count": len(versions), "b2_compatible_upload_count": selection["candidate_count"],
+                "b2_attempted_upload_count": selection["attempted_candidate_count"], "b2_selected_action": "upload",
                 "b2_selected_file_id_sha256": sha256_bytes(str(selected["fileId"]).encode()),
-                "b2_latest_action": visibility.get("latest_action"),
+                "b2_latest_action": ordered[0].get("action") if ordered else None,
             })
         local_manifest = {
             "schema_version": "wr069-verified-local-input-manifest-v1", "task_id": "WR-069",
@@ -451,6 +508,19 @@ def derive_stats_evidence(source: Mapping[str, object], parsed: SchemaResult) ->
              "approved_view_count_match": True, "approved_columns_present": list(STATS_APPROVED_COLUMNS)}, inventory)
 
 
+def derive_players_evidence(parsed: SchemaResult) -> dict:
+    missing = [name for name in PLAYERS_REQUIRED_APPROVED_COLUMNS if name not in parsed.headers]
+    if missing:
+        raise ContractError("required approved players metadata columns missing: " + ",".join(missing))
+    present = [name for name in PLAYERS_APPROVED_COLUMN_ORDER if name in parsed.headers]
+    return {
+        "approved_columns_present": present,
+        "required_approved_columns_present": list(PLAYERS_REQUIRED_APPROVED_COLUMNS),
+        "optional_approved_columns_present": [name for name in PLAYERS_OPTIONAL_APPROVED_COLUMNS if name in parsed.headers],
+        "historical_membership_use": False,
+    }
+
+
 def consumer_phase(manifest_path: Path, manifest_sidecar: Path, contract_path: Path, corpus_path: Path,
                    derived_path: Path, derived_sidecar: Path, report_path: Path, implementation_sha: str) -> None:
     assert_consumer_isolation(os.environ)
@@ -472,10 +542,9 @@ def consumer_phase(manifest_path: Path, manifest_sidecar: Path, contract_path: P
             extra, inventory = derive_stats_evidence(source, parsed); base.update(extra)
             if inventory is not None: inventories.append(inventory)
         elif source["source_class"] == "NFLVERSE_PLAYERS_METADATA_MINIMAL":
-            missing = [name for name in PLAYERS_APPROVED_COLUMNS if name not in parsed.headers]
-            if missing: raise ContractError("approved players metadata columns missing: " + ",".join(missing))
-            base["approved_columns_present"] = list(PLAYERS_APPROVED_COLUMNS); base["historical_membership_use"] = False
-        else: raise ContractError("unapproved retained source class")
+            base.update(derive_players_evidence(parsed))
+        else:
+            raise ContractError("unapproved retained source class")
         source_evidence.append(base)
         summary_rows.append({"source_id": source["source_id"], "physical_row_count": parsed.physical_row_count,
                              "schema_sha256": parsed.schema_sha256, "approved_view_count": base.get("approved_view_count")})
@@ -527,6 +596,7 @@ def main() -> int:
         return 0
     except (ContractError, CsvFatal, OSError, ValueError) as exc:
         print(f"WR-069 FAIL CLOSED: {exc}", file=sys.stderr); return 2
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
