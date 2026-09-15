@@ -2,62 +2,52 @@
 
 HANDOFF
 
-Task ID: WR-070
+Task ID: WR-060
 
 Role: Independent Auditor / QA
 
-Status: COMPLETE — PASS
+Status: COMPLETE — FAIL — REMEDIATION REQUIRED
 
 Workflow: V3.2
 
 Execution mode: WORK_MODE_PREFERRED
 
-Audit branch: `wr-070-retained-safe-consumer-parser-audit`
+Audit branch: `wr-060-v2-source-snapshot-cohort-reaudit`
 
-Assignment baseline: `e01f99e4944b89cc50ea26b8d124c52f63c08bc5`
+Assignment baseline: `2052aefea1b6c8871bc6a25be22c033b921d07a6`
 
-Audited target: WR-069 / PR #192
+Audited target: WR-059 / PR #196
 
-Frozen audited head: `5d4fc5fce3567a9894ddf3c08243f0ce6c087543`
+Frozen audited head: `e871c861f8ba3c339af5b7a022892522b45b844f`
 
-Protected-proof implementation: `56f6581cd62fd474f4422bc5f7d353f48498a853`
+Final verdict: `FAIL — REMEDIATION REQUIRED`
 
-Protected run/jobs: `34922718568`; `104234149528` SUCCESS; `104234179073` SUCCESS
+Finding: HIGH `WR-060-AUD-01` — the admitted replacement `players.csv` record does not preserve a reproducible exact release ID or provider-update timestamp. It contains a narrative placeholder for `release_id` and only day precision for `provider_updated_at`. The accepted WR-039 machine contract requires both fields for every admitted source instance, and WR-060 requires fail-closed treatment when required provenance is missing or non-reproducible.
 
-Report checkpoint: `3b61eb2f73c0e20b3a628ff6eaac96ac72b05f42`
+Provider check: a fresh read-only request to GitHub's exact release-asset endpoint for asset `563580371` returned `404 Not Found`; current provider state cannot independently restore the missing historical release/update fields and no replacement identity was accepted.
 
-Final verdict: `PASS`
+Source snapshot hash: independently reproduced `f6ee530c7733b1aa9d984a3e874015ca9a3dd7cebda5ffc558df4cb159c591b9` from exact canonical committed bytes.
 
-Target discipline: PASS — PR #192 remained open at exact frozen head. The two commits after protected proof modify only privacy-safe `.ai/work_helper/**` evidence/report/handoff files; no runtime, workflow, parser, CI hook, provider boundary, or release guard changed.
+Cohort hash: independently reproduced `d6927509968ac3a371591a69fd665861e9546a0868f1e7b1c5db6c31cc887354` from exact canonical committed bytes.
 
-Identity/admission: PASS — exactly 15 authoritative WR-042 retained identities matched on source ID/class, asset, filename, season, SHA-256, and byte size. Non-allowlisted identities, duplicates, and `draft_picks.csv` fail closed. No upstream reacquisition, substitution, refresh, or recustody exists.
+Cohort disposition: PASS within this failed overall gate. Independent expansion produced 5,176/5,176 unique ordered keys and zero duplicates: 2014–2017 = 410/412/423/423 = 1,668; 2018–2025 = 419/444/437/435/475/446/421/431 = 3,508. All 12 segments match their exact prior-season source lineage. The frozen WR034 identity digest independently reproduced `9d45c1d9b14bc2df5948f19949d784194b68a3608d95b83c0455fd9e569d8e0e`.
 
-Provider custody: PASS — dedicated accepted B2 read-only boundary, full-exact-key bounded discovery, exact filename, upload-only candidate, immutable version download, and immediate digest/size verification were preserved. R2 is exact-key read-only. Protected proof passed 15 B2 reads, 15 R2 reads, and 15 B2/R2 equality checks with zero provider mutation operations.
+Custody/source identity disposition: PASS except for the provenance finding. All 15 expanded WR-059 identities exactly match historical WR-042 source ID/class, asset/name, season, SHA-256, and byte size. Historical manifest digest `d2196293...` and accepted WR-069 evidence digest `448baab...` reproduced. No raw bytes were required.
 
-Safe-consumer separation: PASS — provider access completes before a clean `env -i` consumer; credentials/provider authority are absent. Deliberate authority injection fails closed. Consumer independently re-hashes/re-sizes all 15 inputs before parsing; wrong local identity fails before parsing. Success/failure cleanup passed.
+Exclusion/boundaries: PASS — `draft_picks.csv` remains excluded with no substitute. Current players metadata was not used for historical membership. No provider mutation/reacquisition/refresh, 2026 outcome-table inspection, target join, model/scoring/tuning/evaluation/prediction, ranking/production change, or Phase-6 work was found.
 
-Contract: PASS — exact accepted contract `wr-returning-player-v2-csv-schema-inference-addendum/1.0.0`; machine lock `48d4ace7375a59ab28ad79b2777bd7de4a9c4871cea49e83447371131f60dddb`; corpus `1f70d5e31ed5a62e00e5b02e06f6271e9c30b36951389d9607c50fdf5f71ffe1`. Independent execution reproduced 49 cases: 33 PASS, 16 FATAL, zero mismatches. Explicit source-independent grammar and canonical hashing match the accepted semantics.
+Scope/CI: PASS — PR #196 remained at exact frozen head and changes exactly eight `.ai/research/**` files. Exact-head CI `34988624368` succeeded for classify/Governance; evidence-only product-test skip was correct.
 
-Derived evidence: PASS — independently hashed to `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`. Fields are privacy-safe and source-bound. Historical inventories independently recomputed to 410/412/423/423 = 1,668 using the proper historical stats seasons. Current retained `players.csv` was not used for historical membership.
+Findings by severity: CRITICAL — none. HIGH — WR-060-AUD-01. MEDIUM — none. LOW — none.
 
-Raw-byte/privacy boundary: PASS — protected run artifact collection is empty; logs and summaries contain no raw retained bytes or reusable credentials; raw inputs are runner-temporary and cleanup passed.
+Detailed report: `.ai/auditor/WR-060_AUDIT.md`.
 
-Validation: PASS — protected run `34922718568`; final-head WR-069 workflow `34923188637`; War Room CI `34923188673` including full test lane; WR-046 proof `34923188651`; WR-063 regression `34923188690`; local focused parser/security, custody, release, and workflow-state checks all passed.
+Recommended next role: Manager / Architect, then bounded R&D remediation and fresh Independent Auditor / QA.
 
-Scope: PASS — exact task diff is confined to the ten authorized WR-069 paths. No research, Manager/shared, Auditor, accepted WR-063, production, model, or ranking modification. No 2026 outcomes, targets, model/scoring/tuning/evaluation, prediction/ranking, provider mutation, production, or Phase-6 activity.
+Recommended Manager action: do not merge PR #196. Preserve the verified cohort/custody work. Require either authoritative exact release ID plus full provider-update timestamp for asset `563580371`, or fail-closed exclusion of the metadata source with consistent snapshot regeneration. Do not infer missing precision, substitute/reacquire source bytes, or weaken WR-039. Freeze a new target and re-audit.
 
-Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — none.
+Auditor modified or merged PR #196: NO
 
-Detailed report: `.ai/auditor/WR-070_AUDIT.md`.
-
-Recommended next role: Manager / Architect.
-
-Authorized next action: only Manager may integrate exact audited WR-069 head `5d4fc5fce3567a9894ddf3c08243f0ce6c087543`, after re-verifying PR #192 still points to it, and then run/accept the mandatory canonical-main post-merge canary. WR-059 remains blocked until that canary passes.
-
-Auditor modified PR #192: NO
-
-Auditor merged PR #192: NO
-
-Auditor downloaded retained raw bytes: NO
+Auditor retrieved retained raw bytes: NO
 
 Auditor modified non-`.ai/auditor/**` surfaces: NO
