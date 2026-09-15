@@ -1,104 +1,57 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / WR-072 PRE-SCORE PROTOCOL FREEZE + WR-074 SELF-HOSTED CI PILOT ACTIVE
+Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / WR-073 PROTOCOL AUDIT + WR-074 SELF-HOSTED CI PILOT ACTIVE
 Last verified: 2026-09-15
 Owner: Manager / Architect
 Workflow: V3.2 CANONICAL
 
-## Current accepted baseline
+## Accepted Returning-Player v2 baseline
 
-Repository: `Ryan42062001/The-War-Room`
-
-Workflow V3.2 remains canonical. Atomic Manager reconciliation is mandatory.
-
-Returning-Player v2 now has an independently accepted exact source-snapshot + cohort checkpoint.
-
-Accepted source snapshot:
-
-- ID `wr-returning-player-v2-source-snapshot/1.2.0-wr059`;
-- SHA-256 `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`;
-- retained historical identities 15;
-- admitted Player Summary Stats sources 14;
-- failed-closed Players metadata sources 1;
-- admitted Players metadata sources 0;
-- `draft_picks.csv` remains excluded under WR-057.
-
-Accepted cohort:
-
-- ID `returning-player-v2-cohort/1.2.0-wr059`;
-- SHA-256 `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4`;
-- target seasons 2014–2025;
-- 5,176 / 5,176 unique historical keys;
-- zero duplicates;
-- 2014–2017 = 1,668;
-- 2018–2025 = 3,508;
-- historical membership, ordering, and prior-season stats lineage unchanged.
-
-Historical `players.csv` asset `563580371` remains exact retained custody evidence but is `FAILED_CLOSED` for v2 metadata use because exact historical release ID and full provider-update timestamp are not independently reproducible. No current/replacement metadata asset is authority for that historical source.
+Source snapshot `wr-returning-player-v2-source-snapshot/1.2.0-wr059` / `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea` and cohort `returning-player-v2-cohort/1.2.0-wr059` / `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4` remain accepted. Historical cohort is 5,176 unique keys with zero duplicates. Accepted source semantics remain 14 stats sources, zero admitted Players metadata sources, one failed-closed metadata source, and excluded `draft_picks.csv`.
 
 Preserved authority:
 
-- WR-042 custody manifest SHA-256 `d2196293ff34543b063e737efb175f579967bf37f5dc91b41c08dd45dfe44d26`;
-- WR-069 privacy-safe evidence SHA-256 `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`;
-- accepted WR-063/064 retained-version read infrastructure;
-- accepted WR-067/068 deterministic CSV schema contract;
-- accepted WR-069/070 safe-consumer parser gate.
-
-## WR-059 / WR-071 acceptance
-
-WR-071 independently audited exact WR-059 head `db8b21a65f2decf900902481f110758cc33f0aa6` and returned `PASS` with no findings.
-
-Evidence:
-
-- WR-059 exact-head CI `34998074580` — SUCCESS;
-- WR-071 audit PR `#202` / audit head `96a712ba2cf6a016ddbfdc0ea14cabba282bee04`;
-- WR-071 exact-head CI `35009298684` — SUCCESS;
-- audit evidence merge `0eb20f940fcfe455da3129a54525a73e39c966c6`;
-- WR-059 integration merge `2777ec44ca5b5f2fef77c07d17e4fa75b6013262`;
-- post-integration War Room CI `35009576671` — classify/Governance SUCCESS, product test skipped as evidence-only.
-
-WR-042, WR-059, and WR-071 are complete and removed from the active-only registry. Historical WR-042 PR #168 remains closed/unmerged and immutable; no source reacquisition is needed or authorized.
+- WR-042 custody manifest `d2196293ff34543b063e737efb175f579967bf37f5dc91b41c08dd45dfe44d26`
+- WR-069 evidence `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`
+- WR-071 PASS/no-findings audit and WR-059 accepted integration remain canonical.
 
 ## Returning-Player v2 active gates
 
-### WR-072 — ASSIGNED
+### WR-072 — AUDIT_READY
 
-`WR-072 — Returning-Player v2 Model-Protocol + Feature-Schema Freeze`
+R&D published PR #207 at exact head `d75e58052dd555cd5b3f952fc2b3556287d75f9a`. Manager verified/froze the exact four-file `.ai/research/**` candidate.
 
-This is the mandatory pre-score checkpoint from the accepted WR-039/040 chronology. It must freeze a new v2 feature schema, target semantics, preprocessing, candidate models/hyperparameters, baselines, chronological splits, future result gates, keyed evidence requirements, environment lock, and outcome-isolation rules before any model result exists.
+Frozen identities:
 
-Because the accepted source snapshot has 0 admitted metadata sources and excludes draft capital, WR-072 may use only semantics supported by admitted sources. It must not reintroduce age/birth-date/rookie-season/current-metadata/draft-capital features unless a future separately versioned source-contract/custody/audit gate authorizes them.
+- model protocol `returning-player-v2-model-protocol/1.0.0-wr072`
+- feature schema `returning-player-v2-feature-schema/1.0.0-wr072`
+- preprocessing `returning-player-v2-preprocessing/1.0.0-wr072`
+- serializer `returning-player-v2-evidence-serializer/1.0.0-wr072`
+- target `returning-player-v2-expected-ppr-pg-target/1.0.0-wr072`
+- candidate `returning-player-v2-ridge-stats-only-a100/1.0.0-wr072`
+- machine-lock SHA-256 `d2fb326875c954446b23e2761df0feaad4b814aa49dd0465277979a3c9d9bd73`
+- exact-head War Room CI `35013128300` SUCCESS.
 
-Execution mode: `STANDARD_CHAT`.
+The frozen protocol has exactly 28 predictors, all from admitted Y-1/Y-2 `NFLVERSE_PLAYER_SUMMARY_STATS` REG semantics; zero metadata-derived and zero draft-capital predictors. No v2 model result exists yet.
 
-### WR-073 — BLOCKED
+### WR-073 — ASSIGNED
 
-Fresh independent audit of the exact Manager-frozen WR-072 protocol/feature-schema target. It remains blocked until WR-072 publishes and Manager freezes one immutable head plus exact artifact IDs/hashes and CI.
+Fresh independent audit of exact WR-072 PR #207 head `d75e58052dd555cd5b3f952fc2b3556287d75f9a`. Auditor writes only `.ai/auditor/**` and must independently reproduce the machine lock, identities, source/cohort bindings, feature lineage, chronology, target/preprocessing/candidate/gates, full-row evidence, outcome isolation, and no-result-work boundary.
+
+No scoring/evaluation may be authorized unless WR-073 returns PASS-family and Manager accepts the disposition.
 
 ## Parallel infrastructure lane
 
 ### WR-074 — ASSIGNED
 
-`WR-074 — Self-Hosted Heavy-CI Runner Pilot + Hardening`
-
-Owner: Work Helper. Execution mode: `STANDARD_CHAT`. Assignment mode: `WORKFLOW / CI TROUBLESHOOTING — DIAGNOSIS + REMEDIATION`.
-
-This is a non-blocking parallel infrastructure pilot. It may evaluate the user's local self-hosted GitHub Actions runner for the heavyweight War Room test workload while keeping canonical Governance and sensitive custody/protected-proof lanes on GitHub-hosted runners.
-
-The repository is public, so arbitrary fork pull-request code must never execute on the self-hosted runner. The pilot must use a dedicated runner label, least-privilege workflow permissions, clean-workspace controls, no custody/provider secrets, and a trusted event/ref boundary. The existing GitHub-hosted CI path remains fallback/reference during the pilot.
-
-WR-074 may write only `.ai/work_helper/**`, bounded `.github/workflows/**`, and `scripts/ci/**` if a dedicated helper is necessary. It does not modify research, production, custody scripts, Manager/shared state, or WR-072/073 artifacts.
+Self-hosted heavy-CI runner pilot owned by Work Helper. It remains independent of WR-072/073. Public-repository security boundaries, dedicated runner labels, least privilege, clean workspace, no custody/provider secrets, repeat-run evidence, hosted fallback/reference, and WR-075 audit remain mandatory.
 
 ### WR-075 — BLOCKED
 
-Fresh independent audit of the exact Manager-frozen WR-074 pilot. It remains blocked until Work Helper publishes one immutable candidate with exact run/security/parity evidence and Manager freezes it.
-
-No self-hosted CI configuration is canonical merely because WR-074 executes successfully; PASS-family WR-075 plus Manager disposition is required.
+Fresh independent audit of one future Manager-frozen WR-074 pilot target.
 
 ## Boundaries
 
-No model fitting, scoring, tuning, comparison, predictions, evaluation, target/outcome joins, 2026 regular-season outcome inspection, source reacquisition/refresh/substitution, provider mutation, `draft_picks.csv`, failed-closed metadata use, ranking/production change, season-total composition, or Phase-6 work is authorized.
+No Returning-Player v2 fitting, scoring, tuning, candidate result comparison, predictions, outcome evaluation/join, 2026 regular-season outcome inspection, production-ranking change, season-total composition, or Phase-6 work is authorized.
 
-WR-D001 production ranking authority remains unchanged. WR-033/WR-D005 and WR-034/WR-D006 remain historical v1 research architecture only; WR-072 may reuse ideas only through new v2 versioned identities.
-
-WR-074/075 is independent of the WR-072/073 evidence chronology and may not weaken, block, or rewrite it.
+WR-D001 production ranking authority remains unchanged. WR-074/075 remains independent infrastructure work and may not weaken or rewrite the WR-072/073 evidence chronology.
