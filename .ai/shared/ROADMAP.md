@@ -67,13 +67,35 @@ WR-072 is specification/evidence only. It may reuse v1 ideas only through new v2
 
 No fitting, scoring, tuning, prediction, evaluation, target join, 2026 regular-season outcome use, ranking/production change, source reacquisition/mutation, season-total composition, or Phase-6 work is authorized.
 
-## Infrastructure roadmap — FUTURE / NON-BLOCKING
+## Infrastructure roadmap — ACTIVE PARALLEL PILOT
 
-### Self-hosted heavy-CI runner lane — PLANNED CANDIDATE
+### WR-074 — Self-hosted heavy-CI runner pilot + hardening — ASSIGNED
 
-The WR-059/071 gate is now stable, so a separate future Manager-approved infrastructure task may evaluate the user-operated self-hosted runner for heavyweight browser/test CI. Keep Governance and sensitive custody/protected-proof lanes independently isolated at first; require dedicated labels, health checks, clean-workspace guarantees, fallback capability, benchmarking, exact-head traceability, and fresh independent audit before canonical adoption.
+Work Helper owns a bounded evaluation of the user-operated self-hosted runner for heavyweight browser/test CI.
 
-This candidate is not on the Returning-Player v2 critical path and must not weaken WR-072/073 chronology.
+Because The War Room repository is public, the pilot must treat fork PR code as untrusted. The self-hosted runner must not execute arbitrary fork pull-request heads. Use a dedicated custom runner label, least-privilege permissions, clean-workspace/preflight controls, and a trusted event/ref boundary. Keep B2/R2/provider secrets and retained raw source bytes off the runner.
+
+During the pilot:
+
+- keep `classify` on GitHub-hosted runners;
+- keep `governance` on GitHub-hosted runners;
+- keep custody/protected-proof/credential-bearing workflows GitHub-hosted;
+- preserve the existing GitHub-hosted heavy-test path as fallback/reference;
+- benchmark and compare the self-hosted heavy workload against comparable GitHub-hosted evidence;
+- require repeat-run/cleanup evidence;
+- do not change product/research semantics.
+
+WR-074 branch: `wr-074-self-hosted-heavy-ci-runner-pilot`.
+
+### WR-075 — Independent self-hosted runner audit — BLOCKED
+
+Manager activates WR-075 only after freezing one immutable WR-074 target with exact workflow/security/run evidence.
+
+Sequence:
+
+`WR-074 hardened pilot -> Manager exact freeze -> WR-075 fresh independent audit -> PASS-family only: Manager adoption decision / canonical CI routing`
+
+This infrastructure lane is deliberately non-blocking and may proceed in parallel with WR-072/073. It must not weaken or alter Returning-Player v2 chronology.
 
 ## Future phases
 
