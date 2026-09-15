@@ -17,6 +17,7 @@ ROOT = MODULE.parents[2]
 CONTRACT = ROOT / ".ai/research/generated/RETURNING_PLAYER_V2_CSV_SCHEMA_INFERENCE_CONTRACT.json"
 CORPUS = ROOT / ".ai/research/generated/RETURNING_PLAYER_V2_CSV_SCHEMA_INFERENCE_CONFORMANCE.json"
 WORKFLOW = ROOT / ".github/workflows/wr069-retained-safe-consumer-parser.yml"
+UNAUTHORIZED_PROVIDER = ROOT / "scripts/custody/wr069_retained_provider.py"
 
 
 def rejects(call, phrase: str = "") -> None:
@@ -88,6 +89,46 @@ def test_wr063_exact_version_fail_closed() -> None:
         raise AssertionError("non-upload B2 version was accepted")
 
 
+def test_byte_authoritative_version_selection() -> None:
+    good = b"match"; bad = b"wrong"
+    source = {"source_id":"synthetic","expected_sha256":wr.sha256_bytes(good),"expected_size_bytes":len(good)}
+    versions = [
+        {"action":"upload","fileId":"new-wrong","contentLength":5,"uploadTimestamp":20,"fileInfo":{}},
+        {"action":"hide","fileId":"hide","contentLength":0,"uploadTimestamp":15,"fileInfo":{}},
+        {"action":"upload","fileId":"old-right","contentLength":5,"uploadTimestamp":10,"fileInfo":{}},
+        {"action":"upload","fileId":"wrong-size","contentLength":4,"uploadTimestamp":5,"fileInfo":{}},
+    ]
+
+    class FakeRead:
+        @staticmethod
+        def download_b2_version(auth, file_id, destination):
+            destination.write_bytes(bad if file_id == "new-wrong" else good)
+
+    with tempfile.TemporaryDirectory() as td:
+        destination = Path(td) / "candidate.raw"
+        selected = wr.retrieve_authoritative_b2(FakeRead, {}, source, destination, versions)
+        assert selected["selected"]["fileId"] == "old-right"
+        assert selected["candidate_count"] == 2
+        assert selected["attempted_candidate_count"] == 2
+        assert destination.read_bytes() == good
+
+    no_uploads = [{"action":"hide","fileId":"hide","contentLength":5,"uploadTimestamp":1}]
+    with tempfile.TemporaryDirectory() as td:
+        rejects(lambda: wr.retrieve_authoritative_b2(FakeRead, {}, source, Path(td) / "x", no_uploads), "no size/metadata-compatible")
+
+
+def test_players_minimal_approved_columns() -> None:
+    headers = ["gsis_id","display_name","birth_date","rookie_season","football_name"]
+    parsed = wr.SchemaResult(0, [], "0"*64, headers, [])
+    evidence = wr.derive_players_evidence(parsed)
+    assert evidence["approved_columns_present"] == ["gsis_id","display_name","birth_date","rookie_season"]
+    assert evidence["required_approved_columns_present"] == ["gsis_id","birth_date","rookie_season"]
+    assert evidence["optional_approved_columns_present"] == ["display_name"]
+    assert "mfl_id" not in evidence["approved_columns_present"]
+    assert evidence["historical_membership_use"] is False
+    rejects(lambda: wr.derive_players_evidence(wr.SchemaResult(0, [], "0"*64, ["birth_date","rookie_season"], [])), "gsis_id")
+
+
 def test_no_mutation_helpers_or_operations() -> None:
     text = MODULE.read_text(encoding="utf-8"); tree = ast.parse(text); imported = []
     for node in ast.walk(tree):
@@ -109,6 +150,9 @@ def test_workflow_boundary() -> None:
     assert "Remove runner-temporary retained bytes" in text
     assert "WR_CUSTODY_B2_READ_KEY_ID" in text
     assert "WR_CUSTODY_B2_KEY_ID" not in text
+    assert "wr069_retained_safe_consumer.py provider" in text
+    assert "wr069_retained_provider.py" not in text
+    assert not UNAUTHORIZED_PROVIDER.exists()
     assert "[wr069-live-proof]" in text
 
 
@@ -126,8 +170,10 @@ def test_inventory_ordering_synthetic() -> None:
 
 def main() -> None:
     test_allowlist(); test_contract_and_all_49_vectors(); test_consumer_secret_rejection()
-    test_local_rehash_mismatch_deletes(); test_wr063_exact_version_fail_closed()
-    test_no_mutation_helpers_or_operations(); test_workflow_boundary(); test_inventory_ordering_synthetic()
+    test_local_rehash_mismatch_deletes(); test_wr063_exact_version_fail_closed(); test_byte_authoritative_version_selection()
+    test_players_minimal_approved_columns(); test_no_mutation_helpers_or_operations(); test_workflow_boundary(); test_inventory_ordering_synthetic()
     print("WR-069 safe-consumer fail-closed regressions: PASS")
 
-if __name__ == "__main__": main()
+
+if __name__ == "__main__":
+    main()
