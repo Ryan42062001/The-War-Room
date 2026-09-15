@@ -1,43 +1,38 @@
-# Research & Development (R&D) Handoff
+# R&D Handoff
 
-HANDOFF
+Task: `WR-059 — Returning-Player v2 Source-Snapshot + Cohort Evidence Remediation`  
+Role: Research & Development  
+Status: **FAIL CLOSED — ESCALATION REQUIRED**  
+Execution mode: `STANDARD_CHAT`  
+Baseline: `0ce9fae7de60080d4a408a43b59ef9a68e1c8936`
 
-Task ID: WR-057
-Role: R&D
-Status: COMPLETE — MANAGER REVIEW REQUIRED
-Canonical main at task refresh: `98d0ec3cc65840669aa06b93336132923cbdbddf`
-Branch: `wr-057-draft-picks-rights-disposition`
-Execution mode: `WORK_MODE_PREFERRED`; normal chat/web/repository fallback used
-Primary artifact: `.ai/research/WR057_DRAFT_PICKS_RIGHTS_DISPOSITION.md`
+## Frozen WR-059 evidence
 
-## Disposition
+- Source snapshot: `.ai/research/generated/WR059_RETURNING_PLAYER_V2_SOURCE_SNAPSHOT.json`
+- Source snapshot ID: `wr-returning-player-v2-source-snapshot/1.0.0-wr059-fail-closed`
+- Source snapshot SHA-256: `d062a30d92456e65f27aa82922011ab03b5dcb6fba9da736e9b98492e58ece3d`
+- Cohort/source eligibility: `.ai/research/generated/WR059_RETURNING_PLAYER_V2_COHORT_SOURCE_ELIGIBILITY.json`
+- Cohort version: `returning-player-v2-cohort/1.0.0-wr059-fail-closed`
+- Cohort SHA-256: `ba40123b8a09d3d04b6124745ef289d6d13ce41e4e9cedb9c0ea0bc2717f1cc6`
+- Report: `.ai/research/WR059_SOURCE_SNAPSHOT_COHORT_REMEDIATION.md`
 
-**`RAW_CUSTODY_NOT_ESTABLISHED — EXCLUDE_SOURCE`**
+## Result
 
-The current authoritative evidence does not establish the full upstream rights chain required to retain the PFR-derived nflverse `draft_picks.csv` bytes as an independently auditable source for later predictive-model research.
+- Accepted WR-042 raw custody preserved: **15 exact identities**
+- WR-059 source-snapshot admitted: **0**
+- WR-059 source-snapshot rejected fail-closed: **15**
+- `draft_picks.csv`: **EXCLUDED under WR-057**
+- Declared historical cohort 2014–2025: **5,176 expected keys**
+- Ordered keys retained: **3,508**
+- Missing TRAIN_ONLY ordered keys: **1,668**
+- Duplicate known keys: **0**
 
-Key evidence:
-- nflverse-data is published under CC BY 4.0, but the license grants only rights the licensor has authority to grant and preserves third-party-rights limitations;
-- nflreadr states accessed NFL data belong to their respective owners and are governed by those owners' terms;
-- nflverse identifies `draft_picks` as provided by / courtesy of Pro Football Reference;
-- Sports Reference's current Terms expressly restrict using Site data for AI/ML training and for machine-learning methods that predict/classify/label/score;
-- no authoritative evidence was found of separate upstream permission covering War Room's required private raw retention, Auditor access, derived minimal-column retention, and intended predictive-model use.
+Exact retained-version identity is proven by accepted WR-063/WR-064, but the reviewed protected workflow does not expose verified retained bytes to a WR-059 parsing consumer. Durable exact-hash historical evidence does not retain raw typed/nullability schema, physical full-file row counts, or the 2014–2017 player-ID/position inventories.
 
-This is a conservative research-governance finding, not legal advice and not a declaration that historical draft facts are legally unusable.
+No upstream refresh, source substitution, recustody, custody mutation, draft-picks use, 2026 outcome-table use, target join, fitting, scoring, evaluation, ranking, production, or Phase-6 work occurred.
 
-## Boundaries
+## Recommended next role
 
-Returning-Player source downloaded/admitted/custodied: NO
-`draft_picks.csv` parsed: NO
-2026 regular-season outcomes inspected: NO
-Model fit/score/tune/compare/evaluate: NO
-Outcome join: NO
-Ranking/recommendation/production changes: NO
-WR-039 / WR-D008 semantics changed: NO
-Phase-6 work: NO
+**Manager / Architect**
 
-## Next action
-
-Manager / Architect reviews and accepts or rejects the WR-057 disposition. Until Manager accepts it, WR-042 remains BLOCKED. If accepted, `draft_picks.csv` must remain excluded from custody/use; any future draft-capital source/schema requires the appropriate versioned contract and governance gates. WR-057 does not self-activate WR-042 or WR-043.
-
-Exact immutable branch head and PR are recorded at publication and must not be inferred from this committed handoff because adding a self-reference would move the target.
+Authorize a narrowly reviewed post-WR-063 safe-consumer parser step, then return WR-059 to R&D. Keep WR-060 blocked until a complete immutable WR-059 remediation target exists. Do not activate model work.
