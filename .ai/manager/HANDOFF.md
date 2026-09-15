@@ -12,49 +12,77 @@ WR-063 and WR-064 are accepted and CLOSED. Exact audited WR-063 head `9db29b082c
 
 WR-059 PR #184 remains a CLOSED UNMERGED fail-closed checkpoint at exact head `3c02f5a9a3ea858235772e7f2d065604632e7ee7`.
 
-WR-065 PR #186 remains a CLOSED UNMERGED fail-closed checkpoint at exact head `d4e5ddeaf9f3b0d56846145f8dc3ffe9cf48df7f`, exact-head War Room CI `34913200700` SUCCESS. WR-065 stopped before provider access because accepted WR-039 did not define executable CSV type/nullability inference semantics. WR-066 was never activated and is CLOSED without a verdict.
+WR-065 PR #186 remains a CLOSED UNMERGED fail-closed checkpoint at exact head `d4e5ddeaf9f3b0d56846145f8dc3ffe9cf48df7f`; WR-066 was never activated.
 
-## Frozen WR-067 target
+## Accepted WR-067 / WR-068 contract clarification
 
-R&D published WR-067 PR #188 at exact head:
+WR-067 PR #188 exact audited head:
 
 `1e6b2105bce98408d3fb41f4aa07fcaa7ef6ca04`
 
-Exact-head War Room CI `34917306768` — SUCCESS.
+WR-068 audit PR #190 exact audit head:
 
-The target changes exactly six `.ai/research/**` files and publishes one separately versioned no-scoring clarification:
+`a5ccce36012a5cf06d93bccf99d1834eaa268142`
 
-- clarification ID `wr-returning-player-v2-csv-schema-inference-addendum`;
-- version `1.0.0`;
+WR-068 final verdict:
+
+`PASS`
+
+No findings. Auditor independently reproduced all 49 synthetic cases with zero mismatches.
+
+Accepted contract authority:
+
+- ID/version `wr-returning-player-v2-csv-schema-inference-addendum/1.0.0`;
 - predecessor `wr-returning-player-v2-evidence-contract/1.0.0`;
 - predecessor accepted lock `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`;
 - machine-lock SHA-256 `48d4ace7375a59ab28ad79b2777bd7de4a9c4871cea49e83447371131f60dddb`;
-- conformance corpus SHA-256 `1f70d5e31ed5a62e00e5b02e06f6271e9c30b36951389d9607c50fdf5f71ffe1`;
-- 49 synthetic cases: 33 PASS / 16 FATAL.
+- conformance-corpus SHA-256 `1f70d5e31ed5a62e00e5b02e06f6271e9c30b36951389d9607c50fdf5f71ffe1`;
+- 49 cases: 33 PASS / 16 FATAL;
+- exact WR-067 CI `34917306768` SUCCESS;
+- audit evidence merge `07c89a4560d11e2a53538ca195ccd430af7cd905`;
+- exact audited contract integration `abff69901a040bec378c6562845adde9780f1da5`;
+- canonical-main Governance `34919117910` SUCCESS.
 
-The clarification freezes strict UTF-8 CSV grammar, null/empty rules, closed `boolean|int64|decimal|utf8` types, complete-file inference and promotion, observed nullability, physical row counting, fatal conditions, and version-bound typed-schema hashing. It does not silently rewrite WR-039 v1.0.0.
-
-R&D reports no retained B2/R2 bytes, upstream source bytes, `draft_picks.csv`, 2026 outcomes, target joins, model work, ranking/production changes, custody changes, or Phase-6 work were used.
+WR-067 and WR-068 are CLOSED and accepted.
 
 ## Manager decision
 
-Freeze PR #188/head `1e6b2105bce98408d3fb41f4aa07fcaa7ef6ca04` as the immutable WR-067 audit target.
+The contract clarification does not directly authorize WR-059 to parse retained bytes. Create a fresh parser implementation/audit gate.
 
-WR-067 is `AUDIT_READY`.
+WR-069 is ASSIGNED to Work Helper in `STANDARD_CHAT` on branch:
 
-WR-068 is `ASSIGNED` to Independent Auditor / QA in `STANDARD_CHAT` on branch:
+`wr-069-retained-safe-consumer-parser-v2`
 
-`wr-068-csv-schema-inference-contract-audit`
+WR-070 is pre-created but BLOCKED until Manager freezes one successful immutable WR-069 implementation/live-proof target.
 
-WR-068 must independently reproduce all 49 synthetic cases and determine whether two independent implementations can produce identical typed-schema output and digest under the written contract. Retained provider bytes are explicitly out of scope.
+WR-059 remains BLOCKED on WR-070. WR-060 remains BLOCKED on WR-059.
 
-WR-059 remains BLOCKED. Even a WR-068 PASS-family verdict does not resume WR-059 directly. Manager must first accept the exact clarification, then create a fresh successor safe-consumer parser implementation task plus fresh parser audit. Only exact audited parser integration plus mandatory canonical-main canary may resume WR-059.
+## WR-069 implementation boundary
 
-WR-060 remains BLOCKED until a later complete immutable WR-059 target exists.
+WR-069 must consume exactly the 15 already-custodied WR-042 identities and no others. It must preserve accepted WR-063 provider-read boundaries, perform zero provider mutations, verify B2/R2 digest/size equality before consumption, and expose only verified runner-temporary files plus a privacy-safe local manifest to a credential-free consumer.
+
+The consumer must independently re-hash/re-size each file and implement the accepted WR-067 contract exactly. Before retained-byte parsing, it must reproduce all 49 accepted synthetic conformance cases with zero mismatches.
+
+Authorized byte-derived outputs are limited to the evidence needed by WR-059: physical row counts, ordered raw columns, ordered typed/nullability schemas and canonical hashes, approved-view count checks, exact retained players metadata parser evidence, deterministic source lineage, and historical player-ID/position inventories needed to close the missing 2014–2017 cohort keys.
+
+Raw retained bytes remain runner-temporary and must not enter commits, logs, summaries, or Actions artifacts. `draft_picks.csv` remains excluded.
+
+WR-069 changes protected workflow/script infrastructure and therefore requires WR-070 independent audit plus mandatory canonical-main post-merge canary before WR-059 may resume.
+
+## Routing sequence
+
+1. Work Helper executes WR-069 and publishes one immutable successful implementation/live-proof target.
+2. Manager freezes exact PR/head and activates WR-070.
+3. Auditor independently audits WR-069.
+4. PASS-family returns to Manager.
+5. Manager integrates only the exact audited WR-069 head.
+6. Mandatory canonical-main canary must pass.
+7. Manager then reassigns WR-059 on its fresh branch.
+8. Only a later complete immutable WR-059 target may activate WR-060.
 
 ## Boundaries
 
-No retained-byte parsing under this audit, upstream reacquisition, provider mutation, credential disclosure, `draft_picks.csv` use/replacement, 2026 regular-season outcome-table use, target joins, model fitting/scoring/tuning/comparison/evaluation, predictions, rankings, production changes, or Phase-6 work.
+No upstream source-byte reacquisition, provider mutation, credential-value disclosure, `draft_picks.csv` use/replacement, 2026 regular-season outcome-table use, target joins, model fitting/scoring/tuning/comparison/evaluation, predictions, rankings, production changes, or Phase-6 work.
 
 ## Manager transaction rule
 
