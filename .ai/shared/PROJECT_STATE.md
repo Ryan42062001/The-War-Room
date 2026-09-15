@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / WR-059 REMEDIATION RESUMED
+Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / WR-065 SAFE-CONSUMER PARSER ACTIVE
 Last verified: 2026-09-14
 Owner: Manager / Architect
 Workflow: V3.2 CANONICAL
@@ -13,30 +13,40 @@ Workflow V3.2 remains canonical. Atomic Manager reconciliation is mandatory.
 
 Historical WR-042 PR #168 remains CLOSED UNMERGED after WR-043 `FAIL — REMEDIATION REQUIRED`. Positive custody evidence for the exact 15 retained byte identities remains preserved. `draft_picks.csv` remains excluded under WR-057.
 
-WR-061 and WR-062 remain closed historical lanes.
+Accepted WR-063/WR-064 retained-version infrastructure remains canonical: exact audited WR-063 head `9db29b082cb61b5ef902b56bb5c745fc8ee739b2`, protected proof run/job `34906157295` / `104183220181`, WR-064 `PASS` with no findings, integration commit `8a75f4a712e17bf3b5e91527fa6047b6bb107eb5`, and mandatory canonical-main canary `34908351788` SUCCESS.
 
-## Accepted retained-version infrastructure
+## WR-059 fail-closed checkpoint
 
-WR-063 is CLOSED and accepted. Exact audited implementation target was PR #178 head `9db29b082cb61b5ef902b56bb5c745fc8ee739b2`; protected proof ran on `b2c193cfc11811b32039d00480351ac4f5bc98a1`, run/job `34906157295` / `104183220181`, PASS.
+WR-059 PR #184 is frozen as an immutable fail-closed evidence checkpoint at exact head:
 
-WR-064 is CLOSED with `PASS`, no findings. Audit PR #182 exact head `3c25c4af7b582596d039f3798245e71b4b7a3fed`.
+`3c02f5a9a3ea858235772e7f2d065604632e7ee7`
 
-Manager integrated only the exact audited WR-063 head at canonical commit `8a75f4a712e17bf3b5e91527fa6047b6bb107eb5`.
+Exact-head War Room CI `34911364983` is SUCCESS.
 
-Mandatory canonical-main canary War Room CI `34908351788` completed SUCCESS. Governance passed, including the WR-063 retained-version boundary regression, and the full test job passed browser determinism, phone view, `npm test`, resilience, and backup/offline reload.
+Disposition:
+
+`FAIL CLOSED — REMEDIATION INCOMPLETE / ESCALATION REQUIRED`
+
+The checkpoint preserves 15 exact custody identities but admits 0 source instances under the full WR-039 snapshot contract. It preserves 3,508 ordered cohort keys and identifies 1,668 missing TRAIN_ONLY keys for 2014–2017. It also proves the remaining raw-byte evidence gap: typed/nullability schema, physical full-file row counts, exact current players parser evidence, and missing ordered key inventories cannot be invented from durable header/count artifacts.
+
+PR #184 is not a passing WR-059 target, is not a WR-060 activation target, and must remain immutable/closed unmerged.
 
 ## Active gates
 
-- WR-059 — ASSIGNED to R&D for the bounded source-snapshot + cohort evidence remediation.
-- WR-060 — BLOCKED until WR-059 publishes one immutable completed remediation target.
+- WR-065 — ASSIGNED to Work Helper for a narrow post-WR-063 safe-consumer retained-evidence parser bridge.
+- WR-066 — BLOCKED pending one immutable WR-065 implementation/live-proof target.
+- WR-059 — BLOCKED pending WR-065/WR-066 acceptance, exact integration, and mandatory main canary; future work uses fresh branch `wr-059-v2-source-snapshot-cohort-remediation-2`.
+- WR-060 — BLOCKED pending a later complete immutable WR-059 remediation target.
 - WR-042 — BLOCKED on WR-059 remediation.
 
-WR-063 and WR-064 are no longer active registry lanes.
+## WR-065 safety boundary
+
+WR-065 must use exactly the already-custodied 15 WR-042 source identities, verify B2/R2 equality before parsing, complete provider access before the consumer phase, prove provider credentials absent from the consumer, re-hash every local input before parsing, and publish only deterministic privacy-safe derived evidence.
+
+Accepted WR-063 runtime files and accepted mutation-capable custody helpers/workflows are outside WR-065 write scope.
 
 ## Next gate
 
-R&D resumes WR-059 using the accepted retained-version infrastructure only for no-scoring evidence reconstruction. It must publish the complete WR-039-compliant source snapshot and deterministic cohort/source-eligibility artifact, then return one immutable PR/head to Manager. Manager will freeze that exact target and activate WR-060 for fresh independent re-audit.
+Work Helper executes WR-065 in standard chat, publishes one immutable implementation/live-proof target, and returns control to Manager. Manager then freezes the exact target and activates WR-066. PASS-family audit plus exact integration and successful canonical-main canary are required before WR-059 can resume.
 
-`draft_picks.csv` remains excluded and no substitute provider is authorized.
-
-No upstream reacquisition, provider mutation, credential-value disclosure, 2026 regular-season outcome inspection, target joins, model fitting/scoring/tuning/comparison/evaluation, rankings, production changes, or Phase-6 work is authorized.
+No upstream reacquisition, provider mutation, credential disclosure, `draft_picks.csv` use/replacement, 2026 regular-season outcome-table inspection, target join, model fitting/scoring/tuning/comparison/evaluation, ranking/production change, or Phase-6 work is authorized.
