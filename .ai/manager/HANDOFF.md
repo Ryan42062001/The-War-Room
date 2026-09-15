@@ -4,87 +4,93 @@ HANDOFF
 
 Workflow: V3.2 CANONICAL
 
-## WR-060 final disposition
+## WR-059 Manager freeze
 
-WR-060 independently audited exact WR-059 PR #196 / head:
+R&D completed the bounded post-WR-060 remediation on existing PR #196.
+
+Historical failed-audit head remains immutable evidence:
 
 `e871c861f8ba3c339af5b7a022892522b45b844f`
 
-Final verdict:
+New exact frozen WR-059 target:
 
-`FAIL — REMEDIATION REQUIRED`
+`db8b21a65f2decf900902481f110758cc33f0aa6`
 
-Audit evidence:
+Manager verification:
 
-- audit PR `#198`;
-- audit branch `wr-060-v2-source-snapshot-cohort-reaudit`;
-- immutable audit head `5ae432ca8e7c32dad56701a9792cb55d59150611`;
-- audit War Room CI `34990821783` — SUCCESS;
-- audit evidence merge `acf599e31ad8638f8e1ba399ea2e4328e5ff7bd0`;
-- post-audit canonical-main Governance run `34991282634` — SUCCESS.
+- PR #196 remains open and unmerged;
+- new head is exactly one commit ahead of the historical failed head and zero behind;
+- changed scope is exactly the same eight `.ai/research/**` WR-059 paths;
+- exact-head War Room CI `34998074580` — SUCCESS for classify and Governance; product test skipped as evidence-only;
+- remediation path `B_FAIL_CLOSED`;
+- no raw retained bytes reacquired;
+- no provider mutation, source substitution, inferred sub-day timestamp, `draft_picks.csv`, 2026 outcomes, targets, model/scoring/ranking/production, or Phase-6 work.
 
-Findings:
+Frozen source snapshot:
 
-- CRITICAL — none;
-- HIGH — `WR-060-AUD-01`;
-- MEDIUM — none;
-- LOW — none.
+- ID `wr-returning-player-v2-source-snapshot/1.2.0-wr059`;
+- SHA-256 `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`;
+- retained identities 15;
+- admitted 14;
+- failed closed 1;
+- admitted stats sources 14;
+- admitted metadata sources 0.
 
-`WR-060-AUD-01`: admitted replacement `players.csv` asset `563580371` lacks independently reproducible exact release ID and full provider-update timestamp. The existing record contains a narrative release-ID placeholder and only day precision `2026-09-14`. A fresh read-only exact asset API lookup returned `404 Not Found`; do not infer missing historical metadata or substitute another current asset.
+The failed-closed source is `NFLVERSE_PLAYERS_METADATA_MINIMAL` / historical asset `563580371`, retained SHA-256 `03a823a0e2344aff9a4ef67bdd62005d3e1d7ab62a98c790ce19a8a557d1c221`, byte size `7260242`. Exact historical `release_id` and full `provider_updated_at` remain unresolved and are represented as unavailable rather than inferred.
 
-## Positive evidence that must be preserved
+Frozen cohort/source eligibility:
 
-WR-060 independently reproduced:
+- ID `returning-player-v2-cohort/1.2.0-wr059`;
+- SHA-256 `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4`;
+- 5,176 / 5,176 historical membership rows;
+- unique 5,176;
+- duplicates 0;
+- 2014–2017 = 1,668;
+- 2018–2025 = 3,508;
+- changed historical membership rows 0;
+- ordering unchanged;
+- prior-season stats lineage unchanged.
 
-- source-snapshot SHA-256 `f6ee530c7733b1aa9d984a3e874015ca9a3dd7cebda5ffc558df4cb159c591b9`;
-- cohort SHA-256 `d6927509968ac3a371591a69fd665861e9546a0868f1e7b1c5db6c31cc887354`;
-- all 15 exact WR-042 custody identities;
-- WR-069 derived-evidence SHA-256 `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`;
-- 5,176/5,176 deterministic unique cohort keys with zero duplicates;
-- 1,668 accepted 2014–2017 identities plus 3,508 frozen 2018–2025 identities;
-- exact prior-season lineage for all target-season segments;
-- `draft_picks.csv` exclusion;
-- no current-players rewrite of historical membership;
-- no raw-byte reacquisition, provider mutation, model/scoring/ranking/production, target/outcome, 2026 regular-season outcome-table, or Phase-6 work.
+The cohort is re-versioned solely because its exact source-snapshot binding changed.
 
-Do not redo or weaken these accepted portions merely because WR-060 failed overall.
+## WR-071 activation
 
-## WR-059 routing
+WR-071 is now `ASSIGNED` as the fresh independent Auditor / QA lane.
 
-WR-059 moves to:
+Execution mode:
 
-`REWORK_REQUIRED — BOUNDED METADATA PROVENANCE`
+`STANDARD_CHAT`
 
-Continue existing PR `#196` on branch:
+Do not wait for Work credits.
 
-`wr-059-v2-source-snapshot-cohort-remediation-2`
-
-The audited head `e871c861f8ba3c339af5b7a022892522b45b844f` is now historical failed-audit evidence. R&D may advance the PR only for the bounded remediation below.
-
-For replacement `players.csv` asset ID `563580371`, R&D must either:
-
-1. publish authoritative privacy-safe evidence of the exact provider-issued release ID and full provider-update timestamp independently bound to that exact asset; or
-2. fail closed that metadata source as unavailable and consistently regenerate the source snapshot, admission totals/availability semantics, and cohort source-snapshot binding.
-
-If canonical artifact bytes change, publish new versioned source-snapshot/cohort identities and new canonical hashes. Do not reuse the frozen failed `1.1.0-wr059` version labels for changed bytes.
-
-No raw bytes need to be reacquired. Read-only provider/repository metadata investigation is allowed. No provider mutation or source substitution is authorized.
-
-## WR-071
-
-WR-071 is pre-created as the fresh independent audit gate and remains BLOCKED.
-
-Target branch when activated:
+Assigned branch:
 
 `wr-071-v2-source-snapshot-cohort-reaudit-2`
 
-Manager must independently freeze the new WR-059 PR #196 head and regenerated artifact identities/hashes before WR-071 may start.
+Audit exactly:
+
+- WR-059 PR #196;
+- head `db8b21a65f2decf900902481f110758cc33f0aa6`;
+- source snapshot `wr-returning-player-v2-source-snapshot/1.2.0-wr059` / `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`;
+- cohort `returning-player-v2-cohort/1.2.0-wr059` / `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4`.
+
+The Auditor must independently verify Path B fail-closed consistency, WR-039 preservation, exact canonical hashes and bindings, unchanged 5,176-key cohort/ordering/lineage, exact retained source identities, `draft_picks.csv` exclusion, and all no-reacquisition/no-model boundaries.
+
+Auditor writes only `.ai/auditor/**`, publishes an Auditor-only PR, and returns exactly one verdict:
+
+- `PASS`
+- `PASS WITH NON-BLOCKING FINDINGS`
+- `FAIL — REMEDIATION REQUIRED`
+
+Auditor does not merge WR-059.
 
 ## Blocked lanes
 
-WR-042 remains BLOCKED on WR-059 remediation and WR-071 disposition.
+WR-042 remains BLOCKED pending WR-071 verdict and Manager disposition.
 
-Do not merge WR-059 before a PASS-family fresh audit. Do not begin model/scoring work, Phase 6, or any downstream feature-schema/model path.
+Do not merge WR-059 before PASS-family. Do not begin model/scoring work, Phase 6, or any downstream feature-schema/model path.
+
+The self-hosted heavy-CI runner remains roadmap-only and must not be activated during WR-071.
 
 ## Boundaries
 
