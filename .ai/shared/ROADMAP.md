@@ -53,6 +53,37 @@ Current sequence:
 
 No model fitting, scoring, tuning, evaluation, target joins, 2026 regular-season outcome use, ranking/production change, provider mutation, source reacquisition, or Phase-6 work is authorized.
 
+## Infrastructure roadmap — FUTURE / NON-BLOCKING
+
+### Self-hosted heavy-CI runner lane — PLANNED CANDIDATE
+
+Purpose: use the user-operated GitHub Actions self-hosted runner for expensive repeatable CI while preserving independent and security-sensitive validation boundaries.
+
+Activation gate:
+
+- do not activate or implement this lane while WR-059 / WR-071 evidence remediation and re-audit are in flight;
+- create a separate Manager-approved infrastructure task after the current Returning-Player v2 audit gate reaches a stable disposition.
+
+Initial target scope:
+
+- migrate only the heavyweight browser/test workload from `ubuntu-latest` to a dedicated self-hosted runner lane;
+- keep lightweight CI classification and Governance on GitHub-hosted runners initially so canonical policy validation remains independently reproducible;
+- keep custody, retained-source, protected-proof, or other credential-bearing workflows on GitHub-hosted runners unless a later separately reviewed security task explicitly authorizes otherwise.
+
+Required design controls before activation:
+
+- dedicated labels, e.g. `[self-hosted, linux, x64, war-room]`, rather than generic `self-hosted` targeting;
+- explicit runner health/preflight checks and deterministic Node/Python/browser dependency validation;
+- repository/workspace cleanup between jobs and protection against stale state affecting later runs;
+- no B2/R2 custody credentials, retained raw source bytes, or protected evidence authority available to the heavy-CI runner by default;
+- no production or provider-mutation credentials available to the runner by default;
+- GitHub-hosted fallback path if the local runner is offline, unhealthy, or fails preflight;
+- benchmark current GitHub-hosted versus self-hosted full-CI runtime before permanent migration;
+- preserve exact-head CI traceability and auditability after routing changes;
+- perform a fresh independent audit of the runner-routing change before treating it as canonical infrastructure.
+
+Success criterion: heavy browser/test CI can execute reliably on the self-hosted runner without weakening Governance independence, custody boundaries, secret isolation, exact-head traceability, or GitHub-hosted fallback capability.
+
 ## Future phases
 
 - Phase 3 rookie engine v1 — PLANNED.
