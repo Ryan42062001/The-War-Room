@@ -72,10 +72,20 @@ def test_wr063_exact_version_fail_closed() -> None:
     original = read.request_json
     try:
         read.request_json = lambda *args, **kwargs: {"files":[{"fileName":item.custody_key + "-extra"}]}
-        rejects(lambda: read.list_exact_versions({"api_url":"https://api.backblazeb2.com","token":"x","bucket_id":"b"}, item), "non-exact")
+        try:
+            read.list_exact_versions({"api_url":"https://api.backblazeb2.com","token":"x","bucket_id":"b"}, item)
+        except read.ContractError as exc:
+            assert "non-exact" in str(exc)
+        else:
+            raise AssertionError("non-exact B2 version was accepted")
     finally:
         read.request_json = original
-    rejects(lambda: read.choose_upload_version([{"fileName":item.custody_key,"action":"hide","uploadTimestamp":1}], item), "no candidate upload")
+    try:
+        read.choose_upload_version([{"fileName":item.custody_key,"action":"hide","uploadTimestamp":1}], item)
+    except read.ContractError as exc:
+        assert "no candidate upload" in str(exc)
+    else:
+        raise AssertionError("non-upload B2 version was accepted")
 
 
 def test_no_mutation_helpers_or_operations() -> None:
