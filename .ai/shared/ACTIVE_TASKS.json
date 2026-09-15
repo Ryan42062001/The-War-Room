@@ -1,29 +1,11 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-15T00:08:00Z",
+  "updated_at_utc": "2026-09-15T00:36:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "lifecycle_states": [
-    "PLANNED",
-    "BLOCKED",
-    "ASSIGNED",
-    "IN_PROGRESS",
-    "MANAGER_REVIEW_READY",
-    "AUDIT_READY",
-    "MERGE_READY",
-    "REWORK_REQUIRED",
-    "MERGED",
-    "CLOSED"
-  ],
-  "blocker_types": [
-    "NONE",
-    "USER_ACTION",
-    "UPSTREAM_TASK",
-    "EXTERNAL_SERVICE",
-    "TECHNICAL",
-    "AUDIT"
-  ],
+  "lifecycle_states": ["PLANNED","BLOCKED","ASSIGNED","IN_PROGRESS","MANAGER_REVIEW_READY","AUDIT_READY","MERGE_READY","REWORK_REQUIRED","MERGED","CLOSED"],
+  "blocker_types": ["NONE","USER_ACTION","UPSTREAM_TASK","EXTERNAL_SERVICE","TECHNICAL","AUDIT"],
   "tasks": [
     {
       "task_id": "WR-042",
@@ -41,31 +23,14 @@
       "audit_required": true,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-059"
-      ],
-      "blocked_on": [
-        "WR-043 remediation remains incomplete; WR-059 must eventually publish the complete WR-039 source snapshot and deterministic cohort/source-eligibility target after the safe-consumer parser gate."
-      ],
+      "blocked_on_tasks": ["WR-059"],
+      "blocked_on": ["WR-043 remediation remains incomplete; WR-059 must eventually publish the complete WR-039-derived source snapshot and deterministic cohort/source-eligibility target after the contract-clarification and safe-consumer parser gates."],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/research/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/auditor/",
-        ".ai/work_helper/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [
-        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
-        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
-        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
-      ],
-      "next_gate": "WR-065/WR-066 safe-consumer parser gate -> WR-059 final remediation -> WR-060 fresh independent re-audit"
+      "allowed_path_prefixes": [".ai/research/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/work_helper/", "src/", "public/"],
+      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
+      "next_gate": "WR-067/WR-068 contract clarification -> fresh safe-consumer parser implementation/audit -> WR-059 final remediation -> WR-060"
     },
     {
       "task_id": "WR-059",
@@ -83,31 +48,14 @@
       "audit_required": true,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-066"
-      ],
-      "blocked_on": [
-        "PR #184/head 3c02f5a9a3ea858235772e7f2d065604632e7ee7 is frozen as an immutable fail-closed checkpoint. WR-065 must establish a safe post-secret parser over exact retained bytes, WR-066 must independently PASS that exact target, and Manager must integrate it plus accept the required main canary before WR-059 resumes on this fresh branch."
-      ],
+      "blocked_on_tasks": ["WR-068"],
+      "blocked_on": ["WR-065 failed closed because accepted WR-039 semantics do not define executable deterministic CSV type/nullability inference. WR-067 must freeze a versioned contract clarification and WR-068 must independently PASS it; Manager will then create a fresh safe-consumer parser implementation/audit gate before WR-059 may resume."],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/research/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/auditor/",
-        ".ai/work_helper/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [
-        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
-        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
-        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
-      ],
-      "next_gate": "WR-065 implementation -> WR-066 independent audit -> exact integration + mandatory main canary -> Manager reassigns WR-059 on fresh branch -> WR-060"
+      "allowed_path_prefixes": [".ai/research/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/work_helper/", "src/", "public/"],
+      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
+      "next_gate": "WR-067 contract clarification -> WR-068 audit -> fresh parser bridge + independent audit + main canary -> Manager reassigns WR-059 -> WR-060"
     },
     {
       "task_id": "WR-060",
@@ -125,38 +73,25 @@
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-059"
-      ],
-      "blocked_on": [
-        "WR-059 must publish one complete immutable remediated source-snapshot/cohort target; frozen fail-closed PR #184 is not a passing target."
-      ],
+      "blocked_on_tasks": ["WR-059"],
+      "blocked_on": ["WR-059 must publish one complete immutable remediated source-snapshot/cohort target; frozen fail-closed PR #184 and WR-065 blocker PR #186 are not passing targets."],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/auditor/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/research/",
-        ".ai/work_helper/",
-        "src/",
-        "public/"
-      ],
+      "allowed_path_prefixes": [".ai/auditor/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/", ".ai/work_helper/", "src/", "public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "Do not activate on PR #184. Wait for Manager to freeze a complete post-WR-065/066 WR-059 target."
+      "next_gate": "Do not activate until Manager freezes a later complete WR-059 target."
     },
     {
-      "task_id": "WR-065",
-      "owner": "Work Helper",
-      "worker_slot": "work-helper-safe-consumer-parser",
+      "task_id": "WR-067",
+      "owner": "R&D",
+      "worker_slot": "rnd-csv-schema-contract-clarification",
       "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-065.md",
-      "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "0ce9fae7de60080d4a408a43b59ef9a68e1c8936",
+      "task_file": ".ai/manager/WR-067.md",
+      "role_handoff": ".ai/research/HANDOFF.md",
+      "assignment_main_sha": "9064564fced19594c78b4e49f7ed658b2bd712b0",
       "worker_checkpoint_sha": null,
-      "branch": "wr-065-retained-safe-consumer-parser",
+      "branch": "wr-067-csv-schema-inference-contract",
       "pr": null,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT",
@@ -166,76 +101,36 @@
       "blocked_on_tasks": [],
       "blocked_on": [],
       "external_authority_evidence_required": true,
-      "post_merge_canary_required": true,
-      "allowed_path_prefixes": [
-        ".ai/work_helper/",
-        ".github/workflows/wr065-safe-consumer-parser.yml",
-        "scripts/custody/read_retained_source_evidence.py",
-        "scripts/custody/parse_verified_retained_evidence.py",
-        "scripts/custody/test_safe_consumer_parser.py",
-        ".github/workflows/ci.yml"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/auditor/",
-        ".ai/research/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [
-        ".github/workflows/wr042-source-custody.yml",
-        ".github/workflows/wr046-custody-fixture.yml",
-        ".github/workflows/wr063-retained-version-read.yml",
-        "scripts/custody/read_retained_versions.py",
-        "scripts/custody/acquire_github_release_asset.py",
-        "scripts/custody/attest_credential_scopes.py",
-        "scripts/custody/ensure_b2_custody_object.py",
-        "scripts/custody/prove_b2_r2_custody.py",
-        "scripts/custody/run_normalized_custody_proof.py",
-        "scripts/custody/run_source_manifest_custody.py"
-      ],
-      "next_gate": "Publish one immutable implementation/live-proof target -> Manager freezes exact PR/head -> WR-066 fresh independent audit; PASS-family only permits exact integration + mandatory main canary before WR-059 resumes."
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [".ai/research/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/work_helper/", ".github/", "scripts/", "src/", "public/"],
+      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
+      "next_gate": "Publish one immutable versioned no-scoring CSV schema-inference contract target -> Manager freezes exact PR/head -> WR-068 independent audit"
     },
     {
-      "task_id": "WR-066",
+      "task_id": "WR-068",
       "owner": "Auditor",
-      "worker_slot": "auditor-safe-consumer-parser",
+      "worker_slot": "auditor-csv-schema-contract-clarification",
       "status": "BLOCKED",
-      "task_file": ".ai/manager/WR-066.md",
+      "task_file": ".ai/manager/WR-068.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
       "assignment_main_sha": null,
       "worker_checkpoint_sha": null,
-      "branch": "wr-066-retained-safe-consumer-parser-audit",
+      "branch": "wr-068-csv-schema-inference-contract-audit",
       "pr": null,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT",
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-065"
-      ],
-      "blocked_on": [
-        "WR-065 must publish one immutable implementation/live-proof target before Manager freezes the exact audit target."
-      ],
+      "blocked_on_tasks": ["WR-067"],
+      "blocked_on": ["WR-067 must publish one immutable versioned contract-clarification target before Manager freezes the exact audit target."],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/auditor/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/research/",
-        ".ai/work_helper/",
-        "scripts/",
-        ".github/",
-        "src/",
-        "public/"
-      ],
+      "allowed_path_prefixes": [".ai/auditor/"],
+      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/", ".ai/work_helper/", ".github/", "scripts/", "src/", "public/"],
       "forbidden_exact_paths": [],
-      "next_gate": "Wait for WR-065 immutable target. Manager will pin exact PR/head and activate this audit; do not audit frozen WR-059 PR #184."
+      "next_gate": "Wait for WR-067 immutable target. PASS-family returns to Manager for acceptance and a fresh safe-consumer parser implementation task."
     }
   ]
 }
