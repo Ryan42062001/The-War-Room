@@ -17,35 +17,36 @@ Owner: Manager / Architect
 - WR-056 — CLOSED / trusted custody runtime bridge accepted and merged.
 - WR-057 — CLOSED / `RAW_CUSTODY_NOT_ESTABLISHED — EXCLUDE_SOURCE` for PFR-derived nflverse `draft_picks.csv`.
 - WR-058 — CLOSED / independent custody-bridge audit PASS.
-- WR-059 — ASSIGNED / fresh R&D remediation lane `wr-059-v2-source-snapshot-cohort-remediation-2`; historical PR #184 remains a closed-unmerged fail-closed checkpoint only.
-- WR-060 — BLOCKED on WR-059 / mandatory fresh independent audit of the eventual complete remediation target.
+- WR-059 — AUDIT_READY / PR #196 frozen at exact head `e871c861f8ba3c339af5b7a022892522b45b844f`; complete no-scoring source-snapshot/cohort remediation candidate published; historical PR #184 remains closed-unmerged evidence only.
+- WR-060 — ASSIGNED / mandatory fresh independent re-audit of exact WR-059 PR #196/head in `WORK_MODE_PREFERRED`.
 - WR-061 — CLOSED / immutable fail-closed historical checkpoint, PR #176 unmerged.
 - WR-062 — CLOSED / never activated.
 - WR-063 — CLOSED / accepted retained-version read recovery; protected proof run `34906157295` PASS.
 - WR-064 — CLOSED / independent audit PASS, no findings.
-- WR-065 — CLOSED / PR #186 frozen fail-closed at `d4e5ddeaf9f3b0d56846145f8dc3ffe9cf48df7f`; parser correctly stopped before provider access because CSV typed-schema semantics were not yet executable.
+- WR-065 — CLOSED / PR #186 frozen fail-closed at `d4e5ddeaf9f3b0d56846145f8dc3ffe9cf48df7f`.
 - WR-066 — CLOSED / never activated.
-- WR-067 — CLOSED / exact PR #188 head `1e6b2105bce98408d3fb41f4aa07fcaa7ef6ca04` accepted and integrated; deterministic CSV schema-inference clarification is canonical.
-- WR-068 — CLOSED / independent audit PASS, no findings; all 49 conformance cases independently reproduced.
-- WR-069 — CLOSED / exact audited PR #192 head `5d4fc5fce3567a9894ddf3c08243f0ce6c087543` accepted and integrated at `82ac95d8d85dfe0dff58e387aecdcc49f082ffec`; protected 15-object safe-consumer proof PASS.
-- WR-070 — CLOSED / audit PR #194 head `434988473daf188f4b4efe3207df40b56977e9fd`; verdict `PASS`, no findings; audit evidence merged at `3436f3803e342fce00e784e67ba7dfdc9ddc9561`.
+- WR-067 — CLOSED / deterministic CSV schema-inference clarification accepted and integrated.
+- WR-068 — CLOSED / independent audit PASS, no findings.
+- WR-069 — CLOSED / exact audited PR #192 head `5d4fc5fce3567a9894ddf3c08243f0ce6c087543` accepted and integrated at `82ac95d8d85dfe0dff58e387aecdcc49f082ffec`.
+- WR-070 — CLOSED / audit PR #194 head `434988473daf188f4b4efe3207df40b56977e9fd`; verdict `PASS`, no findings.
 
-Accepted parser gate:
+Frozen WR-059 audit authority:
 
-- mandatory post-WR-069 canonical-main War Room CI `34976191415` — SUCCESS at head `82ac95d8d85dfe0dff58e387aecdcc49f082ffec`;
-- privacy-safe derived evidence SHA-256 `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`;
-- historical inventory counts 410/412/423/423 = `1668`;
-- provider mutation count `0`;
-- `draft_picks.csv` excluded;
-- current retained `players.csv` not used to rewrite historical cohort membership.
+- PR #196 head `e871c861f8ba3c339af5b7a022892522b45b844f`;
+- exact-head War Room CI `34988624368` SUCCESS for classify/Governance;
+- source snapshot `wr-returning-player-v2-source-snapshot/1.1.0-wr059`;
+- source snapshot SHA-256 `f6ee530c7733b1aa9d984a3e874015ca9a3dd7cebda5ffc558df4cb159c591b9`;
+- cohort `returning-player-v2-cohort/1.1.0-wr059`;
+- cohort SHA-256 `d6927509968ac3a371591a69fd665861e9546a0868f1e7b1c5db6c31cc887354`;
+- declared coverage 5,176/5,176 keys, duplicates 0;
+- 2014–2017 closure 1,668 and 2018–2025 frozen identities 3,508;
+- `draft_picks.csv` excluded; no provider/raw-byte access or model/scoring activity.
 
 Current sequence:
 
-`WR-059 complete no-scoring source-snapshot/cohort remediation -> Manager exact target freeze -> WR-060 fresh independent audit -> Manager governance/feature-schema decision before any later model path`
+`WR-060 independent re-audit -> Manager verdict disposition -> if PASS-family, audit evidence merge -> reverify exact WR-059 head -> integrate only audited target -> any required canonical-main canary -> later versioned contract/feature-schema governance gate before model work`
 
-WR-059 must remediate only WR-043-AUD-01 and WR-043-AUD-02. It does not reacquire provider bytes and does not perform scoring/model work.
-
-`draft_picks.csv` remains excluded and no silent replacement provider is authorized. A later versioned contract/feature-schema governance gate remains mandatory before any model path could proceed without draft-capital semantics.
+No model fitting, scoring, tuning, evaluation, target joins, 2026 regular-season outcome use, ranking/production change, provider mutation, or Phase-6 work is authorized.
 
 ## Future phases
 

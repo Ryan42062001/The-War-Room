@@ -4,72 +4,50 @@ HANDOFF
 
 Workflow: V3.2 CANONICAL
 
-## Accepted parser gate and integration
+## Frozen WR-059 audit target
 
-WR-070 independently audited exact WR-069 PR #192/head `5d4fc5fce3567a9894ddf3c08243f0ce6c087543` and returned `PASS` with no findings.
+Manager independently re-verified live WR-059 publication state and freezes:
 
-Audit publication/integration chain:
+- task `WR-059 — Returning-Player v2 Source-Snapshot + Cohort Evidence Remediation`;
+- PR `#196`;
+- branch `wr-059-v2-source-snapshot-cohort-remediation-2`;
+- exact immutable head `e871c861f8ba3c339af5b7a022892522b45b844f`;
+- base canonical main `8ded5ed8e32e3a0688e53b544048fcf7ffd3b4dd`;
+- exact-head War Room CI `34988624368` — SUCCESS for classify/Governance; product test job skipped by evidence-only classification;
+- exact diff scope: eight `.ai/research/**` paths only.
 
-- audit PR `#194`;
-- audit branch `wr-070-retained-safe-consumer-parser-audit`;
-- immutable audit head `434988473daf188f4b4efe3207df40b56977e9fd`;
-- audit evidence merge `3436f3803e342fce00e784e67ba7dfdc9ddc9561`;
-- exact audited WR-069 implementation head `5d4fc5fce3567a9894ddf3c08243f0ce6c087543`;
-- protected live-proof implementation `56f6581cd62fd474f4422bc5f7d353f48498a853`;
-- protected run `34922718568` with jobs `104234149528` and `104234179073` SUCCESS;
-- exact audited implementation integration `82ac95d8d85dfe0dff58e387aecdcc49f082ffec`;
-- mandatory canonical-main War Room CI canary `34976191415` — SUCCESS.
+Frozen artifacts:
 
-The main canary passed classify, Governance including the focused WR-069 retained-safe-consumer boundary regression, full browser determinism, WR-026 phone decision view, `npm test`, resilience validation, and backup/offline reload.
+- source snapshot ID `wr-returning-player-v2-source-snapshot/1.1.0-wr059`;
+- source snapshot SHA-256 `f6ee530c7733b1aa9d984a3e874015ca9a3dd7cebda5ffc558df4cb159c591b9`;
+- cohort version `returning-player-v2-cohort/1.1.0-wr059`;
+- cohort SHA-256 `d6927509968ac3a371591a69fd665861e9546a0868f1e7b1c5db6c31cc887354`.
 
-Accepted privacy-safe evidence:
+The committed sidecars match those frozen digests. R&D declares 15/15 exact retained sources admitted, 5,176/5,176 keys across target seasons 2014–2025, 1,668 accepted WR-069 2014–2017 identities plus 3,508 frozen 2018–2025 identities, duplicate count zero, exact source-snapshot binding, no current-players rewrite of historical membership, and continued WR-057 exclusion of `draft_picks.csv`.
 
-- `.ai/work_helper/WR069_RETAINED_DERIVED_EVIDENCE.json`;
-- SHA-256 `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`;
-- exact retained identities `15`;
-- B2/R2 authoritative digest/size `15/15` and equality `15/15`;
-- provider mutation operations `0`;
-- accepted contract conformance `49/49`;
-- historical inventories 2014=`410`, 2015=`412`, 2016=`423`, 2017=`423`, total=`1668`;
-- raw Actions artifact count `0`;
-- current retained `players.csv` not used to rewrite historical membership.
+The replacement `players.csv` provider-update provenance is only available at day precision (`2026-09-14`); WR-059 records that precision explicitly. This is part of the audit surface and must not be silently upgraded to a fabricated sub-day timestamp.
 
-WR-069 and WR-070 are CLOSED as accepted evidence-infrastructure tasks.
+WR-059 is `AUDIT_READY` and remains unmerged.
 
-## Active routing decision
+## WR-060 activation
 
-WR-059 is now ASSIGNED to R&D in `STANDARD_CHAT` on:
+WR-060 is `ASSIGNED` to fresh Independent Auditor / QA in `WORK_MODE_PREFERRED` on branch:
 
-`wr-059-v2-source-snapshot-cohort-remediation-2`
+`wr-060-v2-source-snapshot-cohort-reaudit`
 
-The fresh branch is to be prepared from the exact canonical main after this Manager control-plane transition is accepted. Historical WR-059 PR #184/head `3c02f5a9a3ea858235772e7f2d065604632e7ee7` remains CLOSED UNMERGED and is evidence only; do not advance it.
+Audit exactly:
 
-WR-059 must remediate only:
+- target task `WR-059`;
+- PR `#196`;
+- target branch `wr-059-v2-source-snapshot-cohort-remediation-2`;
+- exact target head `e871c861f8ba3c339af5b7a022892522b45b844f`;
+- source snapshot ID/hash above;
+- cohort version/hash above.
 
-- `WR-043-AUD-01` — complete WR-039 source-snapshot contract evidence;
-- `WR-043-AUD-02` — deterministic cohort/source-eligibility evidence with complete ordered key coverage.
-
-R&D consumes accepted WR-069 privacy-safe derived evidence and immutable custody/contract evidence. R&D should not require provider credentials or retained raw bytes.
-
-Required WR-059 output:
-
-1. one complete versioned WR-039-compliant source snapshot for every admitted source instance, including content-addressed source instance identity, provider/repository/acquisition identity, acquisition UTC, release/version/asset/filename/provider-update identity, exact SHA-256/size, media/compression state, ordered raw columns, ordered typed/nullability schema and canonical schema hash, physical row count, approved columns, cutoff/availability semantics, mutability/as-of evidence, rights/license/attribution/retention disposition, retained-object key, acquisition-code identity, admission/exclusion reason, versioned `source_snapshot_id`, and deterministic canonical source-snapshot SHA-256;
-2. one deterministic cohort/source-eligibility artifact with versioned `cohort_version`, stable key `(target_season, player_id_namespace, player_id, position, cohort_version)`, deterministic ordered inventory, eligibility/availability and inclusion/exclusion reasons, exact source lineage, duplicates fatal, full declared key coverage, canonical digest, and exact source-snapshot binding.
-
-The accepted WR-069 historical inventories are authoritative privacy-safe inputs for the previously missing 1,668 2014–2017 TRAIN_ONLY keys. Do not use current players metadata to rewrite historical membership.
-
-## Blocked lanes
-
-WR-060 remains BLOCKED until WR-059 publishes one complete immutable target and Manager independently verifies/freezes exact PR/head plus relevant canonical artifact hashes.
-
-WR-042 remains BLOCKED on WR-059 remediation. Historical WR-042 PR #168 stays CLOSED UNMERGED; its positive 15-source custody evidence remains authoritative.
+Auditor must independently reproduce the canonical artifact hashes and deterministic coverage, verify source-instance completeness and lineage against accepted WR-039/WR-042/WR-069 evidence, verify the day-only `players.csv` provider-update precision is contractually adequate or raise a finding, and preserve all no-reacquisition/no-model boundaries.
 
 ## Boundaries
 
-`draft_picks.csv` remains excluded under WR-057. No source reacquisition/refresh/substitution, provider mutation, reusable credential disclosure, 2026 regular-season outcome-table use, target/outcome joins, model fitting/scoring/tuning/comparison/evaluation/predictions, ranking/production changes, or Phase-6 work.
+Do not merge WR-059 before WR-060 PASS-family and Manager disposition. Do not activate model/scoring work. `draft_picks.csv` remains excluded. No upstream reacquisition, provider mutation, 2026 outcome-table use, targets, scoring, tuning, evaluation, predictions, rankings, production changes, or Phase-6 work.
 
-A later versioned contract / feature-schema governance gate remains required before any model path.
-
-## Manager transaction rule
-
-Coordinated control-plane transitions use one atomic Git tree/commit whenever supported. This close/resume reconciliation must remain one logical Manager transaction.
+A PASS-family WR-060 verdict returns to Manager. Auditor does not merge WR-059 or activate downstream model work.
