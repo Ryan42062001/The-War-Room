@@ -1,49 +1,47 @@
-# Research & Development (R&D) Handoff
+# R&D Handoff
 
-HANDOFF
+Status: `WR-059 BOUNDED REMEDIATION COMPLETE — MANAGER EXACT-TARGET FREEZE REQUIRED`
 
-Task ID: WR-067  
-Role: R&D  
-Status: COMPLETE — MANAGER FREEZE / WR-068 AUDIT REQUIRED  
-Branch: `wr-067-csv-schema-inference-contract`  
-Execution mode: `STANDARD_CHAT`
+## Disposition
 
-## Result
+`WR-060-AUD-01` was remediated with **PATH B — FAIL CLOSED**.
 
-Published a separately versioned no-scoring raw-CSV schema-inference clarification:
+Exact historical `players.csv` asset `563580371` remains preserved in accepted custody but is not admitted in the new source snapshot because authoritative exact `release_id` plus full `provider_updated_at` could not be independently reproduced.
 
-- clarification ID: `wr-returning-player-v2-csv-schema-inference-addendum`
-- clarification version: `1.0.0`
-- predecessor: `wr-returning-player-v2-evidence-contract/1.0.0`
-- predecessor accepted lock: `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`
-- human contract: `.ai/research/RETURNING_PLAYER_V2_CSV_SCHEMA_INFERENCE_ADDENDUM.md`
-- machine lock: `.ai/research/generated/RETURNING_PLAYER_V2_CSV_SCHEMA_INFERENCE_CONTRACT.json`
-- machine-lock SHA-256: `48d4ace7375a59ab28ad79b2777bd7de4a9c4871cea49e83447371131f60dddb`
-- conformance corpus: `.ai/research/generated/RETURNING_PLAYER_V2_CSV_SCHEMA_INFERENCE_CONFORMANCE.json`
-- conformance corpus SHA-256: `1f70d5e31ed5a62e00e5b02e06f6271e9c30b36951389d9607c50fdf5f71ffe1`
-- conformance cases: **49** (33 PASS / 16 FATAL)
+No provenance was inferred and no replacement asset/provider was substituted.
 
-The addendum freezes strict UTF-8 CSV parsing, exact null/empty rules, the closed `boolean|int64|decimal|utf8` vocabulary, complete-file lexical inference/promotion, observed nullability, physical row counting, fatal conditions, and version-bound canonical typed-schema hashing.
+## New canonical artifacts
 
-All synthetic cases reproduce their expected schema/hash or exact fatal code under the frozen semantics.
+Source snapshot:
+- `wr-returning-player-v2-source-snapshot/1.2.0-wr059`
+- SHA-256 `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`
+- retained identities: 15
+- admitted: 14
+- failed closed: 1 (`NFLVERSE_PLAYERS_METADATA_MINIMAL`)
+- `draft_picks.csv` remains excluded
+
+Cohort:
+- `returning-player-v2-cohort/1.2.0-wr059`
+- SHA-256 `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4`
+- membership 5,176 / 5,176
+- 2014–2017 = 1,668
+- 2018–2025 = 3,508
+- duplicates = 0
+- changed historical membership rows = 0
+- exact prior-season stats lineage unchanged
+
+Accepted evidence preserved:
+- WR-042 manifest SHA-256 `d2196293ff34543b063e737efb175f579967bf37f5dc91b41c08dd45dfe44d26`
+- WR-069 evidence SHA-256 `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`
+
+Historical failed-audit head `e871c861f8ba3c339af5b7a022892522b45b844f` and its `1.1.0-wr059` artifacts remain immutable history.
 
 ## Boundaries
 
-- retained B2/R2 provider bytes accessed: **NO**
-- upstream source bytes reacquired/refreshed: **NO**
-- `draft_picks.csv` parsed/used/replaced: **NO**
-- 2026 regular-season outcome data accessed: **NO**
-- target/outcome join: **NO**
-- model fit/score/tune/compare/evaluate/predict: **NO**
-- ranking/production change: **NO**
-- custody workflows/credentials changed: **NO**
-- WR-021 / WR-023 frozen artifacts changed: **NO**
-- Phase-6 work: **NO**
+Read-only provider/repository metadata research only. No retained raw-byte access/reacquisition, source refresh/substitution, provider mutation, `draft_picks.csv`, 2026 outcome tables, targets, model/scoring/evaluation/prediction, rankings, production, or Phase-6 work.
 
-The clarification is source-independent and does not authorize retained-byte parsing by itself.
+## Next role
 
-## Next action
+**Manager / Architect**
 
-Manager should freeze the exact immutable WR-067 PR/head and activate WR-068 for fresh independent audit of this exact contract/lock/corpus. A PASS-family WR-068 result authorizes only Manager acceptance of the clarification and creation of a fresh successor safe-consumer parser implementation/audit gate. It does not directly resume WR-059 or authorize model work.
-
-Exact publication PR/head is intentionally not self-referenced inside this committed handoff because adding it would move the immutable target.
+Verify/freeze the exact new PR #196 head, exact eight-file `.ai/research/**` scope, canonical artifact hashes, and exact-head CI. Only then activate fresh independent WR-071. R&D does not activate WR-071.
