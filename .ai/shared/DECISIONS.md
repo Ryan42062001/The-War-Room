@@ -113,7 +113,7 @@ DECISION:
 - WR-040 must independently audit the frozen WR-039 evidence contract before Manager may authorize any new v2 scoring/evaluation task.
 - WR-033 / WR-D005 and WR-034 / WR-D006 remain historical research decisions and are not rewritten. Any reuse by v2 must be explicitly versioned and must not claim identity with unavailable v1 upstream inputs unless independently provable.
 - Phase 6 remains blocked until a later v2 season-total path is independently accepted. WR-D001 production ranking authority remains unchanged throughout.
-RATIONALE: WR-037 exhaustively attempted recovery of the deleted frozen nflverse Players asset and trustworthy full-cohort keyed WR-033 evidence but could not prove exact identity for all 3,508 season-total rows, especially 1,627 zero-game rows. Preserving the original audit standard avoids moving the evidentiary goalposts, while a prospectively frozen v2 contract allows the custom-engine research program to continue with stronger evidence custody.
+RATIONALE: WR-037 exhaustively attempted recovery of the deleted frozen nflverse Players asset and trustworthy full-cohort keyed WR-033 evidence but could not prove exact identity for all 3,508 season-total rows, especially 1,627 zero-game rows. Preserving the original audit standard avoids moving the evidentiary goalposts, while a prospectively frozen v2 contract allows the custom projection research program to continue with stronger evidence custody.
 EVIDENCE: PR #124 final blocker head `701bd4924a8595f2e17d946b39b1189ac2ef7eea`; `.ai/research/WR037_UPSTREAM_IDENTITY_BLOCKER.md`; WR-037 R&D handoff; exact-head War Room CI run `34587084283` SUCCESS; WR-036 audit evidence merged via PR #125.
 ALTERNATIVES REJECTED: Treat active-row aggregate metric equality as proof of full-cohort WR-033 identity; continue remediating WR-036 findings 2–5 on an uncertifiable v1 base; represent newly sourced metadata as the deleted frozen asset; abandon all custom projection research solely because the historical upstream payload is unavailable.
 REVISIT CONDITION: A trustworthy exact copy of the deleted WR-033 upstream asset or a pre-existing complete keyed reference is recovered, or the v2 evidence-contract audit demonstrates that the authorized prospective architecture is itself not viable.
@@ -138,3 +138,26 @@ RATIONALE: WR-040 independently verified that the v2 contract directly addresses
 EVIDENCE: WR-039 PR #127 immutable head `00a9e787e716d6697e6cd0d9252982a672abbbe0`; machine lock `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`; WR-040 audit head `c68ef98b27f81e8e1fb26a36a1d2f8d5739b8824`; audit PR #130 merged at `24c375775d58a0d8a4c178576efde5df64a3eedd`; research PR #127 merged preserving the audited commit as a parent at `a0f090e5c8bbbf513e34c24a3fead7df2c094d44`; PR #130 unchanged-head CI retry run `34621843706` attempt 2 SUCCESS.
 ALTERNATIVES REJECTED: authorize scoring immediately after contract audit; skip independent exact-source custody; allow mutable-source reconstruction after results; treat rights uncertainty as non-blocking; reopen/relabel the uncertifiable WR-033 v1 replay chain.
 REVISIT CONDITION: WR-043 finds the accepted custody architecture cannot be satisfied in practice; a required new source/field demands a contract version bump; or later independently audited evidence justifies a new explicit architecture decision.
+
+---
+
+## DECISION WR-D009
+
+DATE: 2026-09-15
+TASK: WR-059 / WR-071 — Returning-Player v2 source-snapshot + cohort acceptance
+STATUS: ACTIVE — RESEARCH / DEVELOPMENT ARCHITECTURE ONLY
+DECISION:
+- Accept WR-059 exact remediated head `db8b21a65f2decf900902481f110758cc33f0aa6` after WR-071 independent `PASS` with no findings.
+- Accept source snapshot `wr-returning-player-v2-source-snapshot/1.2.0-wr059` with SHA-256 `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea` as the current Returning-Player v2 source-instance authority.
+- Accept cohort `returning-player-v2-cohort/1.2.0-wr059` with SHA-256 `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4` as the current v2 historical cohort authority: 5,176 unique keys, zero duplicates, unchanged historical membership/order/lineage.
+- Preserve all 15 WR-042 retained historical custody identities, but admit only the 14 Player Summary Stats instances. Historical `players.csv` asset `563580371` remains retained yet failed closed for v2 metadata use because exact release ID/full provider-update timestamp are not independently reproducible.
+- Preserve WR-057 exclusion of `draft_picks.csv`; no replacement draft-capital authority is admitted.
+- Close WR-042 as historical custody authority superseded by the complete accepted WR-059/071 checkpoint; PR #168 remains closed unmerged and immutable.
+- Authorize next only WR-072, a no-scoring pre-score model-protocol + ordered feature-schema freeze, followed by fresh independent WR-073 audit.
+- Because admitted metadata count is zero and draft capital remains excluded, WR-072 may not include metadata/draft-derived predictor semantics unless a future separately versioned source-contract/custody/audit gate explicitly authorizes them.
+- No model fitting, scoring, tuning, comparison, prediction, evaluation, target/outcome join, 2026 regular-season outcome inspection, ranking/production change, season-total composition, or Phase-6 work is authorized by this decision.
+- WR-D001 production ranking authority remains unchanged. WR-D005/WR-D006 remain historical v1 research architecture and may inform candidate ideas only through new v2 identities.
+RATIONALE: WR-071 independently reproduced the source/cohort hashes, verified Path-B fail-closed semantics, exact custody/source counts, unchanged 5,176-key cohort and lineage, authority bindings, exclusions, and no-reacquisition/no-model boundaries. This satisfies the WR-D008 source-custody/cohort gate while preserving fail-closed treatment of provenance that cannot be independently reproduced.
+EVIDENCE: WR-059 PR #196 accepted head `db8b21a65f2decf900902481f110758cc33f0aa6`; exact-head CI `34998074580`; WR-071 PR #202 audit head `96a712ba2cf6a016ddbfdc0ea14cabba282bee04`; WR-071 exact-head CI `35009298684`; audit evidence merge `0eb20f940fcfe455da3129a54525a73e39c966c6`; WR-059 integration merge `2777ec44ca5b5f2fef77c07d17e4fa75b6013262`; post-integration CI `35009576671` classify/Governance SUCCESS.
+ALTERNATIVES REJECTED: infer missing historical metadata provenance; substitute current `players.csv`; reacquire sources; reintroduce excluded draft capital; proceed directly to model scoring; preserve WR-042 as an indefinitely blocked active task after its evidence has been incorporated and independently accepted.
+REVISIT CONDITION: a future audited source-contract version admits new metadata/draft semantics, WR-073 finds the pre-score protocol cannot satisfy the accepted contract, or later independently audited evidence requires a new explicit source/cohort version.
