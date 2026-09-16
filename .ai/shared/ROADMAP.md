@@ -6,18 +6,14 @@ Owner: Manager / Architect
 
 ## Workflow foundation
 
-- V3.2 — CANONICAL / ACCEPTED.
-- WR-054 — CLOSED / V3.2 implementation accepted; canonical-main canary `34872984380` PASS.
-- WR-055 — CLOSED / independent V3.2 audit PASS, no findings.
-- WR-078 — AUDIT_READY / remediated Workflow V3.3 efficiency candidate frozen at PR #217 head `d952099946b51c5d4d8a88929ca83d1d4dce3521`; exact-head full CI `35128119119` SUCCESS and readiness packet green.
-- WR-079 — CLOSED / historical independent audit of prior WR-078 head `0b25767...`; verdict `FAIL — REMEDIATION REQUIRED`; findings WR-079-AUD-01/02 preserved.
-- WR-080 — ASSIGNED / fresh independent re-audit of exact WR-078 remediation target `d952099946b51c5d4d8a88929ca83d1d4dce3521`.
+- V3.3 — CANONICAL / ACCEPTED.
+- WR-078 — CLOSED / Workflow V3.3 audit-readiness + Manager-transition implementation accepted at exact audited head `d952099946b51c5d4d8a88929ca83d1d4dce3521`; integrated through PR #217 as canonical-main merge `534f79a4f560d03c1ddf6309f9c416e3373e48b5`.
+- WR-079 — CLOSED / historical failed independent audit of prior WR-078 head `0b25767...`; findings WR-079-AUD-01/02 preserved as remediation history.
+- WR-080 — CLOSED / fresh independent re-audit `PASS`, no findings; Auditor PR #222 / head `7f770c8398202be2e28729e2028445647c50f5ad`; audit CI `35142111164` SUCCESS.
+- Mandatory canonical-main Full War Room CI `35143657933` — SUCCESS, including classify, Governance, full browser/product, `npm test`, resilience, and backup/offline reload validation.
+- V3.2 remains accepted historical foundation inherited by V3.3.
 
-V3.3 candidate sequence:
-
-`WR-078 remediation + full CI + readiness [DONE] -> Manager exact freeze [DONE] -> WR-080 fresh independent re-audit [ACTIVE] -> PASS-family only: WR-078 exact audited integration -> mandatory canonical-main FULL CI canary -> Manager V3.3 canonical disposition`
-
-V3.3 does not remove independent audit, exact-head/live-state gates, Manager merge authority, post-merge canaries, fail-closed behavior, or custody/provider controls. Its purpose is to catch mechanical audit defects earlier and reduce avoidable control-plane mismatch loops.
+Canonical V3.3 capabilities now include mechanical audit-readiness preflight, exact-head readiness packets, Manager-owned task-specific readiness contracts, dry-run/rollback Manager transition preparation, and Bounded Remediation Refresh. These are efficiency aids only; independent audit, Manager acceptance, live/exact-head checks, collision safety, custody/provider boundaries, and post-merge canaries remain mandatory.
 
 ## Phase 5B — Returning-Player v2 evidence reset — ACTIVE
 
@@ -28,7 +24,7 @@ WR-042/043/056/057/058/059/060/061/062/063/064/065/066/067/068/069/070/071/073/0
 
 Current critical path:
 
-`WR-072 operand-signature + conformance-fixture remediation -> Manager exact freeze -> WR-077 fresh re-audit -> PASS-family only: integration -> separately assigned scoring/evaluation -> independent model-result audit -> season-total composition -> independent composition audit -> Phase 6 eligibility`
+`WR-072 bounded remediation -> audit-readiness preflight -> Manager exact freeze -> WR-077 fresh re-audit -> PASS-family only: integration -> separately assigned scoring/evaluation -> independent model-result audit -> season-total composition -> independent composition audit -> Phase 6 eligibility`
 
 No fitting, prediction, target join, scoring, evaluation, or outcome inspection is authorized before that gate.
 
@@ -39,9 +35,9 @@ No fitting, prediction, target join, scoring, evaluation, or outcome inspection 
 
 Sequence:
 
-`WR-074 hardened pilot -> Manager exact freeze -> WR-075 fresh independent audit -> PASS-family only: adoption decision`
+`WR-074 hardened pilot -> audit-readiness preflight -> Manager exact freeze -> WR-075 fresh independent audit -> PASS-family only: adoption decision`
 
-WR-074/075 and WR-078/080 are independent non-blocking infrastructure/workflow lanes and must not alter WR-072/077 model chronology.
+WR-074/075 remains independent of WR-072/077 and must not alter Returning-Player model chronology.
 
 ## Future phases
 
