@@ -1,11 +1,20 @@
 # R&D Handoff
 
-Status: `WR-072 REMEDIATION COMPLETE — MANAGER EXACT-TARGET FREEZE REQUIRED`
+Status: WR-072 1.2 REMEDIATION COMPLETE — MANAGER EXACT-TARGET FREEZE REQUIRED
 
-Historical failed-audit target `d75e58052dd555cd5b3f952fc2b3556287d75f9a` / protocol `1.0.0-wr072` / lock `d2fb326875c954446b23e2761df0feaad4b814aa49dd0465277979a3c9d9bd73` remains immutable. Sole WR-073 finding `WR-073-AUD-01` is remediated by new protocol `returning-player-v2-model-protocol/1.1.0-wr072`, gate contract `returning-player-v2-result-gates/1.1.0-wr072`, machine lock `831aed6e8cad2d760a58a3c9f5bc298891e0ed11707ecc545c9254b29110c61d`.
+PR #207.
 
-The lock inherits exact 1.0 semantics for all positively audited unchanged surfaces and adds exact relative-statistic/group/ordering formulas plus NumPy 2.1.3 `Generator(PCG64(72073))` cluster/draw/weight/replicate/quantile rules. Synthetic bootstrap digest `6e3fa80c05f2c51d5369c9222c57cd5decbe31affb37e7d6e6b7a6d7c644c0c4`, Q.025 `-1.25`, Q.975 `0.5`, gate false.
+Historical failed heads:
+- d75e58052dd555cd5b3f952fc2b3556287d75f9a — 1.0
+- 95b1fdfb36ffc7b865597bf7131fa1dd9f45ae73 — 1.1
 
-28 predictors remain stats-only; metadata/draft predictors remain zero; accepted source/cohort/custody bindings are unchanged. No model/result/outcome/source/production/Phase-6 work occurred.
+New protocol `returning-player-v2-model-protocol/1.2.0-wr072`
+New gates `returning-player-v2-result-gates/1.2.0-wr072`
+Fixture `returning-player-v2-bootstrap-conformance-fixture/1.0.0-wr072` / `3fb3c2088e17f42ad588a94f018abbcbd42cefeb46422a0bcb1da50b31cba3f7`
+Machine lock `aed044e6b7df9684153181a7a97a47a86c50ce9049db063ecdd8a973b1a832b6`
 
-Next: **Manager / Architect** freezes exact new PR #207 head + hash/scope/CI, then may activate fresh WR-076. R&D does not merge or activate WR-076.
+Resolved only WR-076-AUD-01/02: named candidate/baseline operand roles plus complete embedded/hash-bound bootstrap input fixture with expected cluster/replicate/quantile/RNG-state outputs.
+
+All accepted 1.1 positive evidence is inherited by exact predecessor lock hash. No model/result/outcome work occurred.
+
+Next: Manager freezes exact PR #207 target and CI, then may activate WR-077. R&D does not merge or activate audit.
