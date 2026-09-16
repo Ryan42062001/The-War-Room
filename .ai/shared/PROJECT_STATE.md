@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / V3.3 CANDIDATE AUDIT ACTIVE / WR-072 REMEDIATION + WR-074 RUNNER PILOT IN PARALLEL
+Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / V3.3 CANDIDATE IN BOUNDED REMEDIATION / WR-072 REMEDIATION + WR-074 RUNNER PILOT IN PARALLEL
 Last verified: 2026-09-16
 Owner: Manager / Architect
 Workflow: V3.2 CANONICAL; V3.3 CANDIDATE ONLY
@@ -17,20 +17,21 @@ WR-074 remains `IN_PROGRESS` and independent at observed checkpoint `7b4641499c5
 
 ## Workflow V3.3 efficiency candidate
 
-WR-078 is now `AUDIT_READY` at exact PR #217 head `0b25767ce56c44505e9364adc9c536d57c46a1e5`.
+Historical WR-078 target `0b25767ce56c44505e9364adc9c536d57c46a1e5` was independently audited by WR-079 and returned `FAIL — REMEDIATION REQUIRED`.
 
-Frozen evidence:
+WR-079 audit evidence is merged and preserved at Auditor head `a71b058644d594796e816a35d839eee2e160ad0c`, PR #219, exact-head audit CI `35103079057` SUCCESS.
 
-- scope exactly five files: `.github/workflows/ci.yml` plus four workflow helper/regression scripts;
-- exact-head War Room CI `35100255711` SUCCESS;
-- classify `104807577031`, governance `104807636859`, full test `104807695995` all SUCCESS;
-- exact-head readiness packet reports zero blockers, no forbidden/outside-allowlist files, all contract checks PASS, and `ready_for_manager_freeze: true`;
-- readiness packet correctly binds immutable PR head rather than GitHub synthetic merge SHA.
+Blocking findings are bounded to:
 
-WR-079 is `ASSIGNED` to fresh Independent Auditor / QA against only exact WR-078 head `0b25767ce56c44505e9364adc9c536d57c46a1e5`.
+- `WR-079-AUD-01` — auto audit-readiness branch-name attribution is insufficient for public-fork PR identity;
+- `WR-079-AUD-02` — `version_bump` does not distinguish invalid comparison refs from valid refs where the artifact path is absent.
 
-V3.2 remains canonical. Do not merge WR-078 before PASS-family WR-079. Even after accepted integration, V3.3 becomes canonical only after mandatory canonical-main full-CI canary and final Manager disposition.
+WR-078 is `REWORK_REQUIRED` on existing PR #217/branch `manager/wr-078-workflow-v33-efficiency`. Preserve failed head `0b25767...` as immutable historical evidence. Add only focused remediation/regressions, require exact-head FULL War Room CI/readiness evidence, then Manager freezes one new immutable target and activates WR-080.
+
+WR-080 is BLOCKED pending that exact freeze.
+
+V3.2 remains canonical. Do not merge WR-078 before PASS-family fresh re-audit. Even after accepted integration, V3.3 becomes canonical only after mandatory canonical-main full-CI canary and final Manager disposition.
 
 ## Hard boundaries
 
-No workflow automation may issue an Auditor verdict, merge audited work, weaken live/exact-head verification, bypass Manager authority, reduce custody/provider controls, or alter Returning-Player model/ranking semantics. WR-078/079 remains independent of WR-072/077 and WR-074/075.
+No workflow automation may issue an Auditor verdict, merge audited work, weaken live/exact-head verification, bypass Manager authority, reduce custody/provider controls, or alter Returning-Player model/ranking semantics. WR-078/080 remains independent of WR-072/077 and WR-074/075.

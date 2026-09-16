@@ -2,52 +2,48 @@
 
 HANDOFF
 
-Workflow: V3.2 CANONICAL; V3.3 CANDIDATE IN FRESH INDEPENDENT AUDIT
+Workflow: V3.2 CANONICAL; V3.3 CANDIDATE IN BOUNDED REMEDIATION
 
-## WR-078 — frozen Workflow V3.3 candidate
+## WR-079 — CLOSED historical failed audit
 
-Manager freezes exact WR-078 PR #217 head `0b25767ce56c44505e9364adc9c536d57c46a1e5` on branch `manager/wr-078-workflow-v33-efficiency`.
+Fresh Independent Auditor / QA audited exact WR-078 PR #217 head `0b25767ce56c44505e9364adc9c536d57c46a1e5` and returned:
 
-Starting canonical main for the final candidate is `ca6362e1b7128f334a6ae584c67101244a4d8db8`. The final target is exactly one implementation commit and exactly five files:
+`FAIL — REMEDIATION REQUIRED`
 
-- `.github/workflows/ci.yml`;
-- `scripts/workflow-audit-readiness.mjs`;
-- `scripts/test-workflow-audit-readiness.mjs`;
-- `scripts/workflow-manager-transition.mjs`;
-- `scripts/test-workflow-manager-transition.mjs`.
+Auditor publication:
 
-Exact-head War Room CI `35100255711` completed SUCCESS:
+- PR #219
+- Auditor head `a71b058644d594796e816a35d839eee2e160ad0c`
+- exact-head audit CI `35103079057` SUCCESS
+- CRITICAL none / HIGH none / MEDIUM WR-079-AUD-01 and WR-079-AUD-02 / LOW none
 
-- classify `104807577031` SUCCESS;
-- governance `104807636859` SUCCESS;
-- full test `104807695995` SUCCESS.
+The audit evidence is merged canonically. Preserve the failed WR-078 target as immutable historical evidence.
 
-Governance independently ran both new regression suites, canonical active-task/collision validation, custody regressions, and the audit-readiness preflight. The readiness step temporarily checked out exact PR head `0b25767ce56c44505e9364adc9c536d57c46a1e5`, emitted the packet, then restored GitHub's synthetic merge checkout for remaining integration/custody checks.
+## WR-078 — REWORK_REQUIRED
 
-Readiness packet: zero blockers; no forbidden/outside-allowlist files; all contract checks PASS; `ready_for_manager_freeze: true`; exact five-file SHA-256 inventory recorded in PR #217 and WR-078 task spec.
+Continue existing branch `manager/wr-078-workflow-v33-efficiency` and PR #217.
 
-Historical pre-publication heads that exposed a regression-fixture issue and a synthetic-merge-SHA packet ambiguity are not audit targets.
+Bounded remediation only:
 
-## WR-079 — ACTIVE
+1. `WR-079-AUD-01`: bind auto audit-readiness to authorized PR/repository identity beyond branch-name equality. A public fork reusing the active branch name must not be attributed to the task.
+2. `WR-079-AUD-02`: distinguish invalid/malformed comparison refs from valid refs with absent paths in `version_bump`; invalid authority must fail closed.
 
-Fresh Independent Auditor / QA lane:
+Add focused regressions for both defects. Preserve every other positive WR-079 result. Require exact-head FULL War Room CI and green readiness evidence before another Manager freeze.
 
-- branch `wr-079-workflow-v33-efficiency-audit`;
-- target task WR-078;
-- target PR #217;
-- target branch `manager/wr-078-workflow-v33-efficiency`;
-- exact target SHA `0b25767ce56c44505e9364adc9c536d57c46a1e5`.
+## WR-080 — BLOCKED
 
-Auditor must stop if PR #217 moves. Write only `.ai/auditor/**`, publish an Auditor-only PR, and return exactly PASS / PASS WITH NON-BLOCKING FINDINGS / FAIL — REMEDIATION REQUIRED.
+Fresh Independent Auditor / QA lane reserved at:
 
-Audit focus includes fail-closed readiness semantics, exact PR-head packet binding, Manager-transition dry-run/write rollback and no commit/push/merge authority, Bounded Remediation Refresh safety, public-repository read-only PR-head execution, collision preservation, and exact-head full-CI evidence.
+`wr-080-workflow-v33-efficiency-reaudit`
+
+Do not activate until Manager freezes one new immutable WR-078 remediation head and records exact target PR/branch/SHA.
 
 ## Canonicality boundary
 
-Workflow V3.2 remains canonical. Do not merge WR-078 before WR-079 PASS-family. If WR-079 passes, Manager still must integrate WR-078 and require mandatory canonical-main FULL CI/canary before V3.3 can be declared canonical.
+Workflow V3.2 remains canonical. Do not merge WR-078 before PASS-family WR-080. If WR-080 passes, integrate WR-078 only at the audited exact head, then require mandatory canonical-main FULL CI/canary before declaring V3.3 canonical.
 
 ## Parallel lanes
 
 WR-072 remains REWORK_REQUIRED and WR-077 BLOCKED. No model fitting/scoring/outcome inspection is authorized.
 
-WR-074 remains IN_PROGRESS and WR-075 BLOCKED. WR-074's workflow authority remains narrowed to exact `.github/workflows/wr074-self-hosted-heavy-ci-pilot.yml` so it does not collide with WR-078.
+WR-074 remains IN_PROGRESS and WR-075 BLOCKED. WR-074's workflow authority remains narrowed to exact `.github/workflows/wr074-self-hosted-heavy-ci-pilot.yml` and does not collide with WR-078.
