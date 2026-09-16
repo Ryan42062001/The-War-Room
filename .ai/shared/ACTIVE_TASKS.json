@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-16T03:10:00Z",
+  "updated_at_utc": "2026-09-16T11:16:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -34,11 +34,11 @@
       "task_id": "WR-074",
       "owner": "Work Helper",
       "worker_slot": "work-helper-self-hosted-heavy-ci",
-      "status": "ASSIGNED",
+      "status": "IN_PROGRESS",
       "task_file": ".ai/manager/WR-074.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
       "assignment_main_sha": "408a10cf14d71d88d43193df3bdd830633c2cf6f",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "11ff29f40b5345fa39e83fd4238412eb943c54f1",
       "branch": "wr-074-self-hosted-heavy-ci-runner-pilot",
       "pr": null,
       "dependency": "INDEPENDENT",
@@ -50,10 +50,10 @@
       "blocked_on": [],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [".ai/work_helper/", ".github/workflows/", "scripts/ci/"],
+      "allowed_path_prefixes": [".ai/work_helper/", ".github/workflows/", "scripts/ci/", "scripts/validate-release-candidate.mjs"],
       "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/research/", "src/", "public/", "scripts/custody/"],
       "forbidden_exact_paths": [],
-      "next_gate": "Work Helper publishes one immutable hardened self-hosted pilot target -> Manager exact freeze -> WR-075 fresh independent audit."
+      "next_gate": "Work Helper uses the exact additional validator authorization to repair hosted reference CI, then obtains repeated successful execution on the dedicated [self-hosted, war-room-heavy-ci] runner; if the dedicated runner remains unavailable after repository-side remediation, return the exact runner online/label user action to Manager."
     },
     {
       "task_id": "WR-075",
