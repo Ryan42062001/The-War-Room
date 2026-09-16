@@ -2,7 +2,7 @@
 
 HANDOFF
 
-Task ID: WR-073
+Task ID: WR-076
 
 Role: Independent Auditor / QA
 
@@ -12,53 +12,47 @@ Workflow: V3.2
 
 Execution mode: STANDARD_CHAT
 
-Audit branch: `wr-073-v2-model-protocol-feature-schema-audit`
+Audit branch: `wr-076-v2-model-protocol-feature-schema-reaudit`
 
-Assignment baseline: `d8f8a8d19050a1162dfed3763128e53925ee25de`
+Canonical main / prepared branch at audit start: `f04326ce01b1fc25fc5fc217ec3e2b6ac44eb8f4`
 
 Audited target: WR-072 / PR #207
 
-Frozen audited head: `d75e58052dd555cd5b3f952fc2b3556287d75f9a`
+Frozen audited remediation head: `95b1fdfb36ffc7b865597bf7131fa1dd9f45ae73`
 
-Target assignment baseline: `408a10cf14d71d88d43193df3bdd830633c2cf6f`
+Historical failed-audit head: `d75e58052dd555cd5b3f952fc2b3556287d75f9a`
 
 Final verdict: `FAIL — REMEDIATION REQUIRED`
 
-Findings by severity: CRITICAL — none. HIGH — `WR-073-AUD-01`. MEDIUM — none. LOW — none.
+Findings by severity: CRITICAL — none. HIGH — `WR-076-AUD-01`. MEDIUM — `WR-076-AUD-02`. LOW — none.
 
-HIGH `WR-073-AUD-01`: WR-072 freezes gate thresholds but does not fully freeze the exact mathematical transforms for named relative metrics (`MAE_lift`, RMSE/MAE regressions, rank-MAE regressions, secondary-baseline regressions) or the exact player-cluster bootstrap execution algorithm. The lock supplies 5,000 replicates, seed `72073`, `player_id`, candidate-minus-primary MAE, and `percentile95`, but does not bind the RNG API/bit-generator, ordered cluster universe/draw/replacement/duplicate weighting semantics, or exact percentile/quantile method. Historical WR-029 code cannot silently fill these v2 gaps because WR-072 explicitly classifies that lineage as historical design evidence only. This leaves a result-dependent interpretation path at promotion thresholds and violates the accepted WR-039 deterministic-gate/reproducibility requirement.
+HIGH `WR-076-AUD-01`: the remediated machine lock writes generic relative transforms as `improve=(B-C)/B` (positive better) and `regress=(C-B)/B` (positive worse), but its derived calls are written `improve(candidate,primary)` / `regress(candidate,primary)` and similarly `regress(candidate,secondary)` without normatively binding B/C to named operands or defining the positional function signature. For baseline MAE 10 and candidate MAE 9, the intended positive-better value is +0.10, while positional substitution into the displayed call order yields -0.111..., reversing the sign. This remains a result-dependent interpretation path and is blocking before scoring.
 
-Required remediation: before any fitting/prediction/outcome join/result inspection, freeze machine-readable formulas for every relative gate statistic and the complete deterministic clustered-bootstrap procedure (or bind exact audited scoring code by immutable digest with equivalent normative specificity), regenerate a fresh model-protocol lock/head, and require fresh independent audit.
+Required remediation for WR-076-AUD-01: explicitly bind one machine-readable signature, e.g. `improve(candidate,baseline)=(baseline-candidate)/baseline` and `regress(candidate,baseline)=(candidate-baseline)/baseline`, make every derived/secondary call consistent, and bind zero-denominator behavior to the named baseline operand. Regenerate a new lock/version and require fresh audit before result work.
 
-Machine lock: PASS — exact committed WR-072 JSON bytes independently reproduce SHA-256 `d2fb326875c954446b23e2761df0feaad4b814aa49dd0465277979a3c9d9bd73`; adjacent sidecar matches.
+MEDIUM `WR-076-AUD-02`: the lock/human protocol/R&D handoff publish expected synthetic bootstrap digest `6e3fa80c05f2c51d5369c9222c57cd5decbe31affb37e7d6e6b7a6d7c644c0c4`, Q.025 `-1.25`, Q.975 `0.5`, gate false, but no privacy-safe synthetic input fixture is frozen in the four-file remediation or elsewhere under the searched canonical research/Manager surfaces. The claimed conformance vector therefore cannot be independently regenerated. Publish and hash the exact synthetic clusters/rows/errors/order (or equivalent deterministic fixture/reference code) and bind its input/output hashes in the next lock.
 
-Fresh v2 identities: PASS — protocol, feature schema, preprocessing, serializer, target, and primary candidate IDs agree across human/machine artifacts.
+Machine lock integrity: PASS — exact committed 1.1.0 JSON bytes independently reconstruct and SHA-256 to `831aed6e8cad2d760a58a3c9f5bc298891e0ed11707ecc545c9254b29110c61d`; adjacent sidecar matches.
 
-Upstream authority: PASS — exact accepted WR-039 `3fac50f8...`, source snapshot `6af88ada...`, cohort `f62075ec...`, WR-042 `d2196293...`, WR-069 `448baab...`, and WR-071 PASS binding are preserved with no alternate authority.
+Version/history: PASS — new protocol `returning-player-v2-model-protocol/1.1.0-wr072` and result-gates `returning-player-v2-result-gates/1.1.0-wr072`; historical failed `1.0.0` head/hash remains addressable and is explicitly bound by predecessor SHA `d2fb326875c954446b23e2761df0feaad4b814aa49dd0465277979a3c9d9bd73`. Historical WR-073 PR #210/head `1188d0eb8b37fe067e693d16b88ab73e0193c8b0` remains immutable merged audit evidence.
 
-Feature schema: PASS — exactly 28 ordered predictors, independently reconciled to admitted completed Y-1/Y-2 `NFLVERSE_PLAYER_SUMMARY_STATS` fields only. No failed-closed Players metadata, age/birth/rookie/experience/current-team/status, draft capital/`draft_picks.csv`, or intentional proxy for those unavailable/excluded semantics is present.
+Remediation scope: PASS — failed head `d75e5805... -> 95b1fdfb...` is exactly 1 commit ahead / 0 behind and changes only `.ai/research/HANDOFF.md`, `.ai/research/WR072_RETURNING_PLAYER_V2_MODEL_PROTOCOL.md`, `.ai/research/generated/WR072_RETURNING_PLAYER_V2_MODEL_PROTOCOL.json`, and its `.sha256` sidecar.
 
-Target/chronology: PASS — Full-PPR points per recorded target-Y REG game; zero/no-valid target row => `TARGET_UNAVAILABLE`, never zero-imputed; 2014–2017 warmup, 2018–2019 development, 2020–2021 validation, 2022–2025 confirmation; same-position earlier OBSERVED rolling training only; Sep 1 12:00 UTC cutoff; target-Y Week-1+ predictors prohibited.
+Bootstrap mechanics: PASS apart from missing synthetic fixture — exact cluster key/order, stable row order, NumPy 2.1.3 `Generator(PCG64(72073))` constructed once/no reseed, 5,000 exact `rng.integers` calls with replacement, `bincount` multiplicity weighting, candidate-minus-primary weighted-MAE statistic, `math.fsum`, finite/degenerate handling, `numpy.quantile(...,[0.025,0.975],method='linear')`, explicit interpolation, and Q.975<=0 inclusive/unrounded are frozen.
 
-Preprocessing/candidate: PASS — separate QB/RB/WR/TE, exact order/types/named missingness, nonfinite fatal, exact StandardScaler parameters and future state evidence; exact fresh v2 Ridge alpha=100 candidate with no hyperparameter search and no v1 fitted/prediction identity.
+Previously positive WR-073 evidence: PASS — predecessor-hash inheritance preserves source snapshot `6af88ada...`, cohort `f62075ec...`, 5,176 keys / 0 duplicates, WR-042 `d2196293...`, WR-069 `448baab...`, 28 stats-only predictors, zero metadata/draft predictors, target/chronology/preprocessing/candidate/full-row evidence/outcome isolation/fail-closed/environment/publication semantics. Historical WR-029 remains design/governance evidence only.
 
-Full-row evidence/outcome isolation: PASS — all 5,176 cohort keys remain explicit; feature/preprocessing/model/prediction lineage and digests are required; held-out targets remain separate until immutable pre-score manifest/prediction evidence exists; post-exposure semantic changes require a new protocol and audit.
+Target CI: PASS — War Room CI `35091913065` is bound to exact target `95b1fdfb...`; classify `104779970612` SUCCESS, governance `104780020913` SUCCESS, product test `104780091489` SKIPPED as expected.
 
-Fail-closed/environment: PASS apart from WR-073-AUD-01 — source/cohort/key/schema/type/lineage/nonfinite/leakage/premature-target/state/code/environment failures are rejected, and runtime/package/thread/locale/timezone/code/command/output locking is otherwise strongly specified.
+Premature execution/boundaries: PASS — no fitting/scoring/tuning/prediction/result comparison, target/outcome join or inspection, 2026 outcome use, source reacquisition/refresh/substitution, provider mutation, production/ranking, season-total composition, or Phase-6 work found in the frozen remediation.
 
-Repository scope: PASS — `408a10cf... -> d75e5805...` is exactly one commit ahead, zero behind, changing only `.ai/research/HANDOFF.md`, `.ai/research/WR072_RETURNING_PLAYER_V2_MODEL_PROTOCOL.md`, `.ai/research/generated/WR072_RETURNING_PLAYER_V2_MODEL_PROTOCOL.json`, and its `.sha256` sidecar. Later WR-074/075-related advancement is Manager/shared control-plane only and does not alter the target.
+Detailed report: `.ai/auditor/WR-076_AUDIT.md`.
 
-Target CI: PASS — War Room CI `35013128300` is bound to exact target `d75e5805...`; classify `104529778523` and governance `104529832127` succeeded; product test `104529896735` skipped as expected for research/evidence-only scope.
+Report commit: `7fc4dcf893affeed32ffd4ffc556b6b01e85dc79`.
 
-Premature execution/boundaries: PASS — no model fitting/scoring/tuning/comparison/evaluation/prediction, target/outcome join, 2026 outcome inspection, source reacquisition/refresh/substitution, provider mutation, production/ranking change, season-total composition, or Phase-6 work found in the frozen target.
+Recommended next role: Manager / Architect for one further bounded pre-score WR-072 remediation of WR-076-AUD-01/02, then a fresh Independent Auditor / QA lane.
 
-Detailed report: `.ai/auditor/WR-073_AUDIT.md`.
-
-Report commit: `cd9594cd96000f75d3325611546b8a3d22193c37`.
-
-Recommended next role: Manager / Architect for bounded pre-score WR-072 remediation and then fresh Independent Auditor / QA.
-
-Do not merge WR-072 as an accepted scoring protocol. Do not authorize scoring/evaluation. Do not alter WR-074/075 from this Auditor lane.
+Do not merge WR-072 as an accepted scoring protocol. Do not authorize fitting/scoring/evaluation. WR-074/075 are untouched.
 
 Auditor modified or merged PR #207: NO
 
