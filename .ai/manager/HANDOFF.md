@@ -4,63 +4,69 @@ HANDOFF
 
 Workflow: V3.2 CANONICAL
 
-## Returning-Player v2 — WR-072 frozen / WR-073 active
+## Returning-Player v2 — WR-073 FAIL routed to bounded WR-072 remediation
 
-WR-072 R&D completed and published PR #207.
+Historical failed WR-072 target:
 
-Manager independently verified and froze exact target:
+- branch `wr-072-v2-model-protocol-feature-schema`;
+- PR `#207`;
+- exact audited head `d75e58052dd555cd5b3f952fc2b3556287d75f9a`;
+- failed-audit model protocol `returning-player-v2-model-protocol/1.0.0-wr072`;
+- machine-lock SHA-256 `d2fb326875c954446b23e2761df0feaad4b814aa49dd0465277979a3c9d9bd73`;
+- exact-head CI `35013128300` SUCCESS.
 
-- branch `wr-072-v2-model-protocol-feature-schema`
-- PR `#207`
-- immutable head `d75e58052dd555cd5b3f952fc2b3556287d75f9a`
-- exact changed scope: four `.ai/research/**` files only
-- assignment baseline `408a10cf14d71d88d43193df3bdd830633c2cf6f` -> target: one commit ahead / zero behind
-- exact-head War Room CI `35013128300` — classify SUCCESS / governance SUCCESS / product test skipped
+WR-073 independently audited that exact target and returned:
 
-Frozen identities:
+`FAIL — REMEDIATION REQUIRED`
 
-- model protocol `returning-player-v2-model-protocol/1.0.0-wr072`
-- feature schema `returning-player-v2-feature-schema/1.0.0-wr072`
-- preprocessing `returning-player-v2-preprocessing/1.0.0-wr072`
-- serializer `returning-player-v2-evidence-serializer/1.0.0-wr072`
-- target `returning-player-v2-expected-ppr-pg-target/1.0.0-wr072`
-- candidate `returning-player-v2-ridge-stats-only-a100/1.0.0-wr072`
-- machine-lock SHA-256 `d2fb326875c954446b23e2761df0feaad4b814aa49dd0465277979a3c9d9bd73`
+Findings:
 
-Exact upstream binding remains:
+- CRITICAL: none
+- HIGH: `WR-073-AUD-01`
+- MEDIUM: none
+- LOW: none
 
-- evidence contract `wr-returning-player-v2-evidence-contract/1.0.0` / `3fac50f89afa1bb69d356c67f458f882f167ea595661d8eb4772b1a66cdb677a`
-- source snapshot `wr-returning-player-v2-source-snapshot/1.2.0-wr059` / `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`
-- cohort `returning-player-v2-cohort/1.2.0-wr059` / `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4`
-- WR-042 manifest `d2196293ff34543b063e737efb175f579967bf37f5dc91b41c08dd45dfe44d26`
-- WR-069 evidence `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`
+Audit evidence:
 
-The frozen WR-072 protocol contains exactly 28 predictors, all from admitted completed Y-1/Y-2 `NFLVERSE_PLAYER_SUMMARY_STATS` REG semantics. Zero predictors use failed-closed Players metadata or excluded draft capital. It preregisters target semantics, chronology, per-position preprocessing, Ridge candidate/hyperparameters, baselines, development/validation/confirmation gates, full-row keyed evidence, environment lock, fail-closed rules, and hard outcome isolation before any v2 result exists.
+- PR #210;
+- Auditor head `1188d0eb8b37fe067e693d16b88ab73e0193c8b0`;
+- exact audit-head CI `35022367158` SUCCESS;
+- audit evidence merge `a58b31b9d3ab499469d8ea47df6d957f35aa3edd`;
+- post-merge CI `35050720809` classify/Governance SUCCESS.
 
-The machine artifact attests no fitting, scoring, tuning, candidate outcome comparison, prediction, target/outcome join, outcome inspection, 2026 regular-season outcome inspection, source reacquisition/refresh/substitution, provider mutation, production change, or Phase-6 work.
+The finding is narrow: threshold values exist, but exact relative lift/regression transforms and complete deterministic player-cluster bootstrap execution semantics are not sufficiently frozen to guarantee one reproducible pass/fail decision near thresholds.
 
-WR-072 is now `AUDIT_READY`; do not merge PR #207 before audit disposition.
+## WR-072 bounded remediation assignment
 
-## WR-073 assignment
-
-Next Returning-Player role: Independent Auditor / QA.
-
-Task:
-
-`WR-073 — Independent Audit of Returning-Player v2 Model Protocol + Feature Schema`
+Next Returning-Player role: Research & Development.
 
 Execution mode: `STANDARD_CHAT`.
 
-Assigned branch:
+Continue existing branch and PR:
 
-`wr-073-v2-model-protocol-feature-schema-audit`
+- branch `wr-072-v2-model-protocol-feature-schema`;
+- PR #207.
 
-Audit ONLY exact WR-072 PR #207 head `d75e58052dd555cd5b3f952fc2b3556287d75f9a`. Do not silently follow later movement.
+Resolve only `WR-073-AUD-01` unless a directly necessary consistency edit is required.
 
-Auditor must independently verify exact machine-lock bytes/hash, version identities, source/cohort authority, all 28 feature lineages, no metadata/draft-capital features, target/chronology/preprocessing/candidate/gates, full-row evidence, outcome isolation, fail-closed behavior, and absence of premature result work. Auditor writes only `.ai/auditor/**`, opens its own evidence PR, and returns PASS / PASS WITH NON-BLOCKING FINDINGS / FAIL — REMEDIATION REQUIRED.
+Required remediation before any outcome/model execution:
 
-No scoring/evaluation authorization exists yet.
+- machine-readable formula for every relative gate statistic: exact numerator, denominator, sign, weighting, zero/undefined rule and threshold comparison;
+- exact aggregation semantics for position/season/ordering/secondary-baseline gates;
+- exact deterministic player-cluster bootstrap: ordered universe, draws, replacement, duplicate weighting, RNG API/bit-generator + seed construction, replicate statistic, percentile endpoints, quantile method, equality/boundary and finite/degenerate handling;
+- direct normative binding in the new v2 machine protocol lock or equivalent immutable audited code digest;
+- new model-protocol identity/version and machine-lock hash for changed bytes; never reuse failed `returning-player-v2-model-protocol/1.0.0-wr072` for changed protocol bytes.
+
+Preserve the previously accepted 28 stats-only feature schema, source/cohort authority, target semantics, chronology, preprocessing, Ridge candidate, full-row evidence, outcome isolation and fail-closed rules unless a change is strictly required to express the deterministic gate contract.
+
+No fitting, scoring, tuning, predictions, result comparison, target/outcome join or inspection, 2026 regular-season outcome use, production changes, season-total composition or Phase-6 work is authorized.
+
+R&D writes only `.ai/research/**`, publishes a new immutable head on PR #207, runs exact-head CI, and returns to Manager.
+
+## WR-076
+
+Fresh re-audit lane `wr-076-v2-model-protocol-feature-schema-reaudit` is pre-created in Manager state but remains BLOCKED. Manager activates it only after independently freezing the remediated WR-072 exact head, new protocol identity/hash, scope and CI.
 
 ## Parallel infrastructure lane
 
-WR-074 remains independently ASSIGNED to Work Helper on `wr-074-self-hosted-heavy-ci-runner-pilot`. WR-075 remains BLOCKED pending one Manager-frozen WR-074 target. This lane must not alter or delay WR-073 chronology.
+WR-074 remains independently ASSIGNED to Work Helper. WR-075 remains BLOCKED pending one Manager-frozen WR-074 target. This infrastructure lane must not weaken or rewrite the WR-072/076 chronology.
