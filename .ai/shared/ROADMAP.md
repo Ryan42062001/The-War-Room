@@ -30,8 +30,9 @@ Owner: Manager / Architect
 - WR-069 — CLOSED / accepted retained safe-consumer parser evidence.
 - WR-070 — CLOSED / independent audit PASS.
 - WR-071 — CLOSED / independent audit `PASS`, no findings.
-- WR-072 — AUDIT_READY / exact pre-score model-protocol + ordered feature-schema candidate frozen at PR #207 head `d75e58052dd555cd5b3f952fc2b3556287d75f9a`.
-- WR-073 — ASSIGNED / fresh independent audit of that exact frozen WR-072 target.
+- WR-072 — REWORK_REQUIRED / bounded pre-score protocol remediation after WR-073-AUD-01.
+- WR-073 — CLOSED / `FAIL — REMEDIATION REQUIRED`, one HIGH finding `WR-073-AUD-01`, no other findings.
+- WR-076 — BLOCKED / fresh independent re-audit of the future Manager-frozen remediated WR-072 target.
 
 ### Accepted source-snapshot + cohort checkpoint
 
@@ -41,30 +42,27 @@ Owner: Manager / Architect
 - admitted stats 14 / admitted metadata 0 / failed-closed metadata 1;
 - `draft_picks.csv` excluded.
 
-### Frozen WR-072 pre-score candidate
+### Historical failed WR-072 candidate
 
 - PR #207 / head `d75e58052dd555cd5b3f952fc2b3556287d75f9a`;
+- failed-audit model protocol `returning-player-v2-model-protocol/1.0.0-wr072`;
 - machine-lock SHA-256 `d2fb326875c954446b23e2761df0feaad4b814aa49dd0465277979a3c9d9bd73`;
-- model protocol `returning-player-v2-model-protocol/1.0.0-wr072`;
-- feature schema `returning-player-v2-feature-schema/1.0.0-wr072`;
-- preprocessing `returning-player-v2-preprocessing/1.0.0-wr072`;
-- serializer `returning-player-v2-evidence-serializer/1.0.0-wr072`;
-- target `returning-player-v2-expected-ppr-pg-target/1.0.0-wr072`;
-- candidate `returning-player-v2-ridge-stats-only-a100/1.0.0-wr072`;
 - exactly 28 stats-only predictors, zero metadata/draft-capital predictors;
 - exact-head CI `35013128300` SUCCESS.
 
+WR-073 audit PR #210 / head `1188d0eb8b37fe067e693d16b88ab73e0193c8b0` returned FAIL because relative gate-statistic transforms and player-cluster bootstrap execution semantics were not fully deterministic/normative. Audit-head CI `35022367158` succeeded; audit evidence merged at `a58b31b9d3ab499469d8ea47df6d957f35aa3edd`; post-merge CI `35050720809` passed classify/Governance.
+
 ### Current critical path
 
-`WR-073 fresh independent protocol audit -> PASS-family only: Manager disposition/integration -> later separately assigned scoring/evaluation task -> independent model-result audit -> season-total composition -> independent composition audit -> Phase 6 eligibility decision`
+`WR-072 bounded deterministic-gate remediation -> Manager exact freeze of new version/hash/head -> WR-076 fresh independent re-audit -> PASS-family only: Manager disposition/integration -> later separately assigned scoring/evaluation task -> independent model-result audit -> season-total composition -> independent composition audit -> Phase 6 eligibility decision`
 
-No fitting, scoring, tuning, prediction, evaluation, outcome join, 2026 regular-season outcome use, production-ranking change, season-total composition, or Phase-6 work is authorized before PASS-family WR-073 and Manager acceptance.
+WR-072 remediation must occur without fitting, prediction, target join, scoring, evaluation, or outcome inspection. The failed `1.0.0-wr072` protocol/hash remains immutable history; changed protocol bytes require a new identity/version and hash.
 
 ## Infrastructure roadmap — ACTIVE PARALLEL PILOT
 
 ### WR-074 — Self-hosted heavy-CI runner pilot + hardening — ASSIGNED
 
-Work Helper owns a bounded pilot of the user-operated self-hosted runner for heavyweight browser/test CI. The public-repository security boundary remains mandatory: arbitrary fork PR heads cannot execute locally; classify/Governance and custody/protected-proof/credential-bearing workflows remain GitHub-hosted; dedicated label, least privilege, clean workspace, no custody/provider secrets, repeat-run evidence, benchmark parity, and hosted fallback/reference are required.
+Work Helper owns the bounded self-hosted heavy-CI pilot. Public-repository security controls, dedicated runner labels, least privilege, clean workspace, no custody/provider secrets, repeat-run evidence, benchmark parity, and GitHub-hosted fallback/reference remain mandatory.
 
 ### WR-075 — Independent self-hosted runner audit — BLOCKED
 
@@ -74,7 +72,7 @@ Sequence:
 
 `WR-074 hardened pilot -> Manager exact freeze -> WR-075 fresh independent audit -> PASS-family only: Manager adoption decision / canonical CI routing`
 
-This infrastructure lane is deliberately non-blocking and independent of WR-073.
+This infrastructure lane remains independent of WR-072/076.
 
 ## Future phases
 
