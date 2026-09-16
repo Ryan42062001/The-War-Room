@@ -1,7 +1,7 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / WR-072 BOUNDED PROTOCOL REMEDIATION + WR-074 SELF-HOSTED CI PILOT ACTIVE
-Last verified: 2026-09-15
+Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / WR-076 FRESH PROTOCOL RE-AUDIT ACTIVE + WR-074 SELF-HOSTED CI PILOT IN PROGRESS
+Last verified: 2026-09-16
 Owner: Manager / Architect
 Workflow: V3.2 CANONICAL
 
@@ -10,47 +10,40 @@ Workflow: V3.2 CANONICAL
 Source snapshot `wr-returning-player-v2-source-snapshot/1.2.0-wr059` / `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea` and cohort `returning-player-v2-cohort/1.2.0-wr059` / `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4` remain accepted. Historical cohort is 5,176 unique keys with zero duplicates. Accepted source semantics remain 14 stats sources, zero admitted Players metadata sources, one failed-closed metadata source, and excluded `draft_picks.csv`.
 
 Preserved authority:
-
-- WR-042 custody manifest `d2196293ff34543b063e737efb175f579967bf37f5dc91b41c08dd45dfe44d26`
-- WR-069 evidence `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`
+- WR-042 custody manifest `d2196293ff34543b063e737efb175f579967bf37f5dc91b41c08dd45dfe44d26`;
+- WR-069 evidence `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`;
 - WR-071 PASS/no-findings audit and WR-059 accepted integration remain canonical.
 
 ## Returning-Player v2 protocol gate
 
-### WR-072 — REWORK_REQUIRED
+### WR-072 — AUDIT_READY / MANAGER-FROZEN
 
-Historical failed-audit target:
+Exact remediated target:
+- PR #207;
+- branch `wr-072-v2-model-protocol-feature-schema`;
+- head `95b1fdfb36ffc7b865597bf7131fa1dd9f45ae73`;
+- protocol `returning-player-v2-model-protocol/1.1.0-wr072`;
+- result gates `returning-player-v2-result-gates/1.1.0-wr072`;
+- machine-lock SHA-256 `831aed6e8cad2d760a58a3c9f5bc298891e0ed11707ecc545c9254b29110c61d`;
+- exact-head CI `35091913065` classify/Governance SUCCESS, product test skipped.
 
-- PR #207 / head `d75e58052dd555cd5b3f952fc2b3556287d75f9a`;
-- model protocol `returning-player-v2-model-protocol/1.0.0-wr072`;
-- machine-lock SHA-256 `d2fb326875c954446b23e2761df0feaad4b814aa49dd0465277979a3c9d9bd73`;
-- exact-head CI `35013128300` SUCCESS.
+The remediation is exactly one commit ahead of historical failed head `d75e58052dd555cd5b3f952fc2b3556287d75f9a`, zero behind, and changes only the same four `.ai/research/**` protocol/handoff files. It freezes deterministic relative-gate math, aggregation semantics, and the full PCG64 player-cluster bootstrap implementation before any results are exposed.
 
-WR-073 returned `FAIL — REMEDIATION REQUIRED` with one HIGH finding, `WR-073-AUD-01`, and no other findings. The protocol freezes threshold values but does not fully freeze exact relative-statistic formulas or deterministic player-cluster bootstrap execution semantics. Two compliant implementations could therefore make different promotion decisions near a threshold.
+Historical failed protocol `returning-player-v2-model-protocol/1.0.0-wr072` / `d2fb326875c954446b23e2761df0feaad4b814aa49dd0465277979a3c9d9bd73` remains immutable failed-audit evidence from WR-073.
 
-Audit evidence:
+R&D must not move or merge PR #207 during WR-076.
 
-- audit PR #210;
-- Auditor head `1188d0eb8b37fe067e693d16b88ab73e0193c8b0`;
-- audit-head CI `35022367158` SUCCESS;
-- audit evidence merge `a58b31b9d3ab499469d8ea47df6d957f35aa3edd`;
-- post-merge CI `35050720809` classify/Governance SUCCESS.
+### WR-076 — ASSIGNED
 
-R&D is authorized for bounded remediation on the existing WR-072 branch/PR only. It must freeze exact machine-readable gate formulas and the complete deterministic bootstrap algorithm, publish a NEW protocol version/hash for changed bytes, and preserve all previously positive feature/source/target/chronology/preprocessing/candidate/outcome-isolation evidence. No result inspection is allowed.
+Fresh independent re-audit of exact WR-072 head `95b1fdfb36ffc7b865597bf7131fa1dd9f45ae73`. Audit must independently establish whether WR-073-AUD-01 is fully resolved without weakening any previously positive source/feature/target/chronology/preprocessing/candidate/outcome-isolation evidence.
 
-### WR-073 — CLOSED
-
-Historical failed audit above. Removed from active-only registry after evidence merge and Manager disposition.
-
-### WR-076 — BLOCKED
-
-Fresh independent re-audit of one future Manager-frozen remediated WR-072 target. It remains blocked until R&D publishes and Manager freezes the new exact protocol identity/hash/head/CI.
+No scoring/evaluation is authorized unless WR-076 returns PASS-family and Manager completes disposition/integration.
 
 ## Parallel infrastructure lane
 
-### WR-074 — ASSIGNED
+### WR-074 — IN_PROGRESS
 
-Self-hosted heavy-CI runner pilot owned by Work Helper. It remains independent of WR-072/076. Public-repository security boundaries, dedicated runner labels, least privilege, clean workspace, no custody/provider secrets, repeat-run evidence, hosted fallback/reference, and WR-075 audit remain mandatory.
+Work Helper self-hosted heavy-CI pilot remains independent. The exact `scripts/validate-release-candidate.mjs` path is authorized solely to recognize the approved pilot workflow while retaining fail-closed release validation. Dedicated `[self-hosted, war-room-heavy-ci]` routing, repeat runs, clean workspace, no custody/provider secrets, and hosted fallback remain mandatory.
 
 ### WR-075 — BLOCKED
 
