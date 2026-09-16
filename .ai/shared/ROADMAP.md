@@ -30,9 +30,10 @@ Owner: Manager / Architect
 - WR-069 — CLOSED / accepted retained safe-consumer parser evidence.
 - WR-070 — CLOSED / independent audit PASS.
 - WR-071 — CLOSED / independent audit `PASS`, no findings.
-- WR-072 — AUDIT_READY / Manager-frozen remediated protocol target at `95b1fdfb36ffc7b865597bf7131fa1dd9f45ae73`.
+- WR-072 — REWORK_REQUIRED / second bounded pre-score remediation after WR-076 findings.
 - WR-073 — CLOSED / historical `FAIL — REMEDIATION REQUIRED`, one HIGH finding `WR-073-AUD-01`.
-- WR-076 — ASSIGNED / fresh independent audit of the exact remediated WR-072 target.
+- WR-076 — CLOSED / `FAIL — REMEDIATION REQUIRED`, HIGH `WR-076-AUD-01`, MEDIUM `WR-076-AUD-02`, no CRITICAL/LOW findings.
+- WR-077 — BLOCKED / fresh independent audit of the next Manager-frozen WR-072 remediation.
 
 ### Accepted source-snapshot + cohort checkpoint
 
@@ -42,29 +43,18 @@ Owner: Manager / Architect
 - admitted stats 14 / admitted metadata 0 / failed-closed metadata 1;
 - `draft_picks.csv` excluded.
 
-### Historical failed WR-072 candidate
+### WR-072 failed protocol history
 
-- head `d75e58052dd555cd5b3f952fc2b3556287d75f9a`;
-- protocol `returning-player-v2-model-protocol/1.0.0-wr072`;
-- lock SHA-256 `d2fb326875c954446b23e2761df0feaad4b814aa49dd0465277979a3c9d9bd73`;
-- WR-073 audit PR #210 returned FAIL on deterministic gate/bootstrap specificity only.
+1. `returning-player-v2-model-protocol/1.0.0-wr072` / head `d75e5805...` / lock `d2fb3268...` — failed WR-073 because relative-gate/bootstrap execution semantics were insufficiently deterministic.
+2. `returning-player-v2-model-protocol/1.1.0-wr072` / head `95b1fdfb...` / lock `831aed6e...` — fixed most deterministic execution details but failed WR-076 because function operand roles remain ambiguous and the claimed synthetic conformance vector lacks a frozen reproducible input fixture.
 
-### Current frozen WR-072 remediation
-
-- PR #207 / head `95b1fdfb36ffc7b865597bf7131fa1dd9f45ae73`;
-- protocol `returning-player-v2-model-protocol/1.1.0-wr072`;
-- result-gate identity `returning-player-v2-result-gates/1.1.0-wr072`;
-- machine-lock SHA-256 `831aed6e8cad2d760a58a3c9f5bc298891e0ed11707ecc545c9254b29110c61d`;
-- exactly one remediation commit from the failed head, zero behind;
-- exactly the same four `.ai/research/**` files changed;
-- exact-head CI `35091913065` SUCCESS for classify/Governance, product test skipped;
-- exact deterministic relative-metric, aggregation, PCG64 bootstrap, quantile, equality and degenerate-case semantics frozen prospectively.
+WR-076 audit PR #214 / head `dcf75157b18f9b2fba3effa2bb0a705e9ad79749` returned FAIL. Audit-head CI `35094551843` SUCCESS; evidence merged at `7db935e5c0053ea96e162f26f6de77e5ffe4da33`; canonical canary `35094846833` SUCCESS.
 
 ### Current critical path
 
-`WR-076 fresh independent re-audit -> PASS-family only: Manager disposition/integration of exact WR-072 target -> separately assigned scoring/evaluation task -> independent model-result audit -> season-total composition -> independent composition audit -> Phase 6 eligibility decision`
+`WR-072 bounded operand-signature + conformance-fixture remediation -> Manager exact freeze of new version/hash/head/fixture -> WR-077 fresh independent re-audit -> PASS-family only: Manager disposition/integration -> separately assigned scoring/evaluation task -> independent model-result audit -> season-total composition -> independent composition audit -> Phase 6 eligibility decision`
 
-No fitting, prediction, target join, scoring, evaluation, or outcome inspection is authorized during WR-076.
+No fitting, prediction, target join, scoring, evaluation, or outcome inspection is authorized during this remediation/audit sequence.
 
 ## Infrastructure roadmap — ACTIVE PARALLEL PILOT
 
@@ -80,7 +70,7 @@ Sequence:
 
 `WR-074 hardened pilot -> Manager exact freeze -> WR-075 fresh independent audit -> PASS-family only: Manager adoption decision / canonical CI routing`
 
-This infrastructure lane remains independent of WR-072/076.
+This infrastructure lane remains independent of WR-072/077.
 
 ## Future phases
 
