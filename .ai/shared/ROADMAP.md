@@ -9,14 +9,15 @@ Owner: Manager / Architect
 - V3.2 — CANONICAL / ACCEPTED.
 - WR-054 — CLOSED / V3.2 implementation accepted; canonical-main canary `34872984380` PASS.
 - WR-055 — CLOSED / independent V3.2 audit PASS, no findings.
-- WR-078 — AUDIT_READY / Workflow V3.3 efficiency candidate frozen at PR #217 head `0b25767ce56c44505e9364adc9c536d57c46a1e5`; exact-head full CI `35100255711` SUCCESS and readiness packet green.
-- WR-079 — ASSIGNED / fresh independent audit of exact WR-078 target above.
+- WR-078 — REWORK_REQUIRED / Workflow V3.3 efficiency candidate; historical failed audit target `0b25767ce56c44505e9364adc9c536d57c46a1e5` preserved; remediation limited to WR-079-AUD-01/02.
+- WR-079 — CLOSED / historical fresh independent audit; verdict `FAIL — REMEDIATION REQUIRED`; Auditor head `a71b058644d594796e816a35d839eee2e160ad0c`, PR #219.
+- WR-080 — BLOCKED / fresh independent re-audit of one future Manager-frozen remediated WR-078 target.
 
 V3.3 candidate sequence:
 
-`WR-078 implementation + full CI + readiness packet -> Manager exact freeze [DONE] -> WR-079 fresh independent audit [ACTIVE] -> PASS-family only: WR-078 integration -> mandatory canonical-main full-CI canary -> Manager V3.3 canonical disposition`
+`WR-078 bounded remediation of WR-079-AUD-01/02 -> exact-head FULL CI + readiness -> Manager exact freeze -> WR-080 fresh independent re-audit -> PASS-family only: WR-078 integration -> mandatory canonical-main full-CI canary -> Manager V3.3 canonical disposition`
 
-V3.3 does not remove independent audit, exact-head/live-state gates, Manager merge authority, post-merge canaries, fail-closed behavior, or custody/provider controls. Its purpose is to catch mechanical audit defects earlier and reduce avoidable control-plane mismatch loops.
+V3.3 does not remove independent audit, exact-head/live-state gates, Manager merge authority, post-merge canaries, fail-closed behavior, or custody/provider controls.
 
 ## Phase 5B — Returning-Player v2 evidence reset — ACTIVE
 
@@ -40,7 +41,7 @@ Sequence:
 
 `WR-074 hardened pilot -> Manager exact freeze -> WR-075 fresh independent audit -> PASS-family only: adoption decision`
 
-WR-074/075 and WR-078/079 are independent non-blocking infrastructure/workflow lanes and must not alter WR-072/077 model chronology.
+WR-074/075 and WR-078/080 are independent non-blocking infrastructure/workflow lanes and must not alter WR-072/077 model chronology.
 
 ## Future phases
 
