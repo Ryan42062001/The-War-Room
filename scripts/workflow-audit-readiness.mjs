@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { branchIdentityError } from './workflow-task-contract.mjs';
 
 function parseArgs(raw = process.argv.slice(2)) {
-  const out = { task: null, target: null, json: false, root: null, auto: false, branch: null };
+  const out = { task: null, target: null, json: false, root: null, auto: false, branch: null, eventName: null, repository: null, headRepository: null, prNumber: null };
   for (let i = 0; i < raw.length; i += 1) {
     if (raw[i] === '--task') out.task = raw[++i];
     else if (raw[i] === '--target') out.target = raw[++i];
@@ -14,6 +14,10 @@ function parseArgs(raw = process.argv.slice(2)) {
     else if (raw[i] === '--root') out.root = raw[++i];
     else if (raw[i] === '--auto') out.auto = true;
     else if (raw[i] === '--branch') out.branch = raw[++i];
+    else if (raw[i] === '--event-name') out.eventName = raw[++i];
+    else if (raw[i] === '--repository') out.repository = raw[++i];
+    else if (raw[i] === '--head-repository') out.headRepository = raw[++i];
+    else if (raw[i] === '--pr-number') out.prNumber = Number(raw[++i]);
     else if (!raw[i].startsWith('-') && !out.task) out.task = raw[i];
   }
   if (!out.task && !out.auto) throw new Error('Usage: node scripts/workflow-audit-readiness.mjs (--task WR-### | --auto) [--branch name] [--target origin/main] [--json]');
@@ -53,9 +57,27 @@ function sidecarExpected(sidecarText) {
   const first = sidecarText.trim().split(/\s+/)[0] || '';
   return /^[0-9a-f]{64}$/.test(first) ? first : null;
 }
-function gitShow(root, ref, rel) {
-  try { return execFileSync('git', ['show', `${ref}:${rel}`], { cwd: root, encoding: 'utf8', stdio: ['ignore','pipe','pipe'] }); }
-  catch { return ''; }
+
+function gitFileAtRef(root, ref, rel) {
+  const resolved = git(root, ['rev-parse', '--verify', `${ref}^{commit}`], true);
+  if (!resolved) return { refValid: false, pathExists: false, text: null };
+  const names = lines(git(root, ['ls-tree', '-r', '--name-only', resolved, '--', rel]));
+  if (!names.includes(rel)) return { refValid: true, pathExists: false, text: null };
+  const text = execFileSync('git', ['show', `${resolved}:${rel}`], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+  return { refValid: true, pathExists: true, text };
+}
+
+export function selectAutoTask({ tasks, branch, eventName, repository, headRepository, prNumber }) {
+  const task = tasks.find(item => item.branch === branch) || null;
+  if (!task) return { task: null, reason: 'no active task claims this branch' };
+  if (eventName === 'pull_request') {
+    if (!repository || !headRepository) return { task: null, reason: 'pull request repository identity is unavailable' };
+    if (headRepository !== repository) return { task: null, reason: `pull request head repository ${headRepository} does not match canonical repository ${repository}` };
+    if (Number.isInteger(task.pr) && task.pr > 0) {
+      if (!Number.isInteger(prNumber) || prNumber !== task.pr) return { task: null, reason: `pull request identity ${Number.isInteger(prNumber) ? prNumber : '<missing>'} does not match active task PR ${task.pr}` };
+    }
+  }
+  return { task, reason: null };
 }
 
 export function evaluateContract({ root, contract, target }) {
@@ -93,13 +115,16 @@ export function evaluateContract({ root, contract, target }) {
       } else if (check.type === 'version_bump') {
         const current = readJson(root, check.path);
         const currentValue = jsonPointerGet(current, check.pointer);
-        const oldText = gitShow(root, check.relative_to || target, check.path);
-        if (!oldText) {
-          push(check.type, true, `${check.path} absent at comparison target; new artifact`, check);
+        const comparisonRef = check.relative_to || target;
+        const prior = gitFileAtRef(root, comparisonRef, check.path);
+        if (!prior.refValid) {
+          push(check.type, false, `comparison ref is invalid or unresolved: ${comparisonRef}`, check);
+        } else if (!prior.pathExists) {
+          push(check.type, true, `${check.path} absent at valid comparison target ${comparisonRef}; new artifact`, check);
         } else {
-          const old = JSON.parse(oldText);
+          const old = JSON.parse(prior.text);
           const oldValue = jsonPointerGet(old, check.pointer);
-          const oldHash = sha256Bytes(Buffer.from(oldText));
+          const oldHash = sha256Bytes(Buffer.from(prior.text));
           const newHash = sha256Bytes(readBytes(root, check.path));
           const bytesChanged = oldHash !== newHash;
           push(check.type, !bytesChanged || currentValue !== oldValue, `${check.path}${check.pointer} old=${JSON.stringify(oldValue)} current=${JSON.stringify(currentValue)} bytes_changed=${bytesChanged}`, check);
@@ -180,13 +205,24 @@ async function main() {
   const root = options.root ? path.resolve(options.root) : git(process.cwd(), ['rev-parse', '--show-toplevel']);
   const registry = JSON.parse(fs.readFileSync(path.join(root, '.ai/shared/ACTIVE_TASKS.json'), 'utf8'));
   const detectedBranch = options.branch || git(root, ['branch', '--show-current'], true) || '(detached)';
-  const task = options.auto
-    ? registry.tasks.find(item => item.branch === detectedBranch)
-    : registry.tasks.find(item => item.task_id === options.task);
-  if (!task && options.auto) {
-    const output = { schema_version: 1, skipped: true, branch: detectedBranch, reason: 'no active task claims this branch' };
-    console.log(options.json ? JSON.stringify(output, null, 2) : `WORKFLOW AUDIT READINESS — SKIP (${output.reason})`);
-    return;
+  let task = null;
+  if (options.auto) {
+    const selection = selectAutoTask({
+      tasks: registry.tasks,
+      branch: detectedBranch,
+      eventName: options.eventName,
+      repository: options.repository,
+      headRepository: options.headRepository,
+      prNumber: options.prNumber
+    });
+    task = selection.task;
+    if (!task) {
+      const output = { schema_version: 1, skipped: true, branch: detectedBranch, reason: selection.reason };
+      console.log(options.json ? JSON.stringify(output, null, 2) : `WORKFLOW AUDIT READINESS — SKIP (${output.reason})`);
+      return;
+    }
+  } else {
+    task = registry.tasks.find(item => item.task_id === options.task);
   }
   if (!task) throw new Error(`${options.task} is not present in active-only .ai/shared/ACTIVE_TASKS.json`);
   if (!task.audit_required && options.auto) {

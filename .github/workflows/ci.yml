@@ -67,10 +67,18 @@ jobs:
           HEAD_BRANCH: ${{ github.head_ref || github.ref_name }}
           BASE_BRANCH: ${{ github.base_ref || 'main' }}
           AUDIT_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           integration_sha="$(git rev-parse HEAD)"
           git checkout --detach "$AUDIT_HEAD_SHA"
-          node scripts/workflow-audit-readiness.mjs --auto --branch "$HEAD_BRANCH" --target "origin/$BASE_BRANCH" --json
+          args=(--auto --branch "$HEAD_BRANCH" --target "origin/$BASE_BRANCH" --json --event-name "$EVENT_NAME" --repository "$REPOSITORY")
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            args+=(--head-repository "$HEAD_REPOSITORY" --pr-number "$PR_NUMBER")
+          fi
+          node scripts/workflow-audit-readiness.mjs "${args[@]}"
           git checkout --detach "$integration_sha"
       - name: Test trusted source-custody bridge
         run: |
