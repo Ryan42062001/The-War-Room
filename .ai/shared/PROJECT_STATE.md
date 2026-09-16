@@ -1,6 +1,6 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / V3.3 CANDIDATE IN BOUNDED REMEDIATION / WR-072 REMEDIATION + WR-074 RUNNER PILOT IN PARALLEL
+Status: ACTIVE DEVELOPMENT — WORKFLOW V3.2 CANONICAL / V3.3 REMEDIATION FROZEN FOR WR-080 / WR-072 REMEDIATION + WR-074 RUNNER PILOT IN PARALLEL
 Last verified: 2026-09-16
 Owner: Manager / Architect
 Workflow: V3.2 CANONICAL; V3.3 CANDIDATE ONLY
@@ -17,20 +17,26 @@ WR-074 remains `IN_PROGRESS` and independent at observed checkpoint `7b4641499c5
 
 ## Workflow V3.3 efficiency candidate
 
-Historical WR-078 target `0b25767ce56c44505e9364adc9c536d57c46a1e5` was independently audited by WR-079 and returned `FAIL — REMEDIATION REQUIRED`.
+WR-079 is closed historical failed-audit evidence against WR-078 head `0b25767ce56c44505e9364adc9c536d57c46a1e5`. Its two MEDIUM findings were bounded to public-fork auto-readiness identity and invalid `version_bump` comparison-ref handling.
 
-WR-079 audit evidence is merged and preserved at Auditor head `a71b058644d594796e816a35d839eee2e160ad0c`, PR #219, exact-head audit CI `35103079057` SUCCESS.
+WR-078 remediation is now `AUDIT_READY` at exact PR #217 head:
 
-Blocking findings are bounded to:
+`d952099946b51c5d4d8a88929ca83d1d4dce3521`
 
-- `WR-079-AUD-01` — auto audit-readiness branch-name attribution is insufficient for public-fork PR identity;
-- `WR-079-AUD-02` — `version_bump` does not distinguish invalid comparison refs from valid refs where the artifact path is absent.
+Remediation evidence:
 
-WR-078 is `REWORK_REQUIRED` on existing PR #217/branch `manager/wr-078-workflow-v33-efficiency`. Preserve failed head `0b25767...` as immutable historical evidence. Add only focused remediation/regressions, require exact-head FULL War Room CI/readiness evidence, then Manager freezes one new immutable target and activates WR-080.
+- exactly 1 commit ahead / 0 behind from failed audited head `0b25767...`;
+- remediation changes only `.github/workflows/ci.yml`, `scripts/workflow-audit-readiness.mjs`, and `scripts/test-workflow-audit-readiness.mjs`;
+- overall PR remains exactly five implementation files;
+- exact-head War Room CI `35128119119` SUCCESS;
+- classify `104902104972`, governance `104902162737`, full test `104902208975` all SUCCESS;
+- exact-head readiness packet has zero blockers / no forbidden or outside-allowlist files / all checks PASS;
+- public-fork branch-name attribution now binds repository identity and recorded PR identity where available;
+- invalid/malformed `version_bump` comparison refs now fail closed while valid absent-path new-artifact semantics remain distinct.
 
-WR-080 is BLOCKED pending that exact freeze.
+WR-080 is `ASSIGNED` to fresh Independent Auditor / QA against only exact WR-078 remediation head `d952099946b51c5d4d8a88929ca83d1d4dce3521`.
 
-V3.2 remains canonical. Do not merge WR-078 before PASS-family fresh re-audit. Even after accepted integration, V3.3 becomes canonical only after mandatory canonical-main full-CI canary and final Manager disposition.
+V3.2 remains canonical. Do not merge WR-078 before PASS-family WR-080. Even after accepted integration, V3.3 becomes canonical only after mandatory canonical-main FULL CI/canary and final Manager disposition.
 
 ## Hard boundaries
 

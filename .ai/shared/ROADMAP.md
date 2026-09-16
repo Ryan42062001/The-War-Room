@@ -9,15 +9,15 @@ Owner: Manager / Architect
 - V3.2 — CANONICAL / ACCEPTED.
 - WR-054 — CLOSED / V3.2 implementation accepted; canonical-main canary `34872984380` PASS.
 - WR-055 — CLOSED / independent V3.2 audit PASS, no findings.
-- WR-078 — REWORK_REQUIRED / Workflow V3.3 efficiency candidate; historical failed audit target `0b25767ce56c44505e9364adc9c536d57c46a1e5` preserved; remediation limited to WR-079-AUD-01/02.
-- WR-079 — CLOSED / historical fresh independent audit; verdict `FAIL — REMEDIATION REQUIRED`; Auditor head `a71b058644d594796e816a35d839eee2e160ad0c`, PR #219.
-- WR-080 — BLOCKED / fresh independent re-audit of one future Manager-frozen remediated WR-078 target.
+- WR-078 — AUDIT_READY / remediated Workflow V3.3 efficiency candidate frozen at PR #217 head `d952099946b51c5d4d8a88929ca83d1d4dce3521`; exact-head full CI `35128119119` SUCCESS and readiness packet green.
+- WR-079 — CLOSED / historical independent audit of prior WR-078 head `0b25767...`; verdict `FAIL — REMEDIATION REQUIRED`; findings WR-079-AUD-01/02 preserved.
+- WR-080 — ASSIGNED / fresh independent re-audit of exact WR-078 remediation target `d952099946b51c5d4d8a88929ca83d1d4dce3521`.
 
 V3.3 candidate sequence:
 
-`WR-078 bounded remediation of WR-079-AUD-01/02 -> exact-head FULL CI + readiness -> Manager exact freeze -> WR-080 fresh independent re-audit -> PASS-family only: WR-078 integration -> mandatory canonical-main full-CI canary -> Manager V3.3 canonical disposition`
+`WR-078 remediation + full CI + readiness [DONE] -> Manager exact freeze [DONE] -> WR-080 fresh independent re-audit [ACTIVE] -> PASS-family only: WR-078 exact audited integration -> mandatory canonical-main FULL CI canary -> Manager V3.3 canonical disposition`
 
-V3.3 does not remove independent audit, exact-head/live-state gates, Manager merge authority, post-merge canaries, fail-closed behavior, or custody/provider controls.
+V3.3 does not remove independent audit, exact-head/live-state gates, Manager merge authority, post-merge canaries, fail-closed behavior, or custody/provider controls. Its purpose is to catch mechanical audit defects earlier and reduce avoidable control-plane mismatch loops.
 
 ## Phase 5B — Returning-Player v2 evidence reset — ACTIVE
 
