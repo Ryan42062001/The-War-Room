@@ -1,18 +1,31 @@
 # War Room Team Workflow
 
-Status: ACTIVE — WORKFLOW V3.2
-Last updated: 2026-09-14
+Status: ACTIVE — WORKFLOW V3.3
+Last updated: 2026-09-16
 Owner: Manager / Architect
 
 This is the canonical workflow for **The War Room**, the live fantasy-football **DRAFT** assistant. Repository state overrides stale chat memory. If older workflow guidance conflicts with this file, this file wins unless Manager records a newer approved workflow change.
 
-## V3.2 — lane identity enforcement
+## V3.3 — audit-readiness + Manager transition efficiency
 
-WR-054 implemented the bounded Workflow V3.2 safety upgrade, WR-055 independently returned `PASS`, and canonical-main post-merge canary `34872984380` completed `SUCCESS`. V3.2 is canonical.
+WR-078 implemented the bounded Workflow V3.3 efficiency upgrade. Historical WR-079 independently found two MEDIUM defects; WR-078 remediated both without broadening scope. WR-080 then independently audited exact remediated head `d952099946b51c5d4d8a88929ca83d1d4dce3521` and returned `PASS` with no findings. The exact audited implementation was integrated through PR #217 as canonical-main merge `534f79a4f560d03c1ddf6309f9c416e3373e48b5`, and mandatory canonical-main Full War Room CI `35143657933` completed `SUCCESS` across classify, Governance, browser/product tests, `npm test`, resilience syntax, and backup/offline reload validation. V3.3 is canonical.
 
-Task-scoped preflight and finish checks fail closed when the checked-out branch does not equal the branch assigned in `ACTIVE_TASKS.json`, including detached HEAD. Static workflow state validation additionally binds each active task spec's `TASK ID`, `STATUS`, `TARGET BRANCH`, `EXECUTION MODE`, and dependency class to registry truth while permitting descriptive dependency suffix text after the machine token.
+V3.3 preserves all V3.2 lane-identity, collision, custody, exact-head, live-state, independent-audit, Manager-authority, fail-closed, and post-merge-canary guarantees. Its efficiency changes are additive:
 
-V3.2 preserves all accepted WR-056 trusted source-custody CI behavior and existing V3.1.1 collision, audit-target, live-state, and Manager-authority guarantees.
+- mechanical audit-readiness preflight for active audit-required lanes before Manager freeze;
+- deterministic machine-readable readiness packets bound to the exact PR head;
+- Manager-owned task-specific readiness contracts for known mechanical invariants;
+- a dry-run-by-default Manager transition helper with rollback on static-state failure;
+- **Bounded Remediation Refresh** for explicitly bounded same-task remediation after a published audit finding;
+- no helper may issue an Auditor verdict, merge audited work, bypass live verification, or weaken source/custody controls.
+
+Pull-request readiness attribution is bound to the canonical repository identity and, when recorded, the exact task PR identity; same-branch public-fork PRs are not attributed to the active task. `version_bump` comparison authority validates the comparison ref separately from path existence and fails closed on invalid/unresolved refs.
+
+## V3.2 — inherited lane identity enforcement
+
+WR-054 implemented Workflow V3.2, WR-055 independently returned `PASS`, and canonical-main post-merge canary `34872984380` completed `SUCCESS`. V3.3 inherits these accepted controls.
+
+Task-scoped preflight and finish checks fail closed when the checked-out branch does not equal the branch assigned in `ACTIVE_TASKS.json`, including detached HEAD. Static workflow state validation binds each active task spec's `TASK ID`, `STATUS`, `TARGET BRANCH`, `EXECUTION MODE`, and dependency class to registry truth while permitting descriptive dependency suffix text after the machine token.
 
 ## Project identity boundary
 - **The War Room** = live fantasy-football draft assistant.
@@ -36,7 +49,11 @@ Permanent roles remain intentionally small: Manager, Builder, Draft Strategy, R&
 
 Human-readable canonical sources are `.ai/shared/PROJECT_STATE.md`, `.ai/shared/ROADMAP.md`, `.ai/shared/DECISIONS.md`, this workflow, Manager handoff, active task specs, role charters, and relevant specialist evidence.
 
-Use Fast Refresh for routine status/resumption. Use Full Refresh before meaningful task creation/activation, workflow/architecture/roadmap changes, important merges/releases, milestone dispositions, contradiction resolution, or materially stale checkpoints.
+Use **Fast Refresh** for routine status/resumption.
+
+Use **Bounded Remediation Refresh** only for a same-task remediation after a published audit finding when Manager has explicitly bounded the rework. Minimum refresh surface is current canonical main, `ACTIVE_TASKS.json`, assigned task spec, latest failed audit report/handoff, current task branch/PR/head, affected artifacts/files, and only upstream authority necessary to preserve accepted semantics. Escalate to Full Refresh whenever scope/authority is uncertain.
+
+Use **Full Refresh** before meaningful task creation/activation, workflow/architecture/roadmap changes, important merges/releases, milestone dispositions, contradiction resolution, materially stale checkpoints, or any remediation that is not clearly bounded.
 
 ## Task lifecycle
 Meaningful work uses `WR-###`. Lifecycle values are `PLANNED`, `BLOCKED`, `ASSIGNED`, `IN_PROGRESS`, `MANAGER_REVIEW_READY`, `AUDIT_READY`, `MERGE_READY`, `REWORK_REQUIRED`, `MERGED`, and `CLOSED`. Workers report readiness; Manager owns registry transitions. CLOSED tasks are removed from the active-only registry after reconciliation.
@@ -81,12 +98,12 @@ When external provider state materially affects acceptance, set `external_author
 
 Parallel workers use dedicated branches, minimize overlap, preserve starting/checkpoint state, do not independently edit `.ai/shared/*`, and check target advancement before readiness/merge.
 
-## Audit-target metadata and exact-head pinning — V3.1.1
-Active Auditor assignments identify `audit_target_task`, `audit_target_pr`, and `audit_target_branch`. `audit_target_sha` may remain null while the Auditor is merely ASSIGNED because an implementation commit cannot reliably contain a self-reference to its own final commit SHA.
+## Audit-target metadata and exact-head pinning
+Active Auditor assignments identify `audit_target_task`, `audit_target_pr`, `audit_target_branch`, and the frozen target SHA when Manager has frozen it.
 
-Immediately before substantive audit execution, Manager must run `node scripts/workflow-live-state-check.mjs --task WR-###` or equivalent direct GitHub verification, freeze the returned target PR-head SHA in the activation/evidence, and instruct Auditor to audit exactly that immutable SHA. If the target later moves, apply target-advancement rules; never silently carry a verdict onto a materially changed target.
+Immediately before substantive audit execution, Manager must run `node scripts/workflow-live-state-check.mjs --task WR-###` or equivalent direct GitHub verification, freeze the returned target PR-head SHA in activation/evidence, and instruct Auditor to audit exactly that immutable SHA. If the target later moves, apply target-advancement rules; never silently carry a verdict onto a materially changed target.
 
-## Live GitHub state gate — V3.1.1
+## Live GitHub state gate
 `workflow-live-state-check.mjs` is a read-only Manager gate. It cross-checks recorded task branches, owned PRs, worker checkpoints, and Auditor target PR/branch/SHA against live GitHub state. Contradictions fail the gate.
 
 External GitHub/API unavailability is reported separately from a contradiction and exits distinctly. Because network availability is not repository correctness, this live check is syntax-checked by Governance CI but is not an always-on network-dependent CI step. Manager must retry or use equivalent direct GitHub verification before a readiness/merge decision that requires live truth.
@@ -95,19 +112,27 @@ External GitHub/API unavailability is reported separately from a contradiction a
 Classify target movement as `CURRENT`, `CONTROL_PLANE_ONLY`, `NON_OVERLAPPING`, or `OVERLAPPING_RISK`. Control-plane-only advancement does not force expensive product revalidation. Non-overlapping advancement gets bounded integration/smoke validation. Overlapping risk must reconcile before audit/merge and rerun materially affected evidence.
 
 ## Workflow helper scripts
-Read-only helpers:
+Read-only/advisory helpers:
 - `node scripts/workflow-state-check.mjs`
 - `node scripts/workflow-live-state-check.mjs [--task WR-###] [--repo owner/name]`
 - `node scripts/workflow-user-actions.mjs [--json]`
 - `node scripts/workflow-preflight.mjs --task WR-###`
 - `node scripts/workflow-finish-check.mjs --task WR-###`
+- `node scripts/workflow-audit-readiness.mjs [--auto] [--json]`
+
+Manager-only state-preparation helper:
+- `node scripts/workflow-manager-transition.mjs <plan> [--write]`
 
 `workflow-state-check` validates active registry schema/version, task/spec lifecycle consistency, blocker/dependency metadata, task/role files, SHA formats, uniqueness/collision safety, dependency cycles, Auditor target metadata, and active-only discipline. Static state-check failure is a Governance CI failure.
 
-`workflow-live-state-check` verifies live GitHub truth at Manager gates. `workflow-user-actions` is a generated view only. Preflight/finish helpers remain task-scoped and do not prove CI/test execution or audit publication.
+`workflow-audit-readiness` is mechanical evidence only. It validates authorized scope and task-specific readiness contracts, can emit deterministic readiness JSON, and must not issue or imply an Auditor verdict. On pull-request CI, active-lane attribution requires canonical repository identity and recorded PR identity where applicable; exact PR-head readiness checkout is restored to GitHub's synthetic merge checkout before remaining integration/custody checks.
+
+`workflow-manager-transition` is dry-run by default. `--write` may update only planned registry/task-spec machine state, runs the canonical static checker, rolls back touched files on failure, and has no commit/push/merge/Auditor-verdict authority. Manager still reviews the complete diff, performs live verification, updates narrative state, and creates the atomic Git transaction.
 
 ## Path-aware CI
-Every push/PR runs Governance CI: checkout, Node setup, syntax checks for all workflow helpers, and the static state checker. The expensive Full War Room CI runs when any changed path is outside `.ai/**`, including production, datasets, extensions, `scripts/**`, `.github/workflows/**`, package files, or test harnesses. A `force-full-ci` PR label also forces the full matrix. Classifier uncertainty/missing base/diff failure fails upward to Full CI.
+Every push/PR runs Governance CI: checkout, Node setup, syntax checks for workflow helpers, workflow regression tests where applicable, and the static state checker. Active audit-required lanes may also receive the mechanical audit-readiness preflight.
+
+The expensive Full War Room CI runs when any changed path is outside `.ai/**`, including production, datasets, extensions, `scripts/**`, `.github/workflows/**`, package files, or test harnesses. A `force-full-ci` PR label also forces the full matrix. Classifier uncertainty/missing base/diff failure fails upward to Full CI.
 
 `.ai/**`-only evidence/control-plane PRs therefore skip the expensive product/browser matrix by default, while tool/workflow/product changes cannot silently receive governance-only treatment.
 
@@ -136,7 +161,7 @@ When using repository APIs, do not implement one logical Manager transition as s
 - `ACTIVE_TASKS.json`: active machine control-plane index.
 - `PROJECT_STATE.md`: current baseline/blockers/next gates.
 - `ROADMAP.md`: milestones/material dispositions.
-- `DECISIONS.md`: durable product/architecture decisions only.
+- `DECISIONS.md`: durable product/architecture decisions only; workflow mechanics belong here in `WORKFLOW.md`.
 - specialist task/research/strategy/audit/work-helper reports: detailed evidence.
 - handoffs: concise pointers and next action.
 
