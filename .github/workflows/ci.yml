@@ -32,6 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -46,12 +48,30 @@ jobs:
           node --check scripts/workflow-finish-check.mjs
           node --check scripts/workflow-live-state-check.mjs
           node --check scripts/workflow-user-actions.mjs
+          node --check scripts/workflow-audit-readiness.mjs
+          node --check scripts/test-workflow-audit-readiness.mjs
+          node --check scripts/workflow-manager-transition.mjs
+          node --check scripts/test-workflow-manager-transition.mjs
       - name: Test workflow state collision regression
         run: node scripts/test-workflow-state-collisions.mjs
       - name: Test workflow lane identity regression
         run: node scripts/workflow-lane-identity-test.mjs
+      - name: Test audit-readiness regression
+        run: node scripts/test-workflow-audit-readiness.mjs
+      - name: Test Manager-transition regression
+        run: node scripts/test-workflow-manager-transition.mjs
       - name: Validate canonical active-task state
         run: node scripts/workflow-state-check.mjs
+      - name: Run audit-readiness preflight for active audit-required lane
+        env:
+          HEAD_BRANCH: ${{ github.head_ref || github.ref_name }}
+          BASE_BRANCH: ${{ github.base_ref || 'main' }}
+          AUDIT_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          integration_sha="$(git rev-parse HEAD)"
+          git checkout --detach "$AUDIT_HEAD_SHA"
+          node scripts/workflow-audit-readiness.mjs --auto --branch "$HEAD_BRANCH" --target "origin/$BASE_BRANCH" --json
+          git checkout --detach "$integration_sha"
       - name: Test trusted source-custody bridge
         run: |
           python3 -m py_compile \
