@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "task_id": "WR-078",
+  "checks": [
+    {"type": "file_exists", "path": ".ai/manager/WR078_WORKFLOW_V3_3_CANDIDATE.md"},
+    {"type": "file_exists", "path": "scripts/workflow-audit-readiness.mjs"},
+    {"type": "file_exists", "path": "scripts/test-workflow-audit-readiness.mjs"},
+    {"type": "file_exists", "path": "scripts/workflow-manager-transition.mjs"},
+    {"type": "file_exists", "path": "scripts/test-workflow-manager-transition.mjs"},
+    {"type": "file_exists", "path": ".github/workflows/ci.yml"}
+  ]
+}
