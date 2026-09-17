@@ -4,40 +4,28 @@ HANDOFF
 
 Workflow: V3.3 CANONICAL
 
-## Workflow V3.3 — ACCEPTED
+## WR-072 freeze / WR-077 activation
 
-WR-080 independently re-audited exact WR-078 remediation head `d952099946b51c5d4d8a88929ca83d1d4dce3521` and returned `PASS` with no findings.
+Manager independently verified and froze WR-072 PR #207 at exact head `a228d0002545a701aea8c7bead5de0bf36994764`.
 
-Auditor evidence:
-- PR #222
-- Auditor head `7f770c8398202be2e28729e2028445647c50f5ad`
-- exact-head audit CI `35142111164` SUCCESS
+Readiness-equivalent evidence:
+- branch `wr-072-v2-model-protocol-feature-schema` / PR #207 exact-head match;
+- one commit ahead / zero behind failed 1.1 head `95b1fdfb36ffc7b865597bf7131fa1dd9f45ae73`;
+- exactly four changed `.ai/research/**` files;
+- published machine-lock sidecar `aed044e6b7df9684153181a7a97a47a86c50ce9049db063ecdd8a973b1a832b6`;
+- exact-head CI `35097564198` SUCCESS; classify `104798603247` SUCCESS; governance `104798662291` SUCCESS; test `104798730189` SKIPPED as expected;
+- independently reproduced fixture SHA `3fb3c2088e17f42ad588a94f018abbcbd42cefeb46422a0bcb1da50b31cba3f7`, cluster SHA `aa63baf5f7658212ec4f13bcefbd3c0087c6186d0afcfba7aec6d84ffc86a321`, replicate SHA `b4edb70c67e8c678e00465e50e017b6401ecfff0d60ed3c608fda1c651e9de6d`, Q.025 `-0.625`, Q.975 `1`, and final PCG64-state SHA `b235708c403dd720543444365e54f2440817a03c09ceadfbe6c46106b22a3188`.
 
-Manager integrated only the exact audited WR-078 head through PR #217 as canonical-main merge `534f79a4f560d03c1ddf6309f9c416e3373e48b5`.
+WR-072 is `AUDIT_READY`. WR-077 is `ASSIGNED` and must audit exactly `a228d0002545a701aea8c7bead5de0bf36994764`.
 
-Mandatory canonical-main Full War Room CI `35143657933` completed SUCCESS:
-- classify `104954139865` — SUCCESS
-- governance `104954182788` — SUCCESS
-- full test `104954246301` — SUCCESS
-
-Workflow V3.3 is canonical. WR-078 and WR-080 are CLOSED and removed from `ACTIVE_TASKS.json`. Historical WR-079 failed-audit evidence remains preserved.
-
-## Canonical V3.3 operating changes
-
-- audit-required lanes receive mechanical audit-readiness checks before Manager freeze;
-- readiness packets are evidence only, never Auditor verdicts;
-- pull-request auto readiness is bound to canonical repository identity and recorded PR identity where applicable;
-- Manager transition preparation is dry-run by default and rolls back on static-state failure;
-- use **Bounded Remediation Refresh** only for explicitly bounded same-task remediation after published audit findings;
-- use Full Refresh for new task activation, architecture/workflow changes, milestone disposition, contradiction resolution, stale state, or uncertain scope;
-- exact-head freeze, independent audit, Manager merge authority, custody/provider boundaries, and post-merge canaries remain mandatory.
-
-## Returning-Player v2
-
-WR-072 remains REWORK_REQUIRED and WR-077 remains BLOCKED. The authorized WR-072 rework remains only WR-076-AUD-01/02. No model fitting/scoring/prediction/outcome inspection is authorized.
-
-Because that remediation is explicitly bounded, the R&D chat may use canonical V3.3 Bounded Remediation Refresh when it continues. After publication: readiness preflight -> Manager exact freeze -> WR-077 fresh independent audit.
+No model scoring/result/outcome work is authorized. Manager readiness evidence is not an Auditor verdict.
 
 ## Self-hosted CI
 
-WR-074 remains IN_PROGRESS and WR-075 remains BLOCKED. Continue the exact dedicated-runner pilot independently; after one immutable evidence-complete target: readiness preflight -> Manager exact freeze -> WR-075 fresh independent audit.
+WR-074 remains `IN_PROGRESS` and independent. WR-075 remains `BLOCKED`. Because WR-075 and WR-077 both write `.ai/auditor/**`, keep WR-075 blocked while WR-077 is runnable unless the canonical collision rules are otherwise satisfied.
+
+## Next employee action
+
+Tell the existing Independent Auditor / QA chat for WR-077: `Continue`.
+
+The Auditor must refresh live state, audit only the frozen WR-072 target, publish Auditor-only evidence under `.ai/auditor/**`, create the audit PR, run exact-head CI, and return to Manager with one canonical verdict.
