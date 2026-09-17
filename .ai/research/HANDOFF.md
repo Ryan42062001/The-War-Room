@@ -1,47 +1,20 @@
 # R&D Handoff
 
-Status: `WR-059 BOUNDED REMEDIATION COMPLETE — MANAGER EXACT-TARGET FREEZE REQUIRED`
+Status: WR-072 1.2 REMEDIATION COMPLETE — MANAGER EXACT-TARGET FREEZE REQUIRED
 
-## Disposition
+PR #207.
 
-`WR-060-AUD-01` was remediated with **PATH B — FAIL CLOSED**.
+Historical failed heads:
+- d75e58052dd555cd5b3f952fc2b3556287d75f9a — 1.0
+- 95b1fdfb36ffc7b865597bf7131fa1dd9f45ae73 — 1.1
 
-Exact historical `players.csv` asset `563580371` remains preserved in accepted custody but is not admitted in the new source snapshot because authoritative exact `release_id` plus full `provider_updated_at` could not be independently reproduced.
+New protocol `returning-player-v2-model-protocol/1.2.0-wr072`
+New gates `returning-player-v2-result-gates/1.2.0-wr072`
+Fixture `returning-player-v2-bootstrap-conformance-fixture/1.0.0-wr072` / `3fb3c2088e17f42ad588a94f018abbcbd42cefeb46422a0bcb1da50b31cba3f7`
+Machine lock `aed044e6b7df9684153181a7a97a47a86c50ce9049db063ecdd8a973b1a832b6`
 
-No provenance was inferred and no replacement asset/provider was substituted.
+Resolved only WR-076-AUD-01/02: named candidate/baseline operand roles plus complete embedded/hash-bound bootstrap input fixture with expected cluster/replicate/quantile/RNG-state outputs.
 
-## New canonical artifacts
+All accepted 1.1 positive evidence is inherited by exact predecessor lock hash. No model/result/outcome work occurred.
 
-Source snapshot:
-- `wr-returning-player-v2-source-snapshot/1.2.0-wr059`
-- SHA-256 `6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea`
-- retained identities: 15
-- admitted: 14
-- failed closed: 1 (`NFLVERSE_PLAYERS_METADATA_MINIMAL`)
-- `draft_picks.csv` remains excluded
-
-Cohort:
-- `returning-player-v2-cohort/1.2.0-wr059`
-- SHA-256 `f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4`
-- membership 5,176 / 5,176
-- 2014–2017 = 1,668
-- 2018–2025 = 3,508
-- duplicates = 0
-- changed historical membership rows = 0
-- exact prior-season stats lineage unchanged
-
-Accepted evidence preserved:
-- WR-042 manifest SHA-256 `d2196293ff34543b063e737efb175f579967bf37f5dc91b41c08dd45dfe44d26`
-- WR-069 evidence SHA-256 `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`
-
-Historical failed-audit head `e871c861f8ba3c339af5b7a022892522b45b844f` and its `1.1.0-wr059` artifacts remain immutable history.
-
-## Boundaries
-
-Read-only provider/repository metadata research only. No retained raw-byte access/reacquisition, source refresh/substitution, provider mutation, `draft_picks.csv`, 2026 outcome tables, targets, model/scoring/evaluation/prediction, rankings, production, or Phase-6 work.
-
-## Next role
-
-**Manager / Architect**
-
-Verify/freeze the exact new PR #196 head, exact eight-file `.ai/research/**` scope, canonical artifact hashes, and exact-head CI. Only then activate fresh independent WR-071. R&D does not activate WR-071.
+Next: Manager freezes exact PR #207 target and CI, then may activate WR-077. R&D does not merge or activate audit.
