@@ -2,53 +2,53 @@
 
 HANDOFF
 
-STATUS: WR-090 SUCCESS; WR-083 CLOSED; WR-081 REACTIVATED — STAGE A CONSUMER PREPARATION
+STATUS: WR-081 STAGE A ACCEPTED — STAGE B AUTHORITY BOUND
 TASK: WR-081 — Returning-Player v2 Historical Model Scoring + Result Evidence
-ROLE: Manager / Architect -> Research & Development
+ROLE: Manager / Architect -> protected workflow execution -> R&D
 CANONICAL WORKFLOW: V3.4
-CANONICAL REACTIVATION BASE: `11f1014ba73a70563c29a8c6d4b11f8303298cdf`
-FRESH BRANCH: `wr-081-v2-historical-model-scoring-execution`
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-ACCEPTED BRIDGE GATE:
-- WR-089 PASS with no findings;
-- WR-083 exact audited target `c9b13959f598b3633a78e2ff78d0862881982dd2`;
-- integration merge `ee0071717364441db1130336a318e4288a993a41`;
-- WR-090 canary run `35366265783` SUCCESS on canonical main;
-- 14 inputs verified, provider mutations 0, consumer credentials absent, rehash/resize 14/14, cleanup PASS, artifacts 0;
+STAGE-A REVIEWED TARGET:
+- branch `wr-081-v2-historical-model-scoring-execution`;
+- exact head `45d6b22104e4647d04dfc37d01ab69619caed0c1`;
+- PR #251, open/unmerged;
+- consumer `.ai/research/WR081_PROTECTED_SCORING_CONSUMER.py`;
+- consumer SHA-256 `54ccf15ebf542bff182927c946b4ce37fd0c294d4b95f4cf595c3428ec64b2c4`;
+- Manager independently recomputed the same SHA-256;
+- exactly three changed files, all under `.ai/research/**`;
+- synthetic conformance 3/3 PASS;
+- exact-head CI `35401465439`: classify SUCCESS, governance SUCCESS, research-only test job SKIPPED;
 - `real_scoring=false`, `historical_targets_exposed=false`.
 
-STAGE A ONLY:
-R&D prepares the protected WR-081 scoring consumer under `.ai/research/**`, preferably `.ai/research/WR081_PROTECTED_SCORING_CONSUMER.py`, using only synthetic/local fixtures. Implement the audited bridge modes `predict`, `target-ingest`, and `stage-gate` under accepted WR-059/WR-072 semantics.
+CANONICAL FUTURE EXECUTION AUTHORITY:
+```json
+{
+  "branch": "wr-081-v2-historical-model-scoring-execution",
+  "head_sha": "45d6b22104e4647d04dfc37d01ab69619caed0c1",
+  "consumer_path": ".ai/research/WR081_PROTECTED_SCORING_CONSUMER.py",
+  "consumer_sha256": "54ccf15ebf542bff182927c946b4ce37fd0c294d4b95f4cf595c3428ec64b2c4"
+}
+```
 
-DO NOT:
-- dispatch `authorized-wr081-scoring`;
-- retrieve retained B2/R2 bytes;
-- perform real target/model/result inspection;
-- edit outside `.ai/research/**`;
-- self-authorize execution identity;
-- reuse old PR #227 as the execution target.
+NEXT ACTION:
+Run the canonical `WR-083 Protected Historical Scoring Bridge` workflow on branch `main` with mode `authorized-wr081-scoring` and exactly:
+- execution_branch = `wr-081-v2-historical-model-scoring-execution`
+- expected_head_sha = `45d6b22104e4647d04dfc37d01ab69619caed0c1`
+- consumer_path = `.ai/research/WR081_PROTECTED_SCORING_CONSUMER.py`
+- consumer_sha256 = `54ccf15ebf542bff182927c946b4ce37fd0c294d4b95f4cf595c3428ec64b2c4`
 
-RETURN TO MANAGER WITH:
-- exact branch head;
-- exact consumer path;
-- exact consumer SHA-256;
-- changed files;
-- local/synthetic test evidence;
-- PR number if opened;
-- explicit no-retained-scoring attestation.
+Do not merge PR #251 before protected execution. Any branch-head movement before the workflow consumes this authority must fail closed and return to Manager for a new review/freeze.
 
-NEXT MANAGER STEP:
-Review exact consumer/head and populate canonical `future_execution_authority`. Only after that authority merges may protected real scoring be dispatched.
+After protected scoring publishes evidence to PR #251, return WR-081 to R&D for final result packaging/handoff. Then Manager freezes the complete immutable WR-081 result target and activates WR-082.
 
 ## Next Activation
 
 | Order | Employee / Role | Status | Current Task / Gate | Copy/paste activation prompt / next action |
 | --- | --- | --- | --- | --- |
-| 1 | Manager / Architect | WAIT | Await WR-081 Stage-A consumer packet | After R&D returns: `Continue The War Room as the Manager / Architect. Review the WR-081 Stage-A consumer freeze, bind exact future_execution_authority, and authorize protected scoring only if the exact branch/head/path/digest are valid.` |
+| 1 | Manager / Architect | USER ACTION | Canonical Stage-B authority is bound; protected workflow dispatch is the next gate | After the protected run completes, refresh the run/head/publication evidence and route WR-081 back to R&D if SUCCESS. |
 | 2 | Implementation Engineer / Builder | IDLE | No active Builder task | Do not activate. |
 | 3 | Draft Strategy & Decision Intelligence Analyst | IDLE | No active Strategy task | Do not activate. |
-| 4 | Research & Development (R&D) | ACTIVATE NOW | WR-081 Stage A — protected scoring consumer preparation only | Use the Manager activation prompt for WR-081 Stage A. |
-| 5 | Independent Auditor / QA | BLOCKED | WR-082 waits for a complete frozen WR-081 result target; WR-075 waits for WR-074 | Do not activate yet. |
-| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | PLANNED | WR-074 serialization cleared; preserved checkpoint available | Do not spawn yet unless Manager prioritizes the infrastructure lane. |
+| 4 | Research & Development (R&D) | WAIT | Stage A complete; waits for protected scoring publication | Resume only after successful authorized protected scoring. |
+| 5 | Independent Auditor / QA | BLOCKED | WR-082 waits for a complete Manager-frozen WR-081 result target; WR-075 waits for WR-074 | Do not activate yet. |
+| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | WR-074 remains PLANNED at preserved checkpoint; not on immediate WR-081 critical path | Do not activate unless protected scoring hits a technical blocker or Manager prioritizes WR-074. |
