@@ -32,12 +32,12 @@ Canary proof:
 
 WR-083 and WR-090 are closed.
 
-WR-081 is reactivated on fresh branch `wr-081-v2-historical-model-scoring-execution` in Stage A consumer-preparation mode only.
+WR-081 Stage A is complete on PR #251 at exact head `45d6b22104e4647d04dfc37d01ab69619caed0c1`. Manager independently reviewed the consumer and recomputed SHA-256 `54ccf15ebf542bff182927c946b4ce37fd0c294d4b95f4cf595c3428ec64b2c4`.
 
-No protected real scoring is authorized yet because the audited bridge requires canonical Manager authority to bind an exact WR-081 branch/head/consumer path/consumer SHA-256 before retained rows can become visible. R&D must first prepare and freeze the consumer using synthetic/local fixtures, then return to Manager for authority binding.
+Canonical `future_execution_authority` now binds the exact WR-081 execution branch, head, consumer path, and digest. Real scoring remains permitted only through the audited WR-083 protected workflow; PR #251 remains open/unmerged until that workflow publishes the protected result evidence.
 
 Current critical path:
-`WR-081 Stage A consumer preparation -> Manager future_execution_authority -> protected authorized WR-081 scoring -> Manager freeze -> WR-082 fresh result audit -> composition -> composition audit -> Phase 6`.
+`protected authorized WR-081 scoring -> R&D final result packaging -> Manager exact result freeze -> WR-082 fresh result audit -> composition -> composition audit -> Phase 6`.
 
 WR-074 serialization is cleared. It is PLANNED at preserved checkpoint `7b4641499c50541abf523267eb4c0255813e8b6d`, but is not being spawned in this transition because the immediate critical path is WR-081.
 
