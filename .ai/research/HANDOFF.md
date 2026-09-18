@@ -1,20 +1,17 @@
 # R&D Handoff
 
-Status: WR-072 1.2 REMEDIATION COMPLETE — MANAGER EXACT-TARGET FREEZE REQUIRED
+Status: `WR-081 BLOCKED — PROTECTED HISTORICAL SCORING PATH REQUIRED`
 
-PR #207.
+Task: `WR-081 — Returning-Player v2 Historical Model Scoring + Result Evidence`
 
-Historical failed heads:
-- d75e58052dd555cd5b3f952fc2b3556287d75f9a — 1.0
-- 95b1fdfb36ffc7b865597bf7131fa1dd9f45ae73 — 1.1
+Assignment baseline: `69f1ec43c313ed89520e74b2853d69150d715d4d`
 
-New protocol `returning-player-v2-model-protocol/1.2.0-wr072`
-New gates `returning-player-v2-result-gates/1.2.0-wr072`
-Fixture `returning-player-v2-bootstrap-conformance-fixture/1.0.0-wr072` / `3fb3c2088e17f42ad588a94f018abbcbd42cefeb46422a0bcb1da50b31cba3f7`
-Machine lock `aed044e6b7df9684153181a7a97a47a86c50ce9049db063ecdd8a973b1a832b6`
+The accepted WR-072 protocol requires exact retained Player Summary Stats row values. They are absent from the repository and worker environment. The only protected retained-object workflow is hard-bound to WR-069's reviewed schema/inventory consumer, emits no scoring rows, and deletes raw bytes before an R&D process can consume them.
 
-Resolved only WR-076-AUD-01/02: named candidate/baseline operand roles plus complete embedded/hash-bound bootstrap input fixture with expected cluster/replicate/quantile/RNG-state outputs.
+No lawful exact-input scoring path exists within WR-081's `.ai/research/**` write authority. R&D stopped before retrieval, targets, features, fitting, prediction, scoring, comparison, or gate evaluation. No 2026 outcomes, draft data, failed metadata, upstream reacquisition, provider mutation, production/ranking work, season-total composition, or Phase 6 work occurred.
 
-All accepted 1.1 positive evidence is inherited by exact predecessor lock hash. No model/result/outcome work occurred.
+Detailed evidence: `.ai/research/WR081_HISTORICAL_SCORING_BLOCKER.md`.
 
-Next: Manager freezes exact PR #207 target and CI, then may activate WR-077. R&D does not merge or activate audit.
+Terminal result: `NOT_ESTABLISHED — EXECUTION BLOCKED BEFORE SCORING`.
+
+Recommended next role: **Manager / Architect**, then a narrowly scoped **Work Helper / Super Troubleshooter** protected-runtime task. Do not activate WR-082 until WR-081 eventually publishes a complete immutable result target.
