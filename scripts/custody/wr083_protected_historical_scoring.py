@@ -596,9 +596,24 @@ def merge_publication(output_dir: Path, package_dir: Path, frozen: dict[str, tup
         frozen[rel] = identity
 
 
-def write_package_manifest(package_dir: Path, frozen: Mapping[str, tuple[str, int]]) -> None:
+def retained_publication_guard_sha256(retained_manifest: Mapping[str, object]) -> str:
+    sources = retained_manifest.get("sources")
+    if not isinstance(sources, list) or not sources:
+        raise ContractError("retained-input manifest is unavailable for publication binding")
+    identity = [{
+        "source_id": str(x.get("source_id") or ""),
+        "season": int(x.get("season") or 0),
+        "sha256": str(x.get("expected_sha256") or ""),
+        "byte_size": int(x.get("expected_size_bytes") or -1),
+    } for x in sources]
+    return sha256_bytes(canonical_json_bytes(sorted(identity, key=lambda x: (x["season"], x["source_id"]))))
+
+
+def write_package_manifest(package_dir: Path, frozen: Mapping[str, tuple[str, int]],
+                           retained_manifest: Mapping[str, object]) -> None:
     write_json(package_dir / "publication-manifest.json", {
         "schema_version": "wr083-publication-package-v1",
+        "retained_input_identity_set_sha256": retained_publication_guard_sha256(retained_manifest),
         "files": [{"path": path, "sha256": identity[0], "byte_size": identity[1]} for path, identity in sorted(frozen.items())],
     })
 
@@ -759,7 +774,7 @@ def run_future_consumer(control_repo: Path, execution_repo: Path, execution_bran
         rel = ".ai/research/generated/WR081_PROTECTED_EXECUTION_CHRONOLOGY.json"; data = canonical_json_bytes(chronology_artifact); dest = package_dir / "files" / rel; dest.parent.mkdir(parents=True, exist_ok=True); dest.write_bytes(data); identity = (sha256_bytes(data), len(data)); prior = frozen.get(rel)
         if prior is not None and prior != identity:
             raise ContractError("chronology publication collision")
-        frozen[rel] = identity; write_package_manifest(package_dir, frozen)
+        frozen[rel] = identity; write_package_manifest(package_dir, frozen, manifest)
         return {"status": "PASS", "terminal": terminal, "authorization": authorization, "consumer_sha256": consumer_sha256, "publication_file_count": len(frozen), "prediction_lock_count": len(prediction_locks), "gate_lock_count": len(gate_locks)}
     except BaseException:
         cleanup_paths([package_dir, root]); raise
