@@ -379,8 +379,29 @@ def no_scoring_consumer(repo_root: Path, manifest_path: Path, report_path: Path,
     })
 
 
+def validate_future_authorization(control_repo: Path, execution_branch: str) -> dict:
+    if execution_branch == "main" or not execution_branch.startswith("wr-081-"):
+        raise ContractError("future execution branch must be an explicit WR-081 branch, never main")
+    path = control_repo / ".ai/shared/ACTIVE_TASKS.json"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ContractError("canonical active-task authorization unavailable") from exc
+    matches = [x for x in payload.get("tasks", []) if x.get("task_id") == "WR-081"]
+    if len(matches) != 1:
+        raise ContractError("WR-081 is not uniquely active")
+    task = matches[0]
+    if task.get("branch") != execution_branch:
+        raise ContractError("WR-081 execution branch is not Manager-authorized")
+    if task.get("status") not in {"ASSIGNED", "IN_PROGRESS"}:
+        raise ContractError("WR-081 is not Manager-authorized for execution")
+    if task.get("blocker_type") != "NONE" or task.get("blocked_on_tasks"):
+        raise ContractError("WR-081 still has an active blocker")
+    return {"status": "PASS", "task_id": "WR-081", "branch": execution_branch, "task_status": task.get("status")}
+
+
 def validate_future_consumer(execution_repo: Path, execution_branch: str, expected_head: str,
-                             consumer_relpath: str, consumer_sha256: str, output_dir: Path) -> Path:
+                             consumer_relpath: str, consumer_sha256: str) -> Path:
     if execution_branch == "main" or not execution_branch.startswith("wr-081-"):
         raise ContractError("future execution branch must be an explicit WR-081 branch, never main")
     if not HEX40.fullmatch(expected_head) or git_head(execution_repo) != expected_head:
@@ -389,55 +410,258 @@ def validate_future_consumer(execution_repo: Path, execution_branch: str, expect
     if rel.is_absolute() or not str(rel).startswith(".ai/research/") or ".." in rel.parts:
         raise ContractError("future scoring consumer must be under .ai/research/**")
     consumer = (execution_repo / rel).resolve(); root = execution_repo.resolve()
-    if root not in consumer.parents or not consumer.is_file(): raise ContractError("future scoring consumer unavailable")
+    if root not in consumer.parents or not consumer.is_file():
+        raise ContractError("future scoring consumer unavailable")
     if not HEX64.fullmatch(consumer_sha256) or sha256_file(consumer)[0] != consumer_sha256:
         raise ContractError("future scoring consumer digest mismatch")
-    require_runner_temp_child(output_dir)
     return consumer
+
+
+STAGE_YEARS = {
+    "development": (2018, 2019),
+    "validation": (2020, 2021),
+    "confirmation": (2022, 2023, 2024, 2025),
+}
+
+
+def stage_for_year(year: int) -> str:
+    for stage, years in STAGE_YEARS.items():
+        if year in years:
+            return stage
+    raise ContractError("target season is outside frozen scored chronology")
+
+
+def prediction_visible_seasons(target_year: int) -> tuple[int, ...]:
+    stage_for_year(target_year)
+    return tuple(range(2012, target_year))
+
+
+def evaluation_visible_seasons(target_year: int) -> tuple[int, ...]:
+    stage_for_year(target_year)
+    return (target_year,)
+
+
+def publication_entries(output_dir: Path) -> list[dict]:
+    manifest = output_dir / "publication-manifest.json"
+    try:
+        payload = json.loads(manifest.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ContractError("publication manifest missing/invalid") from exc
+    files = payload.get("files")
+    if not isinstance(files, list) or not files:
+        raise ContractError("publication manifest has no files")
+    checked = []; seen = set()
+    for entry in files:
+        rel = str(entry.get("path") or ""); expected = str(entry.get("sha256") or ""); size = int(entry.get("byte_size") or -1)
+        path = Path(rel)
+        if path.is_absolute() or not rel.startswith(".ai/research/") or ".." in path.parts or not HEX64.fullmatch(expected) or size < 0:
+            raise ContractError("publication manifest path/digest boundary violation")
+        if rel in seen:
+            raise ContractError("duplicate publication path")
+        seen.add(rel)
+        staged = output_dir / "files" / path
+        if sha256_file(staged) != (expected, size):
+            raise ContractError("publication file digest/size mismatch")
+        checked.append({"path": rel, "sha256": expected, "byte_size": size})
+    return sorted(checked, key=lambda x: x["path"])
+
+
+def publication_tree_sha256(output_dir: Path) -> str:
+    return sha256_bytes(canonical_json_bytes(publication_entries(output_dir)))
+
+
+def merge_publication(output_dir: Path, package_dir: Path, frozen: dict[str, tuple[str, int]]) -> None:
+    for entry in publication_entries(output_dir):
+        rel = entry["path"]; identity = (entry["sha256"], entry["byte_size"])
+        prior = frozen.get(rel)
+        if prior is not None and prior != identity:
+            raise ContractError("consumer attempted to mutate previously frozen evidence path")
+        dest = package_dir / "files" / Path(rel); dest.parent.mkdir(parents=True, exist_ok=True)
+        if prior is None:
+            shutil.copyfile(output_dir / "files" / Path(rel), dest)
+        frozen[rel] = identity
+
+
+def write_package_manifest(package_dir: Path, frozen: Mapping[str, tuple[str, int]]) -> None:
+    write_json(package_dir / "publication-manifest.json", {
+        "schema_version": "wr083-publication-package-v1",
+        "files": [{"path": path, "sha256": identity[0], "byte_size": identity[1]} for path, identity in sorted(frozen.items())],
+    })
+
+
+def copy_visible_sources(manifest: Mapping[str, object], seasons: Sequence[int], visible_dir: Path) -> list[dict]:
+    shutil.rmtree(visible_dir, ignore_errors=True); visible_dir.mkdir(parents=True, mode=0o700)
+    by_season = {int(x["season"]): x for x in manifest["sources"]}
+    if any(year not in by_season for year in seasons):
+        raise ContractError("visible-source season unavailable")
+    visible = []
+    for season in seasons:
+        source = by_season[season]; src = require_runner_temp_child(Path(str(source["local_path"])))
+        if sha256_file(src) != (source["expected_sha256"], source["expected_size_bytes"]):
+            raise ContractError("visible-source identity mismatch")
+        name = f"stats-{season}-{source['expected_sha256']}.raw"; dest = visible_dir / name; shutil.copyfile(src, dest)
+        visible.append({"season": season, "source_id": source["source_id"], "sha256": source["expected_sha256"], "byte_size": source["expected_size_bytes"], "path": f"/input/{name}"})
+    return visible
+
+
+def bwrap_base() -> list[str]:
+    binary = shutil.which("bwrap")
+    if not binary:
+        raise ContractError("bubblewrap sandbox runtime unavailable")
+    command = [binary, "--die-with-parent", "--new-session", "--unshare-net", "--proc", "/proc", "--dev", "/dev", "--tmpfs", "/tmp", "--dir", "/work", "--dir", "/input", "--dir", "/state", "--dir", "/locks", "--dir", "/output"]
+    for root in ("/usr", "/opt", "/lib", "/lib64", "/etc"):
+        if Path(root).exists():
+            command += ["--ro-bind", root, root]
+    return command
+
+
+def run_sandboxed_consumer(consumer_copy: Path, mode: str, context: Mapping[str, object], visible_dir: Path,
+                           state_dir: Path, locks_dir: Path, output_dir: Path) -> dict:
+    for p in (consumer_copy, visible_dir, state_dir, locks_dir, output_dir):
+        require_runner_temp_child(p)
+    shutil.rmtree(output_dir, ignore_errors=True); output_dir.mkdir(parents=True, mode=0o700)
+    context_path = visible_dir / "context.json"; write_json(context_path, context)
+    command = bwrap_base() + [
+        "--ro-bind", str(consumer_copy), "/work/consumer.py",
+        "--ro-bind", str(visible_dir), "/input",
+        "--bind", str(state_dir), "/state",
+        "--ro-bind", str(locks_dir), "/locks",
+        "--bind", str(output_dir), "/output",
+        "--chdir", "/work", "--clearenv",
+        "--setenv", "PATH", os.environ.get("PATH", "/usr/local/bin:/usr/bin:/bin"),
+        "--setenv", "LANG", "C.UTF-8", "--setenv", "LC_ALL", "C.UTF-8", "--setenv", "TZ", "UTC",
+        "--setenv", "PYTHONHASHSEED", "72072", "--setenv", "OMP_NUM_THREADS", "1", "--setenv", "MKL_NUM_THREADS", "1",
+        "--setenv", "OPENBLAS_NUM_THREADS", "1", "--setenv", "NUMEXPR_NUM_THREADS", "1",
+        sys.executable, "/work/consumer.py", "--wr083-mode", mode, "--wr083-context", "/input/context.json",
+        "--wr083-state-dir", "/state", "--wr083-lock-dir", "/locks", "--wr083-output-dir", "/output",
+    ]
+    result = subprocess.run(command, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    if result.returncode:
+        raise ContractError(f"sandboxed consumer failed closed in {mode}")
+    if result.stdout or result.stderr:
+        raise ContractError("sandboxed consumer emitted prohibited operator-facing output")
+    try:
+        bridge = json.loads((output_dir / "bridge-result.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ContractError("consumer bridge result missing/invalid") from exc
+    if bridge.get("schema_version") != "wr083-consumer-result-v1" or bridge.get("mode") != mode or bridge.get("status") != "PASS":
+        raise ContractError("consumer bridge result contract mismatch")
+    publication_entries(output_dir)
+    return bridge
+
+
+def lock_phase_output(output_dir: Path, locks_dir: Path, label: str) -> str:
+    digest = publication_tree_sha256(output_dir); dest = locks_dir / label
+    if dest.exists():
+        raise ContractError("duplicate immutable phase lock")
+    shutil.copytree(output_dir, dest)
+    for root, dirs, files in os.walk(dest):
+        for name in files:
+            os.chmod(Path(root) / name, 0o444)
+        for name in dirs:
+            os.chmod(Path(root) / name, 0o555)
+    os.chmod(dest, 0o555)
+    return digest
+
+
+def future_execution_plan() -> dict:
+    plans = []
+    for stage, years in STAGE_YEARS.items():
+        for year in years:
+            plans.append({"stage": stage, "target_season": year, "predict_visible_seasons": list(prediction_visible_seasons(year)), "target_visible_seasons": [year]})
+    return {"stages": {k: list(v) for k, v in STAGE_YEARS.items()}, "folds": plans, "network": "UNSHARED", "consumer_repository_visibility": False, "master_raw_visibility": False}
+
+
+def synthetic_sandbox_conformance() -> dict:
+    raw_runner = os.environ.get("RUNNER_TEMP", "")
+    if not raw_runner:
+        raise ContractError("RUNNER_TEMP required for sandbox conformance")
+    root = require_runner_temp_child(Path(raw_runner) / "wr083-sandbox-conformance"); shutil.rmtree(root, ignore_errors=True); root.mkdir()
+    visible = root / "visible"; visible.mkdir(); (visible / "prior.raw").write_text("prior-only\n", encoding="utf-8")
+    hidden = root / "master-raw"; hidden.mkdir(); (hidden / "target.raw").write_text("sealed-target\n", encoding="utf-8")
+    state = root / "state"; state.mkdir(); locks = root / "locks"; locks.mkdir(); output = root / "output"; consumer = root / "consumer.py"
+    code = (
+        "import argparse,json,pathlib,socket,hashlib\n"
+        "p=argparse.ArgumentParser();p.add_argument('--wr083-mode');p.add_argument('--wr083-context');p.add_argument('--wr083-state-dir');p.add_argument('--wr083-lock-dir');p.add_argument('--wr083-output-dir');a=p.parse_args()\n"
+        "assert pathlib.Path('/input/prior.raw').read_text()=='prior-only\\n'\n"
+        "assert not pathlib.Path('/master-raw/target.raw').exists()\n"
+        "network_blocked=False\n"
+        "try:\n s=socket.socket();s.settimeout(.2);s.connect(('1.1.1.1',80))\n"
+        "except OSError: network_blocked=True\n"
+        "assert network_blocked\n"
+        "out=pathlib.Path(a.wr083_output_dir);f=out/'files/.ai/research/generated/SYNTHETIC.json';f.parent.mkdir(parents=True);f.write_text('{}\\n');d=hashlib.sha256(f.read_bytes()).hexdigest();(out/'publication-manifest.json').write_text(json.dumps({'files':[{'path':'.ai/research/generated/SYNTHETIC.json','sha256':d,'byte_size':f.stat().st_size}]})+'\\n');(out/'bridge-result.json').write_text(json.dumps({'schema_version':'wr083-consumer-result-v1','mode':a.wr083_mode,'status':'PASS','network_blocked':network_blocked})+'\\n')\n"
+    )
+    consumer.write_text(code, encoding="utf-8")
+    try:
+        result = run_sandboxed_consumer(consumer, "synthetic", {"visible": "prior-only"}, visible, state, locks, output)
+        if result.get("network_blocked") is not True:
+            raise ContractError("synthetic sandbox network isolation failed")
+        return {"status": "PASS", "sealed_target_not_mounted": True, "network_unshared": True, "operator_output_empty": True}
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+
+def run_future_consumer(control_repo: Path, execution_repo: Path, execution_branch: str, expected_head: str,
+                        consumer_relpath: str, consumer_sha256: str, manifest_path: Path, package_dir: Path) -> dict:
+    assert_consumer_isolation(os.environ)
+    authorization = validate_future_authorization(control_repo, execution_branch)
+    consumer = validate_future_consumer(execution_repo, execution_branch, expected_head, consumer_relpath, consumer_sha256)
+    manifest = load_verified_manifest(manifest_path); package_dir = require_runner_temp_child(package_dir)
+    root = package_dir.parent / "wr083-execution-sandbox"; cleanup_paths([package_dir, root]); package_dir.mkdir(parents=True); root.mkdir()
+    consumer_copy = root / "consumer.py"; shutil.copyfile(consumer, consumer_copy)
+    state = root / "state"; state.mkdir(); locks = root / "locks"; locks.mkdir(); visible = root / "visible"; output = root / "output"
+    frozen: dict[str, tuple[str, int]] = {}; prediction_locks: dict[str, str] = {}; gate_locks: dict[str, str] = {}; terminal = "COMPLETE"; chronology = []
+    try:
+        for stage, years in STAGE_YEARS.items():
+            for year in years:
+                sources = copy_visible_sources(manifest, prediction_visible_seasons(year), visible)
+                context = {"task_id": "WR-081", "mode": "predict", "stage": stage, "target_season": year, "bindings": manifest["bindings"], "visible_sources": sources, "prediction_locks": prediction_locks, "gate_locks": gate_locks}
+                bridge = run_sandboxed_consumer(consumer_copy, "predict", context, visible, state, locks, output)
+                if bridge.get("target_values_accessed") not in (False, None):
+                    raise ContractError("consumer reported target exposure during prediction")
+                lock = lock_phase_output(output, locks, f"prediction-{year}"); prediction_locks[str(year)] = lock; merge_publication(output, package_dir, frozen)
+                chronology.append({"stage": stage, "target_season": year, "event": "PREDICTION_LOCKED", "prediction_lock_sha256": lock})
+                sources = copy_visible_sources(manifest, evaluation_visible_seasons(year), visible)
+                context = {"task_id": "WR-081", "mode": "target-ingest", "stage": stage, "target_season": year, "bindings": manifest["bindings"], "visible_sources": sources, "prediction_lock_sha256": lock, "prediction_locks": prediction_locks, "gate_locks": gate_locks}
+                bridge = run_sandboxed_consumer(consumer_copy, "target-ingest", context, visible, state, locks, output)
+                if bridge.get("accepted_prediction_lock_sha256") != lock:
+                    raise ContractError("target ingest did not bind frozen prediction")
+                target_lock = lock_phase_output(output, locks, f"target-{year}"); merge_publication(output, package_dir, frozen)
+                chronology.append({"stage": stage, "target_season": year, "event": "TARGET_EXPOSED_AFTER_LOCK", "prediction_lock_sha256": lock, "target_ingest_lock_sha256": target_lock})
+            shutil.rmtree(visible, ignore_errors=True); visible.mkdir()
+            lock_set = sha256_bytes(canonical_json_bytes({k: v for k, v in sorted(prediction_locks.items()) if int(k) in years}))
+            context = {"task_id": "WR-081", "mode": "stage-gate", "stage": stage, "target_seasons": list(years), "bindings": manifest["bindings"], "prediction_lock_set_sha256": lock_set, "prediction_locks": prediction_locks, "prior_gate_locks": gate_locks}
+            bridge = run_sandboxed_consumer(consumer_copy, "stage-gate", context, visible, state, locks, output)
+            if bridge.get("stage") != stage or not isinstance(bridge.get("gate_pass"), bool) or bridge.get("prediction_lock_set_sha256") != lock_set:
+                raise ContractError("stage gate result contract mismatch")
+            gate_lock = lock_phase_output(output, locks, f"gate-{stage}"); gate_locks[stage] = gate_lock; merge_publication(output, package_dir, frozen)
+            chronology.append({"stage": stage, "event": "STAGE_GATE", "gate_pass": bridge["gate_pass"], "gate_lock_sha256": gate_lock})
+            if not bridge["gate_pass"]:
+                terminal = f"{stage.upper()}_FAILED"; break
+        chronology_artifact = {"schema_version": "wr081-protected-execution-chronology-v1", "task_id": "WR-081", "authorization": authorization, "consumer_sha256": consumer_sha256, "bindings": manifest["bindings"], "prediction_locks": prediction_locks, "gate_locks": gate_locks, "events": chronology, "terminal": terminal}
+        rel = ".ai/research/generated/WR081_PROTECTED_EXECUTION_CHRONOLOGY.json"; data = canonical_json_bytes(chronology_artifact); dest = package_dir / "files" / rel; dest.parent.mkdir(parents=True, exist_ok=True); dest.write_bytes(data); identity = (sha256_bytes(data), len(data)); prior = frozen.get(rel)
+        if prior is not None and prior != identity:
+            raise ContractError("chronology publication collision")
+        frozen[rel] = identity; write_package_manifest(package_dir, frozen)
+        return {"status": "PASS", "terminal": terminal, "authorization": authorization, "consumer_sha256": consumer_sha256, "publication_file_count": len(frozen), "prediction_lock_count": len(prediction_locks), "gate_lock_count": len(gate_locks)}
+    except BaseException:
+        cleanup_paths([package_dir, root]); raise
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
 
 
 def validate_publication_manifest(output_dir: Path) -> list[dict]:
     output_dir = require_runner_temp_child(output_dir)
-    manifest = output_dir / "publication-manifest.json"
-    try: payload = json.loads(manifest.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc: raise ContractError("publication manifest missing/invalid") from exc
-    files = payload.get("files")
-    if not isinstance(files, list) or not files: raise ContractError("publication manifest has no files")
-    checked=[]
-    for entry in files:
-        rel = str(entry.get("path") or ""); expected = str(entry.get("sha256") or ""); size=int(entry.get("byte_size") or -1)
-        path = Path(rel)
-        if path.is_absolute() or not rel.startswith(".ai/research/") or ".." in path.parts or not HEX64.fullmatch(expected) or size < 0:
-            raise ContractError("publication manifest path/digest boundary violation")
-        staged = output_dir / "files" / path
-        if sha256_file(staged) != (expected,size): raise ContractError("publication file digest/size mismatch")
-        checked.append({"path":rel,"sha256":expected,"byte_size":size})
-    return checked
-
-
-def run_future_consumer(repo_root: Path, execution_repo: Path, execution_branch: str, expected_head: str,
-                        consumer_relpath: str, consumer_sha256: str, manifest_path: Path, output_dir: Path) -> dict:
-    assert_consumer_isolation(os.environ)
-    consumer = validate_future_consumer(execution_repo, execution_branch, expected_head, consumer_relpath, consumer_sha256, output_dir)
-    load_verified_manifest(manifest_path)
-    cleanup_paths([output_dir]); output_dir.mkdir(parents=True,mode=0o700)
-    env={"PATH":os.environ.get("PATH","/usr/local/bin:/usr/bin:/bin"),"RUNNER_TEMP":os.environ["RUNNER_TEMP"],"LANG":"C.UTF-8","LC_ALL":"C.UTF-8"}
-    args=[sys.executable,str(consumer),"--wr083-input-manifest",str(manifest_path),"--wr083-output-dir",str(output_dir),
-          "--wr083-source-snapshot",str(repo_root/SOURCE_SNAPSHOT_PATH),"--wr083-cohort",str(repo_root/COHORT_PATH),
-          "--wr083-protocol",str(repo_root/PROTOCOL_PATH)]
-    result=subprocess.run(args,cwd=execution_repo,env=env,stdin=subprocess.DEVNULL,check=False)
-    if result.returncode: cleanup_paths([output_dir]); raise ContractError(f"future WR-081 consumer exited {result.returncode}")
-    files=validate_publication_manifest(output_dir)
-    return {"status":"PASS","execution_branch":execution_branch,"expected_head":expected_head,
-            "consumer_sha256":consumer_sha256,"publication_file_count":len(files),"publication_files":files}
+    return publication_entries(output_dir)
 
 
 def stage_publication(execution_repo: Path, output_dir: Path) -> list[str]:
-    files=validate_publication_manifest(output_dir); root=execution_repo.resolve(); staged=[]
+    files = validate_publication_manifest(output_dir); root = execution_repo.resolve(); staged = []
     for entry in files:
-        rel=Path(entry["path"]); dest=(root/rel).resolve()
-        if root not in dest.parents: raise ContractError("publication destination escaped execution repo")
-        dest.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(output_dir/"files"/rel,dest); staged.append(str(rel))
+        rel = Path(entry["path"]); dest = (root / rel).resolve()
+        if root not in dest.parents:
+            raise ContractError("publication destination escaped execution repo")
+        dest.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(output_dir / "files" / rel, dest); staged.append(str(rel))
     return staged
 
 
@@ -456,6 +680,9 @@ def main() -> int:
         elif args.command=="provider": provider_phase(args.repo_root.resolve(),args.raw_dir,args.manifest,args.report)
         elif args.command=="no-scoring-consumer": no_scoring_consumer(args.repo_root.resolve(),args.manifest,args.report,args.expected_commit,args.script_sha256,args.test_sha256,args.workflow_sha256)
         elif args.command=="synthetic-conformance": print(json.dumps(synthetic_conformance(),sort_keys=True))
+        elif args.command=="sandbox-conformance": print(json.dumps(synthetic_sandbox_conformance(),sort_keys=True))
+        elif args.command=="future-plan": print(json.dumps(future_execution_plan(),sort_keys=True))
+        elif args.command=="future-authorization": print(json.dumps(validate_future_authorization(args.repo_root.resolve(),args.execution_branch),sort_keys=True))
         elif args.command=="future-execute": print(json.dumps(run_future_consumer(args.repo_root.resolve(),args.execution_repo.resolve(),args.execution_branch,args.expected_head,args.consumer_path,args.consumer_sha256,args.manifest,args.output_dir),sort_keys=True))
         elif args.command=="stage-publication": print(json.dumps({"status":"PASS","files":stage_publication(args.execution_repo.resolve(),args.output_dir)},sort_keys=True))
         return 0
