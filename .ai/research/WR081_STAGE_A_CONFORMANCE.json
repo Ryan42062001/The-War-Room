@@ -1,0 +1,105 @@
+{
+  "schema_version": "wr081-stage-a-conformance-v1",
+  "task_id": "WR-081",
+  "stage": "A_PROTECTED_SCORING_CONSUMER_PREPARATION_ONLY",
+  "prepared_from_canonical_main": "a2aced549501dcb6945a35f4f745d4e19106ca60",
+  "branch": "wr-081-v2-historical-model-scoring-execution",
+  "consumer": {
+    "path": ".ai/research/WR081_PROTECTED_SCORING_CONSUMER.py",
+    "sha256": "54ccf15ebf542bff182927c946b4ce37fd0c294d4b95f4cf595c3428ec64b2c4",
+    "git_blob_sha1": "34a86cc6551878560a4f3cefe64c4e6997145867",
+    "wr083_modes": [
+      "predict",
+      "target-ingest",
+      "stage-gate"
+    ],
+    "silent_success_and_failure": true,
+    "publication_boundary": ".ai/research/(generated/)?WR081_*.json",
+    "real_context_runtime_lock": {
+      "python": "3.12.7",
+      "os": "Ubuntu 24.04 x86_64",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3",
+      "scikit_learn": "1.5.2",
+      "scipy": "1.14.1",
+      "timezone": "UTC",
+      "locale": "C.UTF-8",
+      "single_thread_env_enforced": true
+    }
+  },
+  "synthetic_test": {
+    "path": ".ai/research/test_WR081_PROTECTED_SCORING_CONSUMER.py",
+    "sha256": "c65fbb56511340c8c162180fa1e493a173f340c8f6431ca0be839e8d3e5f63e5",
+    "git_blob_sha1": "e7dbd70d245b511cd436fe25dedf783ce61588f2",
+    "command": "python .ai/research/test_WR081_PROTECTED_SCORING_CONSUMER.py",
+    "result": "PASS",
+    "tests_run": 3,
+    "tests_passed": 3,
+    "elapsed_seconds_observed_local": 12.452,
+    "cases": [
+      {
+        "name": "bootstrap_conformance_fixture_exact",
+        "result": "PASS",
+        "cluster_sha256": "aa63baf5f7658212ec4f13bcefbd3c0087c6186d0afcfba7aec6d84ffc86a321",
+        "replicate_sha256": "b4edb70c67e8c678e00465e50e017b6401ecfff0d60ed3c608fda1c651e9de6d",
+        "rng_state_sha256": "b235708c403dd720543444365e54f2440817a03c09ceadfbe6c46106b22a3188",
+        "q025": "-0.625",
+        "q975": "1",
+        "gate_result": false
+      },
+      {
+        "name": "target_access_before_prediction_lock_fails_silently",
+        "result": "PASS",
+        "consumer_exit_nonzero": true,
+        "stdout_empty": true,
+        "stderr_empty": true,
+        "publication_output_empty": true
+      },
+      {
+        "name": "synthetic_development_chronology_and_gate",
+        "result": "PASS",
+        "chronology": [
+          "predict-2018",
+          "prediction-lock-2018",
+          "target-ingest-2018",
+          "predict-2019",
+          "prediction-lock-2019",
+          "target-ingest-2019",
+          "stage-gate-development"
+        ],
+        "fallbacks": 0,
+        "development_gate_pass_synthetic_only": true,
+        "stdout_empty": true,
+        "stderr_empty": true
+      }
+    ],
+    "fixture_scope": "generated local synthetic CSV only",
+    "production_runtime_version_check_bypassed_only_by_explicit_stage_a_synthetic_fixture_context": true
+  },
+  "accepted_authority_bindings": {
+    "source_snapshot_id": "wr-returning-player-v2-source-snapshot/1.2.0-wr059",
+    "source_snapshot_sha256": "6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea",
+    "cohort_id": "returning-player-v2-cohort/1.2.0-wr059",
+    "cohort_sha256": "f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4",
+    "protocol_id": "returning-player-v2-model-protocol/1.2.0-wr072",
+    "protocol_sha256": "aed044e6b7df9684153181a7a97a47a86c50ce9049db063ecdd8a973b1a832b6",
+    "gates_id": "returning-player-v2-result-gates/1.2.0-wr072",
+    "source_identity_set_sha256": "8cbe874b3ceea141cbb9fedb2198ffa940ee218fe4556feace7afd8bbfb89351"
+  },
+  "scope_attestation": {
+    "authorized_write_prefix_only": ".ai/research/**",
+    "real_scoring": false,
+    "historical_targets_exposed": false,
+    "retained_provider_bytes_retrieved": false,
+    "b2_accessed": false,
+    "r2_accessed": false,
+    "provider_credentials_accessed": false,
+    "provider_credentials_modified": false,
+    "provider_state_mutated": false,
+    "authorized_wr081_scoring_dispatched": false,
+    "future_execution_authority_populated": false,
+    "production_or_ranking_changed": false,
+    "source_reacquisition_or_substitution": false,
+    "real_result_or_gate_inspected": false
+  }
+}
