@@ -706,7 +706,7 @@ def synthetic_sandbox_conformance() -> dict:
         "try:\n s=socket.socket();s.settimeout(.2);s.connect(('1.1.1.1',80))\n"
         "except OSError: network_blocked=True\n"
         "assert network_blocked\n"
-        "out=pathlib.Path(a.wr083_output_dir);f=out/'files/.ai/research/generated/WR081_SYNTHETIC.json';f.parent.mkdir(parents=True);f.write_text('{}\\n');d=hashlib.sha256(f.read_bytes()).hexdigest();(out/'publication-manifest.json').write_text(json.dumps({'files':[{'path':'.ai/research/generated/SYNTHETIC.json','sha256':d,'byte_size':f.stat().st_size}]})+'\\n');(out/'bridge-result.json').write_text(json.dumps({'schema_version':'wr083-consumer-result-v1','mode':a.wr083_mode,'status':'PASS','network_blocked':network_blocked})+'\\n')\n"
+        "out=pathlib.Path(a.wr083_output_dir);f=out/'files/.ai/research/generated/WR081_SYNTHETIC.json';f.parent.mkdir(parents=True);f.write_text('{}\\n');d=hashlib.sha256(f.read_bytes()).hexdigest();(out/'publication-manifest.json').write_text(json.dumps({'files':[{'path':'.ai/research/generated/WR081_SYNTHETIC.json','sha256':d,'byte_size':f.stat().st_size}]})+'\\n');(out/'bridge-result.json').write_text(json.dumps({'schema_version':'wr083-consumer-result-v1','mode':a.wr083_mode,'status':'PASS','network_blocked':network_blocked})+'\\n')\n"
     )
     consumer.write_text(code, encoding="utf-8")
     try:
@@ -743,7 +743,7 @@ def run_future_consumer(control_repo: Path, execution_repo: Path, execution_bran
                 bridge = run_sandboxed_consumer(consumer_copy, "target-ingest", context, visible, state, locks, output, manifest)
                 if bridge.get("accepted_prediction_lock_sha256") != lock:
                     raise ContractError("target ingest did not bind frozen prediction")
-                target_lock = lock_phase_output(output, locks, f"target-{year}", manifest); merge_publication(output, package_dir, frozen)
+                target_lock = lock_phase_output(output, locks, f"target-{year}", manifest); merge_publication(output, package_dir, frozen, manifest)
                 chronology.append({"stage": stage, "target_season": year, "event": "TARGET_EXPOSED_AFTER_LOCK", "prediction_lock_sha256": lock, "target_ingest_lock_sha256": target_lock})
             shutil.rmtree(visible, ignore_errors=True); visible.mkdir()
             lock_set = sha256_bytes(canonical_json_bytes({k: v for k, v in sorted(prediction_locks.items()) if int(k) in years}))
@@ -751,7 +751,7 @@ def run_future_consumer(control_repo: Path, execution_repo: Path, execution_bran
             bridge = run_sandboxed_consumer(consumer_copy, "stage-gate", context, visible, state, locks, output, manifest)
             if bridge.get("stage") != stage or not isinstance(bridge.get("gate_pass"), bool) or bridge.get("prediction_lock_set_sha256") != lock_set:
                 raise ContractError("stage gate result contract mismatch")
-            gate_lock = lock_phase_output(output, locks, f"gate-{stage}", manifest); gate_locks[stage] = gate_lock; merge_publication(output, package_dir, frozen)
+            gate_lock = lock_phase_output(output, locks, f"gate-{stage}", manifest); gate_locks[stage] = gate_lock; merge_publication(output, package_dir, frozen, manifest)
             chronology.append({"stage": stage, "event": "STAGE_GATE", "gate_pass": bridge["gate_pass"], "gate_lock_sha256": gate_lock})
             if not bridge["gate_pass"]:
                 terminal = f"{stage.upper()}_FAILED"; break
