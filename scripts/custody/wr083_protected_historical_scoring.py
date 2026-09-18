@@ -35,6 +35,7 @@ RESULT_GATES_ID = "returning-player-v2-result-gates/1.2.0-wr072"
 EXPECTED_SOURCE_COUNT = 14
 ACCEPTED_R2_ACCESS_KEY_ID_SHA256 = "17e95438e19777a414ee85d57c32d44466199a973c51e5b6f57e42a5384585bd"
 R2_SCOPE_AUTHORITY = ".ai/auditor/WR-053_AUDIT.md"
+R2_SCOPE_POLICY_AUTHORITY = ".ai/auditor/WR-050_AUDIT.md"
 PROVIDER_SECRET_NAMES = (
     "WR_CUSTODY_B2_READ_KEY_ID", "WR_CUSTODY_B2_READ_APPLICATION_KEY",
     "WR_CUSTODY_R2_ACCESS_KEY_ID", "WR_CUSTODY_R2_SECRET_ACCESS_KEY",
@@ -227,11 +228,24 @@ def provider_phase(repo_root: Path, raw_dir: Path, manifest_path: Path, report_p
     if r2_access_key_id_sha256 != ACCEPTED_R2_ACCESS_KEY_ID_SHA256:
         raise ContractError("R2 credential identity is not the WR-053 accepted scope anchor")
     scope_authority = (repo_root / R2_SCOPE_AUTHORITY).read_text(encoding="utf-8")
-    for required_scope_evidence in (
-        ACCEPTED_R2_ACCESS_KEY_ID_SHA256, "war-room-custody-backup", "Object Read & Write", "Final verdict", "`PASS`"
+    scope_policy_authority = (repo_root / R2_SCOPE_POLICY_AUTHORITY).read_text(encoding="utf-8")
+    for required_continuity_evidence in (
+        ACCEPTED_R2_ACCESS_KEY_ID_SHA256,
+        "war-room-custody-backup",
+        "Final verdict",
+        "`PASS`",
+        "Current credential-anchor binding verdict: PASS.",
     ):
-        if required_scope_evidence not in scope_authority:
-            raise ContractError("accepted R2 scope authority evidence mismatch")
+        if required_continuity_evidence not in scope_authority:
+            raise ContractError("accepted R2 credential-continuity authority mismatch")
+    for required_policy_evidence in (
+        ACCEPTED_R2_ACCESS_KEY_ID_SHA256,
+        "bucket: `war-room-custody-backup` only;",
+        "permission: `Object Read & Write`;",
+        "no Admin Read & Write / bucket-configuration authority;",
+    ):
+        if required_policy_evidence not in scope_policy_authority:
+            raise ContractError("accepted R2 scope-policy authority mismatch")
     auth = read.authorize_b2(config)
     cleanup_paths([raw_dir, manifest_path, report_path]); raw_dir.mkdir(parents=True, mode=0o700)
     manifest_sources = []; objects = []
@@ -264,7 +278,7 @@ def provider_phase(repo_root: Path, raw_dir: Path, manifest_path: Path, report_p
             "schema_version":"wr083-provider-proof-v1","task_id":TASK_ID,"result":"PASS","bindings":bindings,
             "verified_input_count":EXPECTED_SOURCE_COUNT,"b2_boundary":auth["boundary"],
             "r2_boundary":{"status":"PASS","bucket_name":config["WR_CUSTODY_R2_BUCKET"],
-                "access_key_id_sha256":r2_access_key_id_sha256,"accepted_scope_authority":R2_SCOPE_AUTHORITY,
+                "access_key_id_sha256":r2_access_key_id_sha256,"accepted_scope_authority":R2_SCOPE_AUTHORITY,"accepted_scope_policy_authority":R2_SCOPE_POLICY_AUTHORITY,
                 "accepted_scope":"bucket-scoped Object Read & Write; no configuration/admin authority",
                 "execution_operations":["HeadObject","GetObject"],"execution_mutation_operations":0,
                 "accepted_scope_anchor_matches":True},"objects":objects,
