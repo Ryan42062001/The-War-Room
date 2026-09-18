@@ -1023,3 +1023,148 @@ def _gate_metrics(state_dir: Path, stage: str) -> tuple[dict[str, Any], bool]:
     for year in years:
         state = read_json(_evaluation_state_path(state_dir, year))["evaluation"]
         fallback_count += int(state.get("fallback_count", 0))
+        lineage_failures += int(state.get("lineage_failures", 0))
+
+    metrics = {
+        "row_count": len(rows),
+        "pooled": {
+            "candidate_mae": fstr(pooled_candidate_mae), "primary_mae": fstr(pooled_primary_mae),
+            "candidate_rmse": fstr(pooled_candidate_rmse), "primary_rmse": fstr(pooled_primary_rmse),
+            "mae_lift": fstr(mae_lift), "rmse_regression": fstr(rmse_reg),
+        },
+        "position": pos_metrics, "position_mae_regression_ge30": fstr(max_pos_reg),
+        "positions_nonworse_mae": nonworse, "min_rows_each_position": int(min_rows or 0),
+        "season": season_metrics, "mean_season_mae_delta": fstr(mean_season_delta),
+        "max_season_mae_regression": fstr(max_season_reg),
+        "fallbacks": fallback_count, "lineage_failures": lineage_failures,
+    }
+
+    if stage == "development":
+        gate = (
+            mae_lift >= 0.01 and rmse_reg <= 0.01 and max_pos_reg <= 0.05
+            and mean_season_delta <= 0 and fallback_count == 0 and lineage_failures == 0
+        )
+    else:
+        ordering = _weighted_ordering(rows, years)
+        spearman_delta = ordering["candidate_weighted_spearman"] - ordering["primary_weighted_spearman"]
+        rank_reg = _relative_regression(ordering["candidate_weighted_rank_mae"], ordering["primary_weighted_rank_mae"])
+        metrics["ordering"] = {**{k: fstr(v) if isinstance(v, float) else v for k, v in ordering.items()},
+                               "weighted_spearman_delta": fstr(spearman_delta),
+                               "weighted_rank_mae_regression": fstr(rank_reg)}
+        if stage == "validation":
+            gate = (
+                mae_lift >= 0.005 and rmse_reg <= 0.01 and spearman_delta >= -0.01
+                and rank_reg <= 0.02 and max_pos_reg <= 0.05 and max_season_reg <= 0.05
+                and fallback_count == 0
+            )
+        else:
+            same_rows = rows
+            secondary = {}
+            for field, name in (
+                ("weighted_baseline_prediction", "weighted_ppr_pg"),
+                ("same_position_mean_baseline_prediction", "same_position_earlier_observed_target_mean"),
+            ):
+                c = _mae(same_rows, "candidate_prediction")
+                b = _mae(same_rows, field)
+                secondary[name] = {
+                    "candidate_mae": fstr(c), "baseline_mae": fstr(b),
+                    "regression": fstr(_relative_regression(c, b)),
+                }
+            max_secondary = max(float(v["regression"]) for v in secondary.values())
+            bootstrap = _bootstrap_confirmation(rows)
+            metrics["secondary"] = secondary
+            metrics["bootstrap"] = bootstrap
+            gate = (
+                mae_lift >= 0.005 and bootstrap["gate_pass"] is True and max_pos_reg <= 0.05
+                and nonworse >= 3 and mean_season_delta <= 0 and max_season_reg <= 0.05
+                and spearman_delta >= -0.01 and rank_reg <= 0.02 and int(min_rows or 0) >= 30
+                and fallback_count == 0 and lineage_failures == 0 and max_secondary <= 0.01
+            )
+    return metrics, bool(gate)
+
+def _stage_gate(context: Mapping[str, Any], context_path: Path, state_dir: Path, locks_dir: Path, output_dir: Path) -> None:
+    stage = str(context["stage"])
+    synthetic = bool(context.get("stage_a_synthetic_fixture", False))
+    _runtime_evidence(synthetic)
+    _verify_visible_sources(context, context_path, "stage-gate")
+    years = STAGE_YEARS[stage]
+
+    prediction_locks = context.get("prediction_locks", {})
+    if not isinstance(prediction_locks, dict):
+        raise ContractError("prediction lock map malformed")
+    stage_locks = {}
+    for year in years:
+        expected = prediction_locks.get(str(year))
+        if not isinstance(expected, str):
+            raise ContractError("stage prediction lock missing")
+        _verify_prediction_lock(locks_dir, year, expected)
+        stage_locks[str(year)] = expected
+    lock_set = sha256_bytes(canonical_bytes({k: v for k, v in sorted(stage_locks.items())}))
+    if context.get("prediction_lock_set_sha256") != lock_set:
+        raise ContractError("prediction lock set mismatch")
+
+    prior_gate_locks = context.get("prior_gate_locks", {})
+    if not isinstance(prior_gate_locks, dict):
+        raise ContractError("prior gate locks malformed")
+    expected_prior = []
+    if stage in {"validation", "confirmation"}:
+        expected_prior.append("development")
+    if stage == "confirmation":
+        expected_prior.append("validation")
+    if set(prior_gate_locks) != set(expected_prior):
+        raise ContractError("prior gate lock set mismatch")
+    for prior in expected_prior:
+        bridge = _verify_gate_lock(locks_dir, prior, str(prior_gate_locks[prior]))
+        if bridge.get("gate_pass") is not True:
+            raise ContractError("prior stage gate failed")
+
+    metrics, gate_pass = _gate_metrics(state_dir, stage)
+    status_label = (
+        "EXPECTED_PERFORMANCE_MODEL_SUPPORTED_FOR_INDEPENDENT_RESULT_AUDIT_ONLY"
+        if stage == "confirmation" and gate_pass
+        else ("BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE" if not gate_pass else "STAGE_PASS")
+    )
+    artifact = {
+        "schema_version": "wr081-stage-gate-evidence-v1",
+        "task_id": TASK_ID, "mode": "stage-gate", "stage": stage,
+        "target_seasons": list(years), "bindings": EXPECTED_BINDINGS,
+        "consumer_sha256": _consumer_sha(), "prediction_lock_set_sha256": lock_set,
+        "prior_gate_locks": dict(prior_gate_locks), "metrics": metrics,
+        "gate_pass": gate_pass, "status_label": status_label,
+    }
+    write_json(_gate_state_path(state_dir, stage), {
+        "schema_version": "wr081-gate-state-v1",
+        "artifact": artifact, "artifact_sha256": sha256_bytes(canonical_bytes(artifact)),
+    })
+    rel = f".ai/research/generated/WR081_GATE_{stage.upper()}.json"
+    pub = _publication(output_dir, rel, artifact)
+    _finish(output_dir, "stage-gate", {
+        "stage": stage, "gate_pass": gate_pass, "prediction_lock_set_sha256": lock_set,
+    }, [pub])
+
+def run(argv: Sequence[str]) -> int:
+    try:
+        warnings.filterwarnings("error")
+        args = parse_cli(argv)
+        mode = args["--wr083-mode"]
+        context_path = Path(args["--wr083-context"]).resolve()
+        state_dir = Path(args["--wr083-state-dir"]).resolve()
+        locks_dir = Path(args["--wr083-lock-dir"]).resolve()
+        output_dir = Path(args["--wr083-output-dir"]).resolve()
+        for directory in (state_dir, locks_dir, output_dir):
+            if not directory.is_dir():
+                raise ContractError("required WR-083 directory absent")
+        context = _validate_context(mode, context_path)
+        if mode == "predict":
+            _predict(context, context_path, state_dir, locks_dir, output_dir)
+        elif mode == "target-ingest":
+            _target_ingest(context, context_path, state_dir, locks_dir, output_dir)
+        else:
+            _stage_gate(context, context_path, state_dir, locks_dir, output_dir)
+        return 0
+    except BaseException:
+        return 2
+
+if __name__ == "__main__":
+    raise SystemExit(run(sys.argv[1:]))
+
