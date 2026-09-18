@@ -32,12 +32,12 @@ Canary proof:
 
 WR-083 and WR-090 are closed.
 
-WR-081 protected scoring completed through canonical workflow run `35402528405`. The audited bridge published protected evidence to PR #251 and advanced the execution branch to `c586394bfe01d70b23c499c12902c712e591c627`.
+WR-081 is Manager-frozen for audit at exact PR #251 head `b5fc0974e0766c24974034557a62044b4752716a`. Protected scoring run `35402528405` completed successfully as an execution; development passed, validation failed, and terminal state is `VALIDATION_FAILED` / `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`. Confirmation seasons 2022–2025 were not exposed or scored.
 
-Development passed, but validation failed the frozen WR-072 gates. Terminal state is `VALIDATION_FAILED` with status `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`. Confirmation seasons 2022–2025 were not exposed or scored. The one-time execution authority is consumed; no rerun/tuning is authorized. R&D now packages the exact terminal result for Manager freeze and WR-082 audit.
+The final report and deterministic manifest are independently hash-verified by Manager, all 11 protected generated evidence blob identities match the manifest, and exact-head CI `35403434472` is SUCCESS. WR-082 is activated for fresh independent result audit.
 
 Current critical path:
-`R&D final WR-081 terminal-result packaging -> Manager exact result freeze -> WR-082 fresh result audit -> Manager baseline-only disposition`.
+`WR-082 fresh independent result audit -> Manager baseline-only/result disposition`.
 
 WR-074 serialization is cleared. It is PLANNED at preserved checkpoint `7b4641499c50541abf523267eb4c0255813e8b6d`, but is not being spawned in this transition because the immediate critical path is WR-081.
 

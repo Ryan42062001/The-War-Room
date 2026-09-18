@@ -15,11 +15,11 @@ Owner: Manager / Architect
 - WR-084 — CLOSED / immutable historical failed audit.
 - WR-089 — CLOSED / PASS with no findings.
 - WR-090 — CLOSED / canonical-main protected NO-SCORING canary SUCCESS, run `35366265783`.
-- WR-081 — IN_PROGRESS / protected scoring complete; development PASS, validation FAIL, terminal `VALIDATION_FAILED`; R&D packaging exact baseline-only/insufficient-evidence result on PR #251.
-- WR-082 — BLOCKED until future WR-081 publishes one complete Manager-frozen result target.
+- WR-081 — AUDIT_READY / exact result frozen at `b5fc0974e0766c24974034557a62044b4752716a`; development PASS, validation FAIL, terminal `VALIDATION_FAILED`, baseline-only/insufficient-evidence.
+- WR-082 — ASSIGNED / fresh independent audit of exact frozen WR-081 result target `b5fc0974e0766c24974034557a62044b4752716a`.
 
 Critical path:
-`R&D WR-081 terminal-result packaging -> Manager result freeze -> WR-082 -> Manager baseline-only disposition`.
+`WR-082 fresh result audit -> Manager baseline-only/result disposition`.
 
 ## Infrastructure
 
