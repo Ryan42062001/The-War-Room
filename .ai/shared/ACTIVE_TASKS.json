@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T02:05:00Z",
+  "updated_at_utc": "2026-09-18T02:35:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -17,7 +17,7 @@
       "branch": "wr-074-self-hosted-heavy-ci-runner-pilot",
       "pr": null,
       "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": true,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
@@ -45,7 +45,8 @@
         "scripts/custody/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "After WR-084 disposition and protected-bridge integration/canary, Manager may reactivate WR-074 from preserved checkpoint 7b4641499c50541abf523267eb4c0255813e8b6d."
+      "next_gate": "After WR-084 disposition and protected-bridge integration/canary, Manager may reactivate WR-074 from preserved checkpoint 7b4641499c50541abf523267eb4c0255813e8b6d.",
+      "refresh_mode": "FAST_REFRESH"
     },
     {
       "task_id": "WR-075",
@@ -59,7 +60,7 @@
       "branch": "wr-075-self-hosted-heavy-ci-runner-audit",
       "pr": null,
       "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
@@ -85,7 +86,8 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes WR-074 exact target -> activate WR-075 fresh independent audit."
+      "next_gate": "Manager freezes WR-074 exact target -> activate WR-075 fresh independent audit.",
+      "refresh_mode": "FAST_REFRESH"
     },
     {
       "task_id": "WR-081",
@@ -99,7 +101,7 @@
       "branch": "wr-081-v2-historical-model-scoring",
       "pr": 227,
       "dependency": "HARD",
-      "execution_mode": "WORK_MODE_PREFERRED",
+      "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": true,
       "blocker_type": "TECHNICAL",
       "user_action_required": false,
@@ -129,7 +131,8 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "WR-083 protected bridge -> WR-084 independent audit -> PASS-family only: Manager integrates exact audited bridge, runs protected canonical-main canary, then explicitly reactivates WR-081 on a fresh execution branch."
+      "next_gate": "WR-083 protected bridge -> WR-084 independent audit -> PASS-family only: Manager integrates exact audited bridge, runs protected canonical-main canary, then explicitly reactivates WR-081 on a fresh execution branch.",
+      "refresh_mode": "FAST_REFRESH"
     },
     {
       "task_id": "WR-082",
@@ -143,7 +146,7 @@
       "branch": "wr-082-v2-historical-model-result-audit",
       "pr": null,
       "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
@@ -169,7 +172,8 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "After protected bridge acceptance, WR-081 executes and publishes one complete result target -> Manager freeze -> activate WR-082."
+      "next_gate": "After protected bridge acceptance, WR-081 executes and publishes one complete result target -> Manager freeze -> activate WR-082.",
+      "refresh_mode": "FAST_REFRESH"
     },
     {
       "task_id": "WR-083",
@@ -183,7 +187,7 @@
       "branch": "wr-083-protected-historical-scoring-bridge",
       "pr": null,
       "dependency": "HARD",
-      "execution_mode": "WORK_MODE_PREFERRED",
+      "execution_mode": "WORK_MODE",
       "audit_required": true,
       "blocker_type": "NONE",
       "user_action_required": false,
@@ -209,7 +213,8 @@
         "scripts/ci/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Work Helper publishes one immutable no-scoring protected-bridge implementation/proof target -> Manager exact freeze -> WR-084 independent audit."
+      "next_gate": "Work Helper publishes one immutable no-scoring protected-bridge implementation/proof target -> Manager exact freeze -> WR-084 independent audit.",
+      "refresh_mode": "FAST_REFRESH"
     },
     {
       "task_id": "WR-084",
@@ -223,7 +228,7 @@
       "branch": "wr-084-protected-historical-scoring-bridge-audit",
       "pr": null,
       "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
@@ -249,7 +254,8 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes exact WR-083 target -> activate WR-084 fresh independent audit."
+      "next_gate": "Manager freezes exact WR-083 target -> activate WR-084 fresh independent audit.",
+      "refresh_mode": "FAST_REFRESH"
     },
     {
       "task_id": "WR-085",
@@ -263,7 +269,7 @@
       "branch": "manager/wr-085-workflow-v34-efficiency",
       "pr": null,
       "dependency": "INDEPENDENT",
-      "execution_mode": "STANDARD_CHAT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": true,
       "blocker_type": "NONE",
       "user_action_required": false,
@@ -308,7 +314,9 @@
         ".github/workflows/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager implements the bounded Workflow V3.4 efficiency candidate in STANDARD_CHAT, self-validates exact scope/tests/CI, publishes one immutable target -> Manager exact freeze -> WR-086 fresh independent audit."
+      "next_gate": "Manager implements the bounded Workflow V3.4 efficiency candidate in STANDARD_CHAT, self-validates exact scope/tests/CI, publishes one immutable target -> Manager exact freeze -> WR-086 fresh independent audit.",
+      "refresh_mode": "FULL_REFRESH",
+      "refresh_reason": "Canonical workflow/control-plane architecture is being changed; this is an explicit Full Refresh exception."
     },
     {
       "task_id": "WR-086",
@@ -322,7 +330,7 @@
       "branch": "wr-086-workflow-v34-efficiency-audit",
       "pr": null,
       "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
@@ -349,7 +357,8 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes exact WR-085 target -> activate WR-086 fresh independent workflow-efficiency audit."
+      "next_gate": "Manager freezes exact WR-085 target -> activate WR-086 fresh independent workflow-efficiency audit.",
+      "refresh_mode": "FAST_REFRESH"
     }
   ]
 }
