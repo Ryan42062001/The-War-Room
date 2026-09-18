@@ -1,10 +1,16 @@
 # War Room Team Workflow
 
-Status: ACTIVE — WORKFLOW V3.4
+Status: ACTIVE — WORKFLOW V3.4 CANONICAL / V3.5 CANDIDATE UNDER WR-091
 Last updated: 2026-09-16
 Owner: Manager / Architect
 
 This is the canonical workflow for **The War Room**, the live fantasy-football **DRAFT** assistant. Repository state overrides stale chat memory. If older workflow guidance conflicts with this file, this file wins unless Manager records a newer approved workflow change.
+
+## V3.5 candidate — transition automation + protected-execution ergonomics (WR-091)
+
+Status: **CANDIDATE / NOT CANONICAL UNTIL FRESH INDEPENDENT AUDIT + POST-MERGE CANARY**.
+
+WR-091 proposes six bounded automation upgrades while preserving V3.4 safety: Auditor activation auto-pins exact target metadata; a deterministic result-freeze verifier emits hash-bound freeze packets; exact-SHA branch-bootstrap pushes may reuse prior successful War Room CI; protected scoring dispatch reads execution identity only from canonical Manager authority; protected scoring publishes distinct execution/result/decision terminal fields; and one-time execution authority is consumed only with a receipt binding the authorized head to one publication head. Uncertainty fails closed or upward to normal validation.
 
 ## V3.4 — ChatGPT usage efficiency (canonical; WR-085)
 

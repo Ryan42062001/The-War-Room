@@ -34,7 +34,7 @@ function task(id, overrides = {}) {
   };
 }
 
-const a = task('WR-901');
+const a = task('WR-901', { status: 'AUDIT_READY', pr: 123, worker_checkpoint_sha: 'a'.repeat(40) });
 const b = task('WR-902', {
   owner: 'Auditor',
   status: 'BLOCKED',
@@ -62,9 +62,7 @@ const plan = {
   update_tasks: [
     { task_id: 'WR-901', set: { status: 'AUDIT_READY', worker_checkpoint_sha: 'a'.repeat(40) } },
     { task_id: 'WR-902', set: {
-      status: 'ASSIGNED', blocker_type: 'NONE', blocked_on_tasks: [], blocked_on: [],
-      audit_target_task: 'WR-901', audit_target_pr: 123,
-      audit_target_branch: 'branch-WR-901', audit_target_sha: 'a'.repeat(40)
+      status: 'ASSIGNED', blocker_type: 'NONE', blocked_on_tasks: [], blocked_on: []
     } }
   ]
 };
@@ -73,6 +71,11 @@ assert.deepEqual(applied.errors, []);
 assert.equal(applied.registry.updated_at_utc, '2026-09-16T01:00:00Z');
 assert.equal(applied.registry.tasks.find(t => t.task_id === 'WR-901').status, 'AUDIT_READY');
 assert.equal(applied.registry.tasks.find(t => t.task_id === 'WR-902').status, 'ASSIGNED');
+const autoPinned = applied.registry.tasks.find(t => t.task_id === 'WR-902');
+assert.equal(autoPinned.audit_target_task, 'WR-901');
+assert.equal(autoPinned.audit_target_pr, 123);
+assert.equal(autoPinned.audit_target_branch, 'branch-WR-901');
+assert.equal(autoPinned.audit_target_sha, 'a'.repeat(40));
 assert.match(applied.taskSpecs.get(a.task_file), /^STATUS: AUDIT_READY$/m);
 assert.match(applied.taskSpecs.get(b.task_file), /^STATUS: ASSIGNED$/m);
 
@@ -104,3 +107,42 @@ const badRefresh = validateTaskShape(task('WR-905', { refresh_mode: 'FULL_REFRES
 assert.ok(badRefresh.some(error => error.includes('FULL_REFRESH requires')));
 
 console.log('workflow Manager-transition regression: PASS');
+
+
+const authorityHead = 'b'.repeat(40);
+const publicationHead = 'c'.repeat(40);
+const authorityTask = task('WR-906', {
+  status: 'IN_PROGRESS',
+  worker_checkpoint_sha: authorityHead,
+  future_execution_authority: {
+    branch: 'wr-906-execution',
+    head_sha: authorityHead,
+    consumer_path: '.ai/research/consumer.py',
+    consumer_sha256: 'd'.repeat(64)
+  }
+});
+const authorityRegistry = { ...registry, tasks: [authorityTask] };
+const authoritySpecs = new Map([[authorityTask.task_file, spec(authorityTask)]]);
+const missingReceipt = applyTransitionPlan({
+  registry: authorityRegistry,
+  plan: { schema_version: 1, update_tasks: [{ task_id: 'WR-906', set: { worker_checkpoint_sha: publicationHead } }] },
+  taskSpecReader: rel => authoritySpecs.get(rel) ?? null
+});
+assert.ok(missingReceipt.errors.some(error => error.includes('authority consumption receipt')));
+const consumed = applyTransitionPlan({
+  registry: authorityRegistry,
+  plan: {
+    schema_version: 1,
+    authority_consumption_receipts: [{
+      task_id: 'WR-906', authority_sha256: 'e'.repeat(64), authorized_head: authorityHead,
+      publication_head: publicationHead, receipt_sha256: 'f'.repeat(64),
+      receipt_path: '.ai/research/generated/WR906_AUTHORITY_CONSUMPTION_RECEIPT.json',
+      single_publication_commit: true, publication_parent_verified: true
+    }],
+    update_tasks: [{ task_id: 'WR-906', set: { worker_checkpoint_sha: publicationHead } }]
+  },
+  taskSpecReader: rel => authoritySpecs.get(rel) ?? null
+});
+assert.deepEqual(consumed.errors, []);
+assert.equal(consumed.registry.tasks[0].future_execution_authority, undefined);
+assert.equal(consumed.registry.tasks[0].authority_consumption_receipt.publication_head, publicationHead);

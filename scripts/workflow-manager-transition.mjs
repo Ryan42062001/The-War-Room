@@ -80,6 +80,111 @@ function explicitlySerializedHardPair(a, b) {
   return (a.dependency === 'HARD' && (a.blocked_on_tasks || []).includes(b.task_id)) ||
     (b.dependency === 'HARD' && (b.blocked_on_tasks || []).includes(a.task_id));
 }
+const ACTIVE_AUDITOR_STATUS = new Set(['ASSIGNED','IN_PROGRESS','MANAGER_REVIEW_READY','AUDIT_READY','MERGE_READY']);
+const SHA40 = /^[0-9a-f]{40}$/;
+const SHA64 = /^[0-9a-f]{64}$/;
+
+export function autoPopulateAuditorPins(tasks, previousTasks, changes = []) {
+  const errors = [];
+  const byId = new Map(tasks.map(task => [task.task_id, task]));
+  const previousById = new Map(previousTasks.map(task => [task.task_id, task]));
+  for (const task of tasks) {
+    if (task.owner !== 'Auditor' || !ACTIVE_AUDITOR_STATUS.has(task.status)) continue;
+    const previous = previousById.get(task.task_id);
+    const candidates = [...new Set([
+      task.audit_target_task,
+      previous?.audit_target_task,
+      ...(previous?.blocked_on_tasks || []),
+      ...(task.blocked_on_tasks || [])
+    ].filter(Boolean))];
+    if (!task.audit_target_task) {
+      if (candidates.length !== 1) {
+        errors.push(`${task.task_id}: cannot auto-pin Auditor target; expected one unambiguous upstream task, got ${candidates.length}`);
+        continue;
+      }
+      task.audit_target_task = candidates[0];
+    }
+    const target = byId.get(task.audit_target_task);
+    if (!target) {
+      errors.push(`${task.task_id}: audit target ${task.audit_target_task} is not active`);
+      continue;
+    }
+    if (!['AUDIT_READY','MERGE_READY'].includes(target.status)) {
+      errors.push(`${task.task_id}: audit target ${target.task_id} is not frozen/audit-ready (${target.status})`);
+      continue;
+    }
+    const authoritative = {
+      audit_target_task: target.task_id,
+      audit_target_pr: target.pr,
+      audit_target_branch: target.branch,
+      audit_target_sha: target.worker_checkpoint_sha
+    };
+    if (!Number.isInteger(authoritative.audit_target_pr) || authoritative.audit_target_pr <= 0 ||
+        typeof authoritative.audit_target_branch !== 'string' || !authoritative.audit_target_branch ||
+        !SHA40.test(authoritative.audit_target_sha || '')) {
+      errors.push(`${task.task_id}: frozen upstream target lacks PR/branch/SHA needed for Auditor activation`);
+      continue;
+    }
+    const populated = [];
+    for (const [field, value] of Object.entries(authoritative)) {
+      if (task[field] == null || task[field] === '') {
+        task[field] = value;
+        populated.push(field);
+      } else if (task[field] !== value) {
+        errors.push(`${task.task_id}: explicit ${field} contradicts frozen ${target.task_id} target`);
+      }
+    }
+    if (populated.length) changes.push({ action: 'auto-pin-auditor', task_id: task.task_id, fields: populated });
+  }
+  return errors;
+}
+
+export function applyAuthorityConsumptionReceipts(previousTasks, nextTasks, plan, changes = []) {
+  const errors = [];
+  const receipts = new Map();
+  for (const receipt of plan.authority_consumption_receipts || []) {
+    if (!receipt || typeof receipt.task_id !== 'string' || receipts.has(receipt.task_id)) {
+      errors.push('authority_consumption_receipts must contain one unique task_id per receipt');
+      continue;
+    }
+    receipts.set(receipt.task_id, receipt);
+  }
+  const nextById = new Map(nextTasks.map(task => [task.task_id, task]));
+  for (const previous of previousTasks) {
+    const oldAuthority = previous.future_execution_authority;
+    if (!oldAuthority || typeof oldAuthority !== 'object') continue;
+    const next = nextById.get(previous.task_id);
+    if (!next) continue;
+    const receipt = receipts.get(previous.task_id);
+    const nextAuthority = next.future_execution_authority;
+    const oldJson = JSON.stringify(oldAuthority);
+    const nextJson = nextAuthority == null ? null : JSON.stringify(nextAuthority);
+    if (nextJson && nextJson !== oldJson) {
+      errors.push(`${previous.task_id}: cannot replace an unconsumed future_execution_authority`);
+      continue;
+    }
+    const advanced = SHA40.test(next.worker_checkpoint_sha || '') && next.worker_checkpoint_sha !== oldAuthority.head_sha;
+    if (!advanced && !receipt) continue;
+    if (!receipt) {
+      errors.push(`${previous.task_id}: authorized branch advanced; authority consumption receipt is required before further transition`);
+      continue;
+    }
+    if (receipt.authorized_head !== oldAuthority.head_sha ||
+        receipt.publication_head !== next.worker_checkpoint_sha ||
+        receipt.single_publication_commit !== true ||
+        receipt.publication_parent_verified !== true ||
+        !SHA64.test(receipt.authority_sha256 || '') ||
+        !SHA64.test(receipt.receipt_sha256 || '')) {
+      errors.push(`${previous.task_id}: authority consumption receipt does not bind the authorized head to the frozen publication head`);
+      continue;
+    }
+    delete next.future_execution_authority;
+    next.authority_consumption_receipt = structuredClone(receipt);
+    changes.push({ action: 'consume-authority', task_id: previous.task_id, fields: ['future_execution_authority','authority_consumption_receipt'] });
+  }
+  return errors;
+}
+
 function validateRegistryRelations(tasks) {
   const errors = [];
   const seen = { branch: new Map(), worker_slot: new Map(), pr: new Map() };
@@ -137,11 +242,16 @@ export function applyTransitionPlan({ registry, plan, taskSpecReader }) {
     const task = next.tasks.find(item => item.task_id === update.task_id);
     if (!task) throw new Error(`cannot update missing task ${update.task_id}`);
     Object.assign(task, structuredClone(update.set || {}));
-    changes.push({ action: 'update', task_id: update.task_id, fields: Object.keys(update.set || {}) });
+    for (const field of update.unset || []) delete task[field];
+    changes.push({ action: 'update', task_id: update.task_id, fields: [...Object.keys(update.set || {}), ...(update.unset || []).map(field => `unset:${field}`)] });
   }
   if (plan.updated_at_utc) next.updated_at_utc = plan.updated_at_utc;
+  const transitionErrors = [
+    ...applyAuthorityConsumptionReceipts(registry.tasks || [], next.tasks, plan, changes),
+    ...autoPopulateAuditorPins(next.tasks, registry.tasks || [], changes)
+  ];
   const ids = new Set();
-  const errors = [];
+  const errors = [...transitionErrors];
   const taskSpecs = new Map();
   for (const task of next.tasks) {
     if (ids.has(task.task_id)) errors.push(`${task.task_id}: duplicate task_id`);
