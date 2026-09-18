@@ -19,6 +19,14 @@ WR-083 is ASSIGNED to Work Helper to implement the smallest protected bridge, wi
 
 WR-074 is temporarily BLOCKED at checkpoint `7b4641499c50541abf523267eb4c0255813e8b6d` solely for V3.3 write-scope collision safety while WR-083/084 is active. WR-075 remains BLOCKED behind WR-074. No WR-074 defect is implied.
 
+## Workflow V3.4 efficiency candidate
+
+WR-085 is ASSIGNED in STANDARD_CHAT to implement the bounded ChatGPT-usage efficiency upgrade requested by the user. V3.3 remains canonical until WR-085 is independently audited by WR-086, the exact audited target is integrated, and the required canonical-main canary passes.
+
+The candidate targets Standard Chat High + Fast Refresh defaults, execution packets, decision consumption, compact handoffs, audit-readiness, safe chat reuse, worker-spawn cost checks, and Work escalation/de-escalation without weakening existing safeguards.
+
+WR-086 is BLOCKED pending one immutable Manager-frozen WR-085 candidate.
+
 ## Next gates
 
 1. WR-083 builds and proves the no-scoring protected bridge.

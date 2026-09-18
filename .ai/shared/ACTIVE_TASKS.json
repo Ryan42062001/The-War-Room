@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T01:50:00Z",
+  "updated_at_utc": "2026-09-18T02:05:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -250,6 +250,106 @@
       ],
       "forbidden_exact_paths": [],
       "next_gate": "Manager freezes exact WR-083 target -> activate WR-084 fresh independent audit."
+    },
+    {
+      "task_id": "WR-085",
+      "owner": "Manager / Architect",
+      "worker_slot": "manager-workflow-v34-efficiency",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-085.md",
+      "role_handoff": ".ai/manager/HANDOFF.md",
+      "assignment_main_sha": "b034d64ac7d65c0cdb39a89712a298a2595187c2",
+      "worker_checkpoint_sha": null,
+      "branch": "manager/wr-085-workflow-v34-efficiency",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT",
+      "audit_required": true,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": true,
+      "allowed_path_prefixes": [
+        ".ai/shared/WORKFLOW.md",
+        ".ai/shared/ACTIVE_TASKS.json",
+        ".ai/shared/PROJECT_STATE.md",
+        ".ai/shared/ROADMAP.md",
+        ".ai/README.md",
+        ".ai/roles/",
+        ".ai/manager/WR-074.md",
+        ".ai/manager/WR-075.md",
+        ".ai/manager/WR-081.md",
+        ".ai/manager/WR-082.md",
+        ".ai/manager/WR-083.md",
+        ".ai/manager/WR-084.md",
+        ".ai/manager/WR-085.md",
+        ".ai/manager/WR-086.md",
+        ".ai/manager/WR085_WORKFLOW_V3_4_EFFICIENCY.md",
+        ".ai/manager/HANDOFF.md",
+        "scripts/workflow-state-check.mjs",
+        "scripts/workflow-task-contract.mjs",
+        "scripts/workflow-manager-transition.mjs",
+        "scripts/workflow-preflight.mjs",
+        "scripts/workflow-finish-check.mjs",
+        "scripts/test-workflow-state.mjs",
+        "scripts/test-workflow-lane-identity.mjs",
+        "scripts/test-workflow-manager-transition.mjs"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/auditor/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        "src/",
+        "public/",
+        "scripts/custody/",
+        "scripts/ci/",
+        ".github/workflows/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Manager implements the bounded Workflow V3.4 efficiency candidate in STANDARD_CHAT, self-validates exact scope/tests/CI, publishes one immutable target -> Manager exact freeze -> WR-086 fresh independent audit."
+    },
+    {
+      "task_id": "WR-086",
+      "owner": "Auditor",
+      "worker_slot": "auditor-workflow-v34-efficiency",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-086.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": "wr-086-workflow-v34-efficiency-audit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "STANDARD_CHAT",
+      "audit_required": false,
+      "blocker_type": "UPSTREAM_TASK",
+      "user_action_required": false,
+      "blocked_on_tasks": [
+        "WR-085"
+      ],
+      "blocked_on": [
+        "WR-085 must publish one self-validated Manager-frozen immutable Workflow V3.4 candidate before fresh independent audit."
+      ],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/auditor/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        ".ai/roles/",
+        ".github/",
+        "scripts/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Manager freezes exact WR-085 target -> activate WR-086 fresh independent workflow-efficiency audit."
     }
   ]
 }

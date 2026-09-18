@@ -9,6 +9,14 @@ Owner: Manager / Architect
 - V3.3 — CANONICAL / ACCEPTED.
 - Exact-head, independent-audit, custody, fail-closed, post-merge-canary, and collision-safety rules remain mandatory.
 
+## Workflow efficiency — V3.4 CANDIDATE
+
+- WR-085 — ASSIGNED / bounded ChatGPT-usage and Work-mode efficiency upgrade.
+- WR-086 — BLOCKED / fresh independent audit after Manager exact freeze.
+- V3.3 remains canonical until PASS-family audit, exact integration, and required canonical-main canary.
+
+Sequence: `WR-085 implementation/self-validation -> Manager exact freeze -> WR-086 fresh independent audit -> PASS-family only: exact integration + full canonical-main canary -> V3.4 canonical disposition`
+
 ## Phase 5B — Returning-Player v2 evidence reset — ACTIVE
 
 - WR-072 — CLOSED / accepted pre-score protocol 1.2.
