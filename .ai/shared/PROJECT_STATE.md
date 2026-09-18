@@ -37,3 +37,7 @@ WR-086 is BLOCKED pending one immutable Manager-frozen WR-085 candidate.
 ## WR-085 audit freeze
 
 WR-085 Workflow V3.4 candidate is self-validated and frozen for independent audit at PR #230 exact head `0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b`; exact-head full CI `35299527394` SUCCESS. WR-086 is ASSIGNED as the fresh independent audit lane. V3.3 remains canonical until PASS-family, exact audited integration, and canonical-main canary.
+
+## WR-086 disposition
+
+Independent WR-086 audit returned `FAIL — REMEDIATION REQUIRED`. The V3.4 design itself substantially passed, but old frozen PR #230 head `0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b` became dirty against canonical main on overlapping control-plane files. WR-085 is in bounded reconciliation/remediation; WR-087 is blocked pending one new immutable target. V3.3 remains canonical.
