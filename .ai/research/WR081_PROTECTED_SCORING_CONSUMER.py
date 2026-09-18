@@ -213,3 +213,171 @@ def _runtime_evidence(synthetic: bool) -> dict[str, Any]:
     if synthetic:
         return evidence
     if platform.python_version() != "3.12.7" or platform.system() != "Linux" or platform.machine() != "x86_64":
+        raise ContractError("frozen runtime mismatch")
+    for name, expected in RUNTIME_PACKAGES.items():
+        if package_versions.get(name) != expected:
+            raise ContractError("frozen package version mismatch")
+    for name, expected in RUNTIME_ENV.items():
+        if os.environ.get(name) != expected:
+            raise ContractError("frozen runtime environment mismatch")
+    if os.environ.get("LANG") != "C.UTF-8" or os.environ.get("LC_ALL") != "C.UTF-8":
+        raise ContractError("frozen locale mismatch")
+    os_release = Path("/etc/os-release")
+    if not os_release.is_file() or 'VERSION_ID="24.04"' not in os_release.read_text(encoding="utf-8"):
+        raise ContractError("frozen Ubuntu version mismatch")
+    return evidence
+
+def _validate_bindings(value: Any) -> None:
+    if value != EXPECTED_BINDINGS:
+        raise ContractError("accepted WR-059/WR-072 bindings mismatch")
+
+def _validate_context(mode: str, context_path: Path) -> dict[str, Any]:
+    context = read_json(context_path)
+    if not isinstance(context, dict) or context.get("task_id") != TASK_ID or context.get("mode") != mode:
+        raise ContractError("context identity mismatch")
+    _validate_bindings(context.get("bindings"))
+    if mode in {"predict", "target-ingest"}:
+        year = int(context.get("target_season", -1))
+        stage = str(context.get("stage", ""))
+        if stage_for_year(year) != stage:
+            raise ContractError("stage/year mismatch")
+    else:
+        stage = str(context.get("stage", ""))
+        if stage not in STAGE_YEARS or context.get("target_seasons") != list(STAGE_YEARS[stage]):
+            raise ContractError("stage-gate chronology mismatch")
+    return context
+
+def _verify_visible_sources(context: Mapping[str, Any], context_path: Path, mode: str) -> dict[int, dict[str, Any]]:
+    sources = context.get("visible_sources", [])
+    if mode == "stage-gate":
+        if sources not in (None, []):
+            raise ContractError("stage-gate must not expose retained sources")
+        return {}
+    if not isinstance(sources, list):
+        raise ContractError("visible source list missing")
+    year = int(context["target_season"])
+    expected_seasons = list(range(2012, year)) if mode == "predict" else [year]
+    if [int(x.get("season", -1)) for x in sources] != expected_seasons:
+        raise ContractError("visible-season boundary violation")
+    parent = context_path.resolve().parent
+    result: dict[int, dict[str, Any]] = {}
+    for item in sources:
+        season = int(item.get("season", -1))
+        source_id = str(item.get("source_id", ""))
+        digest = str(item.get("sha256", ""))
+        size = int(item.get("byte_size", -1))
+        path = Path(str(item.get("path", "")))
+        if source_id != f"nflverse-player-summary-{season}" or len(digest) != 64 or size <= 0:
+            raise ContractError("visible source identity malformed")
+        resolved = path.resolve()
+        if resolved.parent != parent or resolved.name != f"stats-{season}-{digest}.raw":
+            raise ContractError("visible source path mismatch")
+        if sha256_file(resolved) != (digest, size):
+            raise ContractError("visible source digest mismatch")
+        result[season] = {"path": resolved, **dict(item)}
+    return result
+
+def _aggregate_source(path: Path, expected_season: int) -> dict[tuple[str, str], dict[str, Any]]:
+    groups: dict[tuple[str, str], dict[str, Any]] = {}
+    with path.open("r", encoding="utf-8-sig", newline="") as f:
+        reader = csv.DictReader(f)
+        if reader.fieldnames is None or not REQUIRED_COLUMNS.issubset(set(reader.fieldnames)):
+            raise ContractError("required source field absent")
+        for row in reader:
+            try:
+                season = int(str(row.get("season", "")).strip())
+            except ValueError as exc:
+                raise ContractError("invalid source season") from exc
+            if season != expected_season:
+                raise ContractError("source row season mismatch")
+            if str(row.get("season_type", "")).strip() != "REG":
+                continue
+            position = str(row.get("position", "")).strip()
+            if position not in POSITIONS:
+                continue
+            player_id = str(row.get("player_id", "")).strip()
+            if not player_id:
+                raise ContractError("missing player_id")
+            games = finite_float(row.get("games"))
+            if games is None or games < 0 or int(games) != games:
+                raise ContractError("invalid games")
+            key = (player_id, position)
+            g = groups.setdefault(key, {
+                "player_id": player_id, "position": position, "games_values": [],
+                "add": {name: 0.0 for name in ADD_FIELDS},
+                "add_missing": {name: False for name in ADD_FIELDS},
+                "mean_values": {name: [] for name in MEAN_FIELDS},
+                "row_count": 0,
+            })
+            g["games_values"].append(float(games))
+            g["row_count"] += 1
+            for name in ADD_FIELDS:
+                value = finite_float(row.get(name))
+                if value is None:
+                    g["add_missing"][name] = True
+                    value = 0.0
+                g["add"][name] += float(value)
+            for name in MEAN_FIELDS:
+                value = finite_float(row.get(name))
+                if value is not None:
+                    g["mean_values"][name].append(float(value))
+    out = {}
+    for key, g in groups.items():
+        games = max(g["games_values"]) if g["games_values"] else 0.0
+        means = {}
+        mean_missing = {}
+        for name in MEAN_FIELDS:
+            values = g["mean_values"][name]
+            means[name] = math.fsum(values) / len(values) if values else 0.0
+            mean_missing[name] = not bool(values)
+        out[key] = {
+            "player_id": g["player_id"],
+            "position": g["position"],
+            "games": games,
+            "add": g["add"],
+            "add_missing": g["add_missing"],
+            "mean": means,
+            "mean_missing": mean_missing,
+            "row_count": g["row_count"],
+        }
+    return out
+
+def _load_aggregates(visible: Mapping[int, Mapping[str, Any]]) -> dict[int, dict[tuple[str, str], dict[str, Any]]]:
+    return {year: _aggregate_source(Path(str(meta["path"])), year) for year, meta in visible.items()}
+
+def _same_player(groups: Mapping[tuple[str, str], dict[str, Any]], player_id: str, preferred_position: str) -> dict[str, Any] | None:
+    exact = groups.get((player_id, preferred_position))
+    if exact is not None:
+        return exact
+    matches = [v for (pid, _), v in groups.items() if pid == player_id and v["position"] in POSITIONS]
+    if len(matches) > 1:
+        raise ContractError("ambiguous same-player historical row")
+    return matches[0] if matches else None
+
+def _require_valid_feature_row(row: dict[str, Any] | None) -> dict[str, Any]:
+    if row is None or not math.isfinite(float(row["games"])) or float(row["games"]) <= 0:
+        raise ContractError("GAMES_FATAL")
+    return row
+
+def _pg(row: Mapping[str, Any], field: str) -> float:
+    games = float(row["games"])
+    if games <= 0:
+        raise ContractError("GAMES_FATAL")
+    return float(row["add"][field]) / games
+
+def _serialize_feature(values: Sequence[float]) -> tuple[list[list[Any]], str]:
+    if len(values) != 28:
+        raise ContractError("feature count mismatch")
+    encoded = []
+    for name, typ, value in zip(FEATURE_NAMES, FEATURE_TYPES, values):
+        if typ == "i8":
+            iv = int(value)
+            if iv not in (0, 1) or float(iv) != float(value):
+                raise ContractError("invalid indicator")
+            val = str(iv)
+        else:
+            val = fstr(float(value))
+        encoded.append([name, typ, False, val])
+    digest = sha256_bytes(json.dumps(encoded, separators=(",", ":"), ensure_ascii=False).encode("utf-8"))
+    return encoded, digest
+
