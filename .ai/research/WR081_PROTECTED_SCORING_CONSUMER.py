@@ -708,3 +708,153 @@ def _predict(context: Mapping[str, Any], context_path: Path, state_dir: Path, lo
                     "preprocessing_digest": prep["digest"], "model_digest": model_state["digest"],
                 }
                 row["row_digest"] = sha256_bytes(canonical_bytes(row))
+                predictions.append(row)
+
+    predictions.sort(key=stable_key_sort)
+    features.sort(key=stable_key_sort)
+    artifact = {
+        "schema_version": "wr081-prediction-evidence-v1",
+        "task_id": TASK_ID, "mode": "predict", "stage": stage, "target_season": year,
+        "bindings": EXPECTED_BINDINGS,
+        "ids": {
+            "feature_schema": FEATURE_SCHEMA_ID, "preprocessing": PREP_ID,
+            "candidate": CANDIDATE_ID, "target": TARGET_ID, "serializer": SERIALIZER_ID,
+        },
+        "consumer_sha256": _consumer_sha(), "runtime": runtime,
+        "target_values_accessed": False,
+        "cohort_key_count": len(members),
+        "cohort_key_sha256": sha256_bytes(canonical_bytes([stable_key(year, pid, pos) for pid, pos in members])),
+        "feature_rows": features, "preprocessing_states": prep_states, "model_states": model_states,
+        "predictions": predictions, "fallback_count": fallback_count,
+        "lineage_failures": 0,
+    }
+    state_payload = {
+        "schema_version": "wr081-prediction-state-v1",
+        "artifact": artifact,
+        "artifact_sha256": sha256_bytes(canonical_bytes(artifact)),
+    }
+    write_json(_prediction_state_path(state_dir, year), state_payload)
+    rel = f".ai/research/generated/WR081_PREDICTION_{year}.json"
+    pub = _publication(output_dir, rel, artifact)
+    _finish(output_dir, "predict", {"stage": stage, "target_season": year, "target_values_accessed": False}, [pub])
+
+def _target_ingest(context: Mapping[str, Any], context_path: Path, state_dir: Path, locks_dir: Path, output_dir: Path) -> None:
+    year = int(context["target_season"])
+    stage = str(context["stage"])
+    synthetic = bool(context.get("stage_a_synthetic_fixture", False))
+    _runtime_evidence(synthetic)
+    expected_lock = str(context.get("prediction_lock_sha256", ""))
+    _verify_prediction_lock(locks_dir, year, expected_lock)
+
+    lock_map = context.get("prediction_locks", {})
+    if not isinstance(lock_map, dict) or lock_map.get(str(year)) != expected_lock:
+        raise ContractError("target-ingest lock map mismatch")
+    for prior, digest in lock_map.items():
+        _verify_prediction_lock(locks_dir, int(prior), str(digest))
+
+    pred_state = read_json(_prediction_state_path(state_dir, year))
+    artifact = pred_state.get("artifact")
+    if not isinstance(artifact, dict) or artifact.get("target_season") != year or artifact.get("target_values_accessed") is not False:
+        raise ContractError("prediction state mismatch")
+    if pred_state.get("artifact_sha256") != sha256_bytes(canonical_bytes(artifact)):
+        raise ContractError("prediction state digest mismatch")
+
+    locked_prediction = read_json(locks_dir / f"prediction-{year}" / "files" / f".ai/research/generated/WR081_PREDICTION_{year}.json")
+    if sha256_bytes(canonical_bytes(locked_prediction)) != pred_state.get("artifact_sha256"):
+        raise ContractError("state/prediction-lock evidence mismatch")
+
+    visible = _verify_visible_sources(context, context_path, "target-ingest")
+    aggregates = _load_aggregates(visible)
+    target_groups = aggregates.get(year, {})
+    rows = []
+    for prediction in artifact.get("predictions", []):
+        player_id = str(prediction["player_id"])
+        position = str(prediction["position"])
+        status, target, games = _target_from_groups(target_groups, player_id, position)
+        row = {
+            "target_season": year, "player_id_namespace": "gsis_id", "player_id": player_id,
+            "position": position, "stable_key": prediction["stable_key"],
+            "prediction_status": prediction["status"], "target_status": status,
+            "target_games": games, "target_ppr_pg": None if target is None else fstr(target),
+            "candidate_prediction": prediction["candidate_prediction"],
+            "primary_baseline_prediction": prediction["primary_baseline_prediction"],
+            "weighted_baseline_prediction": prediction["weighted_baseline_prediction"],
+            "same_position_mean_baseline_prediction": prediction["same_position_mean_baseline_prediction"],
+            "prediction_row_digest": prediction.get("row_digest"),
+            "prediction_lock_sha256": expected_lock,
+        }
+        if status == "OBSERVED":
+            t = float(target)
+            for name in ("candidate_prediction", "primary_baseline_prediction", "weighted_baseline_prediction", "same_position_mean_baseline_prediction"):
+                if row[name] is None:
+                    continue
+                pred = float(row[name])
+                row[name.replace("_prediction", "_abs_error")] = fstr(abs(pred - t))
+        rows.append(row)
+    rows.sort(key=stable_key_sort)
+    evaluation = {
+        "schema_version": "wr081-target-evaluation-v1",
+        "task_id": TASK_ID, "mode": "target-ingest", "stage": stage, "target_season": year,
+        "bindings": EXPECTED_BINDINGS, "consumer_sha256": _consumer_sha(),
+        "accepted_prediction_lock_sha256": expected_lock,
+        "target_source_sha256": str(visible[year]["sha256"]),
+        "rows": rows,
+        "observed_count": sum(1 for x in rows if x["target_status"] == "OBSERVED"),
+        "target_unavailable_count": sum(1 for x in rows if x["target_status"] != "OBSERVED"),
+        "fallback_count": int(artifact.get("fallback_count", 0)),
+        "lineage_failures": int(artifact.get("lineage_failures", 0)),
+    }
+    write_json(_evaluation_state_path(state_dir, year), {
+        "schema_version": "wr081-evaluation-state-v1",
+        "evaluation": evaluation,
+        "evaluation_sha256": sha256_bytes(canonical_bytes(evaluation)),
+    })
+    rel = f".ai/research/generated/WR081_EVALUATION_{year}.json"
+    pub = _publication(output_dir, rel, evaluation)
+    _finish(output_dir, "target-ingest", {
+        "stage": stage, "target_season": year,
+        "accepted_prediction_lock_sha256": expected_lock,
+        "target_values_accessed": True,
+    }, [pub])
+
+def _observed_rows(state_dir: Path, years: Sequence[int]) -> list[dict[str, Any]]:
+    rows = []
+    for year in years:
+        state = read_json(_evaluation_state_path(state_dir, year))
+        ev = state.get("evaluation")
+        if not isinstance(ev, dict) or state.get("evaluation_sha256") != sha256_bytes(canonical_bytes(ev)):
+            raise ContractError("evaluation state digest mismatch")
+        if int(ev.get("target_season", -1)) != year:
+            raise ContractError("evaluation season mismatch")
+        for row in ev.get("rows", []):
+            if row.get("target_status") == "OBSERVED":
+                values = [
+                    row.get("target_ppr_pg"), row.get("candidate_prediction"),
+                    row.get("primary_baseline_prediction"), row.get("weighted_baseline_prediction"),
+                    row.get("same_position_mean_baseline_prediction"),
+                ]
+                if any(v is None or not math.isfinite(float(v)) for v in values):
+                    raise ContractError("evaluable gate row incomplete")
+                rows.append(dict(row))
+    rows.sort(key=stable_key_sort)
+    return rows
+
+def _mae(rows: Sequence[Mapping[str, Any]], pred_field: str) -> float:
+    if not rows:
+        raise ContractError("zero evaluable rows")
+    return math.fsum(abs(float(r[pred_field]) - float(r["target_ppr_pg"])) for r in rows) / len(rows)
+
+def _rmse(rows: Sequence[Mapping[str, Any]], pred_field: str) -> float:
+    if not rows:
+        raise ContractError("zero evaluable rows")
+    return math.sqrt(math.fsum((float(r[pred_field]) - float(r["target_ppr_pg"])) ** 2 for r in rows) / len(rows))
+
+def _relative_improvement(candidate: float, baseline: float) -> float:
+    if not math.isfinite(candidate) or not math.isfinite(baseline) or candidate < 0 or baseline < 0:
+        raise ContractError("invalid relative gate input")
+    if baseline == 0:
+        if candidate == 0:
+            return 0.0
+        raise ContractError("zero baseline gate input")
+    return (baseline - candidate) / baseline
+
