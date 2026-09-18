@@ -161,7 +161,11 @@
       ],
       "forbidden_exact_paths": [],
       "next_gate": "Fresh independent audit of exact frozen WR-081 target b5fc0974e0766c24974034557a62044b4752716a. Auditor publishes one immutable WR-082 audit target and returns PASS, PASS WITH NON-BLOCKING FINDINGS, or FAIL — REMEDIATION REQUIRED.",
-      "refresh_mode": "FAST_REFRESH"
+      "refresh_mode": "FAST_REFRESH",
+      "audit_target_task": "WR-081",
+      "audit_target_pr": 251,
+      "audit_target_branch": "wr-081-v2-historical-model-scoring-execution",
+      "audit_target_sha": "b5fc0974e0766c24974034557a62044b4752716a"
     }
   ]
 }
