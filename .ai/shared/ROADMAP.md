@@ -15,11 +15,11 @@ Owner: Manager / Architect
 - WR-084 — CLOSED / immutable historical failed audit.
 - WR-089 — CLOSED / PASS with no findings.
 - WR-090 — CLOSED / canonical-main protected NO-SCORING canary SUCCESS, run `35366265783`.
-- WR-081 — ASSIGNED / fresh execution branch, Stage A consumer preparation only.
+- WR-081 — IN_PROGRESS / Stage A accepted; exact Stage-B protected execution authority bound to PR #251 head `45d6b22104e4647d04dfc37d01ab69619caed0c1`.
 - WR-082 — BLOCKED until future WR-081 publishes one complete Manager-frozen result target.
 
 Critical path:
-`WR-081 consumer prep -> Manager exact future_execution_authority -> protected scoring -> WR-082 -> composition -> composition audit -> Phase 6`.
+`protected WR-081 scoring -> R&D result packaging -> Manager result freeze -> WR-082 -> composition -> composition audit -> Phase 6`.
 
 ## Infrastructure
 
