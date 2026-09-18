@@ -242,7 +242,7 @@ jobs:
           summary={
             'task_id':'WR-083','result':'PASS','mode':'NO-SCORING','implementation_sha':os.environ['GITHUB_SHA'],
             'workflow_run_id':os.environ['GITHUB_RUN_ID'],'verified_input_count':provider['verified_input_count'],
-            'bindings':provider['bindings'],'b2_boundary':provider['b2_boundary'],'objects':provider['objects'],
+            'bindings':provider['bindings'],'b2_boundary':provider['b2_boundary'],'r2_boundary':provider['r2_boundary'],'objects':provider['objects'],
             'provider_mutation_operations':provider['provider_mutation_operations'],
             'consumer_provider_credential_presence':consumer['consumer_provider_credential_presence'],
             'consumer_rehash_resize_pass_count':consumer['consumer_rehash_resize_pass_count'],
