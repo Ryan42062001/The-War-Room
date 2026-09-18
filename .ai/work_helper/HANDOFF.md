@@ -12,7 +12,7 @@ Canonical workflow: V3.3
 
 Starting canonical main supplied by assignment: `b034d64ac7d65c0cdb39a89712a298a2595187c2`
 
-Current canonical main reconciled into branch: `9717147e6b5a06b782b2bc2c84d23420b86273ae`
+Current canonical main to reconcile into final target: `33b00edaf9243dfdcbcdff4f8b3f3b7d30ef8be7`
 
 Branch: `wr-083-protected-historical-scoring-bridge`
 
