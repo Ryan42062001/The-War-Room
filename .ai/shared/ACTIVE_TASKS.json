@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T02:50:00Z",
+  "updated_at_utc": "2026-09-18T02:55:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -255,20 +255,22 @@
       "task_id": "WR-085",
       "owner": "Manager / Architect",
       "worker_slot": "manager-workflow-v34-efficiency",
-      "status": "AUDIT_READY",
+      "status": "REWORK_REQUIRED",
       "task_file": ".ai/manager/WR-085.md",
       "role_handoff": ".ai/manager/HANDOFF.md",
-      "assignment_main_sha": "b034d64ac7d65c0cdb39a89712a298a2595187c2",
+      "assignment_main_sha": "33b00edaf9243dfdcbcdff4f8b3f3b7d30ef8be7",
       "worker_checkpoint_sha": "0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b",
       "branch": "manager/wr-085-workflow-v34-efficiency",
       "pr": 230,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT",
       "audit_required": true,
-      "blocker_type": "NONE",
+      "blocker_type": "AUDIT",
       "user_action_required": false,
       "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on": [
+        "WR-086 failed audit HIGH finding WR-086-AUD-01: exact target is dirty/unmergeable against canonical main; reconcile on current main and correct LOW narrative/activation drift."
+      ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": true,
       "allowed_path_prefixes": [
@@ -308,26 +310,30 @@
         ".github/workflows/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Exact target frozen at 0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b after full exact-head CI SUCCESS -> WR-086 fresh independent audit. Do not merge WR-085 before PASS-family."
+      "next_gate": "Bounded remediation: reconcile PR #230 onto current canonical main, fix WR-086-AUD-02 continuation/activation drift, rerun full exact-head CI/readiness, freeze one new immutable target -> WR-087 fresh independent re-audit."
     },
     {
-      "task_id": "WR-086",
+      "task_id": "WR-087",
       "owner": "Auditor",
-      "worker_slot": "auditor-workflow-v34-efficiency",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-086.md",
+      "worker_slot": "auditor-workflow-v34-efficiency-reaudit",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-087.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": "47aee3da73ad05fb6c021a7b13a01e494dd30c31",
+      "assignment_main_sha": null,
       "worker_checkpoint_sha": null,
-      "branch": "wr-086-workflow-v34-efficiency-audit",
+      "branch": "wr-087-workflow-v34-efficiency-reaudit",
       "pr": null,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT",
       "audit_required": false,
-      "blocker_type": "NONE",
+      "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on_tasks": [
+        "WR-085"
+      ],
+      "blocked_on": [
+        "WR-085 must publish one reconciled, self-validated, Manager-frozen immutable V3.4 candidate after WR-086 remediation."
+      ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
@@ -345,11 +351,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Fresh Independent Auditor audits exactly WR-085 PR #230 head 0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b. PASS-family only -> Manager exact audited integration + mandatory canonical-main full canary.",
-      "audit_target_task": "WR-085",
-      "audit_target_pr": 230,
-      "audit_target_branch": "manager/wr-085-workflow-v34-efficiency",
-      "audit_target_sha": "0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b"
+      "next_gate": "Manager freezes reconciled WR-085 exact target -> activate fresh independent WR-087 re-audit. Do not carry WR-086 verdict to new head."
     }
   ]
 }

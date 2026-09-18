@@ -36,3 +36,7 @@ WR-085 is ASSIGNED in STANDARD_CHAT from canonical main b034d64ac7d65c0cdb39a897
 ## WR-085 frozen / WR-086 activated
 
 Frozen WR-085 PR #230 head `0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b` after exact-head full CI `35299527394` SUCCESS. Activate a fresh Independent Auditor chat for WR-086. V3.3 remains canonical; do not merge candidate before PASS-family.
+
+## WR-086 audit disposition
+
+WR-086 PR #232 / head `21cb757d849c49cbb963d1914c59bb3d2f3f209b` returned FAIL — REMEDIATION REQUIRED. HIGH: old WR-085 target is dirty/unmergeable after overlapping Manager freeze/activation changes. LOW: stale legacy routing prose / missing REFRESH MODE in activation output. WR-085 returns to bounded remediation; WR-087 is reserved as fresh re-audit. V3.3 remains canonical.
