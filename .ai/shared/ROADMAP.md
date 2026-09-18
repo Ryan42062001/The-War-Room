@@ -25,3 +25,8 @@ Critical path:
 
 - WR-074 — PLANNED / serialization cleared, preserved checkpoint `7b4641499c50541abf523267eb4c0255813e8b6d`.
 - WR-075 — BLOCKED behind WR-074.
+
+## Workflow V3.5 candidate — PARALLEL
+
+- WR-091 — IN_PROGRESS / six bounded workflow-automation upgrades executing independently of WR-082.
+- Canonical workflow remains V3.4 until WR-091 receives fresh independent audit and post-merge canary.

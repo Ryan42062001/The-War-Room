@@ -2,7 +2,7 @@
 
 HANDOFF
 
-STATUS: WR-081 FROZEN — WR-082 FRESH INDEPENDENT AUDIT ACTIVATED
+STATUS: WR-082 AUDIT ACTIVE — WR-091 WORKFLOW V3.5 CANDIDATE RUNNING IN PARALLEL
 TASK: WR-082 — Independent Audit of Returning-Player v2 Historical Model Results
 ROLE: Manager / Architect -> Independent Auditor / QA
 CANONICAL WORKFLOW: V3.4
@@ -49,3 +49,7 @@ Freshly and independently audit exactly the frozen WR-081 SHA above. Do not rely
 | 4 | Research & Development (R&D) | COMPLETE | WR-081 final frozen result published | No further WR-081 work unless a fresh audit finding requires Manager-routed remediation. |
 | 5 | Independent Auditor / QA | ACTIVATE NOW | WR-082 fresh independent audit of exact WR-081 target | Use the Manager WR-082 activation prompt. |
 | 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | WR-074 remains separately PLANNED; no current WR-081 technical blocker | Do not activate unless a new technical/workflow blocker appears. |
+
+## Parallel lane — WR-091
+
+Manager is implementing the six approved workflow-automation upgrades on `manager/wr-091-workflow-v35-automation` under STANDARD_CHAT_HIGH. The lane is INDEPENDENT from WR-082 and must not touch `.ai/auditor/**` or move/rewrite the frozen WR-081 audit target. Canonical V3.4 remains authoritative until WR-091 independently audits and passes post-merge canary.

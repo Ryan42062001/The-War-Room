@@ -45,3 +45,7 @@ WR-074 serialization is cleared. It is PLANNED at preserved checkpoint `7b464149
 
 Every Next Activation table lists all six permanent War Room employees:
 Manager, Builder, Draft Strategy, R&D, Auditor, and Work Helper.
+
+## Parallel workflow automation
+
+WR-091 is active on dedicated branch `manager/wr-091-workflow-v35-automation` to implement six bounded Workflow V3.5 automation improvements. This lane is independent of WR-082 and must not alter WR-082 audit evidence or frozen WR-081 target `b5fc0974e0766c24974034557a62044b4752716a`. Workflow V3.4 remains canonical until a fresh audit accepts one immutable WR-091 target and the required post-merge canary passes.
