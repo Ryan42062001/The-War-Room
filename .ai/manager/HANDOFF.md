@@ -2,39 +2,53 @@
 
 HANDOFF
 
-STATUS: WR-089 PASS integrated; WR-083 MERGED / CANARY PENDING; WR-090 USER ACTION REQUIRED
-TASK: WR-090 — Protected Bridge Canonical-Main Canary + Reactivation Gate
-ROLE: Manager / Architect
+STATUS: WR-090 SUCCESS; WR-083 CLOSED; WR-081 REACTIVATED — STAGE A CONSUMER PREPARATION
+TASK: WR-081 — Returning-Player v2 Historical Model Scoring + Result Evidence
+ROLE: Manager / Architect -> Research & Development
 CANONICAL WORKFLOW: V3.4
-CANONICAL MAIN: `ee0071717364441db1130336a318e4288a993a41`
+CANONICAL REACTIVATION BASE: `11f1014ba73a70563c29a8c6d4b11f8303298cdf`
+FRESH BRANCH: `wr-081-v2-historical-model-scoring-execution`
+EXECUTION MODE: STANDARD_CHAT_HIGH
+REFRESH MODE: FAST_REFRESH
 
-DONE:
-- WR-089 PASS preserved via PR #247 / merge `3ce2ad4e135d66a0b705dda0d726abd36a569d77`;
-- exact audited WR-083 target `c9b13959f598b3633a78e2ff78d0862881982dd2` integrated through PR #234;
-- post-integration Full War Room CI `35348990387` SUCCESS;
-- canonical Workflow V3.4 presentation rule now requires complete six-employee Next Activation tables.
+ACCEPTED BRIDGE GATE:
+- WR-089 PASS with no findings;
+- WR-083 exact audited target `c9b13959f598b3633a78e2ff78d0862881982dd2`;
+- integration merge `ee0071717364441db1130336a318e4288a993a41`;
+- WR-090 canary run `35366265783` SUCCESS on canonical main;
+- 14 inputs verified, provider mutations 0, consumer credentials absent, rehash/resize 14/14, cleanup PASS, artifacts 0;
+- `real_scoring=false`, `historical_targets_exposed=false`.
 
-BLOCKER:
-GitHub `workflow_dispatch` is not exposed by the connected Manager GitHub tool. User must dispatch the protected NO-SCORING canary on canonical main.
-
-USER ACTION:
-Actions -> WR-083 Protected Historical Scoring Bridge -> Run workflow -> branch `main` -> mode `no-scoring` -> leave scoring-only inputs blank -> Run workflow.
-
-NEXT ACTION:
-After the dispatch finishes, continue this Manager chat. Verify the canary event/head/jobs/artifacts and boundary evidence. On SUCCESS close WR-083/WR-090, then explicitly activate WR-081 on a fresh execution branch with Manager-controlled future_execution_authority. On failure keep WR-081 blocked and route bounded remediation.
+STAGE A ONLY:
+R&D prepares the protected WR-081 scoring consumer under `.ai/research/**`, preferably `.ai/research/WR081_PROTECTED_SCORING_CONSUMER.py`, using only synthetic/local fixtures. Implement the audited bridge modes `predict`, `target-ingest`, and `stage-gate` under accepted WR-059/WR-072 semantics.
 
 DO NOT:
-- do not run authorized-wr081-scoring yet;
-- do not reuse PR #227 as the scoring execution target;
-- do not reactivate WR-081 until the canonical-main NO-SCORING canary succeeds.
+- dispatch `authorized-wr081-scoring`;
+- retrieve retained B2/R2 bytes;
+- perform real target/model/result inspection;
+- edit outside `.ai/research/**`;
+- self-authorize execution identity;
+- reuse old PR #227 as the execution target.
+
+RETURN TO MANAGER WITH:
+- exact branch head;
+- exact consumer path;
+- exact consumer SHA-256;
+- changed files;
+- local/synthetic test evidence;
+- PR number if opened;
+- explicit no-retained-scoring attestation.
+
+NEXT MANAGER STEP:
+Review exact consumer/head and populate canonical `future_execution_authority`. Only after that authority merges may protected real scoring be dispatched.
 
 ## Next Activation
 
 | Order | Employee / Role | Status | Current Task / Gate | Copy/paste activation prompt / next action |
 | --- | --- | --- | --- | --- |
-| 1 | Manager / Architect | USER ACTION | WR-090 — awaiting canonical-main NO-SCORING workflow_dispatch | After the run completes: `Continue The War Room as the Manager / Architect. Refresh live state and process WR-090 canonical-main protected canary; if SUCCESS, close WR-083/WR-090 and reactivate WR-081 under Workflow V3.4.` |
+| 1 | Manager / Architect | WAIT | Await WR-081 Stage-A consumer packet | After R&D returns: `Continue The War Room as the Manager / Architect. Review the WR-081 Stage-A consumer freeze, bind exact future_execution_authority, and authorize protected scoring only if the exact branch/head/path/digest are valid.` |
 | 2 | Implementation Engineer / Builder | IDLE | No active Builder task | Do not activate. |
 | 3 | Draft Strategy & Decision Intelligence Analyst | IDLE | No active Strategy task | Do not activate. |
-| 4 | Research & Development (R&D) | BLOCKED | WR-081 blocked on WR-090 protected canary | Do not activate until Manager explicitly reactivates WR-081. |
-| 5 | Independent Auditor / QA | WAIT | WR-089 complete; WR-082 and WR-075 remain downstream blocked audits | Do not activate. |
-| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | BLOCKED | WR-083 integrated; WR-074 serialized through WR-090 | Do not activate until Manager clears WR-090. |
+| 4 | Research & Development (R&D) | ACTIVATE NOW | WR-081 Stage A — protected scoring consumer preparation only | Use the Manager activation prompt for WR-081 Stage A. |
+| 5 | Independent Auditor / QA | BLOCKED | WR-082 waits for a complete frozen WR-081 result target; WR-075 waits for WR-074 | Do not activate yet. |
+| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | PLANNED | WR-074 serialization cleared; preserved checkpoint available | Do not spawn yet unless Manager prioritizes the infrastructure lane. |

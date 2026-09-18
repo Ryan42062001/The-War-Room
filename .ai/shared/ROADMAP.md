@@ -6,24 +6,22 @@ Owner: Manager / Architect
 
 ## Workflow foundation
 
-- V3.4 — CANONICAL / ACCEPTED.
-- Complete Next Activation table standard — ACTIVE: every routing table lists all six permanent employee roles, including idle/blocked roles.
-- WR-085 / WR-088 — CLOSED after accepted V3.4 audit/integration/canary.
-- WR-086 / WR-087 — immutable failed-audit history.
+- Workflow V3.4 — CANONICAL / ACCEPTED.
+- Complete six-employee Next Activation table standard — ACTIVE.
 
 ## Phase 5B — Returning-Player v2 evidence reset — ACTIVE
 
-- WR-083 — MERGED / exact WR-089-audited protected bridge integrated at canonical merge `ee0071717364441db1130336a318e4288a993a41`; awaiting WR-090 protected canary before closure.
-- WR-084 — CLOSED / historical failed audit.
-- WR-089 — CLOSED / PASS with no findings, PR #247.
-- WR-090 — BLOCKED / USER ACTION REQUIRED: dispatch canonical-main WR-083 protected workflow in `no-scoring` mode and return for Manager verification.
-- WR-081 — BLOCKED before scoring on WR-090.
-- WR-082 — BLOCKED / result audit after future WR-081 result target.
+- WR-083 — CLOSED / audited protected bridge integrated and canonical-main canary passed.
+- WR-084 — CLOSED / immutable historical failed audit.
+- WR-089 — CLOSED / PASS with no findings.
+- WR-090 — CLOSED / canonical-main protected NO-SCORING canary SUCCESS, run `35366265783`.
+- WR-081 — ASSIGNED / fresh execution branch, Stage A consumer preparation only.
+- WR-082 — BLOCKED until future WR-081 publishes one complete Manager-frozen result target.
 
 Critical path:
-`WR-090 protected canary -> WR-081 -> WR-082 -> composition -> composition audit -> Phase 6`.
+`WR-081 consumer prep -> Manager exact future_execution_authority -> protected scoring -> WR-082 -> composition -> composition audit -> Phase 6`.
 
 ## Infrastructure
 
-- WR-074 — temporarily BLOCKED at `7b4641499c50541abf523267eb4c0255813e8b6d` through WR-090.
+- WR-074 — PLANNED / serialization cleared, preserved checkpoint `7b4641499c50541abf523267eb4c0255813e8b6d`.
 - WR-075 — BLOCKED behind WR-074.
