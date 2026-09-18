@@ -2,42 +2,46 @@
 
 HANDOFF
 
-STATUS: COMPLETE — PASS
+STATUS: COMPLETE — FAIL — REMEDIATION REQUIRED
 
-TASK: WR-088
+TASK: WR-084
 
 ROLE: Independent Auditor / QA
 
-BRANCH: `wr-088-workflow-v34-efficiency-reaudit`
+BRANCH: `wr-084-protected-historical-scoring-bridge-audit`
 
 HEAD: use the immutable audit PR head published from this branch
 
-BASE: canonical main `0a4b4edc26a20ba2a385cc956fbeba40a43722b3`
+BASE: canonical main `8e8711dc2a50a066ba4811cb17365a5549e97d1c`
 
-PR: WR-088 audit PR to `main`
+PR: WR-084 audit PR to `main`
 
-DONE: Fresh independent audit of WR-085 / PR #230 exact frozen target `06b8a6766117c8ec1909ba3f13bdfa702f0cf5a2`. WR-087-AUD-01 is fully remediated. Historical WR-086/WR-087 failed audits remain history only; operative V3.4 gating now routes through the currently assigned fresh independent audit, exact audited integration, and required canonical-main canary.
+DONE: Fresh independent audit of WR-083 / PR #234 exact frozen target `4ac5fa2c6148960094fde81b217bd3af080e4213`. The protected NO-SCORING proof, exact 14-source custody binding, provider/consumer isolation, B2/R2 equality, runner-temp cleanup, reviewed bridge-byte identity, prediction-lock chronology, release guard, and scope isolation passed independent review. Two HIGH future-scoring fail-closed defects remain.
 
-CHANGED: Auditor evidence only — `.ai/auditor/WR-088_AUDIT.md` and this handoff.
+CHANGED: Auditor evidence only — `.ai/auditor/WR-084_AUDIT.md` and this handoff.
 
-TESTS: Independently inspected exact target routing, role contracts, task state, workflow enforcement scripts, PR scope, baseline/main advancement, freeze PR, and exact target CI. Verified WR-085 Full War Room CI `35303737871` SUCCESS: classify `105471555922`, governance `105471590166`, full test `105471619318`. Verified freeze PR #239 Governance `105473034768` SUCCESS and post-freeze main Governance `105473171601` SUCCESS.
+TESTS: Independently inspected the frozen bridge/workflow/tests, current V3.4 control plane, accepted WR-042/050/053/059/063/069/072 authority, live proof logs/artifacts, exact target diff and target advancement. Independently reproduced source/cohort/protocol and reviewed implementation SHA-256 bindings. Verified target Full War Room CI `35305591247` SUCCESS and protected/custody regression runs `35305591290`, `35305591251`, `35305591242`, `35305591273` SUCCESS. Verified credentialed NO-SCORING proof `35300775802` SUCCESS with future scoring skipped.
 
-CI: Consume this publication only after the immutable audit PR head has green exact-head CI. The exact audit-head run is recorded in the audit PR/final publication rather than committed here, because adding its run ID here would create a new head.
+CI: Consume this publication only after the immutable audit PR head has green exact-head CI. Record the exact audit-head run/job IDs in the audit PR conversation without changing the immutable audit head.
 
-BLOCKERS: none.
+BLOCKERS:
+- HIGH `WR-084-AUD-01`: future WR-081 expected head / consumer digest are dispatcher-supplied and are not bound to Manager-controlled canonical authority before retained rows/targets reach the consumer; the live remote branch-head check occurs only after execution/staging.
+- HIGH `WR-084-AUD-02`: publication validation confines paths to `.ai/research/**` but does not prevent the consumer from copying retained raw input bytes into an allowed research path that is then staged/committed/pushed.
 
-DECISIONS CONSUMED: V3.3 remains canonical during this audit. WR-086 and WR-087 verdicts were not carried forward. Their evidence was used only to identify historical defects and verify the fresh target independently.
+DECISIONS CONSUMED: V3.4 is canonical. Accepted source/cohort/protocol/custody authority was consumed without re-solving it. WR-050 remains historical FAIL for its then-current lineage gap; WR-053 PASS supplies the accepted current-credential continuity/live-proof closure.
 
-NEXT ACTION: Manager may integrate only exact audited WR-085 head `06b8a6766117c8ec1909ba3f13bdfa702f0cf5a2` after this audit PR's exact-head CI is green, then must run the required canonical-main Full War Room canary before making V3.4 canonical. Do not carry this verdict to a moved target or overlapping canonical advancement.
+NEXT ACTION: Do not merge PR #234 and do not reactivate real WR-081 scoring. Return WR-083 for bounded remediation of both HIGH findings, preserve the accepted NO-SCORING/custody behavior, run exact-head full/protected regressions, freeze one new immutable target, then require a fresh independent audit.
 
-FILES / ARTIFACTS THAT MATTER: `.ai/auditor/WR-088_AUDIT.md`; `.ai/manager/WR088_FREEZE.md`; WR-085 PR #230; exact target `06b8a6766117c8ec1909ba3f13bdfa702f0cf5a2`; target CI `35303737871`; freeze PR #239; current main `0a4b4edc26a20ba2a385cc956fbeba40a43722b3`.
+FILES / ARTIFACTS THAT MATTER: `.ai/auditor/WR-084_AUDIT.md`; `.ai/manager/WR084_FREEZE.md`; WR-083 PR #234; exact target `4ac5fa2c6148960094fde81b217bd3af080e4213`; proof run `35300775802`; target CI `35305591247`.
 
-DO NOT REPEAT: WR-086 dirty-target diagnosis or WR-087 stale-gate verdict as authority. This is a fresh WR-088 verdict on the new exact frozen target.
+DO NOT REPEAT: Do not rerun real historical scoring to investigate these findings. Both defects are independently visible in the future execution/publication control path and can be remediated synthetically.
 
-Final verdict: `PASS`
+Final verdict: `FAIL — REMEDIATION REQUIRED`
 
-Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — none.
+Findings by severity: CRITICAL — none. HIGH — `WR-084-AUD-01`, `WR-084-AUD-02`. MEDIUM — none. LOW — none.
 
-Auditor modified or merged PR #230: NO.
+Auditor modified or merged PR #234: NO.
+
+Auditor performed real WR-081 historical scoring: NO.
 
 Auditor modified non-`.ai/auditor/**` surfaces: NO.
