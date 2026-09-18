@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T03:58:00Z",
+  "updated_at_utc": "2026-09-18T04:12:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -179,13 +179,13 @@
       "task_id": "WR-083",
       "owner": "Work Helper",
       "worker_slot": "work-helper-wr081-protected-scoring-bridge",
-      "status": "ASSIGNED",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-083.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "69f1ec43c313ed89520e74b2853d69150d715d4d",
-      "worker_checkpoint_sha": null,
+      "assignment_main_sha": "8855e00e19d37c0cffca9d2c392262f34febe9cd",
+      "worker_checkpoint_sha": "4ac5fa2c6148960094fde81b217bd3af080e4213",
       "branch": "wr-083-protected-historical-scoring-bridge",
-      "pr": null,
+      "pr": 234,
       "dependency": "HARD",
       "execution_mode": "WORK_MODE",
       "audit_required": true,
@@ -213,31 +213,27 @@
         "scripts/ci/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Work Helper publishes one immutable no-scoring protected-bridge implementation/proof target -> Manager exact freeze -> WR-084 independent audit.",
+      "next_gate": "Exact target frozen by Manager -> WR-084 fresh independent audit. Do not merge PR #234 or authorize real WR-081 scoring before PASS-family audit, exact integration, and protected canonical-main canary.",
       "refresh_mode": "FAST_REFRESH"
     },
     {
       "task_id": "WR-084",
       "owner": "Auditor",
       "worker_slot": "auditor-wr081-protected-scoring-bridge",
-      "status": "BLOCKED",
+      "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-084.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": null,
+      "assignment_main_sha": "8855e00e19d37c0cffca9d2c392262f34febe9cd",
       "worker_checkpoint_sha": null,
       "branch": "wr-084-protected-historical-scoring-bridge-audit",
       "pr": null,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": false,
-      "blocker_type": "UPSTREAM_TASK",
+      "blocker_type": "NONE",
       "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-083"
-      ],
-      "blocked_on": [
-        "WR-083 must publish one Manager-frozen immutable protected-bridge implementation target and privacy-safe no-scoring proof before audit activation."
-      ],
+      "blocked_on_tasks": [],
+      "blocked_on": [],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
@@ -254,8 +250,12 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes exact WR-083 target -> activate WR-084 fresh independent audit.",
-      "refresh_mode": "FAST_REFRESH"
+      "next_gate": "Fresh independent audit of exact Manager-frozen WR-083 target 4ac5fa2c6148960094fde81b217bd3af080e4213. PASS-family only -> Manager integrates exact audited bridge and runs protected canonical-main canary.",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_target_task": "WR-083",
+      "audit_target_pr": 234,
+      "audit_target_branch": "wr-083-protected-historical-scoring-bridge",
+      "audit_target_sha": "4ac5fa2c6148960094fde81b217bd3af080e4213"
     }
   ]
 }
