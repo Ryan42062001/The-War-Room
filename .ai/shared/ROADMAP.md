@@ -12,7 +12,7 @@ Owner: Manager / Architect
 ## Workflow efficiency — V3.4 CANDIDATE
 
 - WR-085 — ASSIGNED / bounded ChatGPT-usage and Work-mode efficiency upgrade.
-- WR-086 — BLOCKED / fresh independent audit after Manager exact freeze.
+- WR-086 — ASSIGNED / fresh independent audit of PR #230 exact head `0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b`.
 - V3.3 remains canonical until PASS-family audit, exact integration, and required canonical-main canary.
 
 Sequence: `WR-085 implementation/self-validation -> Manager exact freeze -> WR-086 fresh independent audit -> PASS-family only: exact integration + full canonical-main canary -> V3.4 canonical disposition`

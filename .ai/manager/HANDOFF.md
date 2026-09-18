@@ -32,3 +32,7 @@ WR-074 is temporarily serialized at `7b4641499c50541abf523267eb4c0255813e8b6d` f
 ## Workflow V3.4 efficiency candidate
 
 WR-085 is ASSIGNED in STANDARD_CHAT from canonical main b034d64ac7d65c0cdb39a89712a298a2595187c2. It implements the bounded usage-efficiency request without weakening V3.3 controls. WR-086 is pre-created BLOCKED as the fresh independent audit lane. V3.3 remains canonical until PASS-family audit, exact integration, and post-merge canary.
+
+## WR-085 frozen / WR-086 activated
+
+Frozen WR-085 PR #230 head `0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b` after exact-head full CI `35299527394` SUCCESS. Activate a fresh Independent Auditor chat for WR-086. V3.3 remains canonical; do not merge candidate before PASS-family.
