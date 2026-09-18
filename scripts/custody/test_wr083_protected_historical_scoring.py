@@ -43,6 +43,7 @@ def test_authority_exact_14() -> None:
     assert bindings["protocol"]["sha256"] == wr083.PROTOCOL_SHA256
     assert wr083.ACCEPTED_R2_ACCESS_KEY_ID_SHA256 == "17e95438e19777a414ee85d57c32d44466199a973c51e5b6f57e42a5384585bd"
     assert wr083.R2_SCOPE_AUTHORITY == ".ai/auditor/WR-053_AUDIT.md"
+    assert wr083.R2_SCOPE_POLICY_AUTHORITY == ".ai/auditor/WR-050_AUDIT.md"
 
 
 def test_consumer_isolation() -> None:
