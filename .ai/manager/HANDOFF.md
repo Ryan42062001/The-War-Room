@@ -2,62 +2,39 @@
 
 HANDOFF
 
-STATUS: WR-083 AUDIT_READY; WR-089 ASSIGNED
-TASK: WR-089 — Fresh Re-Audit of Remediated Protected Historical Scoring Bridge
-ROLE: Manager / Architect -> fresh Independent Auditor / QA
+STATUS: WR-089 PASS integrated; WR-083 MERGED / CANARY PENDING; WR-090 USER ACTION REQUIRED
+TASK: WR-090 — Protected Bridge Canonical-Main Canary + Reactivation Gate
+ROLE: Manager / Architect
 CANONICAL WORKFLOW: V3.4
-CANONICAL MAIN BEFORE FREEZE TRANSITION: `ca7fda518386fc23f44344e78fc3b4169602c254`
-TARGET TASK: WR-083
-TARGET PR: #234
-TARGET BRANCH: `wr-083-protected-historical-scoring-bridge`
-EXACT TARGET SHA: `c9b13959f598b3633a78e2ff78d0862881982dd2`
-AUDIT BRANCH: `wr-089-protected-historical-scoring-bridge-reaudit`
-EXECUTION MODE: STANDARD_CHAT_HIGH
-REFRESH MODE: FAST_REFRESH
+CANONICAL MAIN: `ee0071717364441db1130336a318e4288a993a41`
 
 DONE:
-- WR-084 bounded remediation completed on PR #234.
-- Exact target is current-main based: ahead 35 / behind 0 with only seven authorized WR-083 paths.
-- Final implementation bytes are bound to credentialed NO-SCORING proof head `648ae9372bf2eb49e0fcebcf921d7bafd7d26d1b`.
-- Only Work Helper evidence files changed after the proof.
+- WR-089 PASS preserved via PR #247 / merge `3ce2ad4e135d66a0b705dda0d726abd36a569d77`;
+- exact audited WR-083 target `c9b13959f598b3633a78e2ff78d0862881982dd2` integrated through PR #234;
+- post-integration Full War Room CI `35348990387` SUCCESS;
+- canonical Workflow V3.4 presentation rule now requires complete six-employee Next Activation tables.
 
-VALIDATION:
-- Full War Room CI `35309111018` — SUCCESS;
-- classify `105487272881` — SUCCESS;
-- governance `105487309809` — SUCCESS;
-- full test `105487359262` — SUCCESS;
-- WR-083 protected preflight `35309111079` — SUCCESS;
-- WR-046 `35309111050`, WR-063 `35309111093`, WR-069 `35309111021` — SUCCESS;
-- credentialed remediated NO-SCORING proof `35308823649` — SUCCESS;
-- proof Actions artifacts: 0.
+BLOCKER:
+GitHub `workflow_dispatch` is not exposed by the connected Manager GitHub tool. User must dispatch the protected NO-SCORING canary on canonical main.
 
-AUDIT EMPHASIS:
-- independently verify closure of `WR-084-AUD-01`: Manager-controlled pre-exposure branch/head/consumer identity binding and all stale/unrelated/race failures;
-- independently verify closure of `WR-084-AUD-02`: retained-raw publication exclusion bound to the retained manifest, narrow evidence paths/types, and passthrough negative tests;
-- independently re-verify previously positive custody/no-scoring properties.
-
-BOUNDARY:
-- `real_scoring=false`;
-- `historical_targets_exposed=false`;
-- no real WR-081 scoring during WR-089.
-
-BLOCKERS:
-- PR #234 must not merge before WR-089 PASS-family;
-- WR-081 remains blocked;
-- WR-074 remains serialized.
+USER ACTION:
+Actions -> WR-083 Protected Historical Scoring Bridge -> Run workflow -> branch `main` -> mode `no-scoring` -> leave scoring-only inputs blank -> Run workflow.
 
 NEXT ACTION:
-Fresh Auditor executes WR-089 exactly against `c9b13959f598b3633a78e2ff78d0862881982dd2`, writes only `.ai/auditor/**`, publishes immutable audit evidence/PR/exact-head CI, then returns to Manager.
+After the dispatch finishes, continue this Manager chat. Verify the canary event/head/jobs/artifacts and boundary evidence. On SUCCESS close WR-083/WR-090, then explicitly activate WR-081 on a fresh execution branch with Manager-controlled future_execution_authority. On failure keep WR-081 blocked and route bounded remediation.
 
-FILES / ARTIFACTS THAT MATTER:
-- `.ai/manager/WR-089.md`;
-- `.ai/manager/WR089_FREEZE.md`;
-- `.ai/auditor/WR-084_AUDIT.md`;
-- PR #234;
-- `.ai/work_helper/WR083_PROTECTED_PROOF_SUMMARY.json`;
-- `.github/workflows/wr083-protected-historical-scoring-bridge.yml`;
-- `scripts/custody/wr083_protected_historical_scoring.py`;
-- `scripts/custody/test_wr083_protected_historical_scoring.py`.
+DO NOT:
+- do not run authorized-wr081-scoring yet;
+- do not reuse PR #227 as the scoring execution target;
+- do not reactivate WR-081 until the canonical-main NO-SCORING canary succeeds.
 
-DO NOT REPEAT:
-Do not re-run real scoring, re-litigate accepted source/cohort/protocol policy, or treat Work Helper claims as proof.
+## Next Activation
+
+| Order | Employee / Role | Status | Current Task / Gate | Copy/paste activation prompt / next action |
+| --- | --- | --- | --- | --- |
+| 1 | Manager / Architect | USER ACTION | WR-090 — awaiting canonical-main NO-SCORING workflow_dispatch | After the run completes: `Continue The War Room as the Manager / Architect. Refresh live state and process WR-090 canonical-main protected canary; if SUCCESS, close WR-083/WR-090 and reactivate WR-081 under Workflow V3.4.` |
+| 2 | Implementation Engineer / Builder | IDLE | No active Builder task | Do not activate. |
+| 3 | Draft Strategy & Decision Intelligence Analyst | IDLE | No active Strategy task | Do not activate. |
+| 4 | Research & Development (R&D) | BLOCKED | WR-081 blocked on WR-090 protected canary | Do not activate until Manager explicitly reactivates WR-081. |
+| 5 | Independent Auditor / QA | WAIT | WR-089 complete; WR-082 and WR-075 remain downstream blocked audits | Do not activate. |
+| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | BLOCKED | WR-083 integrated; WR-074 serialized through WR-090 | Do not activate until Manager clears WR-090. |
