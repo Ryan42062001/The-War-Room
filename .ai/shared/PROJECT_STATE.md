@@ -11,10 +11,10 @@ WR-081 remains blocked before scoring. WR-083 remains assigned for the protected
 
 ## Workflow V3.4 efficiency candidate
 
-WR-086 is immutable failed-audit history at PR #232 / head `21cb757d849c49cbb963d1914c59bb3d2f3f209b`.
+WR-086 and WR-087 are immutable failed-audit history at PR #232 / head `21cb757d849c49cbb963d1914c59bb3d2f3f209b` and PR #237 / head `91f07986aea0866bd368ef0b996f62cdc5a04068`.
 
-The substantive V3.4 design passed WR-086 review. Its HIGH exact-target integration defect was remediated by reconciling current canonical state into PR #230; the LOW stale-routing/activation packet drift was also corrected.
+All substantive V3.4 execution/refresh, packet, handoff, chat-reuse, audit-readiness, batching, escalation/de-escalation, machine fail-closed and V3.3 safety behavior passed independent review. The remaining WR-087-AUD-01 stale future-gate defect is bounded-remediated by making operative future-audit routing generic to the currently assigned fresh independent audit rather than hard-coding a historical audit task.
 
-WR-087 is ASSIGNED as the fresh re-audit lane. Its activation state is now reconciled into the candidate before final freeze, specifically to avoid recreating WR-086-AUD-01.
+WR-088 is ASSIGNED as the fresh replacement audit. Audit execution remains gated on non-overlapping `.ai/manager/WR088_FREEZE.md` naming one exact immutable WR-085 head after full exact-head CI/readiness.
 
-Next gate: full CI/readiness on the final candidate head -> non-overlapping exact freeze evidence -> fresh WR-087 audit. V3.3 remains canonical until PASS-family re-audit, exact audited integration, and canonical-main canary.
+V3.3 remains canonical until PASS-family fresh audit, exact audited integration, and required canonical-main full canary.

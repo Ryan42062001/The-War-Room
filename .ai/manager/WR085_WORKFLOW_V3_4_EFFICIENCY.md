@@ -36,7 +36,7 @@ V3.3 already provides Fast Refresh and audit-readiness machinery, but its operat
 | WR-083 | WORK_MODE | FAST_REFRESH | Keep Work-routed: custody/workflow/provider proof is execution-heavy and iterative. Standard fallback remains valid while credits are unavailable. |
 | WR-084 | STANDARD_CHAT_HIGH | FAST_REFRESH | Fresh independent bridge audit. |
 | WR-085 | STANDARD_CHAT_HIGH | FULL_REFRESH | Explicit exception because canonical workflow/control-plane architecture is changing. |
-| WR-086 | STANDARD_CHAT_HIGH | FAST_REFRESH | Fresh independent workflow audit. |
+| WR-088 | STANDARD_CHAT_HIGH | FAST_REFRESH | Currently assigned fresh independent workflow audit after immutable failed WR-086/WR-087 history. |
 
 No active tasks are consolidated. The implementation/audit pairs require distinct ownership, and WR-081/082 remain distinct scoring/result-audit gates.
 

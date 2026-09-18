@@ -7,13 +7,14 @@ Owner: Manager / Architect
 ## Workflow foundation
 
 - V3.3 — CANONICAL / ACCEPTED.
-- V3.4 — CANDIDATE / REMEDIATED, pending fresh re-audit.
-- WR-085 — AUDIT_READY pending final exact-head CI/freeze.
-- WR-086 — COMPLETE / FAIL — REMEDIATION REQUIRED; immutable failed audit PR #232.
-- WR-087 — ASSIGNED / fresh independent re-audit; execution waits for non-overlapping exact freeze evidence.
+- V3.4 — CANDIDATE / bounded stale-routing remediation complete pending final exact-head CI/freeze/re-audit.
+- WR-085 — AUDIT_READY pending final exact-head CI and non-overlapping freeze.
+- WR-086 — COMPLETE / FAIL — immutable historical audit PR #232.
+- WR-087 — COMPLETE / FAIL — immutable historical audit PR #237; sole blocker WR-087-AUD-01 is bounded-remediated in the new candidate head.
+- WR-088 — ASSIGNED / current fresh independent re-audit; execution waits for non-overlapping WR088 freeze evidence.
 - All V3.3 exact-head, independent-audit, custody, fail-closed, collision, Manager-merge, CI and post-merge-canary controls remain mandatory.
 
-Sequence: `final WR-085 full CI -> non-overlapping freeze -> WR-087 fresh audit -> PASS-family only: exact integration + full canonical-main canary -> V3.4 canonical disposition`
+Sequence: `final WR-085 full CI/readiness -> non-overlapping WR088 freeze -> WR-088 fresh audit -> PASS-family only: exact integration + full canonical-main canary -> V3.4 canonical disposition`
 
 ## Phase 5B — Returning-Player v2 evidence reset — ACTIVE
 

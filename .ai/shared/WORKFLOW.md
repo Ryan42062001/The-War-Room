@@ -8,7 +8,7 @@ This is the canonical workflow for **The War Room**, the live fantasy-football *
 
 ## V3.4 — ChatGPT usage efficiency candidate (WR-085)
 
-Status: **CANDIDATE**. V3.3 remains canonical until WR-086 returns PASS-family on one exact WR-085 target, Manager integrates only that audited target, and the required canonical-main canary passes.
+Status: **CANDIDATE**. V3.3 remains canonical until the currently assigned fresh independent audit returns PASS-family on one exact Manager-frozen WR-085 target, Manager integrates only that audited target, and the required canonical-main canary passes.
 
 V3.4 changes resource-routing defaults, not safety authority. All V3.3 exact-head, branch, collision, custody/provider, fail-closed, independent-audit, CI, Manager-merge and post-merge-canary guarantees remain mandatory.
 
