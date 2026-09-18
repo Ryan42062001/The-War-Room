@@ -2,36 +2,61 @@
 
 HANDOFF
 
-Task ID: WR-069
+Task ID: WR-083
 
 Role: Work Helper / Super Troubleshooter / Cross-Functional Operator
 
-Status: COMPLETE — INDEPENDENT AUDIT REQUIRED
+Status: COMPLETE — AUDIT REQUIRED
 
-Starting canonical main: `4d0e265bf67ff85558c21485cd2329ba19c1ba79`
+Canonical workflow: V3.3
 
-Branch: `wr-069-retained-safe-consumer-parser-v2`
+Starting canonical main supplied by assignment: `b034d64ac7d65c0cdb39a89712a298a2595187c2`
 
-Live-proof implementation SHA: `56f6581cd62fd474f4422bc5f7d353f48498a853`
+Current canonical main reconciled into branch: `9717147e6b5a06b782b2bc2c84d23420b86273ae`
 
-Protected run/job: `34922718568` / `104234179073`
+Branch: `wr-083-protected-historical-scoring-bridge`
 
-Privacy-safe evidence commit: `d39085321af0e17dcfd55de91e9faf958b658c28`
+Protected implementation/proof SHA: `cb854442b0acc18a75c4b04e6f477be75480404f`
+
+Protected run: `35300775802` — SUCCESS
+
+Protected jobs:
+- preflight `105462795952` — SUCCESS
+- trust-gate `105462928597` — SUCCESS
+- protected-no-scoring-proof `105462958770` — SUCCESS
+- future-authorized-wr081-scoring `105462959719` — SKIPPED
+
+Proof-head War Room CI: `35300775750` — SUCCESS
 
 ## Disposition
 
-The accepted WR-067 CSV contract was implemented exactly and reproduced 49/49 synthetic conformance cases with zero mismatches. The protected proof consumed exactly the 15 already-custodied WR-042 identities and performed no upstream reacquisition or provider mutation.
+WR-083 implemented the smallest protected historical-scoring execution bridge while preserving the accepted WR-059 source/cohort authority and WR-072 protocol. The protected proof handled exactly the 14 admitted annual Player Summary Stats identities and no Players metadata or `draft_picks.csv`.
 
-All 15 exact identities passed B2 digest/size, R2 digest/size, and B2/R2 byte-equality verification. The dedicated B2 read-only bucket/prefix/capability boundary passed; mutation authority was absent and provider mutation count was zero.
+All 14 retained identities passed B2 SHA-256/byte-size verification, R2 SHA-256/byte-size verification, and B2/R2 byte equality. Provider mutation operations were zero.
 
-All provider access completed before consumer execution. Deliberate provider-authority injection failed closed. The clean consumer ran with provider credential presence `false`, independently re-hashed/re-sized all 15 inputs, and completed retained-source derivation successfully.
+The dedicated B2 read boundary proved exact bucket/prefix/read capabilities with mutation-capable authority absent. The active R2 object credential matched accepted Access Key ID SHA-256 `17e95438e19777a414ee85d57c32d44466199a973c51e5b6f57e42a5384585bd`; current-credential continuity is bound to accepted WR-053 and scope-policy evidence to accepted WR-050. WR-083 exercised R2 `HeadObject`/`GetObject` only.
 
-Derived evidence SHA-256 is `448baab9b5b3109faee3e322432369f72dcef1569685a16b0605ce25bd855fbb`. Historical inventories close the missing WR-059 target seasons 2014–2017 with counts `410`, `412`, `423`, and `423` respectively, using only historical Y-1 source bytes. Current players metadata was not used to rewrite historical cohort membership.
+The no-scoring consumer ran after provider access under an explicit provider-free environment, independently re-hashed/re-sized all 14 inputs, and deliberate provider-authority injection failed closed.
 
-Cleanup PASS. Raw Actions artifact count `0`. No `.ai/research/**`, accepted WR-063 runtime, mutation-capable custody helper, 2026 outcome, target/model/scoring/ranking/production, or Phase-6 surface was changed.
+Synthetic chronology and sandbox conformance passed. Prediction-before-target and stage-order failures are enforced; future target-season bytes are withheld until that season's prediction publication is locked. Sandbox networking is unshared, sealed target data is not mounted during prediction, and future publication is limited to authorized `.ai/research/**`.
 
-Detailed evidence is in `.ai/work_helper/WR069_RETAINED_SAFE_CONSUMER_PARSER.md`, `.ai/work_helper/WR069_RETAINED_DERIVED_EVIDENCE.json`, its SHA sidecar, and `.ai/work_helper/WR069_PROTECTED_PROOF_SUMMARY.json`.
+Cleanup passed. GitHub's artifact endpoint reports zero Actions artifacts for the successful protected run.
+
+Reviewed file SHA-256:
+- script `6218de40d9e65dceee64e77397f019572d1c49abd580d473051187f2f756e44e`
+- tests `d046e556ecda1b94eb1966a26eadd0e676845aaade2bb6e5319e279a7625c07a`
+- workflow `6a317eb1167e8881aabf3777bb877bd1901f59a14a4ecb374eb7b34bcfade779`
+
+No real WR-081 model scoring occurred. Historical targets were not exposed. No 2026 regular-season outcomes were inspected. No provider state, production ranking behavior, season-total composition, or Phase 6 work changed.
+
+Detailed evidence:
+- `.ai/work_helper/WR083_PROTECTED_HISTORICAL_SCORING_BRIDGE.md`
+- `.ai/work_helper/WR083_PROTECTED_PROOF_SUMMARY.json`
 
 ## Next gate
 
-Manager should freeze the exact final WR-069 PR/head and activate WR-070 for fresh Independent Auditor / QA review. Work Helper does not merge or self-certify and must not activate WR-070.
+Return control to Manager.
+
+Manager should verify and freeze the exact final WR-083 PR head, then activate WR-084 for fresh independent audit. Work Helper does not merge WR-083, does not activate WR-084, and does not reactivate WR-081.
+
+Only WR-084 PASS-family plus Manager integration and protected canonical-main canary may unlock later explicit WR-081 historical scoring execution.
