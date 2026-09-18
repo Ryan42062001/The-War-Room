@@ -2,44 +2,40 @@
 
 HANDOFF
 
-Task ID: WR-077
+Task ID: WR-086
 
 Role: Independent Auditor / QA
 
-Status: COMPLETE — PASS
+Status: COMPLETE — FAIL — REMEDIATION REQUIRED
 
-Workflow: V3.3
+Workflow: V3.3 canonical
 
 Execution mode: STANDARD_CHAT
 
-Audit branch: `wr-077-v2-model-protocol-feature-schema-reaudit-2`
+Audit branch: `wr-086-workflow-v34-efficiency-audit`
 
-Audited target: WR-072 / PR #207
+Audited target: WR-085 / PR #230
 
-Frozen audited implementation head: `a228d0002545a701aea8c7bead5de0bf36994764`
+Frozen audited implementation head: `0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b`
 
-Historical failed 1.1 head: `95b1fdfb36ffc7b865597bf7131fa1dd9f45ae73`
+Canonical main verified: `9717147e6b5a06b782b2bc2c84d23420b86273ae`
 
-Final verdict: `PASS`
+Final verdict: `FAIL — REMEDIATION REQUIRED`
 
-Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — none.
+Findings by severity: CRITICAL — none. HIGH — `WR-086-AUD-01`. MEDIUM — none. LOW — `WR-086-AUD-02`.
 
-WR-076-AUD-01: PASS — the lock now defines unambiguous named `candidate,baseline` signatures, always uses baseline as denominator, freezes zero/nonfinite fail-closed behavior, and machine-binds every relative result gate to named candidate/baseline operands. Existing thresholds remain inherited unchanged.
+HIGH `WR-086-AUD-01`: PR #230 remains at the exact frozen head, but live GitHub reports mergeable=false / mergeable_state=dirty / rebaseable=false. Current main advanced two commits from the WR-085 baseline across six Manager/shared control-plane files, and all six are also modified by WR-085. Resolving the overlap would produce new audited-surface bytes/head, so the exact frozen target cannot be integrated under the preserved V3.3 exact-target rule. Reconcile WR-085 onto current main, rerun exact-head validation/Full CI/readiness, freeze a new SHA, and route a fresh independent audit.
 
-WR-076-AUD-02: PASS — the exact privacy-safe synthetic fixture is embedded and hash-bound. Independent reproduction matched fixture SHA `3fb3c208...`, cluster SHA `aa63baf5...`, 5,000-replicate SHA `b4edb70c...`, Q.025 `-0.625`, Q.975 `1`, final PCG64-state SHA `b235708c...`, and gate `false`.
+LOW `WR-086-AUD-02`: machine routing is correct, but continuation prose is incompletely migrated: PROJECT_STATE and Manager handoff retain legacy `STANDARD_CHAT` text, the Manager handoff also retains obsolete base `b034d64...`, WR-085 next_gate still says `STANDARD_CHAT`, and canonical ACTIVATE NOW/Manager activation output omits REFRESH MODE even though the new execution-packet contract requires it. Clean these during reconciliation.
 
-Machine-lock identity: PASS — exact 1.2 JSON bytes hash to `aed044e6b7df9684153181a7a97a47a86c50ce9049db063ecdd8a973b1a832b6`, matching the adjacent sidecar. Unchanged semantics inherit exact 1.1 head `95b1fdf...` / lock SHA `831aed6e8cad2d760a58a3c9f5bc298891e0ed11707ecc545c9254b29110c61d`.
+Positive audit: V3.4's Standard Chat High default, Work routing test, Fast/Full refresh policy, execution packets, decision consumption, compact-handoff policy, self-validation-before-audit, safe chat reuse, worker-spawn cost check, batching boundaries, escalation/de-escalation packets, active-task reclassification, machine enum/refresh drift checks, and all reviewed V3.3 safety controls are otherwise sound.
 
-Preserved boundaries: PASS — accepted source/cohort/custody authority, 5,176 cohort keys, exactly 28 stats-only predictors, zero Players-metadata/draft-capital predictors, target, chronology, preprocessing, Ridge candidate/baselines, bootstrap mechanics, full-row evidence, outcome isolation, fail-closed controls and environment lock remain inherited. No fitting/scoring/tuning/prediction/result/outcome inspection, source mutation, ranking/production, season-total or Phase-6 work was found.
+Exact-target CI: War Room CI `35299527394` SUCCESS; classify `105459050842`, governance `105459089895`, full test `105459120484` all SUCCESS. Audit-readiness had zero blockers/forbidden/outside-allowlist files.
 
-Scope: PASS — failed 1.1 head -> frozen 1.2 head is exactly 1 commit ahead / 0 behind and changes only four authorized `.ai/research/**` artifacts. PR #207 changes exactly those same four paths. Current-main advancement is non-overlapping with those research files.
+Detailed report: `.ai/auditor/WR-086_AUDIT.md`.
 
-Exact-target CI: PASS — War Room CI `35097564198`; classify `104798603247` SUCCESS, governance `104798662291` SUCCESS, product test `104798730189` SKIPPED as expected for research-only scope.
+Recommended next role: Manager / Architect. Do not merge current PR #230. Reconcile on current canonical main, fix the LOW narrative/activation packet drift, produce one new immutable WR-085 target with full exact-head CI/readiness, then route a fresh Independent Auditor re-audit.
 
-Detailed report: `.ai/auditor/WR-077_AUDIT.md`.
-
-Recommended next role: Manager / Architect. While PR #207 remains exact `a228d0002545a701aea8c7bead5de0bf36994764`, perform normal live-state/target-advancement integration gates and merge the exact audited pre-score protocol remediation. This PASS does not itself execute or authorize model scoring; later model-result work remains separately assigned and independently audited.
-
-Auditor modified or merged PR #207: NO
+Auditor modified or merged PR #230: NO
 
 Auditor modified non-`.ai/auditor/**` surfaces: NO
