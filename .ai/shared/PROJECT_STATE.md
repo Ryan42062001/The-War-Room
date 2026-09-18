@@ -32,12 +32,12 @@ Canary proof:
 
 WR-083 and WR-090 are closed.
 
-WR-081 Stage A is complete on PR #251 at exact head `45d6b22104e4647d04dfc37d01ab69619caed0c1`. Manager independently reviewed the consumer and recomputed SHA-256 `54ccf15ebf542bff182927c946b4ce37fd0c294d4b95f4cf595c3428ec64b2c4`.
+WR-081 protected scoring completed through canonical workflow run `35402528405`. The audited bridge published protected evidence to PR #251 and advanced the execution branch to `c586394bfe01d70b23c499c12902c712e591c627`.
 
-Canonical `future_execution_authority` now binds the exact WR-081 execution branch, head, consumer path, and digest. Real scoring remains permitted only through the audited WR-083 protected workflow; PR #251 remains open/unmerged until that workflow publishes the protected result evidence.
+Development passed, but validation failed the frozen WR-072 gates. Terminal state is `VALIDATION_FAILED` with status `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`. Confirmation seasons 2022–2025 were not exposed or scored. The one-time execution authority is consumed; no rerun/tuning is authorized. R&D now packages the exact terminal result for Manager freeze and WR-082 audit.
 
 Current critical path:
-`protected authorized WR-081 scoring -> R&D final result packaging -> Manager exact result freeze -> WR-082 fresh result audit -> composition -> composition audit -> Phase 6`.
+`R&D final WR-081 terminal-result packaging -> Manager exact result freeze -> WR-082 fresh result audit -> Manager baseline-only disposition`.
 
 WR-074 serialization is cleared. It is PLANNED at preserved checkpoint `7b4641499c50541abf523267eb4c0255813e8b6d`, but is not being spawned in this transition because the immediate critical path is WR-081.
 

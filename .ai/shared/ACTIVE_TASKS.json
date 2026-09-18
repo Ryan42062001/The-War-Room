@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T22:29:00Z",
+  "updated_at_utc": "2026-09-18T22:45:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -93,7 +93,7 @@
       "task_file": ".ai/manager/WR-081.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "11f1014ba73a70563c29a8c6d4b11f8303298cdf",
-      "worker_checkpoint_sha": "45d6b22104e4647d04dfc37d01ab69619caed0c1",
+      "worker_checkpoint_sha": "c586394bfe01d70b23c499c12902c712e591c627",
       "branch": "wr-081-v2-historical-model-scoring-execution",
       "pr": 251,
       "dependency": "HARD",
@@ -123,14 +123,8 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "Manager Stage-B authority is canonical: dispatch WR-083 Protected Historical Scoring Bridge on canonical main with mode authorized-wr081-scoring and the exact authorized branch/head/consumer path/SHA-256. After protected scoring publishes evidence to PR #251, R&D resumes WR-081 packaging and returns one complete immutable result target for Manager freeze.",
-      "refresh_mode": "FAST_REFRESH",
-      "future_execution_authority": {
-        "branch": "wr-081-v2-historical-model-scoring-execution",
-        "head_sha": "45d6b22104e4647d04dfc37d01ab69619caed0c1",
-        "consumer_path": ".ai/research/WR081_PROTECTED_SCORING_CONSUMER.py",
-        "consumer_sha256": "54ccf15ebf542bff182927c946b4ce37fd0c294d4b95f4cf595c3428ec64b2c4"
-      }
+      "next_gate": "Protected scoring run 35402528405 completed SUCCESS as an execution and published exact terminal result evidence at c586394bfe01d70b23c499c12902c712e591c627. Development gate passed; validation gate failed under the frozen protocol, so confirmation was not exposed. R&D must package this exact VALIDATION_FAILED / BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE result without tuning, rerun, or confirmation access, publish one immutable final result head with exact-head CI, and return to Manager for WR-082 freeze.",
+      "refresh_mode": "FAST_REFRESH"
     },
     {
       "task_id": "WR-082",
