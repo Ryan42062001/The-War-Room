@@ -11,9 +11,9 @@ Owner: Manager / Architect
 
 ## Workflow efficiency — V3.4 CANDIDATE
 
-- WR-085 — REWORK REQUIRED / bounded reconciliation after WR-086 failed audit; V3.4 substantive design retained.
+- WR-085 — AUDIT READY CANDIDATE / reconciled checkpoint passed full CI; final exact re-audit SHA pending non-conflicting activation reconciliation.
 - WR-086 — COMPLETE / FAIL — REMEDIATION REQUIRED; immutable failed audit PR #232 head `21cb757d849c49cbb963d1914c59bb3d2f3f209b`.
-- WR-087 — BLOCKED / fresh independent re-audit after one new reconciled WR-085 freeze.
+- WR-087 — ASSIGNED / fresh independent re-audit; do not execute until Manager publishes final exact freeze evidence.
 - V3.3 remains canonical until PASS-family re-audit, exact integration, and required canonical-main canary.
 
 Sequence: `WR-085 implementation/self-validation -> Manager exact freeze -> WR-086 fresh independent audit -> PASS-family only: exact integration + full canonical-main canary -> V3.4 canonical disposition`

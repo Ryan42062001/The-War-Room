@@ -41,3 +41,7 @@ WR-085 Workflow V3.4 candidate is self-validated and frozen for independent audi
 ## WR-086 disposition
 
 Independent WR-086 audit returned `FAIL — REMEDIATION REQUIRED`. The V3.4 design itself substantially passed, but old frozen PR #230 head `0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b` became dirty against canonical main on overlapping control-plane files. WR-085 is in bounded reconciliation/remediation; WR-087 is blocked pending one new immutable target. V3.3 remains canonical.
+
+## V3.4 re-audit activation
+
+WR-085 reconciled checkpoint `f7a52ba2d21aed7b378428a3a37f8079efc5f8ca` passed full CI `35301414058`. WR-087 is ASSIGNED, with exact SHA intentionally deferred until activation state is reconciled into PR #230. Manager will then freeze the final clean PR head using non-overlapping evidence before audit execution.
