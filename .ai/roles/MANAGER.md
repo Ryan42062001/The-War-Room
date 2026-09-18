@@ -62,4 +62,4 @@ Reuse an existing same-role chat for closely related sequential work when safe; 
 Handoffs use the V3.4 compact continuation standard. Detailed narrative history belongs in durable task evidence.
 
 ## Activation output
-When routing next work, end with `ACTIVATE NOW`. Multiple entries for the same durable role are allowed under V3.1.1 concurrency. Include CHAT, TASK, EXECUTION MODE, activation message, and fallback when relevant. Work Helper activations additionally define assignment mode, blocker, target/checkpoint, scopes, evidence, boundaries, and handoff.
+When routing next work, end with `ACTIVATE NOW`. Multiple entries for the same durable role are allowed under V3.1.1 concurrency. Include CHAT, TASK, EXECUTION MODE, REFRESH MODE, REFRESH REASON when FULL_REFRESH, activation message, and fallback when relevant. Work Helper activations additionally define assignment mode, blocker, target/checkpoint, scopes, evidence, boundaries, and handoff.

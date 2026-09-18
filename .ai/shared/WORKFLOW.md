@@ -253,9 +253,9 @@ When using repository APIs, do not implement one logical Manager transition as s
 Do not duplicate full evidence tables across canonical files.
 
 ## Manager activation output and worker bootstrap
-When next work is determined, end with `ACTIVATE NOW` covering Manager, Builder, Draft Strategy, R&D, Auditor, and Work Helper. Multiple entries for one durable role are allowed when concurrency rules pass. Include CHAT, TASK, EXECUTION MODE, activation message, and fallback where relevant.
+When next work is determined, end with `ACTIVATE NOW` covering Manager, Builder, Draft Strategy, R&D, Auditor, and Work Helper. Multiple entries for one durable role are allowed when concurrency rules pass. Include CHAT, TASK, EXECUTION MODE, REFRESH MODE, REFRESH REASON when FULL_REFRESH, activation message, and fallback where relevant.
 
-Fresh worker chats should bootstrap from repository pointers rather than copied transcript history: read this workflow, active registry, role charter, assigned task spec, relevant handoff, and execute only the assigned task.
+Worker bootstrap/continuation should use repository pointers rather than copied transcript history: read this workflow, active registry, role charter, assigned task spec, relevant handoff, and execute only the assigned task. Reuse a safe same-role chat when V3.4 permits; independent audits remain fresh.
 
 ## Workflow principle
 Use the smallest permanent team that preserves meaningful separation. Scale throughput with task-scoped concurrency plus machine collision checks, not extra permanent roles. Preserve independent audit and Manager integration authority. Spend expensive validation where changed surfaces justify it while keeping governance checks always on.

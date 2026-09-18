@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T02:45:00Z",
+  "updated_at_utc": "2026-09-18T03:00:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -261,20 +261,22 @@
       "task_id": "WR-085",
       "owner": "Manager / Architect",
       "worker_slot": "manager-workflow-v34-efficiency",
-      "status": "ASSIGNED",
+      "status": "REWORK_REQUIRED",
       "task_file": ".ai/manager/WR-085.md",
       "role_handoff": ".ai/manager/HANDOFF.md",
-      "assignment_main_sha": "47aee3da73ad05fb6c021a7b13a01e494dd30c31",
-      "worker_checkpoint_sha": null,
+      "assignment_main_sha": "2e02577cf615236bd700610a560de159d20498f1",
+      "worker_checkpoint_sha": "0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b",
       "branch": "manager/wr-085-workflow-v34-efficiency",
       "pr": 230,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": true,
-      "blocker_type": "NONE",
+      "blocker_type": "AUDIT",
       "user_action_required": false,
       "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on": [
+        "WR-086 failed audit requires bounded reconciliation onto current canonical main plus LOW continuation/activation-packet cleanup."
+      ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": true,
       "allowed_path_prefixes": [
@@ -301,7 +303,8 @@
         "scripts/workflow-finish-check.mjs",
         "scripts/test-workflow-state.mjs",
         "scripts/test-workflow-manager-transition.mjs",
-        "scripts/workflow-lane-identity-test.mjs"
+        "scripts/workflow-lane-identity-test.mjs",
+        ".ai/manager/WR-087.md"
       ],
       "forbidden_path_prefixes": [
         ".ai/auditor/",
@@ -314,20 +317,20 @@
         ".github/workflows/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager implements the bounded Workflow V3.4 efficiency candidate in STANDARD_CHAT, self-validates exact scope/tests/CI, publishes one immutable target -> Manager exact freeze -> WR-086 fresh independent audit.",
+      "next_gate": "Reconcile PR #230 onto current canonical main, remediate WR-086-AUD-02, rerun full exact-head CI/readiness, freeze one new immutable target -> WR-087 fresh independent re-audit.",
       "refresh_mode": "FULL_REFRESH",
-      "refresh_reason": "Canonical workflow/control-plane architecture is being changed; this is an explicit Full Refresh exception."
+      "refresh_reason": "Canonical workflow/control-plane architecture is being reconciled after independent audit findings; this is an explicit Full Refresh exception."
     },
     {
-      "task_id": "WR-086",
+      "task_id": "WR-087",
       "owner": "Auditor",
-      "worker_slot": "auditor-workflow-v34-efficiency",
+      "worker_slot": "auditor-workflow-v34-efficiency-reaudit",
       "status": "BLOCKED",
-      "task_file": ".ai/manager/WR-086.md",
+      "task_file": ".ai/manager/WR-087.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
       "assignment_main_sha": null,
       "worker_checkpoint_sha": null,
-      "branch": "wr-086-workflow-v34-efficiency-audit",
+      "branch": "wr-087-workflow-v34-efficiency-reaudit",
       "pr": null,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
@@ -338,7 +341,7 @@
         "WR-085"
       ],
       "blocked_on": [
-        "WR-085 must publish one self-validated Manager-frozen immutable Workflow V3.4 candidate before fresh independent audit."
+        "WR-085 must publish one reconciled, self-validated, Manager-frozen immutable V3.4 candidate after WR-086 remediation."
       ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
@@ -357,7 +360,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes exact WR-085 target -> activate WR-086 fresh independent workflow-efficiency audit.",
+      "next_gate": "Manager freezes reconciled WR-085 exact target -> activate fresh independent WR-087 re-audit. Do not carry WR-086 verdict to new head.",
       "refresh_mode": "FAST_REFRESH"
     }
   ]
