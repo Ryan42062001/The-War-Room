@@ -16,6 +16,7 @@ const approvedWorkflows = [
   '.github/workflows/wr046-custody-fixture.yml',
   '.github/workflows/wr063-retained-version-read.yml',
   '.github/workflows/wr069-retained-safe-consumer-parser.yml',
+  '.github/workflows/wr083-protected-historical-scoring-bridge.yml',
 ].sort();
 assert.deepEqual(
   workflows,
