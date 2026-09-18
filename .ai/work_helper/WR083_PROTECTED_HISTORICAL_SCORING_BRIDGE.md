@@ -1,6 +1,6 @@
 # WR-083 — Protected Historical Scoring Execution Bridge
 
-Status: FINAL HARDENED NO-SCORING PROOF PENDING
+Status: FINAL CORRECTED R2-BOUND NO-SCORING PROOF PENDING
 Task: WR-083
 Role: Work Helper / Super Troubleshooter / Cross-Functional Operator
 Canonical workflow: V3.3
