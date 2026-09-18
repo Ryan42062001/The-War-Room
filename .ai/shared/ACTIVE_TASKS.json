@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T23:05:00Z",
+  "updated_at_utc": "2026-09-18T23:40:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -127,57 +127,16 @@
       "refresh_mode": "FAST_REFRESH"
     },
     {
-      "task_id": "WR-082",
-      "owner": "Auditor",
-      "worker_slot": "auditor-v2-historical-model-result",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-082.md",
-      "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": "92a314a4e22f94d3414b7da5d41849d99d486033",
-      "worker_checkpoint_sha": null,
-      "branch": "wr-082-v2-historical-model-result-audit",
-      "pr": null,
-      "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "audit_required": false,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/auditor/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/research/",
-        ".ai/work_helper/",
-        ".github/",
-        "scripts/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [],
-      "next_gate": "Fresh independent audit of exact frozen WR-081 target b5fc0974e0766c24974034557a62044b4752716a. Auditor publishes one immutable WR-082 audit target and returns PASS, PASS WITH NON-BLOCKING FINDINGS, or FAIL — REMEDIATION REQUIRED.",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_target_task": "WR-081",
-      "audit_target_pr": 251,
-      "audit_target_branch": "wr-081-v2-historical-model-scoring-execution",
-      "audit_target_sha": "b5fc0974e0766c24974034557a62044b4752716a"
-    },
-    {
       "task_id": "WR-091",
       "owner": "Manager",
       "worker_slot": "manager-workflow-v35-automation",
-      "status": "IN_PROGRESS",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-091.md",
       "role_handoff": ".ai/manager/HANDOFF.md",
       "assignment_main_sha": "16f766f1464656779d3e8e2fbab91998eca774f9",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "def590788eb615d9322d5cc8ae3eef14e8c1bc25",
       "branch": "manager/wr-091-workflow-v35-automation",
-      "pr": null,
+      "pr": 257,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
@@ -215,7 +174,48 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Implement the six approved Workflow V3.5 automation upgrades on the dedicated branch, preserve WR-082 and its frozen WR-081 target unchanged, self-validate exact-head CI, then Manager freezes one immutable WR-091 candidate for fresh independent audit."
+      "next_gate": "Manager froze exact WR-091 Workflow V3.5 candidate def590788eb615d9322d5cc8ae3eef14e8c1bc25 after Full War Room CI 35405857026 SUCCESS, WR-083 protected preflight 35405938497 SUCCESS, and bootstrap-reuse canary 35406347330 SUCCESS. Fresh WR-092 independent audit is the next gate; V3.4 remains canonical."
+    },
+    {
+      "task_id": "WR-092",
+      "owner": "Auditor",
+      "worker_slot": "auditor-workflow-v35",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-092.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": "916c53bef57e406baf3cb96bd6879594654a4f05",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-092-workflow-v35-audit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/auditor/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        ".github/",
+        "scripts/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Fresh independent audit of exact WR-091 target def590788eb615d9322d5cc8ae3eef14e8c1bc25 / PR #257. Verify all six V3.5 upgrades, fail-closed behavior, exact-head validation evidence, and preservation of V3.4 safety guarantees.",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_target_task": "WR-091",
+      "audit_target_pr": 257,
+      "audit_target_branch": "manager/wr-091-workflow-v35-automation",
+      "audit_target_sha": "def590788eb615d9322d5cc8ae3eef14e8c1bc25"
     }
   ]
 }
