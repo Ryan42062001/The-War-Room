@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-17T01:15:00Z",
+  "updated_at_utc": "2026-09-18T01:50:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -9,26 +9,43 @@
       "task_id": "WR-074",
       "owner": "Work Helper",
       "worker_slot": "work-helper-self-hosted-heavy-ci",
-      "status": "IN_PROGRESS",
+      "status": "BLOCKED",
       "task_file": ".ai/manager/WR-074.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
       "assignment_main_sha": "408a10cf14d71d88d43193df3bdd830633c2cf6f",
       "worker_checkpoint_sha": "7b4641499c50541abf523267eb4c0255813e8b6d",
       "branch": "wr-074-self-hosted-heavy-ci-runner-pilot",
       "pr": null,
-      "dependency": "INDEPENDENT",
+      "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT",
       "audit_required": true,
-      "blocker_type": "NONE",
+      "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on_tasks": [
+        "WR-084"
+      ],
+      "blocked_on": [
+        "Temporarily serialized behind WR-083/WR-084 because both Work Helper lanes may touch .ai/work_helper/** and scripts/validate-release-candidate.mjs; resume after protected bridge audit disposition."
+      ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [".ai/work_helper/", ".github/workflows/wr074-self-hosted-heavy-ci-pilot.yml", "scripts/ci/", "scripts/validate-release-candidate.mjs"],
-      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/research/", "src/", "public/", "scripts/custody/"],
+      "allowed_path_prefixes": [
+        ".ai/work_helper/",
+        ".github/workflows/wr074-self-hosted-heavy-ci-pilot.yml",
+        "scripts/ci/",
+        "scripts/validate-release-candidate.mjs"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/research/",
+        "src/",
+        "public/",
+        "scripts/custody/"
+      ],
       "forbidden_exact_paths": [],
-      "next_gate": "Work Helper completes hosted reference remediation and repeated successful execution on the dedicated [self-hosted, war-room-heavy-ci] runner, then publishes one immutable target -> Manager exact freeze -> WR-075 audit."
+      "next_gate": "After WR-084 disposition and protected-bridge integration/canary, Manager may reactivate WR-074 from preserved checkpoint 7b4641499c50541abf523267eb4c0255813e8b6d."
     },
     {
       "task_id": "WR-075",
@@ -46,12 +63,27 @@
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": ["WR-074"],
-      "blocked_on": ["WR-074 must publish one Manager-frozen immutable hardened runner-pilot target with exact run/security evidence before audit activation."],
+      "blocked_on_tasks": [
+        "WR-074"
+      ],
+      "blocked_on": [
+        "WR-074 must publish one Manager-frozen immutable hardened runner-pilot target with exact run/security evidence before audit activation."
+      ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [".ai/auditor/"],
-      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/", ".ai/work_helper/", ".github/", "scripts/", "src/", "public/"],
+      "allowed_path_prefixes": [
+        ".ai/auditor/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        ".github/",
+        "scripts/",
+        "src/",
+        "public/"
+      ],
       "forbidden_exact_paths": [],
       "next_gate": "Manager freezes WR-074 exact target -> activate WR-075 fresh independent audit."
     },
@@ -59,26 +91,45 @@
       "task_id": "WR-081",
       "owner": "R&D",
       "worker_slot": "rnd-v2-historical-model-scoring",
-      "status": "ASSIGNED",
+      "status": "BLOCKED",
       "task_file": ".ai/manager/WR-081.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "124ebddff321608935d94af51006846eada7a304",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "3f7ee6cc9294d8ae40921a5d4b50f2d0182f98ca",
       "branch": "wr-081-v2-historical-model-scoring",
-      "pr": null,
+      "pr": 227,
       "dependency": "HARD",
       "execution_mode": "WORK_MODE_PREFERRED",
       "audit_required": true,
-      "blocker_type": "NONE",
+      "blocker_type": "TECHNICAL",
       "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on_tasks": [
+        "WR-084"
+      ],
+      "blocked_on": [
+        "Exact retained historical rows are unavailable to the R&D lane; WR-083 must implement and WR-084 must independently accept a protected scoring bridge before WR-081 is reactivated."
+      ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [".ai/research/"],
-      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/auditor/", ".ai/work_helper/", "src/", "public/", ".github/", "scripts/"],
-      "forbidden_exact_paths": [".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv", ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md", ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"],
-      "next_gate": "R&D executes the accepted WR-072 historical protocol exactly, publishes full-row keyed prediction/result evidence and one immutable result target without production changes or 2026 outcome use -> Manager exact freeze -> WR-082 independent model-result audit."
+      "allowed_path_prefixes": [
+        ".ai/research/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/work_helper/",
+        "src/",
+        "public/",
+        ".github/",
+        "scripts/"
+      ],
+      "forbidden_exact_paths": [
+        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
+        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
+        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
+      ],
+      "next_gate": "WR-083 protected bridge -> WR-084 independent audit -> PASS-family only: Manager integrates exact audited bridge, runs protected canonical-main canary, then explicitly reactivates WR-081 on a fresh execution branch."
     },
     {
       "task_id": "WR-082",
@@ -96,14 +147,109 @@
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": ["WR-081"],
-      "blocked_on": ["WR-081 must publish one Manager-frozen immutable historical model-result target under the accepted WR-072 protocol before independent result audit."],
+      "blocked_on_tasks": [
+        "WR-081"
+      ],
+      "blocked_on": [
+        "WR-081 must eventually publish one complete Manager-frozen immutable historical model-result target. PR #227 is blocker evidence, not a result target."
+      ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
-      "allowed_path_prefixes": [".ai/auditor/"],
-      "forbidden_path_prefixes": [".ai/shared/", ".ai/manager/", ".ai/research/", ".ai/work_helper/", ".github/", "scripts/", "src/", "public/"],
+      "allowed_path_prefixes": [
+        ".ai/auditor/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        ".github/",
+        "scripts/",
+        "src/",
+        "public/"
+      ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes WR-081 exact result target -> activate WR-082 fresh independent model-result audit."
+      "next_gate": "After protected bridge acceptance, WR-081 executes and publishes one complete result target -> Manager freeze -> activate WR-082."
+    },
+    {
+      "task_id": "WR-083",
+      "owner": "Work Helper",
+      "worker_slot": "work-helper-wr081-protected-scoring-bridge",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-083.md",
+      "role_handoff": ".ai/work_helper/HANDOFF.md",
+      "assignment_main_sha": "69f1ec43c313ed89520e74b2853d69150d715d4d",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-083-protected-historical-scoring-bridge",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "WORK_MODE_PREFERRED",
+      "audit_required": true,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": true,
+      "post_merge_canary_required": true,
+      "allowed_path_prefixes": [
+        ".ai/work_helper/WR083_",
+        ".ai/work_helper/HANDOFF.md",
+        ".github/workflows/wr083-protected-historical-scoring-bridge.yml",
+        "scripts/custody/wr083_protected_historical_scoring.py",
+        "scripts/custody/test_wr083_protected_historical_scoring.py",
+        "scripts/validate-release-candidate.mjs"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/research/",
+        "src/",
+        "public/",
+        "scripts/ci/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Work Helper publishes one immutable no-scoring protected-bridge implementation/proof target -> Manager exact freeze -> WR-084 independent audit."
+    },
+    {
+      "task_id": "WR-084",
+      "owner": "Auditor",
+      "worker_slot": "auditor-wr081-protected-scoring-bridge",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-084.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": "wr-084-protected-historical-scoring-bridge-audit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "STANDARD_CHAT",
+      "audit_required": false,
+      "blocker_type": "UPSTREAM_TASK",
+      "user_action_required": false,
+      "blocked_on_tasks": [
+        "WR-083"
+      ],
+      "blocked_on": [
+        "WR-083 must publish one Manager-frozen immutable protected-bridge implementation target and privacy-safe no-scoring proof before audit activation."
+      ],
+      "external_authority_evidence_required": true,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/auditor/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        ".github/",
+        "scripts/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Manager freezes exact WR-083 target -> activate WR-084 fresh independent audit."
     }
   ]
 }

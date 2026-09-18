@@ -4,35 +4,27 @@ HANDOFF
 
 Workflow: V3.3 CANONICAL
 
-## Returning-Player v2 — protocol accepted / historical scoring activated
+## WR-081 fail-closed blocker accepted for routing
 
-WR-077 independently audited exact WR-072 head `a228d0002545a701aea8c7bead5de0bf36994764` and returned `PASS` with no findings.
+R&D WR-081 PR #227 is exact blocker evidence at immutable head `3f7ee6cc9294d8ae40921a5d4b50f2d0182f98ca`. It changes only `.ai/research/WR081_HISTORICAL_SCORING_BLOCKER.md` and `.ai/research/HANDOFF.md`. Exact-head War Room CI `35296360912` is SUCCESS: classify `105449599740`, governance `105449622679`, product test skipped as expected.
 
-Audit authority:
-- Auditor PR #225
-- immutable Auditor head `45ba066743d25ec43ede049d93c42d8d04dddbfa`
-- exact audit-head CI `35169095669` SUCCESS
-- audit evidence merge `7064237704018d7a842090c2ac0e1d3da9ca64cd`
-- post-audit canonical-main CI `35169235188` SUCCESS
+No real scoring occurred. Development 2018–2019 = NOT_RUN; validation 2020–2021 = NOT_ELIGIBLE; confirmation 2022–2025 = NOT_ELIGIBLE. Terminal state: `NOT_ESTABLISHED — EXECUTION BLOCKED BEFORE SCORING`.
 
-Manager integrated only the exact audited WR-072 target through PR #207 as canonical-main merge `124ebddff321608935d94af51006846eada7a304`; post-integration War Room CI `35169273680` SUCCESS.
+The proven blocker is architectural/custody execution: exact retained annual stats rows are not available to R&D, and accepted WR-069 intentionally exposes only schema/inventory evidence then deletes raw runner bytes.
 
-WR-072 and WR-077 are CLOSED.
+## WR-083
 
-Accepted protocol authority:
-- `returning-player-v2-model-protocol/1.2.0-wr072`
-- `returning-player-v2-result-gates/1.2.0-wr072`
-- machine-lock `aed044e6b7df9684153181a7a97a47a86c50ce9049db063ecdd8a973b1a832b6`
-- fixture `returning-player-v2-bootstrap-conformance-fixture/1.0.0-wr072` / `3fb3c2088e17f42ad588a94f018abbcbd42cefeb46422a0bcb1da50b31cba3f7`
+Work Helper is assigned the smallest protected historical-scoring execution bridge. It must preserve exact 14-source custody, B2/R2 equality, read-only provider boundaries, provider-credential stripping, runner-temp-only raw bytes, cleanup/no-artifact guarantees, reviewed hash-bound consumer code, chronology fail-closed tests, trusted ref/SHA gates, and future output restricted to an explicitly authorized WR-081 research branch.
 
-## WR-081
+Before WR-084 audit, any protected live proof is NO-SCORING only.
 
-R&D is separately authorized to execute historical model scoring/evaluation exactly under the accepted WR-072 protocol. Use only the accepted retained historical source/cohort authority and protocol-defined 2018-2025 development/validation/confirmation chronology. Publish complete keyed evidence and one immutable result target.
+## WR-084
 
-Forbidden: 2026 regular-season outcomes, source reacquisition/refresh/substitution, provider mutation, feature/model/gate redesign, production/ranking changes, season-total composition, Phase 6.
+BLOCKED fresh Independent Auditor lane. After Manager freezes one exact WR-083 target, WR-084 audits that exact implementation and protected proof. Auditor does not execute real historical model scoring.
 
-WR-082 remains BLOCKED until Manager exact-freezes one WR-081 result target.
+PASS-family only: Manager may integrate exact audited WR-083, run the required protected canonical-main canary, then explicitly reactivate WR-081 on a fresh execution branch.
 
-## Self-hosted CI
+## Other lanes
 
-WR-074 remains IN_PROGRESS. WR-075 remains BLOCKED pending one evidence-complete Manager-frozen WR-074 target.
+WR-082 remains BLOCKED because no model-result target exists.
+WR-074 is temporarily serialized at `7b4641499c50541abf523267eb4c0255813e8b6d` for write-scope collision safety; WR-075 remains blocked behind it.

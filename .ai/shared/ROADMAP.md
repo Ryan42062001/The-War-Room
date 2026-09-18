@@ -7,34 +7,29 @@ Owner: Manager / Architect
 ## Workflow foundation
 
 - V3.3 — CANONICAL / ACCEPTED.
-- WR-078 / WR-080 — CLOSED / accepted Workflow V3.3 path.
-- Historical WR-079 failed-audit evidence remains preserved.
+- Exact-head, independent-audit, custody, fail-closed, post-merge-canary, and collision-safety rules remain mandatory.
 
 ## Phase 5B — Returning-Player v2 evidence reset — ACTIVE
 
-Accepted Returning-Player v2 source/cohort baseline remains unchanged.
+- WR-072 — CLOSED / accepted pre-score protocol 1.2.
+- WR-077 — CLOSED / PASS, no findings.
+- WR-081 — BLOCKED / fail-closed before scoring at PR #227 head `3f7ee6cc9294d8ae40921a5d4b50f2d0182f98ca`; exact retained-row scoring path unavailable.
+- WR-083 — ASSIGNED / protected historical-scoring execution bridge; no real scoring before audit.
+- WR-084 — BLOCKED / independent bridge audit after Manager exact freeze.
+- WR-082 — BLOCKED / independent model-result audit only after WR-081 later produces a complete result target.
 
-- WR-072 — CLOSED / accepted pre-score protocol `returning-player-v2-model-protocol/1.2.0-wr072` at exact audited head `a228d0002545a701aea8c7bead5de0bf36994764`; integrated through PR #207 as canonical-main merge `124ebddff321608935d94af51006846eada7a304`.
-- WR-077 — CLOSED / fresh independent re-audit `PASS`, no findings; Auditor PR #225 / head `45ba066743d25ec43ede049d93c42d8d04dddbfa`; audit CI `35169095669` SUCCESS.
-- WR-081 — ASSIGNED / execute the frozen historical model protocol and publish full-row keyed model-result evidence only.
-- WR-082 — BLOCKED / fresh independent model-result audit after Manager exact freeze of WR-081.
+Critical path:
 
-Current critical path:
+`WR-083 protected bridge -> Manager freeze -> WR-084 independent audit -> PASS-family only: bridge integration + protected canonical-main canary -> fresh WR-081 historical scoring execution -> Manager freeze -> WR-082 model-result audit -> PASS-family only: season-total composition -> independent composition audit -> Phase 6 eligibility`
 
-`WR-081 historical scoring/evaluation -> Manager exact freeze -> WR-082 independent model-result audit -> PASS-family only: season-total composition -> independent composition audit -> Phase 6 eligibility`
+No 2026 regular-season outcome use, source reacquisition/substitution, provider mutation, feature/model/gate redesign, production ranking changes, season-total composition, or Phase 6 is authorized.
 
-WR-081 authorization is historical-result-only. It does not authorize 2026 regular-season outcome use, source reacquisition/refresh/substitution, provider mutation, model/protocol/gate redesign, production ranking changes, season-total composition, or Phase 6.
+## Infrastructure roadmap
 
-## Infrastructure roadmap — ACTIVE PARALLEL PILOT
+- WR-074 — BLOCKED TEMPORARILY / preserved at `7b4641499c50541abf523267eb4c0255813e8b6d` while WR-083/084 owns potentially colliding Work Helper/release-guard surfaces.
+- WR-075 — BLOCKED behind WR-074.
 
-- WR-074 — IN_PROGRESS / self-hosted heavy-CI pilot; dedicated `[self-hosted, war-room-heavy-ci]`, clean workspace, no custody/provider secrets, hosted fallback and repeat-run evidence remain mandatory.
-- WR-075 — BLOCKED / independent runner audit after Manager freeze.
-
-Sequence:
-
-`WR-074 hardened pilot -> audit-readiness preflight -> Manager exact freeze -> WR-075 fresh independent audit -> PASS-family only: adoption decision`
-
-WR-074/075 remains independent of the Returning-Player model chronology.
+After WR-084 disposition, Manager may reactivate WR-074 and continue the self-hosted heavy-CI pilot.
 
 ## Future phases
 
