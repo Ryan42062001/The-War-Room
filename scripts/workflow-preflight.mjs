@@ -67,6 +67,9 @@ const result = {
   owner: task.owner,
   worker_slot: task.worker_slot || null,
   registry_status: task.status,
+  execution_mode: task.execution_mode,
+  refresh_mode: task.refresh_mode,
+  refresh_reason: task.refresh_reason || null,
   blocker_type: task.blocker_type,
   user_action_required: task.user_action_required,
   assigned_branch: task.branch ?? null,
@@ -89,6 +92,9 @@ if (options.json) console.log(JSON.stringify(result, null, 2));
 else {
   console.log(`WORKFLOW PREFLIGHT — ${result.task_id}`);
   console.log(`status: ${result.registry_status}`);
+  console.log(`execution mode: ${result.execution_mode}`);
+  console.log(`refresh mode: ${result.refresh_mode}`);
+  if (result.refresh_reason) console.log(`refresh reason: ${result.refresh_reason}`);
   console.log(`slot: ${result.worker_slot || 'default'}`);
   console.log(`assigned branch: ${result.assigned_branch || '<none>'}`);
   console.log(`branch: ${result.branch}`);
