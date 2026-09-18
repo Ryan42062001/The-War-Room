@@ -144,11 +144,14 @@ jobs:
           echo "consumer_path=$consumer_path" >> "$GITHUB_OUTPUT"
           echo "consumer_sha256=$consumer_sha" >> "$GITHUB_OUTPUT"
           echo "WR-083 trusted ref/actor/mode gate: PASS ($mode)"
-      - name: Require canonical Manager activation before future scoring
+      - name: Require canonical Manager activation and exact execution identity before future scoring
         if: steps.gate.outputs.mode == 'authorized-wr081-scoring'
         run: |
           python3 scripts/custody/wr083_protected_historical_scoring.py future-authorization --repo-root . \
-            --execution-branch "${{ steps.gate.outputs.execution_branch }}"
+            --execution-branch "${{ steps.gate.outputs.execution_branch }}" \
+            --expected-head "${{ steps.gate.outputs.expected_head_sha }}" \
+            --consumer-path "${{ steps.gate.outputs.consumer_path }}" \
+            --consumer-sha256 "${{ steps.gate.outputs.consumer_sha256 }}"
 
   protected-no-scoring-proof:
     needs: trust-gate
@@ -299,6 +302,37 @@ jobs:
           assert (numpy.__version__,pandas.__version__,sklearn.__version__,scipy.__version__) == ('2.1.3','2.2.3','1.5.2','1.14.1')
           print('WR-083 future scoring environment lock: PASS')
           PY
+      - name: Verify live Manager-authorized WR-081 head before retained retrieval
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EXECUTION_BRANCH: ${{ needs.trust-gate.outputs.execution_branch }}
+          EXPECTED_HEAD: ${{ needs.trust-gate.outputs.expected_head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          remote_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          current="$(git ls-remote "$remote_url" "refs/heads/$EXECUTION_BRANCH" | awk '{print $1}')"
+          python3 scripts/custody/wr083_protected_historical_scoring.py future-remote-head --repo-root . \
+            --execution-branch "$EXECUTION_BRANCH" --expected-head "$EXPECTED_HEAD" \
+            --consumer-path "${{ needs.trust-gate.outputs.consumer_path }}" \
+            --consumer-sha256 "${{ needs.trust-gate.outputs.consumer_sha256 }}" \
+            --observed-head "$current"
+      - name: Check out exact Manager-authorized WR-081 head without persisted credentials
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.trust-gate.outputs.expected_head_sha }}
+          path: wr081-execution
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Verify checked-out head and Manager-reviewed consumer before retained retrieval
+        run: |
+          env -i PATH="$PATH" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+            python3 scripts/custody/wr083_protected_historical_scoring.py future-checkout --repo-root . \
+              --execution-repo "$GITHUB_WORKSPACE/wr081-execution" \
+              --execution-branch "${{ needs.trust-gate.outputs.execution_branch }}" \
+              --expected-head "${{ needs.trust-gate.outputs.expected_head_sha }}" \
+              --consumer-path "${{ needs.trust-gate.outputs.consumer_path }}" \
+              --consumer-sha256 "${{ needs.trust-gate.outputs.consumer_sha256 }}"
       - name: Retrieve exact 14 retained stats objects under read-only boundary
         env:
           WR_CUSTODY_B2_READ_KEY_ID: ${{ secrets.WR_CUSTODY_B2_READ_KEY_ID }}
@@ -313,13 +347,21 @@ jobs:
           python3 scripts/custody/wr083_protected_historical_scoring.py provider --repo-root . \
             --raw-dir "$RUNNER_TEMP/wr083-raw" --manifest "$RUNNER_TEMP/wr083-verified-input-manifest.json" \
             --report "$RUNNER_TEMP/wr083-provider-report.json"
-      - name: Check out exact Manager-authorized WR-081 head without persisted credentials
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ needs.trust-gate.outputs.expected_head_sha }}
-          path: wr081-execution
-          fetch-depth: 1
-          persist-credentials: false
+      - name: Recheck live authorized WR-081 head immediately before consumer exposure
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EXECUTION_BRANCH: ${{ needs.trust-gate.outputs.execution_branch }}
+          EXPECTED_HEAD: ${{ needs.trust-gate.outputs.expected_head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          remote_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          current="$(git ls-remote "$remote_url" "refs/heads/$EXECUTION_BRANCH" | awk '{print $1}')"
+          python3 scripts/custody/wr083_protected_historical_scoring.py future-remote-head --repo-root . \
+            --execution-branch "$EXECUTION_BRANCH" --expected-head "$EXPECTED_HEAD" \
+            --consumer-path "${{ needs.trust-gate.outputs.consumer_path }}" \
+            --consumer-sha256 "${{ needs.trust-gate.outputs.consumer_sha256 }}" \
+            --observed-head "$current"
       - name: Execute reviewed WR-081 consumer only after provider authority is absent
         run: |
           env -i PATH="$PATH" RUNNER_TEMP="$RUNNER_TEMP" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
@@ -335,7 +377,9 @@ jobs:
         run: |
           env -i PATH="$PATH" RUNNER_TEMP="$RUNNER_TEMP" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
             python3 scripts/custody/wr083_protected_historical_scoring.py stage-publication \
-              --execution-repo "$GITHUB_WORKSPACE/wr081-execution" --output-dir "$RUNNER_TEMP/wr083-publication"
+              --execution-repo "$GITHUB_WORKSPACE/wr081-execution" \
+              --output-dir "$RUNNER_TEMP/wr083-publication" \
+              --retained-manifest "$RUNNER_TEMP/wr083-verified-input-manifest.json"
           git -C wr081-execution add .ai/research
           test -z "$(git -C wr081-execution diff --cached --name-only | grep -v '^\.ai/research/' || true)"
       - name: Recheck expected branch head, commit evidence, and push without force
