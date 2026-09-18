@@ -166,3 +166,118 @@ class WR081ConsumerTests(unittest.TestCase):
         fixture = [
             [2022, "synthetic", "SYN_A", "QB", 1, 2],
             [2022, "synthetic", "SYN_B", "RB", 4, 2],
+            [2022, "synthetic", "SYN_C", "WR", 0.5, 1],
+            [2023, "synthetic", "SYN_A", "QB", 2, 3],
+            [2023, "synthetic", "SYN_C", "WR", 1, 1],
+            [2024, "synthetic", "SYN_C", "WR", 1.5, 2],
+            [2024, "synthetic", "SYN_D", "TE", 2, 2],
+            [2025, "synthetic", "SYN_D", "TE", 4, 3],
+        ]
+        rows = [
+            {
+                "target_season": year, "player_id_namespace": namespace,
+                "player_id": player_id, "position": position, "target_ppr_pg": "0",
+                "candidate_prediction": str(candidate_error),
+                "primary_baseline_prediction": str(primary_error),
+            }
+            for year, namespace, player_id, position, candidate_error, primary_error in fixture
+        ]
+        proof = module._bootstrap_confirmation(rows)
+        self.assertEqual(proof["cluster_sha256"], "aa63baf5f7658212ec4f13bcefbd3c0087c6186d0afcfba7aec6d84ffc86a321")
+        self.assertEqual(proof["replicate_sha256"], "b4edb70c67e8c678e00465e50e017b6401ecfff0d60ed3c608fda1c651e9de6d")
+        self.assertEqual(proof["rng_state_sha256"], "b235708c403dd720543444365e54f2440817a03c09ceadfbe6c46106b22a3188")
+        self.assertEqual(proof["q025"], "-0.625")
+        self.assertEqual(proof["q975"], "1")
+        self.assertFalse(proof["gate_pass"])
+
+    def test_target_access_before_prediction_lock_fails_silently(self):
+        input_dir = self.temp / "premature-target"
+        input_dir.mkdir()
+        source = write_stats(input_dir, 2018)
+        context = {
+            "task_id": "WR-081", "mode": "target-ingest", "stage": "development",
+            "target_season": 2018, "bindings": BINDINGS, "visible_sources": [source],
+            "prediction_lock_sha256": "0" * 64, "prediction_locks": {"2018": "0" * 64},
+            "gate_locks": {}, "stage_a_synthetic_fixture": True,
+        }
+        result = invoke("target-ingest", context, input_dir, self.state, self.locks, self.output)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, b"")
+        self.assertEqual(result.stderr, b"")
+        self.assertEqual(list(self.output.iterdir()), [])
+
+    def test_synthetic_development_chronology_and_gate(self):
+        prediction_locks = {}
+
+        input_dir = self.temp / "predict-2018"
+        input_dir.mkdir()
+        context = {
+            "task_id": "WR-081", "mode": "predict", "stage": "development",
+            "target_season": 2018, "bindings": BINDINGS,
+            "visible_sources": [write_stats(input_dir, y) for y in range(2012, 2018)],
+            "prediction_locks": {}, "gate_locks": {}, "stage_a_synthetic_fixture": True,
+        }
+        result = invoke("predict", context, input_dir, self.state, self.locks, self.output)
+        self.assertEqual((result.returncode, result.stdout, result.stderr), (0, b"", b""))
+        prediction_locks["2018"] = lock_output(self.output, self.locks, "prediction-2018")
+
+        input_dir = self.temp / "target-2018"
+        input_dir.mkdir()
+        context = {
+            "task_id": "WR-081", "mode": "target-ingest", "stage": "development",
+            "target_season": 2018, "bindings": BINDINGS,
+            "visible_sources": [write_stats(input_dir, 2018)],
+            "prediction_lock_sha256": prediction_locks["2018"],
+            "prediction_locks": dict(prediction_locks), "gate_locks": {},
+            "stage_a_synthetic_fixture": True,
+        }
+        result = invoke("target-ingest", context, input_dir, self.state, self.locks, self.output)
+        self.assertEqual((result.returncode, result.stdout, result.stderr), (0, b"", b""))
+
+        input_dir = self.temp / "predict-2019"
+        input_dir.mkdir()
+        context = {
+            "task_id": "WR-081", "mode": "predict", "stage": "development",
+            "target_season": 2019, "bindings": BINDINGS,
+            "visible_sources": [write_stats(input_dir, y) for y in range(2012, 2019)],
+            "prediction_locks": dict(prediction_locks), "gate_locks": {},
+            "stage_a_synthetic_fixture": True,
+        }
+        result = invoke("predict", context, input_dir, self.state, self.locks, self.output)
+        self.assertEqual((result.returncode, result.stdout, result.stderr), (0, b"", b""))
+        prediction_locks["2019"] = lock_output(self.output, self.locks, "prediction-2019")
+
+        input_dir = self.temp / "target-2019"
+        input_dir.mkdir()
+        context = {
+            "task_id": "WR-081", "mode": "target-ingest", "stage": "development",
+            "target_season": 2019, "bindings": BINDINGS,
+            "visible_sources": [write_stats(input_dir, 2019)],
+            "prediction_lock_sha256": prediction_locks["2019"],
+            "prediction_locks": dict(prediction_locks), "gate_locks": {},
+            "stage_a_synthetic_fixture": True,
+        }
+        result = invoke("target-ingest", context, input_dir, self.state, self.locks, self.output)
+        self.assertEqual((result.returncode, result.stdout, result.stderr), (0, b"", b""))
+
+        input_dir = self.temp / "gate-development"
+        input_dir.mkdir()
+        lock_set = hashlib.sha256(canonical_bytes(dict(sorted(prediction_locks.items())))).hexdigest()
+        context = {
+            "task_id": "WR-081", "mode": "stage-gate", "stage": "development",
+            "target_seasons": [2018, 2019], "bindings": BINDINGS,
+            "prediction_lock_set_sha256": lock_set,
+            "prediction_locks": dict(prediction_locks), "prior_gate_locks": {},
+            "stage_a_synthetic_fixture": True,
+        }
+        result = invoke("stage-gate", context, input_dir, self.state, self.locks, self.output)
+        self.assertEqual((result.returncode, result.stdout, result.stderr), (0, b"", b""))
+        bridge = json.loads((self.output / "bridge-result.json").read_text(encoding="utf-8"))
+        self.assertEqual(bridge["schema_version"], "wr083-consumer-result-v1")
+        self.assertEqual(bridge["mode"], "stage-gate")
+        self.assertEqual(bridge["stage"], "development")
+        self.assertIsInstance(bridge["gate_pass"], bool)
+        self.assertEqual(bridge["prediction_lock_set_sha256"], lock_set)
+
+if __name__ == "__main__":
+    unittest.main()
