@@ -381,3 +381,176 @@ def _serialize_feature(values: Sequence[float]) -> tuple[list[list[Any]], str]:
     digest = sha256_bytes(json.dumps(encoded, separators=(",", ":"), ensure_ascii=False).encode("utf-8"))
     return encoded, digest
 
+def _feature_for(
+    target_year: int,
+    player_id: str,
+    position: str,
+    aggregates: Mapping[int, Mapping[tuple[str, str], dict[str, Any]]],
+    visible: Mapping[int, Mapping[str, Any]],
+) -> dict[str, Any]:
+    prev1 = _require_valid_feature_row(aggregates.get(target_year - 1, {}).get((player_id, position)))
+    raw_prev2 = _same_player(aggregates.get(target_year - 2, {}), player_id, position)
+    prev2 = raw_prev2 if raw_prev2 is not None and float(raw_prev2["games"]) > 0 else None
+
+    ppr1 = _pg(prev1, "fantasy_points_ppr")
+    attempts = float(prev1["add"]["attempts"])
+    carries = float(prev1["add"]["carries"])
+    targets = float(prev1["add"]["targets"])
+    values = [
+        ppr1, float(prev1["games"]), _pg(prev1, "attempts"), _pg(prev1, "carries"),
+        _pg(prev1, "targets"), _pg(prev1, "receptions"), _pg(prev1, "passing_yards"),
+        _pg(prev1, "passing_tds"), _pg(prev1, "passing_interceptions"),
+        _pg(prev1, "rushing_yards"), _pg(prev1, "rushing_tds"),
+        _pg(prev1, "receiving_yards"), _pg(prev1, "receiving_tds"),
+        _pg(prev1, "passing_epa"), _pg(prev1, "rushing_epa"), _pg(prev1, "receiving_epa"),
+        float(prev1["mean"]["target_share"]), float(prev1["mean"]["air_yards_share"]),
+        float(prev1["mean"]["wopr"]),
+        float(prev1["add"]["passing_yards"]) / attempts if attempts > 0 else 0.0,
+        float(prev1["add"]["rushing_yards"]) / carries if carries > 0 else 0.0,
+        float(prev1["add"]["receiving_yards"]) / targets if targets > 0 else 0.0,
+    ]
+    if prev2 is not None:
+        ppr2, games2 = _pg(prev2, "fantasy_points_ppr"), float(prev2["games"])
+        has_prev2 = 1.0
+    else:
+        ppr2, games2, has_prev2 = ppr1, float(prev1["games"]), 0.0
+    values.extend([
+        ppr2, games2, ppr1 - ppr2, 0.70 * ppr1 + 0.30 * ppr2,
+        float(prev1["games"]) - games2, has_prev2,
+    ])
+    if any(not math.isfinite(float(x)) for x in values):
+        raise ContractError("nonfinite feature")
+    encoded, feature_sha = _serialize_feature(values)
+    flags = {
+        "prev1_add_missing": {k: bool(v) for k, v in prev1["add_missing"].items()},
+        "prev1_mean_missing": {k: bool(v) for k, v in prev1["mean_missing"].items()},
+        "prev1_denom_zero": {"attempts": attempts <= 0, "carries": carries <= 0, "targets": targets <= 0},
+        "prior2_missing": prev2 is None,
+    }
+    if prev2 is not None:
+        flags["prev2_add_missing"] = {k: bool(v) for k, v in prev2["add_missing"].items()}
+        flags["prev2_mean_missing"] = {k: bool(v) for k, v in prev2["mean_missing"].items()}
+    lineage = {
+        "prev1": {"season": target_year - 1, "source_sha256": str(visible[target_year - 1]["sha256"])},
+        "prev2": None if prev2 is None else {"season": target_year - 2, "source_sha256": str(visible[target_year - 2]["sha256"])},
+        "source_fields": sorted(REQUIRED_COLUMNS),
+        "failed_closed_metadata_used": False,
+        "draft_capital_used": False,
+    }
+    return {
+        "target_season": target_year,
+        "player_id_namespace": "gsis_id",
+        "player_id": player_id,
+        "position": position,
+        "stable_key": stable_key(target_year, player_id, position),
+        "feature_schema_id": FEATURE_SCHEMA_ID,
+        "ordered_values": encoded,
+        "feature_sha256": feature_sha,
+        "values": [float(x) for x in values],
+        "flags": flags,
+        "lineage": lineage,
+    }
+
+def _cohort_for(
+    target_year: int,
+    aggregates: Mapping[int, Mapping[tuple[str, str], dict[str, Any]]],
+    *,
+    enforce_expected_count: bool = False,
+) -> list[tuple[str, str]]:
+    source = aggregates.get(target_year - 1)
+    if source is None:
+        raise ContractError("cohort source missing")
+    members = []
+    for (player_id, position), row in source.items():
+        if position in POSITIONS and float(row["games"]) > 0:
+            members.append((player_id, position))
+    members.sort(key=lambda x: (POSITION_ORDER[x[1]], x[0]))
+    if len(members) != len(set(members)):
+        raise ContractError("duplicate cohort key")
+    if enforce_expected_count and EXPECTED_COHORT_COUNTS.get(target_year) != len(members):
+        raise ContractError("accepted WR-059 cohort count mismatch")
+    return members
+
+def _target_from_groups(groups: Mapping[tuple[str, str], dict[str, Any]], player_id: str, frozen_position: str) -> tuple[str, float | None, int | None]:
+    row = _same_player(groups, player_id, frozen_position)
+    if row is None or float(row["games"]) <= 0:
+        return "TARGET_UNAVAILABLE", None, None
+    games = float(row["games"])
+    if int(games) != games:
+        raise ContractError("target games invalid")
+    value = float(row["add"]["fantasy_points_ppr"]) / games
+    if not math.isfinite(value):
+        raise ContractError("target nonfinite")
+    return "OBSERVED", value, int(games)
+
+def _build_training_rows(
+    target_year: int,
+    position: str,
+    aggregates: Mapping[int, Mapping[tuple[str, str], dict[str, Any]]],
+    visible: Mapping[int, Mapping[str, Any]],
+    *,
+    enforce_expected_count: bool = False,
+) -> list[dict[str, Any]]:
+    rows = []
+    for season in range(2014, target_year):
+        for player_id, pos in _cohort_for(season, aggregates, enforce_expected_count=enforce_expected_count):
+            if pos != position:
+                continue
+            feature = _feature_for(season, player_id, pos, aggregates, visible)
+            status, target, games = _target_from_groups(aggregates.get(season, {}), player_id, pos)
+            if status != "OBSERVED":
+                continue
+            rows.append({
+                "target_season": season, "player_id": player_id, "position": pos,
+                "feature": feature, "target": float(target), "target_games": games,
+            })
+    rows.sort(key=stable_key_sort)
+    return rows
+
+def _digest_key_list(rows: Sequence[Mapping[str, Any]]) -> str:
+    keys = [stable_key(int(x["target_season"]), str(x["player_id"]), str(x["position"])) for x in rows]
+    return sha256_bytes(canonical_bytes(keys))
+
+def _scaler_state(scaler: StandardScaler, train_rows: Sequence[Mapping[str, Any]], position: str, target_year: int) -> dict[str, Any]:
+    state = {
+        "id": PREP_ID,
+        "target_season": target_year,
+        "position": position,
+        "ordered_features": list(FEATURE_NAMES),
+        "ordered_train_key_sha256": _digest_key_list(train_rows),
+        "ordered_train_key_count": len(train_rows),
+        "mean_": [fstr(float(x)) for x in scaler.mean_],
+        "var_": [fstr(float(x)) for x in scaler.var_],
+        "scale_": [fstr(float(x)) for x in scaler.scale_],
+        "n_samples_seen_": int(scaler.n_samples_seen_),
+        "dtype": "float64",
+    }
+    state["digest"] = sha256_bytes(canonical_bytes(state))
+    return state
+
+def _model_state(model: Ridge, prep_digest: str, position: str, target_year: int) -> dict[str, Any]:
+    state = {
+        "candidate_id": CANDIDATE_ID,
+        "target_definition_id": TARGET_ID,
+        "target_season": target_year,
+        "position": position,
+        "hyperparameters": {
+            "alpha": 100.0, "copy_X": True, "fit_intercept": True,
+            "max_iter": None, "positive": False, "random_state": None,
+            "solver": "svd", "tol": 0.0001,
+        },
+        "preprocessing_digest": prep_digest,
+        "coef_": [fstr(float(x)) for x in np.asarray(model.coef_, dtype=np.float64).tolist()],
+        "intercept_": fstr(float(model.intercept_)),
+        "n_features_in_": int(model.n_features_in_),
+    }
+    state["digest"] = sha256_bytes(canonical_bytes(state))
+    return state
+
+def _consumer_sha() -> str:
+    return sha256_file(Path(__file__).resolve())[0]
+
+def _publication(output_dir: Path, relpath: str, payload: Any) -> dict[str, Any]:
+    if not relpath.startswith(".ai/research/") or not relpath.endswith(".json") or "/WR081_" not in relpath:
+        raise ContractError("invalid publication path")
+    dest = output_dir / "files" / relpath
