@@ -1,0 +1,102 @@
+{
+  "schema_version": "wr083-protected-proof-summary-v1",
+  "task_id": "WR-083",
+  "result": "PASS",
+  "mode": "NO-SCORING",
+  "proof_implementation_sha": "cb854442b0acc18a75c4b04e6f477be75480404f",
+  "proof_workflow_run_id": 35300775802,
+  "proof_jobs": {
+    "preflight": 105462795952,
+    "trust_gate": 105462928597,
+    "protected_no_scoring_proof": 105462958770,
+    "future_authorized_wr081_scoring": {
+      "job_id": 105462959719,
+      "conclusion": "SKIPPED"
+    }
+  },
+  "exact_head_ci": {
+    "run_id": 35300775750,
+    "result": "SUCCESS"
+  },
+  "bindings": {
+    "source_snapshot": {
+      "id": "wr-returning-player-v2-source-snapshot/1.2.0-wr059",
+      "sha256": "6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea"
+    },
+    "cohort": {
+      "id": "returning-player-v2-cohort/1.2.0-wr059",
+      "sha256": "f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4"
+    },
+    "protocol": {
+      "id": "returning-player-v2-model-protocol/1.2.0-wr072",
+      "gates_id": "returning-player-v2-result-gates/1.2.0-wr072",
+      "sha256": "aed044e6b7df9684153181a7a97a47a86c50ce9049db063ecdd8a973b1a832b6"
+    },
+    "admitted_stats_source_count": 14,
+    "source_identity_set_sha256": "8cbe874b3ceea141cbb9fedb2198ffa940ee218fe4556feace7afd8bbfb89351",
+    "players_metadata_admitted_count": 0,
+    "draft_picks_csv_used": false
+  },
+  "reviewed_code_binding": {
+    "script_sha256": "6218de40d9e65dceee64e77397f019572d1c49abd580d473051187f2f756e44e",
+    "test_sha256": "d046e556ecda1b94eb1966a26eadd0e676845aaade2bb6e5319e279a7625c07a",
+    "workflow_sha256": "6a317eb1167e8881aabf3777bb877bd1901f59a14a4ecb374eb7b34bcfade779"
+  },
+  "b2_boundary": {
+    "status": "PASS",
+    "bucket_name": "War-Room-Custody-Primary",
+    "bucket_id": "ca47a42fe60b9e24a40f0e16",
+    "name_prefix": "custody/sha256/",
+    "application_key_id_sha256": "8d5e5657e1a3010c341318237ca91d86153d4ed4dd4161a6bd38677c578c14dc",
+    "required_capabilities_present": true,
+    "mutation_capabilities_absent": true,
+    "shared_mutation_capable_credentials_used": false
+  },
+  "r2_boundary": {
+    "status": "PASS",
+    "bucket_name": "war-room-custody-backup",
+    "access_key_id_sha256": "17e95438e19777a414ee85d57c32d44466199a973c51e5b6f57e42a5384585bd",
+    "accepted_scope_authority": ".ai/auditor/WR-053_AUDIT.md",
+    "accepted_scope_policy_authority": ".ai/auditor/WR-050_AUDIT.md",
+    "accepted_scope": "bucket-scoped Object Read & Write; no configuration/admin authority",
+    "execution_operations": [
+      "HeadObject",
+      "GetObject"
+    ],
+    "execution_mutation_operations": 0,
+    "accepted_scope_anchor_matches": true
+  },
+  "retained_verification": {
+    "verified_input_count": 14,
+    "b2_digest_size_pass_count": 14,
+    "r2_digest_size_pass_count": 14,
+    "b2_r2_equal_count": 14,
+    "consumer_rehash_resize_pass_count": 14,
+    "consumer_provider_credential_presence": false,
+    "provider_mutation_operations": 0
+  },
+  "synthetic_chronology_conformance": {
+    "status": "PASS",
+    "completed_stages": [
+      "development",
+      "validation",
+      "confirmation"
+    ],
+    "fail_closed_cases": 2,
+    "serialization_sha256": "c09d1713a57886464ae774adede2f157a5304859e696a63a79868358bc2d73b0"
+  },
+  "sandbox_conformance": {
+    "status": "PASS",
+    "network_unshared": true,
+    "sealed_target_not_mounted": true,
+    "operator_output_empty": true
+  },
+  "cleanup": "PASS",
+  "raw_actions_artifacts": 0,
+  "real_scoring": false,
+  "historical_targets_exposed": false,
+  "regular_season_2026_outcomes_inspected": false,
+  "provider_mutation": false,
+  "production_or_ranking_change": false,
+  "season_total_or_phase6_work": false
+}
