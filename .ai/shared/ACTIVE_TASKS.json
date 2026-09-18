@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T03:45:00Z",
+  "updated_at_utc": "2026-09-18T03:50:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -300,8 +300,10 @@
         "scripts/workflow-preflight.mjs",
         "scripts/workflow-finish-check.mjs",
         "scripts/test-workflow-state.mjs",
-        "scripts/test-workflow-lane-identity.mjs",
-        "scripts/test-workflow-manager-transition.mjs"
+        "scripts/test-workflow-manager-transition.mjs",
+        ".ai/manager/WR-087.md",
+        ".ai/manager/WR-088.md",
+        "scripts/workflow-lane-identity-test.mjs"
       ],
       "forbidden_path_prefixes": [
         ".ai/auditor/",
