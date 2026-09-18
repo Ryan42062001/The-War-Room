@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T16:13:00Z",
+  "updated_at_utc": "2026-09-18T22:29:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -89,13 +89,13 @@
       "task_id": "WR-081",
       "owner": "R&D",
       "worker_slot": "rnd-v2-historical-model-scoring",
-      "status": "ASSIGNED",
+      "status": "IN_PROGRESS",
       "task_file": ".ai/manager/WR-081.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "11f1014ba73a70563c29a8c6d4b11f8303298cdf",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "45d6b22104e4647d04dfc37d01ab69619caed0c1",
       "branch": "wr-081-v2-historical-model-scoring-execution",
-      "pr": null,
+      "pr": 251,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": true,
@@ -123,8 +123,14 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "R&D prepares and freezes the WR-081 protected scoring consumer on the fresh branch without real retained-data scoring, then returns exact branch head, consumer path, and SHA-256. Manager reviews and records future_execution_authority before any authorized-wr081-scoring workflow_dispatch.",
-      "refresh_mode": "FAST_REFRESH"
+      "next_gate": "Manager Stage-B authority is canonical: dispatch WR-083 Protected Historical Scoring Bridge on canonical main with mode authorized-wr081-scoring and the exact authorized branch/head/consumer path/SHA-256. After protected scoring publishes evidence to PR #251, R&D resumes WR-081 packaging and returns one complete immutable result target for Manager freeze.",
+      "refresh_mode": "FAST_REFRESH",
+      "future_execution_authority": {
+        "branch": "wr-081-v2-historical-model-scoring-execution",
+        "head_sha": "45d6b22104e4647d04dfc37d01ab69619caed0c1",
+        "consumer_path": ".ai/research/WR081_PROTECTED_SCORING_CONSUMER.py",
+        "consumer_sha256": "54ccf15ebf542bff182927c946b4ce37fd0c294d4b95f4cf595c3428ec64b2c4"
+      }
     },
     {
       "task_id": "WR-082",
