@@ -7,21 +7,30 @@ Workflow: V3.4 CANONICAL
 
 ## Returning-Player v2
 
-WR-081 remains blocked before scoring. WR-083 remains assigned for the protected historical-scoring bridge; WR-084 remains blocked for its independent audit. WR-082 remains blocked until a complete historical result target exists. WR-074/075 remain temporarily serialized behind the bridge lane.
+WR-083 is AUDIT_READY at exact reconciled target `4ac5fa2c6148960094fde81b217bd3af080e4213` / PR #234. Canonical V3.4 main `8855e00e19d37c0cffca9d2c392262f34febe9cd` is the exact merge base; the target is behind 0 and differs only by the seven authorized WR-083 bridge files.
+
+WR-084 is ASSIGNED as the fresh independent audit lane and must audit only the exact target frozen in `.ai/manager/WR084_FREEZE.md`.
+
+WR-081 remains blocked before real scoring. No real historical target join, Ridge fit, prediction, comparison, result-gate evaluation, or 2026 outcome inspection is authorized before WR-084 PASS-family, Manager integration of only the exact audited bridge, and the required protected canonical-main canary.
+
+WR-082 remains blocked until a complete future WR-081 historical model-result target exists.
+
+WR-074/075 remain serialized behind the protected bridge lane.
 
 Current critical path:
-`WR-083 -> WR-084 -> protected bridge integration/canary -> fresh WR-081 execution -> WR-082 -> composition -> composition audit -> Phase 6`.
+`WR-084 -> exact WR-083 integration -> protected canonical-main canary -> fresh WR-081 execution -> WR-082 -> composition -> composition audit -> Phase 6`.
+
+## WR-083 frozen evidence
+
+- exact target: `4ac5fa2c6148960094fde81b217bd3af080e4213`;
+- PR #234: OPEN / ready / clean;
+- exact-head Full War Room CI `35305591247`: SUCCESS;
+- protected live NO-SCORING proof `35300775802`: SUCCESS on byte-identical reviewed implementation;
+- reconciled-head protected preflight `35305591290`: SUCCESS;
+- exact-head WR-046 / WR-063 / WR-069 regressions `35305591251`, `35305591242`, `35305591273`: SUCCESS;
+- `real_scoring=false`;
+- `historical_targets_exposed=false`.
 
 ## Workflow V3.4
 
-Workflow V3.4 is canonical and accepted.
-
-Acceptance evidence:
-- exact WR-085 audited target: `06b8a6766117c8ec1909ba3f13bdfa702f0cf5a2`;
-- WR-088 independent verdict: `PASS`, no findings;
-- WR-088 audit PR #240 / Auditor head `267ac8962ed16a2323ace81d4af09072900cf222`;
-- exact audited integration: PR #230 / canonical-main merge `8dd8188a752e9a11ec2066685a59bfe8008539e8`;
-- mandatory canonical-main Full War Room CI canary `35304841154`: `SUCCESS`;
-- classify `105474805946`, governance `105474826936`, full test `105474850059`: all `SUCCESS`.
-
-WR-086 and WR-087 remain immutable failed-audit history. WR-085 and WR-088 are CLOSED and removed from the active-only registry.
+Workflow V3.4 is canonical and accepted. WR-085/WR-088 are CLOSED. WR-086/WR-087 remain immutable failed-audit history.
