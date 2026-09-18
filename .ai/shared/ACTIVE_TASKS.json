@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T13:18:00Z",
+  "updated_at_utc": "2026-09-18T16:20:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -9,7 +9,7 @@
       "task_id": "WR-074",
       "owner": "Work Helper",
       "worker_slot": "work-helper-self-hosted-heavy-ci",
-      "status": "BLOCKED",
+      "status": "PLANNED",
       "task_file": ".ai/manager/WR-074.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
       "assignment_main_sha": "408a10cf14d71d88d43193df3bdd830633c2cf6f",
@@ -19,14 +19,10 @@
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": true,
-      "blocker_type": "UPSTREAM_TASK",
+      "blocker_type": "NONE",
       "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-090"
-      ],
-      "blocked_on": [
-        "Temporarily serialized until the integrated protected bridge completes its WR-090 canonical-main canary and Manager disposition."
-      ],
+      "blocked_on_tasks": [],
+      "blocked_on": [],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
@@ -45,7 +41,7 @@
         "scripts/custody/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "After WR-090 protected canary SUCCESS and Manager disposition, WR-074 may resume from preserved checkpoint 7b4641499c50541abf523267eb4c0255813e8b6d.",
+      "next_gate": "Protected bridge lane is accepted and no longer blocks WR-074. Manager may reactivate WR-074 from preserved checkpoint 7b4641499c50541abf523267eb4c0255813e8b6d when worthwhile; it is not currently activated.",
       "refresh_mode": "FAST_REFRESH"
     },
     {
@@ -93,25 +89,21 @@
       "task_id": "WR-081",
       "owner": "R&D",
       "worker_slot": "rnd-v2-historical-model-scoring",
-      "status": "BLOCKED",
+      "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-081.md",
       "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": "124ebddff321608935d94af51006846eada7a304",
-      "worker_checkpoint_sha": "3f7ee6cc9294d8ae40921a5d4b50f2d0182f98ca",
-      "branch": "wr-081-v2-historical-model-scoring",
-      "pr": 227,
+      "assignment_main_sha": "11f1014ba73a70563c29a8c6d4b11f8303298cdf",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-081-v2-historical-model-scoring-r2",
+      "pr": null,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": true,
-      "blocker_type": "UPSTREAM_TASK",
+      "blocker_type": "NONE",
       "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-090"
-      ],
-      "blocked_on": [
-        "WR-089 returned PASS and exact WR-083 target is integrated, but WR-081 remains blocked until WR-090 records a successful credentialed NO-SCORING workflow_dispatch canary on canonical main."
-      ],
-      "external_authority_evidence_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
         ".ai/research/"
@@ -131,8 +123,9 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "WR-090 canonical-main protected canary SUCCESS -> Manager closes WR-083/WR-090 and explicitly reactivates WR-081 on a fresh execution branch with exact future_execution_authority.",
-      "refresh_mode": "FAST_REFRESH"
+      "next_gate": "Phase A only: R&D prepares reviewed protected scoring consumer under .ai/research/** on fresh branch and returns exact head/path/SHA-256. Manager then freezes future_execution_authority. Real retained target exposure/scoring remains prohibited until that Manager authority exists and authorized-wr081-scoring is separately dispatched.",
+      "refresh_mode": "FAST_REFRESH",
+      "future_execution_authority": null
     },
     {
       "task_id": "WR-082",
@@ -154,7 +147,7 @@
         "WR-081"
       ],
       "blocked_on": [
-        "WR-081 must eventually publish one complete Manager-frozen immutable historical model-result target. PR #227 is blocker evidence, not a result target."
+        "WR-081 is reactivated on fresh branch wr-081-v2-historical-model-scoring-r2 but must first complete consumer review/Manager authority, then protected historical scoring, then publish one complete Manager-frozen immutable result target."
       ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
@@ -172,87 +165,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "After protected bridge acceptance, WR-081 executes and publishes one complete result target -> Manager freeze -> activate WR-082.",
-      "refresh_mode": "FAST_REFRESH"
-    },
-    {
-      "task_id": "WR-083",
-      "owner": "Work Helper",
-      "worker_slot": "work-helper-wr081-protected-scoring-bridge",
-      "status": "MERGED",
-      "task_file": ".ai/manager/WR-083.md",
-      "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "ee0071717364441db1130336a318e4288a993a41",
-      "worker_checkpoint_sha": "c9b13959f598b3633a78e2ff78d0862881982dd2",
-      "branch": "wr-083-protected-historical-scoring-bridge",
-      "pr": 234,
-      "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "audit_required": true,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": true,
-      "post_merge_canary_required": true,
-      "allowed_path_prefixes": [
-        ".ai/work_helper/WR083_",
-        ".ai/work_helper/HANDOFF.md",
-        ".github/workflows/wr083-protected-historical-scoring-bridge.yml",
-        "scripts/custody/wr083_protected_historical_scoring.py",
-        "scripts/custody/test_wr083_protected_historical_scoring.py",
-        "scripts/validate-release-candidate.mjs"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/auditor/",
-        ".ai/research/",
-        "src/",
-        "public/",
-        "scripts/ci/"
-      ],
-      "forbidden_exact_paths": [],
-      "next_gate": "WR-090 protected canonical-main NO-SCORING canary must succeed before WR-083 closes and WR-081 can be reactivated.",
-      "refresh_mode": "FAST_REFRESH"
-    },
-    {
-      "task_id": "WR-090",
-      "owner": "Manager",
-      "worker_slot": "manager-protected-bridge-canonical-canary",
-      "status": "BLOCKED",
-      "task_file": ".ai/manager/WR-090.md",
-      "role_handoff": ".ai/manager/HANDOFF.md",
-      "assignment_main_sha": "ee0071717364441db1130336a318e4288a993a41",
-      "worker_checkpoint_sha": null,
-      "branch": "manager/wr-090-protected-bridge-canary",
-      "pr": null,
-      "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "audit_required": false,
-      "blocker_type": "USER_ACTION",
-      "user_action_required": true,
-      "blocked_on_tasks": [],
-      "blocked_on": [
-        "Run the GitHub Actions workflow `WR-083 Protected Historical Scoring Bridge` on branch `main` with workflow_dispatch input mode=`no-scoring`. Leave scoring-only inputs blank. Return after the run completes so Manager can verify the exact canonical-main protected canary."
-      ],
-      "external_authority_evidence_required": true,
-      "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/auditor/",
-        ".ai/research/",
-        ".ai/work_helper/",
-        ".github/",
-        "scripts/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [],
-      "next_gate": "User dispatches canonical-main NO-SCORING protected canary -> Manager verifies trust-gate/protected-no-scoring proof/cleanup/zero artifacts -> closes WR-083/WR-090 and explicitly reactivates WR-081 only on SUCCESS.",
+      "next_gate": "WR-081 consumer checkpoint -> Manager future_execution_authority -> protected authorized scoring -> complete WR-081 result target -> Manager freeze -> activate WR-082.",
       "refresh_mode": "FAST_REFRESH"
     }
   ]

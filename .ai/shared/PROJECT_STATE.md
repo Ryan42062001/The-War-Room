@@ -7,30 +7,40 @@ Workflow: V3.4 CANONICAL
 
 ## Returning-Player v2
 
-WR-089 completed a fresh independent re-audit of remediated WR-083 target `c9b13959f598b3633a78e2ff78d0862881982dd2` and returned `PASS` with no findings.
+The protected historical-scoring bridge is accepted end-to-end.
 
-Audit publication:
-- PR #247;
-- Auditor head `a4cc4983982e91d820772d18b1019708a78f5b78`;
-- audit-head War Room CI `35348224226` — SUCCESS;
-- audit evidence merge `3ce2ad4e135d66a0b705dda0d726abd36a569d77`.
+WR-089 independently returned PASS on exact WR-083 target `c9b13959f598b3633a78e2ff78d0862881982dd2`. Manager integrated only that target as merge `ee0071717364441db1130336a318e4288a993a41`.
 
-Manager integrated only that exact audited WR-083 target through PR #234 as canonical-main merge `ee0071717364441db1130336a318e4288a993a41`.
+WR-090 canonical-main NO-SCORING canary run `35366265783` completed SUCCESS on head `11f1014ba73a70563c29a8c6d4b11f8303298cdf`:
+- preflight SUCCESS;
+- trust-gate SUCCESS;
+- protected-no-scoring-proof SUCCESS;
+- future scoring SKIPPED;
+- 14/14 retained inputs verified;
+- provider mutations 0;
+- consumer provider credentials absent;
+- cleanup PASS;
+- zero Actions artifacts;
+- real scoring false;
+- historical targets exposed false.
 
-Post-integration Full War Room CI `35348990387` completed SUCCESS.
+WR-083 and WR-090 are CLOSED.
 
-WR-083 is MERGED but remains open at the canary gate. WR-090 now owns the required credentialed canonical-main NO-SCORING canary. The connected GitHub Manager tool cannot create workflow_dispatch events, so WR-090 is a genuine USER_ACTION gate.
+WR-081 is reactivated on fresh branch `wr-081-v2-historical-model-scoring-r2`.
 
-WR-081 remains blocked before real scoring until WR-090 SUCCESS and explicit Manager reactivation with a fresh execution branch and complete future_execution_authority.
+### Current WR-081 phase
 
-WR-082 remains blocked until a complete future WR-081 result target exists. WR-074/075 remain serialized behind WR-090 until protected-bridge closure.
+Phase A is consumer preparation only.
 
-Current critical path:
-`WR-090 canonical-main protected canary -> explicit WR-081 reactivation -> WR-081 historical scoring -> WR-082 result audit -> composition -> composition audit -> Phase 6`.
+No real scoring is authorized until R&D publishes a reviewed consumer checkpoint and Manager records exact `future_execution_authority` binding:
+- branch;
+- exact head SHA;
+- consumer path;
+- consumer SHA-256.
 
-## Workflow presentation
+After that Manager freeze, the accepted protected workflow may be dispatched in `authorized-wr081-scoring` mode. The workflow itself performs retained retrieval, chronology-controlled target exposure, consumer execution, publication validation, non-force commit/push, and cleanup.
 
-Canonical Workflow V3.4 now requires every Next Activation / Activation Routing table to show all six permanent War Room employees:
-Manager, Builder, Draft Strategy, R&D, Auditor, and Work Helper.
+Critical path:
+`WR-081 Phase A consumer -> Manager authority freeze -> protected authorized scoring -> WR-081 result freeze -> WR-082 independent result audit -> composition -> composition audit -> Phase 6`.
 
-Legacy Troubleshooting is a redirect to Work Helper and is not a separate employee row.
+WR-074 is no longer blocked by the bridge and is PLANNED at its preserved checkpoint, but is not activated in this transition.
