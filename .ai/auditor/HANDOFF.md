@@ -2,41 +2,41 @@
 
 HANDOFF
 
-STATUS: COMPLETE — FAIL — REMEDIATION REQUIRED
+STATUS: COMPLETE — PASS
 
-TASK: WR-087
+TASK: WR-088
 
 ROLE: Independent Auditor / QA
 
-BRANCH: `wr-087-workflow-v34-efficiency-reaudit`
+BRANCH: `wr-088-workflow-v34-efficiency-reaudit`
 
-HEAD: pending this handoff commit; use the immutable PR head published from this branch
+HEAD: use the immutable audit PR head published from this branch
 
-BASE: canonical main `19ebe9bdffb93adb152619ebc03223265a927040`
+BASE: canonical main `0a4b4edc26a20ba2a385cc956fbeba40a43722b3`
 
-PR: audit PR to main from this branch
+PR: WR-088 audit PR to `main`
 
-DONE: Fresh independent re-audit of WR-085 / PR #230 exact frozen head `c621c66b311407dae917b317ee62f6ec7150f771`.
+DONE: Fresh independent audit of WR-085 / PR #230 exact frozen target `06b8a6766117c8ec1909ba3f13bdfa702f0cf5a2`. WR-087-AUD-01 is fully remediated. Historical WR-086/WR-087 failed audits remain history only; operative V3.4 gating now routes through the currently assigned fresh independent audit, exact audited integration, and required canonical-main canary.
 
-CHANGED: Auditor evidence only — `.ai/auditor/WR-087_AUDIT.md` and this handoff.
+CHANGED: Auditor evidence only — `.ai/auditor/WR-088_AUDIT.md` and this handoff.
 
-TESTS: Independently verified WR-085 exact-head CI `35302071025` SUCCESS; classify `105466597375`, governance `105466626232`, full test `105466670945` all SUCCESS. Verified collision/lane-identity/audit-readiness/Manager-transition/custody/WR-063/WR-069 governance coverage.
+TESTS: Independently inspected exact target routing, role contracts, task state, workflow enforcement scripts, PR scope, baseline/main advancement, freeze PR, and exact target CI. Verified WR-085 Full War Room CI `35303737871` SUCCESS: classify `105471555922`, governance `105471590166`, full test `105471619318`. Verified freeze PR #239 Governance `105473034768` SUCCESS and post-freeze main Governance `105473171601` SUCCESS.
 
-CI: Audit-head CI must pass on the immutable audit PR head before Manager consumes this publication.
+CI: Consume this publication only after the immutable audit PR head has green exact-head CI. The exact audit-head run is recorded in the audit PR/final publication rather than committed here, because adding its run ID here would create a new head.
 
-BLOCKERS: WR-087-AUD-01 — MEDIUM. The frozen target's authoritative `.ai/shared/WORKFLOW.md` still says V3.4 remains candidate until WR-086 returns PASS-family, although WR-086 is immutable failed history and WR-087 is the live re-audit. WR-085's operative completion text also still routes to WR-086.
+BLOCKERS: none.
 
-DECISIONS CONSUMED: WR-086-AUD-01 integrability defect is fully remediated; PR #230 is clean/mergeable and post-reconciliation main advancement is only non-overlapping `.ai/manager/WR087_FREEZE.md`. The intended V3.4 routing/machine/safety design otherwise passes.
+DECISIONS CONSUMED: V3.3 remains canonical during this audit. WR-086 and WR-087 verdicts were not carried forward. Their evidence was used only to identify historical defects and verify the fresh target independently.
 
-NEXT ACTION: Manager returns WR-085 to narrowly bounded stale-routing remediation, updates operative future-audit gates from WR-086 to WR-087 while preserving historical WR-086 evidence, reruns exact-head full validation/CI, freezes one new immutable target, and routes a fresh independent re-audit. Do not merge PR #230 at `c621c66b311407dae917b317ee62f6ec7150f771`.
+NEXT ACTION: Manager may integrate only exact audited WR-085 head `06b8a6766117c8ec1909ba3f13bdfa702f0cf5a2` after this audit PR's exact-head CI is green, then must run the required canonical-main Full War Room canary before making V3.4 canonical. Do not carry this verdict to a moved target or overlapping canonical advancement.
 
-FILES / ARTIFACTS THAT MATTER: `.ai/auditor/WR-087_AUDIT.md`; `.ai/manager/WR087_FREEZE.md`; WR-085 PR #230; exact target `c621c66b311407dae917b317ee62f6ec7150f771`; CI `35302071025`.
+FILES / ARTIFACTS THAT MATTER: `.ai/auditor/WR-088_AUDIT.md`; `.ai/manager/WR088_FREEZE.md`; WR-085 PR #230; exact target `06b8a6766117c8ec1909ba3f13bdfa702f0cf5a2`; target CI `35303737871`; freeze PR #239; current main `0a4b4edc26a20ba2a385cc956fbeba40a43722b3`.
 
-DO NOT REPEAT: WR-086's old dirty-target diagnosis. The current blocking issue is only the surviving authoritative stale WR-086 future-gate prose.
+DO NOT REPEAT: WR-086 dirty-target diagnosis or WR-087 stale-gate verdict as authority. This is a fresh WR-088 verdict on the new exact frozen target.
 
-Final verdict: `FAIL — REMEDIATION REQUIRED`
+Final verdict: `PASS`
 
-Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — `WR-087-AUD-01`. LOW — none.
+Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — none.
 
 Auditor modified or merged PR #230: NO.
 
