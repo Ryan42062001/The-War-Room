@@ -7,14 +7,14 @@ Workflow: V3.3 CANONICAL
 
 ## Returning-Player v2
 
-Accepted source/cohort/protocol authority remains unchanged. WR-081 is blocked before scoring; WR-083 is assigned to build the protected historical-scoring bridge; WR-084 is blocked for independent bridge audit; WR-082 remains blocked until a complete historical result target exists.
-
-WR-074/075 remain temporarily serialized behind the protected-bridge lane for write-scope collision safety.
+WR-081 remains blocked before scoring. WR-083 remains assigned for the protected historical-scoring bridge; WR-084 remains blocked for its independent audit. WR-082 remains blocked until a complete historical result target exists. WR-074/075 remain temporarily serialized behind the bridge lane.
 
 ## Workflow V3.4 efficiency candidate
 
-WR-086 independent audit returned `FAIL — REMEDIATION REQUIRED` on old frozen WR-085 head `0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b`. The substantive V3.4 design and safety preservation otherwise passed.
+WR-086 is immutable failed-audit history at PR #232 / head `21cb757d849c49cbb963d1914c59bb3d2f3f209b`.
 
-WR-085 is now in bounded reconciliation/remediation on canonical baseline `2e02577cf615236bd700610a560de159d20498f1`. Required fixes: make the exact target clean/integrable against canonical main, remove stale legacy routing/base narrative, correct next-gate wording, and include REFRESH MODE / conditional REFRESH REASON in canonical activation output.
+The substantive V3.4 design passed WR-086 review. Its HIGH exact-target integration defect was remediated by reconciling current canonical state into PR #230; the LOW stale-routing/activation packet drift was also corrected.
 
-WR-087 is BLOCKED pending one new self-validated Manager-frozen immutable WR-085 head. V3.3 remains canonical until a fresh PASS-family re-audit, exact audited integration, and the required canonical-main canary.
+WR-087 is ASSIGNED as the fresh re-audit lane. Its activation state is now reconciled into the candidate before final freeze, specifically to avoid recreating WR-086-AUD-01.
+
+Next gate: full CI/readiness on the final candidate head -> non-overlapping exact freeze evidence -> fresh WR-087 audit. V3.3 remains canonical until PASS-family re-audit, exact audited integration, and canonical-main canary.
