@@ -1,6 +1,6 @@
 # WR-083 — Protected Historical Scoring Execution Bridge
 
-Status: LIVE NO-SCORING PROOF PENDING
+Status: FINAL HARDENED NO-SCORING PROOF PENDING
 Task: WR-083
 Role: Work Helper / Super Troubleshooter / Cross-Functional Operator
 Canonical workflow: V3.3
@@ -22,6 +22,8 @@ The bridge is hard-bound to:
 The protected workflow retrieves only exact admitted content-addressed custody objects. B2 uses the accepted read-only exact-key/version-aware reader; R2 is read by exact key. Bytes must independently match the accepted SHA-256 and byte size and B2/R2 bytes must agree before consumption. Provider operations are read-only.
 
 Raw bytes, provider reports, local manifests, sandbox inputs, locks, and publication staging are confined to `RUNNER_TEMP`. The no-scoring consumer is launched with an explicit provider-free environment and independently re-hashes/re-sizes all 14 objects.
+
+R2 credential continuity is additionally fail-closed against the WR-053 accepted current-scope identity anchor: Access Key ID SHA-256 `17e95438e19777a414ee85d57c32d44466199a973c51e5b6f57e42a5384585bd`. The accepted scope is bucket `war-room-custody-backup`, `Object Read & Write` with no configuration/admin authority; WR-083 itself exercises only exact-key `HeadObject` and `GetObject` operations and performs zero provider mutations.
 
 The pre-audit mode does not parse historical CSV rows into model features, expose historical targets, fit Ridge, emit predictions, compare baselines, calculate result gates, or inspect development/validation/confirmation outcomes.
 
@@ -52,7 +54,7 @@ The implementation includes deterministic fail-closed regressions for:
 
 ## Live proof
 
-The current proof-trigger commit must establish, before WR-084:
+The final hardened proof-trigger commit must establish, before WR-084:
 - exact 14/14 B2/R2 retained identity verification;
 - B2 provider-issued read-only bucket/prefix/capability boundary;
 - zero provider mutation operations;
