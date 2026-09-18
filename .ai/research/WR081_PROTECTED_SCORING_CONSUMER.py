@@ -554,3 +554,157 @@ def _publication(output_dir: Path, relpath: str, payload: Any) -> dict[str, Any]
     if not relpath.startswith(".ai/research/") or not relpath.endswith(".json") or "/WR081_" not in relpath:
         raise ContractError("invalid publication path")
     dest = output_dir / "files" / relpath
+    digest, size = write_json(dest, payload)
+    return {"path": relpath, "sha256": digest, "byte_size": size}
+
+def _finish(output_dir: Path, mode: str, bridge: Mapping[str, Any], publications: Sequence[dict[str, Any]]) -> None:
+    write_json(output_dir / "publication-manifest.json", {
+        "schema_version": "wr081-consumer-publication-manifest-v1",
+        "files": list(publications),
+    })
+    result = {"schema_version": BRIDGE_SCHEMA, "mode": mode, "status": "PASS", **dict(bridge)}
+    write_json(output_dir / "bridge-result.json", result)
+
+def _prediction_state_path(state_dir: Path, year: int) -> Path:
+    return state_dir / f"prediction-{year}.json"
+
+def _evaluation_state_path(state_dir: Path, year: int) -> Path:
+    return state_dir / f"evaluation-{year}.json"
+
+def _gate_state_path(state_dir: Path, stage: str) -> Path:
+    return state_dir / f"gate-{stage}.json"
+
+def _lock_publication_tree(lock_dir: Path) -> str:
+    manifest = read_json(lock_dir / "publication-manifest.json")
+    files = manifest.get("files")
+    if not isinstance(files, list) or not files:
+        raise ContractError("immutable lock publication manifest invalid")
+    checked = []
+    for entry in files:
+        rel = str(entry.get("path", ""))
+        digest = str(entry.get("sha256", ""))
+        size = int(entry.get("byte_size", -1))
+        file_path = lock_dir / "files" / rel
+        if sha256_file(file_path) != (digest, size):
+            raise ContractError("immutable lock publication mismatch")
+        checked.append({"path": rel, "sha256": digest, "byte_size": size})
+    checked.sort(key=lambda x: x["path"])
+    return sha256_bytes(canonical_bytes(checked))
+
+def _verify_prediction_lock(locks_dir: Path, year: int, expected: str) -> None:
+    if len(expected) != 64:
+        raise ContractError("prediction lock malformed")
+    actual = _lock_publication_tree(locks_dir / f"prediction-{year}")
+    if actual != expected:
+        raise ContractError("prediction lock mismatch")
+
+def _verify_gate_lock(locks_dir: Path, stage: str, expected: str) -> dict[str, Any]:
+    lock_path = locks_dir / f"gate-{stage}"
+    if _lock_publication_tree(lock_path) != expected:
+        raise ContractError("prior gate lock mismatch")
+    bridge = read_json(lock_path / "bridge-result.json")
+    if bridge.get("schema_version") != BRIDGE_SCHEMA or bridge.get("mode") != "stage-gate" or bridge.get("stage") != stage:
+        raise ContractError("prior gate bridge mismatch")
+    return bridge
+
+def _predict(context: Mapping[str, Any], context_path: Path, state_dir: Path, locks_dir: Path, output_dir: Path) -> None:
+    year = int(context["target_season"])
+    stage = str(context["stage"])
+    synthetic = bool(context.get("stage_a_synthetic_fixture", False))
+    runtime = _runtime_evidence(synthetic)
+    visible = _verify_visible_sources(context, context_path, "predict")
+    aggregates = _load_aggregates(visible)
+
+    prediction_locks = context.get("prediction_locks", {})
+    if not isinstance(prediction_locks, dict):
+        raise ContractError("prediction lock map malformed")
+    for prior in range(2018, year):
+        expected = prediction_locks.get(str(prior))
+        if not isinstance(expected, str):
+            raise ContractError("missing prior prediction lock")
+        _verify_prediction_lock(locks_dir, prior, expected)
+    if str(year) in prediction_locks:
+        raise ContractError("current target already has prediction lock")
+
+    gate_locks = context.get("gate_locks", {})
+    if not isinstance(gate_locks, dict):
+        raise ContractError("gate lock map malformed")
+    prior_stages = []
+    if stage in {"validation", "confirmation"}:
+        prior_stages.append("development")
+    if stage == "confirmation":
+        prior_stages.append("validation")
+    for prior_stage in prior_stages:
+        expected = gate_locks.get(prior_stage)
+        if not isinstance(expected, str) or _verify_gate_lock(locks_dir, prior_stage, expected).get("gate_pass") is not True:
+            raise ContractError("prior stage not eligible")
+    if any(k not in prior_stages for k in gate_locks):
+        raise ContractError("unexpected future gate lock")
+
+    members = _cohort_for(year, aggregates, enforce_expected_count=not synthetic)
+    features = [_feature_for(year, pid, pos, aggregates, visible) for pid, pos in members]
+    predictions = []
+    prep_states = []
+    model_states = []
+    fallback_count = 0
+
+    by_pos = {p: [] for p in POSITIONS}
+    for feature in features:
+        by_pos[feature["position"]].append(feature)
+
+    for position in POSITIONS:
+        train = _build_training_rows(year, position, aggregates, visible, enforce_expected_count=not synthetic)
+        candidates = by_pos[position]
+        if len(train) < 25:
+            fallback_count += len(candidates)
+            for feature in candidates:
+                prev1 = float(feature["values"][0])
+                row = {
+                    "target_season": year, "player_id_namespace": "gsis_id",
+                    "player_id": feature["player_id"], "position": position,
+                    "stable_key": feature["stable_key"], "status": "FALLBACK",
+                    "fallback_reason": "MIN_TRAIN_LT_25", "candidate_prediction": fstr(prev1),
+                    "primary_baseline_prediction": fstr(prev1),
+                    "weighted_baseline_prediction": fstr(float(feature["values"][25])),
+                    "same_position_mean_baseline_prediction": None,
+                    "feature_sha256": feature["feature_sha256"],
+                    "preprocessing_digest": None, "model_digest": None,
+                }
+                row["row_digest"] = sha256_bytes(canonical_bytes(row))
+                predictions.append(row)
+            continue
+
+        X_train = np.asarray([x["feature"]["values"] for x in train], dtype=np.float64)
+        y_train = np.asarray([x["target"] for x in train], dtype=np.float64)
+        if X_train.shape[1] != 28 or not np.isfinite(X_train).all() or not np.isfinite(y_train).all():
+            raise ContractError("nonfinite training matrix")
+        scaler = StandardScaler(copy=True, with_mean=True, with_std=True)
+        Xt = scaler.fit_transform(X_train)
+        model = Ridge(alpha=100.0, fit_intercept=True, copy_X=True, max_iter=None,
+                      tol=0.0001, solver="svd", positive=False, random_state=None)
+        model.fit(Xt, y_train)
+        prep = _scaler_state(scaler, train, position, year)
+        model_state = _model_state(model, prep["digest"], position, year)
+        prep_states.append(prep)
+        model_states.append(model_state)
+        earlier_mean = math.fsum(float(x["target"]) for x in train) / len(train)
+        if not math.isfinite(earlier_mean):
+            raise ContractError("nonfinite same-position mean")
+        if candidates:
+            X_pred = np.asarray([x["values"] for x in candidates], dtype=np.float64)
+            y_pred = model.predict(scaler.transform(X_pred))
+            if not np.isfinite(y_pred).all():
+                raise ContractError("nonfinite prediction")
+            for feature, candidate in zip(candidates, y_pred.tolist()):
+                row = {
+                    "target_season": year, "player_id_namespace": "gsis_id",
+                    "player_id": feature["player_id"], "position": position,
+                    "stable_key": feature["stable_key"], "status": "SCORED",
+                    "fallback_reason": None, "candidate_prediction": fstr(float(candidate)),
+                    "primary_baseline_prediction": fstr(float(feature["values"][0])),
+                    "weighted_baseline_prediction": fstr(float(feature["values"][25])),
+                    "same_position_mean_baseline_prediction": fstr(earlier_mean),
+                    "feature_sha256": feature["feature_sha256"],
+                    "preprocessing_digest": prep["digest"], "model_digest": model_state["digest"],
+                }
+                row["row_digest"] = sha256_bytes(canonical_bytes(row))
