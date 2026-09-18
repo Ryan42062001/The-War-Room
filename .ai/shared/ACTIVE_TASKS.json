@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T03:58:00Z",
+  "updated_at_utc": "2026-09-18T04:38:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -22,10 +22,10 @@
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
       "blocked_on_tasks": [
-        "WR-084"
+        "WR-089"
       ],
       "blocked_on": [
-        "Temporarily serialized behind WR-083/WR-084 because both Work Helper lanes may touch .ai/work_helper/** and scripts/validate-release-candidate.mjs; resume after protected bridge audit disposition."
+        "Temporarily serialized behind WR-083 remediation and fresh WR-089 protected-bridge re-audit because both Work Helper lanes may touch .ai/work_helper/** and scripts/validate-release-candidate.mjs; resume only after protected bridge PASS-family disposition and integration/canary."
       ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
@@ -45,7 +45,7 @@
         "scripts/custody/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "After WR-084 disposition and protected-bridge integration/canary, Manager may reactivate WR-074 from preserved checkpoint 7b4641499c50541abf523267eb4c0255813e8b6d.",
+      "next_gate": "After WR-089 PASS-family disposition and protected-bridge integration/canary, Manager may reactivate WR-074 from preserved checkpoint 7b4641499c50541abf523267eb4c0255813e8b6d.",
       "refresh_mode": "FAST_REFRESH"
     },
     {
@@ -106,10 +106,11 @@
       "blocker_type": "TECHNICAL",
       "user_action_required": false,
       "blocked_on_tasks": [
-        "WR-084"
+        "WR-083",
+        "WR-089"
       ],
       "blocked_on": [
-        "Exact retained historical rows are unavailable to the R&D lane; WR-083 must implement and WR-084 must independently accept a protected scoring bridge before WR-081 is reactivated."
+        "WR-084 failed with HIGH findings WR-084-AUD-01 and WR-084-AUD-02. WR-083 must remediate both findings and fresh WR-089 must independently return PASS-family before any real historical scoring is reactivated."
       ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
@@ -131,7 +132,7 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "WR-083 protected bridge -> WR-084 independent audit -> PASS-family only: Manager integrates exact audited bridge, runs protected canonical-main canary, then explicitly reactivates WR-081 on a fresh execution branch.",
+      "next_gate": "WR-083 bounded remediation -> Manager freeze -> WR-089 fresh independent re-audit -> PASS-family only: Manager integrates exact audited bridge, runs protected canonical-main canary, then explicitly reactivates WR-081 on a fresh execution branch.",
       "refresh_mode": "FAST_REFRESH"
     },
     {
@@ -182,12 +183,12 @@
       "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-083.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "69f1ec43c313ed89520e74b2853d69150d715d4d",
-      "worker_checkpoint_sha": null,
+      "assignment_main_sha": "9f6eba965b11e3ee8c30be71cd9b7aac387a79e2",
+      "worker_checkpoint_sha": "4ac5fa2c6148960094fde81b217bd3af080e4213",
       "branch": "wr-083-protected-historical-scoring-bridge",
-      "pr": null,
+      "pr": 234,
       "dependency": "HARD",
-      "execution_mode": "WORK_MODE",
+      "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": true,
       "blocker_type": "NONE",
       "user_action_required": false,
@@ -213,19 +214,19 @@
         "scripts/ci/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Work Helper publishes one immutable no-scoring protected-bridge implementation/proof target -> Manager exact freeze -> WR-084 independent audit.",
+      "next_gate": "Bounded remediation for WR-084-AUD-01 and WR-084-AUD-02 only -> publish one new immutable WR-083 target on PR #234 -> Manager exact freeze -> activate fresh independent WR-089 re-audit. Do not perform real WR-081 scoring.",
       "refresh_mode": "FAST_REFRESH"
     },
     {
-      "task_id": "WR-084",
+      "task_id": "WR-089",
       "owner": "Auditor",
-      "worker_slot": "auditor-wr081-protected-scoring-bridge",
+      "worker_slot": "auditor-wr081-protected-scoring-bridge-reaudit",
       "status": "BLOCKED",
-      "task_file": ".ai/manager/WR-084.md",
+      "task_file": ".ai/manager/WR-089.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
       "assignment_main_sha": null,
       "worker_checkpoint_sha": null,
-      "branch": "wr-084-protected-historical-scoring-bridge-audit",
+      "branch": "wr-089-protected-historical-scoring-bridge-reaudit",
       "pr": null,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
@@ -236,7 +237,7 @@
         "WR-083"
       ],
       "blocked_on": [
-        "WR-083 must publish one Manager-frozen immutable protected-bridge implementation target and privacy-safe no-scoring proof before audit activation."
+        "WR-083 must publish one new Manager-frozen immutable remediation target that addresses WR-084-AUD-01 and WR-084-AUD-02 before fresh independent re-audit activation."
       ],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
@@ -254,7 +255,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes exact WR-083 target -> activate WR-084 fresh independent audit.",
+      "next_gate": "Manager freezes new remediated WR-083 target -> activate WR-089 fresh independent audit. PASS-family only -> exact bridge integration and protected canonical-main canary.",
       "refresh_mode": "FAST_REFRESH"
     }
   ]
