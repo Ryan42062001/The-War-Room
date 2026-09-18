@@ -33,6 +33,8 @@ PROTOCOL_ID = "returning-player-v2-model-protocol/1.2.0-wr072"
 PROTOCOL_SHA256 = "aed044e6b7df9684153181a7a97a47a86c50ce9049db063ecdd8a973b1a832b6"
 RESULT_GATES_ID = "returning-player-v2-result-gates/1.2.0-wr072"
 EXPECTED_SOURCE_COUNT = 14
+ACCEPTED_R2_ACCESS_KEY_ID_SHA256 = "17e95438e19777a414ee85d57c32d44466199a973c51e5b6f57e42a5384585bd"
+R2_SCOPE_AUTHORITY = ".ai/auditor/WR-053_AUDIT.md"
 PROVIDER_SECRET_NAMES = (
     "WR_CUSTODY_B2_READ_KEY_ID", "WR_CUSTODY_B2_READ_APPLICATION_KEY",
     "WR_CUSTODY_R2_ACCESS_KEY_ID", "WR_CUSTODY_R2_SECRET_ACCESS_KEY",
@@ -221,6 +223,15 @@ def provider_phase(repo_root: Path, raw_dir: Path, manifest_path: Path, report_p
     sources, bindings = load_authority(repo_root)
     read = load_read_module(repo_root)
     config = read.require_environment(os.environ)
+    r2_access_key_id_sha256 = sha256_bytes(config["WR_CUSTODY_R2_ACCESS_KEY_ID"].strip().encode("utf-8"))
+    if r2_access_key_id_sha256 != ACCEPTED_R2_ACCESS_KEY_ID_SHA256:
+        raise ContractError("R2 credential identity is not the WR-053 accepted scope anchor")
+    scope_authority = (repo_root / R2_SCOPE_AUTHORITY).read_text(encoding="utf-8")
+    for required_scope_evidence in (
+        ACCEPTED_R2_ACCESS_KEY_ID_SHA256, "war-room-custody-backup", "Object Read & Write", "Final verdict", "`PASS`"
+    ):
+        if required_scope_evidence not in scope_authority:
+            raise ContractError("accepted R2 scope authority evidence mismatch")
     auth = read.authorize_b2(config)
     cleanup_paths([raw_dir, manifest_path, report_path]); raw_dir.mkdir(parents=True, mode=0o700)
     manifest_sources = []; objects = []
@@ -251,7 +262,12 @@ def provider_phase(repo_root: Path, raw_dir: Path, manifest_path: Path, report_p
         manifest_sha = write_json(manifest_path, manifest)
         write_json(report_path, {
             "schema_version":"wr083-provider-proof-v1","task_id":TASK_ID,"result":"PASS","bindings":bindings,
-            "verified_input_count":EXPECTED_SOURCE_COUNT,"b2_boundary":auth["boundary"],"objects":objects,
+            "verified_input_count":EXPECTED_SOURCE_COUNT,"b2_boundary":auth["boundary"],
+            "r2_boundary":{"status":"PASS","bucket_name":config["WR_CUSTODY_R2_BUCKET"],
+                "access_key_id_sha256":r2_access_key_id_sha256,"accepted_scope_authority":R2_SCOPE_AUTHORITY,
+                "accepted_scope":"bucket-scoped Object Read & Write; no configuration/admin authority",
+                "execution_operations":["HeadObject","GetObject"],"execution_mutation_operations":0,
+                "accepted_scope_anchor_matches":True},"objects":objects,
             "provider_operations":{"B2":["b2_authorize_account","b2_list_file_versions","b2_download_file_by_id"],"R2":["HeadObject","GetObject"]},
             "provider_mutation_operations":0,"upstream_source_access":False,"draft_picks_csv":False,
             "players_metadata":False,"raw_storage":"RUNNER_TEMP-only","local_manifest_sha256":manifest_sha,
