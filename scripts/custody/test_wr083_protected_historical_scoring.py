@@ -77,29 +77,84 @@ def git_init_with_consumer(root: pathlib.Path) -> tuple[str, str]:
     digest=hashlib.sha256(path.read_bytes()).hexdigest(); return head,digest
 
 
-def test_future_branch_head_and_consumer_digest_gates() -> None:
-    with tempfile.TemporaryDirectory() as td, tempfile.TemporaryDirectory() as runner:
+def manager_authority(root: pathlib.Path, head: str, digest: str,
+                      branch: str = "wr-081-execution",
+                      consumer_path: str = ".ai/research/synthetic_consumer.py") -> dict:
+    control=root/".ai/shared"; control.mkdir(parents=True, exist_ok=True)
+    authority={"branch":branch,"head_sha":head,"consumer_path":consumer_path,"consumer_sha256":digest}
+    active={
+        "schema_version":3,"canonical_branch":"main","manager_owned":True,
+        "tasks":[{
+            "task_id":"WR-081","branch":branch,"status":"IN_PROGRESS","blocker_type":"NONE","blocked_on_tasks":[],
+            wr083.MANAGER_EXECUTION_AUTHORITY_KEY:authority,
+        }],
+    }
+    (control/"ACTIVE_TASKS.json").write_text(json.dumps(active)+"\n")
+    return authority
+
+
+def synthetic_retained_manifest(runner: pathlib.Path) -> tuple[dict, pathlib.Path, bytes]:
+    raw_dir=runner/"retained"; raw_dir.mkdir(parents=True, exist_ok=True)
+    sources=[]; first=b"retained-raw-00\n"
+    for season in range(2012,2026):
+        data=(first if season==2012 else f"retained-raw-{season}\n".encode())
+        raw=raw_dir/f"{season}.raw"; raw.write_bytes(data); digest=hashlib.sha256(data).hexdigest()
+        sources.append({"season":season,"source_id":f"synthetic-{season}","local_path":str(raw),
+                        "expected_sha256":digest,"expected_size_bytes":len(data)})
+    manifest={"schema_version":"wr083-verified-local-input-manifest-v1","task_id":"WR-083","bindings":{},
+              "input_count":14,"sources":sources}
+    path=runner/"verified-manifest.json"; path.write_text(json.dumps(manifest)+"\n")
+    return manifest,path,first
+
+
+def test_future_manager_bound_identity_gates() -> None:
+    with tempfile.TemporaryDirectory() as td:
         repo=pathlib.Path(td); head,digest=git_init_with_consumer(repo)
-        old=os.environ.get("RUNNER_TEMP"); os.environ["RUNNER_TEMP"]=runner
-        try:
-            must_fail(lambda: wr083.validate_future_consumer(repo,"main",head,".ai/research/synthetic_consumer.py",digest),"never main")
-            must_fail(lambda: wr083.validate_future_consumer(repo,"wr-081-execution","0"*40,".ai/research/synthetic_consumer.py",digest),"race gate")
-            must_fail(lambda: wr083.validate_future_consumer(repo,"wr-081-execution",head,"scripts/no.py",digest),".ai/research")
-            must_fail(lambda: wr083.validate_future_consumer(repo,"wr-081-execution",head,".ai/research/synthetic_consumer.py","0"*64),"digest")
-            assert wr083.validate_future_consumer(repo,"wr-081-execution",head,".ai/research/synthetic_consumer.py",digest).is_file()
-        finally:
-            if old is None: os.environ.pop("RUNNER_TEMP",None)
-            else: os.environ["RUNNER_TEMP"]=old
+        authority=manager_authority(repo,head,digest)
+        approved=wr083.validate_future_authorization(repo,authority["branch"],head,authority["consumer_path"],digest)
+        assert approved["authority_sha256"] == hashlib.sha256(
+            wr083.canonical_json_bytes(authority)
+        ).hexdigest()
+        assert wr083.validate_future_consumer(repo,approved).is_file()
+        wr083.validate_live_remote_head(approved,head)
+
+        # Unreviewed workflow-dispatch identity must never substitute for Manager authority.
+        must_fail(lambda: wr083.validate_future_authorization(
+            repo,authority["branch"],"0"*40,authority["consumer_path"],digest
+        ),"not Manager-authorized")
+        must_fail(lambda: wr083.validate_future_authorization(
+            repo,authority["branch"],head,".ai/research/unreviewed_consumer.py",digest
+        ),"not Manager-authorized")
+        must_fail(lambda: wr083.validate_future_authorization(
+            repo,authority["branch"],head,authority["consumer_path"],"0"*64
+        ),"not Manager-authorized")
+
+        # Stale authorized-branch SHA and branch advancement both fail before consumer exposure.
+        subprocess.run(["git","checkout","-b",authority["branch"]],cwd=repo,check=True,stdout=subprocess.DEVNULL)
+        (repo/"advance.txt").write_text("advance\n")
+        subprocess.run(["git","add","advance.txt"],cwd=repo,check=True)
+        subprocess.run(["git","commit","-m","advance"],cwd=repo,check=True,stdout=subprocess.DEVNULL)
+        advanced=subprocess.check_output(["git","rev-parse","HEAD"],cwd=repo,text=True).strip()
+        must_fail(lambda: wr083.validate_live_remote_head(approved,advanced),"live authorized")
+        must_fail(lambda: wr083.validate_future_consumer(repo,approved),"checked-out head")
+
+        # Explicitly model branch advancement between initial authorization and execution.
+        subprocess.run(["git","checkout",head],cwd=repo,check=True,stdout=subprocess.DEVNULL)
+        wr083.validate_live_remote_head(approved,head)
+        must_fail(lambda: wr083.validate_live_remote_head(approved,advanced),"live authorized")
 
 
 def test_manager_authorization_and_fold_visibility() -> None:
     with tempfile.TemporaryDirectory() as td:
-        root=pathlib.Path(td); control=root/".ai/shared"; control.mkdir(parents=True)
-        active={"tasks":[{"task_id":"WR-081","branch":"wr-081-execution","status":"IN_PROGRESS","blocker_type":"NONE","blocked_on_tasks":[]}]}
-        (control/"ACTIVE_TASKS.json").write_text(json.dumps(active)+"\n")
-        assert wr083.validate_future_authorization(root,"wr-081-execution")["status"]=="PASS"
-        active["tasks"][0]["blocker_type"]="AUDIT"; (control/"ACTIVE_TASKS.json").write_text(json.dumps(active)+"\n")
-        must_fail(lambda: wr083.validate_future_authorization(root,"wr-081-execution"),"blocker")
+        root=pathlib.Path(td); repo=root/"repo"; repo.mkdir(); head,digest=git_init_with_consumer(repo)
+        authority=manager_authority(root,head,digest)
+        assert wr083.validate_future_authorization(root,authority["branch"],head,authority["consumer_path"],digest)["status"]=="PASS"
+        payload=json.loads((root/".ai/shared/ACTIVE_TASKS.json").read_text())
+        payload["tasks"][0]["blocker_type"]="AUDIT"; (root/".ai/shared/ACTIVE_TASKS.json").write_text(json.dumps(payload)+"\n")
+        must_fail(lambda: wr083.validate_future_authorization(root,authority["branch"],head,authority["consumer_path"],digest),"blocker")
+        payload["tasks"][0]["blocker_type"]="NONE"; payload["tasks"][0].pop(wr083.MANAGER_EXECUTION_AUTHORITY_KEY)
+        (root/".ai/shared/ACTIVE_TASKS.json").write_text(json.dumps(payload)+"\n")
+        must_fail(lambda: wr083.validate_future_authorization(root,authority["branch"],head,authority["consumer_path"],digest),"authority is absent")
     plan=wr083.future_execution_plan(); assert len(plan["folds"])==8
     for fold in plan["folds"]:
         y=fold["target_season"]; assert y not in fold["predict_visible_seasons"]
@@ -112,30 +167,41 @@ def test_frozen_publication_paths_cannot_mutate() -> None:
     with tempfile.TemporaryDirectory() as runner:
         old=os.environ.get("RUNNER_TEMP"); os.environ["RUNNER_TEMP"]=runner
         try:
-            package=pathlib.Path(runner)/"package"; package.mkdir(); frozen={}
+            root=pathlib.Path(runner); retained,_,_=synthetic_retained_manifest(root)
+            package=root/"package"; package.mkdir(); frozen={}
             def make_out(value:str):
-                out=pathlib.Path(runner)/"out"; import shutil; shutil.rmtree(out,ignore_errors=True)
-                f=out/"files/.ai/research/generated/FOLD.json"; f.parent.mkdir(parents=True); f.write_text(value)
-                d=hashlib.sha256(f.read_bytes()).hexdigest(); (out/"publication-manifest.json").write_text(json.dumps({"files":[{"path":".ai/research/generated/FOLD.json","sha256":d,"byte_size":f.stat().st_size}]})+"\n")
+                out=root/"out"; import shutil; shutil.rmtree(out,ignore_errors=True)
+                f=out/"files/.ai/research/generated/WR081_FOLD.json"; f.parent.mkdir(parents=True); f.write_text(value)
+                d=hashlib.sha256(f.read_bytes()).hexdigest(); (out/"publication-manifest.json").write_text(json.dumps({"files":[{"path":".ai/research/generated/WR081_FOLD.json","sha256":d,"byte_size":f.stat().st_size}]})+"\n")
                 return out
-            wr083.merge_publication(make_out("one\n"),package,frozen)
-            must_fail(lambda: wr083.merge_publication(make_out("two\n"),package,frozen),"mutate")
+            wr083.merge_publication(make_out("one\n"),package,frozen,retained)
+            must_fail(lambda: wr083.merge_publication(make_out("two\n"),package,frozen,retained),"mutate")
         finally:
             if old is None: os.environ.pop("RUNNER_TEMP",None)
             else: os.environ["RUNNER_TEMP"]=old
 
 
-def test_publication_manifest_restricts_research_paths() -> None:
+def test_publication_manifest_restricts_paths_and_raw_passthrough() -> None:
     with tempfile.TemporaryDirectory() as runner, tempfile.TemporaryDirectory() as repo_td:
         old=os.environ.get("RUNNER_TEMP"); os.environ["RUNNER_TEMP"]=runner
         try:
-            out=pathlib.Path(runner)/"out"; file=out/"files/.ai/research/generated/result.json"; file.parent.mkdir(parents=True); file.write_text("{}\n")
+            root=pathlib.Path(runner); retained,retained_path,raw_bytes=synthetic_retained_manifest(root)
+            out=root/"out"; file=out/"files/.ai/research/generated/WR081_RESULT.json"; file.parent.mkdir(parents=True); file.write_text("{}\n")
             digest=hashlib.sha256(file.read_bytes()).hexdigest(); size=file.stat().st_size
-            (out/"publication-manifest.json").write_text(json.dumps({"files":[{"path":".ai/research/generated/result.json","sha256":digest,"byte_size":size}]})+"\n")
-            checked=wr083.validate_publication_manifest(out); assert len(checked)==1
-            staged=wr083.stage_publication(pathlib.Path(repo_td),out); assert staged==[".ai/research/generated/result.json"]
-            bad=out/"publication-manifest.json"; bad.write_text(json.dumps({"files":[{"path":"../escape","sha256":digest,"byte_size":size}]})+"\n")
-            must_fail(lambda: wr083.validate_publication_manifest(out),"boundary")
+            (out/"publication-manifest.json").write_text(json.dumps({"files":[{"path":".ai/research/generated/WR081_RESULT.json","sha256":digest,"byte_size":size}]})+"\n")
+            checked=wr083.validate_publication_manifest(out,retained_path); assert len(checked)==1
+            staged=wr083.stage_publication(pathlib.Path(repo_td),out,retained_path); assert staged==[".ai/research/generated/WR081_RESULT.json"]
+
+            # Path/type allowlist is narrower than arbitrary .ai/research/**.
+            bad=out/"publication-manifest.json"; bad.write_text(json.dumps({"files":[{"path":".ai/research/generated/result.json","sha256":digest,"byte_size":size}]})+"\n")
+            must_fail(lambda: wr083.validate_publication_manifest(out,retained_path),"path/type")
+
+            # Exact retained bytes remain rejected even under an otherwise allowed WR-081 evidence path.
+            raw=out/"files/.ai/research/generated/WR081_RAW_COPY.json"; raw.write_bytes(raw_bytes)
+            raw_digest=hashlib.sha256(raw_bytes).hexdigest()
+            bad.write_text(json.dumps({"files":[{"path":".ai/research/generated/WR081_RAW_COPY.json","sha256":raw_digest,"byte_size":len(raw_bytes)}]})+"\n")
+            must_fail(lambda: wr083.validate_publication_manifest(out,retained_path),"retained raw source")
+            must_fail(lambda: wr083.stage_publication(pathlib.Path(repo_td),out,retained_path),"retained raw source")
         finally:
             if old is None: os.environ.pop("RUNNER_TEMP",None)
             else: os.environ["RUNNER_TEMP"]=old
@@ -160,8 +226,12 @@ def test_workflow_static_security_and_release_guard() -> None:
     assert "persist-credentials: false" in text
     assert "[wr083-no-scoring-proof]" in text
     assert "refs/heads/main" in text and "authorized-wr081-scoring" in text
-    assert "future-authorization" in text and "ACTIVE_TASKS.json" in (ROOT / "scripts/custody/wr083_protected_historical_scoring.py").read_text()
-    assert "sandbox-conformance" in text and "--unshare-net" in (ROOT / "scripts/custody/wr083_protected_historical_scoring.py").read_text()
+    script=(ROOT / "scripts/custody/wr083_protected_historical_scoring.py").read_text()
+    assert "future-authorization" in text and "ACTIVE_TASKS.json" in script
+    assert "future-remote-head" in text and "future-checkout" in text
+    assert "future_execution_authority" in script and "live authorized WR-081 branch head mismatch" in script
+    assert "--retained-manifest" in text and "publication exactly matches retained raw source" in script
+    assert "sandbox-conformance" in text and "--unshare-net" in script
     assert "actions/upload-artifact" not in text
     assert ".github/workflows/wr083-protected-historical-scoring-bridge.yml" in guard
     assert "tracked.filter(file => file.startsWith('.github/workflows/')).sort()" in guard
@@ -170,8 +240,8 @@ def test_workflow_static_security_and_release_guard() -> None:
 
 def main() -> int:
     test_authority_exact_14(); test_consumer_isolation(); test_chronology_fail_closed_and_serialization()
-    test_future_branch_head_and_consumer_digest_gates(); test_manager_authorization_and_fold_visibility()
-    test_frozen_publication_paths_cannot_mutate(); test_publication_manifest_restricts_research_paths()
+    test_future_manager_bound_identity_gates(); test_manager_authorization_and_fold_visibility()
+    test_frozen_publication_paths_cannot_mutate(); test_publication_manifest_restricts_paths_and_raw_passthrough()
     test_cleanup_helper(); test_workflow_static_security_and_release_guard()
     print("WR-083 protected historical scoring bridge regressions: PASS")
     return 0
