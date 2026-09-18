@@ -1,14 +1,14 @@
 # War Room Team Workflow
 
-Status: ACTIVE — WORKFLOW V3.3
+Status: ACTIVE — WORKFLOW V3.4
 Last updated: 2026-09-16
 Owner: Manager / Architect
 
 This is the canonical workflow for **The War Room**, the live fantasy-football **DRAFT** assistant. Repository state overrides stale chat memory. If older workflow guidance conflicts with this file, this file wins unless Manager records a newer approved workflow change.
 
-## V3.4 — ChatGPT usage efficiency candidate (WR-085)
+## V3.4 — ChatGPT usage efficiency (canonical; WR-085)
 
-Status: **CANDIDATE**. V3.3 remains canonical until the currently assigned fresh independent audit returns PASS-family on one exact Manager-frozen WR-085 target, Manager integrates only that audited target, and the required canonical-main canary passes.
+Status: **CANONICAL / ACCEPTED**. WR-088 independently returned `PASS` on exact WR-085 target `06b8a6766117c8ec1909ba3f13bdfa702f0cf5a2` with no findings. Manager integrated only that audited target through PR #230 as canonical-main merge `8dd8188a752e9a11ec2066685a59bfe8008539e8`. Mandatory canonical-main Full War Room CI canary `35304841154` completed `SUCCESS` across classify, Governance, browser determinism, WR-026 validation/evidence, `npm test`, resilience syntax, and backup/offline reload.
 
 V3.4 changes resource-routing defaults, not safety authority. All V3.3 exact-head, branch, collision, custody/provider, fail-closed, independent-audit, CI, Manager-merge and post-merge-canary guarantees remain mandatory.
 
@@ -93,7 +93,7 @@ Detailed history belongs in task-specific reports/evidence and should be referen
 
 ## V3.3 — audit-readiness + Manager transition efficiency
 
-WR-078 implemented the bounded Workflow V3.3 efficiency upgrade. Historical WR-079 independently found two MEDIUM defects; WR-078 remediated both without broadening scope. WR-080 then independently audited exact remediated head `d952099946b51c5d4d8a88929ca83d1d4dce3521` and returned `PASS` with no findings. The exact audited implementation was integrated through PR #217 as canonical-main merge `534f79a4f560d03c1ddf6309f9c416e3373e48b5`, and mandatory canonical-main Full War Room CI `35143657933` completed `SUCCESS` across classify, Governance, browser/product tests, `npm test`, resilience syntax, and backup/offline reload validation. V3.3 is canonical.
+WR-078 implemented the bounded Workflow V3.3 efficiency upgrade. Historical WR-079 independently found two MEDIUM defects; WR-078 remediated both without broadening scope. WR-080 then independently audited exact remediated head `d952099946b51c5d4d8a88929ca83d1d4dce3521` and returned `PASS` with no findings. The exact audited implementation was integrated through PR #217 as canonical-main merge `534f79a4f560d03c1ddf6309f9c416e3373e48b5`, and mandatory canonical-main Full War Room CI `35143657933` completed `SUCCESS` across classify, Governance, browser/product tests, `npm test`, resilience syntax, and backup/offline reload validation. V3.3 is the accepted predecessor to canonical V3.4.
 
 V3.3 preserves all V3.2 lane-identity, collision, custody, exact-head, live-state, independent-audit, Manager-authority, fail-closed, and post-merge-canary guarantees. Its efficiency changes are additive:
 

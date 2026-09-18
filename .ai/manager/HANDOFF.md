@@ -2,15 +2,14 @@
 
 HANDOFF
 
-STATUS: WR-085 AUDIT_READY pending final exact-head CI/freeze
-TASK: WR-085 / WR-088
-ROLE: Manager / Architect -> fresh Independent Auditor / QA
-BRANCH: `manager/wr-085-workflow-v34-efficiency`
-PR: #230
-DONE: WR-086 integrability/packet findings and WR-087 stale future-gate finding bounded-remediated; canonical WR-088 activation reconciled into candidate.
-TESTS: previous frozen candidate `c621c66b311407dae917b317ee62f6ec7150f771` passed full CI `35302071025`; this new reconciliation head must pass full exact-head CI/readiness before freeze.
-BLOCKERS: audit execution only; exact final SHA intentionally not self-recorded here.
-DECISIONS CONSUMED: substantive V3.4 design and V3.3 safety preservation already passed independent review; do not re-solve them absent contradictory evidence.
-NEXT ACTION: full exact-head CI/readiness -> non-overlapping `.ai/manager/WR088_FREEZE.md` -> fresh WR-088 audit.
-FILES / ARTIFACTS THAT MATTER: PR #230; WR-087 audit PR #237; `.ai/shared/WORKFLOW.md`; `.ai/manager/WR-085.md`; `.ai/manager/WR-088.md`.
-DO NOT REPEAT: old WR-086 dirty-target diagnosis or prior V3.4 policy review unless new contradictory evidence appears.
+STATUS: WORKFLOW V3.4 CANONICAL; active development continues
+TASK: next runnable lane is WR-083
+ROLE: Manager / Architect -> Work Helper
+HEAD: canonical workflow integration `8dd8188a752e9a11ec2066685a59bfe8008539e8`; final canonicalization follows as Manager-only control-plane evidence
+DONE: WR-088 PASS preserved; exact audited WR-085 target integrated; mandatory Full canonical-main canary `35304841154` SUCCESS; V3.4 accepted as canonical.
+TESTS: canary classify `105474805946`, governance `105474826936`, full test `105474850059` — all SUCCESS.
+BLOCKERS: WR-081 remains blocked behind protected bridge acceptance; WR-074 remains serialized behind WR-084.
+DECISIONS CONSUMED: Workflow V3.4 now governs execution/refresh routing; STANDARD_CHAT_HIGH is default, FAST_REFRESH is default, WORK_MODE is an accelerator for substantial autonomous execution only.
+NEXT ACTION: continue WR-083 protected historical-scoring bridge. Work mode is not a capability dependency; if Work credits are unavailable, continue the established WR-083 task in Standard Chat High where feasible.
+FILES / ARTIFACTS THAT MATTER: `.ai/shared/WORKFLOW.md`; `.ai/shared/ACTIVE_TASKS.json`; `.ai/manager/WR-083.md`; `.ai/work_helper/HANDOFF.md`.
+DO NOT REPEAT: WR-085/086/087/088 workflow-audit cycle unless new contradictory evidence appears.
