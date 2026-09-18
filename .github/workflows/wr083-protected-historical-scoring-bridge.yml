@@ -1,0 +1,406 @@
+name: WR-083 Protected Historical Scoring Bridge
+
+on:
+  push:
+    branches: [wr-083-protected-historical-scoring-bridge]
+    paths:
+      - '.github/workflows/wr083-protected-historical-scoring-bridge.yml'
+      - 'scripts/custody/wr083_protected_historical_scoring.py'
+      - 'scripts/custody/test_wr083_protected_historical_scoring.py'
+      - 'scripts/validate-release-candidate.mjs'
+      - '.ai/work_helper/WR083_*'
+      - '.ai/work_helper/HANDOFF.md'
+  pull_request:
+    paths:
+      - '.github/workflows/wr083-protected-historical-scoring-bridge.yml'
+      - 'scripts/custody/wr083_protected_historical_scoring.py'
+      - 'scripts/custody/test_wr083_protected_historical_scoring.py'
+      - 'scripts/validate-release-candidate.mjs'
+      - '.ai/work_helper/WR083_*'
+      - '.ai/work_helper/HANDOFF.md'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Protected bridge mode
+        required: true
+        type: choice
+        default: no-scoring
+        options: [no-scoring, authorized-wr081-scoring]
+      execution_branch:
+        description: Future Manager-authorized WR-081 execution branch (scoring mode only)
+        required: false
+        type: string
+      expected_head_sha:
+        description: Exact expected WR-081 branch head (scoring mode only)
+        required: false
+        type: string
+      consumer_path:
+        description: Reviewed WR-081 consumer under .ai/research/** (scoring mode only)
+        required: false
+        type: string
+      consumer_sha256:
+        description: SHA-256 of reviewed WR-081 consumer (scoring mode only)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wr083-protected-historical-scoring-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v6
+        with:
+          python-version: 3.12.7
+      - name: Install sandbox runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y bubblewrap apparmor-profiles apparmor-utils
+          test -f /usr/share/apparmor/extra-profiles/bwrap-userns-restrict
+          sudo install -m 0644 /usr/share/apparmor/extra-profiles/bwrap-userns-restrict /etc/apparmor.d/bwrap-userns-restrict
+          sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+      - name: Validate implementation, frozen authority, and synthetic chronology
+        run: |
+          python3 -m py_compile scripts/custody/wr083_protected_historical_scoring.py scripts/custody/test_wr083_protected_historical_scoring.py
+          python3 scripts/custody/wr083_protected_historical_scoring.py authority --repo-root .
+          python3 scripts/custody/wr083_protected_historical_scoring.py synthetic-conformance
+          python3 scripts/custody/wr083_protected_historical_scoring.py future-plan
+          python3 scripts/custody/wr083_protected_historical_scoring.py sandbox-conformance
+          python3 scripts/custody/test_wr083_protected_historical_scoring.py
+      - name: Regress accepted retained-reader boundary
+        run: python3 scripts/custody/test_read_retained_versions.py
+      - name: Preserve fail-closed release workflow allowlist
+        run: npm run test:release
+
+  trust-gate:
+    needs: preflight
+    if: >-
+      (github.event_name == 'push' && contains(github.event.head_commit.message, '[wr083-no-scoring-proof]')) ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    outputs:
+      mode: ${{ steps.gate.outputs.mode }}
+      execution_branch: ${{ steps.gate.outputs.execution_branch }}
+      expected_head_sha: ${{ steps.gate.outputs.expected_head_sha }}
+      consumer_path: ${{ steps.gate.outputs.consumer_path }}
+      consumer_sha256: ${{ steps.gate.outputs.consumer_sha256 }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - id: gate
+        name: Fail closed on untrusted ref, branch substitution, or premature scoring
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REPOSITORY: ${{ github.repository }}
+          REF: ${{ github.ref }}
+          ACTOR: ${{ github.actor }}
+          REQUESTED_MODE: ${{ github.event.inputs.mode }}
+          EXECUTION_BRANCH: ${{ github.event.inputs.execution_branch }}
+          EXPECTED_HEAD_SHA: ${{ github.event.inputs.expected_head_sha }}
+          CONSUMER_PATH: ${{ github.event.inputs.consumer_path }}
+          CONSUMER_SHA256: ${{ github.event.inputs.consumer_sha256 }}
+        run: |
+          set -euo pipefail
+          test "$REPOSITORY" = "Ryan42062001/The-War-Room"
+          test "$ACTOR" = "Ryan42062001"
+          if test "$EVENT_NAME" = "push"; then
+            test "$REF" = "refs/heads/wr-083-protected-historical-scoring-bridge"
+            mode="no-scoring"
+            execution_branch=""; expected_head=""; consumer_path=""; consumer_sha=""
+          else
+            mode="$REQUESTED_MODE"
+            if test "$mode" = "no-scoring"; then
+              test "$REF" = "refs/heads/main"
+              execution_branch=""; expected_head=""; consumer_path=""; consumer_sha=""
+            else
+              test "$mode" = "authorized-wr081-scoring"
+              test "$REF" = "refs/heads/main"
+              case "$EXECUTION_BRANCH" in wr-081-*) ;; *) exit 2 ;; esac
+              test "$EXECUTION_BRANCH" != "main"
+              [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+              case "$CONSUMER_PATH" in .ai/research/*) ;; *) exit 2 ;; esac
+              [[ "$CONSUMER_SHA256" =~ ^[0-9a-f]{64}$ ]]
+              execution_branch="$EXECUTION_BRANCH"; expected_head="$EXPECTED_HEAD_SHA"; consumer_path="$CONSUMER_PATH"; consumer_sha="$CONSUMER_SHA256"
+            fi
+          fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "execution_branch=$execution_branch" >> "$GITHUB_OUTPUT"
+          echo "expected_head_sha=$expected_head" >> "$GITHUB_OUTPUT"
+          echo "consumer_path=$consumer_path" >> "$GITHUB_OUTPUT"
+          echo "consumer_sha256=$consumer_sha" >> "$GITHUB_OUTPUT"
+          echo "WR-083 trusted ref/actor/mode gate: PASS ($mode)"
+      - name: Require canonical Manager activation and exact execution identity before future scoring
+        if: steps.gate.outputs.mode == 'authorized-wr081-scoring'
+        run: |
+          python3 scripts/custody/wr083_protected_historical_scoring.py future-authorization --repo-root . \
+            --execution-branch "${{ steps.gate.outputs.execution_branch }}" \
+            --expected-head "${{ steps.gate.outputs.expected_head_sha }}" \
+            --consumer-path "${{ steps.gate.outputs.consumer_path }}" \
+            --consumer-sha256 "${{ steps.gate.outputs.consumer_sha256 }}"
+
+  protected-no-scoring-proof:
+    needs: trust-gate
+    if: needs.trust-gate.outputs.mode == 'no-scoring'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out exact reviewed bridge implementation
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: 3.12.7
+      - name: Install sandbox runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y bubblewrap apparmor-profiles apparmor-utils
+          test -f /usr/share/apparmor/extra-profiles/bwrap-userns-restrict
+          sudo install -m 0644 /usr/share/apparmor/extra-profiles/bwrap-userns-restrict /etc/apparmor.d/bwrap-userns-restrict
+          sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+      - name: Prove sandbox target/network isolation without historical scoring
+        run: python3 scripts/custody/wr083_protected_historical_scoring.py sandbox-conformance > "$RUNNER_TEMP/wr083-sandbox-proof.json"
+      - id: bind
+        name: Hash-bind reviewed bridge files
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "script_sha256=$(sha256sum scripts/custody/wr083_protected_historical_scoring.py | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+          echo "test_sha256=$(sha256sum scripts/custody/test_wr083_protected_historical_scoring.py | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+          echo "workflow_sha256=$(sha256sum .github/workflows/wr083-protected-historical-scoring-bridge.yml | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+      - name: Retrieve and verify exactly 14 admitted retained stats objects
+        env:
+          WR_CUSTODY_B2_READ_KEY_ID: ${{ secrets.WR_CUSTODY_B2_READ_KEY_ID }}
+          WR_CUSTODY_B2_READ_APPLICATION_KEY: ${{ secrets.WR_CUSTODY_B2_READ_APPLICATION_KEY }}
+          WR_CUSTODY_R2_ACCESS_KEY_ID: ${{ secrets.WR_CUSTODY_R2_ACCESS_KEY_ID }}
+          WR_CUSTODY_R2_SECRET_ACCESS_KEY: ${{ secrets.WR_CUSTODY_R2_SECRET_ACCESS_KEY }}
+          WR_CUSTODY_B2_BUCKET: ${{ vars.WR_CUSTODY_B2_BUCKET }}
+          WR_CUSTODY_B2_ENDPOINT: ${{ vars.WR_CUSTODY_B2_ENDPOINT }}
+          WR_CUSTODY_R2_BUCKET: ${{ vars.WR_CUSTODY_R2_BUCKET }}
+          WR_CUSTODY_R2_ENDPOINT: ${{ vars.WR_CUSTODY_R2_ENDPOINT }}
+        run: |
+          echo "::add-mask::${WR_CUSTODY_B2_READ_KEY_ID}"
+          echo "::add-mask::${WR_CUSTODY_B2_READ_APPLICATION_KEY}"
+          echo "::add-mask::${WR_CUSTODY_R2_ACCESS_KEY_ID}"
+          echo "::add-mask::${WR_CUSTODY_R2_SECRET_ACCESS_KEY}"
+          python3 scripts/custody/wr083_protected_historical_scoring.py provider --repo-root . \
+            --raw-dir "$RUNNER_TEMP/wr083-raw" \
+            --manifest "$RUNNER_TEMP/wr083-verified-input-manifest.json" \
+            --report "$RUNNER_TEMP/wr083-provider-report.json"
+      - name: NO-SCORING consumer with explicit provider-free environment
+        run: |
+          env -i PATH="$PATH" RUNNER_TEMP="$RUNNER_TEMP" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+            python3 scripts/custody/wr083_protected_historical_scoring.py no-scoring-consumer --repo-root . \
+              --manifest "$RUNNER_TEMP/wr083-verified-input-manifest.json" \
+              --report "$RUNNER_TEMP/wr083-consumer-report.json" \
+              --expected-commit "$GITHUB_SHA" \
+              --script-sha256 "${{ steps.bind.outputs.script_sha256 }}" \
+              --test-sha256 "${{ steps.bind.outputs.test_sha256 }}" \
+              --workflow-sha256 "${{ steps.bind.outputs.workflow_sha256 }}"
+      - name: Deliberate consumer authority injection must fail closed
+        run: |
+          set +e
+          env -i PATH="$PATH" RUNNER_TEMP="$RUNNER_TEMP" LANG=C.UTF-8 LC_ALL=C.UTF-8 WR_CUSTODY_R2_ENDPOINT=deliberate-injection \
+            python3 scripts/custody/wr083_protected_historical_scoring.py no-scoring-consumer --repo-root . \
+              --manifest "$RUNNER_TEMP/wr083-verified-input-manifest.json" \
+              --report "$RUNNER_TEMP/wr083-injection-report.json" \
+              --expected-commit "$GITHUB_SHA" \
+              --script-sha256 "${{ steps.bind.outputs.script_sha256 }}" \
+              --test-sha256 "${{ steps.bind.outputs.test_sha256 }}" \
+              --workflow-sha256 "${{ steps.bind.outputs.workflow_sha256 }}"
+          status=$?
+          set -e
+          test "$status" -eq 2
+          test ! -e "$RUNNER_TEMP/wr083-injection-report.json"
+          echo "WR-083 deliberate provider-authority injection: FAIL-CLOSED PASS"
+      - name: Publish privacy-safe NO-SCORING proof summary
+        env:
+          SCRIPT_SHA: ${{ steps.bind.outputs.script_sha256 }}
+          TEST_SHA: ${{ steps.bind.outputs.test_sha256 }}
+          WORKFLOW_SHA: ${{ steps.bind.outputs.workflow_sha256 }}
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])
+          provider=json.loads((root/'wr083-provider-report.json').read_text())
+          consumer=json.loads((root/'wr083-consumer-report.json').read_text())
+          sandbox=json.loads((root/'wr083-sandbox-proof.json').read_text())
+          summary={
+            'task_id':'WR-083','result':'PASS','mode':'NO-SCORING','implementation_sha':os.environ['GITHUB_SHA'],
+            'workflow_run_id':os.environ['GITHUB_RUN_ID'],'verified_input_count':provider['verified_input_count'],
+            'bindings':provider['bindings'],'b2_boundary':provider['b2_boundary'],'r2_boundary':provider['r2_boundary'],'objects':provider['objects'],
+            'provider_mutation_operations':provider['provider_mutation_operations'],
+            'consumer_provider_credential_presence':consumer['consumer_provider_credential_presence'],
+            'consumer_rehash_resize_pass_count':consumer['consumer_rehash_resize_pass_count'],
+            'reviewed_code_binding':consumer['reviewed_code_binding'],
+            'synthetic_chronology_conformance':consumer['synthetic_chronology_conformance'],'sandbox_conformance':sandbox,
+            'real_scoring':False,'historical_targets_exposed':False,'raw_actions_artifacts':0,
+            'script_sha256':os.environ['SCRIPT_SHA'],'test_sha256':os.environ['TEST_SHA'],'workflow_sha256':os.environ['WORKFLOW_SHA']}
+          print(json.dumps(summary,sort_keys=True))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as out:
+            out.write('### WR-083 protected NO-SCORING proof\n\n'+json.dumps(summary,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Remove all runner-temporary retained bytes and manifests
+        if: always()
+        shell: bash
+        run: |
+          rm -rf "$RUNNER_TEMP/wr083-raw"
+          rm -f "$RUNNER_TEMP/wr083-verified-input-manifest.json" "$RUNNER_TEMP/wr083-provider-report.json" \
+            "$RUNNER_TEMP/wr083-consumer-report.json" "$RUNNER_TEMP/wr083-injection-report.json" "$RUNNER_TEMP/wr083-sandbox-proof.json"
+          test ! -e "$RUNNER_TEMP/wr083-raw"
+          test ! -e "$RUNNER_TEMP/wr083-verified-input-manifest.json"
+          test ! -e "$RUNNER_TEMP/wr083-provider-report.json"
+          test ! -e "$RUNNER_TEMP/wr083-consumer-report.json"
+          echo '{"wr083_cleanup":"PASS","raw_actions_artifacts":0}'
+
+  future-authorized-wr081-scoring:
+    needs: trust-gate
+    if: needs.trust-gate.outputs.mode == 'authorized-wr081-scoring'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    steps:
+      - name: Check out audited bridge from canonical main
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: 3.12.7
+      - name: Install frozen scoring runtime and sandbox
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y bubblewrap apparmor-profiles apparmor-utils
+          test -f /usr/share/apparmor/extra-profiles/bwrap-userns-restrict
+          sudo install -m 0644 /usr/share/apparmor/extra-profiles/bwrap-userns-restrict /etc/apparmor.d/bwrap-userns-restrict
+          sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+          python3 -m pip install --disable-pip-version-check --no-input numpy==2.1.3 pandas==2.2.3 scikit-learn==1.5.2 scipy==1.14.1
+          python3 - <<'PY'
+          import platform,sys,numpy,pandas,sklearn,scipy
+          assert sys.version_info[:3] == (3,12,7)
+          assert platform.system() == 'Linux' and platform.machine() == 'x86_64'
+          assert (numpy.__version__,pandas.__version__,sklearn.__version__,scipy.__version__) == ('2.1.3','2.2.3','1.5.2','1.14.1')
+          print('WR-083 future scoring environment lock: PASS')
+          PY
+      - name: Verify live Manager-authorized WR-081 head before retained retrieval
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EXECUTION_BRANCH: ${{ needs.trust-gate.outputs.execution_branch }}
+          EXPECTED_HEAD: ${{ needs.trust-gate.outputs.expected_head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          remote_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          current="$(git ls-remote "$remote_url" "refs/heads/$EXECUTION_BRANCH" | awk '{print $1}')"
+          python3 scripts/custody/wr083_protected_historical_scoring.py future-remote-head --repo-root . \
+            --execution-branch "$EXECUTION_BRANCH" --expected-head "$EXPECTED_HEAD" \
+            --consumer-path "${{ needs.trust-gate.outputs.consumer_path }}" \
+            --consumer-sha256 "${{ needs.trust-gate.outputs.consumer_sha256 }}" \
+            --observed-head "$current"
+      - name: Check out exact Manager-authorized WR-081 head without persisted credentials
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.trust-gate.outputs.expected_head_sha }}
+          path: wr081-execution
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Verify checked-out head and Manager-reviewed consumer before retained retrieval
+        run: |
+          env -i PATH="$PATH" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+            python3 scripts/custody/wr083_protected_historical_scoring.py future-checkout --repo-root . \
+              --execution-repo "$GITHUB_WORKSPACE/wr081-execution" \
+              --execution-branch "${{ needs.trust-gate.outputs.execution_branch }}" \
+              --expected-head "${{ needs.trust-gate.outputs.expected_head_sha }}" \
+              --consumer-path "${{ needs.trust-gate.outputs.consumer_path }}" \
+              --consumer-sha256 "${{ needs.trust-gate.outputs.consumer_sha256 }}"
+      - name: Retrieve exact 14 retained stats objects under read-only boundary
+        env:
+          WR_CUSTODY_B2_READ_KEY_ID: ${{ secrets.WR_CUSTODY_B2_READ_KEY_ID }}
+          WR_CUSTODY_B2_READ_APPLICATION_KEY: ${{ secrets.WR_CUSTODY_B2_READ_APPLICATION_KEY }}
+          WR_CUSTODY_R2_ACCESS_KEY_ID: ${{ secrets.WR_CUSTODY_R2_ACCESS_KEY_ID }}
+          WR_CUSTODY_R2_SECRET_ACCESS_KEY: ${{ secrets.WR_CUSTODY_R2_SECRET_ACCESS_KEY }}
+          WR_CUSTODY_B2_BUCKET: ${{ vars.WR_CUSTODY_B2_BUCKET }}
+          WR_CUSTODY_B2_ENDPOINT: ${{ vars.WR_CUSTODY_B2_ENDPOINT }}
+          WR_CUSTODY_R2_BUCKET: ${{ vars.WR_CUSTODY_R2_BUCKET }}
+          WR_CUSTODY_R2_ENDPOINT: ${{ vars.WR_CUSTODY_R2_ENDPOINT }}
+        run: |
+          python3 scripts/custody/wr083_protected_historical_scoring.py provider --repo-root . \
+            --raw-dir "$RUNNER_TEMP/wr083-raw" --manifest "$RUNNER_TEMP/wr083-verified-input-manifest.json" \
+            --report "$RUNNER_TEMP/wr083-provider-report.json"
+      - name: Recheck live authorized WR-081 head immediately before consumer exposure
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EXECUTION_BRANCH: ${{ needs.trust-gate.outputs.execution_branch }}
+          EXPECTED_HEAD: ${{ needs.trust-gate.outputs.expected_head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          remote_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          current="$(git ls-remote "$remote_url" "refs/heads/$EXECUTION_BRANCH" | awk '{print $1}')"
+          python3 scripts/custody/wr083_protected_historical_scoring.py future-remote-head --repo-root . \
+            --execution-branch "$EXECUTION_BRANCH" --expected-head "$EXPECTED_HEAD" \
+            --consumer-path "${{ needs.trust-gate.outputs.consumer_path }}" \
+            --consumer-sha256 "${{ needs.trust-gate.outputs.consumer_sha256 }}" \
+            --observed-head "$current"
+      - name: Execute reviewed WR-081 consumer only after provider authority is absent
+        run: |
+          env -i PATH="$PATH" RUNNER_TEMP="$RUNNER_TEMP" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+            python3 scripts/custody/wr083_protected_historical_scoring.py future-execute --repo-root . \
+              --execution-repo "$GITHUB_WORKSPACE/wr081-execution" \
+              --execution-branch "${{ needs.trust-gate.outputs.execution_branch }}" \
+              --expected-head "${{ needs.trust-gate.outputs.expected_head_sha }}" \
+              --consumer-path "${{ needs.trust-gate.outputs.consumer_path }}" \
+              --consumer-sha256 "${{ needs.trust-gate.outputs.consumer_sha256 }}" \
+              --manifest "$RUNNER_TEMP/wr083-verified-input-manifest.json" \
+              --output-dir "$RUNNER_TEMP/wr083-publication"
+      - name: Stage only consumer-declared .ai/research evidence
+        run: |
+          env -i PATH="$PATH" RUNNER_TEMP="$RUNNER_TEMP" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+            python3 scripts/custody/wr083_protected_historical_scoring.py stage-publication \
+              --execution-repo "$GITHUB_WORKSPACE/wr081-execution" \
+              --output-dir "$RUNNER_TEMP/wr083-publication" \
+              --retained-manifest "$RUNNER_TEMP/wr083-verified-input-manifest.json"
+          git -C wr081-execution add .ai/research
+          test -z "$(git -C wr081-execution diff --cached --name-only | grep -v '^\.ai/research/' || true)"
+      - name: Recheck expected branch head, commit evidence, and push without force
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EXECUTION_BRANCH: ${{ needs.trust-gate.outputs.execution_branch }}
+          EXPECTED_HEAD: ${{ needs.trust-gate.outputs.expected_head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          remote_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          current="$(git ls-remote "$remote_url" "refs/heads/$EXECUTION_BRANCH" | awk '{print $1}')"
+          test "$current" = "$EXPECTED_HEAD"
+          git -C wr081-execution config user.name "github-actions[bot]"
+          git -C wr081-execution config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C wr081-execution commit -m "WR-081: publish protected historical scoring evidence"
+          current="$(git ls-remote "$remote_url" "refs/heads/$EXECUTION_BRANCH" | awk '{print $1}')"
+          test "$current" = "$EXPECTED_HEAD"
+          git -C wr081-execution push "$remote_url" "HEAD:refs/heads/$EXECUTION_BRANCH"
+      - name: Cleanup protected raw bytes, publication staging, and execution checkout
+        if: always()
+        run: |
+          rm -rf "$RUNNER_TEMP/wr083-raw" "$RUNNER_TEMP/wr083-publication" "$GITHUB_WORKSPACE/wr081-execution"
+          rm -f "$RUNNER_TEMP/wr083-verified-input-manifest.json" "$RUNNER_TEMP/wr083-provider-report.json"

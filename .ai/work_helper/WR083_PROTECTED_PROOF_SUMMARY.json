@@ -1,0 +1,180 @@
+{
+  "schema_version": "wr083-protected-proof-summary-v2",
+  "task_id": "WR-083",
+  "workflow_version": "V3.4",
+  "result": "PASS",
+  "disposition": "BOUNDED_REMEDIATION_COMPLETE_REAUDIT_REQUIRED",
+  "mode": "NO-SCORING",
+  "failed_audited_target_preserved": "4ac5fa2c6148960094fde81b217bd3af080e4213",
+  "failed_audit": {
+    "task_id": "WR-084",
+    "pr": 243,
+    "auditor_head": "69b491dfff87c08413ae335448c2b9ec2a2515f0",
+    "verdict": "FAIL — REMEDIATION REQUIRED",
+    "evidence_merge": "9f6eba965b11e3ee8c30be71cd9b7aac387a79e2"
+  },
+  "remediation_proof_implementation_sha": "648ae9372bf2eb49e0fcebcf921d7bafd7d26d1b",
+  "remediation_proof_workflow_run_id": 35308823649,
+  "remediation_proof_jobs": {
+    "preflight": {
+      "job_id": 105486418552,
+      "result": "SUCCESS"
+    },
+    "trust_gate": {
+      "job_id": 105486504930,
+      "result": "SUCCESS"
+    },
+    "protected_no_scoring_proof": {
+      "job_id": 105486527602,
+      "result": "SUCCESS"
+    },
+    "future_authorized_wr081_scoring": {
+      "job_id": 105486528622,
+      "result": "SKIPPED"
+    }
+  },
+  "exact_proof_head_ci": {
+    "run_id": 35308823631,
+    "result": "SUCCESS"
+  },
+  "applicable_regressions": {
+    "wr046": {
+      "run_id": 35308826445,
+      "result": "SUCCESS"
+    },
+    "wr063": {
+      "run_id": 35308826406,
+      "result": "SUCCESS"
+    },
+    "wr069": {
+      "run_id": 35308826554,
+      "result": "SUCCESS"
+    },
+    "wr083_pr_preflight": {
+      "run_id": 35308826526,
+      "result": "SUCCESS"
+    }
+  },
+  "findings": {
+    "WR-084-AUD-01": {
+      "severity": "HIGH",
+      "status": "REMEDIATED",
+      "code": [
+        "Manager-owned ACTIVE_TASKS WR-081 future_execution_authority must bind exact branch, head_sha, consumer_path, consumer_sha256.",
+        "Workflow-dispatch values must exactly equal Manager authority and cannot self-authorize.",
+        "Live remote authorized branch head is checked before retained retrieval.",
+        "Checked-out commit and Manager-reviewed consumer path/digest are checked before retained retrieval.",
+        "Live remote authorized branch head is rechecked immediately before consumer exposure.",
+        "Existing immediate pre-push remote-head race checks remain."
+      ],
+      "negative_tests": [
+        "unrelated same-repository checked-out SHA fails closed",
+        "stale authorized-branch SHA fails closed",
+        "unreviewed consumer digest fails closed",
+        "unreviewed consumer path fails closed",
+        "branch advancement between authorization and execution fails closed",
+        "missing Manager execution authority fails closed",
+        "blocked WR-081 task fails closed"
+      ]
+    },
+    "WR-084-AUD-02": {
+      "severity": "HIGH",
+      "status": "REMEDIATED",
+      "code": [
+        "Publication validation is bound to the verified retained-input manifest at every consumer output and final staging.",
+        "Publication digest+size equal to any retained raw identity is rejected.",
+        "Same-sized publication exact-byte equality with retained raw source is rejected.",
+        "Authorized evidence path/type contract is limited to WR081_*.json or WR081_*.md under .ai/research/ or .ai/research/generated/.",
+        "Final publication package records retained_input_identity_set_sha256."
+      ],
+      "negative_tests": [
+        "arbitrary .ai/research path/type is rejected",
+        "exact retained raw bytes copied to allowed WR081 evidence path are rejected",
+        "raw passthrough is rejected again at final staging",
+        "previously frozen evidence path mutation remains rejected"
+      ]
+    }
+  },
+  "reviewed_code_binding": {
+    "script_sha256": "b111a5566f64a3e334b946780c9bf6fb5579a995917615c33ce1d95e98733498",
+    "test_sha256": "a581a9a98b15af75e9eeacdade3fb66364dbb9900dec153aa91c0c89dd61ca34",
+    "workflow_sha256": "cf83c12c213772012fcd4a2c5b430e8bff321f0ef229007ca3fa85eccc6cae38"
+  },
+  "bindings": {
+    "source_snapshot": {
+      "id": "wr-returning-player-v2-source-snapshot/1.2.0-wr059",
+      "sha256": "6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea"
+    },
+    "cohort": {
+      "id": "returning-player-v2-cohort/1.2.0-wr059",
+      "sha256": "f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4"
+    },
+    "protocol": {
+      "id": "returning-player-v2-model-protocol/1.2.0-wr072",
+      "gates_id": "returning-player-v2-result-gates/1.2.0-wr072",
+      "sha256": "aed044e6b7df9684153181a7a97a47a86c50ce9049db063ecdd8a973b1a832b6"
+    },
+    "admitted_stats_source_count": 14,
+    "source_identity_set_sha256": "8cbe874b3ceea141cbb9fedb2198ffa940ee218fe4556feace7afd8bbfb89351",
+    "players_metadata_admitted_count": 0,
+    "draft_picks_csv_used": false
+  },
+  "b2_boundary": {
+    "status": "PASS",
+    "bucket_name": "War-Room-Custody-Primary",
+    "bucket_id": "ca47a42fe60b9e24a40f0e16",
+    "name_prefix": "custody/sha256/",
+    "application_key_id_sha256": "8d5e5657e1a3010c341318237ca91d86153d4ed4dd4161a6bd38677c578c14dc",
+    "required_capabilities_present": true,
+    "mutation_capabilities_absent": true,
+    "shared_mutation_capable_credentials_used": false
+  },
+  "r2_boundary": {
+    "status": "PASS",
+    "bucket_name": "war-room-custody-backup",
+    "access_key_id_sha256": "17e95438e19777a414ee85d57c32d44466199a973c51e5b6f57e42a5384585bd",
+    "accepted_scope_authority": ".ai/auditor/WR-053_AUDIT.md",
+    "accepted_scope_policy_authority": ".ai/auditor/WR-050_AUDIT.md",
+    "execution_operations": [
+      "HeadObject",
+      "GetObject"
+    ],
+    "execution_mutation_operations": 0,
+    "accepted_scope_anchor_matches": true
+  },
+  "retained_verification": {
+    "verified_input_count": 14,
+    "b2_digest_size_pass_count": 14,
+    "r2_digest_size_pass_count": 14,
+    "b2_r2_equal_count": 14,
+    "consumer_rehash_resize_pass_count": 14,
+    "consumer_provider_credential_presence": false,
+    "provider_mutation_operations": 0
+  },
+  "synthetic_chronology_conformance": {
+    "status": "PASS",
+    "completed_stages": [
+      "development",
+      "validation",
+      "confirmation"
+    ],
+    "fail_closed_cases": 2,
+    "serialization_sha256": "c09d1713a57886464ae774adede2f157a5304859e696a63a79868358bc2d73b0"
+  },
+  "sandbox_conformance": {
+    "status": "PASS",
+    "network_unshared": true,
+    "sealed_target_not_mounted": true,
+    "operator_output_empty": true
+  },
+  "cleanup": "PASS",
+  "raw_actions_artifacts": 0,
+  "real_scoring": false,
+  "historical_targets_exposed": false,
+  "regular_season_2026_outcomes_inspected": false,
+  "upstream_reacquisition_or_substitution": false,
+  "provider_mutation": false,
+  "production_or_ranking_change": false,
+  "season_total_or_phase6_work": false,
+  "next_gate": "Manager exact freeze -> activate WR-089 fresh independent re-audit; Work Helper does not activate WR-089."
+}
