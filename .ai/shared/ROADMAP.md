@@ -13,10 +13,11 @@ Owner: Manager / Architect
 
 - WR-085 — AUDIT READY CANDIDATE / reconciled checkpoint passed full CI; final exact re-audit SHA pending non-conflicting activation reconciliation.
 - WR-086 — COMPLETE / FAIL — REMEDIATION REQUIRED; immutable failed audit PR #232 head `21cb757d849c49cbb963d1914c59bb3d2f3f209b`.
-- WR-087 — ASSIGNED / fresh independent re-audit; do not execute until Manager publishes final exact freeze evidence.
-- V3.3 remains canonical until PASS-family re-audit, exact integration, and required canonical-main canary.
+- WR-087 — COMPLETE / FAIL — REMEDIATION REQUIRED; immutable failed audit PR #237 head `91f07986aea0866bd368ef0b996f62cdc5a04068`; one MEDIUM stale-routing finding.
+- WR-088 — ASSIGNED / fresh independent replacement re-audit; do not execute until `WR088_FREEZE.md` pins the final exact head.
+- V3.3 remains canonical until PASS-family fresh re-audit, exact integration, and required canonical-main canary.
 
-Sequence: `WR-085 implementation/self-validation -> Manager exact freeze -> WR-086 fresh independent audit -> PASS-family only: exact integration + full canonical-main canary -> V3.4 canonical disposition`
+Sequence: `WR-085 bounded WR-087-AUD-01 remediation -> full exact-head self-validation -> non-overlapping WR088 freeze -> WR-088 fresh independent audit -> PASS-family only: exact integration + full canonical-main canary -> V3.4 canonical disposition`
 
 ## Phase 5B — Returning-Player v2 evidence reset — ACTIVE
 

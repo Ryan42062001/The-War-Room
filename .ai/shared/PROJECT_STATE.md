@@ -45,3 +45,7 @@ Independent WR-086 audit returned `FAIL — REMEDIATION REQUIRED`. The V3.4 desi
 ## V3.4 re-audit activation
 
 WR-085 reconciled checkpoint `f7a52ba2d21aed7b378428a3a37f8079efc5f8ca` passed full CI `35301414058`. WR-087 is ASSIGNED, with exact SHA intentionally deferred until activation state is reconciled into PR #230. Manager will then freeze the final clean PR head using non-overlapping evidence before audit execution.
+
+## WR-087 disposition / WR-088 routing
+
+WR-087 independently returned `FAIL — REMEDIATION REQUIRED` with no CRITICAL/HIGH findings and one MEDIUM stale-routing finding, `WR-087-AUD-01`. WR-086 integrability and prior LOW migration findings remain remediated. WR-085 is returned to bounded stale-routing remediation only. WR-088 is pre-routed as the fresh replacement audit but must not execute until non-overlapping `.ai/manager/WR088_FREEZE.md` names the new exact target after full CI/readiness. V3.3 remains canonical.

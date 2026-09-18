@@ -4,6 +4,8 @@ HANDOFF
 
 Workflow: V3.3 CANONICAL; V3.4 CANDIDATE
 
-WR-085 bounded remediation passed full self-validation at reconciled checkpoint `f7a52ba2d21aed7b378428a3a37f8079efc5f8ca`, CI `35301414058` SUCCESS. WR-087 is ASSIGNED as the fresh independent re-audit lane, but audit execution is not authorized until a final exact SHA is published in non-overlapping `.ai/manager/WR087_FREEZE.md`.
+WR-087 is COMPLETE with `FAIL — REMEDIATION REQUIRED` at Auditor head `91f07986aea0866bd368ef0b996f62cdc5a04068` / PR #237. No CRITICAL/HIGH findings. Sole blocker: MEDIUM `WR-087-AUD-01`, stale operative future-gate routing to historical failed WR-086.
 
-The activation transition is intentionally reconciled into PR #230 before final freeze, preventing a repeat of WR-086-AUD-01. WR-086 remains immutable failed-audit history.
+WR-085 is REWORK_REQUIRED for that finding only. Preserve all accepted V3.4 semantics and V3.3 safety controls. Reconcile canonical state into PR #230, change only operative future-audit routing, run full exact-head CI/readiness, then publish non-overlapping `.ai/manager/WR088_FREEZE.md`.
+
+WR-088 is ASSIGNED as the fresh independent replacement audit but MUST NOT begin substantive audit until the freeze file names the exact immutable target. Historical WR-086 and WR-087 verdicts do not transfer.
