@@ -858,3 +858,168 @@ def _relative_improvement(candidate: float, baseline: float) -> float:
         raise ContractError("zero baseline gate input")
     return (baseline - candidate) / baseline
 
+def _relative_regression(candidate: float, baseline: float) -> float:
+    if not math.isfinite(candidate) or not math.isfinite(baseline) or candidate < 0 or baseline < 0:
+        raise ContractError("invalid relative gate input")
+    if baseline == 0:
+        if candidate == 0:
+            return 0.0
+        raise ContractError("zero baseline gate input")
+    return (candidate - baseline) / baseline
+
+def _average_ranks(values: Sequence[float]) -> list[float]:
+    indexed = sorted(enumerate(values), key=lambda x: x[1])
+    ranks = [0.0] * len(values)
+    i = 0
+    while i < len(indexed):
+        j = i + 1
+        while j < len(indexed) and indexed[j][1] == indexed[i][1]:
+            j += 1
+        rank = (i + 1 + j) / 2.0
+        for k in range(i, j):
+            ranks[indexed[k][0]] = rank
+        i = j
+    return ranks
+
+def _spearman(rows: Sequence[Mapping[str, Any]], pred_field: str) -> float:
+    if len(rows) < 2:
+        raise ContractError("Spearman cell too small")
+    x = [float(r[pred_field]) for r in rows]
+    y = [float(r["target_ppr_pg"]) for r in rows]
+    rx, ry = _average_ranks(x), _average_ranks(y)
+    mx, my = math.fsum(rx) / len(rx), math.fsum(ry) / len(ry)
+    num = math.fsum((a - mx) * (b - my) for a, b in zip(rx, ry))
+    sx = math.fsum((a - mx) ** 2 for a in rx)
+    sy = math.fsum((b - my) ** 2 for b in ry)
+    den = math.sqrt(sx * sy)
+    if den == 0 or not math.isfinite(den):
+        raise ContractError("undefined Spearman")
+    return num / den
+
+def _descending_integer_ranks(rows: Sequence[Mapping[str, Any]], field: str) -> dict[tuple[str, str], int]:
+    ordered = sorted(rows, key=lambda r: (-float(r[field]), str(r["player_id_namespace"]).encode("utf-8"), str(r["player_id"]).encode("utf-8")))
+    return {(str(r["player_id_namespace"]), str(r["player_id"])): i + 1 for i, r in enumerate(ordered)}
+
+def _rank_mae(rows: Sequence[Mapping[str, Any]], pred_field: str) -> float:
+    pred = _descending_integer_ranks(rows, pred_field)
+    target = _descending_integer_ranks(rows, "target_ppr_pg")
+    return math.fsum(abs(pred[k] - target[k]) for k in pred) / len(rows)
+
+def _weighted_ordering(rows: Sequence[Mapping[str, Any]], years: Sequence[int]) -> dict[str, float]:
+    cells = []
+    for year in years:
+        for pos in POSITIONS:
+            cell = [r for r in rows if int(r["target_season"]) == year and r["position"] == pos]
+            if len(cell) < 8:
+                continue
+            cells.append((year, pos, len(cell), _spearman(cell, "candidate_prediction"),
+                          _spearman(cell, "primary_baseline_prediction"),
+                          _rank_mae(cell, "candidate_prediction"),
+                          _rank_mae(cell, "primary_baseline_prediction")))
+    if not cells:
+        raise ContractError("no eligible ordering cells")
+    total = math.fsum(c[2] for c in cells)
+    return {
+        "candidate_weighted_spearman": math.fsum(c[2] * c[3] for c in cells) / total,
+        "primary_weighted_spearman": math.fsum(c[2] * c[4] for c in cells) / total,
+        "candidate_weighted_rank_mae": math.fsum(c[2] * c[5] for c in cells) / total,
+        "primary_weighted_rank_mae": math.fsum(c[2] * c[6] for c in cells) / total,
+        "eligible_cell_count": len(cells),
+    }
+
+def _bootstrap_confirmation(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    keys = sorted({(str(r["player_id_namespace"]), str(r["player_id"])) for r in rows},
+                  key=lambda x: json.dumps([x[0], x[1]], separators=(",", ":"), ensure_ascii=False).encode("utf-8"))
+    if len(keys) < 2:
+        raise ContractError("bootstrap requires >=2 clusters")
+    cluster_index = {k: i for i, k in enumerate(keys)}
+    cluster_rows = [[] for _ in keys]
+    for row in rows:
+        cluster_rows[cluster_index[(str(row["player_id_namespace"]), str(row["player_id"]))]].append(row)
+    cluster_serial = [[k[0], k[1]] for k in keys]
+    cluster_sha = sha256_bytes(canonical_bytes(cluster_serial))
+    rng = np.random.Generator(np.random.PCG64(72073))
+    deltas = []
+    K = len(keys)
+    for _ in range(5000):
+        draws = rng.integers(0, K, size=K, dtype=np.int64, endpoint=False)
+        counts = np.bincount(draws, minlength=K)
+        total_weight = 0
+        cand_terms = []
+        base_terms = []
+        for idx, m in enumerate(counts.tolist()):
+            if not m:
+                continue
+            for row in cluster_rows[idx]:
+                total_weight += m
+                cand_terms.append(m * abs(float(row["candidate_prediction"]) - float(row["target_ppr_pg"])))
+                base_terms.append(m * abs(float(row["primary_baseline_prediction"]) - float(row["target_ppr_pg"])))
+        if total_weight <= 0:
+            raise ContractError("bootstrap zero rows")
+        delta = math.fsum(cand_terms) / total_weight - math.fsum(base_terms) / total_weight
+        if not math.isfinite(delta):
+            raise ContractError("bootstrap nonfinite")
+        deltas.append(float(delta))
+    array = np.asarray(deltas, dtype=np.float64)
+    q025, q975 = np.quantile(array, [0.025, 0.975], method="linear").tolist()
+    encoded = [fstr(x) for x in deltas]
+    replicate_sha = sha256_bytes(canonical_bytes(encoded))
+    state_sha = sha256_bytes(canonical_bytes(rng.bit_generator.state))
+    return {
+        "replicates": 5000, "seed": 72073, "cluster_count": K,
+        "cluster_sha256": cluster_sha, "replicate_sha256": replicate_sha,
+        "rng_state_sha256": state_sha, "q025": fstr(float(q025)), "q975": fstr(float(q975)),
+        "gate_pass": float(q975) <= 0.0,
+    }
+
+def _gate_metrics(state_dir: Path, stage: str) -> tuple[dict[str, Any], bool]:
+    years = STAGE_YEARS[stage]
+    rows = _observed_rows(state_dir, years)
+    pooled_candidate_mae = _mae(rows, "candidate_prediction")
+    pooled_primary_mae = _mae(rows, "primary_baseline_prediction")
+    pooled_candidate_rmse = _rmse(rows, "candidate_prediction")
+    pooled_primary_rmse = _rmse(rows, "primary_baseline_prediction")
+    mae_lift = _relative_improvement(pooled_candidate_mae, pooled_primary_mae)
+    rmse_reg = _relative_regression(pooled_candidate_rmse, pooled_primary_rmse)
+
+    pos_metrics = {}
+    eligible_pos_regs = []
+    nonworse = 0
+    min_rows = None
+    for pos in POSITIONS:
+        group = [r for r in rows if r["position"] == pos]
+        n = len(group)
+        min_rows = n if min_rows is None else min(min_rows, n)
+        if n >= 30:
+            c, b = _mae(group, "candidate_prediction"), _mae(group, "primary_baseline_prediction")
+            reg = _relative_regression(c, b)
+            eligible_pos_regs.append(reg)
+            if c <= b:
+                nonworse += 1
+            pos_metrics[pos] = {"n": n, "candidate_mae": fstr(c), "primary_mae": fstr(b), "regression": fstr(reg)}
+        else:
+            pos_metrics[pos] = {"n": n, "excluded_lt30": True}
+    if not eligible_pos_regs:
+        raise ContractError("no position eligible for regression gate")
+    max_pos_reg = max(eligible_pos_regs)
+
+    season_deltas = []
+    season_regs = []
+    season_metrics = {}
+    for year in years:
+        group = [r for r in rows if int(r["target_season"]) == year]
+        if not group:
+            raise ContractError("declared season has zero evaluable rows")
+        c, b = _mae(group, "candidate_prediction"), _mae(group, "primary_baseline_prediction")
+        delta, reg = c - b, _relative_regression(c, b)
+        season_deltas.append(delta)
+        season_regs.append(reg)
+        season_metrics[str(year)] = {"n": len(group), "candidate_mae": fstr(c), "primary_mae": fstr(b), "delta": fstr(delta), "regression": fstr(reg)}
+    mean_season_delta = math.fsum(season_deltas) / len(season_deltas)
+    max_season_reg = max(season_regs)
+
+    fallback_count = 0
+    lineage_failures = 0
+    for year in years:
+        state = read_json(_evaluation_state_path(state_dir, year))["evaluation"]
+        fallback_count += int(state.get("fallback_count", 0))
