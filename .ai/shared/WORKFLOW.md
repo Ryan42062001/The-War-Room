@@ -91,6 +91,29 @@ Use continuation-oriented headings when applicable:
 
 Detailed history belongs in task-specific reports/evidence and should be referenced, not copied into every handoff.
 
+#### Next Activation table — required
+
+Every employee handoff and user-facing completion response must end with one small **Next Activation** table so the user can immediately see which employee should act next and has a ready-to-copy activation prompt.
+
+Use this shape:
+
+| Next employee | Activate when / why | Copy/paste activation prompt |
+| --- | --- | --- |
+| `<canonical role>` | `<short gate/reason>` | `<concise prompt with repository, task, execution mode, refresh mode, and exact next action>` |
+
+Rules:
+
+- Normally provide exactly one row. Use multiple rows only when Manager has explicitly authorized genuinely independent parallel lanes.
+- Use canonical role names only: Manager / Architect, Implementation Engineer / Builder, Draft Strategy & Decision Intelligence Analyst, Research & Development specialist, Independent Auditor / QA, or Work Helper / Super Troubleshooter / Cross-Functional Operator.
+- The prompt must be immediately usable without asking the user to reconstruct context. Include the repository, task ID, execution mode, refresh mode, and exact next action. Include branch, PR, exact SHA, blocker, or audit target when known and materially relevant.
+- Keep the prompt compact. Reference authoritative repository artifacts instead of copying long histories into the prompt.
+- Never invent a task ID, branch, PR, SHA, authorization, PASS-family verdict, or unrecorded Manager decision.
+- Never use this table to bypass a blocker, independent audit, Manager freeze, merge gate, canary, custody rule, or role boundary.
+- Non-Manager employees **recommend** the next activation; Manager remains the routing/activation authority. If Manager must reconcile or authorize the next lane first, the next employee is `Manager / Architect`.
+- If no employee should be activated yet, use `NONE — wait for Manager/user/external gate` and provide a short prompt explaining what must become true before activation.
+- If the current task failed audit or needs remediation, route back through Manager unless the canonical task state already contains an explicit remediation assignment.
+- The user-facing table should match the durable handoff so chat guidance and repository state do not diverge.
+
 ## V3.3 — audit-readiness + Manager transition efficiency
 
 WR-078 implemented the bounded Workflow V3.3 efficiency upgrade. Historical WR-079 independently found two MEDIUM defects; WR-078 remediated both without broadening scope. WR-080 then independently audited exact remediated head `d952099946b51c5d4d8a88929ca83d1d4dce3521` and returned `PASS` with no findings. The exact audited implementation was integrated through PR #217 as canonical-main merge `534f79a4f560d03c1ddf6309f9c416e3373e48b5`, and mandatory canonical-main Full War Room CI `35143657933` completed `SUCCESS` across classify, Governance, browser/product tests, `npm test`, resilience syntax, and backup/offline reload validation. V3.3 is the accepted predecessor to canonical V3.4.
