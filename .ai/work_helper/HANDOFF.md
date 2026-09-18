@@ -6,48 +6,103 @@ Task ID: WR-083
 
 Role: Work Helper / Super Troubleshooter / Cross-Functional Operator
 
-Status: COMPLETE — AUDIT REQUIRED
+Status: COMPLETE — FRESH RE-AUDIT REQUIRED
 
-Canonical workflow: V3.3
+Canonical workflow: V3.4
 
-Starting canonical main supplied by assignment: `b034d64ac7d65c0cdb39a89712a298a2595187c2`
+Canonical remediation base reconciled:
+`ca7fda518386fc23f44344e78fc3b4169602c254`
 
-Latest canonical main reconciled into final Work Helper target: `2e02577cf615236bd700610a560de159d20498f1`
+Branch:
+`wr-083-protected-historical-scoring-bridge`
 
-Branch: `wr-083-protected-historical-scoring-bridge`
+Existing PR:
+#234
 
-Protected implementation/proof SHA: `cb854442b0acc18a75c4b04e6f477be75480404f`
+Failed audited target preserved:
+`4ac5fa2c6148960094fde81b217bd3af080e4213`
 
-Protected run: `35300775802` — SUCCESS
+Failed audit:
+WR-084 / PR #243 / Auditor head
+`69b491dfff87c08413ae335448c2b9ec2a2515f0`
 
-Protected jobs:
-- preflight `105462795952` — SUCCESS
-- trust-gate `105462928597` — SUCCESS
-- protected-no-scoring-proof `105462958770` — SUCCESS
-- future-authorized-wr081-scoring `105462959719` — SKIPPED
+## Remediated proof
 
-Proof-head War Room CI: `35300775750` — SUCCESS
+Protected implementation/proof SHA:
+`648ae9372bf2eb49e0fcebcf921d7bafd7d26d1b`
 
-## Disposition
+Protected run:
+`35308823649` — SUCCESS
 
-WR-083 implemented the smallest protected historical-scoring execution bridge while preserving the accepted WR-059 source/cohort authority and WR-072 protocol. The protected proof handled exactly the 14 admitted annual Player Summary Stats identities and no Players metadata or `draft_picks.csv`.
+Jobs:
+- preflight `105486418552` — SUCCESS
+- trust gate `105486504930` — SUCCESS
+- protected no-scoring proof `105486527602` — SUCCESS
+- future-authorized WR-081 scoring `105486528622` — SKIPPED
 
-All 14 retained identities passed B2 SHA-256/byte-size verification, R2 SHA-256/byte-size verification, and B2/R2 byte equality. Provider mutation operations were zero.
+Exact proof-head Full War Room CI:
+`35308823631` — SUCCESS
 
-The dedicated B2 read boundary proved exact bucket/prefix/read capabilities with mutation-capable authority absent. The active R2 object credential matched accepted Access Key ID SHA-256 `17e95438e19777a414ee85d57c32d44466199a973c51e5b6f57e42a5384585bd`; current-credential continuity is bound to accepted WR-053 and scope-policy evidence to accepted WR-050. WR-083 exercised R2 `HeadObject`/`GetObject` only.
+Applicable same-head regressions:
+- WR-083 PR preflight `35308826526` — SUCCESS
+- WR-046 `35308826445` — SUCCESS
+- WR-063 `35308826406` — SUCCESS
+- WR-069 `35308826554` — SUCCESS
 
-The no-scoring consumer ran after provider access under an explicit provider-free environment, independently re-hashed/re-sized all 14 inputs, and deliberate provider-authority injection failed closed.
+Reviewed implementation hashes:
+- script `b111a5566f64a3e334b946780c9bf6fb5579a995917615c33ce1d95e98733498`
+- tests `a581a9a98b15af75e9eeacdade3fb66364dbb9900dec153aa91c0c89dd61ca34`
+- workflow `cf83c12c213772012fcd4a2c5b430e8bff321f0ef229007ca3fa85eccc6cae38`
 
-Synthetic chronology and sandbox conformance passed. Prediction-before-target and stage-order failures are enforced; future target-season bytes are withheld until that season's prediction publication is locked. Sandbox networking is unshared, sealed target data is not mounted during prediction, and future publication is limited to authorized `.ai/research/**`.
+## WR-084-AUD-01
 
-Cleanup passed. GitHub's artifact endpoint reports zero Actions artifacts for the successful protected run.
+REMEDIATED.
 
-Reviewed file SHA-256:
-- script `6218de40d9e65dceee64e77397f019572d1c49abd580d473051187f2f756e44e`
-- tests `d046e556ecda1b94eb1966a26eadd0e676845aaade2bb6e5319e279a7625c07a`
-- workflow `6a317eb1167e8881aabf3777bb877bd1901f59a14a4ecb374eb7b34bcfade779`
+Future execution now requires Manager-owned canonical WR-081
+`future_execution_authority` for exact branch, exact head SHA, exact consumer path, and exact reviewed consumer SHA-256. Workflow-dispatch values must match that authority exactly.
 
-No real WR-081 model scoring occurred. Historical targets were not exposed. No 2026 regular-season outcomes were inspected. No provider state, production ranking behavior, season-total composition, or Phase 6 work changed.
+Before retained retrieval:
+- live authorized remote branch head must equal Manager head;
+- exact authorized commit is checked out;
+- local HEAD and reviewed consumer path/digest must match Manager authority.
+
+Immediately before consumer exposure, the remote head is checked again. The existing pre-push remote-head checks remain.
+
+Negative tests cover unrelated same-repository SHA, stale authorized branch SHA, unreviewed path/digest, missing/blocked authority, and branch advancement between authorization and execution.
+
+## WR-084-AUD-02
+
+REMEDIATED.
+
+Publication validation is bound to the verified retained-input manifest at consumer validation, immutable phase merge/locking, and final staging.
+
+An output is rejected if its digest/size or exact bytes match any retained raw source. Publication is limited to explicit WR-081 JSON/Markdown evidence names under `.ai/research/` or `.ai/research/generated/`.
+
+Negative tests prove an exact retained raw copy placed at an otherwise allowed
+`.ai/research/generated/WR081_RAW_COPY.json`
+fails validation and final staging.
+
+## Preserved properties
+
+The live no-scoring proof reproduced all previously PASSed custody/isolation properties:
+- exact 14 admitted stats identities;
+- B2/R2 digest+size and byte equality 14/14;
+- provider mutations 0;
+- consumer provider credentials absent;
+- consumer independent re-hash 14/14;
+- sandbox isolation PASS;
+- chronology PASS;
+- cleanup PASS;
+- raw Actions artifacts 0;
+- zero Players metadata;
+- no `draft_picks.csv`;
+- no upstream reacquisition/substitution.
+
+`real_scoring=false`
+
+`historical_targets_exposed=false`
+
+No 2026 regular-season outcomes, production ranking/model behavior, season-total composition, or Phase 6 behavior was changed or inspected.
 
 Detailed evidence:
 - `.ai/work_helper/WR083_PROTECTED_HISTORICAL_SCORING_BRIDGE.md`
@@ -57,6 +112,6 @@ Detailed evidence:
 
 Return control to Manager.
 
-Manager should verify and freeze the exact final WR-083 PR head, then activate WR-084 for fresh independent audit. Work Helper does not merge WR-083, does not activate WR-084, and does not reactivate WR-081.
+Manager should freeze the exact final WR-083 PR #234 head after final documentation/CI verification, then activate WR-089 as a fresh independent re-audit.
 
-Only WR-084 PASS-family plus Manager integration and protected canonical-main canary may unlock later explicit WR-081 historical scoring execution.
+Work Helper does not merge PR #234, does not activate WR-089, and does not reactivate WR-081.
