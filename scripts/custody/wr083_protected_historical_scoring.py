@@ -411,17 +411,7 @@ def no_scoring_consumer(repo_root: Path, manifest_path: Path, report_path: Path,
     })
 
 
-def validate_future_authorization(control_repo: Path, execution_branch: str, expected_head: str,
-                                  consumer_relpath: str, consumer_sha256: str) -> dict:
-    if execution_branch == "main" or not execution_branch.startswith("wr-081-"):
-        raise ContractError("future execution branch must be an explicit WR-081 branch, never main")
-    if not HEX40.fullmatch(expected_head):
-        raise ContractError("future execution head must be an exact commit SHA")
-    rel = Path(consumer_relpath)
-    if rel.is_absolute() or not str(rel).startswith(".ai/research/") or ".." in rel.parts:
-        raise ContractError("future scoring consumer must be under .ai/research/**")
-    if not HEX64.fullmatch(consumer_sha256):
-        raise ContractError("future scoring consumer digest is invalid")
+def load_future_authorization(control_repo: Path) -> dict:
     path = control_repo / ".ai/shared/ACTIVE_TASKS.json"
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
@@ -450,25 +440,31 @@ def validate_future_authorization(control_repo: Path, execution_branch: str, exp
             manager_rel.is_absolute() or not manager_path.startswith(".ai/research/") or ".." in manager_rel.parts or
             not HEX64.fullmatch(manager_digest)):
         raise ContractError("Manager-controlled WR-081 execution authority is malformed")
-    requested = {
-        "branch": execution_branch,
-        "head_sha": expected_head,
-        "consumer_path": consumer_relpath,
-        "consumer_sha256": consumer_sha256,
-    }
     manager = {
         "branch": manager_branch,
         "head_sha": manager_head,
         "consumer_path": manager_path,
         "consumer_sha256": manager_digest,
     }
-    if requested != manager:
-        raise ContractError("workflow-dispatch execution identity is not Manager-authorized")
     return {
         "status": "PASS", "task_id": "WR-081", "task_status": task.get("status"),
         **manager, "authority_sha256": sha256_bytes(canonical_json_bytes(manager)),
     }
 
+
+def validate_future_authorization(control_repo: Path, execution_branch: str, expected_head: str,
+                                  consumer_relpath: str, consumer_sha256: str) -> dict:
+    manager = load_future_authorization(control_repo)
+    requested = {
+        "branch": execution_branch,
+        "head_sha": expected_head,
+        "consumer_path": consumer_relpath,
+        "consumer_sha256": consumer_sha256,
+    }
+    expected = {key: manager[key] for key in requested}
+    if requested != expected:
+        raise ContractError("workflow-dispatch execution identity is not Manager-authorized")
+    return manager
 
 def validate_live_remote_head(authorization: Mapping[str, object], observed_head: str) -> None:
     expected = str(authorization.get("head_sha") or "")
@@ -733,6 +729,92 @@ def synthetic_sandbox_conformance() -> dict:
         shutil.rmtree(root, ignore_errors=True)
 
 
+def _add_frozen_json(package_dir: Path, frozen: dict[str, tuple[str, int]], rel: str,
+                     payload: Mapping[str, object], collision_label: str) -> tuple[str, int]:
+    data = canonical_json_bytes(payload)
+    dest = package_dir / "files" / rel
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(data)
+    identity = (sha256_bytes(data), len(data))
+    prior = frozen.get(rel)
+    if prior is not None and prior != identity:
+        raise ContractError(f"{collision_label} publication collision")
+    frozen[rel] = identity
+    return identity
+
+
+def build_terminal_result_summary(authorization: Mapping[str, object], consumer_sha256: str, terminal: str,
+                                  decision_status: str, prediction_lock_count: int, gate_lock_count: int) -> dict:
+    return {
+        "schema_version": "wr081-terminal-result-summary-v1",
+        "task_id": "WR-081",
+        "execution_status": "SUCCESS",
+        "result_terminal": terminal,
+        "decision_status": decision_status,
+        "authority_sha256": authorization["authority_sha256"],
+        "authorized_head": authorization["head_sha"],
+        "consumer_sha256": consumer_sha256,
+        "prediction_lock_count": prediction_lock_count,
+        "gate_lock_count": gate_lock_count,
+    }
+
+
+def build_authority_consumption_receipt(authorization: Mapping[str, object], terminal_summary: Mapping[str, object],
+                                        publication_payload_sha256: str, workflow_run_id: str) -> dict:
+    if not workflow_run_id:
+        raise ContractError("workflow run identity is required for authority consumption receipt")
+    return {
+        "schema_version": "wr081-authority-consumption-receipt-v1",
+        "task_id": "WR-081",
+        "authority_sha256": authorization["authority_sha256"],
+        "branch": authorization["branch"],
+        "authorized_head": authorization["head_sha"],
+        "consumer_path": authorization["consumer_path"],
+        "consumer_sha256": authorization["consumer_sha256"],
+        "workflow_run_id": workflow_run_id,
+        "execution_status": terminal_summary["execution_status"],
+        "result_terminal": terminal_summary["result_terminal"],
+        "decision_status": terminal_summary["decision_status"],
+        "publication_payload_sha256": publication_payload_sha256,
+        "single_publication_commit_required": True,
+    }
+
+
+def validate_authority_consumption(control_repo: Path, execution_repo: Path, publication_head: str) -> dict:
+    authorization = load_future_authorization(control_repo)
+    if not HEX40.fullmatch(publication_head) or git_head(execution_repo) != publication_head:
+        raise ContractError("publication head is not the checked-out execution head")
+    try:
+        parent = subprocess.check_output(
+            ["git", "-C", str(execution_repo), "rev-parse", f"{publication_head}^"],
+            text=True, stderr=subprocess.DEVNULL
+        ).strip()
+    except subprocess.SubprocessError as exc:
+        raise ContractError("publication commit parent unavailable") from exc
+    if parent != authorization["head_sha"]:
+        raise ContractError("protected publication must advance the authorized head by exactly one commit")
+    receipt_path = execution_repo / ".ai/research/generated/WR081_AUTHORITY_CONSUMPTION_RECEIPT.json"
+    try:
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ContractError("authority consumption receipt missing/invalid") from exc
+    required = {
+        "authority_sha256": authorization["authority_sha256"],
+        "branch": authorization["branch"],
+        "authorized_head": authorization["head_sha"],
+        "consumer_path": authorization["consumer_path"],
+        "consumer_sha256": authorization["consumer_sha256"],
+    }
+    if any(receipt.get(key) != value for key, value in required.items()) or receipt.get("single_publication_commit_required") is not True:
+        raise ContractError("authority consumption receipt binding mismatch")
+    return {
+        **receipt,
+        "publication_head": publication_head,
+        "publication_parent_verified": True,
+        "receipt_sha256": sha256_file(receipt_path)[0],
+    }
+
+
 def run_future_consumer(control_repo: Path, execution_repo: Path, execution_branch: str, expected_head: str,
                         consumer_relpath: str, consumer_sha256: str, manifest_path: Path, package_dir: Path) -> dict:
     assert_consumer_isolation(os.environ)
@@ -742,7 +824,7 @@ def run_future_consumer(control_repo: Path, execution_repo: Path, execution_bran
     root = package_dir.parent / "wr083-execution-sandbox"; cleanup_paths([package_dir, root]); package_dir.mkdir(parents=True); root.mkdir()
     consumer_copy = root / "consumer.py"; shutil.copyfile(consumer, consumer_copy)
     state = root / "state"; state.mkdir(); locks = root / "locks"; locks.mkdir(); visible = root / "visible"; output = root / "output"
-    frozen: dict[str, tuple[str, int]] = {}; prediction_locks: dict[str, str] = {}; gate_locks: dict[str, str] = {}; terminal = "COMPLETE"; chronology = []
+    frozen: dict[str, tuple[str, int]] = {}; prediction_locks: dict[str, str] = {}; gate_locks: dict[str, str] = {}; terminal = "COMPLETE"; decision_status = "UNDECIDED"; chronology = []
     try:
         for stage, years in STAGE_YEARS.items():
             for year in years:
@@ -766,16 +848,23 @@ def run_future_consumer(control_repo: Path, execution_repo: Path, execution_bran
             bridge = run_sandboxed_consumer(consumer_copy, "stage-gate", context, visible, state, locks, output, manifest)
             if bridge.get("stage") != stage or not isinstance(bridge.get("gate_pass"), bool) or bridge.get("prediction_lock_set_sha256") != lock_set:
                 raise ContractError("stage gate result contract mismatch")
+            if not isinstance(bridge.get("status_label"), str) or not bridge.get("status_label"):
+                raise ContractError("stage gate result status_label missing")
+            decision_status = bridge["status_label"]
             gate_lock = lock_phase_output(output, locks, f"gate-{stage}", manifest); gate_locks[stage] = gate_lock; merge_publication(output, package_dir, frozen, manifest)
             chronology.append({"stage": stage, "event": "STAGE_GATE", "gate_pass": bridge["gate_pass"], "gate_lock_sha256": gate_lock})
             if not bridge["gate_pass"]:
                 terminal = f"{stage.upper()}_FAILED"; break
         chronology_artifact = {"schema_version": "wr081-protected-execution-chronology-v1", "task_id": "WR-081", "authorization": authorization, "consumer_sha256": consumer_sha256, "bindings": manifest["bindings"], "prediction_locks": prediction_locks, "gate_locks": gate_locks, "events": chronology, "terminal": terminal}
-        rel = ".ai/research/generated/WR081_PROTECTED_EXECUTION_CHRONOLOGY.json"; data = canonical_json_bytes(chronology_artifact); dest = package_dir / "files" / rel; dest.parent.mkdir(parents=True, exist_ok=True); dest.write_bytes(data); identity = (sha256_bytes(data), len(data)); prior = frozen.get(rel)
-        if prior is not None and prior != identity:
-            raise ContractError("chronology publication collision")
-        frozen[rel] = identity; write_package_manifest(package_dir, frozen, manifest)
-        return {"status": "PASS", "terminal": terminal, "authorization": authorization, "consumer_sha256": consumer_sha256, "publication_file_count": len(frozen), "prediction_lock_count": len(prediction_locks), "gate_lock_count": len(gate_locks)}
+        _add_frozen_json(package_dir, frozen, ".ai/research/generated/WR081_PROTECTED_EXECUTION_CHRONOLOGY.json", chronology_artifact, "chronology")
+        terminal_summary = build_terminal_result_summary(authorization, consumer_sha256, terminal, decision_status, len(prediction_locks), len(gate_locks))
+        _add_frozen_json(package_dir, frozen, ".ai/research/generated/WR081_TERMINAL_RESULT.json", terminal_summary, "terminal result")
+        payload_entries = [{"path": rel, "sha256": identity[0], "byte_size": identity[1]} for rel, identity in sorted(frozen.items())]
+        payload_sha256 = sha256_bytes(canonical_json_bytes(payload_entries))
+        receipt = build_authority_consumption_receipt(authorization, terminal_summary, payload_sha256, os.environ.get("GITHUB_RUN_ID", ""))
+        _add_frozen_json(package_dir, frozen, ".ai/research/generated/WR081_AUTHORITY_CONSUMPTION_RECEIPT.json", receipt, "authority receipt")
+        write_package_manifest(package_dir, frozen, manifest)
+        return {"status": "PASS", "execution_status": "SUCCESS", "terminal": terminal, "decision_status": decision_status, "authorization": authorization, "consumer_sha256": consumer_sha256, "publication_file_count": len(frozen), "prediction_lock_count": len(prediction_locks), "gate_lock_count": len(gate_locks), "authority_receipt_path": ".ai/research/generated/WR081_AUTHORITY_CONSUMPTION_RECEIPT.json"}
     except BaseException:
         cleanup_paths([package_dir, root]); raise
     finally:
@@ -806,11 +895,13 @@ def main() -> int:
     sub.add_parser("synthetic-conformance")
     sub.add_parser("sandbox-conformance")
     sub.add_parser("future-plan")
+    p=sub.add_parser("future-authority"); p.add_argument("--repo-root",type=Path,default=Path("."))
     p=sub.add_parser("future-authorization"); p.add_argument("--repo-root",type=Path,default=Path(".")); p.add_argument("--execution-branch",required=True); p.add_argument("--expected-head",required=True); p.add_argument("--consumer-path",required=True); p.add_argument("--consumer-sha256",required=True)
     p=sub.add_parser("future-remote-head"); p.add_argument("--repo-root",type=Path,default=Path(".")); p.add_argument("--execution-branch",required=True); p.add_argument("--expected-head",required=True); p.add_argument("--consumer-path",required=True); p.add_argument("--consumer-sha256",required=True); p.add_argument("--observed-head",required=True)
     p=sub.add_parser("future-checkout"); p.add_argument("--repo-root",type=Path,default=Path(".")); p.add_argument("--execution-repo",type=Path,required=True); p.add_argument("--execution-branch",required=True); p.add_argument("--expected-head",required=True); p.add_argument("--consumer-path",required=True); p.add_argument("--consumer-sha256",required=True)
     p=sub.add_parser("future-execute"); p.add_argument("--repo-root",type=Path,default=Path(".")); p.add_argument("--execution-repo",type=Path,required=True); p.add_argument("--execution-branch",required=True); p.add_argument("--expected-head",required=True); p.add_argument("--consumer-path",required=True); p.add_argument("--consumer-sha256",required=True); p.add_argument("--manifest",type=Path,required=True); p.add_argument("--output-dir",type=Path,required=True)
     p=sub.add_parser("stage-publication"); p.add_argument("--execution-repo",type=Path,required=True); p.add_argument("--output-dir",type=Path,required=True); p.add_argument("--retained-manifest",type=Path,required=True)
+    p=sub.add_parser("authority-consumption-check"); p.add_argument("--repo-root",type=Path,default=Path(".")); p.add_argument("--execution-repo",type=Path,required=True); p.add_argument("--publication-head",required=True)
     args=parser.parse_args()
     try:
         if args.command=="authority":
@@ -820,6 +911,7 @@ def main() -> int:
         elif args.command=="synthetic-conformance": print(json.dumps(synthetic_conformance(),sort_keys=True))
         elif args.command=="sandbox-conformance": print(json.dumps(synthetic_sandbox_conformance(),sort_keys=True))
         elif args.command=="future-plan": print(json.dumps(future_execution_plan(),sort_keys=True))
+        elif args.command=="future-authority": print(json.dumps(load_future_authorization(args.repo_root.resolve()),sort_keys=True))
         elif args.command=="future-authorization":
             print(json.dumps(validate_future_authorization(args.repo_root.resolve(),args.execution_branch,args.expected_head,args.consumer_path,args.consumer_sha256),sort_keys=True))
         elif args.command=="future-remote-head":
@@ -828,6 +920,7 @@ def main() -> int:
             authorization=validate_future_authorization(args.repo_root.resolve(),args.execution_branch,args.expected_head,args.consumer_path,args.consumer_sha256); consumer=validate_future_consumer(args.execution_repo.resolve(),authorization); print(json.dumps({"status":"PASS","authority_sha256":authorization["authority_sha256"],"consumer_sha256":sha256_file(consumer)[0]},sort_keys=True))
         elif args.command=="future-execute": print(json.dumps(run_future_consumer(args.repo_root.resolve(),args.execution_repo.resolve(),args.execution_branch,args.expected_head,args.consumer_path,args.consumer_sha256,args.manifest,args.output_dir),sort_keys=True))
         elif args.command=="stage-publication": print(json.dumps({"status":"PASS","files":stage_publication(args.execution_repo.resolve(),args.output_dir,args.retained_manifest)},sort_keys=True))
+        elif args.command=="authority-consumption-check": print(json.dumps(validate_authority_consumption(args.repo_root.resolve(),args.execution_repo.resolve(),args.publication_head),sort_keys=True))
         return 0
     except (ContractError,OSError,ValueError,subprocess.SubprocessError) as exc:
         print(f"WR-083 FAIL CLOSED: {exc}",file=sys.stderr); return 2

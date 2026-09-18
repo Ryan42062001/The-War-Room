@@ -26,22 +26,6 @@ on:
         type: choice
         default: no-scoring
         options: [no-scoring, authorized-wr081-scoring]
-      execution_branch:
-        description: Future Manager-authorized WR-081 execution branch (scoring mode only)
-        required: false
-        type: string
-      expected_head_sha:
-        description: Exact expected WR-081 branch head (scoring mode only)
-        required: false
-        type: string
-      consumer_path:
-        description: Reviewed WR-081 consumer under .ai/research/** (scoring mode only)
-        required: false
-        type: string
-      consumer_sha256:
-        description: SHA-256 of reviewed WR-081 consumer (scoring mode only)
-        required: false
-        type: string
 
 permissions:
   contents: read
@@ -110,10 +94,6 @@ jobs:
           REF: ${{ github.ref }}
           ACTOR: ${{ github.actor }}
           REQUESTED_MODE: ${{ github.event.inputs.mode }}
-          EXECUTION_BRANCH: ${{ github.event.inputs.execution_branch }}
-          EXPECTED_HEAD_SHA: ${{ github.event.inputs.expected_head_sha }}
-          CONSUMER_PATH: ${{ github.event.inputs.consumer_path }}
-          CONSUMER_SHA256: ${{ github.event.inputs.consumer_sha256 }}
         run: |
           set -euo pipefail
           test "$REPOSITORY" = "Ryan42062001/The-War-Room"
@@ -124,18 +104,25 @@ jobs:
             execution_branch=""; expected_head=""; consumer_path=""; consumer_sha=""
           else
             mode="$REQUESTED_MODE"
+            test "$REF" = "refs/heads/main"
             if test "$mode" = "no-scoring"; then
-              test "$REF" = "refs/heads/main"
               execution_branch=""; expected_head=""; consumer_path=""; consumer_sha=""
             else
               test "$mode" = "authorized-wr081-scoring"
-              test "$REF" = "refs/heads/main"
-              case "$EXECUTION_BRANCH" in wr-081-*) ;; *) exit 2 ;; esac
-              test "$EXECUTION_BRANCH" != "main"
-              [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
-              case "$CONSUMER_PATH" in .ai/research/*) ;; *) exit 2 ;; esac
-              [[ "$CONSUMER_SHA256" =~ ^[0-9a-f]{64}$ ]]
-              execution_branch="$EXECUTION_BRANCH"; expected_head="$EXPECTED_HEAD_SHA"; consumer_path="$CONSUMER_PATH"; consumer_sha="$CONSUMER_SHA256"
+              python3 scripts/custody/wr083_protected_historical_scoring.py future-authority --repo-root . > "$RUNNER_TEMP/wr083-authority.json"
+              readarray -t authority < <(python3 - "$RUNNER_TEMP/wr083-authority.json" <<'PY'
+          import json,sys
+          a=json.load(open(sys.argv[1],encoding='utf-8'))
+          for key in ('branch','head_sha','consumer_path','consumer_sha256'):
+              print(a[key])
+          PY
+              )
+              execution_branch="${authority[0]}"; expected_head="${authority[1]}"; consumer_path="${authority[2]}"; consumer_sha="${authority[3]}"
+              case "$execution_branch" in wr-081-*) ;; *) exit 2 ;; esac
+              test "$execution_branch" != "main"
+              [[ "$expected_head" =~ ^[0-9a-f]{40}$ ]]
+              case "$consumer_path" in .ai/research/*) ;; *) exit 2 ;; esac
+              [[ "$consumer_sha" =~ ^[0-9a-f]{64}$ ]]
             fi
           fi
           echo "mode=$mode" >> "$GITHUB_OUTPUT"
@@ -263,6 +250,7 @@ jobs:
         run: |
           rm -rf "$RUNNER_TEMP/wr083-raw"
           rm -f "$RUNNER_TEMP/wr083-verified-input-manifest.json" "$RUNNER_TEMP/wr083-provider-report.json" \
+            "$RUNNER_TEMP/wr083-authority.json" "$RUNNER_TEMP/wr083-authority-consumption-final.json" \
             "$RUNNER_TEMP/wr083-consumer-report.json" "$RUNNER_TEMP/wr083-injection-report.json" "$RUNNER_TEMP/wr083-sandbox-proof.json"
           test ! -e "$RUNNER_TEMP/wr083-raw"
           test ! -e "$RUNNER_TEMP/wr083-verified-input-manifest.json"
@@ -364,7 +352,7 @@ jobs:
             --observed-head "$current"
       - name: Execute reviewed WR-081 consumer only after provider authority is absent
         run: |
-          env -i PATH="$PATH" RUNNER_TEMP="$RUNNER_TEMP" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+          env -i PATH="$PATH" RUNNER_TEMP="$RUNNER_TEMP" GITHUB_RUN_ID="$GITHUB_RUN_ID" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
             python3 scripts/custody/wr083_protected_historical_scoring.py future-execute --repo-root . \
               --execution-repo "$GITHUB_WORKSPACE/wr081-execution" \
               --execution-branch "${{ needs.trust-gate.outputs.execution_branch }}" \
@@ -382,7 +370,8 @@ jobs:
               --retained-manifest "$RUNNER_TEMP/wr083-verified-input-manifest.json"
           git -C wr081-execution add .ai/research
           test -z "$(git -C wr081-execution diff --cached --name-only | grep -v '^\.ai/research/' || true)"
-      - name: Recheck expected branch head, commit evidence, and push without force
+      - id: publish
+        name: Recheck expected branch head, commit evidence, and push without force
         env:
           GITHUB_TOKEN: ${{ github.token }}
           EXECUTION_BRANCH: ${{ needs.trust-gate.outputs.execution_branch }}
@@ -399,6 +388,21 @@ jobs:
           current="$(git ls-remote "$remote_url" "refs/heads/$EXECUTION_BRANCH" | awk '{print $1}')"
           test "$current" = "$EXPECTED_HEAD"
           git -C wr081-execution push "$remote_url" "HEAD:refs/heads/$EXECUTION_BRANCH"
+          publication_head="$(git -C wr081-execution rev-parse HEAD)"
+          test "$(git -C wr081-execution rev-list --count "$EXPECTED_HEAD..$publication_head")" -eq 1
+          echo "publication_head=$publication_head" >> "$GITHUB_OUTPUT"
+      - name: Verify one-step authority consumption receipt
+        run: |
+          python3 scripts/custody/wr083_protected_historical_scoring.py authority-consumption-check --repo-root . \
+            --execution-repo "$GITHUB_WORKSPACE/wr081-execution" \
+            --publication-head "${{ steps.publish.outputs.publication_head }}" > "$RUNNER_TEMP/wr083-authority-consumption-final.json"
+          {
+            echo "### WR-081 authority consumption"
+            echo
+            echo '~~~json'
+            cat "$RUNNER_TEMP/wr083-authority-consumption-final.json"
+            echo '~~~'
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Cleanup protected raw bytes, publication staging, and execution checkout
         if: always()
         run: |
