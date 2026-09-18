@@ -62,4 +62,10 @@ Reuse an existing same-role chat for closely related sequential work when safe; 
 Handoffs use the V3.4 compact continuation standard. Detailed narrative history belongs in durable task evidence.
 
 ## Activation output
-When routing next work, end with `ACTIVATE NOW`. Multiple entries for the same durable role are allowed under V3.1.1 concurrency. Include CHAT, TASK, EXECUTION MODE, REFRESH MODE, REFRESH REASON when FULL_REFRESH, activation message, and fallback when relevant. Work Helper activations additionally define assignment mode, blocker, target/checkpoint, scopes, evidence, boundaries, and handoff.
+When routing next work, use the canonical Complete Next Activation table from `.ai/shared/WORKFLOW.md`.
+
+Every routing/status response must show all six permanent employee roles exactly once: Manager, Builder, Draft Strategy, R&D, Auditor, and Work Helper. Never collapse the table to only the next actionable worker. Legacy `TROUBLESHOOTING.md` is not a separate employee.
+
+The actionable row must include the full copy/paste activation prompt. WAIT/BLOCKED/IDLE/COMPLETE rows must remain visible and state their current task/gate without inventing work. If one role owns multiple task-scoped lanes, summarize those lanes in that role's single row.
+
+Multiple task-scoped activations for the same durable role remain allowed under V3.1.1 concurrency. For actionable work include CHAT, TASK, EXECUTION MODE, REFRESH MODE, REFRESH REASON when FULL_REFRESH, activation message, and fallback when relevant. Work Helper activations additionally define assignment mode, blocker, target/checkpoint, scopes, evidence, boundaries, and handoff.

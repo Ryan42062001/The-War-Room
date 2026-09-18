@@ -83,6 +83,36 @@ Before spawning any worker, Manager checks:
 
 Tightly related low-risk correction + test + documentation/handoff may be one remediation unit when role/separation rules permit. Never batch unrelated features, independent policy decisions, work owned by different roles, or work requiring separate audit ownership.
 
+
+
+### Complete Next Activation table
+
+Whenever a Manager or worker publishes a `Next Activation`, `Activation routing`, employee-status table, or equivalent handoff routing table, it must show **every permanent War Room employee role**, not only the role that acts next.
+
+The six permanent employee rows are, exactly once each:
+
+1. Manager / Architect
+2. Implementation Engineer / Builder
+3. Draft Strategy & Decision Intelligence Analyst
+4. Research & Development (R&D)
+5. Independent Auditor / QA
+6. Work Helper / Super Troubleshooter / Cross-Functional Operator
+
+`.ai/roles/TROUBLESHOOTING.md` is a legacy supersession redirect and is **not** a seventh employee row.
+
+Minimum table columns:
+
+`Order | Employee / Role | Status | Current Task / Gate | Copy/paste activation prompt / next action`
+
+Rules:
+- Never omit an employee because the role is idle, blocked, waiting, or not next.
+- Use a clear status such as `ACTIVATE NOW`, `WAIT`, `BLOCKED`, `IDLE`, `COMPLETE`, or `USER ACTION` as appropriate.
+- The actionable role gets the full copy/paste activation prompt.
+- Non-actionable rows state the exact blocker/gate or `No active task`; do not manufacture work merely to fill the table.
+- If one permanent role has multiple task-scoped lanes, keep one employee row and summarize those lane/task statuses in `Current Task / Gate`.
+- Same-role concurrency remains allowed under the existing collision/independence rules; this presentation rule does not serialize work.
+- Manager outputs should place the complete table near the end of the response so the user can see the whole team state at each routing transition.
+
 ### Compact handoff standard
 
 Use continuation-oriented headings when applicable:
