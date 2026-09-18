@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { applyTransitionPlan, syncTaskSpecHeaders, validateTaskShape } from './workflow-manager-transition.mjs';
 
 function spec(task) {
-  return `# Test task\n\nTASK ID: ${task.task_id}\nROLE: Test\nSTATUS: ${task.status}\nDEPENDENCY: ${task.dependency}\nEXECUTION MODE: ${task.execution_mode}\nTARGET BRANCH: \`${task.branch}\`\n`;
+  return `# Test task\n\nTASK ID: ${task.task_id}\nROLE: Test\nSTATUS: ${task.status}\nDEPENDENCY: ${task.dependency}\nEXECUTION MODE: ${task.execution_mode}\nREFRESH MODE: ${task.refresh_mode}\nTARGET BRANCH: \`${task.branch}\`\n`;
 }
 function task(id, overrides = {}) {
   return {
@@ -17,7 +17,8 @@ function task(id, overrides = {}) {
     branch: `branch-${id}`,
     pr: null,
     dependency: 'INDEPENDENT',
-    execution_mode: 'STANDARD_CHAT',
+    execution_mode: 'STANDARD_CHAT_HIGH',
+    refresh_mode: 'FAST_REFRESH',
     audit_required: true,
     blocker_type: 'NONE',
     user_action_required: false,
@@ -90,10 +91,16 @@ assert.ok(collision.errors.some(error => error.includes('unsafe parallel write-p
 const badStatus = validateTaskShape(task('WR-903', { status: 'BLOCKED', blocker_type: 'NONE' }));
 assert.ok(badStatus.some(error => error.includes('requires non-NONE')));
 
-const synced = syncTaskSpecHeaders(spec(a), { ...a, status: 'MERGE_READY', dependency: 'SOFT', execution_mode: 'WORK_MODE_PREFERRED', branch: 'new-branch' });
+const synced = syncTaskSpecHeaders(spec(a), { ...a, status: 'MERGE_READY', dependency: 'SOFT', execution_mode: 'WORK_MODE', refresh_mode: 'FULL_REFRESH', refresh_reason: 'test exception', branch: 'new-branch' });
 assert.match(synced, /^STATUS: MERGE_READY$/m);
 assert.match(synced, /^DEPENDENCY: SOFT$/m);
-assert.match(synced, /^EXECUTION MODE: WORK_MODE_PREFERRED$/m);
+assert.match(synced, /^EXECUTION MODE: WORK_MODE$/m);
+assert.match(synced, /^REFRESH MODE: FULL_REFRESH$/m);
 assert.match(synced, /^TARGET BRANCH: `new-branch`$/m);
+
+const badExecution = validateTaskShape(task('WR-904', { execution_mode: 'WORK_MODE_PREFERRED' }));
+assert.ok(badExecution.some(error => error.includes('invalid execution_mode')));
+const badRefresh = validateTaskShape(task('WR-905', { refresh_mode: 'FULL_REFRESH' }));
+assert.ok(badRefresh.some(error => error.includes('FULL_REFRESH requires')));
 
 console.log('workflow Manager-transition regression: PASS');

@@ -29,9 +29,11 @@ Implement only approved requirements. Do not invent draft strategy, ranking poli
 Prefer the smallest coherent change. Preserve unrelated ranking, draft-state, persistence, and ESPN semantics unless explicitly authorized.
 
 ## Execution modes
-If Manager marks the task `WORK_MODE_PREFERRED` or `WORK_MODE_HIGH_VALUE`, Work mode may be used to accelerate sustained multi-step repository/browser/test work.
+Default to `STANDARD_CHAT_HIGH`. Use `WORK_MODE` only when the execution packet justifies substantial autonomous multi-file edit/test/debug/browser/terminal work. If Work capacity is unavailable, continue the same branch/task in Standard Chat High when feasible; do not restart.
 
-If Work mode or credits are unavailable, continue in normal chat when the underlying task can still be completed. Produce exact patches, commands, test steps, and iterate from returned evidence. Do not stall merely because the preferred accelerator is unavailable.
+If Standard Chat High becomes materially execution-heavy, return `WORK_MODE_ESCALATION_RECOMMENDED` with exact task/branch/SHA/PR, work completed, remaining work, exact execution-heavy reason, files/components, tests/failures and next action. When the execution-heavy portion ends, return `STANDARD_CHAT_HIGH_HANDOFF_RECOMMENDED`.
+
+Consume accepted Strategy/R&D/policy decisions; do not re-solve them unless contradictory evidence requires fail-closed routing.
 
 ## Anti-loop debugging
 After roughly three materially different failed hypotheses without meaningful new evidence or progress:
@@ -45,7 +47,7 @@ Do not keep changing code without a new testable hypothesis.
 Work Helper is not a replacement for normal Builder debugging. If activated, it may inspect across roles/layers and may remediate only within the Manager-authorized write scope. Builder remains the normal production owner unless Manager explicitly transfers a bounded remediation surface.
 
 ## Validation
-Never claim tests/CI passed unless observed. Separate tests added, tests actually run, results, CI observed, and unverified items.
+Never claim tests/CI passed unless observed. Before requesting audit freeze, finish approved scope, run required tests/lint/build/typecheck as applicable, resolve expected failures, inspect the full diff, verify no unrelated changes, update implementation evidence and publish one final candidate SHA. Separate tests added, tests actually run, results, CI observed, and unverified items.
 
 ## Handoff
-Keep `.ai/builder/HANDOFF.md` concise. Point to detailed PR/test evidence instead of duplicating it. Builder does not merge its own production work.
+Use the canonical compact handoff headings in `WORKFLOW.md`. Point to detailed PR/test evidence instead of duplicating it. Builder does not merge its own production work.

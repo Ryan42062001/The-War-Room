@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T02:55:00Z",
+  "updated_at_utc": "2026-09-18T03:58:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -17,7 +17,7 @@
       "branch": "wr-074-self-hosted-heavy-ci-runner-pilot",
       "pr": null,
       "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": true,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
@@ -45,7 +45,8 @@
         "scripts/custody/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "After WR-084 disposition and protected-bridge integration/canary, Manager may reactivate WR-074 from preserved checkpoint 7b4641499c50541abf523267eb4c0255813e8b6d."
+      "next_gate": "After WR-084 disposition and protected-bridge integration/canary, Manager may reactivate WR-074 from preserved checkpoint 7b4641499c50541abf523267eb4c0255813e8b6d.",
+      "refresh_mode": "FAST_REFRESH"
     },
     {
       "task_id": "WR-075",
@@ -59,7 +60,7 @@
       "branch": "wr-075-self-hosted-heavy-ci-runner-audit",
       "pr": null,
       "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
@@ -85,7 +86,8 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes WR-074 exact target -> activate WR-075 fresh independent audit."
+      "next_gate": "Manager freezes WR-074 exact target -> activate WR-075 fresh independent audit.",
+      "refresh_mode": "FAST_REFRESH"
     },
     {
       "task_id": "WR-081",
@@ -99,7 +101,7 @@
       "branch": "wr-081-v2-historical-model-scoring",
       "pr": 227,
       "dependency": "HARD",
-      "execution_mode": "WORK_MODE_PREFERRED",
+      "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": true,
       "blocker_type": "TECHNICAL",
       "user_action_required": false,
@@ -129,7 +131,8 @@
         ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
         ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
       ],
-      "next_gate": "WR-083 protected bridge -> WR-084 independent audit -> PASS-family only: Manager integrates exact audited bridge, runs protected canonical-main canary, then explicitly reactivates WR-081 on a fresh execution branch."
+      "next_gate": "WR-083 protected bridge -> WR-084 independent audit -> PASS-family only: Manager integrates exact audited bridge, runs protected canonical-main canary, then explicitly reactivates WR-081 on a fresh execution branch.",
+      "refresh_mode": "FAST_REFRESH"
     },
     {
       "task_id": "WR-082",
@@ -143,7 +146,7 @@
       "branch": "wr-082-v2-historical-model-result-audit",
       "pr": null,
       "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
@@ -169,7 +172,8 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "After protected bridge acceptance, WR-081 executes and publishes one complete result target -> Manager freeze -> activate WR-082."
+      "next_gate": "After protected bridge acceptance, WR-081 executes and publishes one complete result target -> Manager freeze -> activate WR-082.",
+      "refresh_mode": "FAST_REFRESH"
     },
     {
       "task_id": "WR-083",
@@ -183,7 +187,7 @@
       "branch": "wr-083-protected-historical-scoring-bridge",
       "pr": null,
       "dependency": "HARD",
-      "execution_mode": "WORK_MODE_PREFERRED",
+      "execution_mode": "WORK_MODE",
       "audit_required": true,
       "blocker_type": "NONE",
       "user_action_required": false,
@@ -209,7 +213,8 @@
         "scripts/ci/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Work Helper publishes one immutable no-scoring protected-bridge implementation/proof target -> Manager exact freeze -> WR-084 independent audit."
+      "next_gate": "Work Helper publishes one immutable no-scoring protected-bridge implementation/proof target -> Manager exact freeze -> WR-084 independent audit.",
+      "refresh_mode": "FAST_REFRESH"
     },
     {
       "task_id": "WR-084",
@@ -223,7 +228,7 @@
       "branch": "wr-084-protected-historical-scoring-bridge-audit",
       "pr": null,
       "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": false,
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
@@ -249,109 +254,8 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes exact WR-083 target -> activate WR-084 fresh independent audit."
-    },
-    {
-      "task_id": "WR-085",
-      "owner": "Manager / Architect",
-      "worker_slot": "manager-workflow-v34-efficiency",
-      "status": "REWORK_REQUIRED",
-      "task_file": ".ai/manager/WR-085.md",
-      "role_handoff": ".ai/manager/HANDOFF.md",
-      "assignment_main_sha": "33b00edaf9243dfdcbcdff4f8b3f3b7d30ef8be7",
-      "worker_checkpoint_sha": "0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b",
-      "branch": "manager/wr-085-workflow-v34-efficiency",
-      "pr": 230,
-      "dependency": "INDEPENDENT",
-      "execution_mode": "STANDARD_CHAT",
-      "audit_required": true,
-      "blocker_type": "AUDIT",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [
-        "WR-086 failed audit HIGH finding WR-086-AUD-01: exact target is dirty/unmergeable against canonical main; reconcile on current main and correct LOW narrative/activation drift."
-      ],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": true,
-      "allowed_path_prefixes": [
-        ".ai/shared/WORKFLOW.md",
-        ".ai/shared/ACTIVE_TASKS.json",
-        ".ai/shared/PROJECT_STATE.md",
-        ".ai/shared/ROADMAP.md",
-        ".ai/README.md",
-        ".ai/roles/",
-        ".ai/manager/WR-074.md",
-        ".ai/manager/WR-075.md",
-        ".ai/manager/WR-081.md",
-        ".ai/manager/WR-082.md",
-        ".ai/manager/WR-083.md",
-        ".ai/manager/WR-084.md",
-        ".ai/manager/WR-085.md",
-        ".ai/manager/WR-086.md",
-        ".ai/manager/WR085_WORKFLOW_V3_4_EFFICIENCY.md",
-        ".ai/manager/HANDOFF.md",
-        "scripts/workflow-state-check.mjs",
-        "scripts/workflow-task-contract.mjs",
-        "scripts/workflow-manager-transition.mjs",
-        "scripts/workflow-preflight.mjs",
-        "scripts/workflow-finish-check.mjs",
-        "scripts/test-workflow-state.mjs",
-        "scripts/test-workflow-lane-identity.mjs",
-        "scripts/test-workflow-manager-transition.mjs"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/auditor/",
-        ".ai/research/",
-        ".ai/work_helper/",
-        "src/",
-        "public/",
-        "scripts/custody/",
-        "scripts/ci/",
-        ".github/workflows/"
-      ],
-      "forbidden_exact_paths": [],
-      "next_gate": "Bounded remediation: reconcile PR #230 onto current canonical main, fix WR-086-AUD-02 continuation/activation drift, rerun full exact-head CI/readiness, freeze one new immutable target -> WR-087 fresh independent re-audit."
-    },
-    {
-      "task_id": "WR-087",
-      "owner": "Auditor",
-      "worker_slot": "auditor-workflow-v34-efficiency-reaudit",
-      "status": "BLOCKED",
-      "task_file": ".ai/manager/WR-087.md",
-      "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": null,
-      "worker_checkpoint_sha": null,
-      "branch": "wr-087-workflow-v34-efficiency-reaudit",
-      "pr": null,
-      "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT",
-      "audit_required": false,
-      "blocker_type": "UPSTREAM_TASK",
-      "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-085"
-      ],
-      "blocked_on": [
-        "WR-085 must publish one reconciled, self-validated, Manager-frozen immutable V3.4 candidate after WR-086 remediation."
-      ],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/auditor/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/research/",
-        ".ai/work_helper/",
-        ".ai/roles/",
-        ".github/",
-        "scripts/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes reconciled WR-085 exact target -> activate fresh independent WR-087 re-audit. Do not carry WR-086 verdict to new head."
+      "next_gate": "Manager freezes exact WR-083 target -> activate WR-084 fresh independent audit.",
+      "refresh_mode": "FAST_REFRESH"
     }
   ]
 }

@@ -7,14 +7,16 @@ const sampleTask = {
   task_id: 'WR-900',
   status: 'ASSIGNED',
   branch: 'wr-900-lane',
-  execution_mode: 'STANDARD_CHAT',
+  execution_mode: 'STANDARD_CHAT_HIGH',
+  refresh_mode: 'FAST_REFRESH',
   dependency: 'INDEPENDENT'
 };
 
 const goodSpec = `TASK ID: WR-900
 STATUS: ASSIGNED
 DEPENDENCY: INDEPENDENT — descriptive suffix is allowed
-EXECUTION MODE: STANDARD_CHAT
+EXECUTION MODE: STANDARD_CHAT_HIGH
+REFRESH MODE: FAST_REFRESH
 TARGET BRANCH: \`wr-900-lane\`
 `;
 
@@ -28,8 +30,12 @@ assert.match(
   /target_branch stale-lane != registry wr-900-lane/
 );
 assert.match(
-  validateTaskSpecContract(sampleTask, goodSpec.replace('STANDARD_CHAT', 'WORK_MODE_PREFERRED')).errors.join('\n'),
-  /execution_mode WORK_MODE_PREFERRED != registry STANDARD_CHAT/
+  validateTaskSpecContract(sampleTask, goodSpec.replace('STANDARD_CHAT_HIGH', 'WORK_MODE')).errors.join('\n'),
+  /execution_mode WORK_MODE != registry STANDARD_CHAT_HIGH/
+);
+assert.match(
+  validateTaskSpecContract(sampleTask, goodSpec.replace('FAST_REFRESH', 'FULL_REFRESH')).errors.join('\n'),
+  /refresh_mode FULL_REFRESH != registry FAST_REFRESH/
 );
 assert.match(
   validateTaskSpecContract(sampleTask, goodSpec.replace('INDEPENDENT — descriptive suffix is allowed', 'HARD — descriptive suffix is allowed')).errors.join('\n'),

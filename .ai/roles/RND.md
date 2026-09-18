@@ -49,8 +49,10 @@ Preserve frozen prospective contracts, source-rights boundaries, and outcome-con
 ## Strategy boundary
 R&D may improve estimates, models, data quality, and technical capability. Draft Strategy owns how evidence should affect live draft decisions. When a task crosses both, provide your technical/data result and route the decision-policy question to Draft Strategy / Manager.
 
-## Work mode
-If Manager marks a task Work-preferred/high-value, use Work mode when available to accelerate large repository/browser/data investigations. If unavailable, continue through normal chat/web/repository tooling when feasible and break the task into evidence-producing steps rather than stalling.
+## Execution mode
+Default to `STANDARD_CHAT_HIGH` for research, modeling analysis, feasibility reasoning and evidence interpretation. Use `WORK_MODE` only when hands-on experimentation, repeated environment execution, browser/terminal interaction or iterative data/tool runs materially benefit from autonomy. If unavailable, continue the same task in Standard Chat High when feasible.
+
+Consume accepted source/protocol/policy decisions as fixed inputs. Contradictory evidence returns to the owning role/Manager rather than silently redefining authority.
 
 ## Anti-loop / Work Helper escalation
 If roughly three materially different research approaches fail without new evidence, stop and return `STALLED / ESCALATION REQUIRED`, including what was tried, what is still unknown, and what evidence/capability would resolve it.
@@ -60,4 +62,4 @@ Recommend **Work Helper / Super Troubleshooter** when the unresolved blocker cro
 Work Helper may inspect R&D evidence broadly when assigned, but it does not independently change model/research policy, frozen contracts, or roadmap. Any research-policy disposition returns to R&D/Manager and any material remediation remains subject to the normal audit/governance gates.
 
 ## Handoff
-Keep `.ai/research/HANDOFF.md` concise. Detailed datasets, methodology, experiments, and evidence belong in task-specific research reports/artifacts and should be referenced rather than duplicated.
+Use the canonical compact handoff headings in `WORKFLOW.md`. Detailed datasets, methodology, experiments, and evidence belong in task-specific research reports/artifacts and should be referenced rather than duplicated.

@@ -7,6 +7,8 @@ import { validateTaskSpecContract } from './workflow-task-contract.mjs';
 const STATUS = new Set(['PLANNED','BLOCKED','ASSIGNED','IN_PROGRESS','MANAGER_REVIEW_READY','AUDIT_READY','MERGE_READY','REWORK_REQUIRED','MERGED']);
 const DEPENDENCY = new Set(['INDEPENDENT','SOFT','HARD']);
 const BLOCKER = new Set(['NONE','USER_ACTION','UPSTREAM_TASK','EXTERNAL_SERVICE','TECHNICAL','AUDIT']);
+const EXECUTION_MODE = new Set(['STANDARD_CHAT_HIGH','WORK_MODE']);
+const REFRESH_MODE = new Set(['FAST_REFRESH','FULL_REFRESH']);
 
 function parseArgs(raw = process.argv.slice(2)) {
   const out = { plan: null, write: false, json: false, root: null };
@@ -34,6 +36,7 @@ export function syncTaskSpecHeaders(text, task) {
   next = replaceHeader(next, 'STATUS', task.status);
   next = replaceHeader(next, 'DEPENDENCY', task.dependency);
   next = replaceHeader(next, 'EXECUTION MODE', task.execution_mode);
+  next = replaceHeader(next, 'REFRESH MODE', task.refresh_mode);
   next = replaceHeader(next, 'TARGET BRANCH', task.branch ?? null);
   return next;
 }
@@ -43,6 +46,9 @@ export function validateTaskShape(task) {
   if (!STATUS.has(task.status)) errors.push(`invalid status ${task.status}`);
   if (!DEPENDENCY.has(task.dependency)) errors.push(`invalid dependency ${task.dependency}`);
   if (!BLOCKER.has(task.blocker_type)) errors.push(`invalid blocker_type ${task.blocker_type}`);
+  if (!EXECUTION_MODE.has(task.execution_mode)) errors.push(`invalid execution_mode ${task.execution_mode}`);
+  if (!REFRESH_MODE.has(task.refresh_mode)) errors.push(`invalid refresh_mode ${task.refresh_mode}`);
+  if (task.refresh_mode === 'FULL_REFRESH' && (typeof task.refresh_reason !== 'string' || !task.refresh_reason.trim())) errors.push('FULL_REFRESH requires non-empty refresh_reason');
   if (['BLOCKED','REWORK_REQUIRED'].includes(task.status) && task.blocker_type === 'NONE') errors.push(`${task.status} requires non-NONE blocker_type`);
   if (!['BLOCKED','REWORK_REQUIRED'].includes(task.status) && task.blocker_type !== 'NONE') errors.push(`${task.status} requires blocker_type NONE`);
   if (!Array.isArray(task.blocked_on_tasks)) errors.push('blocked_on_tasks must be array');

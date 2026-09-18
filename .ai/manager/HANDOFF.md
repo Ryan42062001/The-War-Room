@@ -2,41 +2,14 @@
 
 HANDOFF
 
-Workflow: V3.3 CANONICAL
-
-## WR-081 fail-closed blocker accepted for routing
-
-R&D WR-081 PR #227 is exact blocker evidence at immutable head `3f7ee6cc9294d8ae40921a5d4b50f2d0182f98ca`. It changes only `.ai/research/WR081_HISTORICAL_SCORING_BLOCKER.md` and `.ai/research/HANDOFF.md`. Exact-head War Room CI `35296360912` is SUCCESS: classify `105449599740`, governance `105449622679`, product test skipped as expected.
-
-No real scoring occurred. Development 2018–2019 = NOT_RUN; validation 2020–2021 = NOT_ELIGIBLE; confirmation 2022–2025 = NOT_ELIGIBLE. Terminal state: `NOT_ESTABLISHED — EXECUTION BLOCKED BEFORE SCORING`.
-
-The proven blocker is architectural/custody execution: exact retained annual stats rows are not available to R&D, and accepted WR-069 intentionally exposes only schema/inventory evidence then deletes raw runner bytes.
-
-## WR-083
-
-Work Helper is assigned the smallest protected historical-scoring execution bridge. It must preserve exact 14-source custody, B2/R2 equality, read-only provider boundaries, provider-credential stripping, runner-temp-only raw bytes, cleanup/no-artifact guarantees, reviewed hash-bound consumer code, chronology fail-closed tests, trusted ref/SHA gates, and future output restricted to an explicitly authorized WR-081 research branch.
-
-Before WR-084 audit, any protected live proof is NO-SCORING only.
-
-## WR-084
-
-BLOCKED fresh Independent Auditor lane. After Manager freezes one exact WR-083 target, WR-084 audits that exact implementation and protected proof. Auditor does not execute real historical model scoring.
-
-PASS-family only: Manager may integrate exact audited WR-083, run the required protected canonical-main canary, then explicitly reactivate WR-081 on a fresh execution branch.
-
-## Other lanes
-
-WR-082 remains BLOCKED because no model-result target exists.
-WR-074 is temporarily serialized at `7b4641499c50541abf523267eb4c0255813e8b6d` for write-scope collision safety; WR-075 remains blocked behind it.
-
-## Workflow V3.4 efficiency candidate
-
-WR-085 is ASSIGNED in STANDARD_CHAT from canonical main b034d64ac7d65c0cdb39a89712a298a2595187c2. It implements the bounded usage-efficiency request without weakening V3.3 controls. WR-086 is pre-created BLOCKED as the fresh independent audit lane. V3.3 remains canonical until PASS-family audit, exact integration, and post-merge canary.
-
-## WR-085 frozen / WR-086 activated
-
-Frozen WR-085 PR #230 head `0c7cc69e382b04ce8c1059851ca2fc3dcfdc5a6b` after exact-head full CI `35299527394` SUCCESS. Activate a fresh Independent Auditor chat for WR-086. V3.3 remains canonical; do not merge candidate before PASS-family.
-
-## WR-086 audit disposition
-
-WR-086 PR #232 / head `21cb757d849c49cbb963d1914c59bb3d2f3f209b` returned FAIL — REMEDIATION REQUIRED. HIGH: old WR-085 target is dirty/unmergeable after overlapping Manager freeze/activation changes. LOW: stale legacy routing prose / missing REFRESH MODE in activation output. WR-085 returns to bounded remediation; WR-087 is reserved as fresh re-audit. V3.3 remains canonical.
+STATUS: WORKFLOW V3.4 CANONICAL; active development continues
+TASK: next runnable lane is WR-083
+ROLE: Manager / Architect -> Work Helper
+HEAD: canonical workflow integration `8dd8188a752e9a11ec2066685a59bfe8008539e8`; final canonicalization follows as Manager-only control-plane evidence
+DONE: WR-088 PASS preserved; exact audited WR-085 target integrated; mandatory Full canonical-main canary `35304841154` SUCCESS; V3.4 accepted as canonical.
+TESTS: canary classify `105474805946`, governance `105474826936`, full test `105474850059` — all SUCCESS.
+BLOCKERS: WR-081 remains blocked behind protected bridge acceptance; WR-074 remains serialized behind WR-084.
+DECISIONS CONSUMED: Workflow V3.4 now governs execution/refresh routing; STANDARD_CHAT_HIGH is default, FAST_REFRESH is default, WORK_MODE is an accelerator for substantial autonomous execution only.
+NEXT ACTION: continue WR-083 protected historical-scoring bridge. Work mode is not a capability dependency; if Work credits are unavailable, continue the established WR-083 task in Standard Chat High where feasible.
+FILES / ARTIFACTS THAT MATTER: `.ai/shared/WORKFLOW.md`; `.ai/shared/ACTIVE_TASKS.json`; `.ai/manager/WR-083.md`; `.ai/work_helper/HANDOFF.md`.
+DO NOT REPEAT: WR-085/086/087/088 workflow-audit cycle unless new contradictory evidence appears.

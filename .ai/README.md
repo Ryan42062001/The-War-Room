@@ -32,7 +32,7 @@ For routine status/continue checks and fresh task-scoped worker startup, begin w
 5. relevant role handoff;
 6. open PR/current branch when relevant.
 
-Load broader roadmap/history only when needed. Use Full Refresh from `.ai/shared/WORKFLOW.md` for new tasks, architecture/roadmap decisions, research/strategy dispositions that change the plan, merges/releases, conflicts, and materially stale checkpoints.
+Load broader roadmap/history only when Fast Refresh cannot establish authoritative state. `FAST_REFRESH` is the default even for new tasks and most merges. `FULL_REFRESH` requires a recorded reason such as genuine control-plane ambiguity/contradiction, major workflow/control-plane reconciliation, milestone/integration risk, or an audit whose evidence cannot be established narrowly.
 
 ## Canonical sources
 - `.ai/shared/ACTIVE_TASKS.json` — current task/dependency/status index
@@ -54,11 +54,11 @@ Role workspaces:
 
 R&D intentionally keeps `.ai/research/` for compatibility.
 
-## Chat rollover
-Prefer a fresh worker chat per meaningful task. Manager chats may span a milestone but should roll over at milestone boundaries or sooner when long context causes slowdown, stale-state confusion, or loops. Replacement chats recover from repository state rather than copied chat history.
+## Chat reuse
+Do not require a fresh chat merely because the task ID changed. Reuse a current same-role chat for closely related sequential work when context remains useful and no independence requirement applies. Fresh chats remain mandatory for independent audits and appropriate when role separation, bias risk, or stale/confused context makes reuse unsafe.
 
-## Work mode
-Manager classifies new tasks as `STANDARD_CHAT`, `WORK_MODE_PREFERRED`, or `WORK_MODE_HIGH_VALUE`. Work mode is an accelerator, not a default dependency. Any Work-preferred task must include a normal-chat fallback when the needed capability exists outside Work mode.
+## Execution mode
+There are exactly two task modes: `STANDARD_CHAT_HIGH` (default) and `WORK_MODE` (execution-heavy accelerator). Work mode requires material autonomous-execution benefit. If unavailable, continue the established task in Standard Chat High when feasible rather than restarting.
 
 ## Anti-loop escalation
 After roughly three materially different failed hypotheses without new evidence or progress, stop speculative iteration and return a `STALLED / ESCALATION REQUIRED` handoff. Manager may instantiate the temporary Troubleshooting & Root Cause Engineer with a fresh evidence packet.
