@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T22:56:00Z",
+  "updated_at_utc": "2026-09-18T23:05:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -166,6 +166,56 @@
       "audit_target_pr": 251,
       "audit_target_branch": "wr-081-v2-historical-model-scoring-execution",
       "audit_target_sha": "b5fc0974e0766c24974034557a62044b4752716a"
+    },
+    {
+      "task_id": "WR-091",
+      "owner": "Manager",
+      "worker_slot": "manager-workflow-v35-automation",
+      "status": "IN_PROGRESS",
+      "task_file": ".ai/manager/WR-091.md",
+      "role_handoff": ".ai/manager/HANDOFF.md",
+      "assignment_main_sha": "16f766f1464656779d3e8e2fbab91998eca774f9",
+      "worker_checkpoint_sha": null,
+      "branch": "manager/wr-091-workflow-v35-automation",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": true,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": true,
+      "allowed_path_prefixes": [
+        ".ai/manager/WR-091.md",
+        ".ai/manager/WR091_WORKFLOW_V3_5_CANDIDATE.md",
+        ".ai/manager/HANDOFF.md",
+        ".ai/shared/WORKFLOW.md",
+        ".ai/shared/ACTIVE_TASKS.json",
+        ".ai/shared/PROJECT_STATE.md",
+        ".ai/shared/ROADMAP.md",
+        ".github/workflows/ci.yml",
+        ".github/workflows/wr083-protected-historical-scoring-bridge.yml",
+        "scripts/workflow-manager-transition.mjs",
+        "scripts/test-workflow-manager-transition.mjs",
+        "scripts/workflow-result-freeze-check.mjs",
+        "scripts/test-workflow-result-freeze-check.mjs",
+        "scripts/workflow-ci-classify.mjs",
+        "scripts/test-workflow-ci-classify.mjs",
+        "scripts/custody/wr083_protected_historical_scoring.py",
+        "scripts/custody/test_wr083_protected_historical_scoring.py"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/auditor/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Implement the six approved Workflow V3.5 automation upgrades on the dedicated branch, preserve WR-082 and its frozen WR-081 target unchanged, self-validate exact-head CI, then Manager freezes one immutable WR-091 candidate for fresh independent audit."
     }
   ]
 }
