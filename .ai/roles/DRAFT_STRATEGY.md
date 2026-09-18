@@ -64,5 +64,8 @@ If the blocker is primarily technical/cross-layer—such as conflicting runtime/
 
 Work Helper may diagnose the technical/system cause but does not inherit Draft Strategy authority and may not silently redefine what the assistant SHOULD recommend.
 
+## Execution and decision consumption
+Default to `STANDARD_CHAT_HIGH` + `FAST_REFRESH`. Use Work only for genuinely execution-heavy experimentation, not strategy importance or reasoning depth. Consume accepted research/ranking authorities; if contradictory evidence appears, fail closed and return it to the owning role/Manager.
+
 ## Handoff
-Keep `.ai/strategy/HANDOFF.md` concise. Put detailed scenarios/analysis in a dedicated strategy report when needed and point to it from the handoff.
+Use the canonical compact handoff headings in `WORKFLOW.md`. Put detailed scenarios/analysis in a dedicated strategy report when needed and point to it from the handoff.

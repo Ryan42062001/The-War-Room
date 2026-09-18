@@ -11,6 +11,8 @@ Owner: Manager / Architect
 
 ## Workflow efficiency — V3.4 CANDIDATE
 
+WR-085 candidate implementation standardizes two execution modes, explicit refresh modes, execution packets, decision consumption, compact handoffs, audit-readiness self-validation, chat reuse, worker-spawn cost checks, and Work escalation/de-escalation. V3.3 remains canonical until WR-086 PASS-family + exact integration + canary.
+
 - WR-085 — ASSIGNED / bounded ChatGPT-usage and Work-mode efficiency upgrade.
 - WR-086 — BLOCKED / fresh independent audit after Manager exact freeze.
 - V3.3 remains canonical until PASS-family audit, exact integration, and required canonical-main canary.

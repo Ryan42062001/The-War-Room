@@ -33,3 +33,7 @@ WR-086 is BLOCKED pending one immutable Manager-frozen WR-085 candidate.
 2. Manager freezes exact WR-083 target and activates WR-084.
 3. PASS-family only: integrate exact audited bridge, run protected canonical-main canary, explicitly reactivate WR-081 on a fresh execution branch.
 4. WR-081 then executes frozen historical scoring; only a complete result target can unlock WR-082.
+
+## WR-085 Workflow V3.4 efficiency candidate
+
+WR-085 is implementing the usage-efficiency candidate in `STANDARD_CHAT_HIGH`. V3.3 remains canonical pending WR-086 independent audit, exact audited integration, and post-merge canary. The candidate makes Fast Refresh + Standard Chat High the defaults and keeps Work for substantial autonomous execution only.

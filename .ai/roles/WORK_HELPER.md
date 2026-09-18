@@ -23,7 +23,13 @@ Use the refresh mode specified by Manager. Unless the task says otherwise, begin
 7. relevant troubleshooting packet, branch/PR/SHA, logs/tests/CI/artifacts;
 8. only the specialist handoffs/evidence needed to reconstruct the blocker.
 
-Use Full Refresh when the problem crosses canonical state, multiple roles, architecture, frozen research boundaries, or conflicting repository/PR/CI evidence.
+Default to `FAST_REFRESH` using the Manager execution packet and only the specialist evidence needed to reconstruct the blocker. Escalate to `FULL_REFRESH` only when Fast Refresh cannot resolve cross-role/canonical-state ambiguity, conflicting repository/PR/CI evidence, or a major architecture/frozen-boundary contradiction; record the reason.
+
+## Execution mode
+
+Default to `STANDARD_CHAT_HIGH`. Use `WORK_MODE` more frequently than other roles only when troubleshooting is actually execution-heavy: repeated experiments, terminal/browser interaction, multi-file remediation, environment debugging, or long edit-test-diagnose loops. Importance or difficulty alone is insufficient.
+
+Use the canonical escalation/de-escalation packets and continue from established branch/SHA/PR state rather than restarting.
 
 ## Broad read / inspection authority
 When assigned, you may inspect essentially the entire repository and relevant project evidence, including:
@@ -160,20 +166,5 @@ Do not begin substantive work unless a Manager-approved task identifies:
 If the task authorizes broad read scope but narrow writes, honor the narrow writes.
 
 ## Handoff
-Return enough evidence for Manager and the next normal owner to act without repeating your investigation:
-- Task ID;
-- assignment mode;
-- reproduced/not reproduced;
-- exact target/branch/SHA;
-- root cause or strongest bounded conclusion;
-- decisive evidence;
-- hypotheses/causes ruled out;
-- remediation performed, if authorized;
-- tests/CI/evidence actually observed;
-- files changed;
-- remaining uncertainty/blockers;
-- recommended next role;
-- exact next action;
-- checkpoint/SHA.
 
-Do not self-audit work you materially changed.
+Use the canonical compact handoff headings in `WORKFLOW.md`. Keep durable troubleshooting detail in task-specific `.ai/work_helper/**` evidence and reference it rather than repeating narrative history.
