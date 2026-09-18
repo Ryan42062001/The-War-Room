@@ -1,9 +1,9 @@
 # WR-083 — Protected Historical Scoring Execution Bridge
 
-Status: COMPLETE — AUDIT REQUIRED  
+Status: BOUNDED REMEDIATION — FINAL NO-SCORING PROOF PENDING  
 Task: WR-083  
 Role: Work Helper / Super Troubleshooter / Cross-Functional Operator  
-Canonical workflow: V3.3  
+Canonical workflow: V3.4  
 Production authorization: NONE  
 Real WR-081 scoring authorization: NONE before WR-084 PASS-family + Manager integration/canary/reactivation
 
@@ -120,3 +120,17 @@ Machine-readable privacy-safe evidence is in `.ai/work_helper/WR083_PROTECTED_PR
 Work Helper does not merge WR-083 and does not activate WR-084.
 
 Manager should verify/freeze the exact final WR-083 PR head. Then activate WR-084 as a fresh independent audit lane against that immutable target. Only a WR-084 PASS-family disposition may permit Manager integration, protected canonical-main canary, and later explicit WR-081 reactivation.
+
+
+## WR-084 bounded remediation — proof pending
+
+Failed audited target preserved immutably: `4ac5fa2c6148960094fde81b217bd3af080e4213`.
+
+This remediation changes only the two WR-084 HIGH findings:
+
+- **WR-084-AUD-01:** future scoring still requires trusted dispatch syntax, but dispatch values are no longer sufficient authority. Canonical Manager-owned `.ai/shared/ACTIVE_TASKS.json` must contain a complete WR-081 `future_execution_authority` binding for exact branch, head SHA, consumer path, and reviewed consumer SHA-256, and the dispatch identity must equal that Manager authority. The live remote branch head is checked before retained retrieval, the exact checkout + reviewed consumer are checked before retained retrieval, the remote head is checked again immediately before consumer exposure, and the pre-push remote-head race check remains.
+- **WR-084-AUD-02:** every consumer publication validation is bound to the verified retained-input manifest. Only explicit `WR081_*.json` / `WR081_*.md` evidence paths under `.ai/research/` (optionally `generated/`) are accepted. Any output matching a retained raw source digest+size or exact bytes fails closed. Final staging revalidates against the retained manifest, and the final publication package records a deterministic retained-input identity-set binding.
+
+Direct negative regressions cover unrelated same-repository checkout SHA, stale authorized-branch SHA, unreviewed consumer path, unreviewed consumer digest, branch advancement between authorization and execution, path/type escape, and exact retained raw-byte passthrough.
+
+No real WR-081 historical scoring is authorized or performed by this remediation. `real_scoring=false`; `historical_targets_exposed=false`.
