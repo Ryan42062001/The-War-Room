@@ -19,6 +19,8 @@ const RUNNABLE = new Set([
 ]);
 const BLOCKER_TYPES = new Set(['NONE', 'USER_ACTION', 'UPSTREAM_TASK', 'EXTERNAL_SERVICE', 'TECHNICAL', 'AUDIT']);
 const DEPENDENCIES = new Set(['INDEPENDENT', 'SOFT', 'HARD']);
+const EXECUTION_MODES = new Set(['STANDARD_CHAT_HIGH', 'WORK_MODE']);
+const REFRESH_MODES = new Set(['FAST_REFRESH', 'FULL_REFRESH']);
 const SHA = /^[0-9a-f]{40}$/;
 const WR = /^WR-\d{3}$/;
 
@@ -96,6 +98,9 @@ for (const task of tasks) {
   if (!ACTIVE.has(task.status)) errors.push(`${label}: active-only registry cannot contain status ${task.status}`);
   if (!BLOCKER_TYPES.has(task.blocker_type)) errors.push(`${label}: invalid blocker_type ${task.blocker_type}`);
   if (!DEPENDENCIES.has(task.dependency)) errors.push(`${label}: dependency must be INDEPENDENT, SOFT, or HARD`);
+  if (!EXECUTION_MODES.has(task.execution_mode)) errors.push(`${label}: execution_mode must be STANDARD_CHAT_HIGH or WORK_MODE`);
+  if (!REFRESH_MODES.has(task.refresh_mode)) errors.push(`${label}: refresh_mode must be FAST_REFRESH or FULL_REFRESH`);
+  if (task.refresh_mode === 'FULL_REFRESH' && (typeof task.refresh_reason !== 'string' || !task.refresh_reason.trim())) errors.push(`${label}: FULL_REFRESH requires non-empty refresh_reason`);
   if (typeof task.user_action_required !== 'boolean') errors.push(`${label}: user_action_required must be boolean`);
   if (!Array.isArray(task.blocked_on_tasks)) errors.push(`${label}: blocked_on_tasks must be array`);
   if (!Array.isArray(task.blocked_on)) errors.push(`${label}: blocked_on must be array`);

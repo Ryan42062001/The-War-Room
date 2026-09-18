@@ -3,6 +3,7 @@ const FIELD_LABELS = {
   status: 'STATUS',
   dependency: 'DEPENDENCY',
   execution_mode: 'EXECUTION MODE',
+  refresh_mode: 'REFRESH MODE',
   target_branch: 'TARGET BRANCH'
 };
 
@@ -41,6 +42,7 @@ export function parseTaskSpecContract(text) {
     status: firstMachineToken(lineValue(text, FIELD_LABELS.status)),
     dependency: firstMachineToken(lineValue(text, FIELD_LABELS.dependency)),
     execution_mode: firstMachineToken(lineValue(text, FIELD_LABELS.execution_mode)),
+    refresh_mode: firstMachineToken(lineValue(text, FIELD_LABELS.refresh_mode)),
     target_branch: normalizeBranch(lineValue(text, FIELD_LABELS.target_branch))
   };
 }
@@ -53,6 +55,7 @@ export function validateTaskSpecContract(task, text) {
     ['status', task.status],
     ['dependency', task.dependency],
     ['execution_mode', task.execution_mode],
+    ['refresh_mode', task.refresh_mode],
     ['target_branch', task.branch ?? null]
   ];
 
