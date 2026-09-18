@@ -12,16 +12,16 @@ Owner: Manager / Architect
 
 ## Phase 5B — Returning-Player v2 evidence reset — ACTIVE
 
-- WR-083 — ASSIGNED / bounded remediation for WR-084-AUD-01 and WR-084-AUD-02 on PR #234.
+- WR-083 — AUDIT_READY / remediated exact Manager-frozen target `c9b13959f598b3633a78e2ff78d0862881982dd2`, PR #234.
 - WR-084 — CLOSED / FAIL evidence merged through PR #243.
-- WR-089 — BLOCKED / reserved fresh independent re-audit of the next remediated WR-083 target.
-- WR-081 — BLOCKED before scoring pending WR-083 remediation, WR-089 PASS-family, exact bridge integration and protected canonical-main canary.
+- WR-089 — ASSIGNED / fresh independent re-audit of the remediated protected bridge.
+- WR-081 — BLOCKED before scoring pending WR-089 PASS-family, exact bridge integration and protected canonical-main canary.
 - WR-082 — BLOCKED / model-result audit after future WR-081 result target.
 
 Critical path:
-`WR-083 remediation -> WR-089 -> exact bridge integration -> protected canonical-main canary -> WR-081 -> WR-082 -> composition -> composition audit -> Phase 6`.
+`WR-089 -> exact WR-083 integration -> protected canonical-main canary -> WR-081 -> WR-082 -> composition -> composition audit -> Phase 6`.
 
-No real WR-081 scoring is authorized during remediation or re-audit.
+No real WR-081 scoring is authorized during WR-089.
 
 ## Infrastructure
 

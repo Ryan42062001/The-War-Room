@@ -2,49 +2,62 @@
 
 HANDOFF
 
-STATUS: WR-084 FAIL evidence preserved; WR-083 bounded remediation ASSIGNED; WR-089 reserved BLOCKED
-TASK: WR-083 — Protected Historical Scoring Execution Bridge — bounded remediation
-ROLE: Manager / Architect -> Work Helper / Super Troubleshooter / Cross-Functional Operator
+STATUS: WR-083 AUDIT_READY; WR-089 ASSIGNED
+TASK: WR-089 — Fresh Re-Audit of Remediated Protected Historical Scoring Bridge
+ROLE: Manager / Architect -> fresh Independent Auditor / QA
 CANONICAL WORKFLOW: V3.4
-CANONICAL ROUTING BASE: `9f6eba965b11e3ee8c30be71cd9b7aac387a79e2`
-IMPLEMENTATION BRANCH: `wr-083-protected-historical-scoring-bridge`
-EXISTING PR: #234
-FAILED AUDITED TARGET TO PRESERVE: `4ac5fa2c6148960094fde81b217bd3af080e4213`
+CANONICAL MAIN BEFORE FREEZE TRANSITION: `ca7fda518386fc23f44344e78fc3b4169602c254`
+TARGET TASK: WR-083
+TARGET PR: #234
+TARGET BRANCH: `wr-083-protected-historical-scoring-bridge`
+EXACT TARGET SHA: `c9b13959f598b3633a78e2ff78d0862881982dd2`
+AUDIT BRANCH: `wr-089-protected-historical-scoring-bridge-reaudit`
 EXECUTION MODE: STANDARD_CHAT_HIGH
-REFRESH MODE: FAST_REFRESH / bounded remediation
+REFRESH MODE: FAST_REFRESH
 
-AUDIT RESULT:
-- WR-084 PR #243 — merged;
-- Auditor head `69b491dfff87c08413ae335448c2b9ec2a2515f0`;
-- verdict `FAIL — REMEDIATION REQUIRED`;
-- audit-head CI `35307131616` — SUCCESS;
-- post-merge main CI `35307517063` — SUCCESS.
+DONE:
+- WR-084 bounded remediation completed on PR #234.
+- Exact target is current-main based: ahead 35 / behind 0 with only seven authorized WR-083 paths.
+- Final implementation bytes are bound to credentialed NO-SCORING proof head `648ae9372bf2eb49e0fcebcf921d7bafd7d26d1b`.
+- Only Work Helper evidence files changed after the proof.
 
-FIX ONLY:
-1. `WR-084-AUD-01`: establish Manager-controlled branch/head/consumer-path/consumer-digest authority and verify exact authorized branch head + reviewed consumer identity before retained rows/targets become consumer-visible; retain the second pre-push race check and negative tests for stale/unrelated/raced identities.
-2. `WR-084-AUD-02`: bind publication validation to retained-input identities and fail closed on any output matching retained raw source bytes/digest+size; add negative passthrough tests while preserving no-artifact/no-log/cleanup protections.
+VALIDATION:
+- Full War Room CI `35309111018` — SUCCESS;
+- classify `105487272881` — SUCCESS;
+- governance `105487309809` — SUCCESS;
+- full test `105487359262` — SUCCESS;
+- WR-083 protected preflight `35309111079` — SUCCESS;
+- WR-046 `35309111050`, WR-063 `35309111093`, WR-069 `35309111021` — SUCCESS;
+- credentialed remediated NO-SCORING proof `35308823649` — SUCCESS;
+- proof Actions artifacts: 0.
 
-PRESERVE: all WR-084 independently PASSed custody/no-scoring behavior unless minimally required by one of the two fixes.
+AUDIT EMPHASIS:
+- independently verify closure of `WR-084-AUD-01`: Manager-controlled pre-exposure branch/head/consumer identity binding and all stale/unrelated/race failures;
+- independently verify closure of `WR-084-AUD-02`: retained-raw publication exclusion bound to the retained manifest, narrow evidence paths/types, and passthrough negative tests;
+- independently re-verify previously positive custody/no-scoring properties.
 
-DO NOT:
-- perform real WR-081 scoring;
-- inspect historical model outcomes;
-- merge PR #234;
-- modify Manager/shared/Auditor/research/product surfaces;
-- broaden source/predictor scope;
-- reactivate WR-081 or WR-074;
-- activate WR-089.
+BOUNDARY:
+- `real_scoring=false`;
+- `historical_targets_exposed=false`;
+- no real WR-081 scoring during WR-089.
 
-COMPLETION:
-Publish one new immutable WR-083 target on PR #234 with exact changed files, implementation/test hashes, explicit finding-closure map, exact-head Full War Room CI, protected bridge/custody regressions, and `real_scoring=false` / `historical_targets_exposed=false`. Return to Manager for exact freeze. Manager then activates fresh WR-089.
+BLOCKERS:
+- PR #234 must not merge before WR-089 PASS-family;
+- WR-081 remains blocked;
+- WR-074 remains serialized.
+
+NEXT ACTION:
+Fresh Auditor executes WR-089 exactly against `c9b13959f598b3633a78e2ff78d0862881982dd2`, writes only `.ai/auditor/**`, publishes immutable audit evidence/PR/exact-head CI, then returns to Manager.
 
 FILES / ARTIFACTS THAT MATTER:
-- `.ai/manager/WR-083.md`
-- `.ai/manager/WR083_REMEDIATION_WR084.md`
-- `.ai/auditor/WR-084_AUDIT.md`
-- `.ai/work_helper/WR083_PROTECTED_HISTORICAL_SCORING_BRIDGE.md`
-- `.github/workflows/wr083-protected-historical-scoring-bridge.yml`
-- `scripts/custody/wr083_protected_historical_scoring.py`
-- `scripts/custody/test_wr083_protected_historical_scoring.py`
+- `.ai/manager/WR-089.md`;
+- `.ai/manager/WR089_FREEZE.md`;
+- `.ai/auditor/WR-084_AUDIT.md`;
+- PR #234;
+- `.ai/work_helper/WR083_PROTECTED_PROOF_SUMMARY.json`;
+- `.github/workflows/wr083-protected-historical-scoring-bridge.yml`;
+- `scripts/custody/wr083_protected_historical_scoring.py`;
+- `scripts/custody/test_wr083_protected_historical_scoring.py`.
 
-WORK MODE: not initially justified. If remediation expands into substantial repeated CI/environment debugging, return `WORK_MODE_ESCALATION_RECOMMENDED` with exact remaining work instead of restarting.
+DO NOT REPEAT:
+Do not re-run real scoring, re-litigate accepted source/cohort/protocol policy, or treat Work Helper claims as proof.
