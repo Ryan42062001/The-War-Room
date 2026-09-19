@@ -41,6 +41,9 @@ jobs:
     defaults:
       run:
         shell: cmd
+    defaults:
+      run:
+        shell: cmd
     steps:
       - name: Check out exact trusted push SHA
         uses: actions/checkout@v7
