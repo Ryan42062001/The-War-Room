@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T14:30:00Z",
+  "updated_at_utc": "2026-09-19T15:50:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -84,84 +84,6 @@
       "forbidden_exact_paths": [],
       "next_gate": "Manager freezes WR-074 exact target -> activate WR-075 fresh independent audit.",
       "refresh_mode": "FAST_REFRESH"
-    },
-    {
-      "task_id": "WR-101",
-      "owner": "R&D",
-      "worker_slot": "rnd-v21-protected-validation-scoring",
-      "status": "AUDIT_READY",
-      "task_file": ".ai/manager/WR-101.md",
-      "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": "b9bedf49cb500524e766f9e233356c3e64d1843f",
-      "worker_checkpoint_sha": "a1cfda0b7ec0decbe5ece96283900a35d875abaf",
-      "branch": "wr-101-v21-validation-scoring-execution-r3",
-      "pr": 301,
-      "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_required": true,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/research/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/auditor/",
-        ".ai/work_helper/",
-        ".github/",
-        "scripts/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [],
-      "next_gate": "WR-102 fresh independent audit of exact frozen target a1cfda0b7ec0decbe5ece96283900a35d875abaf. Keep PR #301 unmerged and do not move the frozen audit target."
-    },
-    {
-      "task_id": "WR-102",
-      "owner": "Auditor",
-      "worker_slot": "auditor-v21-validation-result",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-102.md",
-      "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": "115b9c9aa62b9dcf72dcc461fc65dab50a30b5f9",
-      "worker_checkpoint_sha": null,
-      "branch": "wr-102-v21-validation-result-audit",
-      "pr": null,
-      "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_required": false,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/auditor/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/research/",
-        ".ai/work_helper/",
-        ".github/",
-        "scripts/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [],
-      "next_gate": "Fresh independent audit of exact WR-101 PR #301 target a1cfda0b7ec0decbe5ece96283900a35d875abaf. Auditor publishes Auditor-only verdict/evidence; Manager reviews verdict before any integration or downstream disposition.",
-      "audit_target_task": "WR-101",
-      "audit_target_pr": 301,
-      "audit_target_branch": "wr-101-v21-validation-scoring-execution-r3",
-      "audit_target_sha": "a1cfda0b7ec0decbe5ece96283900a35d875abaf"
     }
   ]
 }
