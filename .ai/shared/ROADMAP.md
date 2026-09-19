@@ -84,3 +84,11 @@ No active Phase 5B critical path.
 - 2022–2025 outcomes remain unopened during WR-095.
 - Phase 6 remains blocked until a later v2.1 season-total path is independently accepted.
 - Next gate if protocol-ready: Manager exact freeze -> fresh independent protocol audit before any scoring.
+
+
+## Returning-Player v2.1 protocol audit
+
+- WR-095 — AUDIT_READY / exact protocol candidate frozen at `738296ad38282fc91738203e7e1ced888ba862ed`, PR #270.
+- WR-096 — ASSIGNED / fresh independent protocol audit.
+- No scoring/retained-source/confirmation authority exists.
+- Phase 6 remains blocked.

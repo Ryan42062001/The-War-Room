@@ -101,3 +101,10 @@ Purpose:
 - determine whether the accepted WR-059 source surface is sufficient.
 
 WR-095 has no retained-source, fitting, scoring, confirmation-outcome, production, composition or Phase-6 authority. If protocol-ready, the next gate is a fresh independent protocol audit.
+
+
+## WR-095 v2.1 protocol freeze
+
+R&D completed WR-095 and proposed `PER_POSITION_BOUNDED_RESIDUAL_RIDGE` after diagnosing the accepted WR-081 failure as tail-concentrated feature-space extrapolation. Manager froze exact PR #270 head `738296ad38282fc91738203e7e1ced888ba862ed` for WR-096. The machine candidate SHA-256 independently reproduces as `5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39`.
+
+WR-096 is the fresh independent protocol audit. No scoring authority exists; 2022–2025 remain unopened.
