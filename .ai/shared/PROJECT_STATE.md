@@ -402,3 +402,27 @@ WR-102 is ASSIGNED to audit exactly:
 The Auditor must independently verify the complete authority/run/receipt/result/package chain and may write only `.ai/auditor/**`.
 
 PR #301 remains unmerged. No scoring authority exists. No downstream promotion, production/ranking/composition, or Phase-6 authority exists.
+
+
+## Returning-Player v2.1 final audited result — CLOSED
+
+WR-102 independently returned PASS with no findings on exact WR-101 target `a1cfda0b7ec0decbe5ece96283900a35d875abaf`.
+
+Accepted integration chain:
+- Auditor head `a13df5e9edd6b350e9d4fca81c3db3ec243761ed`;
+- Auditor PR #304 / CI `35452642020` SUCCESS;
+- audit evidence canonical merge `2ea5dbe0eba4819e685bab77140233df593758ad`;
+- post-audit-evidence canonical CI `35452807308` SUCCESS;
+- exact audited WR-101 target integrated as canonical merge `c9c4cfe1b2b40b43ffe94a11d5f223acd72114db`;
+- required canonical-main War Room CI `35452844314` SUCCESS.
+
+Final accepted v2.1 result:
+- validation 2022–2023: PASS;
+- confirmation 2024–2025: FAIL;
+- terminal `CONFIRMATION_FAILED`;
+- decision `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`;
+- blocking criterion: RB position-MAE regression `0.107573057046809` exceeds frozen `0.05` cap.
+
+WR-101 and WR-102 are closed and removed from the active-only registry.
+
+No scoring rerun, new authority, tuning/remediation, gate/source/protocol change, production promotion, season-total composition, or Phase 6 is authorized by this accepted result.

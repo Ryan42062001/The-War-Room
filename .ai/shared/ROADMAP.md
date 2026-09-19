@@ -282,3 +282,15 @@ No active Phase 5B critical path.
 - PR #301 remains unmerged.
 - No scoring authority, rerun, tuning, promotion, production/ranking/composition, or Phase-6 authorization.
 - Next gate — WR-102 Auditor-only verdict/evidence -> Manager disposition.
+
+
+## Returning-Player v2.1 audited result — CLOSED
+
+- WR-101 — CLOSED / exact audited result `a1cfda0b7ec0decbe5ece96283900a35d875abaf` integrated as `c9c4cfe1b2b40b43ffe94a11d5f223acd72114db`.
+- WR-102 — CLOSED / independent PASS, no findings; Auditor head `a13df5e9edd6b350e9d4fca81c3db3ec243761ed`.
+- Audit evidence merge `2ea5dbe0eba4819e685bab77140233df593758ad`.
+- Required canonical-main validation `35452844314` — SUCCESS.
+- Final v2.1 terminal — `CONFIRMATION_FAILED`.
+- Final v2.1 decision — `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`.
+- No downstream promotion, rerun, new scoring authority, tuning, gate/source/protocol change, composition, or Phase 6 authorization.
+- Any future Returning-Player model attempt requires a new explicit research/protocol task and cannot inherit WR-101 authority.

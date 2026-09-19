@@ -254,3 +254,26 @@ RATIONALE: live execution reached the stage-gate boundary only after exact autho
 EVIDENCE: run `35444278227`; scoring job `105900552923`; exact error `stage gate decision status missing`; authority SHA-256 `2ef299a0de94fabda98095676208f9c50a34076d52ed14e53a322b963b411c0f`; execution branch unchanged; artifacts 0; cleanup PASS.
 ALTERNATIVES REJECTED: weaken/remove wrapper status requirement; infer status from gate_pass in the wrapper; rerun immediately; expose raw retained data to debug; modify frozen gate semantics.
 REVISIT CONDITION: WR-107 returns PASS-family on one exact WR-106 remediation target and Manager integrates it with canonical validation/readiness proof.
+
+
+---
+
+## DECISION WR-D016
+
+DATE: 2026-09-19
+TASK: WR-101 / WR-102 — Returning-Player v2.1 final protected-result disposition
+STATUS: ACTIVE — RESULT ACCEPTED / BASELINE-ONLY EVIDENCE
+DECISION:
+- Accept WR-102 independent `PASS` with no CRITICAL/HIGH/MEDIUM/LOW findings only for exact WR-101 SHA `a1cfda0b7ec0decbe5ece96283900a35d875abaf`.
+- Accept the protected WR-101 result as a valid protocol result: validation 2022–2023 PASS; confirmation 2024–2025 FAIL; terminal `CONFIRMATION_FAILED`; decision `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`.
+- Record the blocking frozen confirmation criterion as RB position-MAE regression `0.107573057046809`, exceeding the frozen `0.05` cap.
+- Accept Auditor evidence head `a13df5e9edd6b350e9d4fca81c3db3ec243761ed`, audit PR #304, audit CI `35452642020` SUCCESS, and audit-evidence merge `2ea5dbe0eba4819e685bab77140233df593758ad`.
+- Integrate only exact audited WR-101 target `a1cfda0b7ec0decbe5ece96283900a35d875abaf`, producing canonical merge `c9c4cfe1b2b40b43ffe94a11d5f223acd72114db`.
+- Accept required canonical-main War Room CI `35452844314` SUCCESS after exact result integration.
+- Close WR-101 and WR-102 as completed baseline-only research evidence.
+- Do not authorize another scoring run, new scoring authority, tuning/remediation, threshold/gate changes, source/cohort/protocol substitution, production promotion, season-total composition, or Phase 6 from this result.
+- Any future Returning-Player model attempt requires a separate prospective Manager/R&D protocol decision and fresh applicable audit gates.
+RATIONALE: The protected workflow executed successfully under consumed one-time R3 authority, validation passed, confirmation lawfully opened, and the frozen confirmation gate then failed on the RB position-MAE regression criterion. WR-102 independently reproduced the execution/publication/chronology/hash/gate evidence and found no audit defects. Preserving the failed confirmation verdict prevents post-result tuning or gate weakening while retaining the result as valid research evidence.
+EVIDENCE: WR-101 exact target `a1cfda0b7ec0decbe5ece96283900a35d875abaf`; protected publication `41c1601ce2a7ae26fcb13a370ae2960db9427a80`; protected run `35447590872`; WR-102 Auditor head `a13df5e9edd6b350e9d4fca81c3db3ec243761ed`; audit PR #304; audit CI `35452642020`; audit evidence merge `2ea5dbe0eba4819e685bab77140233df593758ad`; exact result integration `c9c4cfe1b2b40b43ffe94a11d5f223acd72114db`; canonical validation `35452844314` SUCCESS.
+ALTERNATIVES REJECTED: rerun until confirmation passes; tune against exposed 2024–2025 outcomes; weaken the 0.05 position cap; treat workflow SUCCESS as model PASS; promote the model despite confirmation failure; carry R3 authority into a future attempt.
+REVISIT CONDITION: a wholly new prospectively specified Returning-Player research task is authorized with fresh protocol/evidence/audit boundaries; WR-101/WR-102 themselves are not reopened to obtain a different result.
