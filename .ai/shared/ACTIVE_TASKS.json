@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T13:04:00Z",
+  "updated_at_utc": "2026-09-19T13:30:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -171,13 +171,13 @@
       "task_id": "WR-106",
       "owner": "Work Helper",
       "worker_slot": "work-helper-v21-stage-gate-contract",
-      "status": "ASSIGNED",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-106.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
       "assignment_main_sha": "6dc3d5ff523f556302cc1b7fab5f3fe6ff4d3121",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "af988e4437cb45c920e18cbdcd4dc4c228dbf7c3",
       "branch": "wr-106-v21-stage-gate-status-remediation",
-      "pr": null,
+      "pr": 295,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
@@ -206,16 +206,16 @@
         ".github/workflows/wr097-v21-protected-scoring-bridge.yml",
         "scripts/custody/wr097_v21_protected_scoring.py"
       ],
-      "next_gate": "Reproduce the stage-gate bridge result omission deterministically with synthetic/local state, add the missing status_label to the consumer bridge result without changing gate semantics, add direct + actual-wrapper regression coverage, run Full War Room CI, and return one immutable remediation target. No retained provider access or scoring dispatch."
+      "next_gate": "Fresh WR-107 independent audit of exact frozen WR-106 PR #295 head af988e4437cb45c920e18cbdcd4dc4c228dbf7c3. No merge, scoring rerun, or new authority before PASS-family audit."
     },
     {
       "task_id": "WR-107",
       "owner": "Auditor",
       "worker_slot": "auditor-v21-stage-gate-contract-remediation",
-      "status": "BLOCKED",
+      "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-107.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": null,
+      "assignment_main_sha": "6422caa5b8a782022d58816f30432128503b9754",
       "worker_checkpoint_sha": null,
       "branch": "wr-107-v21-stage-gate-status-remediation-audit",
       "pr": null,
@@ -223,14 +223,10 @@
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": false,
-      "blocker_type": "UPSTREAM_TASK",
+      "blocker_type": "NONE",
       "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-106"
-      ],
-      "blocked_on": [
-        "WR-106 must publish one exact immutable remediation target with deterministic reproduction and Full War Room CI before audit activation."
-      ],
+      "blocked_on_tasks": [],
+      "blocked_on": [],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
@@ -247,7 +243,11 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes exact WR-106 target -> activate fresh WR-107 independent audit."
+      "next_gate": "Fresh independent audit of exact WR-106 PR #295 head af988e4437cb45c920e18cbdcd4dc4c228dbf7c3. Reproduce bridge/artifact status omission synthetically, verify one-field remediation and wrapper fail-close behavior, then publish Auditor-only verdict/evidence.",
+      "audit_target_task": "WR-106",
+      "audit_target_pr": 295,
+      "audit_target_branch": "wr-106-v21-stage-gate-status-remediation",
+      "audit_target_sha": "af988e4437cb45c920e18cbdcd4dc4c228dbf7c3"
     }
   ]
 }

@@ -210,3 +210,12 @@ No active Phase 5B critical path.
 - WR-107 — BLOCKED / fresh independent audit after exact WR-106 freeze.
 - WR-102 — BLOCKED/reserved for a future actual protected result.
 - Next gate — WR-106 synthetic reproduction + smallest fix -> Full CI -> Manager freeze -> WR-107 audit.
+
+
+## WR-106 stage-gate remediation audit gate
+
+- WR-106 — AUDIT_READY / PR #295 frozen at exact SHA `af988e4437cb45c920e18cbdcd4dc4c228dbf7c3`; implementation SHA `4b41ac8b12a4e9f029979eb29c92458e7b4cb640`; final Full CI `35445518850` SUCCESS.
+- WR-107 — ASSIGNED / fresh independent audit on `wr-107-v21-stage-gate-status-remediation-audit`.
+- WR-101 — remains BLOCKED; R2 authority revoked; no scoring authority active.
+- WR-102 — remains blocked/reserved for a future actual protected result.
+- Next gate — WR-107 PASS-family -> integrate exact audited WR-106 target -> canonical validation/no-scoring proof -> separate Manager decision on any NEW one-time scoring authority.
