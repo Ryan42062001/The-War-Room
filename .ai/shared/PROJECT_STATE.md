@@ -132,7 +132,7 @@ WR-098 is assigned for fresh independent audit.
 Canonical Manager transition tooling still recognizes only the legacy WR-083 protected workflow identity. This remains a deliberate fail-closed external integration blocker; no real v2.1 scoring authority may be created until it is resolved through separately audited integration.
 
 
-## WR-098 PASS / WR-097 exact integration / WR-099 gate
+## WR-098 PASS / WR-097 exact integration / WR-099 active
 
 WR-098 independently returned PASS with no findings on exact WR-097 target `75c0fbcd518438a226a8c49e3e11951de3944638`.
 
@@ -143,8 +143,23 @@ Audit evidence:
 
 Because source PR #275 became non-mergeable after control-plane advancement, Manager integrated the exact nine audited WR-097 Git blobs byte-for-byte through PR #278 as canonical merge `3956e88be165df29a83442cb624b198b7347e381`. Post-merge Full War Room CI `35419965619` completed SUCCESS. PR #275 is closed as superseded at the immutable audited head.
 
-The first canonical-main WR-097 NO-SCORING canary is still required and has not yet been dispatched. No real v2.1 scoring authority exists.
+The required canonical-main WR-097 NO-SCORING canary is now accepted:
+- run `35420945339` / run #14;
+- canonical control-plane head `21abf6e9d7bade0d638d40339b3ae4b699a6eacc`;
+- preflight, trust gate and protected NO-SCORING readiness SUCCESS;
+- future authorized v2.1 scoring SKIPPED;
+- 14/14 retained identities verified;
+- provider mutation operations 0;
+- consumer provider credentials absent;
+- consumer re-hash/re-size 14/14;
+- cleanup PASS;
+- Actions artifacts 0;
+- `real_scoring=false`;
+- `historical_targets_exposed=false`;
+- `target_outcomes_2022_2025_exposed=false`.
 
-WR-099 is the next bounded Manager-controlled task: protected workflow identity integration in `scripts/workflow-manager-transition.mjs` plus its regression suite only. WR-099 is BLOCKED on the canonical-main WR-097 NO-SCORING canary. After that canary, WR-099 follows Manager implementation/freeze -> fresh independent audit -> exact audited integration -> second canonical-main protected NO-SCORING canary.
+WR-097 is CLOSED.
 
-2022–2025 remain unopened. No 2026 regular-season outcome inspection, season-total composition, or Phase 6 is authorized.
+WR-099 is now IN_PROGRESS as the next bounded Manager-controlled task. Its executable scope is limited to `scripts/workflow-manager-transition.mjs` and `scripts/test-workflow-manager-transition.mjs`. It must preserve WR-083, bind WR-097 identity from canonical authority context, pass direct adversarial regressions plus Full War Room CI, then receive a fresh independent audit before exact integration. A second canonical-main protected NO-SCORING canary is mandatory after audited integration.
+
+2022–2025 remain unopened. No real v2.1 validation scoring authority exists. No 2026 regular-season outcome inspection, season-total composition, or Phase 6 is authorized.
