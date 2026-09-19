@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T14:10:00Z",
+  "updated_at_utc": "2026-09-19T14:25:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -89,13 +89,13 @@
       "task_id": "WR-101",
       "owner": "R&D",
       "worker_slot": "rnd-v21-protected-validation-scoring",
-      "status": "IN_PROGRESS",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-101.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "b9bedf49cb500524e766f9e233356c3e64d1843f",
-      "worker_checkpoint_sha": "41c1601ce2a7ae26fcb13a370ae2960db9427a80",
+      "worker_checkpoint_sha": "a1cfda0b7ec0decbe5ece96283900a35d875abaf",
       "branch": "wr-101-v21-validation-scoring-execution-r3",
-      "pr": null,
+      "pr": 301,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
@@ -120,7 +120,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "R&D package only the already-published immutable R3 result at 41c1601ce2a7ae26fcb13a370ae2960db9427a80 under .ai/research/** without altering generated protected evidence; return exact final head/changed files/manifest/hashes/terminal result/exact-head CI to Manager for freeze and WR-102 activation. No rerun or new scoring authority."
+      "next_gate": "Manager exact freeze target a1cfda0b7ec0decbe5ece96283900a35d875abaf must become canonical -> create fresh WR-102 audit branch from that canonical checkpoint -> activate independent result audit. Do not merge PR #301."
     },
     {
       "task_id": "WR-102",
@@ -143,7 +143,7 @@
         "WR-101"
       ],
       "blocked_on": [
-        "WR-101 R3 result exists at 41c1601ce2a7ae26fcb13a370ae2960db9427a80, but WR-102 remains blocked until bounded R&D packaging and Manager exact freeze of the complete immutable result target."
+        "Manager has frozen WR-101 exact target a1cfda0b7ec0decbe5ece96283900a35d875abaf; WR-102 activates only after this freeze is canonical and its fresh audit branch is created from that exact canonical Manager checkpoint."
       ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
@@ -161,7 +161,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "R&D final WR-101 packaging + exact-head CI -> Manager immutable freeze -> activate WR-102 fresh independent result audit."
+      "next_gate": "Canonicalize exact WR-101 freeze a1cfda0b7ec0decbe5ece96283900a35d875abaf -> create fresh audit branch -> assign WR-102 against exact target only."
     }
   ]
 }
