@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T02:20:00Z",
+  "updated_at_utc": "2026-09-19T03:10:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -86,17 +86,17 @@
       "refresh_mode": "FAST_REFRESH"
     },
     {
-      "task_id": "WR-095",
-      "owner": "R&D",
-      "worker_slot": "rnd-returning-player-v21-protocol",
-      "status": "AUDIT_READY",
-      "task_file": ".ai/manager/WR-095.md",
-      "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": "8d1ad6433c409ba096eb36ee320a277676bd64cd",
-      "worker_checkpoint_sha": "738296ad38282fc91738203e7e1ced888ba862ed",
-      "branch": "wr-095-returning-player-v21-failure-analysis-protocol",
-      "pr": 270,
-      "dependency": "INDEPENDENT",
+      "task_id": "WR-097",
+      "owner": "Work Helper",
+      "worker_slot": "work-helper-v21-protected-execution",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-097.md",
+      "role_handoff": ".ai/work_helper/HANDOFF.md",
+      "assignment_main_sha": "daa5e686cbc4fe2ca379baf696bf0335d05ad19d",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-097-v21-protected-execution-bridge",
+      "pr": null,
+      "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": true,
@@ -104,64 +104,34 @@
       "user_action_required": false,
       "blocked_on_tasks": [],
       "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
+      "external_authority_evidence_required": true,
+      "post_merge_canary_required": true,
       "allowed_path_prefixes": [
-        ".ai/research/"
+        ".ai/work_helper/",
+        ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py",
+        ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py",
+        ".github/workflows/wr097-v21-protected-scoring-bridge.yml",
+        "scripts/custody/wr097_v21_protected_scoring.py",
+        "scripts/custody/test_wr097_v21_protected_scoring.py",
+        "scripts/validate-release-candidate.mjs"
       ],
       "forbidden_path_prefixes": [
         ".ai/shared/",
         ".ai/manager/",
         ".ai/auditor/",
-        ".ai/work_helper/",
-        ".github/",
-        "scripts/",
         "src/",
         "public/"
       ],
-      "forbidden_exact_paths": [],
-      "next_gate": "WR-096 fresh independent protocol audit of exact WR-095 target 738296ad38282fc91738203e7e1ced888ba862ed. No scoring/retained-source/confirmation/production authority until PASS-family Manager disposition."
-    },
-    {
-      "task_id": "WR-096",
-      "owner": "Auditor",
-      "worker_slot": "auditor-returning-player-v21-protocol",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-096.md",
-      "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": "1511ebc509f7e28426e3e27a351cb33acb9368f9",
-      "worker_checkpoint_sha": null,
-      "branch": "wr-096-returning-player-v21-protocol-audit",
-      "pr": null,
-      "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_required": false,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/auditor/"
+      "forbidden_exact_paths": [
+        ".ai/research/WR095_V21_FAILURE_ANALYSIS.md",
+        ".ai/research/WR095_V21_PROTOCOL_PROPOSAL.md",
+        ".ai/research/generated/WR095_RETURNING_PLAYER_V21_PROTOCOL_CANDIDATE.json",
+        ".ai/research/generated/WR095_RETURNING_PLAYER_V21_PROTOCOL_CANDIDATE.json.sha256",
+        ".github/workflows/wr083-protected-historical-scoring-bridge.yml",
+        "scripts/custody/wr083_protected_historical_scoring.py",
+        "scripts/custody/test_wr083_protected_historical_scoring.py"
       ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/research/",
-        ".ai/work_helper/",
-        ".github/",
-        "scripts/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [],
-      "next_gate": "Fresh independent audit of exact WR-095 protocol target 738296ad38282fc91738203e7e1ced888ba862ed. Verify failure analysis, contamination handling, prospective chronology, protocol determinism, thresholds, source sufficiency, and no hidden scoring/outcome exposure.",
-      "audit_target_task": "WR-095",
-      "audit_target_pr": 270,
-      "audit_target_branch": "wr-095-returning-player-v21-failure-analysis-protocol",
-      "audit_target_sha": "738296ad38282fc91738203e7e1ced888ba862ed"
+      "next_gate": "Work Helper publishes one immutable WR-097 NO-SCORING protected consumer/bridge target with synthetic/conformance and protected readiness evidence -> Manager exact freeze -> fresh independent WR-098 audit -> only after PASS-family integration plus canonical-main NO-SCORING canary may Manager consider a separate v2.1 scoring task. No scoring authority exists in WR-097."
     }
   ]
 }

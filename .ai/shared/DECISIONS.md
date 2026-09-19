@@ -161,3 +161,26 @@ RATIONALE: WR-071 independently reproduced the source/cohort hashes, verified Pa
 EVIDENCE: WR-059 PR #196 accepted head `db8b21a65f2decf900902481f110758cc33f0aa6`; exact-head CI `34998074580`; WR-071 PR #202 audit head `96a712ba2cf6a016ddbfdc0ea14cabba282bee04`; WR-071 exact-head CI `35009298684`; audit evidence merge `0eb20f940fcfe455da3129a54525a73e39c966c6`; WR-059 integration merge `2777ec44ca5b5f2fef77c07d17e4fa75b6013262`; post-integration CI `35009576671` classify/Governance SUCCESS.
 ALTERNATIVES REJECTED: infer missing historical metadata provenance; substitute current `players.csv`; reacquire sources; reintroduce excluded draft capital; proceed directly to model scoring; preserve WR-042 as an indefinitely blocked active task after its evidence has been incorporated and independently accepted.
 REVISIT CONDITION: a future audited source-contract version admits new metadata/draft semantics, WR-073 finds the pre-score protocol cannot satisfy the accepted contract, or later independently audited evidence requires a new explicit source/cohort version.
+
+
+---
+
+## DECISION WR-D010
+
+DATE: 2026-09-18
+TASK: WR-095 / WR-096 — Returning-Player v2.1 protocol acceptance
+STATUS: ACTIVE — RESEARCH / PROTECTED-EXECUTION ARCHITECTURE ONLY
+DECISION:
+- Accept exact WR-095 frozen target `738296ad38282fc91738203e7e1ced888ba862ed` after WR-096 independent `PASS` with no findings.
+- Accept machine protocol candidate `returning-player-v2.1-model-protocol-candidate/1.0.0-wr095` with SHA-256 `5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39` as the governing prospective v2.1 model protocol for the next protected-execution implementation gate.
+- Accept `EXISTING_ACCEPTED_SOURCE_SUFFICIENT`: retain WR-059 source/cohort authority, exactly 14 Player Summary Stats sources, zero Players metadata and zero draft-capital predictors.
+- Treat 2018–2021 permanently as design-exposed for v2.1.
+- Freeze future untouched chronology as validation 2022–2023, then confirmation 2024–2025 only after complete validation PASS.
+- Accept the bounded residual Ridge architecture exactly as audited: per-position StandardScaler, z clamp [-6,+6], Ridge alpha=100 on residual target versus persistence, MAD robust sigma 1.4826*MAD, residual bound center +/- 3*robust_sigma, final prediction persistence + bounded adjustment, and fail-closed fallback semantics.
+- Preserve accepted WR-072 performance thresholds numerically.
+- Authorize only WR-097 protected consumer/bridge implementation and NO-SCORING readiness evidence, followed by fresh independent audit.
+- No model scoring, 2022–2025 outcome exposure, production/ranking change, season-total composition or Phase 6 is authorized by this decision.
+RATIONALE: WR-096 independently reproduced the WR-081 failure decomposition, verified the catastrophic tail/covariate-extrapolation mechanism, validated the prospective contamination controls, protocol determinism, unchanged gates, source sufficiency and exact machine digest, and returned PASS with no findings.
+EVIDENCE: WR-095 frozen head `738296ad38282fc91738203e7e1ced888ba862ed`; protocol SHA-256 `5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39`; WR-096 Auditor head `3a779f6997c3bc57ec63f4fa4fa8084a609d5441`; audit PR #272; audit CI `35415672844` SUCCESS; audit evidence merge `94ec9656495fd56433c4c3dd413b9e0a0c1c1534`; exact audited research blobs integrated via PR #273 as `daa5e686cbc4fe2ca379baf696bf0335d05ad19d`.
+ALTERNATIVES REJECTED: rerun WR-081; tune against 2020–2021 while calling them validation; inspect 2022–2025 before protocol freeze; weaken gates; admit new sources without need; proceed directly to scoring without a separately reviewed protected consumer/bridge.
+REVISIT CONDITION: WR-098 finds the protected implementation does not faithfully encode the accepted protocol/custody chronology, a required source field is unavailable from accepted custody, or future untouched validation fails under the accepted protocol.

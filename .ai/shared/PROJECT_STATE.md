@@ -108,3 +108,14 @@ WR-095 has no retained-source, fitting, scoring, confirmation-outcome, productio
 R&D completed WR-095 and proposed `PER_POSITION_BOUNDED_RESIDUAL_RIDGE` after diagnosing the accepted WR-081 failure as tail-concentrated feature-space extrapolation. Manager froze exact PR #270 head `738296ad38282fc91738203e7e1ced888ba862ed` for WR-096. The machine candidate SHA-256 independently reproduces as `5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39`.
 
 WR-096 is the fresh independent protocol audit. No scoring authority exists; 2022–2025 remain unopened.
+
+
+## Returning-Player v2.1 protocol accepted / protected implementation activated
+
+WR-096 independently returned PASS with no findings on exact WR-095 target `738296ad38282fc91738203e7e1ced888ba862ed`.
+
+The audited five research blobs were integrated byte-for-byte through PR #273 at canonical merge `daa5e686cbc4fe2ca379baf696bf0335d05ad19d`.
+
+Manager accepts protocol SHA-256 `5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39` under WR-D010.
+
+WR-097 is now the active critical path: implement the exact v2.1 protected consumer and dedicated execution bridge with synthetic/conformance and NO-SCORING readiness evidence only. 2022–2025 remain unopened. No scoring authority exists.
