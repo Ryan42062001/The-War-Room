@@ -102,3 +102,13 @@ No active Phase 5B critical path.
 - Next gate: Manager exact freeze -> WR-098 fresh independent audit -> exact integration -> canonical-main protected NO-SCORING canary.
 - No real validation scoring authority exists.
 - Phase 6 remains blocked.
+
+
+## Returning-Player v2.1 protected execution audit
+
+- WR-097 — AUDIT_READY / exact protected consumer/bridge target `75c0fbcd518438a226a8c49e3e11951de3944638`, PR #275.
+- WR-098 — ASSIGNED / fresh independent bridge/consumer audit.
+- Credentialed NO-SCORING readiness proof `35417205490` SUCCESS; future scoring skipped.
+- Known Manager workflow-identity integration blocker remains fail closed and must be separately audited if changed.
+- No validation scoring authority exists.
+- Phase 6 remains blocked.
