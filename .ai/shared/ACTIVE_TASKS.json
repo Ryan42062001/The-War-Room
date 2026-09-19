@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T14:25:00Z",
+  "updated_at_utc": "2026-09-19T14:30:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -120,16 +120,16 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager exact freeze target a1cfda0b7ec0decbe5ece96283900a35d875abaf must become canonical -> create fresh WR-102 audit branch from that canonical checkpoint -> activate independent result audit. Do not merge PR #301."
+      "next_gate": "WR-102 fresh independent audit of exact frozen target a1cfda0b7ec0decbe5ece96283900a35d875abaf. Keep PR #301 unmerged and do not move the frozen audit target."
     },
     {
       "task_id": "WR-102",
       "owner": "Auditor",
       "worker_slot": "auditor-v21-validation-result",
-      "status": "BLOCKED",
+      "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-102.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": null,
+      "assignment_main_sha": "115b9c9aa62b9dcf72dcc461fc65dab50a30b5f9",
       "worker_checkpoint_sha": null,
       "branch": "wr-102-v21-validation-result-audit",
       "pr": null,
@@ -137,14 +137,10 @@
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": false,
-      "blocker_type": "UPSTREAM_TASK",
+      "blocker_type": "NONE",
       "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-101"
-      ],
-      "blocked_on": [
-        "Manager has frozen WR-101 exact target a1cfda0b7ec0decbe5ece96283900a35d875abaf; WR-102 activates only after this freeze is canonical and its fresh audit branch is created from that exact canonical Manager checkpoint."
-      ],
+      "blocked_on_tasks": [],
+      "blocked_on": [],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
@@ -161,7 +157,11 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Canonicalize exact WR-101 freeze a1cfda0b7ec0decbe5ece96283900a35d875abaf -> create fresh audit branch -> assign WR-102 against exact target only."
+      "next_gate": "Fresh independent audit of exact WR-101 PR #301 target a1cfda0b7ec0decbe5ece96283900a35d875abaf. Auditor publishes Auditor-only verdict/evidence; Manager reviews verdict before any integration or downstream disposition.",
+      "audit_target_task": "WR-101",
+      "audit_target_pr": 301,
+      "audit_target_branch": "wr-101-v21-validation-scoring-execution-r3",
+      "audit_target_sha": "a1cfda0b7ec0decbe5ece96283900a35d875abaf"
     }
   ]
 }
