@@ -1336,7 +1336,8 @@ def _stage_gate(context: Mapping[str, Any], context_path: Path, state_dir: Path,
     })
     pub = _publication(output_dir, "RETURNING_PLAYER_V21_STAGE_GATES", artifact, stage.upper())
     _finish(output_dir, "stage-gate", {
-        "stage": stage, "gate_pass": gate_pass, "prediction_lock_set_sha256": lock_set,
+        "stage": stage, "gate_pass": gate_pass, "status_label": status_label,
+        "prediction_lock_set_sha256": lock_set,
     }, [pub])
 
 def _readiness(context: Mapping[str, Any], output_dir: Path) -> None:
