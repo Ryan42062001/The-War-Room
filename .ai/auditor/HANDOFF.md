@@ -4,21 +4,21 @@ HANDOFF
 
 STATUS: COMPLETE — PASS
 
-TASK: WR-102 — Independent Audit of Returning-Player v2.1 Protected Validation Result
+TASK: WR-075 — Independent Audit of Self-Hosted Heavy-CI Runner Pilot
 
 ROLE: Independent Auditor / QA
 
-BRANCH: `wr-102-v21-validation-result-audit`
+BRANCH: `wr-075-self-hosted-heavy-ci-runner-audit`
 
-BASE: canonical main verified at `42f51c2701b911b2ddc8fec1c3c4c7b52b2acac3`.
+BASE: canonical main verified at `26060aa426ca9ec3bebdeb38735c1b5ae351b09c`.
 
 AUDITED TARGET:
-- WR-101
-- PR #301
-- branch `wr-101-v21-validation-scoring-execution-r3`
-- exact frozen SHA `a1cfda0b7ec0decbe5ece96283900a35d875abaf`
-- protected publication head `41c1601ce2a7ae26fcb13a370ae2960db9427a80`
-- authorized parent `3d2f0ee09aad47a3190e4be6e83cc765543da387`
+- WR-074
+- PR #307
+- branch `wr-074-self-hosted-heavy-ci-runner-pilot`
+- exact frozen SHA `75fcd3756956b2943f18aff03115f9783a16d0aa`
+- immutable implementation SHA `c2e511da5d3767cbc0688de7e95236135a6975b2`
+- canonical implementation base `cb544da20c7b82ded5552d425d69b8a47c880f30`
 
 VERDICT: `PASS`
 
@@ -29,56 +29,76 @@ FINDINGS:
 - LOW: none
 
 INDEPENDENTLY VERIFIED:
-- exact R3 Manager authority, branch/head/consumer identity and SHA-256;
-- authority SHA-256 `722a965cecb2c14baa9b5f3d4188d464c1f56e0bf56d648fa2f8e143f4677aff`;
-- protected run `35447590872` and exact expected jobs;
-- live-head checks before retained retrieval and immediately before exposure;
-- exactly one non-force publication commit;
-- exactly 34 generated protected evidence files;
-- zero Actions artifacts and successful cleanup;
-- publication payload SHA-256 independently reconstructed as `056140b09bdf63f96c58017335b79d399ec0a5004f0bdc2542a6bfeb83c4ee39`;
-- receipt SHA-256 `11231733032061e7fde5fbe02dae8f111d04bfa6248e951cff87d3f679156fd3`;
-- prediction-lock-before-target chronology for 2022, 2023, 2024 and 2025;
-- complete validation PASS before any confirmation exposure;
-- source snapshot, cohort, 14-source identity set, no Players metadata, no draft capital, exact v2.1 protocol/gates;
-- independent row-level recalculation of validation and confirmation gate metrics;
-- validation 2022–2023 PASS;
-- confirmation 2024–2025 FAIL;
-- blocking confirmation criterion: RB position MAE regression `0.107573057046809` > frozen `0.05` cap;
-- terminal `CONFIRMATION_FAILED`;
-- decision `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`;
-- all 34 R&D evidence-manifest Git blob SHA-1 and byte-size bindings exact;
-- R&D report SHA-256 `dcd4093544b5e464e4dca2e058f4e0102dff8081a4a669ba9178ff5a70207718`;
-- R&D evidence-manifest SHA-256 `c9eaed975f8b5aa5507bbdf98bec01392ee003f71ed9ddf87f353d4838425129`;
-- post-publication packaging delta contains only R&D handoff/report/manifest;
-- no rerun, tuning, gate change, source/cohort/protocol substitution, additional retained-data access, 2026 outcome use, season composition, production/ranking change, or Phase 6 work.
+- PR #307 open, draft, unmerged at exact frozen target;
+- exact six-path WR-074 scope;
+- base-to-implementation contains only pilot workflow/helper/validator + Work Helper activation evidence;
+- implementation-to-final contains only Work Helper report/activation/handoff evidence;
+- no Windows diagnostic/shim files remain;
+- exact push-only WR-074 branch trigger;
+- exact dedicated `[self-hosted, war-room-heavy-ci]` route;
+- no `pull_request` or `pull_request_target` route;
+- GitHub-hosted exact repo/ref/actor trust gate;
+- top-level `contents: read`;
+- checkout `persist-credentials: false`;
+- no WR-074 `secrets.*` references;
+- provider/custody authority absent in successful self-hosted evidence;
+- no retained-provider retrieval on self-hosted;
+- canonical `ci.yml` byte-identical and fully GitHub-hosted;
+- custody/protected workflows byte-identical and still GitHub-hosted;
+- repeated self-hosted preflight + cleanup proves no node_modules/artifacts/sentinel residue, Git clean, provider authority absent;
+- two distinct successful self-hosted parity runs plus matched hosted references;
+- final frozen head was actually fetched/checked out at `75fcd3756956b2943f18aff03115f9783a16d0aa`;
+- final target pilot and canonical War Room CI succeeded;
+- Linux / X64 / WSL2 environment evidence;
+- non-Linux helper path fails closed;
+- helper hashes runner-name evidence, does not deliberately print precise workspace path, does not enumerate unrelated files, and does not expose credential values;
+- standard GitHub self-hosted bootstrap metadata remains a platform-level operational privacy characteristic, not WR-074-authored logging;
+- release validator changed by exactly one allowlist entry for WR-074 while preserving all existing V3.5 workflows;
+- release validation succeeded on repeated parity runs and final frozen target;
+- no production/ranking/strategy/research/model/custody/Phase-6/Manager/shared contamination.
 
-PROTECTED RUN:
-- preflight `105909100834` — SUCCESS
-- trust gate `105909226178` — SUCCESS
-- future-authorized-v21-scoring `105909245699` — SUCCESS
-- protected-no-scoring-readiness `105909246395` — SKIPPED
+REPEATED PARITY:
+- run `35460866285`: trust `105944368659` SUCCESS; self `105944382151` SUCCESS; hosted `105944382105` SUCCESS.
+- run `35461197805`: trust `105945263537` SUCCESS; self `105945274820` SUCCESS; hosted `105945274919` SUCCESS.
 
-R&D EXACT-HEAD CI:
-- War Room CI `35448347283` — SUCCESS
-- classify `105911089005` — SUCCESS
-- governance `105911105372` — SUCCESS
-- bootstrap-reuse `105911105848` — SKIPPED
-- test `105911130138` — SKIPPED
+BENCHMARK:
+- run 1 stress: self 183154 ms vs hosted 160436 ms = 14.16% slower;
+- run 2 stress: self 182270 ms vs hosted 137516 ms = 32.54% slower;
+- mean stress: self 182712 ms vs hosted 148976 ms = 22.65% slower;
+- run 1 resilience: self 17624 ms vs hosted 16211 ms = 8.72% slower;
+- run 2 resilience: self 18956 ms vs hosted 14655 ms = 29.35% slower;
+- mean resilience: self 18290 ms vs hosted 15433 ms = 18.51% slower.
+- conclusion: functional/security viability only; no speed advantage.
+
+FINAL TARGET:
+- pilot run `35461615030` — SUCCESS
+  - trust `105946380768`
+  - hosted `105946392493`
+  - self-hosted `105946392540`
+- War Room CI `35461622646` — SUCCESS
+  - classify `105946400743`
+  - governance `105946432859`
+  - bootstrap-reuse `105946433631` SKIPPED
+  - test `105946457088` SUCCESS
+
+CANONICAL MANAGER EVIDENCE:
+- Manager freeze checkpoint `58eded3958d296d3392aac2cb1fdd92a0cd513c8`
+- post-freeze CI `35462263434` SUCCESS
+- post-activation CI `35462363341` SUCCESS
 
 BOUNDARY:
-No target modification, generated-evidence modification, scoring rerun, new authority, provider-data access, 2026 outcome inspection, tuning, protocol/gate change, production/ranking/composition work, Phase 6 work, or target merge occurred in this audit.
+No WR-074 target/workflow/helper modification, runner reconfiguration, custody/provider access, product/research/Manager/shared write, remediation, or target merge occurred in this audit.
 
 NEXT ACTION:
-Manager may consume PASS only for exact WR-101 SHA `a1cfda0b7ec0decbe5ece96283900a35d875abaf`. If accepted, integrate/disposition only that exact audited result and perform required canonical-main validation. This PASS does not authorize rerun, tuning, new scoring authority, production promotion, season-total composition, or Phase 6.
+Manager may consume PASS only for exact WR-074 SHA `75fcd3756956b2943f18aff03115f9783a16d0aa`. If accepted, integrate only that exact audited target and run required canonical-main post-merge/full-CI validation before treating the pilot as accepted infrastructure. This PASS does not authorize broader triggers, generic self-hosted routing, credential-bearing self-hosted workloads, arbitrary PR execution, or a performance-superiority claim.
 
 FILES / ARTIFACTS THAT MATTER:
-- `.ai/auditor/WR-102_AUDIT.md`
+- `.ai/auditor/WR-075_AUDIT.md`
 - `.ai/auditor/HANDOFF.md`
-- PR #301
-- frozen target `a1cfda0b7ec0decbe5ece96283900a35d875abaf`
-- protected publication `41c1601ce2a7ae26fcb13a370ae2960db9427a80`
-- protected run `35447590872`
+- PR #307
+- frozen target `75fcd3756956b2943f18aff03115f9783a16d0aa`
+- pilot runs `35460866285`, `35461197805`, `35461615030`
+- final War Room CI `35461622646`
 
 DO NOT REPEAT:
-Do not transfer this PASS to a changed WR-101 SHA. Do not merge PR #301 as Auditor. Do not rerun scoring, create authority, tune the model, inspect 2026 outcomes, or perform production/composition work from this lane.
+Do not transfer this PASS to a changed WR-074 SHA. Do not merge PR #307 as Auditor. Do not broaden runner labels/triggers, change runner configuration, or route credential-bearing/custody work onto self-hosted from this lane.
