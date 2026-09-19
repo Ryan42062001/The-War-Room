@@ -92,3 +92,13 @@ No active Phase 5B critical path.
 - WR-096 — ASSIGNED / fresh independent protocol audit.
 - No scoring/retained-source/confirmation authority exists.
 - Phase 6 remains blocked.
+
+
+## Returning-Player v2.1 protected execution — ACTIVE
+
+- WR-095 — CLOSED / accepted protocol after WR-096 PASS.
+- WR-096 — CLOSED / PASS with no findings.
+- WR-097 — ASSIGNED / protected v2.1 consumer + execution bridge, NO-SCORING implementation only.
+- Next gate: Manager exact freeze -> WR-098 fresh independent audit -> exact integration -> canonical-main protected NO-SCORING canary.
+- No real validation scoring authority exists.
+- Phase 6 remains blocked.
