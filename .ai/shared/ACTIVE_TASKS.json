@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T14:00:00Z",
+  "updated_at_utc": "2026-09-19T14:10:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -92,8 +92,8 @@
       "status": "IN_PROGRESS",
       "task_file": ".ai/manager/WR-101.md",
       "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": "3d2f0ee09aad47a3190e4be6e83cc765543da387",
-      "worker_checkpoint_sha": "3d2f0ee09aad47a3190e4be6e83cc765543da387",
+      "assignment_main_sha": "b9bedf49cb500524e766f9e233356c3e64d1843f",
+      "worker_checkpoint_sha": "41c1601ce2a7ae26fcb13a370ae2960db9427a80",
       "branch": "wr-101-v21-validation-scoring-execution-r3",
       "pr": null,
       "dependency": "HARD",
@@ -104,7 +104,7 @@
       "user_action_required": false,
       "blocked_on_tasks": [],
       "blocked_on": [],
-      "external_authority_evidence_required": true,
+      "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
         ".ai/research/"
@@ -120,13 +120,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "After this NEW R3 authority is canonical on main and its post-merge governance CI succeeds, dispatch WR-097 Returning-Player v2.1 Protected Scoring Bridge on canonical main with mode authorized-v21-scoring exactly once. Do not supply alternate execution identity. No automatic rerun on technical/model failure.",
-      "future_execution_authority": {
-        "branch": "wr-101-v21-validation-scoring-execution-r3",
-        "head_sha": "3d2f0ee09aad47a3190e4be6e83cc765543da387",
-        "consumer_path": ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py",
-        "consumer_sha256": "5fc302f54f554ba2db42606a204c94e1764599fc8c5687b7c7ef56d33423150a"
-      }
+      "next_gate": "R&D package only the already-published immutable R3 result at 41c1601ce2a7ae26fcb13a370ae2960db9427a80 under .ai/research/** without altering generated protected evidence; return exact final head/changed files/manifest/hashes/terminal result/exact-head CI to Manager for freeze and WR-102 activation. No rerun or new scoring authority."
     },
     {
       "task_id": "WR-102",
@@ -149,7 +143,7 @@
         "WR-101"
       ],
       "blocked_on": [
-        "WR-102 remains reserved for the immutable result target produced by the newly reauthorized WR-101 R3 protected execution, if that execution publishes a result."
+        "WR-101 R3 result exists at 41c1601ce2a7ae26fcb13a370ae2960db9427a80, but WR-102 remains blocked until bounded R&D packaging and Manager exact freeze of the complete immutable result target."
       ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
@@ -167,7 +161,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "WR-101 R3 protected execution -> authority consumption/result publication -> R&D bounded packaging -> Manager exact freeze -> activate WR-102."
+      "next_gate": "R&D final WR-101 packaging + exact-head CI -> Manager immutable freeze -> activate WR-102 fresh independent result audit."
     }
   ]
 }
