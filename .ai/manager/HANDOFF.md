@@ -2,31 +2,32 @@
 
 HANDOFF
 
-STATUS: WR-097 EXACT AUDITED INTEGRATION MERGED — CANONICAL-MAIN NO-SCORING CANARY REQUIRED — WR-099 BLOCKED
+STATUS: WR-097 CLOSED — WR-099 IN_PROGRESS
 CANONICAL WORKFLOW: V3.5
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-WR-098 final disposition:
-- PASS with no findings;
-- exact audited WR-097 target `75c0fbcd518438a226a8c49e3e11951de3944638`;
-- Auditor PR #277 / immutable head `941ace56d120dba7c3abb78f3c6ae3871448f658`;
-- exact-head CI `35419098246` SUCCESS.
+WR-097 canonical-main NO-SCORING canary is accepted:
+- run `35420945339` / run #14;
+- workflow `WR-097 Returning-Player v2.1 Protected Scoring Bridge`;
+- canonical head `21abf6e9d7bade0d638d40339b3ae4b699a6eacc`;
+- preflight / trust-gate / protected-no-scoring-readiness: SUCCESS;
+- future authorized v2.1 scoring: SKIPPED;
+- 14/14 retained identities verified;
+- provider mutations 0;
+- consumer provider credentials absent;
+- consumer re-hash/re-size 14/14;
+- cleanup PASS;
+- Actions artifacts 0;
+- `real_scoring=false`;
+- `historical_targets_exposed=false`;
+- `target_outcomes_2022_2025_exposed=false`.
 
-WR-097 exact integration:
-- source PR #275 closed as superseded at unchanged audited head;
-- exact nine audited blobs integrated byte-for-byte through PR #278;
-- canonical merge `3956e88be165df29a83442cb624b198b7347e381`;
-- PR-head Full CI `35419663316` SUCCESS;
-- post-merge Full CI `35419965619` SUCCESS.
+WR-099 is now active. Production scope is exactly:
+- `scripts/workflow-manager-transition.mjs`;
+- `scripts/test-workflow-manager-transition.mjs`.
 
-Known fail-closed blocker remains:
-- canonical Manager transition verification currently recognizes only `WR-083 Protected Historical Scoring Bridge`;
-- WR-099 will add exact authority-context binding for `WR-097 Returning-Player v2.1 Protected Scoring Bridge` while preserving WR-083;
-- WR-099 is audit-required and post-merge-canary-required.
-
-Immediate user gate:
-run `WR-097 Returning-Player v2.1 Protected Scoring Bridge` from GitHub Actions on branch `main` with `mode=no-scoring`.
+Required design: derive protected workflow identity from canonical authority consumer identity, preserve WR-083, admit WR-097 only for the exact v2.1 consumer family, bind live run repository/main/control-plane head/run/result context, and fail closed on all required substitution/API/replay adversaries.
 
 No real scoring authority exists. 2022–2025 remain unopened.
 
@@ -34,9 +35,9 @@ No real scoring authority exists. 2022–2025 remain unopened.
 
 | Order | Employee / Role | Status | Current Task / Gate | Next action |
 | --- | --- | --- | --- | --- |
-| 1 | Manager / Architect | BLOCKED — USER ACTION | WR-099 / pre-implementation gate | Verify canonical-main WR-097 NO-SCORING canary, then unblock bounded WR-099 implementation. |
+| 1 | Manager / Architect | ACTIVE | WR-099 protected workflow identity integration | Implement bounded two-file change, run regressions + Full CI, freeze exact target, then activate WR-100 fresh audit. |
 | 2 | Implementation Engineer / Builder | IDLE | No production task | Wait. |
 | 3 | Draft Strategy & Decision Intelligence Analyst | BLOCKED | Phase 6 blocked | Wait for accepted v2.1 result + later composition. |
 | 4 | Research & Development (R&D) | COMPLETE | v2.1 protocol accepted | No action unless protocol ambiguity is found. |
-| 5 | Independent Auditor / QA | WAIT | Future WR-099 audit not yet activated | Fresh audit only after Manager freezes one immutable WR-099 target. |
-| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | WR-097 integrated; WR-074 separately PLANNED | Do not alter WR-097; WR-074 remains separate infrastructure work. |
+| 5 | Independent Auditor / QA | WAIT | WR-100 not yet activated | Fresh audit only after Manager freezes one immutable WR-099 target. |
+| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | WR-097 closed; WR-074 separately PLANNED | Do not alter WR-097; WR-074 remains separate infrastructure work. |

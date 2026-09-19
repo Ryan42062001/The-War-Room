@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T04:05:00Z",
+  "updated_at_utc": "2026-09-19T04:23:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -86,16 +86,16 @@
       "refresh_mode": "FAST_REFRESH"
     },
     {
-      "task_id": "WR-097",
-      "owner": "Work Helper",
-      "worker_slot": "work-helper-v21-protected-execution",
-      "status": "MERGED",
-      "task_file": ".ai/manager/WR-097.md",
-      "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "daa5e686cbc4fe2ca379baf696bf0335d05ad19d",
-      "worker_checkpoint_sha": "75c0fbcd518438a226a8c49e3e11951de3944638",
-      "branch": "wr-097-v21-protected-execution-bridge",
-      "pr": 275,
+      "task_id": "WR-099",
+      "owner": "Manager",
+      "worker_slot": "manager-v21-protected-workflow-identity",
+      "status": "IN_PROGRESS",
+      "task_file": ".ai/manager/WR-099.md",
+      "role_handoff": ".ai/manager/HANDOFF.md",
+      "assignment_main_sha": "21abf6e9d7bade0d638d40339b3ae4b699a6eacc",
+      "worker_checkpoint_sha": null,
+      "branch": "manager/wr-099-protected-workflow-identity-integration",
+      "pr": null,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
@@ -104,62 +104,6 @@
       "user_action_required": false,
       "blocked_on_tasks": [],
       "blocked_on": [],
-      "external_authority_evidence_required": true,
-      "post_merge_canary_required": true,
-      "allowed_path_prefixes": [
-        ".ai/work_helper/",
-        ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py",
-        ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py",
-        ".github/workflows/wr097-v21-protected-scoring-bridge.yml",
-        "scripts/custody/wr097_v21_protected_scoring.py",
-        "scripts/custody/test_wr097_v21_protected_scoring.py",
-        "scripts/validate-release-candidate.mjs"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/auditor/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [
-        ".ai/research/WR095_V21_FAILURE_ANALYSIS.md",
-        ".ai/research/WR095_V21_PROTOCOL_PROPOSAL.md",
-        ".ai/research/generated/WR095_RETURNING_PLAYER_V21_PROTOCOL_CANDIDATE.json",
-        ".ai/research/generated/WR095_RETURNING_PLAYER_V21_PROTOCOL_CANDIDATE.json.sha256",
-        ".github/workflows/wr083-protected-historical-scoring-bridge.yml",
-        "scripts/custody/wr083_protected_historical_scoring.py",
-        "scripts/custody/test_wr083_protected_historical_scoring.py"
-      ],
-      "next_gate": "Canonical-main WR-097 workflow_dispatch canary in mode no-scoring. After Manager verifies the canary, close WR-097 and unblock WR-099. No real scoring authority exists.",
-      "canonical_integration_pr": 278,
-      "canonical_integration_merge_sha": "3956e88be165df29a83442cb624b198b7347e381",
-      "audit_task": "WR-098",
-      "audit_verdict": "PASS"
-    },
-    {
-      "task_id": "WR-099",
-      "owner": "Manager",
-      "worker_slot": "manager-v21-protected-workflow-identity",
-      "status": "BLOCKED",
-      "task_file": ".ai/manager/WR-099.md",
-      "role_handoff": ".ai/manager/HANDOFF.md",
-      "assignment_main_sha": "3956e88be165df29a83442cb624b198b7347e381",
-      "worker_checkpoint_sha": null,
-      "branch": "manager/wr-099-protected-workflow-identity-integration",
-      "pr": null,
-      "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_required": true,
-      "blocker_type": "USER_ACTION",
-      "user_action_required": true,
-      "blocked_on_tasks": [
-        "WR-097"
-      ],
-      "blocked_on": [
-        "Canonical-main WR-097 NO-SCORING workflow_dispatch canary must complete SUCCESS after exact audited integration before WR-099 implementation begins."
-      ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": true,
       "allowed_path_prefixes": [
@@ -184,7 +128,7 @@
         ".ai/research/WR081_PROTECTED_SCORING_CONSUMER.py",
         ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py"
       ],
-      "next_gate": "User runs WR-097 Returning-Player v2.1 Protected Scoring Bridge on canonical main in no-scoring mode. Manager verifies the canonical-main canary, then unblocks WR-099 for bounded Manager implementation/freeze -> fresh independent audit -> exact audited integration -> second canonical-main protected NO-SCORING canary."
+      "next_gate": "Implement only scripts/workflow-manager-transition.mjs and scripts/test-workflow-manager-transition.mjs; run direct regressions plus Full War Room CI; Manager freezes one immutable WR-099 target; then activate WR-100 for fresh independent audit before any integration or scoring authority."
     }
   ]
 }
