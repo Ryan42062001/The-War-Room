@@ -44,3 +44,10 @@ Critical path:
 - WR-092 — CLOSED / FAIL — REMEDIATION REQUIRED on exact historical WR-091 target `def590788eb615d9322d5cc8ae3eef14e8c1bc25`; 3 HIGH findings.
 - WR-091 — IN_PROGRESS / bounded remediation of AUD-01/02/03 only.
 - V3.4 remains canonical until a new WR-091 candidate passes fresh independent audit and post-merge Full CI canary.
+
+
+## Workflow V3.5 remediation re-audit
+
+- WR-092 — CLOSED / FAIL on historical `def590788...`; three HIGH findings preserved.
+- WR-091 — AUDIT_READY / remediated exact target `638a8e2af25f1c806fe8883de0c959c5caaff35e`.
+- WR-093 — ASSIGNED / fresh independent re-audit of remediated V3.5 candidate.

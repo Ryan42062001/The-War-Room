@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T23:48:00Z",
+  "updated_at_utc": "2026-09-18T23:58:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -89,11 +89,11 @@
       "task_id": "WR-091",
       "owner": "Manager",
       "worker_slot": "manager-workflow-v35-automation",
-      "status": "IN_PROGRESS",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-091.md",
       "role_handoff": ".ai/manager/HANDOFF.md",
       "assignment_main_sha": "16f766f1464656779d3e8e2fbab91998eca774f9",
-      "worker_checkpoint_sha": "def590788eb615d9322d5cc8ae3eef14e8c1bc25",
+      "worker_checkpoint_sha": "638a8e2af25f1c806fe8883de0c959c5caaff35e",
       "branch": "manager/wr-091-workflow-v35-automation",
       "pr": 257,
       "dependency": "INDEPENDENT",
@@ -133,7 +133,48 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Remediate only WR-092-AUD-01/02/03 on PR #257: enforce unique Auditor target derivation despite explicit pins; independently bind authority-consumption evidence to canonical authority/committed receipt/publication; reject replay/reuse of consumed authority. Add direct adversarial regressions, reconcile current main, obtain exact-head Full CI/protected-boundary validation, then Manager freezes a new immutable WR-091 target for a fresh independent re-audit."
+      "next_gate": "Manager froze remediated WR-091 exact target 638a8e2af25f1c806fe8883de0c959c5caaff35e after direct AUD-01/02/03 adversarial regressions and exact-head Full War Room CI 35408373771 SUCCESS plus protected/boundary runs. WR-093 fresh independent re-audit is the next gate; historical WR-092 FAIL applies only to def590788eb615d9322d5cc8ae3eef14e8c1bc25."
+    },
+    {
+      "task_id": "WR-093",
+      "owner": "Auditor",
+      "worker_slot": "auditor-workflow-v35-remediation",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-093.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": "fa2eae4e0b514f1ddc96f189589e149f8ad360de",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-093-workflow-v35-remediation-audit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/auditor/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        ".github/",
+        "scripts/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Fresh independent re-audit of remediated WR-091 exact target 638a8e2af25f1c806fe8883de0c959c5caaff35e / PR #257. Re-test WR-092-AUD-01/02/03 adversaries and preservation of upgrades 2 core, 3, 4, 5 and V3.4 safety guarantees.",
+      "audit_target_task": "WR-091",
+      "audit_target_pr": 257,
+      "audit_target_branch": "manager/wr-091-workflow-v35-automation",
+      "audit_target_sha": "638a8e2af25f1c806fe8883de0c959c5caaff35e"
     }
   ]
 }
