@@ -5,6 +5,8 @@ TASK: WR-095 — Returning-Player v2.1 Failure Analysis + Prospective Model-Prot
 ROLE: Research & Development (R&D)
 BRANCH: `wr-095-returning-player-v21-failure-analysis-protocol`
 BASE: canonical main `1511ebc509f7e28426e3e27a351cb33acb9368f9`
+PR: #270
+HEAD: freeze the live PR #270 head containing this final handoff; no further R&D writes are authorized after this commit.
 PROTOCOL DISPOSITION: `PROTOCOL_READY_FOR_MANAGER_FREEZE`
 SOURCE / CUSTODY DISPOSITION: `EXISTING_ACCEPTED_SOURCE_SUFFICIENT`
 
