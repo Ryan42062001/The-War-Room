@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T04:42:00Z",
+  "updated_at_utc": "2026-09-19T04:54:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -89,7 +89,7 @@
       "task_id": "WR-099",
       "owner": "Manager",
       "worker_slot": "manager-v21-protected-workflow-identity",
-      "status": "AUDIT_READY",
+      "status": "IN_PROGRESS",
       "task_file": ".ai/manager/WR-099.md",
       "role_handoff": ".ai/manager/HANDOFF.md",
       "assignment_main_sha": "21abf6e9d7bade0d638d40339b3ae4b699a6eacc",
@@ -128,48 +128,7 @@
         ".ai/research/WR081_PROTECTED_SCORING_CONSUMER.py",
         ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py"
       ],
-      "next_gate": "WR-100 fresh independent audit of exact WR-099 PR #281 head fd51d7ab40456182457fd19915baac8a88ae4468. No merge, authority issuance, or real scoring before PASS-family verdict and exact audited integration."
-    },
-    {
-      "task_id": "WR-100",
-      "owner": "Auditor",
-      "worker_slot": "auditor-v21-protected-workflow-identity",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-100.md",
-      "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": "2da4444c7e5adfff86da769b17bee9b1b53768ca",
-      "worker_checkpoint_sha": null,
-      "branch": "wr-100-v21-protected-workflow-identity-audit",
-      "pr": null,
-      "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_required": false,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/auditor/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/research/",
-        ".ai/work_helper/",
-        ".github/",
-        "scripts/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [],
-      "next_gate": "Fresh independent audit of exact WR-099 target. Verify canonical authority-derived WR-083/WR-097 workflow identity, repository/main/control-plane/run binding, receipt/result/replay preservation, adversarial regressions, exact scope and CI. Publish Auditor report/handoff/PR with PASS-family or remediation verdict.",
-      "audit_target_task": "WR-099",
-      "audit_target_pr": 281,
-      "audit_target_branch": "manager/wr-099-protected-workflow-identity-integration",
-      "audit_target_sha": "fd51d7ab40456182457fd19915baac8a88ae4468"
+      "next_gate": "Bounded WR-099 remediation for WR-100 findings M-01/L-01 only: require exact completed run status, remove null-to-completed coercion, add focused wrong-event/direct consumer path+digest/unconsumed-authority replacement regressions, rerun direct regressions + Full War Room CI, freeze a new immutable PR #281 target, then reactivate fresh WR-100 independent re-audit. No canary or scoring authority before PASS-family re-audit."
     }
   ]
 }

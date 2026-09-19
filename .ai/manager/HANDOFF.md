@@ -2,38 +2,43 @@
 
 HANDOFF
 
-STATUS: WR-099 FROZEN — WR-100 ASSIGNED
+STATUS: WR-100 FAIL ACCEPTED — WR-099 BOUNDED REMEDIATION ACTIVE
 
 CANONICAL WORKFLOW: V3.5
+EXECUTION MODE: STANDARD_CHAT_HIGH
+REFRESH MODE: FAST_REFRESH
 
-WR-097 canonical-main NO-SCORING canary `35420945339` is accepted and WR-097 is CLOSED.
+Canonical main:
+`25c593ca1e75f1493860e3b0dfe8304029a6797c`
 
-WR-099 exact implementation freeze:
-- PR #281;
-- branch `manager/wr-099-protected-workflow-identity-integration`;
-- exact target `fd51d7ab40456182457fd19915baac8a88ae4468`;
-- base `2da4444c7e5adfff86da769b17bee9b1b53768ca`;
-- changed files exactly `scripts/workflow-manager-transition.mjs` and `scripts/test-workflow-manager-transition.mjs`;
-- Full War Room CI `35421600341` SUCCESS;
-- governance `105840233795` SUCCESS;
-- product/browser test `105840261827` SUCCESS.
+WR-100 published:
+- audit PR #283;
+- Auditor head `9c587d609f8473717582c20dd4dbcecf1ad10158`;
+- audit CI `35422248812` SUCCESS;
+- canonical audit-evidence merge `25c593ca1e75f1493860e3b0dfe8304029a6797c`;
+- post-merge CI `35422443550` SUCCESS;
+- verdict `FAIL — REMEDIATION REQUIRED`;
+- M-01 MEDIUM: missing/null run status accepted and coerced to completed;
+- L-01 LOW: focused regression gaps for wrong event, direct consumer path/digest mismatch, unconsumed-authority replacement.
 
-WR-100 is the fresh independent Auditor lane:
-- branch `wr-100-v21-protected-workflow-identity-audit`;
-- audit target WR-099 / PR #281 / exact SHA `fd51d7ab40456182457fd19915baac8a88ae4468`;
-- write scope only `.ai/auditor/**`;
-- verify both legitimate WR-083 and WR-097 authority families plus all repository/head/run/cross-binding/replay adversaries;
-- do not modify or merge the target.
+WR-099 prior target `fd51d7ab40456182457fd19915baac8a88ae4468` / PR #281 MUST NOT be merged in that form.
 
-No scoring authority exists. 2022–2025 remain unopened.
+Authorized remediation remains exactly two executable files:
+- `scripts/workflow-manager-transition.mjs`;
+- `scripts/test-workflow-manager-transition.mjs`.
+
+Next gate:
+bounded remediation -> direct Manager-transition regression + Full War Room CI -> new immutable WR-099 freeze -> fresh WR-100 re-audit.
+
+No second WR-097 NO-SCORING canary yet. No real scoring authority. 2022–2025 remain unopened.
 
 ## Next Activation
 
 | Order | Employee / Role | Status | Current Task / Gate | Next action |
 | --- | --- | --- | --- | --- |
-| 1 | Manager / Architect | WAIT | WR-099 frozen | Wait for WR-100 published verdict; integrate only exact audited target after PASS-family. |
-| 2 | Implementation Engineer / Builder | IDLE | No production task | Wait. |
-| 3 | Draft Strategy & Decision Intelligence Analyst | BLOCKED | Phase 6 blocked | Wait for accepted v2.1 model result and later composition. |
+| 1 | Manager / Architect | ACTIVE | WR-099 bounded remediation | Fix M-01/L-01 only, validate, freeze new target. |
+| 2 | Implementation Engineer / Builder | IDLE | No task | Wait. |
+| 3 | Draft Strategy & Decision Intelligence Analyst | BLOCKED | Phase 6 blocked | Wait. |
 | 4 | Research & Development (R&D) | COMPLETE | v2.1 protocol accepted | No action. |
-| 5 | Independent Auditor / QA | ACTIVE | WR-100 protected workflow identity audit | Audit exact PR #281 head `fd51d7ab40456182457fd19915baac8a88ae4468` and publish immutable audit evidence. |
-| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | WR-097 closed; WR-074 separately PLANNED | No WR-099/100 implementation authority. |
+| 5 | Independent Auditor / QA | WAIT | WR-100 re-audit not yet reactivated | Fresh re-audit only after new Manager freeze. |
+| 6 | Work Helper / Super Troubleshooter | WAIT | No WR-099 authority | Do not alter protected workflow integration. |

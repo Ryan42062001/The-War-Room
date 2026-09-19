@@ -172,3 +172,14 @@ WR-099 is frozen at PR #281 / `fd51d7ab40456182457fd19915baac8a88ae4468` with ex
 WR-100 is assigned as a fresh independent audit of that immutable target. It must verify authority-derived WR-083/WR-097 workflow identity, canonical repository/main/control-plane/run binding, receipt/result/publication/replay preservation, adversarial substitution cases, and exact scope. PR #281 remains unmerged pending a PASS-family verdict.
 
 No real scoring authority exists. 2022–2025 remain unopened. Phase 6 remains blocked.
+
+
+## WR-100 FAIL / WR-099 bounded remediation
+
+WR-100 independently audited exact WR-099 target `fd51d7ab40456182457fd19915baac8a88ae4468` and returned `FAIL — REMEDIATION REQUIRED` through Auditor PR #283 / immutable head `9c587d609f8473717582c20dd4dbcecf1ad10158`. Audit CI `35422248812` and canonical post-merge CI `35422443550` are SUCCESS.
+
+Blocking finding M-01: the live workflow-run verifier accepts missing/null `status` and coerces it to `completed` when conclusion is success. L-01 additionally identifies missing focused regressions for wrong event, direct consumer path/digest mismatches, and replacement of an unconsumed authority.
+
+WR-099 is back IN_PROGRESS for exactly that bounded two-file remediation. Prior PR #281 head `fd51d7ab40456182457fd19915baac8a88ae4468` must not be merged. After remediation and Full CI, Manager must freeze a new immutable target and reactivate fresh WR-100 audit.
+
+No second canonical-main WR-097 NO-SCORING canary is authorized yet. No real v2.1 scoring authority exists. 2022–2025 remain unopened. Phase 6 remains blocked.
