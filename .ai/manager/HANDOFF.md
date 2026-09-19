@@ -2,28 +2,32 @@
 
 HANDOFF
 
-STATUS: WR-091 BOUNDED REMEDIATION IN PROGRESS AFTER WR-093 FAIL
+STATUS: WR-091 FINAL REMEDIATION FROZEN — WR-094 FRESH RE-AUDIT ACTIVATED
 CANONICAL WORKFLOW: V3.4
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-WR-093 is accepted as historical failed-audit evidence:
-- audited target `638a8e2af25f1c806fe8883de0c959c5caaff35e`
-- audit PR #262
-- Auditor head `ac57d30afb38911c8f46a31695865c3ad8f0808d`
-- exact-head War Room CI `35409752010` SUCCESS
-- verdict `FAIL — REMEDIATION REQUIRED`
-- one HIGH finding: WR-093-AUD-01
+Historical failed audits:
+- WR-092 failed `def590788eb615d9322d5cc8ae3eef14e8c1bc25`.
+- WR-093 failed `638a8e2af25f1c806fe8883de0c959c5caaff35e` on one HIGH add/remove replay-history reset.
 
-WR-092-AUD-01 and AUD-02 are independently closed. Remaining scope is only protection of machine-owned consumption receipt/history across add/remove lifecycle so replay history cannot be injected or erased. Manager additionally authorizes `scripts/workflow-state-check.mjs` solely for independent validation of the new machine-owned global consumed-authority ledger.
+New frozen WR-091 target:
+- PR #257
+- exact SHA `77d3b182264ff71d723aa5e28335083692fb42fc`
+- Full War Room CI `35410238089` SUCCESS
+- WR-083 `35410238021` SUCCESS
+- WR-069 `35410238069` SUCCESS
+- WR-046 `35410238083` SUCCESS
+
+The final remediation preserves consumed-authority identity in a registry-level machine-owned ledger across legitimate task removal/closure, rejects add/update replay, rejects protected-field injection through add, and independently validates ledger consistency in the canonical state checker.
 
 ## Next Activation
 
 | Order | Employee / Role | Status | Current Task / Gate | Next action |
 | --- | --- | --- | --- | --- |
-| 1 | Manager / Architect | ACTIVATE NOW | WR-091 bounded WR-093 remediation | Fix protected-field add/remove lifecycle, add direct regressions, exact-head validate, freeze new candidate, activate fresh re-audit. |
+| 1 | Manager / Architect | WAIT | Await WR-094 fresh verdict | Verify immutable audit head/CI; integrate PR #257 only on PASS-family, then run canonical-main Full CI canary. |
 | 2 | Implementation Engineer / Builder | IDLE | No product implementation task | Do not activate. |
 | 3 | Draft Strategy & Decision Intelligence Analyst | IDLE | No strategy task | Do not activate. |
 | 4 | Research & Development (R&D) | COMPLETE | WR-081 historical result closed | No action. |
-| 5 | Independent Auditor / QA | COMPLETE | WR-093 failed exact frozen target | Wait for a new immutable WR-091 target. |
-| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | No separate blocker | Activate only if bounded remediation hits a cross-layer blocker. |
+| 5 | Independent Auditor / QA | ACTIVATE NOW | WR-094 final remediation re-audit | Audit exact `77d3b182264ff71d723aa5e28335083692fb42fc`. |
+| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | No separate blocker | Activate only if fresh audit exposes a cross-layer blocker. |

@@ -58,3 +58,10 @@ Critical path:
 - WR-093 — CLOSED / FAIL on `638a8e2...`; one HIGH lifecycle replay-history finding.
 - WR-091 — IN_PROGRESS / bounded remediation of WR-093-AUD-01 only.
 - Next gate — new exact WR-091 freeze followed by fresh independent re-audit.
+
+
+## Workflow V3.5 final remediation re-audit
+
+- WR-093 — CLOSED / FAIL on historical `638a8e2...`; one HIGH lifecycle replay-history finding.
+- WR-091 — AUDIT_READY / final remediated exact target `77d3b182264ff71d723aa5e28335083692fb42fc`.
+- WR-094 — ASSIGNED / fresh independent final-remediation re-audit.
