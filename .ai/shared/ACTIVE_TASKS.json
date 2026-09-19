@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T15:50:00Z",
+  "updated_at_utc": "2026-09-19T15:55:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -9,10 +9,10 @@
       "task_id": "WR-074",
       "owner": "Work Helper",
       "worker_slot": "work-helper-self-hosted-heavy-ci",
-      "status": "PLANNED",
+      "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-074.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "408a10cf14d71d88d43193df3bdd830633c2cf6f",
+      "assignment_main_sha": "94cb4826fc477d5bf592a37585f8cbea7574daea",
       "worker_checkpoint_sha": "7b4641499c50541abf523267eb4c0255813e8b6d",
       "branch": "wr-074-self-hosted-heavy-ci-runner-pilot",
       "pr": null,
@@ -41,7 +41,7 @@
         "scripts/custody/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Bridge serialization is cleared. Manager may reactivate WR-074 from preserved checkpoint 7b4641499c50541abf523267eb4c0255813e8b6d when the infrastructure lane is worth spawning; no current dependency on WR-081.",
+      "next_gate": "Reconcile the three WR-074 branch-unique task changes from preserved checkpoint 7b4641499c50541abf523267eb4c0255813e8b6d onto canonical main 94cb4826fc477d5bf592a37585f8cbea7574daea; then complete hosted/self-hosted parity, repeat-run, cleanup and security evidence. If dedicated runner is unavailable/mislabeled, fail closed with smallest user action.",
       "refresh_mode": "FAST_REFRESH"
     },
     {

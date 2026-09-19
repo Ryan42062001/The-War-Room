@@ -426,3 +426,19 @@ Final accepted v2.1 result:
 WR-101 and WR-102 are closed and removed from the active-only registry.
 
 No scoring rerun, new authority, tuning/remediation, gate/source/protocol change, production promotion, season-total composition, or Phase 6 is authorized by this accepted result.
+
+
+## WR-074 self-hosted heavy-CI pilot reactivated
+
+Returning-Player v2.1 WR-101/102 is closed, so the preserved infrastructure lane is reactivated.
+
+WR-074:
+- status ASSIGNED;
+- Work Helper / Super Troubleshooter;
+- execution `STANDARD_CHAT_HIGH`;
+- canonical activation main `94cb4826fc477d5bf592a37585f8cbea7574daea`;
+- preserved worker checkpoint `7b4641499c50541abf523267eb4c0255813e8b6d`.
+
+The old branch is 2 commits ahead / 348 behind current main, with exactly three task-unique paths: the dedicated WR-074 pilot workflow, pilot helper, and one release-validator recognition change. Work Helper must reconcile only those task changes onto current V3.5 main before continuing.
+
+WR-075 remains blocked until one immutable WR-074 target is Manager-frozen.

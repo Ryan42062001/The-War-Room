@@ -2,55 +2,37 @@
 
 HANDOFF
 
-STATUS: WR-101 / WR-102 CLOSED — AUDITED V2.1 RESULT ACCEPTED AS BASELINE-ONLY EVIDENCE
+STATUS: WR-074 REACTIVATED — SELF-HOSTED HEAVY-CI PILOT
 
 CANONICAL WORKFLOW: V3.5
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-Final accepted WR-101 result:
-- exact independently audited target: `a1cfda0b7ec0decbe5ece96283900a35d875abaf`;
-- R&D PR #301 merged only after WR-102 PASS;
-- canonical result integration merge: `c9c4cfe1b2b40b43ffe94a11d5f223acd72114db`;
-- protected publication head: `41c1601ce2a7ae26fcb13a370ae2960db9427a80`;
-- protected workflow run: `35447590872` SUCCESS;
-- validation 2022–2023: PASS;
-- confirmation 2024–2025: FAIL;
-- terminal: `CONFIRMATION_FAILED`;
-- decision: `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`.
+Current canonical main at activation:
+`94cb4826fc477d5bf592a37585f8cbea7574daea`
 
-WR-102 independent audit:
-- verdict: PASS;
-- findings: CRITICAL 0 / HIGH 0 / MEDIUM 0 / LOW 0;
-- exact audited target: `a1cfda0b7ec0decbe5ece96283900a35d875abaf`;
-- Auditor head: `a13df5e9edd6b350e9d4fca81c3db3ec243761ed`;
-- Auditor PR #304;
-- Auditor exact-head CI `35452642020` SUCCESS;
-- audit evidence canonical merge: `2ea5dbe0eba4819e685bab77140233df593758ad`;
-- post-audit-evidence canonical CI `35452807308` SUCCESS.
+WR-074 is now ASSIGNED to the Work Helper / Super Troubleshooter.
 
-Canonical result validation:
-- merge `c9c4cfe1b2b40b43ffe94a11d5f223acd72114db`;
-- War Room CI `35452844314` SUCCESS;
-- classify `105922891266` SUCCESS;
-- governance `105922915112` SUCCESS;
-- test `105922943195` SKIPPED under research-only classification.
+Assigned branch:
+`wr-074-self-hosted-heavy-ci-runner-pilot`
 
-Manager disposition:
-- accept only the exact audited WR-101 result as a valid protected protocol result;
-- close WR-101 as baseline-only historical/research evidence;
-- close WR-102 as PASS evidence;
-- no scoring rerun;
-- no new scoring authority;
-- no tuning/remediation from this PASS;
-- no threshold/gate changes;
-- no source/cohort/protocol substitution;
-- no production promotion;
-- no season-total composition;
-- no Phase 6 authority.
+Preserved branch checkpoint:
+`7b4641499c50541abf523267eb4c0255813e8b6d`
 
-Any future Returning-Player model attempt requires a separate new Manager/R&D protocol decision and cannot inherit authority from WR-101/WR-102.
+Live branch reconciliation fact:
+- branch is 2 commits ahead / 348 commits behind current main;
+- the only branch-unique changed paths are:
+  - `.github/workflows/wr074-self-hosted-heavy-ci-pilot.yml`;
+  - `scripts/ci/wr074-pilot.mjs`;
+  - `scripts/validate-release-candidate.mjs`.
 
-Current active registry after reconciliation retains only the independent infrastructure lane:
-- WR-074 PLANNED;
-- WR-075 BLOCKED on WR-074.
+Work Helper must reconcile those exact task changes onto current canonical main before further substantive WR-074 work. Do not revive stale Manager/shared/research state from the old checkpoint.
+
+Primary objective:
+harden and validate the dedicated `[self-hosted, war-room-heavy-ci]` runner path without weakening hosted Governance, custody isolation, fork safety, permissions, cleanup, or release validation.
+
+Execution mode remains `STANDARD_CHAT_HIGH`; no Work-mode credit is required.
+
+If the dedicated self-hosted runner is unavailable, offline, or missing the `war-room-heavy-ci` label, fail closed and return the smallest exact user action. Do not weaken runner routing.
+
+WR-075 remains BLOCKED for a later fresh independent audit after Manager freezes one immutable WR-074 target.
