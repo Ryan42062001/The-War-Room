@@ -232,3 +232,25 @@ RATIONALE: the first real protected attempt discovered an execution-path defect 
 EVIDENCE: workflow run `35424042233`; protected job `105846904830`; failure message `WR-097 FAIL CLOSED: sandboxed consumer failed closed in target-ingest`; unchanged execution branch head `6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9`; zero workflow artifacts.
 ALTERNATIVES REJECTED: rerun immediately; treat the failure as validation FAIL; broaden source/protocol/model semantics; inspect retained targets manually; leave the live authority in canonical state.
 REVISIT CONDITION: WR-103 produces an exact bounded remediation, WR-104 returns PASS-family, Manager integrates only the audited target, and all required canonical/no-scoring validation gates succeed.
+
+
+---
+
+## DECISION WR-D015
+
+DATE: 2026-09-19
+TASK: WR-101 / WR-106 / WR-107 — R2 stage-gate bridge contract failure
+STATUS: ACTIVE — TECHNICAL FAIL-CLOSED / REMEDIATION REQUIRED
+DECISION:
+- Treat WR-101 R2 run `35444278227` as a technical fail-closed event, not a model-result verdict.
+- Revoke/remove the R2 one-time authority immediately because no publication/receipt consumed it.
+- Do not rerun under the same authority.
+- Preserve the protected wrapper requirement for a non-empty stage-gate bridge `status_label`; the wrapper is behaving correctly.
+- Route WR-106 to Work Helper for deterministic synthetic reproduction and the smallest consumer-side bridge-result fix.
+- Restrict WR-106 implementation to the WR-097 consumer and focused tests/evidence; do not modify the protected wrapper or workflow.
+- Require WR-107 fresh independent audit before integration.
+- No future scoring authority may be considered until exact audited remediation integration and required canonical readiness proof complete.
+RATIONALE: live execution reached the stage-gate boundary only after exact authority/head/consumer/retrieval checks passed. The consumer computes a stage-gate decision label and writes it into the artifact but fails to expose it in the bridge payload required by the wrapper. Fail-closing here preserves machine-readable terminal/result semantics.
+EVIDENCE: run `35444278227`; scoring job `105900552923`; exact error `stage gate decision status missing`; authority SHA-256 `2ef299a0de94fabda98095676208f9c50a34076d52ed14e53a322b963b411c0f`; execution branch unchanged; artifacts 0; cleanup PASS.
+ALTERNATIVES REJECTED: weaken/remove wrapper status requirement; infer status from gate_pass in the wrapper; rerun immediately; expose raw retained data to debug; modify frozen gate semantics.
+REVISIT CONDITION: WR-107 returns PASS-family on one exact WR-106 remediation target and Manager integrates it with canonical validation/readiness proof.

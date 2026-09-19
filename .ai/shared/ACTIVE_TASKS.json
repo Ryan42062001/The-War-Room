@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T12:47:00Z",
+  "updated_at_utc": "2026-09-19T13:04:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -89,7 +89,7 @@
       "task_id": "WR-101",
       "owner": "R&D",
       "worker_slot": "rnd-v21-protected-validation-scoring",
-      "status": "IN_PROGRESS",
+      "status": "BLOCKED",
       "task_file": ".ai/manager/WR-101.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "c47209cbd21ff3d42ee2867108cb9f2707212969",
@@ -100,10 +100,14 @@
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": true,
-      "blocker_type": "NONE",
+      "blocker_type": "TECHNICAL",
       "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on_tasks": [
+        "WR-106"
+      ],
+      "blocked_on": [
+        "Authorized R2 run 35444278227 failed closed during stage-gate before publication/receipt because the consumer bridge result omitted required status_label. R2 authority is revoked; no rerun is authorized."
+      ],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
@@ -120,13 +124,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "After this NEW authority is canonical on main and its post-merge governance CI succeeds, dispatch WR-097 Returning-Player v2.1 Protected Scoring Bridge on canonical main with mode authorized-v21-scoring exactly once. Do not supply alternate execution identity. No automatic rerun on technical/model failure.",
-      "future_execution_authority": {
-        "branch": "wr-101-v21-validation-scoring-execution-r2",
-        "head_sha": "c47209cbd21ff3d42ee2867108cb9f2707212969",
-        "consumer_path": ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py",
-        "consumer_sha256": "74ae7a44bf60399957fdca57bad0c879486df07c4ff0524093a69c84d82e2296"
-      }
+      "next_gate": "WR-106 bounded stage-gate bridge-result contract remediation -> Full War Room CI -> Manager exact freeze -> WR-107 fresh independent audit. Only after PASS-family audit/integration and canonical no-scoring proof may Manager separately decide on any NEW one-time execution authority."
     },
     {
       "task_id": "WR-102",
@@ -149,7 +147,7 @@
         "WR-101"
       ],
       "blocked_on": [
-        "WR-102 remains reserved for the immutable result target produced by the newly reauthorized WR-101 protected execution, if that execution publishes a result."
+        "WR-102 remains reserved for a future actual WR-101 protected result target. R2 run 35444278227 failed before publication and produced no result target."
       ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
@@ -167,7 +165,89 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "WR-101 protected execution -> authority consumption/result publication -> R&D bounded packaging -> Manager exact freeze -> activate WR-102."
+      "next_gate": "WR-106 remediation + WR-107 audit -> later separate Manager authority decision -> successful protected WR-101 result -> R&D packaging -> Manager exact freeze -> activate WR-102."
+    },
+    {
+      "task_id": "WR-106",
+      "owner": "Work Helper",
+      "worker_slot": "work-helper-v21-stage-gate-contract",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-106.md",
+      "role_handoff": ".ai/work_helper/HANDOFF.md",
+      "assignment_main_sha": "6dc3d5ff523f556302cc1b7fab5f3fe6ff4d3121",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-106-v21-stage-gate-status-remediation",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": true,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/work_helper/",
+        ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py",
+        ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py",
+        "scripts/custody/test_wr097_v21_protected_scoring.py"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".github/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [
+        ".github/workflows/wr097-v21-protected-scoring-bridge.yml",
+        "scripts/custody/wr097_v21_protected_scoring.py"
+      ],
+      "next_gate": "Reproduce the stage-gate bridge result omission deterministically with synthetic/local state, add the missing status_label to the consumer bridge result without changing gate semantics, add direct + actual-wrapper regression coverage, run Full War Room CI, and return one immutable remediation target. No retained provider access or scoring dispatch."
+    },
+    {
+      "task_id": "WR-107",
+      "owner": "Auditor",
+      "worker_slot": "auditor-v21-stage-gate-contract-remediation",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-107.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": "wr-107-v21-stage-gate-status-remediation-audit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "UPSTREAM_TASK",
+      "user_action_required": false,
+      "blocked_on_tasks": [
+        "WR-106"
+      ],
+      "blocked_on": [
+        "WR-106 must publish one exact immutable remediation target with deterministic reproduction and Full War Room CI before audit activation."
+      ],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/auditor/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        ".github/",
+        "scripts/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Manager freezes exact WR-106 target -> activate fresh WR-107 independent audit."
     }
   ]
 }
