@@ -505,3 +505,14 @@ After WR-074/075 closure and an empty active-only registry, Manager reviewed the
 WR-109 is a bounded R&D evidence/validation-plan task only, in `STANDARD_CHAT_HIGH`, branch `wr-109-draft-readiness-evidence-assessment` from the canonical Manager activation checkpoint after this transition.
 
 No actual live Direct-mode pass is inferred from synthetic or fixture tests; no authenticated ESPN execution, production/dataset changes, model reruns, ranking changes, new source authority, Phase 6 or broader self-hosted CI authority. Historical open PR #251/#244 are not new work.
+
+
+## WR-109 final Manager disposition — CLOSED / LIVE_DIRECT_UNVERIFIED
+
+Manager independently verified WR-109 PR #314 at exact head `03cc8b6366f666bf7fe3bbe168a031886a2b7f95`: changed files are only `.ai/research/WR109_DRAFT_READINESS_GAP_ASSESSMENT.md`, `.ai/research/WR109_ESPN_DIRECT_LIVE_VALIDATION_PLAN.md`, and `.ai/research/HANDOFF.md`. Canonical main had advanced only through unrelated Manager roadmap documentation; no R&D assignment collision occurred.
+
+Accepted research evidence: Companion v0.9.14 repository contract; bundled 2026 717-player source baseline and existing ECR-value/ESPN-market separation; documented live Board/Pick History fallback; synthetic structured-source tests; and a future consent-safe Direct-validation plan. The reports accurately leave actual independent full-mock structured Direct proof and post-fix real-mock duplicate/off-board behavior UNVERIFIED. Existing documented live observations and fixture tests are not mislabeled as new WR-109 live validation.
+
+Exact-head War Room CI: push `35476965962` and PR `35476969561`, both SUCCESS (classify and Governance; product test skipped as research-only). Accepted exact target integrated through PR #314 at `feb6e35898608a1fc656a3d6712d984a43b8ae59`; post-integration canonical CI `35477156091` SUCCESS.
+
+WR-109 CLOSED and removed from active-only registry. No new task is activated. Future live ESPN observation requires eligible disposable mock, explicit user consent and a new Manager-scoped task. Source-intake is deferred pending next-cycle source availability/rights. No Builder/Strategy implementation or policy task is presently justified without new verified evidence. No live account access, ranking/source/model/runner/Phase-6 authority follows.

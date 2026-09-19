@@ -1,7 +1,7 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — WR-109 R&D assessment is the sole assigned lane
-Current-state snapshot: 2026-09-19; refresh against `.ai/shared/ACTIVE_TASKS.json` before routing or acting.
+Status: ACTIVE DEVELOPMENT — no assigned work; next gate is eligible disposable ESPN mock / explicit Manager authorization
+Current-state snapshot: 2026-09-19 after WR-109 acceptance; refresh against `.ai/shared/ACTIVE_TASKS.json` before routing or acting.
 Owner: Manager / Architect
 Workflow: V3.5 — CANONICAL
 
@@ -11,8 +11,8 @@ Workflow: V3.5 — CANONICAL
 
 | Priority | Workstream | Current state | Required next gate / boundary |
 | --- | --- | --- | --- |
-| 1 | **WR-109 — draft-cycle readiness and ESPN Direct evidence assessment** | **ASSIGNED — R&D only**, `STANDARD_CHAT_HIGH`; branch `wr-109-draft-readiness-evidence-assessment`. | R&D publishes bounded evidence reports, a disposable-live-mock protocol, and separately scoped next-cycle source-intake prerequisites with exact-head CI. Manager reviews the report before activating anything downstream. Do not treat fixtures as real live Direct validation. |
-| 2 | **ESPN structured Direct live validation** | **PROPOSED / NOT ASSIGNED** — structured Direct capture has not been independently established in a real disposable live mock; live Board/Pick History fallback has separate previous validation evidence. | After WR-109 Manager review, explicitly authorize a consent-safe disposable mock and distinguish Direct evidence, fallback behavior, ownership, monotonic pick order, missed/reordered picks, terminal state and error recovery. Mark PASS only with real, sanitised, attributable live evidence; otherwise remain UNVERIFIED / INCONCLUSIVE. No authenticated ESPN capture is authorized by this roadmap. |
+| 1 | **WR-109 — draft-cycle readiness and ESPN Direct evidence assessment** | **CLOSED — evidence accepted only**, PR #314 exact head `03cc8b6366f666bf7fe3bbe168a031886a2b7f95`; canonical merge `feb6e35898608a1fc656a3d6712d984a43b8ae59`. | The two research reports and consent-safe future mock plan are accepted; `LIVE_DIRECT_UNVERIFIED` remains. Separate approval is required for live testing or data/source work. |
+| 2 | **ESPN structured Direct live validation** | **DEFERRED / USER READINESS NEEDED — NOT ASSIGNED** — structured Direct capture has not been independently established in a real disposable live mock; live Board/Pick History fallback has separate previous validation evidence. | When the user confirms an eligible disposable mock and consents, Manager may separately authorize a consent-safe disposable mock and distinguish Direct evidence, fallback behavior, ownership, monotonic pick order, missed/reordered picks, terminal state and error recovery. Mark PASS only with real, sanitised, attributable live evidence; otherwise remain UNVERIFIED / INCONCLUSIVE. No authenticated ESPN capture is authorized by this roadmap. |
 | 3 | **Next draft-cycle rankings/source intake** | **PROPOSED / NOT ASSIGNED** — existing bundled 2026 baseline remains authoritative for the current application. | Separate Manager-scoped source/provenance and rights/availability review, seasonal identity/freshness, FantasyPros expert PPR ECR value vs ESPN board/ADP timing, import/baseline count/hash and compatibility assessment. No silent update, acquisition, source substitution, player/rank fabrication, or production dataset replacement. |
 | 4 | **Draft-day release readiness** | **PROPOSED / NOT ASSIGNED** — contingent on evidence and any separately accepted fixes/refresh. | Define explicit end-to-end mock/recovery and manual-fallback acceptance; verify draft-state ownership/pick order/terminal and saved-session recovery, phone/desktop usability, ranking freshness, extension/app compatibility, full regressions, deployment/rollback and a documented go/no-go gate before release. |
 | 5 | **Historical PR reconciliation** | **HOUSEKEEPING / NOT ASSIGNED** — historical open PR #251 (WR-081 Stage A) and #244 (V3.4 Next Activation) remain on GitHub. | Review whether already-superseded historical PRs should be closed or preserved with explanatory comments. Do not merge, retarget, delete, or reactivate them from roadmap wording alone. |
@@ -26,7 +26,7 @@ Workflow: V3.5 — CANONICAL
 
 ### Routing rule
 
-WR-109 is the **only currently assigned task in the active-only registry at this snapshot**. Proposed work above is planning, not permission to run tests on the user's ESPN account, alter data/production, create downstream worker assignments, or expand infrastructure. Manager must refresh the registry and live PR/CI state before any transition; WR-109 R&D owns only the exact three research/handoff files granted by its task. This Manager roadmap cleanup changes no R&D file, task scope, status, registry, or live authority.
+There are **no currently assigned tasks in the active-only registry at this snapshot**. Proposed work above is planning, not permission to run tests on the user's ESPN account, alter data/production, create downstream worker assignments, or expand infrastructure. Manager must refresh the registry and live PR/CI state before any transition; WR-109 R&D owns only the exact three research/handoff files granted by its task. This Manager roadmap cleanup changes no R&D file, task scope, status, registry, or live authority.
 
 ---
 
@@ -383,3 +383,14 @@ No active Phase 5B critical path.
 - Branch `wr-109-draft-readiness-evidence-assessment`; no production/extension/data/source/CI/runner/strategy/model writes.
 - Next gate: R&D PR + exact-head CI -> Manager review -> separate live ESPN validation or source-refresh/Builder/Strategy authorization as supported by evidence.
 - WR-D016 baseline-only v2.1 and WR-D017 bounded self-hosted CI boundaries remain unchanged.
+
+
+## WR-109 evidence accepted — CLOSED (2026-09-19)
+
+- PR #314 / exact R&D head `03cc8b6366f666bf7fe3bbe168a031886a2b7f95` contained exactly the two authorized WR-109 reports plus `.ai/research/HANDOFF.md`; no application, extension, source, workflow, or model changes.
+- Exact-head push CI `35476965962` and PR CI `35476969561` — SUCCESS (classify and Governance; product test skipped for research-only scope).
+- Exact report target integrated at canonical merge `feb6e35898608a1fc656a3d6712d984a43b8ae59`; post-merge War Room CI `35477156091` — SUCCESS (classify and Governance; product test skipped).
+- Manager accepts research evidence and the prospective live validation plan only. Disposition remains `LIVE_DIRECT_UNVERIFIED`; no live disposable mock was executed in WR-109.
+- No new task activated. A separate disposable ESPN validation requires a real eligible mock, user's consent and a fresh Manager task with pinned runtime, safety/privacy and stop criteria. If no eligible mock is available, leave this gate deferred.
+- Separate next-cycle source-rights/intake research is deferred until the target draft season and sources are actually available; no ranking/data update or automatic promotion.
+- No verified new product defect or approved recommendation-policy question currently merits Builder or Draft Strategy activation. WR-D016 baseline-only model and WR-D017 runner boundaries remain unchanged.
