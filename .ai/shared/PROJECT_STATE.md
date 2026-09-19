@@ -211,3 +211,14 @@ Manager activates WR-101 on fresh branch `wr-101-v21-validation-scoring-executio
 WR-101 permits exactly one audited protected-workflow execution. Validation is 2022–2023; 2024–2025 confirmation is visible only if validation PASS unlocks it under the frozen protocol. No rerun/tuning/source substitution/2026/production/composition/Phase 6 authority is granted.
 
 WR-102 is blocked pending one immutable WR-101 result target.
+
+
+## WR-101 first protected execution failed closed / authority revoked
+
+Authorized WR-101 run `35424042233` failed inside the sandboxed WR-097 consumer during `target-ingest`. The canonical authority, live execution head, exact checkout, reviewed consumer digest, retained-source retrieval and pre-consumer live-head recheck all passed first.
+
+No publication commit was created, no receipt was produced or verified, the execution branch remained at `6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9`, Actions artifacts remained zero, and cleanup passed.
+
+Manager treats this as a technical fail-closed event, not a model result. The live WR-101 future execution authority is revoked. No rerun is authorized.
+
+WR-103 is assigned for retained-data-free deterministic failure reproduction and bounded protected-execution remediation. WR-104 is blocked for fresh independent audit. Any later scoring attempt requires a new explicit Manager decision and new one-time authority.
