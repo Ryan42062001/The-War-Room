@@ -122,3 +122,11 @@ No active Phase 5B critical path.
 - Next gate — direct regressions + Full War Room CI -> Manager immutable freeze -> WR-100 fresh independent audit -> exact audited integration -> second canonical-main protected NO-SCORING canary.
 - No real v2.1 validation scoring authority exists.
 - Phase 6 remains blocked.
+
+
+## WR-099 / WR-100 protected workflow identity gate
+
+- WR-099 — AUDIT_READY / exact target `fd51d7ab40456182457fd19915baac8a88ae4468` on draft PR #281; exact two-file scope; Full War Room CI `35421600341` SUCCESS.
+- WR-100 — ASSIGNED / fresh independent audit of exact WR-099 target; Auditor-only evidence scope.
+- Next gate — PASS-family WR-100 -> exact audited WR-099 integration -> canonical-main Full CI -> second WR-097 NO-SCORING canary.
+- No real v2.1 validation scoring authority exists. Phase 6 remains blocked.

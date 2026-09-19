@@ -163,3 +163,12 @@ WR-097 is CLOSED.
 WR-099 is now IN_PROGRESS as the next bounded Manager-controlled task. Its executable scope is limited to `scripts/workflow-manager-transition.mjs` and `scripts/test-workflow-manager-transition.mjs`. It must preserve WR-083, bind WR-097 identity from canonical authority context, pass direct adversarial regressions plus Full War Room CI, then receive a fresh independent audit before exact integration. A second canonical-main protected NO-SCORING canary is mandatory after audited integration.
 
 2022–2025 remain unopened. No real v2.1 validation scoring authority exists. No 2026 regular-season outcome inspection, season-total composition, or Phase 6 is authorized.
+
+
+## WR-099 exact freeze / WR-100 audit activation
+
+WR-099 is frozen at PR #281 / `fd51d7ab40456182457fd19915baac8a88ae4468` with exactly the two authorized transition-verifier files changed. Full War Room CI `35421600341` completed SUCCESS; Manager-transition regression, canonical state/audit-readiness controls, browser determinism, repository-wide tests, resilience syntax and backup/offline reload all passed.
+
+WR-100 is assigned as a fresh independent audit of that immutable target. It must verify authority-derived WR-083/WR-097 workflow identity, canonical repository/main/control-plane/run binding, receipt/result/publication/replay preservation, adversarial substitution cases, and exact scope. PR #281 remains unmerged pending a PASS-family verdict.
+
+No real scoring authority exists. 2022–2025 remain unopened. Phase 6 remains blocked.
