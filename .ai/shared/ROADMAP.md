@@ -178,3 +178,14 @@ No active Phase 5B critical path.
 - WR-101 — remains BLOCKED; prior one-time authority revoked.
 - WR-102 — remains blocked/reserved for a later actual protected result.
 - Next gate — WR-104 PASS-family -> integrate exact audited WR-103 target -> canonical validation/no-scoring proof -> separate Manager decision on any NEW one-time scoring authority.
+
+
+## WR-105 post-remediation protected canary
+
+- WR-103 — CLOSED / exact audited remediation target `1a572baac9e4393582db37ad43cbe8609628d8c3` integrated as `55a8cb1d78d5e41a8ec5e57d7e1a913537921e7d`.
+- WR-104 — CLOSED / independent `PASS`, no findings; Auditor head `5fb3ac8ae9066dd98aa41386722c724a1830b3e9`.
+- Post-integration Full War Room CI `35442985916` — SUCCESS.
+- WR-105 — BLOCKED / USER ACTION: canonical-main WR-097 `no-scoring` canary after this gate becomes canonical.
+- WR-101 — BLOCKED behind WR-105; no scoring authority.
+- WR-102 — BLOCKED/reserved for a future actual protected result.
+- Next gate — WR-105 canary SUCCESS -> separate Manager review -> fresh execution identity + NEW one-time authority only if explicitly authorized.
