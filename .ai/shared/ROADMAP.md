@@ -257,3 +257,17 @@ No active Phase 5B critical path.
 - WR-101 — IN_PROGRESS only for bounded R&D packaging of the immutable result.
 - WR-102 — BLOCKED pending exact final result freeze.
 - Next gate — R&D packaging -> exact-head CI -> Manager freeze -> WR-102 fresh independent audit.
+
+
+## WR-101 frozen result / WR-102 audit activation gate
+
+- WR-101 — AUDIT_READY on PR #301 at exact target `a1cfda0b7ec0decbe5ece96283900a35d875abaf`.
+- Protected publication head `41c1601ce2a7ae26fcb13a370ae2960db9427a80` remains immutable.
+- Final packaging delta: exactly R&D handoff + result report + evidence manifest.
+- Generated protected evidence: unchanged.
+- Exact-head CI `35448347283` — SUCCESS.
+- Terminal — `CONFIRMATION_FAILED`.
+- Decision — `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`.
+- PR #301 — do not merge before fresh independent audit.
+- WR-102 — BLOCKED only until this exact Manager freeze is canonical and a fresh audit branch is created from that canonical checkpoint.
+- No rerun, new scoring authority, production, ranking, composition, or Phase-6 authorization.
