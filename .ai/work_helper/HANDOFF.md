@@ -1,36 +1,33 @@
 # Work Helper / Super Troubleshooter Handoff
 
-STATUS: COMPLETE — MANAGER FREEZE / FRESH WR-107 INDEPENDENT AUDIT REQUIRED  
-TASK: WR-106 — v2.1 Stage-Gate Bridge Status Contract Remediation  
-ROLE: Work Helper / Super Troubleshooter / Cross-Functional Operator  
+STATUS: COMPLETE — MANAGER FREEZE REQUIRED; WR-075 REMAINS BLOCKED  
+TASK: WR-074 — Self-Hosted Heavy-CI Runner Pilot + Hardening  
 WORKFLOW: V3.5  
-BRANCH: `wr-106-v21-stage-gate-status-remediation`  
-PR: #295 — draft / open / unmerged  
-BASE: `6422caa5b8a782022d58816f30432128503b9754`  
-IMMUTABLE IMPLEMENTATION SHA: `4b41ac8b12a4e9f029979eb29c92458e7b4cb640`
+BRANCH: `wr-074-self-hosted-heavy-ci-runner-pilot`  
+CANONICAL BASE: `cb544da20c7b82ded5552d425d69b8a47c880f30`  
+IMMUTABLE IMPLEMENTATION SHA: `c2e511da5d3767cbc0688de7e95236135a6975b2`
 
-ROOT CAUSE: The consumer already computed and persisted the canonical stage-gate `status_label`, but omitted it from the bridge result returned through `_finish()`. The accepted wrapper correctly required a non-empty bridge label and failed closed.
+RESULT: The dedicated self-hosted heavy-CI route is functionally viable and hardened on Linux/WSL2 with exact labels `self-hosted`, `Linux`, `X64`, `war-room-heavy-ci`. Two complete repeated self-hosted runs passed the same heavy sequence as matched GitHub-hosted reference runs, including stale-workspace preflight, browser stress, WR-026, canonical npm aggregate, resilience, and cleanup.
 
-PRE-FIX PROOF: Test-only SHA `78a0269e214581a1d7896edfd47a319f0ef02438`; WR-097 preflight `35445047344` / job `105902421401` failed the synthetic PASS and FAIL fixtures with `KeyError: 'status_label'`. No provider or real target data was used.
+SECURITY: Push-only exact WR-074 branch; GitHub-hosted trust gate; exact repo/ref/actor checks; `contents: read`; non-persistent checkout credentials; no PR/`pull_request_target` route; no workflow secret references; provider/custody authority denied on self-hosted; Linux fail-closed; exact `[self-hosted, war-room-heavy-ci]` routing retained.
 
-REMEDIATION: The consumer bridge exports the exact already-computed `status_label`. Direct synthetic tests prove bridge/artifact equality for both `STAGE_PASS` and `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`. The actual provider-free bubblewrap wrapper path accepts the corrected synthetic bridge and still fails closed for missing/empty status or tampered lock evidence.
+HOSTED REFERENCE / RELEASE: War Room CI `35460498373` SUCCESS: classify `105943366474`, governance `105943388469`, test `105943414952`. Release validator reported 522 tracked files with permissions/identity clean.
 
-CHANGED IMPLEMENTATION/TEST FILES:
-- `.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py`
-- `.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py`
-- `scripts/custody/test_wr097_v21_protected_scoring.py`
+REPEATED SELF-HOSTED EVIDENCE:
+- run `35460866285`: self `105944382151` SUCCESS; hosted `105944382105` SUCCESS; trust `105944368659` SUCCESS.
+- run `35461197805`: self `105945274820` SUCCESS; hosted `105945274919` SUCCESS; trust `105945263537` SUCCESS.
+- both self-hosted preflights found no node_modules/artifacts/sentinel residue, Git clean, provider authority absent.
+- both self-hosted cleanups PASS.
 
-EVIDENCE FILES:
-- `.ai/work_helper/WR106_STAGE_GATE_STATUS_REPRODUCTION.md`
-- `.ai/work_helper/WR106_REMEDIATION_REPORT.md`
+BENCHMARK: self-hosted stress was ~14.2% slower than hosted in run 1 and ~32.5% slower in run 2; two-run mean ~22.6% slower. Resilience was ~8.7% and ~29.3% slower; mean ~18.5% slower. Functional parity passed; no speed advantage was demonstrated.
+
+MACHINE PREREQUISITE: Ubuntu 24.04 / WSL2 systemd runner. Playwright Linux OS dependencies were installed once interactively; recurring CI has no sudo authority. Windows heavy runner should remain offline or without `war-room-heavy-ci`.
+
+EVIDENCE:
+- `.ai/work_helper/WR074_LINUX_RUNNER_ACTIVATION.md`
+- `.ai/work_helper/WR074_SELF_HOSTED_HEAVY_CI_REPORT.md`
 - this handoff
 
-TESTS / CI: Corrected consumer 16/16 PASS; WR-097 bridge + WR-063/069/083 regressions PASS. WR-097 non-scoring preflight `35445124879` / `105902676394` SUCCESS with scoring jobs SKIPPED. WR-046 contract-preflight `35445124891` / `105902630155` SUCCESS with credentialed jobs SKIPPED. Full War Room CI `35445124926` SUCCESS: classify `105902630272`, governance `105902647478`, full test `105902668200`.
+BOUNDARIES: No retained-provider access; no credential-bearing workflow moved self-hosted; no canonical CI/custody/protected/production modifications; no merge; no WR-075 activation; no self-audit.
 
-PRESERVED: Protected wrapper, WR-097 workflow, accepted v2.1 protocol, gate formulas/labels, source/cohort/target/model/preprocessing semantics, prediction-lock-before-target chronology, validation-before-confirmation chronology, publication allowlist, provider isolation, authority/receipt/replay, and cleanup behavior are unchanged.
-
-BOUNDARIES: No retained-provider access; no real scoring; no real 2022–2025 target inspection; no 2026 outcomes; no tuning; no WR-097 workflow_dispatch; no rerun of `35444278227`; no new/consumed scoring authority; no protected wrapper/workflow/shared/Manager/Auditor/production changes; no merge; no self-audit.
-
-NEXT ACTION: Manager freezes the exact current PR #295 head as the WR-106 audit target, retaining `4b41ac8b12a4e9f029979eb29c92458e7b4cb640` as the implementation SHA, then activates a FRESH WR-107 independent audit. WR-106 does not create any future scoring authority.
-
-DO NOT REPEAT: Do not rerun WR-101 R2, retrieve retained provider data, inspect real targets, dispatch protected scoring, modify the wrapper/workflow, or treat green CI as an independent audit verdict.
+NEXT: Manager freezes the final PR head, retaining `c2e511da5d3767cbc0688de7e95236135a6975b2` as the immutable implementation SHA, reviews the benchmark/operational tradeoffs, and only then determines WR-075 disposition.
