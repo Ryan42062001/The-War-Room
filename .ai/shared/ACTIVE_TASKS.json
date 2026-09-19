@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T12:38:00Z",
+  "updated_at_utc": "2026-09-19T12:47:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -89,25 +89,21 @@
       "task_id": "WR-101",
       "owner": "R&D",
       "worker_slot": "rnd-v21-protected-validation-scoring",
-      "status": "BLOCKED",
+      "status": "IN_PROGRESS",
       "task_file": ".ai/manager/WR-101.md",
       "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": "6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9",
-      "worker_checkpoint_sha": "6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9",
-      "branch": "wr-101-v21-validation-scoring-execution",
+      "assignment_main_sha": "c47209cbd21ff3d42ee2867108cb9f2707212969",
+      "worker_checkpoint_sha": "c47209cbd21ff3d42ee2867108cb9f2707212969",
+      "branch": "wr-101-v21-validation-scoring-execution-r2",
       "pr": null,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": true,
-      "blocker_type": "UPSTREAM_TASK",
+      "blocker_type": "NONE",
       "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-105"
-      ],
-      "blocked_on": [
-        "WR-105 canonical-main post-remediation NO-SCORING canary must succeed before Manager may consider a NEW one-time v2.1 scoring authority."
-      ],
+      "blocked_on_tasks": [],
+      "blocked_on": [],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
@@ -124,7 +120,13 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "WR-105 canonical-main NO-SCORING canary SUCCESS -> separate Manager review -> fresh execution branch and NEW explicit one-time authority, if authorized. Do not reuse the revoked authority or dispatch real scoring before that decision."
+      "next_gate": "After this NEW authority is canonical on main and its post-merge governance CI succeeds, dispatch WR-097 Returning-Player v2.1 Protected Scoring Bridge on canonical main with mode authorized-v21-scoring exactly once. Do not supply alternate execution identity. No automatic rerun on technical/model failure.",
+      "future_execution_authority": {
+        "branch": "wr-101-v21-validation-scoring-execution-r2",
+        "head_sha": "c47209cbd21ff3d42ee2867108cb9f2707212969",
+        "consumer_path": ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py",
+        "consumer_sha256": "74ae7a44bf60399957fdca57bad0c879486df07c4ff0524093a69c84d82e2296"
+      }
     },
     {
       "task_id": "WR-102",
@@ -147,7 +149,7 @@
         "WR-101"
       ],
       "blocked_on": [
-        "WR-102 remains reserved for a future actual WR-101 protected result target. WR-101 is blocked behind WR-105 and has no active scoring authority."
+        "WR-102 remains reserved for the immutable result target produced by the newly reauthorized WR-101 protected execution, if that execution publishes a result."
       ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
@@ -165,46 +167,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Successful future protected WR-101 result -> R&D packaging -> Manager exact freeze -> activate WR-102 fresh result audit."
-    },
-    {
-      "task_id": "WR-105",
-      "owner": "Manager",
-      "worker_slot": "manager-v21-remediation-no-scoring-canary",
-      "status": "BLOCKED",
-      "task_file": ".ai/manager/WR-105.md",
-      "role_handoff": ".ai/manager/HANDOFF.md",
-      "assignment_main_sha": "55a8cb1d78d5e41a8ec5e57d7e1a913537921e7d",
-      "worker_checkpoint_sha": "55a8cb1d78d5e41a8ec5e57d7e1a913537921e7d",
-      "branch": "manager/wr-105-v21-remediation-no-scoring-canary",
-      "pr": null,
-      "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_required": false,
-      "blocker_type": "USER_ACTION",
-      "user_action_required": true,
-      "blocked_on_tasks": [],
-      "blocked_on": [
-        "User must dispatch WR-097 Returning-Player v2.1 Protected Scoring Bridge on canonical main with mode no-scoring after this Manager gate is canonical."
-      ],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": true,
-      "allowed_path_prefixes": [
-        ".ai/manager/",
-        ".ai/shared/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/auditor/",
-        ".ai/research/",
-        ".ai/work_helper/",
-        ".github/",
-        "scripts/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [],
-      "next_gate": "After this gate is canonical, user dispatches WR-097 on main in no-scoring mode exactly once. Manager verifies trusted mode/ref, readiness, custody/no-exposure/cleanup evidence and zero artifacts. SUCCESS permits a separate Manager authority decision; failure keeps WR-101 blocked."
+      "next_gate": "WR-101 protected execution -> authority consumption/result publication -> R&D bounded packaging -> Manager exact freeze -> activate WR-102."
     }
   ]
 }
