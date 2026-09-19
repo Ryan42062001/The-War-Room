@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T18:45:00Z",
+  "updated_at_utc": "2026-09-19T18:50:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -48,24 +48,20 @@
       "task_id": "WR-075",
       "owner": "Auditor",
       "worker_slot": "auditor-self-hosted-heavy-ci",
-      "status": "BLOCKED",
+      "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-075.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": null,
+      "assignment_main_sha": "58eded3958d296d3392aac2cb1fdd92a0cd513c8",
       "worker_checkpoint_sha": null,
       "branch": "wr-075-self-hosted-heavy-ci-runner-audit",
       "pr": null,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": false,
-      "blocker_type": "UPSTREAM_TASK",
+      "blocker_type": "NONE",
       "user_action_required": false,
-      "blocked_on_tasks": [
-        "WR-074"
-      ],
-      "blocked_on": [
-        "Manager WR-074 exact freeze must be canonical before fresh WR-075 activation."
-      ],
+      "blocked_on_tasks": [],
+      "blocked_on": [],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
@@ -82,7 +78,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Canonicalize exact WR-074 freeze, then activate a fresh WR-075 audit branch against exactly 75fcd3756956b2943f18aff03115f9783a16d0aa.",
+      "next_gate": "Fresh independent audit of exact WR-074 PR #307 target 75fcd3756956b2943f18aff03115f9783a16d0aa. Auditor publishes Auditor-only verdict/evidence; Manager reviews before any WR-074 integration or infrastructure disposition.",
       "refresh_mode": "FAST_REFRESH",
       "audit_target_task": "WR-074",
       "audit_target_pr": 307,

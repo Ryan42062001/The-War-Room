@@ -457,3 +457,17 @@ Both self-hosted runs show clean preflight, no provider/custody authority, compl
 Benchmark evidence shows the self-hosted runner was slower than hosted in both observations; WR-074 claims functional/security viability, not performance advantage.
 
 PR #307 remains draft/unmerged. WR-075 remains blocked until this exact freeze is canonical.
+
+
+## WR-075 fresh independent self-hosted CI audit activated
+
+The WR-074 exact freeze is canonical at `58eded3958d296d3392aac2cb1fdd92a0cd513c8`; post-freeze War Room CI `35462263434` completed SUCCESS.
+
+WR-075 is ASSIGNED to audit exactly:
+- WR-074 PR #307;
+- target `75fcd3756956b2943f18aff03115f9783a16d0aa`;
+- implementation `c2e511da5d3767cbc0688de7e95236135a6975b2`.
+
+The fresh Auditor owns independent verification of security routing, trusted-trigger/fork boundaries, hosted/custody separation, secret absence, cleanup/repeatability, parity, benchmark claims, fallback, and exact final scope.
+
+PR #307 remains draft/unmerged. Self-hosted infrastructure is not canonical pending audit and Manager disposition.
