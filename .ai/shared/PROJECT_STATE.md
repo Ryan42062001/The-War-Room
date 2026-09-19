@@ -1,9 +1,9 @@
 # War Room Project State
 
-Status: ACTIVE DEVELOPMENT — WORKFLOW V3.4 CANONICAL
+Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
 Last verified: 2026-09-18
 Owner: Manager / Architect
-Workflow: V3.4 CANONICAL
+Workflow: V3.5 CANONICAL
 
 ## Returning-Player v2
 
@@ -32,12 +32,9 @@ Canary proof:
 
 WR-083 and WR-090 are closed.
 
-WR-081 is Manager-frozen for audit at exact PR #251 head `b5fc0974e0766c24974034557a62044b4752716a`. Protected scoring run `35402528405` completed successfully as an execution; development passed, validation failed, and terminal state is `VALIDATION_FAILED` / `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`. Confirmation seasons 2022–2025 were not exposed or scored.
+WR-081 / WR-082 are closed. WR-082 independently returned PASS with no findings on exact WR-081 target `b5fc0974e0766c24974034557a62044b4752716a`. The accepted historical result is `VALIDATION_FAILED` / `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`: development passed, validation failed, confirmation seasons 2022–2025 were not exposed or scored, and no rerun/tuning/confirmation/composition/production promotion is authorized. Any future model attempt requires a new R&D/protocol task.
 
-The final report and deterministic manifest are independently hash-verified by Manager, all 11 protected generated evidence blob identities match the manifest, and exact-head CI `35403434472` is SUCCESS. WR-082 is activated for fresh independent result audit.
-
-Current critical path:
-`WR-082 fresh independent result audit -> Manager baseline-only/result disposition`.
+There is no active Returning-Player v2 critical-path task.
 
 WR-074 serialization is cleared. It is PLANNED at preserved checkpoint `7b4641499c50541abf523267eb4c0255813e8b6d`, but is not being spawned in this transition because the immediate critical path is WR-081.
 
@@ -78,3 +75,16 @@ WR-093 failed exact remediated candidate `638a8e2af25f1c806fe8883de0c959c5caaff3
 ## WR-091 final remediation freeze
 
 WR-093's single remaining lifecycle replay-history finding has been remediated. Final candidate `77d3b182264ff71d723aa5e28335083692fb42fc` preserves consumed-authority identity in a machine-owned global ledger across task removal/closure and adds canonical state-check enforcement. Exact-head Full War Room CI `35410238089` and protected/boundary regressions are green. WR-094 is assigned for fresh independent re-audit. V3.4 remains canonical.
+
+
+## Workflow V3.5 canonical acceptance
+
+WR-094 independently returned PASS with no findings on exact final WR-091 target `77d3b182264ff71d723aa5e28335083692fb42fc`.
+
+Acceptance chain:
+- WR-094 audit PR #266 / immutable head `f844a8884394fd53746df577993528dd63109537`;
+- Auditor exact-head CI `35413270322` SUCCESS;
+- audited PR #257 integrated as canonical-main merge `d9f617ae4553e40e5ee9389978cfcc1657fd3402`;
+- mandatory post-merge Full War Room CI canary `35413697902` SUCCESS, including full test job `105818140464`.
+
+Workflow V3.5 is now canonical. WR-091 and WR-094 are closed and removed from the active-only registry. Historical WR-092 and WR-093 FAIL evidence remains preserved and applies only to the exact old SHAs audited at those times.

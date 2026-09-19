@@ -6,20 +6,20 @@ Owner: Manager / Architect
 
 ## Workflow foundation
 
-- Workflow V3.4 — CANONICAL / ACCEPTED.
+- Workflow V3.5 — CANONICAL / ACCEPTED after WR-094 PASS and canonical-main Full CI canary `35413697902` SUCCESS.
+- Workflow V3.4 — SUPERSEDED / preserved baseline.
 - Complete six-employee Next Activation table standard — ACTIVE.
 
-## Phase 5B — Returning-Player v2 evidence reset — ACTIVE
+## Phase 5B — Returning-Player v2 evidence reset — CLOSED
 
 - WR-083 — CLOSED / audited protected bridge integrated and canonical-main canary passed.
 - WR-084 — CLOSED / immutable historical failed audit.
 - WR-089 — CLOSED / PASS with no findings.
 - WR-090 — CLOSED / canonical-main protected NO-SCORING canary SUCCESS, run `35366265783`.
-- WR-081 — AUDIT_READY / exact result frozen at `b5fc0974e0766c24974034557a62044b4752716a`; development PASS, validation FAIL, terminal `VALIDATION_FAILED`, baseline-only/insufficient-evidence.
-- WR-082 — ASSIGNED / fresh independent audit of exact frozen WR-081 result target `b5fc0974e0766c24974034557a62044b4752716a`.
+- WR-081 — CLOSED / historical result accepted as `VALIDATION_FAILED` / `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`; no downstream promotion.
+- WR-082 — CLOSED / PASS with no findings on exact frozen WR-081 result target `b5fc0974e0766c24974034557a62044b4752716a`.
 
-Critical path:
-`WR-082 fresh result audit -> Manager baseline-only/result disposition`.
+No active Phase 5B critical path.
 
 ## Infrastructure
 
@@ -65,3 +65,12 @@ Critical path:
 - WR-093 — CLOSED / FAIL on historical `638a8e2...`; one HIGH lifecycle replay-history finding.
 - WR-091 — AUDIT_READY / final remediated exact target `77d3b182264ff71d723aa5e28335083692fb42fc`.
 - WR-094 — ASSIGNED / fresh independent final-remediation re-audit.
+
+
+## Workflow V3.5 — CANONICAL
+
+- WR-091 — MERGED / exact independently audited target `77d3b182264ff71d723aa5e28335083692fb42fc`.
+- WR-094 — CLOSED / PASS with no findings; Auditor PR #266, head `f844a8884394fd53746df577993528dd63109537`.
+- PR #257 — MERGED as canonical-main commit `d9f617ae4553e40e5ee9389978cfcc1657fd3402`.
+- Mandatory post-merge Full War Room CI canary `35413697902` — SUCCESS.
+- Workflow V3.5 is the active canonical workflow.
