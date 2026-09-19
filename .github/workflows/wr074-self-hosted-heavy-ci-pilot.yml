@@ -58,14 +58,14 @@ jobs:
       - name: Harden and verify persistent workspace
         run: node scripts/ci/wr074-pilot.mjs preflight
 
-      - name: Record sanitized runner environment evidence
-        run: node scripts/ci/wr074-pilot.mjs environment
-
       - name: Install exact lockfile dependencies
         run: npm ci
 
       - name: Prepare Playwright Chromium
         run: npx playwright install --with-deps chromium
+
+      - name: Record sanitized runner environment evidence
+        run: node scripts/ci/wr074-pilot.mjs environment
 
       - name: Stress browser determinism boundaries
         run: node scripts/ci/wr074-pilot.mjs stress
