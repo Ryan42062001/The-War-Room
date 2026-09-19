@@ -63,3 +63,13 @@ WR-082 independently PASSed the frozen WR-081 result with no findings; its audit
 WR-092 independently failed exact Workflow V3.5 candidate `def590788eb615d9322d5cc8ae3eef14e8c1bc25` with three HIGH fail-closed findings (AUD-01/02/03). Audit evidence is merged at `8a6ef495a5715eb416a23b0912c201ef49306e9f`. V3.4 remains canonical. WR-091 is back IN_PROGRESS for bounded remediation only.
 
 WR-081/WR-082 result work is complete. The historical model result is accepted as a valid `VALIDATION_FAILED` / `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE` outcome, with no rerun/tuning/confirmation/composition/production promotion authorized.
+
+
+## WR-091 remediation freeze
+
+WR-092 failed historical candidate `def590788eb615d9322d5cc8ae3eef14e8c1bc25` with three HIGH fail-closed findings. Bounded remediation is now frozen at `638a8e2af25f1c806fe8883de0c959c5caaff35e` / PR #257 after direct adversarial regression coverage and exact-head Full War Room CI `35408373771` SUCCESS plus WR-083/WR-069/WR-046 regressions. WR-093 is assigned for fresh independent re-audit. V3.4 remains canonical.
+
+
+## WR-093 failed re-audit
+
+WR-093 failed exact remediated candidate `638a8e2af25f1c806fe8883de0c959c5caaff35e` on one remaining HIGH lifecycle-replay defect: add/remove transitions can inject or erase machine-owned authority consumption history. Prior unique-target and repository-bound-consumption findings are independently closed. WR-091 is back in bounded remediation; V3.4 remains canonical.

@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T23:48:00Z",
+  "updated_at_utc": "2026-09-19T00:45:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -93,7 +93,7 @@
       "task_file": ".ai/manager/WR-091.md",
       "role_handoff": ".ai/manager/HANDOFF.md",
       "assignment_main_sha": "16f766f1464656779d3e8e2fbab91998eca774f9",
-      "worker_checkpoint_sha": "def590788eb615d9322d5cc8ae3eef14e8c1bc25",
+      "worker_checkpoint_sha": "638a8e2af25f1c806fe8883de0c959c5caaff35e",
       "branch": "manager/wr-091-workflow-v35-automation",
       "pr": 257,
       "dependency": "INDEPENDENT",
@@ -133,7 +133,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Remediate only WR-092-AUD-01/02/03 on PR #257: enforce unique Auditor target derivation despite explicit pins; independently bind authority-consumption evidence to canonical authority/committed receipt/publication; reject replay/reuse of consumed authority. Add direct adversarial regressions, reconcile current main, obtain exact-head Full CI/protected-boundary validation, then Manager freezes a new immutable WR-091 target for a fresh independent re-audit."
+      "next_gate": "Bounded WR-093-AUD-01 remediation only: protect machine-owned authority receipt/history across add/remove lifecycle and prevent any replay-history reset. Then exact-head validate, freeze a new WR-091 SHA, and route fresh independent re-audit. V3.4 remains canonical."
     }
   ]
 }
