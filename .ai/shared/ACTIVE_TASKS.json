@@ -1,8 +1,50 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T23:20:00Z",
+  "updated_at_utc": "2026-09-19T23:30:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": []
+  "tasks": [
+    {
+      "task_id": "WR-109",
+      "owner": "R&D",
+      "worker_slot": "rnd-wr109-draft-readiness",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-109.md",
+      "role_handoff": ".ai/research/HANDOFF.md",
+      "assignment_main_sha": "1288a9eb2e10765ec9e7a83c77d709268bfba709",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-109-draft-readiness-evidence-assessment",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/research/WR109_DRAFT_READINESS_GAP_ASSESSMENT.md",
+        ".ai/research/WR109_ESPN_DIRECT_LIVE_VALIDATION_PLAN.md",
+        ".ai/research/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/work_helper/",
+        ".github/",
+        "src/",
+        "public/",
+        "scripts/",
+        "data/",
+        "extensions/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "R&D publishes bounded evidence assessment and consent-safe future live ESPN Direct validation plan with exact-head CI; Manager reviews report before any live/mock execution, source refresh, Builder work or Draft Strategy policy change."
+    }
+  ]
 }

@@ -343,3 +343,13 @@ No active Phase 5B critical path.
 - No generic self-hosted routing, fork-PR execution, credential-bearing self-hosted workloads, or performance-superiority claim.
 - WR-074 and WR-075 — CLOSED.
 - Any broader self-hosted CI expansion requires a separate future Manager task and fresh applicable audit.
+
+
+## WR-109 next-draft-cycle readiness — ASSIGNED
+
+- Manager reviewed the now-empty active registry after WR-074/075 closure.
+- Current product gap: structured ESPN Direct capture remains unverified in a real disposable live mock; live Board/Pick History fallback has separate accepted evidence. A future next-draft-cycle ranking refresh requires an independently authorized source/baseline intake, not automatic replacement of bundled 2026 rankings.
+- WR-109 — ASSIGNED to R&D in `STANDARD_CHAT_HIGH`; bounded evidence assessment + live mock validation plan + separate source-refresh intake proposal only.
+- Branch `wr-109-draft-readiness-evidence-assessment`; no production/extension/data/source/CI/runner/strategy/model writes.
+- Next gate: R&D PR + exact-head CI -> Manager review -> separate live ESPN validation or source-refresh/Builder/Strategy authorization as supported by evidence.
+- WR-D016 baseline-only v2.1 and WR-D017 bounded self-hosted CI boundaries remain unchanged.
