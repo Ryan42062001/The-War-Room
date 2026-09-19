@@ -71,16 +71,22 @@ if (mode === 'preflight') {
   assertAuthorityAbsent();
   const workspaceEnv = process.env.GITHUB_WORKSPACE;
   if (workspaceEnv && path.resolve(workspaceEnv) !== path.resolve(root)) fail('current directory is not the assigned GitHub workspace');
+  git(['config', 'core.autocrlf', 'false']);
+  git(['config', 'core.eol', 'lf']);
   cleanWorkspace();
+  const browserTestSource = fs.readFileSync(path.join(root, 'scripts', 'test-browser.mjs'), 'utf8');
   const residue = {
     node_modules_present_after_clean: fs.existsSync(path.join(root, 'node_modules')),
     artifacts_present_after_clean: fs.existsSync(path.join(root, 'artifacts')),
     sentinel_present_after_clean: fs.existsSync(marker),
     git_status_clean: git(['status', '--porcelain']) === '',
+    browser_test_crlf_present: browserTestSource.includes('\r\n'),
+    core_autocrlf: git(['config', '--get', 'core.autocrlf']),
+    core_eol: git(['config', '--get', 'core.eol']),
     provider_authority_present: false,
   };
-  if (residue.node_modules_present_after_clean || residue.artifacts_present_after_clean || residue.sentinel_present_after_clean || !residue.git_status_clean) {
-    fail('persistent workspace residue survived bounded cleanup');
+  if (residue.node_modules_present_after_clean || residue.artifacts_present_after_clean || residue.sentinel_present_after_clean || !residue.git_status_clean || residue.browser_test_crlf_present) {
+    fail('persistent workspace residue or non-canonical line endings survived bounded cleanup');
   }
   fs.writeFileSync(marker, 'WR-074 ephemeral workspace sentinel\n', 'utf8');
   console.log(JSON.stringify({ wr074_workspace_preflight: 'PASS', ...residue }));
