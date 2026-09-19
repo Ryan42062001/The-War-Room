@@ -5,6 +5,7 @@ No retained provider byte or real 2022-2025 target value is used by this suite.
 """
 from __future__ import annotations
 
+import csv
 import hashlib
 import importlib.util
 import json
@@ -80,6 +81,84 @@ def synthetic_gate_rows(year: int) -> list[dict]:
                 "same_position_mean_baseline_prediction": c.fstr(secondary),
             })
     return rows
+
+def synthetic_locked_target_fixture(root: Path) -> tuple[dict, Path, Path, Path, Path, str]:
+    """Fabricated 2022 prediction/lock/source, no retained or actual player data."""
+    inp=root/"input"; state=root/"state"; locks=root/"locks"; out=root/"output"; prediction_out=root/"prediction-output"
+    for directory in (inp,state,locks,out,prediction_out):
+        directory.mkdir(parents=True,exist_ok=True)
+    prediction={
+        "target_season":2022,"player_id":"SYNTHETIC_QB","position":"QB",
+        "stable_key":c.stable_key(2022,"SYNTHETIC_QB","QB"),
+        "status":"LEARNED","candidate_prediction":"10","primary_baseline_prediction":"9",
+        "weighted_baseline_prediction":"8","same_position_mean_baseline_prediction":"7",
+        "row_digest":"f"*64,
+    }
+    artifact={
+        "schema_version":"wr097-v21-prediction-artifact-synthetic-v1",
+        "target_season":2022,"target_values_accessed":False,
+        "predictions":[prediction],"fallback_count":0,"lineage_failures":0,
+    }
+    artifact_digest=c.sha256_bytes(c.canonical_bytes(artifact))
+    c.write_json(state/"prediction-2022.json",{
+        "schema_version":"wr097-v21-prediction-state-v1",
+        "artifact":artifact,"artifact_sha256":artifact_digest,
+    })
+    families=(
+        "RETURNING_PLAYER_V21_KEY_MANIFEST",
+        "RETURNING_PLAYER_V21_FEATURE_SURFACE",
+        "RETURNING_PLAYER_V21_PREPROCESSING_STATES",
+        "RETURNING_PLAYER_V21_MODEL_STATES",
+        "RETURNING_PLAYER_V21_PREDICTIONS_PRE_OUTCOME",
+        "RETURNING_PLAYER_V21_ENVIRONMENT_LOCK",
+    )
+    publications=[
+        c._publication(
+            prediction_out,family,
+            artifact if family=="RETURNING_PLAYER_V21_PREDICTIONS_PRE_OUTCOME"
+            else {"schema_version":"wr103-synthetic-evidence-v1","family":family},
+            "2022",
+        )
+        for family in families
+    ]
+    c._finish(prediction_out,"predict",{
+        "stage":"validation","target_season":2022,"target_values_accessed":False,
+    },publications)
+    # This is the bridge's canonical publication entry shape, including "family".
+    lock_digest=c.sha256_bytes(c.canonical_bytes(sorted(publications,key=lambda x:x["path"])))
+    lock_dir=locks/"prediction-2022"
+    shutil.copytree(prediction_out,lock_dir)
+    for file_path in lock_dir.rglob("*"):
+        if file_path.is_file():
+            file_path.chmod(0o444)
+    fields=sorted(c.REQUIRED_COLUMNS)
+    target_row={field:"0" for field in fields}
+    target_row.update({
+        "player_id":"SYNTHETIC_QB","position":"QB","season":"2022","season_type":"REG",
+        "games":"2","fantasy_points_ppr":"24",
+    })
+    raw=inp/"synthetic-target.tmp"
+    with raw.open("w",encoding="utf-8",newline="") as handle:
+        writer=csv.DictWriter(handle,fieldnames=fields,lineterminator="\n")
+        writer.writeheader()
+        writer.writerow(target_row)
+    digest,size=c.sha256_file(raw)
+    source=inp/f"stats-2022-{digest}.raw"
+    raw.rename(source)
+    context={
+        "task_id":"WR-097","mode":"target-ingest","stage":"validation",
+        "target_season":2022,"bindings":c.EXPECTED_BINDINGS,"synthetic_fixture":True,
+        "visible_sources":[{
+            "season":2022,"source_id":"nflverse-player-summary-2022",
+            "sha256":digest,"byte_size":size,"path":str(source),
+        }],
+        "prediction_lock_sha256":lock_digest,"prediction_locks":{"2022":lock_digest},
+        "gate_locks":{},
+    }
+    context_path=inp/"context.json"
+    c.write_json(context_path,context)
+    return context,context_path,state,locks,out,lock_digest
+
 
 class WR097V21ConsumerTests(unittest.TestCase):
     def test_exact_protocol_sha_and_feature_schema(self):
@@ -167,6 +246,48 @@ class WR097V21ConsumerTests(unittest.TestCase):
             must_fail(lambda: c._require_prior_future_outcomes(state, 2024), "prior future-season outcome")
             write_evaluation(state, 2023, [])
             c._require_prior_future_outcomes(state, 2024)
+
+    def test_bridge_prediction_lock_family_is_part_of_canonical_digest(self):
+        with tempfile.TemporaryDirectory() as td:
+            context,context_path,state,locks,out,bridge_digest=synthetic_locked_target_fixture(Path(td))
+            # Pre-remediation consumer silently dropped "family" from these entries.
+            lock_manifest=c.read_json(locks/"prediction-2022"/"publication-manifest.json")
+            entries=lock_manifest["files"]
+            self.assertEqual(len(entries),6)
+            self.assertTrue(all(entry["family"] in c.PUBLICATION_FAMILIES for entry in entries))
+            legacy=[{name:entry[name] for name in ("path","sha256","byte_size")} for entry in entries]
+            legacy_digest=c.sha256_bytes(c.canonical_bytes(sorted(legacy,key=lambda x:x["path"])))
+            self.assertNotEqual(legacy_digest,bridge_digest)
+            # This assertion fails on the old consumer before target source read.
+            c._verify_prediction_lock(locks,2022,bridge_digest)
+
+    def test_target_ingest_realistic_synthetic_happy_path_after_immutable_lock(self):
+        with tempfile.TemporaryDirectory() as td:
+            context,context_path,state,locks,out,bridge_digest=synthetic_locked_target_fixture(Path(td))
+            c._target_ingest(context,context_path,state,locks,out)
+            state_payload=c.read_json(state/"evaluation-2022.json")
+            evaluation=state_payload["evaluation"]
+            self.assertEqual(evaluation["accepted_prediction_lock_sha256"],bridge_digest)
+            self.assertEqual(evaluation["observed_count"],1)
+            self.assertEqual(evaluation["target_unavailable_count"],0)
+            self.assertEqual(evaluation["rows"][0]["target_ppr_pg"],"12")
+            self.assertEqual(evaluation["rows"][0]["prediction_lock_sha256"],bridge_digest)
+            self.assertEqual(c.read_json(out/"bridge-result.json")["status"],"PASS")
+            self.assertEqual(c.read_json(out/"publication-manifest.json")["files"][0]["family"],
+                             "RETURNING_PLAYER_V21_EVALUATIONS")
+            # This test uses only synthetic source data, and cannot unlock confirmation.
+            self.assertFalse((locks/"gate-validation").exists())
+
+    def test_target_ingest_tampered_prediction_lock_fails_closed(self):
+        with tempfile.TemporaryDirectory() as td:
+            context,context_path,state,locks,out,bridge_digest=synthetic_locked_target_fixture(Path(td))
+            locked_file=locks/"prediction-2022"/"files"/".ai/research/generated"/"RETURNING_PLAYER_V21_PREDICTIONS_PRE_OUTCOME_2022.json"
+            locked_file.chmod(0o644)
+            locked_file.write_bytes(c.canonical_bytes({"tampered":"synthetic"}))
+            must_fail(lambda:c._target_ingest(context,context_path,state,locks,out),
+                      "immutable lock publication mismatch")
+            self.assertFalse((state/"evaluation-2022.json").exists())
+            self.assertFalse((out/"publication-manifest.json").exists())
 
     def test_target_before_prediction_lock_fails_before_source_read(self):
         with tempfile.TemporaryDirectory() as td:
