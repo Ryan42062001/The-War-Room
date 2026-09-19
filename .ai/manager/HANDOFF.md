@@ -2,34 +2,28 @@
 
 HANDOFF
 
-STATUS: WR-091 REMEDIATED AND FROZEN — WR-093 FRESH RE-AUDIT ACTIVATED
+STATUS: WR-091 BOUNDED REMEDIATION IN PROGRESS AFTER WR-093 FAIL
 CANONICAL WORKFLOW: V3.4
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-WR-092 historical verdict:
-- exact failed target `def590788eb615d9322d5cc8ae3eef14e8c1bc25`
-- FAIL — REMEDIATION REQUIRED
-- three HIGH findings AUD-01/02/03
+WR-093 is accepted as historical failed-audit evidence:
+- audited target `638a8e2af25f1c806fe8883de0c959c5caaff35e`
+- audit PR #262
+- Auditor head `ac57d30afb38911c8f46a31695865c3ad8f0808d`
+- exact-head War Room CI `35409752010` SUCCESS
+- verdict `FAIL — REMEDIATION REQUIRED`
+- one HIGH finding: WR-093-AUD-01
 
-New frozen WR-091 target:
-- PR #257
-- branch `manager/wr-091-workflow-v35-automation`
-- exact SHA `638a8e2af25f1c806fe8883de0c959c5caaff35e`
-- Full War Room CI `35408373771` SUCCESS
-- WR-083 `35408373770` SUCCESS
-- WR-069 `35408373783` SUCCESS
-- WR-046 `35408373793` SUCCESS
-
-WR-093 is a fresh independent audit. The WR-092 verdict does not transfer.
+WR-092-AUD-01 and AUD-02 are independently closed. Remaining scope is only protection of machine-owned consumption receipt/history across add/remove lifecycle so replay history cannot be injected or erased.
 
 ## Next Activation
 
 | Order | Employee / Role | Status | Current Task / Gate | Next action |
 | --- | --- | --- | --- | --- |
-| 1 | Manager / Architect | WAIT | Await WR-093 fresh verdict | Verify immutable WR-093 audit head/CI; integrate only on PASS-family. |
-| 2 | Implementation Engineer / Builder | IDLE | No product task | Do not activate. |
+| 1 | Manager / Architect | ACTIVATE NOW | WR-091 bounded WR-093 remediation | Fix protected-field add/remove lifecycle, add direct regressions, exact-head validate, freeze new candidate, activate fresh re-audit. |
+| 2 | Implementation Engineer / Builder | IDLE | No product implementation task | Do not activate. |
 | 3 | Draft Strategy & Decision Intelligence Analyst | IDLE | No strategy task | Do not activate. |
 | 4 | Research & Development (R&D) | COMPLETE | WR-081 historical result closed | No action. |
-| 5 | Independent Auditor / QA | ACTIVATE NOW | WR-093 re-audit exact remediated WR-091 target | Audit exact SHA `638a8e2af25f1c806fe8883de0c959c5caaff35e`. |
-| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | No separate blocker | Activate only if fresh audit exposes a cross-layer blocker. |
+| 5 | Independent Auditor / QA | COMPLETE | WR-093 failed exact frozen target | Wait for a new immutable WR-091 target. |
+| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | No separate blocker | Activate only if bounded remediation hits a cross-layer blocker. |
