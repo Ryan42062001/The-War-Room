@@ -208,3 +208,27 @@ RATIONALE: WR-097/098 established the protected v2.1 execution boundary; WR-099/
 EVIDENCE: WR-100 audit PR #286 / head `453ce58c4ead8f3d734a8eea5568dfb22d4dfca6` / CI `35423220027`; WR-099 exact target `33d8d6037b1922841a134b9aba01eb3ea11ad97b`; canonical integration `6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9`; Full CI `35423356815`; second no-scoring canary `35423633965`; readiness job `105845796842`.
 ALTERNATIVES REJECTED: keep scoring blocked after all audited gates pass; reuse WR-097 branch as a result lane; issue open-ended scoring authority; permit caller-supplied execution identity; skip result audit; pre-authorize reruns; expose confirmation regardless of validation.
 REVISIT CONDITION: WR-101 protected execution fails technically, the authority/receipt cannot be consumed exactly, WR-102 finds a material result/evidence defect, or the frozen validation result requires a new explicit Manager decision.
+
+
+---
+
+## DECISION WR-D012
+
+DATE: 2026-09-19
+TASK: WR-101 / WR-103 / WR-104 — first v2.1 protected execution failure disposition
+STATUS: ACTIVE — TECHNICAL REMEDIATION REQUIRED
+DECISION:
+- Treat WR-097 workflow run `35424042233` as a technical fail-closed execution, not a model result.
+- Preserve evidence that canonical authority, live branch/head, exact checkout, reviewed consumer digest, retained-source retrieval and pre-consumer head recheck passed.
+- Record failure at sandboxed consumer `target-ingest`.
+- Record that staging/publication/push/authority-receipt verification were skipped; execution branch did not advance; cleanup passed; Actions artifacts are zero.
+- Revoke/remove the WR-101 future execution authority immediately.
+- Do not authorize a rerun from the same authority, despite the absence of a consumption receipt.
+- Assign WR-103 for deterministic retained-data-free reproduction and the smallest bounded protected-execution remediation.
+- Require fresh WR-104 independent audit before any remediation integration.
+- Require a separate future Manager decision before any NEW one-time scoring authority can be issued.
+- Keep confirmation/production/composition/Phase 6 blocked.
+RATIONALE: the first real protected attempt discovered an execution-path defect not exposed by existing synthetic target-ingest coverage. Fail-closed behavior worked as intended, but repeating the run without root-cause remediation and fresh audit would violate the one-time authorization policy and risk repeated target exposure.
+EVIDENCE: workflow run `35424042233`; protected job `105846904830`; failure message `WR-097 FAIL CLOSED: sandboxed consumer failed closed in target-ingest`; unchanged execution branch head `6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9`; zero workflow artifacts.
+ALTERNATIVES REJECTED: rerun immediately; treat the failure as validation FAIL; broaden source/protocol/model semantics; inspect retained targets manually; leave the live authority in canonical state.
+REVISIT CONDITION: WR-103 produces an exact bounded remediation, WR-104 returns PASS-family, Manager integrates only the audited target, and all required canonical/no-scoring validation gates succeed.
