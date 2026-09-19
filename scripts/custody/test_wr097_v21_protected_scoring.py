@@ -6,6 +6,7 @@ import importlib.util
 import json
 import os
 import pathlib
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -169,6 +170,77 @@ def test_terminal_receipt_and_one_publication_parent():
         second=subprocess.check_output(["git","rev-parse","HEAD"],cwd=repo,text=True).strip()
         must_fail(lambda: b.validate_authority_consumption(root,repo,second),"exactly one commit")
 
+def test_real_consumer_synthetic_target_ingest_under_immutable_sandbox_lock():
+    """No provider access: fabricated local CSV, prediction state and bridge lock."""
+    # The direct consumer suite exercises this same fixture without bubblewrap.
+    # This test additionally exercises the actual provider-free bwrap/lock wrapper.
+    if not shutil.which("bwrap"):
+        raise AssertionError("bubblewrap required for WR-103 sandbox happy-path proof")
+    consumer_tests_path=ROOT/".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py"
+    spec=importlib.util.spec_from_file_location("wr103_consumer_fixture",consumer_tests_path)
+    assert spec and spec.loader
+    fixture_module=importlib.util.module_from_spec(spec)
+    sys.modules[spec.name]=fixture_module
+    spec.loader.exec_module(fixture_module)
+    with tempfile.TemporaryDirectory() as td:
+        old=os.environ.get("RUNNER_TEMP")
+        os.environ["RUNNER_TEMP"]=td
+        try:
+            root=pathlib.Path(td)
+            fixture_root=root/"synthetic-fixture"; fixture_root.mkdir()
+            context,context_path,state,locks,_out,expected_lock=(
+                fixture_module.synthetic_locked_target_fixture(fixture_root)
+            )
+            raw_source=pathlib.Path(context["visible_sources"][0]["path"])
+            source_meta=context["visible_sources"][0]
+            retained={
+                "sources":[{
+                    "season":2022,"source_id":"nflverse-player-summary-2022",
+                    "local_path":str(raw_source),
+                    "expected_sha256":source_meta["sha256"],
+                    "expected_size_bytes":source_meta["byte_size"],
+                }],
+            }
+            # Replace the test's synthetic copy with the actual bridge-created,
+            # read-only prediction lock and require the same canonical digest.
+            shutil.rmtree(locks/"prediction-2022")
+            bridge_lock=b.lock_phase_output(
+                fixture_root/"prediction-output",locks,"prediction-2022",retained
+            )
+            assert bridge_lock==expected_lock
+            visible=root/"sandbox-visible"
+            sandbox_sources=b.copy_visible_sources(retained,(2022,),visible)
+            context["visible_sources"]=sandbox_sources
+            consumer_copy=root/"consumer.py"
+            shutil.copyfile(ROOT/b.V21_CONSUMER_PATH,consumer_copy)
+            output=root/"sandbox-output"
+            b.assert_consumer_isolation({"PATH":os.environ.get("PATH","")})
+            result=b.run_sandboxed_consumer(
+                consumer_copy,"target-ingest",context,visible,state,locks,output,retained
+            )
+            assert result["status"]=="PASS" and result["mode"]=="target-ingest"
+            assert result["accepted_prediction_lock_sha256"]==bridge_lock
+            assert result["target_values_accessed"] is True
+            assert (state/"evaluation-2022.json").is_file()
+            assert len(b.publication_entries(output,retained))==1
+            # Tampering with the immutable lock must still fail closed inside
+            # the same actual sandbox, without publishing a second result.
+            locked=locks/"prediction-2022"/"files"/".ai/research/generated"/"RETURNING_PLAYER_V21_PREDICTIONS_PRE_OUTCOME_2022.json"
+            locked.chmod(0o644)
+            locked.write_text('{"synthetic_tamper":true}\n',encoding="utf-8")
+            must_fail(lambda:b.run_sandboxed_consumer(
+                consumer_copy,"target-ingest",context,visible,state,locks,output,retained
+            ),"sandboxed consumer failed closed in target-ingest")
+            assert not (output/"publication-manifest.json").exists()
+            b.cleanup_paths([visible,state,locks,output,consumer_copy])
+            assert all(not p.exists() for p in (visible,state,locks,output,consumer_copy))
+        finally:
+            if old is None:
+                os.environ.pop("RUNNER_TEMP",None)
+            else:
+                os.environ["RUNNER_TEMP"]=old
+
+
 def test_cleanup_success_and_deliberate_failure_paths():
     with tempfile.TemporaryDirectory() as td:
         root=pathlib.Path(td); a=root/"raw"; a.mkdir(); (a/"x").write_text("synthetic")
@@ -209,6 +281,7 @@ def main():
     test_publication_allowlist_raw_and_credentials_fail_closed()
     test_validation_confirmation_chronology_and_determinism()
     test_terminal_receipt_and_one_publication_parent()
+    test_real_consumer_synthetic_target_ingest_under_immutable_sandbox_lock()
     test_cleanup_success_and_deliberate_failure_paths()
     test_workflow_static_security_and_release_guard()
     print("WR-097 protected v2.1 bridge regressions: PASS")
