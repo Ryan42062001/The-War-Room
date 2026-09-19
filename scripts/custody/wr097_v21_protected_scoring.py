@@ -225,10 +225,19 @@ def retrieve_authoritative_b2(read, auth: Mapping[str, str], source: Mapping[str
 def cleanup_paths(paths: Sequence[Path]) -> None:
     for path in paths:
         try:
-            if path.is_dir(): shutil.rmtree(path, ignore_errors=True)
-            else: path.unlink(missing_ok=True)
-        except OSError:
-            pass
+            if path.is_dir() and not path.is_symlink():
+                # Immutable phase-lock directories are intentionally 0555.
+                # Restore only runner-temporary directory write permission
+                # before deletion; never modify the frozen lock contents.
+                for current, _dirs, _files in os.walk(path, topdown=False):
+                    os.chmod(current, 0o700)
+                shutil.rmtree(path)
+            else:
+                path.unlink(missing_ok=True)
+        except OSError as exc:
+            raise ContractError("runner-temporary cleanup failed") from exc
+        if path.exists() or path.is_symlink():
+            raise ContractError("runner-temporary cleanup incomplete")
 
 
 def files_equal(a: Path, b: Path) -> bool:
@@ -952,7 +961,7 @@ def run_future_consumer(control_repo: Path, execution_repo: Path, execution_bran
     except BaseException:
         cleanup_paths([package_dir,root]); raise
     finally:
-        shutil.rmtree(root,ignore_errors=True)
+        cleanup_paths([root])
 
 
 def validate_publication_manifest(output_dir: Path, retained_manifest_path: Path) -> list[dict]:
