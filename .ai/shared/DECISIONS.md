@@ -277,3 +277,27 @@ RATIONALE: The protected workflow executed successfully under consumed one-time 
 EVIDENCE: WR-101 exact target `a1cfda0b7ec0decbe5ece96283900a35d875abaf`; protected publication `41c1601ce2a7ae26fcb13a370ae2960db9427a80`; protected run `35447590872`; WR-102 Auditor head `a13df5e9edd6b350e9d4fca81c3db3ec243761ed`; audit PR #304; audit CI `35452642020`; audit evidence merge `2ea5dbe0eba4819e685bab77140233df593758ad`; exact result integration `c9c4cfe1b2b40b43ffe94a11d5f223acd72114db`; canonical validation `35452844314` SUCCESS.
 ALTERNATIVES REJECTED: rerun until confirmation passes; tune against exposed 2024–2025 outcomes; weaken the 0.05 position cap; treat workflow SUCCESS as model PASS; promote the model despite confirmation failure; carry R3 authority into a future attempt.
 REVISIT CONDITION: a wholly new prospectively specified Returning-Player research task is authorized with fresh protocol/evidence/audit boundaries; WR-101/WR-102 themselves are not reopened to obtain a different result.
+
+
+---
+
+## DECISION WR-D017
+
+DATE: 2026-09-19
+TASK: WR-074 / WR-075 — Self-Hosted Heavy-CI Runner Pilot Final Disposition
+STATUS: ACTIVE — AUDITED PILOT ACCEPTED
+DECISION:
+- Accept WR-075 independent `PASS` with no CRITICAL/HIGH/MEDIUM/LOW findings only for exact WR-074 SHA `75fcd3756956b2943f18aff03115f9783a16d0aa`.
+- Accept Auditor evidence head `0968f3e84aa852d6fa528e3ca9a9ca3383cc6362`, Auditor PR #310, and Auditor exact-head CI `35463331283` SUCCESS.
+- Accept audit-evidence canonical merge `2d860ab27fd0fe02e3614311a6f202d7a91439df` and post-audit-evidence canonical CI `35475324576` SUCCESS.
+- Integrate only exact audited WR-074 target `75fcd3756956b2943f18aff03115f9783a16d0aa`, producing canonical merge `3656d355351113bb4692759e4410e607b60967ea`.
+- Accept required canonical-main FULL War Room CI `35475382820` SUCCESS after integration, including full test job `105983665291` SUCCESS.
+- Close WR-074 and WR-075.
+- Accept the dedicated Linux/WSL2 `[self-hosted, war-room-heavy-ci]` path as a bounded heavy-CI pilot with functional/security viability and hosted parity/fallback evidence.
+- Preserve exact push-only trusted branch gating, GitHub-hosted Governance/custody/protected separation, least-privilege permissions, non-persistent checkout credentials, provider/custody secret isolation, and bounded persistent-workspace cleanup.
+- Do not claim performance superiority; the audited benchmark showed self-hosted slower than hosted in the observed runs.
+- Do not authorize generic self-hosted routing, arbitrary PR execution, `pull_request_target` execution of untrusted code, credential-bearing/custody/protected workloads on self-hosted, or unrelated CI migration from this decision.
+RATIONALE: WR-075 independently reproduced the exact frozen target scope, trusted routing, secret/custody boundaries, repeated clean self-hosted runs, hosted-reference parity, benchmark math, release validation, and final-target evidence with no findings. Exact audited integration was followed by required canonical-main full CI success.
+EVIDENCE: WR-074 target `75fcd3756956b2943f18aff03115f9783a16d0aa`; implementation `c2e511da5d3767cbc0688de7e95236135a6975b2`; parity runs `35460866285`, `35461197805`, final pilot `35461615030`; WR-075 Auditor head `0968f3e84aa852d6fa528e3ca9a9ca3383cc6362`; PR #310; audit CI `35463331283`; audit evidence merge `2d860ab27fd0fe02e3614311a6f202d7a91439df`; exact target integration `3656d355351113bb4692759e4410e607b60967ea`; canonical full CI `35475382820`.
+ALTERNATIVES REJECTED: broaden routing to generic self-hosted; run fork PR code on the host; migrate custody/protected credentialed workflows; treat self-hosted as faster despite measured regressions; skip canonical full-CI validation.
+REVISIT CONDITION: any change to runner trust model, trigger surface, labels/routing, credential scope, host operating model, or migration of additional workloads requires a separate Manager task and applicable fresh audit.

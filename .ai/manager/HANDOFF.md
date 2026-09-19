@@ -2,50 +2,48 @@
 
 HANDOFF
 
-STATUS: WR-075 ASSIGNED — FRESH INDEPENDENT SELF-HOSTED CI AUDIT
+STATUS: WR-074 / WR-075 CLOSED — AUDITED SELF-HOSTED CI PILOT ACCEPTED
 
 CANONICAL WORKFLOW: V3.5
-EXECUTION MODE: STANDARD_CHAT_HIGH
-REFRESH MODE: FAST_REFRESH
 
-Canonical WR-074 freeze checkpoint:
-`58eded3958d296d3392aac2cb1fdd92a0cd513c8`
+Manager consumed WR-075 PASS only for exact WR-074 SHA:
+`75fcd3756956b2943f18aff03115f9783a16d0aa`
 
-Post-freeze War Room CI:
-`35462263434` — SUCCESS
+Accepted audit evidence:
+- Auditor PR #310;
+- Auditor head `0968f3e84aa852d6fa528e3ca9a9ca3383cc6362`;
+- verdict `PASS`;
+- CRITICAL/HIGH/MEDIUM/LOW: none;
+- Auditor exact-head CI `35463331283` SUCCESS.
 
-WR-075 must audit exactly:
-- task: WR-074;
-- PR: #307;
-- branch: `wr-074-self-hosted-heavy-ci-runner-pilot`;
-- exact frozen target: `75fcd3756956b2943f18aff03115f9783a16d0aa`;
-- immutable implementation SHA: `c2e511da5d3767cbc0688de7e95236135a6975b2`;
-- canonical implementation base: `cb544da20c7b82ded5552d425d69b8a47c880f30`.
+Audit evidence canonical merge:
+`2d860ab27fd0fe02e3614311a6f202d7a91439df`
 
-Assigned Auditor branch:
-`wr-075-self-hosted-heavy-ci-runner-audit`
+Post-audit-evidence canonical War Room CI:
+`35475324576` — SUCCESS.
 
-The fresh Auditor must independently verify:
-- exact frozen target and final changed-file scope;
-- dedicated `[self-hosted, war-room-heavy-ci]` routing;
-- public-repository fork/untrusted-code safety;
-- no `pull_request_target` abuse;
-- hosted Governance/custody/protected workflow separation;
-- no B2/R2/provider secrets or retained raw-source access on self-hosted;
-- least-privilege permissions and non-persistent checkout credentials;
-- repeated clean preflight/cleanup and stale-workspace independence;
-- heavy-test parity against hosted reference;
-- exact run evidence and benchmark math;
-- hosted fallback availability;
-- operational risks and final scope.
+Exact audited WR-074 target integration:
+- PR #307;
+- exact audited head `75fcd3756956b2943f18aff03115f9783a16d0aa`;
+- canonical merge `3656d355351113bb4692759e4410e607b60967ea`.
 
-Important evidence to independently reproduce, not assume:
-- parity run `35460866285`;
-- parity run `35461197805`;
-- final pilot `35461615030`;
-- final-head War Room CI `35461622646`;
-- Work Helper report and activation evidence at exact target.
+Required canonical-main post-integration FULL War Room CI:
+- run `35475382820` — SUCCESS;
+- classify `105983625300` — SUCCESS;
+- governance `105983645613` — SUCCESS;
+- bootstrap-reuse `105983646132` — SKIPPED;
+- full test `105983665291` — SUCCESS.
 
-Write only `.ai/auditor/**`.
-Do not modify or merge PR #307.
-Do not treat self-hosted infrastructure as canonical until Manager reviews the fresh audit verdict.
+Final disposition:
+- WR-074 CLOSED — ACCEPTED SELF-HOSTED HEAVY-CI PILOT;
+- WR-075 CLOSED — PASS EVIDENCE INTEGRATED;
+- dedicated route remains `[self-hosted, war-room-heavy-ci]`;
+- exact push-only trusted branch gate remains;
+- no generic self-hosted routing;
+- no PR/`pull_request_target` execution route;
+- no credential-bearing/custody/protected self-hosted workloads;
+- no performance-superiority claim.
+
+The accepted result establishes bounded functional/security viability for the dedicated Linux/WSL2 self-hosted heavy-CI pilot. It does not make persistent self-hosted hardware equivalent to disposable GitHub-hosted infrastructure and does not authorize broader infrastructure expansion.
+
+WR-074 and WR-075 are removed from the active-only registry.
