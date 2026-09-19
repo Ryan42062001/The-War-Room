@@ -49,9 +49,10 @@ function assertAuthorityAbsent() {
 
 function cleanWorkspace() {
   git(['reset', '--hard', 'HEAD']);
+  git(['checkout-index', '--all', '--force']);
   git(['clean', '-ffdx']);
   const status = git(['status', '--porcelain']);
-  if (status) fail('workspace is not clean after reset/clean');
+  if (status) fail('workspace is not clean after reset/checkout-index/clean');
 }
 
 function writeSummary(title, value) {
@@ -85,6 +86,7 @@ if (mode === 'preflight') {
     core_eol: git(['config', '--get', 'core.eol']),
     provider_authority_present: false,
   };
+  console.log(JSON.stringify({ wr074_workspace_preflight_evidence: residue }));
   if (residue.node_modules_present_after_clean || residue.artifacts_present_after_clean || residue.sentinel_present_after_clean || !residue.git_status_clean || residue.browser_test_crlf_present) {
     fail('persistent workspace residue or non-canonical line endings survived bounded cleanup');
   }
