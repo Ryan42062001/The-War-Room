@@ -10,7 +10,9 @@ import {
   authorityIdentitySha256,
   createGitAuthorityEvidenceReader,
   syncTaskSpecHeaders,
-  validateTaskShape
+  validateTaskShape,
+  verifyAuthorityWorkflowRuns,
+  verifyProtectedWorkflowRun
 } from './workflow-manager-transition.mjs';
 
 function spec(task) {
@@ -53,6 +55,37 @@ function canonicalize(value) {
 function canonicalBytes(value) { return Buffer.from(`${JSON.stringify(canonicalize(value))}\n`); }
 function sha256(bytes) { return crypto.createHash('sha256').update(bytes).digest('hex'); }
 function git(root, args) { return execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim(); }
+
+const CANONICAL_REPOSITORY='Ryan42062001/The-War-Room';
+const CONTROL_PLANE_HEAD='c'.repeat(40);
+const LEGACY_CONSUMER='.ai/research/WR081_PROTECTED_SCORING_CONSUMER.py';
+const V21_CONSUMER='.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py';
+const LEGACY_WORKFLOW='WR-083 Protected Historical Scoring Bridge';
+const V21_WORKFLOW='WR-097 Returning-Player v2.1 Protected Scoring Bridge';
+
+function workflowForAuthority(authority) {
+  if (authority.consumer_path === LEGACY_CONSUMER) return LEGACY_WORKFLOW;
+  if (authority.consumer_path === V21_CONSUMER) return V21_WORKFLOW;
+  return 'UNKNOWN';
+}
+function rawRunFor(authority, overrides={}) {
+  return {
+    id:12345,name:workflowForAuthority(authority),event:'workflow_dispatch',
+    head_branch:'main',head_sha:CONTROL_PLANE_HEAD,status:'completed',conclusion:'success',
+    repository:{full_name:CANONICAL_REPOSITORY},...overrides
+  };
+}
+function verifiedRunFor(fx, overrides={}) {
+  const raw=rawRunFor(fx.authority,overrides);
+  return {
+    id:raw.id,name:raw.name,expected_workflow_name:workflowForAuthority(fx.authority),
+    event:raw.event,head_branch:raw.head_branch,head_sha:raw.head_sha,status:raw.status,
+    conclusion:raw.conclusion,repository_full_name:raw.repository?.full_name || raw.repository_full_name,
+    control_plane_head:CONTROL_PLANE_HEAD,authority_sha256:fx.authoritySha,
+    consumer_path:fx.authority.consumer_path,consumer_sha256:fx.authority.consumer_sha256,
+    ...overrides
+  };
+}
 
 function testBasicTransitionAndAutoPin() {
   const a = task('WR-901', { status: 'AUDIT_READY', pr: 123, worker_checkpoint_sha: 'a'.repeat(40) });
@@ -106,15 +139,16 @@ function testAuditorAmbiguityAdversaries() {
   assert.ok(errors.some(e=>e.includes('explicit audit_target_pr contradicts')),'explicit PR mismatch must fail');
 }
 
-function buildPublicationRepo() {
+function buildPublicationRepo({consumerPath=LEGACY_CONSUMER, receiptOverrides={}, terminalOverrides={}}={}) {
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'wr-authority-'));
   git(root,['init','-q']); git(root,['config','user.email','test@example.com']); git(root,['config','user.name','Test']);
-  fs.mkdirSync(path.join(root,'.ai/research'),{recursive:true});
-  fs.writeFileSync(path.join(root,'.ai/research/consumer.py'),'print("ok")\n');
+  const consumerFull=path.join(root,consumerPath);
+  fs.mkdirSync(path.dirname(consumerFull),{recursive:true});
+  fs.writeFileSync(consumerFull,'print("ok")\n');
   git(root,['add','.']); git(root,['commit','-qm','authorized']);
   const authorizedHead=git(root,['rev-parse','HEAD']);
-  const consumerBytes=fs.readFileSync(path.join(root,'.ai/research/consumer.py'));
-  const authority={branch:'wr-906-execution',head_sha:authorizedHead,consumer_path:'.ai/research/consumer.py',consumer_sha256:sha256(consumerBytes)};
+  const consumerBytes=fs.readFileSync(consumerFull);
+  const authority={branch:'wr-906-execution',head_sha:authorizedHead,consumer_path:consumerPath,consumer_sha256:sha256(consumerBytes)};
   const authoritySha=authorityIdentitySha256(authority);
   const terminalPath='.ai/research/generated/WR906_TERMINAL_RESULT.json';
   const resultPath='.ai/research/generated/WR906_RESULT.json';
@@ -124,7 +158,7 @@ function buildPublicationRepo() {
     schema_version:'wr081-terminal-result-summary-v1',task_id:'WR-906',execution_status:'SUCCESS',
     result_terminal:'VALIDATION_FAILED',decision_status:'BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE',
     authority_sha256:authoritySha,authorized_head:authorizedHead,consumer_sha256:authority.consumer_sha256,
-    prediction_lock_count:4,gate_lock_count:2
+    prediction_lock_count:4,gate_lock_count:2,...terminalOverrides
   };
   fs.writeFileSync(path.join(root,terminalPath),canonicalBytes(terminal));
   fs.writeFileSync(path.join(root,resultPath),canonicalBytes({task_id:'WR-906',ok:true}));
@@ -139,7 +173,7 @@ function buildPublicationRepo() {
     branch:authority.branch,authorized_head:authorizedHead,consumer_path:authority.consumer_path,
     consumer_sha256:authority.consumer_sha256,workflow_run_id:'12345',execution_status:'SUCCESS',
     result_terminal:terminal.result_terminal,decision_status:terminal.decision_status,
-    publication_payload_sha256:payloadSha,single_publication_commit_required:true
+    publication_payload_sha256:payloadSha,single_publication_commit_required:true,...receiptOverrides
   };
   fs.writeFileSync(path.join(root,receiptPath),canonicalBytes(receipt));
   git(root,['add','.']); git(root,['commit','-qm','protected publication']);
@@ -170,7 +204,7 @@ function testAuthorityConsumptionAndReplay() {
     }],update_tasks:[{task_id:'WR-906',set:{worker_checkpoint_sha:fx.publicationHead}}]},
     taskSpecReader:reader,
     authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root),
-    authorityVerifiedRuns:new Map([['WR-906',{id:12345,name:'WR-083 Protected Historical Scoring Bridge',event:'workflow_dispatch',head_branch:'main',conclusion:'success'}]])
+    authorityVerifiedRuns:new Map([['WR-906',verifiedRunFor(fx)]])
   });
   assert.ok(fabricated.errors.some(e=>e.includes('committed receipt SHA-256 mismatch')),'AUD-02 fabricated digest must fail');
 
@@ -182,7 +216,7 @@ function testAuthorityConsumptionAndReplay() {
     }],update_tasks:[{task_id:'WR-906',set:{worker_checkpoint_sha:fx.publicationHead}}]},
     taskSpecReader:reader,
     authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root),
-    authorityVerifiedRuns:new Map([['WR-906',{id:12345,name:'WR-083 Protected Historical Scoring Bridge',event:'workflow_dispatch',head_branch:'main',conclusion:'failure'}]])
+    authorityVerifiedRuns:new Map([['WR-906',verifiedRunFor(fx,{conclusion:'failure'})]])
   });
   assert.ok(unverifiedRun.errors.some(e=>e.includes('not independently verified')),'AUD-02 failed workflow run must not authorize consumption');
 
@@ -194,7 +228,7 @@ function testAuthorityConsumptionAndReplay() {
     }],update_tasks:[{task_id:'WR-906',set:{worker_checkpoint_sha:fx.publicationHead}}]},
     taskSpecReader:reader,
     authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root),
-    authorityVerifiedRuns:new Map([['WR-906',{id:12345,name:'WR-083 Protected Historical Scoring Bridge',event:'workflow_dispatch',head_branch:'main',conclusion:'success'}]])
+    authorityVerifiedRuns:new Map([['WR-906',verifiedRunFor(fx)]])
   });
   assert.deepEqual(consumed.errors,[]);
   const done=consumed.registry.tasks[0];
@@ -278,9 +312,86 @@ function testAuthorityConsumptionAndReplay() {
     }],update_tasks:[{task_id:'WR-906',set:{worker_checkpoint_sha:second}}]},
     taskSpecReader:reader,
     authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root),
-    authorityVerifiedRuns:new Map([['WR-906',{id:12345,name:'WR-083 Protected Historical Scoring Bridge',event:'workflow_dispatch',head_branch:'main',conclusion:'success'}]])
+    authorityVerifiedRuns:new Map([['WR-906',verifiedRunFor(fx)]])
   });
   assert.ok(multi.errors.some(e=>e.includes('publication parent does not equal authorized head')),'multi-commit advancement must fail');
+}
+
+function testProtectedWorkflowIdentityBinding() {
+  const legacy=buildPublicationRepo();
+  const v21=buildPublicationRepo({consumerPath:V21_CONSUMER});
+  const context={workflowRunId:'12345',repositoryFullName:CANONICAL_REPOSITORY,controlPlaneHead:CONTROL_PLANE_HEAD};
+
+  assert.equal(verifyProtectedWorkflowRun(legacy.authority,rawRunFor(legacy.authority),context).name,LEGACY_WORKFLOW);
+  assert.equal(verifyProtectedWorkflowRun(v21.authority,rawRunFor(v21.authority),context).name,V21_WORKFLOW);
+
+  const badCases=[
+    [legacy.authority,rawRunFor(legacy.authority,{name:'wrong workflow'}),'wrong workflow name'],
+    [legacy.authority,rawRunFor(legacy.authority,{name:V21_WORKFLOW}),'WR-083 authority paired with WR-097 workflow'],
+    [v21.authority,rawRunFor(v21.authority,{name:LEGACY_WORKFLOW}),'WR-097 authority paired with WR-083 workflow'],
+    [legacy.authority,rawRunFor(legacy.authority,{repository:{full_name:'fork/repo'}}),'wrong repository'],
+    [legacy.authority,rawRunFor(legacy.authority,{head_branch:'feature'}),'wrong branch'],
+    [legacy.authority,rawRunFor(legacy.authority,{head_sha:'d'.repeat(40)}),'wrong control-plane head'],
+    [legacy.authority,rawRunFor(legacy.authority,{id:99999}),'wrong workflow run ID'],
+    [legacy.authority,rawRunFor(legacy.authority,{conclusion:'failure'}),'failed workflow run'],
+    [legacy.authority,rawRunFor(legacy.authority,{conclusion:'cancelled'}),'cancelled workflow run'],
+    [legacy.authority,rawRunFor(legacy.authority,{status:'in_progress',conclusion:null}),'in-progress workflow run']
+  ];
+  for (const [authority,run,label] of badCases) assert.throws(()=>verifyProtectedWorkflowRun(authority,run,context),undefined,label);
+  assert.throws(()=>verifyProtectedWorkflowRun({...legacy.authority,consumer_path:'.ai/research/UNKNOWN.py'},rawRunFor(legacy.authority),context),/unsupported protected consumer identity/,'unknown consumer/workflow family must fail closed');
+
+  const v21Task=task('WR-906',{status:'IN_PROGRESS',branch:v21.authority.branch,worker_checkpoint_sha:v21.authorizedHead,future_execution_authority:v21.authority});
+  const v21Registry={schema_version:3,updated_at_utc:'2026-09-19T00:00:00Z',canonical_branch:'main',manager_owned:true,active_only:true,tasks:[v21Task]};
+  const v21Specs=new Map([[v21Task.task_file,spec(v21Task)]]);
+  const v21Consumed=applyTransitionPlan({
+    registry:v21Registry,
+    plan:{schema_version:1,authority_consumption_receipts:[{task_id:'WR-906',publication_head:v21.publicationHead,receipt_path:v21.receiptPath,terminal_path:v21.terminalPath,workflow_run_id:'12345',receipt_sha256:v21.receiptSha}],update_tasks:[{task_id:'WR-906',set:{worker_checkpoint_sha:v21.publicationHead}}]},
+    taskSpecReader:rel=>v21Specs.get(rel)??null,
+    authorityEvidenceReader:createGitAuthorityEvidenceReader(v21.root),
+    authorityVerifiedRuns:new Map([['WR-906',verifiedRunFor(v21)]])
+  });
+  assert.deepEqual(v21Consumed.errors,[],'legitimate WR-097 v2.1 authority path must be valid');
+
+  const badReceipt=buildPublicationRepo({receiptOverrides:{consumer_sha256:'0'.repeat(64)}});
+  const badReceiptTask=task('WR-906',{status:'IN_PROGRESS',branch:badReceipt.authority.branch,worker_checkpoint_sha:badReceipt.authorizedHead,future_execution_authority:badReceipt.authority});
+  const badReceiptRegistry={schema_version:3,updated_at_utc:'2026-09-19T00:00:00Z',canonical_branch:'main',manager_owned:true,active_only:true,tasks:[badReceiptTask]};
+  const badReceiptSpecs=new Map([[badReceiptTask.task_file,spec(badReceiptTask)]]);
+  const badDigest=applyTransitionPlan({
+    registry:badReceiptRegistry,
+    plan:{schema_version:1,authority_consumption_receipts:[{task_id:'WR-906',publication_head:badReceipt.publicationHead,receipt_path:badReceipt.receiptPath,terminal_path:badReceipt.terminalPath,workflow_run_id:'12345',receipt_sha256:badReceipt.receiptSha}],update_tasks:[{task_id:'WR-906',set:{worker_checkpoint_sha:badReceipt.publicationHead}}]},
+    taskSpecReader:rel=>badReceiptSpecs.get(rel)??null,
+    authorityEvidenceReader:createGitAuthorityEvidenceReader(badReceipt.root),
+    authorityVerifiedRuns:new Map([['WR-906',verifiedRunFor(badReceipt)]])
+  });
+  assert.ok(badDigest.errors.some(e=>e.includes('committed receipt consumer_sha256 mismatch')),'wrong consumer digest must fail closed');
+
+  const crossBound=buildPublicationRepo({terminalOverrides:{authority_sha256:'0'.repeat(64)}});
+  const crossTask=task('WR-906',{status:'IN_PROGRESS',branch:crossBound.authority.branch,worker_checkpoint_sha:crossBound.authorizedHead,future_execution_authority:crossBound.authority});
+  const crossRegistry={schema_version:3,updated_at_utc:'2026-09-19T00:00:00Z',canonical_branch:'main',manager_owned:true,active_only:true,tasks:[crossTask]};
+  const crossSpecs=new Map([[crossTask.task_file,spec(crossTask)]]);
+  const cross=applyTransitionPlan({
+    registry:crossRegistry,
+    plan:{schema_version:1,authority_consumption_receipts:[{task_id:'WR-906',publication_head:crossBound.publicationHead,receipt_path:crossBound.receiptPath,terminal_path:crossBound.terminalPath,workflow_run_id:'12345',receipt_sha256:crossBound.receiptSha}],update_tasks:[{task_id:'WR-906',set:{worker_checkpoint_sha:crossBound.publicationHead}}]},
+    taskSpecReader:rel=>crossSpecs.get(rel)??null,
+    authorityEvidenceReader:createGitAuthorityEvidenceReader(crossBound.root),
+    authorityVerifiedRuns:new Map([['WR-906',verifiedRunFor(crossBound)]])
+  });
+  assert.ok(cross.errors.some(e=>e.includes('terminal summary authority_sha256 mismatch')),'authority/result cross-binding mismatch must fail closed');
+}
+
+async function testLiveWorkflowVerificationFailures() {
+  const fx=buildPublicationRepo({consumerPath:V21_CONSUMER});
+  const authorityTask=task('WR-906',{status:'IN_PROGRESS',branch:fx.authority.branch,worker_checkpoint_sha:fx.authorizedHead,future_execution_authority:fx.authority});
+  const registry={schema_version:3,updated_at_utc:'2026-09-19T00:00:00Z',canonical_branch:'main',manager_owned:true,active_only:true,tasks:[authorityTask]};
+  const plan={schema_version:1,repository:CANONICAL_REPOSITORY,authority_consumption_receipts:[{task_id:'WR-906',workflow_run_id:'12345'}]};
+  const options={repositoryFullName:CANONICAL_REPOSITORY,controlPlaneHead:CONTROL_PLANE_HEAD};
+  const okFetch=async()=>({ok:true,status:200,json:async()=>rawRunFor(fx.authority)});
+  const verified=await verifyAuthorityWorkflowRuns(plan,registry,{...options,fetchImpl:okFetch});
+  assert.equal(verified.get('WR-906').name,V21_WORKFLOW);
+  await assert.rejects(()=>verifyAuthorityWorkflowRuns(plan,registry,{...options,fetchImpl:async()=>{throw new Error('network down');}}),/live verification unavailable/,'canonical run unavailable must fail closed');
+  await assert.rejects(()=>verifyAuthorityWorkflowRuns(plan,registry,{...options,fetchImpl:async()=>({ok:false,status:503,json:async()=>({})})}),/HTTP 503/,'GitHub API non-success must fail closed');
+  await assert.rejects(()=>verifyAuthorityWorkflowRuns(plan,registry,{...options,fetchImpl:async()=>({ok:true,status:200,json:async()=>rawRunFor(fx.authority,{name:LEGACY_WORKFLOW})})}),/workflow identity mismatch/,'workflow identity substitution must fail');
+  await assert.rejects(()=>verifyAuthorityWorkflowRuns({...plan,repository:'fork/repo'},registry,{...options,fetchImpl:okFetch}),/does not match canonical repository/,'caller repository substitution must fail');
 }
 
 function testExistingShapeAndHeaderContracts() {
@@ -296,5 +407,7 @@ function testExistingShapeAndHeaderContracts() {
 testBasicTransitionAndAutoPin();
 testAuditorAmbiguityAdversaries();
 testAuthorityConsumptionAndReplay();
+testProtectedWorkflowIdentityBinding();
+await testLiveWorkflowVerificationFailures();
 testExistingShapeAndHeaderContracts();
 console.log('workflow Manager-transition regression: PASS');

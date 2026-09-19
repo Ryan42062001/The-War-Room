@@ -87,6 +87,10 @@ const SHA64 = /^[0-9a-f]{64}$/;
 const AUTHORITY_RECEIPT_FIELD = 'authority_consumption_receipt';
 const AUTHORITY_HISTORY_FIELD = 'consumed_authority_sha256s';
 const AUTHORITY_GLOBAL_HISTORY_FIELD = 'authority_consumption_history';
+const PROTECTED_WORKFLOW_BY_CONSUMER = new Map([
+  ['.ai/research/WR081_PROTECTED_SCORING_CONSUMER.py', 'WR-083 Protected Historical Scoring Bridge'],
+  ['.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py', 'WR-097 Returning-Player v2.1 Protected Scoring Bridge']
+]);
 
 function canonicalize(value) {
   if (Array.isArray(value)) return value.map(canonicalize);
@@ -120,6 +124,90 @@ export function authorityIdentitySha256(authority) {
   const normalized = normalizeAuthority(authority);
   if (!normalized) return null;
   return sha256Bytes(canonicalJsonBytes(normalized));
+}
+
+function expectedProtectedWorkflowName(authority) {
+  const normalized = normalizeAuthority(authority);
+  if (!normalized) throw new Error('canonical future_execution_authority is malformed');
+  const expected = PROTECTED_WORKFLOW_BY_CONSUMER.get(normalized.consumer_path);
+  if (!expected) throw new Error(`unsupported protected consumer identity ${normalized.consumer_path}`);
+  return expected;
+}
+
+function parseGithubRepositoryRemote(remote) {
+  const value = String(remote || '').trim();
+  let match = value.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+?)(?:\.git)?$/);
+  if (!match) match = value.match(/^git@github\.com:([^/]+)\/([^/]+?)(?:\.git)?$/);
+  return match ? `${match[1]}/${match[2]}` : null;
+}
+
+function resolveCanonicalRepository(root) {
+  const envRepository = String(process.env.GITHUB_REPOSITORY || '').trim();
+  let remoteRepository = '';
+  try {
+    remoteRepository = parseGithubRepositoryRemote(execFileSync('git', ['config', '--get', 'remote.origin.url'], {
+      cwd: path.resolve(root), encoding: 'utf8', stdio: ['ignore','pipe','pipe']
+    }).trim()) || '';
+  } catch {}
+  if (envRepository && remoteRepository && envRepository !== remoteRepository) {
+    throw new Error(`canonical repository identity mismatch: env=${envRepository} remote=${remoteRepository}`);
+  }
+  const repository = envRepository || remoteRepository;
+  if (!/^[^/]+\/[^/]+$/.test(repository)) throw new Error('cannot resolve canonical repository owner/name');
+  return repository;
+}
+
+function resolveControlPlaneHead(root) {
+  let head = '';
+  try {
+    head = execFileSync('git', ['log','-1','--format=%H','--','.ai/shared/ACTIVE_TASKS.json'], {
+      cwd: path.resolve(root), encoding: 'utf8', stdio: ['ignore','pipe','pipe']
+    }).trim();
+  } catch (error) {
+    throw new Error(`cannot resolve canonical control-plane head: ${error.message}`);
+  }
+  if (!SHA40.test(head)) throw new Error('canonical control-plane head is not a commit SHA');
+  return head;
+}
+
+export function verifyProtectedWorkflowRun(authority, run, {
+  workflowRunId,
+  repositoryFullName,
+  controlPlaneHead
+} = {}) {
+  const normalized = normalizeAuthority(authority);
+  if (!normalized) throw new Error('canonical future_execution_authority is malformed');
+  const expectedWorkflowName = expectedProtectedWorkflowName(normalized);
+  if (!/^[^/]+\/[^/]+$/.test(repositoryFullName || '')) throw new Error('canonical repository identity is invalid');
+  if (!SHA40.test(controlPlaneHead || '')) throw new Error('canonical control-plane head is invalid');
+  if (!run || typeof run !== 'object') throw new Error('protected workflow run is unavailable');
+  const expectedRunId = String(workflowRunId || '');
+  const runRepository = String(run.repository?.full_name || run.repository_full_name || '');
+  const errors = [];
+  if (!expectedRunId || String(run.id) !== expectedRunId) errors.push('workflow run ID mismatch');
+  if (run.name !== expectedWorkflowName) errors.push(`workflow identity mismatch (expected ${expectedWorkflowName})`);
+  if (run.event !== 'workflow_dispatch') errors.push('workflow event is not workflow_dispatch');
+  if (run.head_branch !== 'main') errors.push('workflow branch is not canonical main');
+  if (run.head_sha !== controlPlaneHead) errors.push('workflow/control-plane head mismatch');
+  if (runRepository !== repositoryFullName) errors.push('workflow repository mismatch');
+  if (run.status != null && run.status !== 'completed') errors.push('workflow run is not completed');
+  if (run.conclusion !== 'success') errors.push('workflow run conclusion is not success');
+  if (errors.length) throw new Error(errors.join('; '));
+  return {
+    id: run.id,
+    name: run.name,
+    expected_workflow_name: expectedWorkflowName,
+    event: run.event,
+    head_branch: run.head_branch,
+    head_sha: run.head_sha,
+    status: run.status ?? 'completed',
+    conclusion: run.conclusion,
+    repository_full_name: runRepository,
+    control_plane_head: controlPlaneHead,
+    authority_sha256: authorityIdentitySha256(normalized),
+    consumer_path: normalized.consumer_path,
+    consumer_sha256: normalized.consumer_sha256
+  };
 }
 
 function taskConsumedAuthorityDigests(task) {
@@ -284,13 +372,23 @@ export function verifyCommittedAuthorityConsumption(previousTask, nextTask, clai
   if (!claim.workflow_run_id || String(claim.workflow_run_id) !== receipt.workflow_run_id) {
     throw new Error(`${previousTask.task_id}: committed receipt workflow_run_id mismatch`);
   }
+  const expectedWorkflowName = expectedProtectedWorkflowName(oldAuthority);
   if (!verifiedRun ||
       String(verifiedRun.id) !== receipt.workflow_run_id ||
-      verifiedRun.name !== 'WR-083 Protected Historical Scoring Bridge' ||
+      verifiedRun.name !== expectedWorkflowName ||
+      verifiedRun.expected_workflow_name !== expectedWorkflowName ||
       verifiedRun.event !== 'workflow_dispatch' ||
       verifiedRun.head_branch !== 'main' ||
-      verifiedRun.conclusion !== 'success') {
-    throw new Error(`${previousTask.task_id}: protected workflow run is not independently verified as successful canonical execution`);
+      !SHA40.test(verifiedRun.head_sha || '') ||
+      !SHA40.test(verifiedRun.control_plane_head || '') ||
+      verifiedRun.head_sha !== verifiedRun.control_plane_head ||
+      verifiedRun.status !== 'completed' ||
+      verifiedRun.conclusion !== 'success' ||
+      !/^[^/]+\/[^/]+$/.test(verifiedRun.repository_full_name || '') ||
+      verifiedRun.authority_sha256 !== authoritySha ||
+      verifiedRun.consumer_path !== oldAuthority.consumer_path ||
+      verifiedRun.consumer_sha256 !== oldAuthority.consumer_sha256) {
+    throw new Error(`${previousTask.task_id}: protected workflow run is not independently verified against canonical authority/repository/control-plane context`);
   }
 
   const terminalBytes = evidenceReader.readFile(publicationHead, terminalPath);
@@ -337,6 +435,9 @@ export function verifyCommittedAuthorityConsumption(previousTask, nextTask, clai
     receipt_sha256: receiptSha,
     terminal_path: terminalPath,
     workflow_run_id: receipt.workflow_run_id,
+    workflow_name: expectedWorkflowName,
+    workflow_repository: verifiedRun.repository_full_name,
+    workflow_control_plane_head: verifiedRun.control_plane_head,
     execution_status: receipt.execution_status,
     result_terminal: receipt.result_terminal,
     decision_status: receipt.decision_status,
@@ -523,11 +624,20 @@ export function applyTransitionPlan({ registry, plan, taskSpecReader, authorityE
   return { registry: next, taskSpecs, changes, errors: [...new Set(errors)] };
 }
 
-async function verifyAuthorityWorkflowRuns(plan) {
+export async function verifyAuthorityWorkflowRuns(plan, registry, {
+  root = process.cwd(),
+  fetchImpl = fetch,
+  repositoryFullName = null,
+  controlPlaneHead = null
+} = {}) {
   const claims = plan.authority_consumption_receipts || [];
   if (!claims.length) return new Map();
-  const repository = String(plan.repository || process.env.GITHUB_REPOSITORY || '');
-  if (!/^[^/]+\/[^/]+$/.test(repository)) throw new Error('authority consumption transition requires repository owner/name');
+  const repository = repositoryFullName || resolveCanonicalRepository(root);
+  if (plan.repository && String(plan.repository) !== repository) {
+    throw new Error(`authority consumption repository claim does not match canonical repository ${repository}`);
+  }
+  const canonicalControlPlaneHead = controlPlaneHead || resolveControlPlaneHead(root);
+  if (!SHA40.test(canonicalControlPlaneHead || '')) throw new Error('canonical control-plane head is invalid');
   const token = process.env.GITHUB_TOKEN || '';
   const headers = { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
   if (token) headers.Authorization = `Bearer ${token}`;
@@ -536,23 +646,30 @@ async function verifyAuthorityWorkflowRuns(plan) {
     if (!claim?.task_id || !claim.workflow_run_id || verified.has(claim.task_id)) {
       throw new Error('authority consumption claim requires unique task_id and workflow_run_id');
     }
+    const canonicalTask = (registry?.tasks || []).find(task => task.task_id === claim.task_id);
+    const authority = normalizeAuthority(canonicalTask?.future_execution_authority);
+    if (!canonicalTask || !authority) {
+      throw new Error(`${claim.task_id}: canonical future_execution_authority is unavailable or malformed`);
+    }
     const url = `https://api.github.com/repos/${repository}/actions/runs/${encodeURIComponent(String(claim.workflow_run_id))}`;
     let response;
-    try { response = await fetch(url, { headers }); }
+    try { response = await fetchImpl(url, { headers }); }
     catch (error) { throw new Error(`authority workflow live verification unavailable: ${error.message}`); }
-    if (!response.ok) throw new Error(`authority workflow live verification HTTP ${response.status}`);
-    const run = await response.json();
-    if (String(run.id) !== String(claim.workflow_run_id) ||
-        run.name !== 'WR-083 Protected Historical Scoring Bridge' ||
-        run.event !== 'workflow_dispatch' ||
-        run.head_branch !== 'main' ||
-        run.conclusion !== 'success') {
-      throw new Error(`${claim.task_id}: protected workflow run is not a successful canonical WR-083 dispatch`);
+    if (!response?.ok) throw new Error(`authority workflow live verification HTTP ${response?.status ?? 'unknown'}`);
+    let run;
+    try { run = await response.json(); }
+    catch (error) { throw new Error(`authority workflow live verification returned invalid JSON: ${error.message}`); }
+    let boundRun;
+    try {
+      boundRun = verifyProtectedWorkflowRun(authority, run, {
+        workflowRunId: claim.workflow_run_id,
+        repositoryFullName: repository,
+        controlPlaneHead: canonicalControlPlaneHead
+      });
+    } catch (error) {
+      throw new Error(`${claim.task_id}: protected workflow run failed canonical binding: ${error.message}`);
     }
-    verified.set(claim.task_id, {
-      id: run.id, name: run.name, event: run.event, head_branch: run.head_branch,
-      head_sha: run.head_sha, conclusion: run.conclusion
-    });
+    verified.set(claim.task_id, boundRun);
   }
   return verified;
 }
@@ -564,7 +681,7 @@ async function main() {
   const planPath = path.resolve(root, options.plan);
   const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
   const plan = JSON.parse(fs.readFileSync(planPath, 'utf8'));
-  const authorityVerifiedRuns = await verifyAuthorityWorkflowRuns(plan);
+  const authorityVerifiedRuns = await verifyAuthorityWorkflowRuns(plan, registry, { root });
   const result = applyTransitionPlan({
     registry,
     plan,
