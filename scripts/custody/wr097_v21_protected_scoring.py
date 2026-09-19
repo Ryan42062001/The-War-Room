@@ -142,7 +142,9 @@ def load_authority(repo_root: Path) -> tuple[list[dict], dict]:
         raise ContractError("source snapshot identity mismatch")
     if c.get("cohort_version") != COHORT_ID:
         raise ContractError("cohort identity mismatch")
-    if ((p.get("protocol") or {}).get("id")) != PROTOCOL_ID or ((p.get("gates") or {}).get("id")) != RESULT_GATES_ID:
+    protocol_identity=(p.get("protocol") or {}).get("id")
+    gate_identity=(p.get("ids") or {}).get("result_gates_candidate")
+    if protocol_identity != PROTOCOL_ID or gate_identity != RESULT_GATES_ID:
         raise ContractError("WR-095 v2.1 protocol identity mismatch")
     stats = s.get("stats_contract") or {}
     if stats.get("status") != "ADMITTED" or (s.get("summary") or {}).get("admitted_source_count") != EXPECTED_SOURCE_COUNT:
