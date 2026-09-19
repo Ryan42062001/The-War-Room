@@ -1,6 +1,6 @@
 # WR-097 — Returning-Player v2.1 Protected Consumer + Execution Bridge
 
-Status: IMPLEMENTED — LIVE NO-SCORING READINESS PROOF PENDING  
+Status: COMPLETE — AUDIT REQUIRED  
 Canonical workflow: V3.5  
 Scoring authorization: NONE  
 Target-outcome authorization: NONE
@@ -101,19 +101,76 @@ Synthetic/preflight head:
 
 No credentialed WR-097 provider proof had executed before this marker commit.
 
-## Live readiness boundary
+## Live NO-SCORING readiness proof
 
-The credentialed readiness proof triggered by this evidence commit is strictly NO-SCORING. It may retrieve and re-hash the 14 exact retained objects but the actual v2.1 consumer receives no retained paths/bytes and runs only its source-free `readiness` mode.
+Successful implementation/proof SHA:
 
-Required proof:
-- 14/14 B2 and R2 SHA-256/size identity;
-- 14/14 B2/R2 equality;
-- provider mutations 0;
-- provider credentials absent from consumer;
-- independent bridge re-hash 14/14 without CSV parsing;
-- actual v2.1 consumer readiness with `retained_rows_parsed=false`, `historical_targets_exposed=false`, `model_fit=false`, `predictions_emitted=false`;
-- deliberate credential injection fails closed;
+`123149f330338b02381fdabeb09f575b7a94c26c`
+
+Protected workflow run:
+
+`35417205490` — SUCCESS
+
+Jobs:
+- preflight `105828043700` — SUCCESS;
+- trust gate `105828139958` — SUCCESS;
+- protected no-scoring readiness `105828156958` — SUCCESS;
+- future authorized v2.1 scoring `105828157786` — SKIPPED.
+
+War Room CI on the same proof SHA:
+
+`35417205509` — SUCCESS.
+
+Reviewed SHA-256:
+- protected scoring consumer: `f6e5eee35c0e769abc9cbc899c0eecc3e311ff3cd22973ebf2c7351ddd58c6f8`;
+- consumer conformance test: `ef7e7f3cadc8566faf059831bdc5fbad28ee39e2b713e446566c1fefb026a97a`;
+- custody/execution bridge: `439000b4b4f7967f0e8ed075e1c9bd164a1047ec58a3c39ab6ee47ee75e9ff3b`;
+- bridge regression suite: `3955b3c1deb3a628d32407e6971669597a289472955af59dfb6bdf5c5734ff8f`;
+- protected workflow: `377b86ce431e16cf967871e41eb62541d716c766c1dc1c92bbc934898e25403b`.
+
+The credentialed readiness proof remained genuinely NO-SCORING:
+- exactly 14 retained identities verified;
+- B2 digest/size 14/14 PASS;
+- R2 digest/size 14/14 PASS;
+- B2/R2 equality 14/14 PASS;
+- bridge independent re-hash/re-size 14/14 PASS;
+- provider mutation operations 0;
+- consumer provider credential presence false;
+- the actual v2.1 consumer ran only source-free `readiness` mode;
+- retained rows parsed by consumer false;
+- historical targets exposed false;
+- 2022–2025 target outcomes exposed false;
+- real model fit false;
+- real predictions emitted false;
+- deliberate credential injection failed closed;
 - cleanup PASS;
-- Actions artifacts 0.
+- GitHub Actions artifacts 0.
 
-No real 2022–2025 target value may be exposed or inspected in this proof.
+Synthetic/conformance coverage passed for the exact protocol hash, ordered 28-feature schema, scaler→clamp ordering, fit/predict clamp symmetry, Ridge configuration, residual-target construction, median/MAD/`1.4826` arithmetic, residual bounds, final prediction arithmetic, invalid/zero-MAD fallback, fallback-count gate interaction, no named-player/WR exception, validation/confirmation chronology, deterministic serialization, publication allowlist, raw-source passthrough rejection, credential isolation, cleanup success/failure, branch/head race rejection, untrusted PR protections, V3.5 authority identity, and one-time receipt/replay semantics.
+
+Machine-readable evidence:
+`.ai/work_helper/WR097_V21_PROTECTED_READINESS_SUMMARY.json`.
+
+## Remaining fail-closed integration item
+
+Canonical Manager transition tooling currently recognizes only the legacy WR-083 protected workflow name when consuming a successful protected workflow-run identity. WR-097 does not own or modify that Manager-controlled tooling, so it remains a post-audit integration item.
+
+This does not weaken WR-097: future real scoring remains fail closed until Manager integrates the exact audited WR-097 target, updates canonical transition authority, runs the canonical-main NO-SCORING canary, and separately authorizes a real scoring task.
+
+## Boundary attestation
+
+`real_scoring=false`
+
+`historical_targets_exposed=false`
+
+`target_outcomes_2022_2025_exposed=false`
+
+No 2022–2025 target outcome was exposed, joined, inspected, inferred, or evaluated by WR-097. No 2026 regular-season outcome was inspected. No real Ridge fit/prediction/baseline comparison/gate calculation occurred on retained data.
+
+No source was reacquired, refreshed, substituted, or recustodied. No provider mutation occurred. No Players metadata, draft-capital predictor, or `draft_picks.csv` was admitted. No production ranking/recommendation behavior, season-total composition, WR-074 surface, or Phase 6 work changed.
+
+## Next gate
+
+Work Helper does not merge this work and does not activate the Auditor.
+
+Manager should freeze the exact final WR-097 PR head, then activate fresh WR-098 independent audit. Only an accepted WR-098 PASS-family result may proceed to exact audited integration and a canonical-main NO-SCORING canary. Real v2.1 validation scoring requires a separate later Manager task.
