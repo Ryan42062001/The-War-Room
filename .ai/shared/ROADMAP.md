@@ -160,3 +160,12 @@ No active Phase 5B critical path.
 - WR-102 — BLOCKED / fresh independent result audit after exact WR-101 freeze.
 - Next gate — canonicalize WR-101 authority -> one `authorized-v21-scoring` protected dispatch -> consume authority -> bounded result packaging -> exact freeze -> WR-102 audit.
 - No rerun/tuning/2026/production/ranking/composition/Phase 6 authority.
+
+
+## Returning-Player v2.1 target-ingest technical failure
+
+- WR-101 — BLOCKED / first authorized run `35424042233` failed closed inside sandboxed target-ingest; no publication/receipt; authority revoked.
+- WR-103 — ASSIGNED / bounded retained-data-free failure analysis + remediation.
+- WR-104 — BLOCKED / fresh independent remediation audit after Manager freeze.
+- WR-102 — remains blocked/reserved for a later actual protected result target.
+- No rerun or replacement authority is authorized.
