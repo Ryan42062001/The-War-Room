@@ -112,3 +112,14 @@ No active Phase 5B critical path.
 - Known Manager workflow-identity integration blocker remains fail closed and must be separately audited if changed.
 - No validation scoring authority exists.
 - Phase 6 remains blocked.
+
+
+## Returning-Player v2.1 protected workflow identity integration
+
+- WR-098 — CLOSED / PASS with no findings on exact WR-097 SHA `75c0fbcd518438a226a8c49e3e11951de3944638`.
+- WR-097 — MERGED / exact audited bytes integrated through PR #278 as canonical merge `3956e88be165df29a83442cb624b198b7347e381`; post-merge Full CI `35419965619` SUCCESS.
+- WR-097 canonical-main NO-SCORING canary — REQUIRED / not yet dispatched.
+- WR-099 — BLOCKED / next bounded Manager-controlled V3.5 protected-workflow identity integration; implementation scope limited to `scripts/workflow-manager-transition.mjs` and `scripts/test-workflow-manager-transition.mjs`.
+- WR-099 requires fresh independent audit after Manager freeze and a second canonical-main protected NO-SCORING canary after exact audited integration.
+- No real v2.1 validation scoring authority exists.
+- Phase 6 remains blocked.
