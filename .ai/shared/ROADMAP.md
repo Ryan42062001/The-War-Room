@@ -37,3 +37,10 @@ Critical path:
 - WR-091 — AUDIT_READY / exact candidate frozen at `def590788eb615d9322d5cc8ae3eef14e8c1bc25`, PR #257.
 - WR-092 — ASSIGNED / fresh independent V3.5 audit.
 - V3.4 remains canonical pending WR-092 PASS-family verdict plus post-merge Full War Room CI canary.
+
+
+## WR-092 failed audit remediation
+
+- WR-092 — CLOSED / FAIL — REMEDIATION REQUIRED on exact historical WR-091 target `def590788eb615d9322d5cc8ae3eef14e8c1bc25`; 3 HIGH findings.
+- WR-091 — IN_PROGRESS / bounded remediation of AUD-01/02/03 only.
+- V3.4 remains canonical until a new WR-091 candidate passes fresh independent audit and post-merge Full CI canary.
