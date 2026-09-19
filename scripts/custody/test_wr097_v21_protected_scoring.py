@@ -251,6 +251,14 @@ def test_cleanup_success_and_deliberate_failure_paths():
         except RuntimeError:
             b.cleanup_paths([c])
         assert not c.exists()
+        frozen=root/"immutable-lock"; nested=frozen/"files"/"synthetic"; nested.mkdir(parents=True)
+        (nested/"evidence.json").write_text('{"synthetic":true}\n',encoding="utf-8")
+        (nested/"evidence.json").chmod(0o444)
+        nested.chmod(0o555)
+        (frozen/"files").chmod(0o555)
+        frozen.chmod(0o555)
+        b.cleanup_paths([frozen])
+        assert not frozen.exists(), "immutable runner-temp phase lock must be fully removed"
 
 def test_workflow_static_security_and_release_guard():
     workflow=ROOT/".github/workflows/wr097-v21-protected-scoring-bridge.yml"
