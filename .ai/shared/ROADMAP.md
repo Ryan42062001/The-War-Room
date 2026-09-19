@@ -305,3 +305,16 @@ No active Phase 5B critical path.
 - First gate — reconcile exactly three task-owned branch changes onto current main.
 - Then prove hosted reference + dedicated self-hosted parity, repeat-run cleanliness, security boundaries and benchmark.
 - WR-075 — BLOCKED pending one Manager-frozen immutable WR-074 target.
+
+
+## WR-074 frozen self-hosted CI pilot / WR-075 audit gate
+
+- WR-074 — AUDIT_READY / PR #307 frozen at exact SHA `75fcd3756956b2943f18aff03115f9783a16d0aa`.
+- Immutable implementation SHA — `c2e511da5d3767cbc0688de7e95236135a6975b2`.
+- Repeated self/hosted parity runs — `35460866285` and `35461197805`, all matched jobs SUCCESS.
+- Final pilot `35461615030` — SUCCESS.
+- Final-head War Room CI `35461622646` — SUCCESS with full test.
+- Self-hosted route remains dedicated and fail-closed; canonical hosted/custody/protected workflows remain hosted.
+- No speed advantage demonstrated.
+- PR #307 remains unmerged.
+- WR-075 — BLOCKED only until this exact Manager freeze is canonical; then fresh independent audit.

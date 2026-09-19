@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T15:55:00Z",
+  "updated_at_utc": "2026-09-19T18:45:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -9,13 +9,13 @@
       "task_id": "WR-074",
       "owner": "Work Helper",
       "worker_slot": "work-helper-self-hosted-heavy-ci",
-      "status": "ASSIGNED",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-074.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "94cb4826fc477d5bf592a37585f8cbea7574daea",
-      "worker_checkpoint_sha": "7b4641499c50541abf523267eb4c0255813e8b6d",
+      "assignment_main_sha": "cb544da20c7b82ded5552d425d69b8a47c880f30",
+      "worker_checkpoint_sha": "75fcd3756956b2943f18aff03115f9783a16d0aa",
       "branch": "wr-074-self-hosted-heavy-ci-runner-pilot",
-      "pr": null,
+      "pr": 307,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "audit_required": true,
@@ -41,7 +41,7 @@
         "scripts/custody/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Reconcile the three WR-074 branch-unique task changes from preserved checkpoint 7b4641499c50541abf523267eb4c0255813e8b6d onto canonical main 94cb4826fc477d5bf592a37585f8cbea7574daea; then complete hosted/self-hosted parity, repeat-run, cleanup and security evidence. If dedicated runner is unavailable/mislabeled, fail closed with smallest user action.",
+      "next_gate": "WR-075 fresh independent audit of exact frozen target 75fcd3756956b2943f18aff03115f9783a16d0aa. Keep PR #307 draft/unmerged and do not follow later branch movement.",
       "refresh_mode": "FAST_REFRESH"
     },
     {
@@ -64,7 +64,7 @@
         "WR-074"
       ],
       "blocked_on": [
-        "WR-074 must publish one Manager-frozen immutable hardened runner-pilot target with exact run/security evidence before audit activation."
+        "Manager WR-074 exact freeze must be canonical before fresh WR-075 activation."
       ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
@@ -82,8 +82,12 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes WR-074 exact target -> activate WR-075 fresh independent audit.",
-      "refresh_mode": "FAST_REFRESH"
+      "next_gate": "Canonicalize exact WR-074 freeze, then activate a fresh WR-075 audit branch against exactly 75fcd3756956b2943f18aff03115f9783a16d0aa.",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_target_task": "WR-074",
+      "audit_target_pr": 307,
+      "audit_target_branch": "wr-074-self-hosted-heavy-ci-runner-pilot",
+      "audit_target_sha": "75fcd3756956b2943f18aff03115f9783a16d0aa"
     }
   ]
 }
