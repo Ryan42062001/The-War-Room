@@ -13,12 +13,13 @@ function fail(message) {
   process.exit(2);
 }
 
-function commandName(base) {
-  return process.platform === 'win32' && (base === 'npm' || base === 'npx') ? `${base}.cmd` : base;
-}
-
 function run(command, args = [], options = {}) {
-  const result = spawnSync(commandName(command), args, {
+  const windowsCommandScript = process.platform === 'win32' && (command === 'npm' || command === 'npx');
+  const executable = windowsCommandScript ? (process.env.ComSpec || 'cmd.exe') : command;
+  const commandArgs = windowsCommandScript
+    ? ['/d', '/s', '/c', [`${command}.cmd`, ...args].join(' ')]
+    : args;
+  const result = spawnSync(executable, commandArgs, {
     cwd: root,
     stdio: options.capture ? ['ignore', 'pipe', 'pipe'] : 'inherit',
     encoding: 'utf8',
