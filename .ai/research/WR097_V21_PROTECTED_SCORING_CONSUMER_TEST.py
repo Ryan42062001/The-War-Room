@@ -72,6 +72,7 @@ def synthetic_gate_rows(year: int) -> list[dict]:
             rows.append({
                 "target_season": year, "player_id_namespace": "synthetic",
                 "player_id": f"{pos}_{i:02d}", "position": pos,
+                "target_status": "OBSERVED",
                 "target_ppr_pg": c.fstr(target),
                 "candidate_prediction": c.fstr(candidate),
                 "primary_baseline_prediction": c.fstr(baseline),
@@ -85,7 +86,7 @@ class WR097V21ConsumerTests(unittest.TestCase):
         data = PROTOCOL_PATH.read_bytes()
         self.assertEqual(hashlib.sha256(data).hexdigest(), c.PROTOCOL_SHA256)
         protocol = json.loads(data)
-        self.assertEqual(protocol["protocol"]["id"], c.PROTOCOL_ID)
+        self.assertEqual(protocol["ids"]["protocol_candidate"], c.PROTOCOL_ID)
         self.assertEqual(tuple(protocol["features"]["ordered_names"]), EXPECTED_FEATURES)
         self.assertEqual(c.FEATURE_NAMES, EXPECTED_FEATURES)
         self.assertEqual(len(c.FEATURE_NAMES), 28)
@@ -182,7 +183,7 @@ class WR097V21ConsumerTests(unittest.TestCase):
                 "gate_locks": {}, "synthetic_fixture": True,
             }
             path=inp/"context.json"; path.write_text(json.dumps(context))
-            must_fail(lambda: c._target_ingest(context,path,state,locks,out), "publication manifest")
+            must_fail(lambda: c._target_ingest(context,path,state,locks,out), "invalid JSON")
 
     def test_validation_requires_complete_2022_2023_and_fallbacks_zero(self):
         with tempfile.TemporaryDirectory() as td:
