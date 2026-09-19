@@ -51,3 +51,10 @@ Critical path:
 - WR-092 — CLOSED / FAIL on historical `def590788...`; three HIGH findings preserved.
 - WR-091 — AUDIT_READY / remediated exact target `638a8e2af25f1c806fe8883de0c959c5caaff35e`.
 - WR-093 — ASSIGNED / fresh independent re-audit of remediated V3.5 candidate.
+
+
+## Workflow V3.5 second remediation
+
+- WR-093 — CLOSED / FAIL on `638a8e2...`; one HIGH lifecycle replay-history finding.
+- WR-091 — IN_PROGRESS / bounded remediation of WR-093-AUD-01 only.
+- Next gate — new exact WR-091 freeze followed by fresh independent re-audit.
