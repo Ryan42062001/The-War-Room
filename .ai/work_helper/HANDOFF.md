@@ -1,117 +1,96 @@
 # Work Helper / Super Troubleshooter Handoff
 
-HANDOFF
+STATUS: COMPLETE — AUDIT REQUIRED  
+TASK: WR-097 — Returning-Player v2.1 Protected Consumer + Execution Bridge  
+ROLE: Work Helper / Super Troubleshooter / Cross-Functional Operator  
+CANONICAL WORKFLOW: V3.5  
+EXECUTION MODE: STANDARD_CHAT_HIGH  
+REFRESH MODE: FAST_REFRESH
 
-Task ID: WR-083
+BRANCH: `wr-097-v21-protected-execution-bridge`
 
-Role: Work Helper / Super Troubleshooter / Cross-Functional Operator
+CANONICAL MAIN:
+`38d116b3741459e6e9f9d2f1bfc6aa5c7d835f38`
 
-Status: COMPLETE — FRESH RE-AUDIT REQUIRED
+PROOF IMPLEMENTATION SHA:
+`123149f330338b02381fdabeb09f575b7a94c26c`
 
-Canonical workflow: V3.4
+SCORING AUTHORIZATION: NONE  
+TARGET-OUTCOME AUTHORIZATION: NONE
 
-Canonical remediation base reconciled:
-`ca7fda518386fc23f44344e78fc3b4169602c254`
+## Accepted decisions consumed
 
-Branch:
-`wr-083-protected-historical-scoring-bridge`
+- WR-095 audited target `738296ad38282fc91738203e7e1ced888ba862ed`;
+- WR-096 PASS, no findings;
+- protocol `returning-player-v2.1-model-protocol-candidate/1.0.0-wr095`;
+- protocol SHA-256 `5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39`;
+- WR-059 source snapshot / cohort unchanged;
+- exactly 14 Player Summary Stats retained identities;
+- zero Players metadata and draft-capital predictors.
 
-Existing PR:
-#234
+## Done
 
-Failed audited target preserved:
-`4ac5fa2c6148960094fde81b217bd3af080e4213`
+Implemented:
+- exact hash-bindable v2.1 protected consumer;
+- dedicated V3.5 protected execution/custody bridge;
+- dedicated protected workflow;
+- exact WR-095 model semantics and chronology;
+- publication-family/raw-source barriers;
+- canonical authority identity and replay/receipt mechanics;
+- synthetic/conformance suites;
+- credentialed NO-SCORING readiness proof.
 
-Failed audit:
-WR-084 / PR #243 / Auditor head
-`69b491dfff87c08413ae335448c2b9ec2a2515f0`
+Protected run `35417205490` — SUCCESS:
+- preflight `105828043700` — SUCCESS
+- trust gate `105828139958` — SUCCESS
+- protected no-scoring readiness `105828156958` — SUCCESS
+- future authorized v2.1 scoring `105828157786` — SKIPPED
 
-## Remediated proof
+Proof-head War Room CI `35417205509` — SUCCESS.
 
-Protected implementation/proof SHA:
-`648ae9372bf2eb49e0fcebcf921d7bafd7d26d1b`
+Reviewed hashes:
+- consumer `f6e5eee35c0e769abc9cbc899c0eecc3e311ff3cd22973ebf2c7351ddd58c6f8`
+- consumer test `ef7e7f3cadc8566faf059831bdc5fbad28ee39e2b713e446566c1fefb026a97a`
+- bridge script `439000b4b4f7967f0e8ed075e1c9bd164a1047ec58a3c39ab6ee47ee75e9ff3b`
+- bridge test `3955b3c1deb3a628d32407e6971669597a289472955af59dfb6bdf5c5734ff8f`
+- workflow `377b86ce431e16cf967871e41eb62541d716c766c1dc1c92bbc934898e25403b`
 
-Protected run:
-`35308823649` — SUCCESS
+Custody/readiness:
+- B2 digest/size 14/14 PASS
+- R2 digest/size 14/14 PASS
+- B2/R2 equality 14/14 PASS
+- bridge re-hash/re-size 14/14 PASS
+- provider mutations 0
+- consumer provider credentials absent
+- deliberate credential injection fails closed
+- cleanup PASS
+- Actions artifacts 0
 
-Jobs:
-- preflight `105486418552` — SUCCESS
-- trust gate `105486504930` — SUCCESS
-- protected no-scoring proof `105486527602` — SUCCESS
-- future-authorized WR-081 scoring `105486528622` — SKIPPED
+`real_scoring=false`  
+`historical_targets_exposed=false`  
+`target_outcomes_2022_2025_exposed=false`
 
-Exact proof-head Full War Room CI:
-`35308823631` — SUCCESS
+## Remaining risk / integration gate
 
-Applicable same-head regressions:
-- WR-083 PR preflight `35308826526` — SUCCESS
-- WR-046 `35308826445` — SUCCESS
-- WR-063 `35308826406` — SUCCESS
-- WR-069 `35308826554` — SUCCESS
+Manager-owned V3.5 transition tooling still recognizes the legacy WR-083 protected workflow name for successful workflow-run identity consumption. WR-097 correctly leaves this fail closed; Work Helper did not modify Manager/shared tooling.
 
-Reviewed implementation hashes:
-- script `b111a5566f64a3e334b946780c9bf6fb5579a995917615c33ce1d95e98733498`
-- tests `a581a9a98b15af75e9eeacdade3fb66364dbb9900dec153aa91c0c89dd61ca34`
-- workflow `cf83c12c213772012fcd4a2c5b430e8bff321f0ef229007ca3fa85eccc6cae38`
+After fresh WR-098 PASS-family, Manager must integrate the exact audited target, update canonical transition authority as needed, and run a canonical-main protected NO-SCORING canary before considering a separate real scoring task.
 
-## WR-084-AUD-01
+FILES / ARTIFACTS THAT MATTER:
+- `.ai/work_helper/WR097_V21_PROTECTED_EXECUTION_BRIDGE.md`
+- `.ai/work_helper/WR097_V21_PROTECTED_READINESS_SUMMARY.json`
+- `.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py`
+- `.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py`
+- `.github/workflows/wr097-v21-protected-scoring-bridge.yml`
+- `scripts/custody/wr097_v21_protected_scoring.py`
+- `scripts/custody/test_wr097_v21_protected_scoring.py`
 
-REMEDIATED.
+NEXT ACTION:
+Manager verifies/freezes the final WR-097 PR head and activates fresh WR-098 independent audit.
 
-Future execution now requires Manager-owned canonical WR-081
-`future_execution_authority` for exact branch, exact head SHA, exact consumer path, and exact reviewed consumer SHA-256. Workflow-dispatch values must match that authority exactly.
-
-Before retained retrieval:
-- live authorized remote branch head must equal Manager head;
-- exact authorized commit is checked out;
-- local HEAD and reviewed consumer path/digest must match Manager authority.
-
-Immediately before consumer exposure, the remote head is checked again. The existing pre-push remote-head checks remain.
-
-Negative tests cover unrelated same-repository SHA, stale authorized branch SHA, unreviewed path/digest, missing/blocked authority, and branch advancement between authorization and execution.
-
-## WR-084-AUD-02
-
-REMEDIATED.
-
-Publication validation is bound to the verified retained-input manifest at consumer validation, immutable phase merge/locking, and final staging.
-
-An output is rejected if its digest/size or exact bytes match any retained raw source. Publication is limited to explicit WR-081 JSON/Markdown evidence names under `.ai/research/` or `.ai/research/generated/`.
-
-Negative tests prove an exact retained raw copy placed at an otherwise allowed
-`.ai/research/generated/WR081_RAW_COPY.json`
-fails validation and final staging.
-
-## Preserved properties
-
-The live no-scoring proof reproduced all previously PASSed custody/isolation properties:
-- exact 14 admitted stats identities;
-- B2/R2 digest+size and byte equality 14/14;
-- provider mutations 0;
-- consumer provider credentials absent;
-- consumer independent re-hash 14/14;
-- sandbox isolation PASS;
-- chronology PASS;
-- cleanup PASS;
-- raw Actions artifacts 0;
-- zero Players metadata;
-- no `draft_picks.csv`;
-- no upstream reacquisition/substitution.
-
-`real_scoring=false`
-
-`historical_targets_exposed=false`
-
-No 2026 regular-season outcomes, production ranking/model behavior, season-total composition, or Phase 6 behavior was changed or inspected.
-
-Detailed evidence:
-- `.ai/work_helper/WR083_PROTECTED_HISTORICAL_SCORING_BRIDGE.md`
-- `.ai/work_helper/WR083_PROTECTED_PROOF_SUMMARY.json`
-
-## Next gate
-
-Return control to Manager.
-
-Manager should freeze the exact final WR-083 PR #234 head after final documentation/CI verification, then activate WR-089 as a fresh independent re-audit.
-
-Work Helper does not merge PR #234, does not activate WR-089, and does not reactivate WR-081.
+DO NOT REPEAT:
+- do not rerun WR-095 research;
+- do not expose 2022–2025 outcomes;
+- do not run real v2.1 scoring;
+- do not resume WR-074;
+- do not merge the WR-097 PR from this role.

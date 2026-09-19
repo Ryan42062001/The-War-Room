@@ -1,0 +1,411 @@
+name: WR-097 Returning-Player v2.1 Protected Scoring Bridge
+
+on:
+  push:
+    branches: [wr-097-v21-protected-execution-bridge]
+    paths:
+      - '.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py'
+      - '.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py'
+      - '.github/workflows/wr097-v21-protected-scoring-bridge.yml'
+      - 'scripts/custody/wr097_v21_protected_scoring.py'
+      - 'scripts/custody/test_wr097_v21_protected_scoring.py'
+      - 'scripts/validate-release-candidate.mjs'
+      - '.ai/work_helper/**'
+  pull_request:
+    paths:
+      - '.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py'
+      - '.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py'
+      - '.github/workflows/wr097-v21-protected-scoring-bridge.yml'
+      - 'scripts/custody/wr097_v21_protected_scoring.py'
+      - 'scripts/custody/test_wr097_v21_protected_scoring.py'
+      - 'scripts/validate-release-candidate.mjs'
+      - '.ai/work_helper/**'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Protected bridge mode
+        required: true
+        type: choice
+        default: no-scoring
+        options: [no-scoring, authorized-v21-scoring]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wr097-v21-protected-scoring-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v6
+        with:
+          python-version: 3.12.7
+      - name: Install frozen v2.1 runtime and sandbox support
+        run: |
+          python3 -m pip install --disable-pip-version-check --no-input numpy==2.1.3 pandas==2.2.3 scikit-learn==1.5.2 scipy==1.14.1
+          sudo apt-get update -qq
+          sudo apt-get install -y bubblewrap apparmor-profiles apparmor-utils
+          test -f /usr/share/apparmor/extra-profiles/bwrap-userns-restrict
+          sudo install -m 0644 /usr/share/apparmor/extra-profiles/bwrap-userns-restrict /etc/apparmor.d/bwrap-userns-restrict
+          sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+      - name: Verify exact accepted v2.1 authority and Python syntax
+        run: |
+          test "$(sha256sum .ai/research/generated/WR095_RETURNING_PLAYER_V21_PROTOCOL_CANDIDATE.json | cut -d' ' -f1)" = "5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39"
+          test "$(awk '{print $1}' .ai/research/generated/WR095_RETURNING_PLAYER_V21_PROTOCOL_CANDIDATE.json.sha256)" = "5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39"
+          python3 -m py_compile \
+            .ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py \
+            .ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py \
+            scripts/custody/wr097_v21_protected_scoring.py \
+            scripts/custody/test_wr097_v21_protected_scoring.py
+          python3 scripts/custody/wr097_v21_protected_scoring.py authority --repo-root .
+          python3 scripts/custody/wr097_v21_protected_scoring.py synthetic-conformance
+          python3 scripts/custody/wr097_v21_protected_scoring.py future-plan
+          python3 scripts/custody/wr097_v21_protected_scoring.py sandbox-conformance
+      - name: Run exact v2.1 synthetic consumer conformance
+        run: python3 .ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py
+      - name: Run WR-097 bridge security/V3.5 regressions
+        run: python3 scripts/custody/test_wr097_v21_protected_scoring.py
+      - name: Regress accepted retained-reader and predecessor protected boundaries
+        run: |
+          python3 scripts/custody/test_read_retained_versions.py
+          python3 scripts/custody/test_wr069_retained_safe_consumer.py
+          python3 scripts/custody/test_wr083_protected_historical_scoring.py
+      - name: Preserve fail-closed release workflow allowlist
+        run: npm run test:release
+
+  trust-gate:
+    needs: preflight
+    if: >-
+      (github.event_name == 'push' && contains(github.event.head_commit.message, '[wr097-no-scoring-proof]')) ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    outputs:
+      mode: ${{ steps.gate.outputs.mode }}
+      execution_task_id: ${{ steps.authority.outputs.execution_task_id }}
+      execution_branch: ${{ steps.authority.outputs.execution_branch }}
+      expected_head_sha: ${{ steps.authority.outputs.expected_head_sha }}
+      consumer_path: ${{ steps.authority.outputs.consumer_path }}
+      consumer_sha256: ${{ steps.authority.outputs.consumer_sha256 }}
+      authority_sha256: ${{ steps.authority.outputs.authority_sha256 }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - id: gate
+        name: Fail closed on untrusted ref/actor or premature scoring
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REPOSITORY: ${{ github.repository }}
+          REF: ${{ github.ref }}
+          ACTOR: ${{ github.actor }}
+          REQUESTED_MODE: ${{ github.event.inputs.mode }}
+        run: |
+          set -euo pipefail
+          test "$REPOSITORY" = "Ryan42062001/The-War-Room"
+          test "$ACTOR" = "Ryan42062001"
+          if test "$EVENT_NAME" = "push"; then
+            test "$REF" = "refs/heads/wr-097-v21-protected-execution-bridge"
+            mode="no-scoring"
+          else
+            test "$REF" = "refs/heads/main"
+            case "$REQUESTED_MODE" in
+              no-scoring|authorized-v21-scoring) mode="$REQUESTED_MODE" ;;
+              *) exit 2 ;;
+            esac
+          fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "WR-097 trusted ref/actor/mode gate: PASS ($mode)"
+      - id: authority
+        name: Load canonical Manager execution authority only for future scoring
+        if: steps.gate.outputs.mode == 'authorized-v21-scoring'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/custody/wr097_v21_protected_scoring.py future-authority --repo-root . > "$RUNNER_TEMP/wr097-authority.json"
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os, pathlib
+          a=json.loads((pathlib.Path(os.environ["RUNNER_TEMP"])/"wr097-authority.json").read_text())
+          for out,key in (
+            ("execution_task_id","task_id"),("execution_branch","branch"),("expected_head_sha","head_sha"),
+            ("consumer_path","consumer_path"),("consumer_sha256","consumer_sha256"),("authority_sha256","authority_sha256")
+          ):
+              value=str(a[key])
+              if "\n" in value or "\r" in value: raise SystemExit(2)
+              print(f"{out}={value}")
+          PY
+
+  protected-no-scoring-readiness:
+    needs: trust-gate
+    if: needs.trust-gate.outputs.mode == 'no-scoring'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: 3.12.7
+      - name: Install frozen runtime
+        run: python3 -m pip install --disable-pip-version-check --no-input numpy==2.1.3 pandas==2.2.3 scikit-learn==1.5.2 scipy==1.14.1
+      - id: bind
+        name: Hash-bind exact reviewed WR-097 implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "script_sha256=$(sha256sum scripts/custody/wr097_v21_protected_scoring.py | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+          echo "test_sha256=$(sha256sum scripts/custody/test_wr097_v21_protected_scoring.py | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+          echo "workflow_sha256=$(sha256sum .github/workflows/wr097-v21-protected-scoring-bridge.yml | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+          echo "consumer_sha256=$(sha256sum .ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+          echo "consumer_test_sha256=$(sha256sum .ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+      - name: Retrieve and verify exactly 14 retained identities
+        env:
+          WR_CUSTODY_B2_READ_KEY_ID: ${{ secrets.WR_CUSTODY_B2_READ_KEY_ID }}
+          WR_CUSTODY_B2_READ_APPLICATION_KEY: ${{ secrets.WR_CUSTODY_B2_READ_APPLICATION_KEY }}
+          WR_CUSTODY_R2_ACCESS_KEY_ID: ${{ secrets.WR_CUSTODY_R2_ACCESS_KEY_ID }}
+          WR_CUSTODY_R2_SECRET_ACCESS_KEY: ${{ secrets.WR_CUSTODY_R2_SECRET_ACCESS_KEY }}
+          WR_CUSTODY_B2_BUCKET: ${{ vars.WR_CUSTODY_B2_BUCKET }}
+          WR_CUSTODY_B2_ENDPOINT: ${{ vars.WR_CUSTODY_B2_ENDPOINT }}
+          WR_CUSTODY_R2_BUCKET: ${{ vars.WR_CUSTODY_R2_BUCKET }}
+          WR_CUSTODY_R2_ENDPOINT: ${{ vars.WR_CUSTODY_R2_ENDPOINT }}
+        run: |
+          echo "::add-mask::${WR_CUSTODY_B2_READ_KEY_ID}"
+          echo "::add-mask::${WR_CUSTODY_B2_READ_APPLICATION_KEY}"
+          echo "::add-mask::${WR_CUSTODY_R2_ACCESS_KEY_ID}"
+          echo "::add-mask::${WR_CUSTODY_R2_SECRET_ACCESS_KEY}"
+          python3 scripts/custody/wr097_v21_protected_scoring.py provider --repo-root . \
+            --raw-dir "$RUNNER_TEMP/wr097-raw" \
+            --manifest "$RUNNER_TEMP/wr097-verified-input-manifest.json" \
+            --report "$RUNNER_TEMP/wr097-provider-report.json"
+      - name: Re-hash retained inputs without parsing or scoring
+        run: |
+          env -i PATH="$PATH" RUNNER_TEMP="$RUNNER_TEMP" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+            python3 scripts/custody/wr097_v21_protected_scoring.py no-scoring-consumer --repo-root . \
+              --manifest "$RUNNER_TEMP/wr097-verified-input-manifest.json" \
+              --report "$RUNNER_TEMP/wr097-no-scoring-report.json" \
+              --expected-commit "$GITHUB_SHA" \
+              --script-sha256 "${{ steps.bind.outputs.script_sha256 }}" \
+              --test-sha256 "${{ steps.bind.outputs.test_sha256 }}" \
+              --workflow-sha256 "${{ steps.bind.outputs.workflow_sha256 }}" \
+              --consumer-sha256 "${{ steps.bind.outputs.consumer_sha256 }}" \
+              --consumer-test-sha256 "${{ steps.bind.outputs.consumer_test_sha256 }}"
+      - name: Run actual v2.1 consumer readiness with no provider authority and no retained rows
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/wr097-ready/input" "$RUNNER_TEMP/wr097-ready/state" "$RUNNER_TEMP/wr097-ready/locks" "$RUNNER_TEMP/wr097-ready/output"
+          python3 - <<'PY'
+          import json, os, pathlib
+          root=pathlib.Path(os.environ["RUNNER_TEMP"])/"wr097-ready"
+          context={
+            "task_id":"WR-097","mode":"readiness","synthetic_fixture":True,"visible_sources":[],
+            "bindings":{
+              "source_snapshot":{"id":"wr-returning-player-v2-source-snapshot/1.2.0-wr059","sha256":"6af88adaea478351a2b9c4884ca248dfed9527cb97f05e3648bd82c5fe0b3cea"},
+              "cohort":{"id":"returning-player-v2-cohort/1.2.0-wr059","sha256":"f62075ec3c13784dea4568fa69aae8a84d39ca70f074ca769132f1f143f2c3d4"},
+              "protocol":{"id":"returning-player-v2.1-model-protocol-candidate/1.0.0-wr095","sha256":"5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39","gates_id":"returning-player-v2.1-result-gates-candidate/1.0.0-wr095"},
+              "admitted_stats_source_count":14,"players_metadata_admitted_count":0,"draft_picks_csv_used":False,
+              "source_identity_set_sha256":"8cbe874b3ceea141cbb9fedb2198ffa940ee218fe4556feace7afd8bbfb89351"}
+          }
+          (root/"input/context.json").write_text(json.dumps(context))
+          PY
+          env -i PATH="$PATH" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+            python3 .ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py \
+              --wr097-mode readiness --wr097-context "$RUNNER_TEMP/wr097-ready/input/context.json" \
+              --wr097-state-dir "$RUNNER_TEMP/wr097-ready/state" --wr097-lock-dir "$RUNNER_TEMP/wr097-ready/locks" \
+              --wr097-output-dir "$RUNNER_TEMP/wr097-ready/output"
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"wr097-ready/output/bridge-result.json"
+          x=json.loads(p.read_text())
+          assert x["status"]=="PASS" and x["provider_credentials_present"] is False
+          assert x["retained_rows_parsed"] is False and x["historical_targets_exposed"] is False
+          assert x["model_fit"] is False and x["predictions_emitted"] is False
+          PY
+      - name: Deliberate consumer credential injection fails closed
+        shell: bash
+        run: |
+          set +e
+          env -i PATH="$PATH" LANG=C.UTF-8 LC_ALL=C.UTF-8 WR_CUSTODY_R2_ENDPOINT=deliberate-injection \
+            python3 .ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py \
+              --wr097-mode readiness --wr097-context "$RUNNER_TEMP/wr097-ready/input/context.json" \
+              --wr097-state-dir "$RUNNER_TEMP/wr097-ready/state" --wr097-lock-dir "$RUNNER_TEMP/wr097-ready/locks" \
+              --wr097-output-dir "$RUNNER_TEMP/wr097-ready/injected-output"
+          status=$?
+          set -e
+          test "$status" -eq 2
+          test ! -e "$RUNNER_TEMP/wr097-ready/injected-output/bridge-result.json"
+      - name: Publish privacy-safe readiness summary
+        env:
+          SCRIPT_SHA: ${{ steps.bind.outputs.script_sha256 }}
+          TEST_SHA: ${{ steps.bind.outputs.test_sha256 }}
+          WORKFLOW_SHA: ${{ steps.bind.outputs.workflow_sha256 }}
+          CONSUMER_SHA: ${{ steps.bind.outputs.consumer_sha256 }}
+          CONSUMER_TEST_SHA: ${{ steps.bind.outputs.consumer_test_sha256 }}
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          root=pathlib.Path(os.environ["RUNNER_TEMP"])
+          provider=json.loads((root/"wr097-provider-report.json").read_text())
+          safe=json.loads((root/"wr097-no-scoring-report.json").read_text())
+          summary={
+            "task_id":"WR-097","result":"PASS","mode":"NO-SCORING","implementation_sha":os.environ["GITHUB_SHA"],
+            "workflow_run_id":os.environ["GITHUB_RUN_ID"],"verified_input_count":provider["verified_input_count"],
+            "bindings":provider["bindings"],"b2_boundary":provider["b2_boundary"],"r2_boundary":provider["r2_boundary"],
+            "provider_mutation_operations":provider["provider_mutation_operations"],
+            "consumer_provider_credential_presence":safe["consumer_provider_credential_presence"],
+            "consumer_rehash_resize_pass_count":safe["consumer_rehash_resize_pass_count"],
+            "reviewed_code_binding":safe["reviewed_code_binding"],
+            "synthetic_chronology_conformance":safe["synthetic_chronology_conformance"],
+            "real_scoring":False,"historical_targets_exposed":False,"target_outcomes_2022_2025_exposed":False,
+            "regular_season_2026_outcomes_inspected":False,"raw_actions_artifacts":0,
+            "script_sha256":os.environ["SCRIPT_SHA"],"test_sha256":os.environ["TEST_SHA"],
+            "workflow_sha256":os.environ["WORKFLOW_SHA"],"consumer_sha256":os.environ["CONSUMER_SHA"],
+            "consumer_test_sha256":os.environ["CONSUMER_TEST_SHA"]}
+          print(json.dumps(summary,sort_keys=True))
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a",encoding="utf-8") as f:
+            f.write("### WR-097 protected NO-SCORING readiness\n\n"+json.dumps(summary,indent=2,sort_keys=True)+"\n")
+          PY
+      - name: Cleanup retained bytes and readiness state
+        if: always()
+        run: |
+          rm -rf "$RUNNER_TEMP/wr097-raw" "$RUNNER_TEMP/wr097-ready"
+          rm -f "$RUNNER_TEMP/wr097-verified-input-manifest.json" "$RUNNER_TEMP/wr097-provider-report.json" "$RUNNER_TEMP/wr097-no-scoring-report.json"
+          test ! -e "$RUNNER_TEMP/wr097-raw"
+          test ! -e "$RUNNER_TEMP/wr097-verified-input-manifest.json"
+          echo '{"wr097_cleanup":"PASS","raw_actions_artifacts":0,"real_scoring":false,"historical_targets_exposed":false}'
+
+  future-authorized-v21-scoring:
+    needs: trust-gate
+    if: needs.trust-gate.outputs.mode == 'authorized-v21-scoring'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: 3.12.7
+      - name: Install frozen runtime and sandbox
+        run: |
+          python3 -m pip install --disable-pip-version-check --no-input numpy==2.1.3 pandas==2.2.3 scikit-learn==1.5.2 scipy==1.14.1
+          sudo apt-get update -qq
+          sudo apt-get install -y bubblewrap apparmor-profiles apparmor-utils
+          sudo install -m 0644 /usr/share/apparmor/extra-profiles/bwrap-userns-restrict /etc/apparmor.d/bwrap-userns-restrict
+          sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+      - name: Verify live Manager-authorized branch head before retained retrieval
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EXECUTION_BRANCH: ${{ needs.trust-gate.outputs.execution_branch }}
+        run: |
+          set -euo pipefail
+          remote_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          current="$(git ls-remote "$remote_url" "refs/heads/$EXECUTION_BRANCH" | awk '{print $1}')"
+          python3 scripts/custody/wr097_v21_protected_scoring.py future-remote-head --repo-root . \
+            --execution-branch "$EXECUTION_BRANCH" --expected-head "${{ needs.trust-gate.outputs.expected_head_sha }}" \
+            --consumer-path "${{ needs.trust-gate.outputs.consumer_path }}" --consumer-sha256 "${{ needs.trust-gate.outputs.consumer_sha256 }}" \
+            --observed-head "$current"
+      - name: Check out exact authorized scoring head
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.trust-gate.outputs.expected_head_sha }}
+          path: v21-execution
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Verify exact checkout and reviewed consumer before retained retrieval
+        run: |
+          env -i PATH="$PATH" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+            python3 scripts/custody/wr097_v21_protected_scoring.py future-checkout --repo-root . \
+              --execution-repo "$GITHUB_WORKSPACE/v21-execution" \
+              --execution-branch "${{ needs.trust-gate.outputs.execution_branch }}" \
+              --expected-head "${{ needs.trust-gate.outputs.expected_head_sha }}" \
+              --consumer-path "${{ needs.trust-gate.outputs.consumer_path }}" \
+              --consumer-sha256 "${{ needs.trust-gate.outputs.consumer_sha256 }}"
+      - name: Retrieve exact retained inputs under accepted read-only boundary
+        env:
+          WR_CUSTODY_B2_READ_KEY_ID: ${{ secrets.WR_CUSTODY_B2_READ_KEY_ID }}
+          WR_CUSTODY_B2_READ_APPLICATION_KEY: ${{ secrets.WR_CUSTODY_B2_READ_APPLICATION_KEY }}
+          WR_CUSTODY_R2_ACCESS_KEY_ID: ${{ secrets.WR_CUSTODY_R2_ACCESS_KEY_ID }}
+          WR_CUSTODY_R2_SECRET_ACCESS_KEY: ${{ secrets.WR_CUSTODY_R2_SECRET_ACCESS_KEY }}
+          WR_CUSTODY_B2_BUCKET: ${{ vars.WR_CUSTODY_B2_BUCKET }}
+          WR_CUSTODY_B2_ENDPOINT: ${{ vars.WR_CUSTODY_B2_ENDPOINT }}
+          WR_CUSTODY_R2_BUCKET: ${{ vars.WR_CUSTODY_R2_BUCKET }}
+          WR_CUSTODY_R2_ENDPOINT: ${{ vars.WR_CUSTODY_R2_ENDPOINT }}
+        run: |
+          python3 scripts/custody/wr097_v21_protected_scoring.py provider --repo-root . \
+            --raw-dir "$RUNNER_TEMP/wr097-raw" --manifest "$RUNNER_TEMP/wr097-verified-input-manifest.json" \
+            --report "$RUNNER_TEMP/wr097-provider-report.json"
+      - name: Recheck authorized branch immediately before consumer exposure
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EXECUTION_BRANCH: ${{ needs.trust-gate.outputs.execution_branch }}
+        run: |
+          set -euo pipefail
+          remote_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          current="$(git ls-remote "$remote_url" "refs/heads/$EXECUTION_BRANCH" | awk '{print $1}')"
+          python3 scripts/custody/wr097_v21_protected_scoring.py future-remote-head --repo-root . \
+            --execution-branch "$EXECUTION_BRANCH" --expected-head "${{ needs.trust-gate.outputs.expected_head_sha }}" \
+            --consumer-path "${{ needs.trust-gate.outputs.consumer_path }}" --consumer-sha256 "${{ needs.trust-gate.outputs.consumer_sha256 }}" \
+            --observed-head "$current"
+      - name: Execute protected v2.1 chronology with provider-free consumer
+        run: |
+          env -i PATH="$PATH" RUNNER_TEMP="$RUNNER_TEMP" LANG=C.UTF-8 LC_ALL=C.UTF-8 GITHUB_RUN_ID="$GITHUB_RUN_ID" \
+            python3 scripts/custody/wr097_v21_protected_scoring.py future-execute --repo-root . \
+              --execution-repo "$GITHUB_WORKSPACE/v21-execution" \
+              --execution-branch "${{ needs.trust-gate.outputs.execution_branch }}" \
+              --expected-head "${{ needs.trust-gate.outputs.expected_head_sha }}" \
+              --consumer-path "${{ needs.trust-gate.outputs.consumer_path }}" \
+              --consumer-sha256 "${{ needs.trust-gate.outputs.consumer_sha256 }}" \
+              --manifest "$RUNNER_TEMP/wr097-verified-input-manifest.json" --output-dir "$RUNNER_TEMP/wr097-publication"
+      - name: Stage only validated v2.1 publication families
+        run: |
+          env -i PATH="$PATH" RUNNER_TEMP="$RUNNER_TEMP" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+            python3 scripts/custody/wr097_v21_protected_scoring.py stage-publication \
+              --execution-repo "$GITHUB_WORKSPACE/v21-execution" --output-dir "$RUNNER_TEMP/wr097-publication" \
+              --retained-manifest "$RUNNER_TEMP/wr097-verified-input-manifest.json"
+          git -C v21-execution add .ai/research
+          test -z "$(git -C v21-execution diff --cached --name-only | grep -v '^\.ai/research/generated/RETURNING_PLAYER_V21_' || true)"
+      - name: Recheck remote head, create exactly one publication commit, and push without force
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EXECUTION_BRANCH: ${{ needs.trust-gate.outputs.execution_branch }}
+          EXPECTED_HEAD: ${{ needs.trust-gate.outputs.expected_head_sha }}
+        run: |
+          set -euo pipefail
+          remote_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          current="$(git ls-remote "$remote_url" "refs/heads/$EXECUTION_BRANCH" | awk '{print $1}')"; test "$current" = "$EXPECTED_HEAD"
+          git -C v21-execution config user.name "github-actions[bot]"
+          git -C v21-execution config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C v21-execution commit -m "WR-097: publish authorized v2.1 protected result evidence"
+          test "$(git -C v21-execution rev-parse HEAD^)" = "$EXPECTED_HEAD"
+          current="$(git ls-remote "$remote_url" "refs/heads/$EXECUTION_BRANCH" | awk '{print $1}')"; test "$current" = "$EXPECTED_HEAD"
+          git -C v21-execution push "$remote_url" "HEAD:refs/heads/$EXECUTION_BRANCH"
+      - name: Verify one-publication authority receipt
+        run: |
+          publication_head="$(git -C v21-execution rev-parse HEAD)"
+          env -i PATH="$PATH" LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+            python3 scripts/custody/wr097_v21_protected_scoring.py authority-consumption-check --repo-root . \
+              --execution-repo "$GITHUB_WORKSPACE/v21-execution" --publication-head "$publication_head"
+      - name: Cleanup all raw and execution staging
+        if: always()
+        run: |
+          rm -rf "$RUNNER_TEMP/wr097-raw" "$RUNNER_TEMP/wr097-publication" "$GITHUB_WORKSPACE/v21-execution"
+          rm -f "$RUNNER_TEMP/wr097-verified-input-manifest.json" "$RUNNER_TEMP/wr097-provider-report.json"
