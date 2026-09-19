@@ -366,3 +366,23 @@ Frozen result:
 The R3 one-time authority is consumed and removed. No rerun or replacement scoring authority exists.
 
 WR-101 remains IN_PROGRESS only for bounded R&D packaging of the immutable result already produced. WR-102 remains BLOCKED until Manager freezes the final packaged target.
+
+
+## WR-101 exact R3 result freeze
+
+Manager independently accepted R&D packaging on PR #301 as the immutable WR-101 audit target.
+
+Frozen target:
+- exact SHA `a1cfda0b7ec0decbe5ece96283900a35d875abaf`;
+- protected publication parent `41c1601ce2a7ae26fcb13a370ae2960db9427a80`;
+- report SHA-256 `dcd4093544b5e464e4dca2e058f4e0102dff8081a4a669ba9178ff5a70207718`;
+- evidence manifest SHA-256 `c9eaed975f8b5aa5507bbdf98bec01392ee003f71ed9ddf87f353d4838425129`;
+- exact-head CI `35448347283` SUCCESS;
+- generated protected evidence unchanged;
+- manifest 34/34 blob identities and byte sizes match publication evidence;
+- terminal `CONFIRMATION_FAILED`;
+- decision `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`.
+
+PR #301 remains unmerged. No scoring authority exists. No production/ranking/composition/Phase-6 authority follows from this freeze.
+
+Next gate: canonicalize this freeze, then activate fresh WR-102 independent result audit against exactly `a1cfda0b7ec0decbe5ece96283900a35d875abaf`.
