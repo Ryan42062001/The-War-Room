@@ -318,3 +318,14 @@ No active Phase 5B critical path.
 - No speed advantage demonstrated.
 - PR #307 remains unmerged.
 - WR-075 — BLOCKED only until this exact Manager freeze is canonical; then fresh independent audit.
+
+
+## WR-075 independent self-hosted CI audit
+
+- WR-074 — AUDIT_READY / frozen PR #307 target `75fcd3756956b2943f18aff03115f9783a16d0aa`.
+- Canonical freeze checkpoint — `58eded3958d296d3392aac2cb1fdd92a0cd513c8`.
+- Post-freeze CI `35462263434` — SUCCESS.
+- WR-075 — ASSIGNED / fresh audit branch `wr-075-self-hosted-heavy-ci-runner-audit`.
+- Audit target — exactly `75fcd3756956b2943f18aff03115f9783a16d0aa`.
+- PR #307 stays draft/unmerged.
+- Next gate — Auditor-only verdict/evidence -> Manager infrastructure disposition.
