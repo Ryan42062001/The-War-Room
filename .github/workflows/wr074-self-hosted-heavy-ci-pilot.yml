@@ -74,13 +74,9 @@ jobs:
         run: node scripts/ci/wr074-command-bar-diagnose.mjs
 
       - name: Stress browser determinism boundaries
-        env:
-          NODE_OPTIONS: --require=./scripts/ci/wr074-playwright-shim.cjs
         run: node scripts/ci/wr074-pilot.mjs stress
 
       - name: Test WR-026 phone decision view
-        env:
-          NODE_OPTIONS: --require=./scripts/ci/wr074-playwright-shim.cjs
         run: npm run test:phone-decision-view
 
       - name: Upload WR-026 phone review evidence
@@ -95,8 +91,6 @@ jobs:
           if-no-files-found: ignore
 
       - name: Run canonical npm aggregate
-        env:
-          NODE_OPTIONS: --require=./scripts/ci/wr074-playwright-shim.cjs
         run: npm test
 
       - name: Validate resilience syntax
@@ -148,13 +142,9 @@ jobs:
         run: node scripts/ci/wr074-command-bar-diagnose.mjs
 
       - name: Stress browser determinism boundaries
-        env:
-          NODE_OPTIONS: --require=./scripts/ci/wr074-playwright-shim.cjs
         run: node scripts/ci/wr074-pilot.mjs stress
 
       - name: Test WR-026 phone decision view
-        env:
-          NODE_OPTIONS: --require=./scripts/ci/wr074-playwright-shim.cjs
         run: npm run test:phone-decision-view
 
       - name: Upload hosted WR-026 phone review evidence
@@ -169,8 +159,6 @@ jobs:
           if-no-files-found: ignore
 
       - name: Run canonical npm aggregate
-        env:
-          NODE_OPTIONS: --require=./scripts/ci/wr074-playwright-shim.cjs
         run: npm test
 
       - name: Validate resilience syntax

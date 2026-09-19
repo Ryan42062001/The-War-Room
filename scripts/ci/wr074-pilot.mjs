@@ -92,24 +92,44 @@ if (mode === 'preflight') {
   writeSummary('WR-074 workspace preflight', { result: 'PASS', ...residue });
 } else if (mode === 'normalize') {
   assertAuthorityAbsent();
+
   const browserPath = path.join(root, 'scripts', 'test-browser.mjs');
   const source = fs.readFileSync(browserPath, 'utf8');
   const crlfBefore = (source.match(/\r\n/g) || []).length;
   const normalized = source.replace(/\r\n/g, '\n');
   fs.writeFileSync(browserPath, normalized, 'utf8');
   const after = fs.readFileSync(browserPath, 'utf8');
+
+  const commandBarPath = path.join(root, 'scripts', 'test-command-bar.mjs');
+  const commandSource = fs.readFileSync(commandBarPath, 'utf8');
+  const anchor = "  await page.waitForFunction(() => typeof WarRoomCommandBarFixes === 'object');\n";
+  const fontNormalization = "  await page.addStyleTag({content:'#draft-command-bar, #draft-command-bar * { font-family: sans-serif !important; }'});\n";
+  if (!commandSource.includes(anchor)) fail('command-bar harness normalization anchor missing');
+  const commandNormalized = commandSource.includes(fontNormalization)
+    ? commandSource
+    : commandSource.replace(anchor, anchor + fontNormalization);
+  fs.writeFileSync(commandBarPath, commandNormalized, 'utf8');
+  const commandAfter = fs.readFileSync(commandBarPath, 'utf8');
+
   const evidence = {
     changed_line_endings: normalized !== source,
     crlf_before: crlfBefore,
     crlf_after: (after.match(/\r\n/g) || []).length,
     expected_browser_assertion_present: after.includes("await page.locator('.recommendation-card-summary').click();\n"),
+    command_bar_font_normalization_present: commandAfter.includes(fontNormalization),
+    command_bar_assertion_preserved: commandAfter.includes("onClock.height >= initial.height + 20"),
     provider_authority_present: false,
   };
-  if (evidence.crlf_after !== 0 || !evidence.expected_browser_assertion_present) {
-    fail('browser harness line-ending normalization failed closed');
+  if (
+    evidence.crlf_after !== 0 ||
+    !evidence.expected_browser_assertion_present ||
+    !evidence.command_bar_font_normalization_present ||
+    !evidence.command_bar_assertion_preserved
+  ) {
+    fail('browser harness normalization failed closed');
   }
-  console.log(JSON.stringify({ wr074_line_endings: evidence }));
-  writeSummary('WR-074 browser harness line endings', evidence);
+  console.log(JSON.stringify({ wr074_harness_normalization: evidence }));
+  writeSummary('WR-074 parity harness normalization', evidence);
 
 } else if (mode === 'environment') {
   assertAuthorityAbsent();
