@@ -61,7 +61,7 @@ jobs:
       - name: Verify exact accepted v2.1 authority and Python syntax
         run: |
           test "$(sha256sum .ai/research/generated/WR095_RETURNING_PLAYER_V21_PROTOCOL_CANDIDATE.json | cut -d' ' -f1)" = "5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39"
-          test "$(tr -d '\r\n ' < .ai/research/generated/WR095_RETURNING_PLAYER_V21_PROTOCOL_CANDIDATE.json.sha256)" = "5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39"
+          test "$(awk '{print $1}' .ai/research/generated/WR095_RETURNING_PLAYER_V21_PROTOCOL_CANDIDATE.json.sha256)" = "5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39"
           python3 -m py_compile \
             .ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py \
             .ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py \
