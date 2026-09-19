@@ -496,3 +496,12 @@ Accepted infrastructure result:
 The pilot demonstrated functional/security viability, not speed superiority.
 
 WR-074 and WR-075 are closed and removed from the active-only registry.
+
+
+## WR-109 draft readiness and ESPN Direct evidence assessment — ASSIGNED
+
+After WR-074/075 closure and an empty active-only registry, Manager reviewed the existing product roadmap and identified unverified live ESPN structured Direct capture, despite previously validated live Board/Pick History fallback. Existing 2026 FantasyPros ECR baseline is a separate future next-cycle source-refresh question.
+
+WR-109 is a bounded R&D evidence/validation-plan task only, in `STANDARD_CHAT_HIGH`, branch `wr-109-draft-readiness-evidence-assessment` from the canonical Manager activation checkpoint after this transition.
+
+No actual live Direct-mode pass is inferred from synthetic or fixture tests; no authenticated ESPN execution, production/dataset changes, model reruns, ranking changes, new source authority, Phase 6 or broader self-hosted CI authority. Historical open PR #251/#244 are not new work.
