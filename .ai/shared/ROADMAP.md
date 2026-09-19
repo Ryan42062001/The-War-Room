@@ -231,3 +231,13 @@ No active Phase 5B critical path.
 - WR-101 — BLOCKED behind WR-108; R2 authority revoked; no scoring authority.
 - WR-102 — BLOCKED/reserved for a future actual protected result.
 - Next gate — WR-108 canary SUCCESS -> separate Manager review -> completely NEW execution identity + NEW one-time authority only if explicitly authorized.
+
+
+## WR-101 R3 protected execution gate
+
+- WR-108 — CLOSED / canonical-main NO-SCORING canary `35447178653` SUCCESS.
+- WR-101 — IN_PROGRESS / fresh one-time R3 authority on branch `wr-101-v21-validation-scoring-execution-r3` at exact head `3d2f0ee09aad47a3190e4be6e83cc765543da387`.
+- Reviewed consumer SHA-256: `5fc302f54f554ba2db42606a204c94e1764599fc8c5687b7c7ef56d33423150a`.
+- Both prior execution identities/authorities remain revoked and must not be reused.
+- WR-102 — BLOCKED / reserved for a future immutable WR-101 result target.
+- Next gate — canonicalize new R3 authority -> one `authorized-v21-scoring` dispatch -> verify publication/receipt/authority consumption -> bounded R&D packaging -> Manager freeze -> WR-102 fresh result audit.

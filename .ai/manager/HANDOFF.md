@@ -2,40 +2,43 @@
 
 HANDOFF
 
-STATUS: WR-106/107 ACCEPTED — WR-108 CANONICAL-MAIN NO-SCORING GATE REQUIRES USER ACTION
+STATUS: WR-108 CLOSED SUCCESS — WR-101 R3 ONE-TIME AUTHORITY STAGED
 
 CANONICAL WORKFLOW: V3.5
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-Accepted WR-106 / WR-107 chain:
-- WR-106 exact audited target: `af988e4437cb45c920e18cbdcd4dc4c228dbf7c3`;
-- WR-106 immutable implementation SHA: `4b41ac8b12a4e9f029979eb29c92458e7b4cb640`;
-- WR-107 Auditor verdict: `PASS`, no findings;
-- WR-107 Auditor head: `4cd093e54c7263f515baa523ad22fcb6ebbcbd73`;
-- audit PR #297;
-- audit exact-head CI `35446344611` SUCCESS;
-- Auditor-only evidence integrated as canonical merge `d639bca7dc6bff61a7d4a695ff9d252ffea377be`;
-- post-audit-evidence canonical-main CI `35446527119` SUCCESS;
-- exact audited WR-106 PR #295 integrated as canonical merge `ffb7057f7d8951cdc4a53bcc4835d38684faa50e`;
+Accepted remediation chain:
+- WR-101 R2 run `35444278227` remains historical technical fail-closed evidence;
+- R2 authority remains revoked and must never be reused;
+- WR-106 exact audited remediation target `af988e4437cb45c920e18cbdcd4dc4c228dbf7c3` integrated as `ffb7057f7d8951cdc4a53bcc4835d38684faa50e`;
+- WR-107 independent `PASS`, no findings;
 - post-integration Full War Room CI `35446586616` SUCCESS;
-- protected wrapper and WR-097 workflow remained unchanged.
+- WR-108 canonical-main NO-SCORING canary `35447178653` SUCCESS at `3d2f0ee09aad47a3190e4be6e83cc765543da387`.
 
-WR-106 and WR-107 are CLOSED and removed from the active-only registry.
+WR-108 canary evidence:
+- preflight `105908010471` SUCCESS;
+- trust gate `105908196958` SUCCESS, mode `no-scoring`;
+- readiness `105908214310` SUCCESS;
+- authorized scoring job `105908215055` SKIPPED;
+- 14 retained identities verified;
+- provider mutations 0;
+- consumer provider credentials absent;
+- re-hash/re-size 14/14;
+- corrected synthetic chronology/stage-gate conformance PASS;
+- cleanup PASS;
+- Actions artifacts 0;
+- no historical/2022-2025/2026 target exposure.
 
-WR-101 remains BLOCKED:
-- R2 run `35444278227` remains a technical fail-closed event;
-- R2 execution branch remains at `c47209cbd21ff3d42ee2867108cb9f2707212969`;
-- R2 authority remains revoked/removed;
-- no rerun or replacement scoring authority is active.
+Fresh WR-101 R3 execution identity:
+- branch `wr-101-v21-validation-scoring-execution-r3`;
+- exact pre-execution head `3d2f0ee09aad47a3190e4be6e83cc765543da387`;
+- consumer `.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py`;
+- consumer SHA-256 `5fc302f54f554ba2db42606a204c94e1764599fc8c5687b7c7ef56d33423150a`.
 
-WR-102 remains BLOCKED/reserved for a future actual WR-101 protected result target.
+The fresh R3 execution branch exists at that exact head.
 
-WR-108 is the active protected gate:
-- Manager task;
-- canonical-main post-stage-gate-remediation WR-097 `no-scoring` canary;
-- user action required only after WR-108 control-plane state is canonical and canonical CI is green;
-- do not choose `authorized-v21-scoring`;
-- do not supply or substitute execution branch/head/consumer identity.
+Next gate:
+canonicalize this NEW Manager authority and require its post-merge governance CI to pass. Only then may the user dispatch WR-097 on canonical `main` exactly once with mode `authorized-v21-scoring`.
 
-After WR-108 canary SUCCESS, Manager independently verifies the exact run. Canary success is readiness evidence only. Any future scoring requires a separate Manager decision, a completely NEW execution identity, a fresh exact consumer digest binding, and a NEW one-time authority. Neither prior revoked WR-101 authority/execution identity may be reused.
+Do not reuse either prior execution branch/authority. Do not run a second scoring attempt after any technical or model-result failure without a new explicit Manager decision. WR-102 remains blocked until an actual immutable WR-101 result is produced, packaged and frozen.
