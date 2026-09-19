@@ -184,3 +184,27 @@ RATIONALE: WR-096 independently reproduced the WR-081 failure decomposition, ver
 EVIDENCE: WR-095 frozen head `738296ad38282fc91738203e7e1ced888ba862ed`; protocol SHA-256 `5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39`; WR-096 Auditor head `3a779f6997c3bc57ec63f4fa4fa8084a609d5441`; audit PR #272; audit CI `35415672844` SUCCESS; audit evidence merge `94ec9656495fd56433c4c3dd413b9e0a0c1c1534`; exact audited research blobs integrated via PR #273 as `daa5e686cbc4fe2ca379baf696bf0335d05ad19d`.
 ALTERNATIVES REJECTED: rerun WR-081; tune against 2020–2021 while calling them validation; inspect 2022–2025 before protocol freeze; weaken gates; admit new sources without need; proceed directly to scoring without a separately reviewed protected consumer/bridge.
 REVISIT CONDITION: WR-098 finds the protected implementation does not faithfully encode the accepted protocol/custody chronology, a required source field is unavailable from accepted custody, or future untouched validation fails under the accepted protocol.
+
+
+---
+
+## DECISION WR-D011
+
+DATE: 2026-09-19
+TASK: WR-099 / WR-100 / WR-101 — Returning-Player v2.1 one-time protected validation authorization
+STATUS: ACTIVE — ONE-TIME PROTECTED VALIDATION EXECUTION
+DECISION:
+- Accept WR-100 fresh independent PASS with no findings on exact WR-099 target `33d8d6037b1922841a134b9aba01eb3ea11ad97b`.
+- Accept canonical WR-099 integration merge `6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9` only after exact-head audit binding.
+- Accept canonical post-integration Full War Room CI `35423356815` SUCCESS.
+- Accept second canonical-main WR-097 NO-SCORING canary `35423633965` SUCCESS: 14/14 retained identities, 14/14 consumer re-hash/re-size, zero provider mutations, no consumer provider credentials, zero Actions artifacts, no real scoring, no 2022–2025 target exposure, no 2026 outcome inspection, cleanup PASS.
+- Conclude the protected-execution and V3.5 workflow-identity gates are satisfied for one fresh v2.1 result execution.
+- Authorize WR-101 exactly once through canonical Manager `future_execution_authority`: branch `wr-101-v21-validation-scoring-execution`, head `6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9`, consumer `.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py`, consumer SHA-256 `f6e5eee35c0e769abc9cbc899c0eecc3e311ff3cd22973ebf2c7351ddd58c6f8`.
+- Validation authority covers 2022–2023 only under the frozen WR-095 chronology; 2024–2025 confirmation may become visible only if the complete validation gate passes and the accepted protocol itself unlocks confirmation.
+- Require one-time authority consumption receipt, one publication commit, exact terminal/result/decision cross-binding, bounded R&D packaging, Manager exact freeze, and fresh WR-102 result audit.
+- Do not authorize rerun, tuning, alternate thresholds/features/sources, source reacquisition/substitution, 2026 outcomes, production/ranking changes, season-total composition, or Phase 6.
+- A technical or model-result failure does not create automatic rerun authority.
+RATIONALE: WR-097/098 established the protected v2.1 execution boundary; WR-099/100 independently established canonical V3.5 identity/run/receipt binding for that workflow; canonical Full CI and the second credentialed no-scoring canary prove the integrated path remains fail-closed and custody-safe. The previously blocked prerequisite chain is therefore complete, while one-time authority and fresh result audit preserve separation between execution permission and result acceptance.
+EVIDENCE: WR-100 audit PR #286 / head `453ce58c4ead8f3d734a8eea5568dfb22d4dfca6` / CI `35423220027`; WR-099 exact target `33d8d6037b1922841a134b9aba01eb3ea11ad97b`; canonical integration `6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9`; Full CI `35423356815`; second no-scoring canary `35423633965`; readiness job `105845796842`.
+ALTERNATIVES REJECTED: keep scoring blocked after all audited gates pass; reuse WR-097 branch as a result lane; issue open-ended scoring authority; permit caller-supplied execution identity; skip result audit; pre-authorize reruns; expose confirmation regardless of validation.
+REVISIT CONDITION: WR-101 protected execution fails technically, the authority/receipt cannot be consumed exactly, WR-102 finds a material result/evidence defect, or the frozen validation result requires a new explicit Manager decision.
