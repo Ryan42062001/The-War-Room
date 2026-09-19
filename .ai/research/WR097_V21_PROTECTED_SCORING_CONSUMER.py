@@ -719,10 +719,24 @@ def _lock_publication_tree(lock_dir: Path) -> str:
         rel = str(entry.get("path", ""))
         digest = str(entry.get("sha256", ""))
         size = int(entry.get("byte_size", -1))
-        file_path = lock_dir / "files" / rel
+        family = str(entry.get("family", ""))
+        path = Path(rel)
+        stem = path.stem
+        matches = [
+            candidate for candidate in PUBLICATION_FAMILIES
+            if stem == candidate or stem.startswith(candidate + "_")
+        ]
+        if (not rel.startswith(".ai/research/generated/") or path.is_absolute()
+                or ".." in path.parts or path.suffix != ".json"
+                or len(matches) != 1 or family != matches[0]):
+            raise ContractError("immutable lock publication family mismatch")
+        file_path = lock_dir / "files" / path
         if sha256_file(file_path) != (digest, size):
             raise ContractError("immutable lock publication mismatch")
-        checked.append({"path": rel, "sha256": digest, "byte_size": size})
+        # The bridge hashes path, sha256, byte_size AND family. Do not omit
+        # family when reconstructing an already-published immutable lock.
+        checked.append({"path": rel, "sha256": digest, "byte_size": size,
+                        "family": family})
     checked.sort(key=lambda x: x["path"])
     return sha256_bytes(canonical_bytes(checked))
 
