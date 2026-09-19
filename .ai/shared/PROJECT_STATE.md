@@ -222,3 +222,12 @@ No publication commit was created, no receipt was produced or verified, the exec
 Manager treats this as a technical fail-closed event, not a model result. The live WR-101 future execution authority is revoked. No rerun is authorized.
 
 WR-103 is assigned for retained-data-free deterministic failure reproduction and bounded protected-execution remediation. WR-104 is blocked for fresh independent audit. Any later scoring attempt requires a new explicit Manager decision and new one-time authority.
+
+
+## WR-103 frozen / WR-104 fresh audit activated
+
+Manager freezes WR-103 PR #289 at exact head `1a572baac9e4393582db37ad43cbe8609628d8c3` for independent audit. The implementation head is `b81be550a45e12032814a67dea6a8b146597250a`; the only later WR-103 commit adds Work Helper report/handoff evidence.
+
+Final-target Full War Room CI `35425624460` is SUCCESS and WR-097 PR-triggered noncredentialed preflight `35425624521` is SUCCESS with credentialed/scoring jobs skipped.
+
+WR-104 is ASSIGNED on `wr-104-v21-target-ingest-remediation-audit` and must audit exactly the frozen WR-103 SHA. WR-101 remains BLOCKED and its prior scoring authority remains revoked. No scoring rerun or new authority is authorized.
