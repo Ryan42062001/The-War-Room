@@ -160,6 +160,39 @@ def synthetic_locked_target_fixture(root: Path) -> tuple[dict, Path, Path, Path,
     return context,context_path,state,locks,out,lock_digest
 
 
+def synthetic_stage_gate_fixture(root: Path, fallback_count: int = 0) -> tuple[dict, Path, Path, Path, Path, str]:
+    """Fabricated validation evaluations + immutable prediction locks; no retained data."""
+    inp=root/"stage-gate-input"; state=root/"stage-gate-state"; locks=root/"stage-gate-locks"; out=root/"stage-gate-output"
+    for directory in (inp,state,locks,out):
+        directory.mkdir(parents=True,exist_ok=True)
+    prediction_locks={}
+    for year in c.STAGE_YEARS["validation"]:
+        write_evaluation(state,year,synthetic_gate_rows(year),fallback_count if year==2023 else 0)
+        prediction_out=root/f"stage-gate-prediction-{year}"
+        prediction_out.mkdir()
+        pub=c._publication(
+            prediction_out,"RETURNING_PLAYER_V21_PREDICTIONS_PRE_OUTCOME",
+            {"schema_version":"wr106-synthetic-prediction-v1","target_season":year},str(year),
+        )
+        c._finish(prediction_out,"predict",{
+            "stage":"validation","target_season":year,"target_values_accessed":False,
+        },[pub])
+        digest=c.sha256_bytes(c.canonical_bytes([pub]))
+        shutil.copytree(prediction_out,locks/f"prediction-{year}")
+        prediction_locks[str(year)]=digest
+    lock_set=c.sha256_bytes(c.canonical_bytes({k:v for k,v in sorted(prediction_locks.items())}))
+    context={
+        "task_id":"WR-097","mode":"stage-gate","stage":"validation",
+        "target_seasons":list(c.STAGE_YEARS["validation"]),"bindings":c.EXPECTED_BINDINGS,
+        "synthetic_fixture":True,"visible_sources":[],
+        "prediction_lock_set_sha256":lock_set,"prediction_locks":prediction_locks,
+        "prior_gate_locks":{},
+    }
+    context_path=inp/"context.json"
+    c.write_json(context_path,context)
+    return context,context_path,state,locks,out,lock_set
+
+
 class WR097V21ConsumerTests(unittest.TestCase):
     def test_exact_protocol_sha_and_feature_schema(self):
         data = PROTOCOL_PATH.read_bytes()
@@ -305,6 +338,28 @@ class WR097V21ConsumerTests(unittest.TestCase):
             }
             path=inp/"context.json"; path.write_text(json.dumps(context))
             must_fail(lambda: c._target_ingest(context,path,state,locks,out), "invalid JSON")
+
+    def test_stage_gate_bridge_exports_exact_artifact_status_label(self):
+        cases = (
+            (0, True, "STAGE_PASS"),
+            (1, False, "BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE"),
+        )
+        for fallback_count,expected_gate,expected_status in cases:
+            with self.subTest(expected_status=expected_status), tempfile.TemporaryDirectory() as td:
+                context,context_path,state,locks,out,lock_set=synthetic_stage_gate_fixture(
+                    Path(td),fallback_count=fallback_count
+                )
+                c._stage_gate(context,context_path,state,locks,out)
+                gate_state=c.read_json(state/"gate-validation.json")
+                artifact=gate_state["artifact"]
+                bridge=c.read_json(out/"bridge-result.json")
+                self.assertEqual(artifact["prediction_lock_set_sha256"],lock_set)
+                self.assertEqual(artifact["gate_pass"],expected_gate)
+                self.assertEqual(artifact["status_label"],expected_status)
+                self.assertEqual(bridge["gate_pass"],artifact["gate_pass"])
+                # WR-106 regression: this fails on the pre-fix consumer because
+                # the artifact has status_label but the bridge result omits it.
+                self.assertEqual(bridge["status_label"],artifact["status_label"])
 
     def test_validation_requires_complete_2022_2023_and_fallbacks_zero(self):
         with tempfile.TemporaryDirectory() as td:
