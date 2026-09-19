@@ -241,3 +241,19 @@ No active Phase 5B critical path.
 - Both prior execution identities/authorities remain revoked and must not be reused.
 - WR-102 — BLOCKED / reserved for a future immutable WR-101 result target.
 - Next gate — canonicalize new R3 authority -> one `authorized-v21-scoring` dispatch -> verify publication/receipt/authority consumption -> bounded R&D packaging -> Manager freeze -> WR-102 fresh result audit.
+
+
+## WR-101 R3 result packaging gate
+
+- WR-101 protected run `35447590872` — SUCCESS.
+- R3 publication head `41c1601ce2a7ae26fcb13a370ae2960db9427a80` — exactly one commit over authorized head `3d2f0ee09aad47a3190e4be6e83cc765543da387`.
+- 34 protected generated evidence files published; receipt and parent binding verified.
+- Validation — PASS.
+- Confirmation — FAIL.
+- Terminal — `CONFIRMATION_FAILED`.
+- Decision — `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`.
+- R3 one-time authority — CONSUMED / REMOVED.
+- No rerun or replacement scoring authority.
+- WR-101 — IN_PROGRESS only for bounded R&D packaging of the immutable result.
+- WR-102 — BLOCKED pending exact final result freeze.
+- Next gate — R&D packaging -> exact-head CI -> Manager freeze -> WR-102 fresh independent audit.
