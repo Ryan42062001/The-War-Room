@@ -47,21 +47,11 @@ function assertAuthorityAbsent() {
   if (found.length) fail(`provider/custody authority environment present (${found.length} blocked variable name(s))`);
 }
 
-function restoreCanonicalBlob(relativePath) {
-  const bytes = execFileSync('git', ['cat-file', 'blob', `HEAD:${relativePath}`], {
-    cwd: root,
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
-  fs.writeFileSync(path.join(root, relativePath), bytes);
-}
-
 function cleanWorkspace() {
   git(['reset', '--hard', 'HEAD']);
-  git(['checkout-index', '--all', '--force']);
   git(['clean', '-ffdx']);
-  restoreCanonicalBlob('scripts/test-browser.mjs');
   const status = git(['status', '--porcelain']);
-  if (status) fail('workspace is not clean after reset/checkout-index/clean/canonical-blob restore');
+  if (status) fail('workspace is not clean after reset/clean');
 }
 
 function writeSummary(title, value) {
@@ -81,27 +71,42 @@ if (mode === 'preflight') {
   assertAuthorityAbsent();
   const workspaceEnv = process.env.GITHUB_WORKSPACE;
   if (workspaceEnv && path.resolve(workspaceEnv) !== path.resolve(root)) fail('current directory is not the assigned GitHub workspace');
-  git(['config', 'core.autocrlf', 'false']);
-  git(['config', 'core.eol', 'lf']);
   cleanWorkspace();
-  const browserTestSource = fs.readFileSync(path.join(root, 'scripts', 'test-browser.mjs'), 'utf8');
   const residue = {
     node_modules_present_after_clean: fs.existsSync(path.join(root, 'node_modules')),
     artifacts_present_after_clean: fs.existsSync(path.join(root, 'artifacts')),
     sentinel_present_after_clean: fs.existsSync(marker),
     git_status_clean: git(['status', '--porcelain']) === '',
-    browser_test_crlf_present: browserTestSource.includes('\r\n'),
-    core_autocrlf: git(['config', '--get', 'core.autocrlf']),
-    core_eol: git(['config', '--get', 'core.eol']),
     provider_authority_present: false,
   };
   console.log(JSON.stringify({ wr074_workspace_preflight_evidence: residue }));
-  if (residue.node_modules_present_after_clean || residue.artifacts_present_after_clean || residue.sentinel_present_after_clean || !residue.git_status_clean || residue.browser_test_crlf_present) {
-    fail('persistent workspace residue or non-canonical line endings survived bounded cleanup');
+  if (residue.node_modules_present_after_clean || residue.artifacts_present_after_clean || residue.sentinel_present_after_clean || !residue.git_status_clean) {
+    fail('persistent workspace residue survived bounded cleanup');
   }
   fs.writeFileSync(marker, 'WR-074 ephemeral workspace sentinel\n', 'utf8');
   console.log(JSON.stringify({ wr074_workspace_preflight: 'PASS', ...residue }));
   writeSummary('WR-074 workspace preflight', { result: 'PASS', ...residue });
+} else if (mode === 'normalize') {
+  assertAuthorityAbsent();
+  const browserPath = path.join(root, 'scripts', 'test-browser.mjs');
+  const source = fs.readFileSync(browserPath, 'utf8');
+  const crlfBefore = (source.match(/\r\n/g) || []).length;
+  const normalized = source.replace(/\r\n/g, '\n');
+  fs.writeFileSync(browserPath, normalized, 'utf8');
+  const after = fs.readFileSync(browserPath, 'utf8');
+  const evidence = {
+    changed_line_endings: normalized !== source,
+    crlf_before: crlfBefore,
+    crlf_after: (after.match(/\r\n/g) || []).length,
+    expected_browser_assertion_present: after.includes("await page.locator('.recommendation-card-summary').click();\n"),
+    provider_authority_present: false,
+  };
+  if (evidence.crlf_after !== 0 || !evidence.expected_browser_assertion_present) {
+    fail('browser harness line-ending normalization failed closed');
+  }
+  console.log(JSON.stringify({ wr074_line_endings: evidence }));
+  writeSummary('WR-074 browser harness line endings', evidence);
+
 } else if (mode === 'environment') {
   assertAuthorityAbsent();
   const runnerName = String(process.env.RUNNER_NAME || '');
