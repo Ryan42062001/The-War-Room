@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T03:10:00Z",
+  "updated_at_utc": "2026-09-19T03:30:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -89,13 +89,13 @@
       "task_id": "WR-097",
       "owner": "Work Helper",
       "worker_slot": "work-helper-v21-protected-execution",
-      "status": "ASSIGNED",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-097.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
       "assignment_main_sha": "daa5e686cbc4fe2ca379baf696bf0335d05ad19d",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "75c0fbcd518438a226a8c49e3e11951de3944638",
       "branch": "wr-097-v21-protected-execution-bridge",
-      "pr": null,
+      "pr": 275,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
@@ -131,7 +131,48 @@
         "scripts/custody/wr083_protected_historical_scoring.py",
         "scripts/custody/test_wr083_protected_historical_scoring.py"
       ],
-      "next_gate": "Work Helper publishes one immutable WR-097 NO-SCORING protected consumer/bridge target with synthetic/conformance and protected readiness evidence -> Manager exact freeze -> fresh independent WR-098 audit -> only after PASS-family integration plus canonical-main NO-SCORING canary may Manager consider a separate v2.1 scoring task. No scoring authority exists in WR-097."
+      "next_gate": "WR-098 fresh independent audit of exact WR-097 target 75c0fbcd518438a226a8c49e3e11951de3944638. Audit must treat the current canonical Manager workflow-name restriction as an external fail-closed integration blocker, not as permission to score. No real scoring authority exists."
+    },
+    {
+      "task_id": "WR-098",
+      "owner": "Auditor",
+      "worker_slot": "auditor-v21-protected-execution",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-098.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": "38d116b3741459e6e9f9d2f1bfc6aa5c7d835f38",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-098-v21-protected-execution-audit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/auditor/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        ".github/",
+        "scripts/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Fresh independent audit of exact WR-097 bridge/consumer target. Verify model semantics, custody/readiness proof, chronology, publication boundary, V3.5 authority/replay semantics, and that the legacy Manager workflow-name restriction safely fails closed. No scoring authority.",
+      "audit_target_task": "WR-097",
+      "audit_target_pr": 275,
+      "audit_target_branch": "wr-097-v21-protected-execution-bridge",
+      "audit_target_sha": "75c0fbcd518438a226a8c49e3e11951de3944638"
     }
   ]
 }

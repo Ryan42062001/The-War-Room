@@ -119,3 +119,14 @@ The audited five research blobs were integrated byte-for-byte through PR #273 at
 Manager accepts protocol SHA-256 `5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39` under WR-D010.
 
 WR-097 is now the active critical path: implement the exact v2.1 protected consumer and dedicated execution bridge with synthetic/conformance and NO-SCORING readiness evidence only. 2022–2025 remain unopened. No scoring authority exists.
+
+
+## WR-097 protected implementation freeze
+
+Work Helper completed the v2.1 protected consumer/bridge without real scoring. Manager froze exact PR #275 head `75c0fbcd518438a226a8c49e3e11951de3944638` after Full CI, predecessor regressions, and a successful credentialed NO-SCORING proof.
+
+The readiness proof verified 14/14 B2/R2 retained identities, consumer credential isolation, cleanup and zero Actions artifacts while leaving real scoring and 2022–2025 outcome exposure false.
+
+WR-098 is assigned for fresh independent audit.
+
+Canonical Manager transition tooling still recognizes only the legacy WR-083 protected workflow identity. This remains a deliberate fail-closed external integration blocker; no real v2.1 scoring authority may be created until it is resolved through separately audited integration.
