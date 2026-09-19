@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T00:45:00Z",
+  "updated_at_utc": "2026-09-19T00:52:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -107,23 +107,24 @@
       "external_authority_evidence_required": false,
       "post_merge_canary_required": true,
       "allowed_path_prefixes": [
+        ".ai/manager/HANDOFF.md",
         ".ai/manager/WR-091.md",
         ".ai/manager/WR091_WORKFLOW_V3_5_CANDIDATE.md",
-        ".ai/manager/HANDOFF.md",
-        ".ai/shared/WORKFLOW.md",
         ".ai/shared/ACTIVE_TASKS.json",
         ".ai/shared/PROJECT_STATE.md",
         ".ai/shared/ROADMAP.md",
+        ".ai/shared/WORKFLOW.md",
         ".github/workflows/ci.yml",
         ".github/workflows/wr083-protected-historical-scoring-bridge.yml",
-        "scripts/workflow-manager-transition.mjs",
+        "scripts/custody/test_wr083_protected_historical_scoring.py",
+        "scripts/custody/wr083_protected_historical_scoring.py",
+        "scripts/test-workflow-ci-classify.mjs",
         "scripts/test-workflow-manager-transition.mjs",
-        "scripts/workflow-result-freeze-check.mjs",
         "scripts/test-workflow-result-freeze-check.mjs",
         "scripts/workflow-ci-classify.mjs",
-        "scripts/test-workflow-ci-classify.mjs",
-        "scripts/custody/wr083_protected_historical_scoring.py",
-        "scripts/custody/test_wr083_protected_historical_scoring.py"
+        "scripts/workflow-manager-transition.mjs",
+        "scripts/workflow-result-freeze-check.mjs",
+        "scripts/workflow-state-check.mjs"
       ],
       "forbidden_path_prefixes": [
         ".ai/auditor/",
@@ -133,7 +134,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Bounded WR-093-AUD-01 remediation only: protect machine-owned authority receipt/history across add/remove lifecycle and prevent any replay-history reset. Then exact-head validate, freeze a new WR-091 SHA, and route fresh independent re-audit. V3.4 remains canonical."
+      "next_gate": "WR-093-AUD-01 bounded remediation includes scripts/workflow-state-check.mjs solely to independently validate the machine-owned global authority-consumption ledger. Reconcile this scope amendment into PR #257, rerun exact-head Full CI, then freeze a new target for fresh independent re-audit."
     }
   ]
 }

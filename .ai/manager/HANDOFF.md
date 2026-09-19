@@ -15,7 +15,7 @@ WR-093 is accepted as historical failed-audit evidence:
 - verdict `FAIL — REMEDIATION REQUIRED`
 - one HIGH finding: WR-093-AUD-01
 
-WR-092-AUD-01 and AUD-02 are independently closed. Remaining scope is only protection of machine-owned consumption receipt/history across add/remove lifecycle so replay history cannot be injected or erased.
+WR-092-AUD-01 and AUD-02 are independently closed. Remaining scope is only protection of machine-owned consumption receipt/history across add/remove lifecycle so replay history cannot be injected or erased. Manager additionally authorizes `scripts/workflow-state-check.mjs` solely for independent validation of the new machine-owned global consumed-authority ledger.
 
 ## Next Activation
 
