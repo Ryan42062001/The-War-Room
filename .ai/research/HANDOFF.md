@@ -1,139 +1,122 @@
 # R&D Handoff
 
-STATUS: READY FOR MANAGER — WR-095 PROSPECTIVE PROTOCOL CANDIDATE
-TASK: WR-095 — Returning-Player v2.1 Failure Analysis + Prospective Model-Protocol Design
+STATUS: READY FOR MANAGER — WR-101 IMMUTABLE PROTECTED RESULT PACKAGED
+TASK: WR-101 — Returning-Player v2.1 One-Time Protected Validation Scoring
 ROLE: Research & Development (R&D)
-BRANCH: `wr-095-returning-player-v21-failure-analysis-protocol`
-BASE: canonical main `1511ebc509f7e28426e3e27a351cb33acb9368f9`
-PR: #270
-HEAD: freeze the live PR #270 head containing this final handoff; no further R&D writes are authorized after this commit.
-PROTOCOL DISPOSITION: `PROTOCOL_READY_FOR_MANAGER_FREEZE`
-SOURCE / CUSTODY DISPOSITION: `EXISTING_ACCEPTED_SOURCE_SUFFICIENT`
+BRANCH: `wr-101-v21-validation-scoring-execution-r3`
+PR: #301
+CANONICAL MAIN AT PACKAGING START: `50860915d58e6caf7d44c7a9dc2422daa16fef8c`
+PROTECTED PUBLICATION HEAD: `41c1601ce2a7ae26fcb13a370ae2960db9427a80`
+AUTHORIZED PRE-EXECUTION PARENT: `3d2f0ee09aad47a3190e4be6e83cc765543da387`
+FINAL HEAD: use the exact live PR #301 head containing this handoff; no further R&D writes are authorized after this commit.
 
 ## DONE
 
-Used only accepted/audited WR-081 evidence from exact frozen target `b5fc0974e0766c24974034557a62044b4752716a` plus accepted WR-059/WR-072 contracts.
+Packaged the exact already-produced WR-101 R3 protected result without changing generated evidence.
 
-2018–2021 are explicitly DESIGN-EXPOSED for v2.1.
+Protected workflow:
+- run `35447590872` — SUCCESS
+- preflight `105909100834` — SUCCESS
+- trust gate `105909226178` — SUCCESS
+- future-authorized-v21-scoring `105909245699` — SUCCESS
+- protected-no-scoring-readiness `105909246395` — SKIPPED
+- Actions artifacts: 0
+- cleanup: SUCCESS
 
-2022–2025 outcomes remained unopened.
+Consumed authority:
+- branch `wr-101-v21-validation-scoring-execution-r3`
+- authorized head `3d2f0ee09aad47a3190e4be6e83cc765543da387`
+- consumer `.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py`
+- consumer SHA-256 `5fc302f54f554ba2db42606a204c94e1764599fc8c5687b7c7ef56d33423150a`
+- authority SHA-256 `722a965cecb2c14baa9b5f3d4188d464c1f56e0bf56d648fa2f8e143f4677aff`
+- authority canonically consumed/removed
+- no active scoring authority
 
-### Failure-analysis conclusion
+Publication:
+- exact protected head `41c1601ce2a7ae26fcb13a370ae2960db9427a80`
+- exactly one publication commit over authorized parent
+- exactly 34 protected generated files
+- publication tree SHA-1 `27fe1bbb7f91ea331e8bcc8f21f2f8d802a03c7a`
+- publication payload SHA-256 `056140b09bdf63f96c58017335b79d399ec0a5004f0bdc2542a6bfeb83c4ee39`
+- authority-consumption receipt SHA-256 `11231733032061e7fde5fbe02dae8f111d04bfa6248e951cff87d3f679156fd3`
 
-The WR-081 validation failure is strongly tail-concentrated rather than broad.
+## RESULT
 
-One 2021 WR row:
-- candidate `-105.44209159462447`;
-- target `3.5036363636363634`;
-- baseline `-2.78`;
-- candidate absolute error `108.94572795826083`;
-- contributes `65.27%` of all validation candidate SSE;
-- contributes `85.22%` of WR candidate SSE.
+Validation 2022–2023:
+- gate PASS
+- status `STAGE_PASS`
 
-That row has extreme within-WR standardized sparse passing features:
-- interceptions/game `+474.93σ`;
-- attempts/game `+299.29σ`;
-- passing EPA/game `-236.94σ`.
+Confirmation 2024–2025:
+- reached only after complete validation PASS
+- gate FAIL
+- status `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`
 
-The top three linear contributions sum to about `-107.1` PPR/game.
+Terminal:
+`CONFIRMATION_FAILED`
 
-Diagnostic-only exclusion of that one row makes the remaining validation candidate SSE lower than baseline and the remaining WR candidate MAE/RMSE lower than baseline. No row exclusion is proposed for future scoring.
+Decision:
+`BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`
 
-### Recommended v2.1 architecture
+Blocking confirmation criterion:
+- RB candidate MAE `2.6671957821736454`
+- RB primary MAE `2.4081443343208049`
+- RB MAE regression `0.10757305704680846`
+- frozen position cap `0.05`
+- criterion FAIL
 
-`PER_POSITION_BOUNDED_RESIDUAL_RIDGE`
+All other frozen confirmation criteria represented in the protected gate evidence pass, including pooled MAE/RMSE, ordering, bootstrap, season gates, secondary baselines, three non-worse positions, zero fallbacks, and zero lineage failures.
 
-- retain the accepted 28 stats-only features;
-- retain per-position StandardScaler;
-- clip standardized feature inputs to `[-6,+6]` before model fit/predict;
-- retain Ridge alpha=100;
-- model residual target `target - prev1_ppr_pg`;
-- compute training residual median and MAD;
-- robust sigma = `1.4826 * MAD`;
-- clamp residual prediction to median +/- `3 * robust_sigma`;
-- final candidate = primary persistence baseline + bounded residual correction;
-- no hyperparameter search;
-- no player-specific or WR-only special case.
+## CHRONOLOGY
 
-### Future chronology
+Prediction locks:
+- 2022 `12d28c5a1a6c2f0ff77d91fcc7b392c10e1830678c98215e2a8062833a4d786d`
+- 2023 `892dd11736519f8403616177ef989a13b9dadc93b35f3b969a72945f37cb1a8e`
+- 2024 `51697a0cb4f63919381382cfe19487de06518eb9ef0bd2b0b4bc68d91b2aaafd`
+- 2025 `fa1cf3301ecb094f80374fac76c7b13ffa4e26e49c1e67f36df8a5df6eb6835e`
 
-Validation:
-- 2022
-- 2023
+Stage-gate locks:
+- validation `0a3d84cba6ac0d86f1b2d99025658be95653038933a083e835ec7ccb7c19df5a` — PASS
+- confirmation `f333a7ad55cb434eec02fa342a0afcc613a82b4b9d672bbcc0a3b20f645a3bf3` — FAIL
 
-Only if validation PASS:
+Chronology evidence proves validation PASS preceded any 2024/2025 confirmation exposure.
 
-Confirmation:
-- 2024
-- 2025
+## FILES / ARTIFACTS THAT MATTER
 
-Prediction/model/preprocessing state for Y must be immutable before target-Y exposure. After Y is locked/exposed, Y may enter Y+1 rolling training.
-
-All WR-072 validation/confirmation performance thresholds are numerically preserved.
-
-## CHANGED / ARTIFACTS
-
-- `.ai/research/WR095_V21_FAILURE_ANALYSIS.md`
-- `.ai/research/WR095_V21_PROTOCOL_PROPOSAL.md`
-- `.ai/research/generated/WR095_RETURNING_PLAYER_V21_PROTOCOL_CANDIDATE.json`
-- `.ai/research/generated/WR095_RETURNING_PLAYER_V21_PROTOCOL_CANDIDATE.json.sha256`
+Final R&D packaging:
+- `.ai/research/WR101_V21_PROTECTED_RESULT_REPORT.md`
+- `.ai/research/WR101_V21_RESULT_EVIDENCE_MANIFEST.json`
 - `.ai/research/HANDOFF.md`
 
-Machine protocol candidate:
-- ID: `returning-player-v2.1-model-protocol-candidate/1.0.0-wr095`
-- version: `1.0.0-wr095`
-- SHA-256: `5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39`
+Packaging manifest SHA-256 at creation:
+`c9eaed975f8b5aa5507bbdf98bec01392ee003f71ed9ddf87f353d4838425129`
 
-## TESTS / EVIDENCE CHECKS
-
-- live main verified exactly `1511ebc509f7e28426e3e27a351cb33acb9368f9`;
-- initial branch verified exactly `9ac05c75b6e6fe31042d2b38f86f6eca79575975`;
-- WR-082 PASS consumed as historical audit authority;
-- row-level WR-081 2018–2021 evaluation evidence decomposed;
-- catastrophic-row linear prediction reconstructed exactly from frozen preprocessing/model state;
-- machine candidate canonicalized as sorted-key compact UTF-8 JSON + LF;
-- adjacent SHA-256 sidecar published.
-
-## DECISIONS CONSUMED
-
-- WR-D001 production ranking authority unchanged.
-- WR-D008 evidence-contract architecture remains binding.
-- WR-D009 accepted WR-059 source/cohort authority remains binding.
-- WR-072 is predecessor protocol evidence, not a validation set for v2.1.
-- WR-081/WR-082 frozen result remains immutable historical evidence.
-
-## BLOCKERS / RISKS
-
-No blocker to protocol freeze.
-
-Unresolved prospective risks:
-- the protocol has not been fit or scored;
-- z=6 and 3-MAD-sigma controls are fixed design choices, not proven optimal;
-- 2022–2023 may fail untouched validation;
-- current protected publication allowlist is WR-081-specific and likely needs a bounded audited update before any v2.1 scoring authority.
+The evidence manifest binds all 34 protected generated files by exact path, Git blob SHA-1 and byte size, plus publication tree/payload identities and independent SHA-256 hashes of the critical receipt/chronology/gates/result files.
 
 ## SCOPE ATTESTATION
 
 No:
-- WR-081 rerun;
-- model fit or score;
-- hyperparameter search;
-- retained raw source access;
-- source reacquisition/substitution;
-- 2022–2025 target exposure;
-- 2026 outcome inspection;
-- season-total composition;
-- production/ranking/recommendation modification;
-- Phase-6 work;
-- PR merge;
-- self-audit.
+- scoring rerun
+- new scoring authority
+- tuning or model change
+- threshold/gate change
+- source/cohort/protocol semantic change
+- retained-data reacquisition/substitution
+- 2026 regular-season outcome inspection
+- season-total composition
+- production/ranking/recommendation modification
+- Phase 6
+- merge
+- self-audit
+
+Generated protected evidence was not modified.
 
 ## NEXT ACTION
 
 Manager / Architect:
-1. verify exact WR-095 branch head, changed files, machine-candidate SHA, and exact-head CI;
-2. freeze the exact R&D target if acceptable;
-3. activate a **fresh Independent Auditor protocol audit**;
-4. create no scoring authority until that audit is accepted.
+1. verify exact PR #301 head and its delta from protected publication head;
+2. verify generated protected evidence remains byte-identical;
+3. verify exact-head War Room CI;
+4. freeze that exact final WR-101 target;
+5. activate fresh WR-102 Independent Auditor / QA result audit.
 
-R&D does not merge and does not activate the Auditor.
+R&D does not merge and does not activate WR-102.
