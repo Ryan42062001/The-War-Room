@@ -241,6 +241,79 @@ def test_real_consumer_synthetic_target_ingest_under_immutable_sandbox_lock():
                 os.environ["RUNNER_TEMP"]=old
 
 
+def test_real_consumer_synthetic_stage_gate_status_contract():
+    """Actual provider-free wrapper sandbox reaches corrected stage-gate bridge contract."""
+    if not shutil.which("bwrap"):
+        raise AssertionError("bubblewrap required for WR-106 stage-gate sandbox proof")
+    consumer_tests_path=ROOT/".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py"
+    spec=importlib.util.spec_from_file_location("wr106_consumer_fixture",consumer_tests_path)
+    assert spec and spec.loader
+    fixture_module=importlib.util.module_from_spec(spec)
+    sys.modules[spec.name]=fixture_module
+    spec.loader.exec_module(fixture_module)
+    with tempfile.TemporaryDirectory() as td:
+        old=os.environ.get("RUNNER_TEMP")
+        os.environ["RUNNER_TEMP"]=td
+        try:
+            root=pathlib.Path(td)
+            fixture_root=root/"synthetic-stage-gate"; fixture_root.mkdir()
+            context,_context_path,state,locks,_out,lock_set=(
+                fixture_module.synthetic_stage_gate_fixture(fixture_root,fallback_count=0)
+            )
+            visible=root/"sandbox-visible"; visible.mkdir()
+            retained_raw=root/"synthetic-retained-identity.raw"
+            retained_raw.write_bytes(b"wr106-synthetic-retained-identity-only\n")
+            digest,size=b.sha256_file(retained_raw)
+            retained={"sources":[{
+                "season":2012,"source_id":"wr106-synthetic-retained-identity-only",
+                "local_path":str(retained_raw),"expected_sha256":digest,
+                "expected_size_bytes":size,
+            }]}
+            consumer_copy=root/"consumer.py"
+            shutil.copyfile(ROOT/b.V21_CONSUMER_PATH,consumer_copy)
+            output=root/"sandbox-output"
+            bridge=b.run_sandboxed_consumer(
+                consumer_copy,"stage-gate",context,visible,state,locks,output,retained
+            )
+            artifact=json.loads((
+                output/"files/.ai/research/generated/RETURNING_PLAYER_V21_STAGE_GATES_VALIDATION.json"
+            ).read_text(encoding="utf-8"))
+            assert bridge["stage"]=="validation"
+            assert bridge["gate_pass"] is True
+            assert bridge["prediction_lock_set_sha256"]==lock_set
+            assert bridge["status_label"]=="STAGE_PASS"
+            assert bridge["status_label"]==artifact["status_label"]
+
+            # Mirror the accepted wrapper's unchanged stage-gate checks so the
+            # synthetic returned bridge is proven acceptable while missing,
+            # empty and tampered contract evidence remains fail-closed.
+            source=MODULE_PATH.read_text(encoding="utf-8")
+            assert 'decision_status=str(bridge.get("status_label") or "")' in source
+            assert 'raise ContractError("stage gate decision status missing")' in source
+            def accepted_stage_gate(candidate):
+                if (candidate.get("stage")!="validation"
+                        or not isinstance(candidate.get("gate_pass"),bool)
+                        or candidate.get("prediction_lock_set_sha256")!=lock_set):
+                    raise b.ContractError("stage gate result contract mismatch")
+                decision_status=str(candidate.get("status_label") or "")
+                if not decision_status:
+                    raise b.ContractError("stage gate decision status missing")
+                return decision_status
+            assert accepted_stage_gate(bridge)==artifact["status_label"]
+            missing=dict(bridge); missing.pop("status_label")
+            must_fail(lambda:accepted_stage_gate(missing),"stage gate decision status missing")
+            empty=dict(bridge); empty["status_label"]=""
+            must_fail(lambda:accepted_stage_gate(empty),"stage gate decision status missing")
+            tampered=dict(bridge); tampered["prediction_lock_set_sha256"]="0"*64
+            must_fail(lambda:accepted_stage_gate(tampered),"stage gate result contract mismatch")
+            b.cleanup_paths([visible,state,locks,output,consumer_copy,retained_raw])
+        finally:
+            if old is None:
+                os.environ.pop("RUNNER_TEMP",None)
+            else:
+                os.environ["RUNNER_TEMP"]=old
+
+
 def test_cleanup_success_and_deliberate_failure_paths():
     with tempfile.TemporaryDirectory() as td:
         root=pathlib.Path(td); a=root/"raw"; a.mkdir(); (a/"x").write_text("synthetic")
@@ -290,6 +363,7 @@ def main():
     test_validation_confirmation_chronology_and_determinism()
     test_terminal_receipt_and_one_publication_parent()
     test_real_consumer_synthetic_target_ingest_under_immutable_sandbox_lock()
+    test_real_consumer_synthetic_stage_gate_status_contract()
     test_cleanup_success_and_deliberate_failure_paths()
     test_workflow_static_security_and_release_guard()
     print("WR-097 protected v2.1 bridge regressions: PASS")
