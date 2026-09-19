@@ -73,3 +73,8 @@ WR-092 failed historical candidate `def590788eb615d9322d5cc8ae3eef14e8c1bc25` wi
 ## WR-093 failed re-audit
 
 WR-093 failed exact remediated candidate `638a8e2af25f1c806fe8883de0c959c5caaff35e` on one remaining HIGH lifecycle-replay defect: add/remove transitions can inject or erase machine-owned authority consumption history. Prior unique-target and repository-bound-consumption findings are independently closed. WR-091 is back in bounded remediation; V3.4 remains canonical.
+
+
+## WR-091 final remediation freeze
+
+WR-093's single remaining lifecycle replay-history finding has been remediated. Final candidate `77d3b182264ff71d723aa5e28335083692fb42fc` preserves consumed-authority identity in a machine-owned global ledger across task removal/closure and adds canonical state-check enforcement. Exact-head Full War Room CI `35410238089` and protected/boundary regressions are green. WR-094 is assigned for fresh independent re-audit. V3.4 remains canonical.

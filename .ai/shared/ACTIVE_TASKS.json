@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T00:52:00Z",
+  "updated_at_utc": "2026-09-19T01:02:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -89,11 +89,11 @@
       "task_id": "WR-091",
       "owner": "Manager",
       "worker_slot": "manager-workflow-v35-automation",
-      "status": "IN_PROGRESS",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-091.md",
       "role_handoff": ".ai/manager/HANDOFF.md",
       "assignment_main_sha": "16f766f1464656779d3e8e2fbab91998eca774f9",
-      "worker_checkpoint_sha": "638a8e2af25f1c806fe8883de0c959c5caaff35e",
+      "worker_checkpoint_sha": "77d3b182264ff71d723aa5e28335083692fb42fc",
       "branch": "manager/wr-091-workflow-v35-automation",
       "pr": 257,
       "dependency": "INDEPENDENT",
@@ -134,7 +134,48 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "WR-093-AUD-01 bounded remediation includes scripts/workflow-state-check.mjs solely to independently validate the machine-owned global authority-consumption ledger. Reconcile this scope amendment into PR #257, rerun exact-head Full CI, then freeze a new target for fresh independent re-audit."
+      "next_gate": "WR-094 fresh independent audit of exact remediated Workflow V3.5 target 77d3b182264ff71d723aa5e28335083692fb42fc. Historical WR-092/WR-093 FAIL verdicts remain bound only to their old SHAs. V3.4 remains canonical."
+    },
+    {
+      "task_id": "WR-094",
+      "owner": "Auditor",
+      "worker_slot": "auditor-workflow-v35-final-remediation",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-094.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": "0cbae7c07868f00f46591111c0bf3d6083dbdf46",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-094-workflow-v35-final-remediation-audit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/auditor/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        ".github/",
+        "scripts/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Fresh independent re-audit of exact WR-091 target 77d3b182264ff71d723aa5e28335083692fb42fc / PR #257. Re-test WR-093-AUD-01 lifecycle replay-history protection and preserve prior WR-092 closures plus all other V3.5/V3.4 guarantees.",
+      "audit_target_task": "WR-091",
+      "audit_target_pr": 257,
+      "audit_target_branch": "manager/wr-091-workflow-v35-automation",
+      "audit_target_sha": "77d3b182264ff71d723aa5e28335083692fb42fc"
     }
   ]
 }
