@@ -1,7 +1,7 @@
 # War Room Roadmap
 
 Status: ACTIVE DEVELOPMENT
-Last updated: 2026-09-18
+Last updated: 2026-09-19
 Owner: Manager / Architect
 
 ## Workflow foundation
@@ -219,3 +219,15 @@ No active Phase 5B critical path.
 - WR-101 — remains BLOCKED; R2 authority revoked; no scoring authority active.
 - WR-102 — remains blocked/reserved for a future actual protected result.
 - Next gate — WR-107 PASS-family -> integrate exact audited WR-106 target -> canonical validation/no-scoring proof -> separate Manager decision on any NEW one-time scoring authority.
+
+
+## WR-108 post-stage-gate-remediation protected canary
+
+- WR-106 — CLOSED / exact audited remediation target `af988e4437cb45c920e18cbdcd4dc4c228dbf7c3` integrated as `ffb7057f7d8951cdc4a53bcc4835d38684faa50e`.
+- WR-107 — CLOSED / independent `PASS`, no findings; Auditor head `4cd093e54c7263f515baa523ad22fcb6ebbcbd73`, audit PR #297.
+- Auditor evidence merge `d639bca7dc6bff61a7d4a695ff9d252ffea377be`; post-evidence CI `35446527119` SUCCESS.
+- Post-integration Full War Room CI `35446586616` — SUCCESS.
+- WR-108 — BLOCKED / USER ACTION after canonicalization: canonical-main WR-097 `no-scoring` canary.
+- WR-101 — BLOCKED behind WR-108; R2 authority revoked; no scoring authority.
+- WR-102 — BLOCKED/reserved for a future actual protected result.
+- Next gate — WR-108 canary SUCCESS -> separate Manager review -> completely NEW execution identity + NEW one-time authority only if explicitly authorized.
