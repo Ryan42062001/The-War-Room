@@ -231,3 +231,16 @@ Manager freezes WR-103 PR #289 at exact head `1a572baac9e4393582db37ad43cbe86096
 Final-target Full War Room CI `35425624460` is SUCCESS and WR-097 PR-triggered noncredentialed preflight `35425624521` is SUCCESS with credentialed/scoring jobs skipped.
 
 WR-104 is ASSIGNED on `wr-104-v21-target-ingest-remediation-audit` and must audit exactly the frozen WR-103 SHA. WR-101 remains BLOCKED and its prior scoring authority remains revoked. No scoring rerun or new authority is authorized.
+
+
+## WR-103/104 accepted / WR-105 post-remediation canary gate
+
+WR-104 independently returned `PASS` with no findings on exact WR-103 target `1a572baac9e4393582db37ad43cbe8609628d8c3`.
+
+Auditor evidence was integrated as canonical merge `9e41181de7060d0226b996a55daf1858a08d9f1a`. Manager then integrated only the exact audited WR-103 target through PR #289 as canonical merge `55a8cb1d78d5e41a8ec5e57d7e1a913537921e7d`.
+
+Post-integration Full War Room CI `35442985916` completed SUCCESS: classify, governance and full product/test path all green.
+
+WR-103 and WR-104 are CLOSED. WR-101 remains BLOCKED with the prior authority revoked and absent. WR-102 remains reserved for a future actual result target.
+
+WR-105 is now the mandatory canonical-main post-remediation NO-SCORING canary gate. No real scoring authority exists. A successful canary permits only a separate later Manager review of whether to issue a NEW one-time authority.
