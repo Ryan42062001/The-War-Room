@@ -760,8 +760,6 @@ def _predict(context: Mapping[str, Any], context_path: Path, state_dir: Path, lo
     stage = str(context["stage"])
     synthetic = bool(context.get("synthetic_fixture", False))
     runtime = _runtime_evidence(synthetic)
-    visible = _verify_visible_sources(context, context_path, "predict")
-    aggregates = _load_aggregates(visible)
 
     prediction_locks = context.get("prediction_locks", {})
     if not isinstance(prediction_locks, dict):
@@ -784,6 +782,11 @@ def _predict(context: Mapping[str, Any], context_path: Path, state_dir: Path, lo
         if _verify_gate_lock(locks_dir, prior_stage, str(gate_locks[prior_stage])).get("gate_pass") is not True:
             raise ContractError("prior stage not eligible")
     _require_prior_future_outcomes(state_dir, year)
+
+    # No retained byte is hashed or parsed until the future chronology has
+    # proved all prior target exposures and required stage eligibility.
+    visible = _verify_visible_sources(context, context_path, "predict")
+    aggregates = _load_aggregates(visible)
 
     members = _cohort_for(year, aggregates, enforce_expected_count=not synthetic)
     features = [_feature_for(year, pid, pos, aggregates, visible) for pid, pos in members]
