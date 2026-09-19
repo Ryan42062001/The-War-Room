@@ -25,3 +25,12 @@ Security boundary preserved:
 - The pilot helper fails closed when `RUNNER_OS` is not `Linux`.
 
 This evidence commit exists to create a fresh post-label pilot run so GitHub schedules a new job after the dedicated Linux runner became eligible.
+
+
+## Playwright Linux dependency activation
+
+The first Linux self-hosted execution reached Chromium launch but failed before test execution because `libnspr4.so` was absent. The background runner service was intentionally not granted passwordless sudo.
+
+The user then performed a one-time interactive Playwright 1.63.0 Chromium dependency installation inside Ubuntu using the runner's Node 22.23.2 toolchain. This preserves least privilege: recurring WR-074 self-hosted jobs install only browser binaries and do not receive sudo authority.
+
+This evidence-only update creates a fresh post-dependency pilot run. No workflow routing, credentials, custody boundary, product code, or test assertion was changed by this commit.
