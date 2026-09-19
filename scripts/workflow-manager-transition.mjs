@@ -212,7 +212,7 @@ function parseJsonBytes(bytes, label) {
   catch { throw new Error(`${label} is not valid JSON`); }
 }
 
-export function verifyCommittedAuthorityConsumption(previousTask, nextTask, claim, evidenceReader) {
+export function verifyCommittedAuthorityConsumption(previousTask, nextTask, claim, evidenceReader, verifiedRun = null) {
   if (!evidenceReader) throw new Error(`${previousTask.task_id}: repository evidence reader is required for authority consumption`);
   const oldAuthority = normalizeAuthority(previousTask.future_execution_authority);
   if (!oldAuthority) throw new Error(`${previousTask.task_id}: prior future_execution_authority is malformed`);
@@ -258,8 +258,16 @@ export function verifyCommittedAuthorityConsumption(previousTask, nextTask, clai
       !SHA64.test(receipt.publication_payload_sha256 || '')) {
     throw new Error(`${previousTask.task_id}: committed authority receipt contract is incomplete`);
   }
-  if (claim.workflow_run_id && String(claim.workflow_run_id) !== receipt.workflow_run_id) {
+  if (!claim.workflow_run_id || String(claim.workflow_run_id) !== receipt.workflow_run_id) {
     throw new Error(`${previousTask.task_id}: committed receipt workflow_run_id mismatch`);
+  }
+  if (!verifiedRun ||
+      String(verifiedRun.id) !== receipt.workflow_run_id ||
+      verifiedRun.name !== 'WR-083 Protected Historical Scoring Bridge' ||
+      verifiedRun.event !== 'workflow_dispatch' ||
+      verifiedRun.head_branch !== 'main' ||
+      verifiedRun.conclusion !== 'success') {
+    throw new Error(`${previousTask.task_id}: protected workflow run is not independently verified as successful canonical execution`);
   }
 
   const terminalBytes = evidenceReader.readFile(publicationHead, terminalPath);
@@ -313,7 +321,7 @@ export function verifyCommittedAuthorityConsumption(previousTask, nextTask, clai
   };
 }
 
-export function applyAuthorityConsumptionReceipts(previousTasks, nextTasks, plan, changes = [], evidenceReader = null) {
+export function applyAuthorityConsumptionReceipts(previousTasks, nextTasks, plan, changes = [], evidenceReader = null, verifiedRuns = new Map()) {
   const errors = [];
   const claims = new Map();
   for (const claim of plan.authority_consumption_receipts || []) {
@@ -360,7 +368,7 @@ export function applyAuthorityConsumptionReceipts(previousTasks, nextTasks, plan
       continue;
     }
     try {
-      const verified = verifyCommittedAuthorityConsumption(previous, next, claim, evidenceReader);
+      const verified = verifyCommittedAuthorityConsumption(previous, next, claim, evidenceReader, verifiedRuns.get(previous.task_id) || null);
       delete next.future_execution_authority;
       next[AUTHORITY_RECEIPT_FIELD] = verified;
       next[AUTHORITY_HISTORY_FIELD] = [...new Set([...consumed, verified.authority_sha256])].sort();
@@ -413,7 +421,7 @@ function validateRegistryRelations(tasks) {
   return errors;
 }
 
-export function applyTransitionPlan({ registry, plan, taskSpecReader, authorityEvidenceReader = null }) {
+export function applyTransitionPlan({ registry, plan, taskSpecReader, authorityEvidenceReader = null, authorityVerifiedRuns = new Map() }) {
   if (plan.schema_version !== 1) throw new Error(`plan schema_version must be 1, got ${plan.schema_version}`);
   const next = structuredClone(registry);
   const changes = [];
@@ -441,7 +449,7 @@ export function applyTransitionPlan({ registry, plan, taskSpecReader, authorityE
   if (plan.updated_at_utc) next.updated_at_utc = plan.updated_at_utc;
   const transitionErrors = [
     ...planErrors,
-    ...applyAuthorityConsumptionReceipts(registry.tasks || [], next.tasks, plan, changes, authorityEvidenceReader),
+    ...applyAuthorityConsumptionReceipts(registry.tasks || [], next.tasks, plan, changes, authorityEvidenceReader, authorityVerifiedRuns),
     ...autoPopulateAuditorPins(next.tasks, registry.tasks || [], changes)
   ];
   const ids = new Set();
@@ -470,6 +478,40 @@ export function applyTransitionPlan({ registry, plan, taskSpecReader, authorityE
   return { registry: next, taskSpecs, changes, errors: [...new Set(errors)] };
 }
 
+async function verifyAuthorityWorkflowRuns(plan) {
+  const claims = plan.authority_consumption_receipts || [];
+  if (!claims.length) return new Map();
+  const repository = String(plan.repository || process.env.GITHUB_REPOSITORY || '');
+  if (!/^[^/]+\/[^/]+$/.test(repository)) throw new Error('authority consumption transition requires repository owner/name');
+  const token = process.env.GITHUB_TOKEN || '';
+  const headers = { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const verified = new Map();
+  for (const claim of claims) {
+    if (!claim?.task_id || !claim.workflow_run_id || verified.has(claim.task_id)) {
+      throw new Error('authority consumption claim requires unique task_id and workflow_run_id');
+    }
+    const url = `https://api.github.com/repos/${repository}/actions/runs/${encodeURIComponent(String(claim.workflow_run_id))}`;
+    let response;
+    try { response = await fetch(url, { headers }); }
+    catch (error) { throw new Error(`authority workflow live verification unavailable: ${error.message}`); }
+    if (!response.ok) throw new Error(`authority workflow live verification HTTP ${response.status}`);
+    const run = await response.json();
+    if (String(run.id) !== String(claim.workflow_run_id) ||
+        run.name !== 'WR-083 Protected Historical Scoring Bridge' ||
+        run.event !== 'workflow_dispatch' ||
+        run.head_branch !== 'main' ||
+        run.conclusion !== 'success') {
+      throw new Error(`${claim.task_id}: protected workflow run is not a successful canonical WR-083 dispatch`);
+    }
+    verified.set(claim.task_id, {
+      id: run.id, name: run.name, event: run.event, head_branch: run.head_branch,
+      head_sha: run.head_sha, conclusion: run.conclusion
+    });
+  }
+  return verified;
+}
+
 async function main() {
   const options = parseArgs();
   const root = path.resolve(options.root || process.cwd());
@@ -477,6 +519,7 @@ async function main() {
   const planPath = path.resolve(root, options.plan);
   const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
   const plan = JSON.parse(fs.readFileSync(planPath, 'utf8'));
+  const authorityVerifiedRuns = await verifyAuthorityWorkflowRuns(plan);
   const result = applyTransitionPlan({
     registry,
     plan,
@@ -484,7 +527,8 @@ async function main() {
       const full = path.join(root, rel);
       return fs.existsSync(full) ? fs.readFileSync(full, 'utf8') : null;
     },
-    authorityEvidenceReader: createGitAuthorityEvidenceReader(root)
+    authorityEvidenceReader: createGitAuthorityEvidenceReader(root),
+    authorityVerifiedRuns
   });
   if (result.errors.length) {
     const output = { ok: false, dry_run: !options.write, changes: result.changes, errors: result.errors };

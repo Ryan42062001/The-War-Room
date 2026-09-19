@@ -169,9 +169,22 @@ function testAuthorityConsumptionAndReplay() {
       workflow_run_id:'12345',receipt_sha256:'0'.repeat(64)
     }],update_tasks:[{task_id:'WR-906',set:{worker_checkpoint_sha:fx.publicationHead}}]},
     taskSpecReader:reader,
-    authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root)
+    authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root),
+    authorityVerifiedRuns:new Map([['WR-906',{id:12345,name:'WR-083 Protected Historical Scoring Bridge',event:'workflow_dispatch',head_branch:'main',conclusion:'success'}]])
   });
   assert.ok(fabricated.errors.some(e=>e.includes('committed receipt SHA-256 mismatch')),'AUD-02 fabricated digest must fail');
+
+  const unverifiedRun=applyTransitionPlan({
+    registry,
+    plan:{schema_version:1,authority_consumption_receipts:[{
+      task_id:'WR-906',publication_head:fx.publicationHead,receipt_path:fx.receiptPath,terminal_path:fx.terminalPath,
+      workflow_run_id:'12345',receipt_sha256:fx.receiptSha
+    }],update_tasks:[{task_id:'WR-906',set:{worker_checkpoint_sha:fx.publicationHead}}]},
+    taskSpecReader:reader,
+    authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root),
+    authorityVerifiedRuns:new Map([['WR-906',{id:12345,name:'WR-083 Protected Historical Scoring Bridge',event:'workflow_dispatch',head_branch:'main',conclusion:'failure'}]])
+  });
+  assert.ok(unverifiedRun.errors.some(e=>e.includes('not independently verified')),'AUD-02 failed workflow run must not authorize consumption');
 
   const consumed=applyTransitionPlan({
     registry,
@@ -180,7 +193,8 @@ function testAuthorityConsumptionAndReplay() {
       workflow_run_id:'12345',receipt_sha256:fx.receiptSha
     }],update_tasks:[{task_id:'WR-906',set:{worker_checkpoint_sha:fx.publicationHead}}]},
     taskSpecReader:reader,
-    authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root)
+    authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root),
+    authorityVerifiedRuns:new Map([['WR-906',{id:12345,name:'WR-083 Protected Historical Scoring Bridge',event:'workflow_dispatch',head_branch:'main',conclusion:'success'}]])
   });
   assert.deepEqual(consumed.errors,[]);
   const done=consumed.registry.tasks[0];
@@ -212,7 +226,8 @@ function testAuthorityConsumptionAndReplay() {
       task_id:'WR-906',publication_head:second,receipt_path:fx.receiptPath,terminal_path:fx.terminalPath,workflow_run_id:'12345'
     }],update_tasks:[{task_id:'WR-906',set:{worker_checkpoint_sha:second}}]},
     taskSpecReader:reader,
-    authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root)
+    authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root),
+    authorityVerifiedRuns:new Map([['WR-906',{id:12345,name:'WR-083 Protected Historical Scoring Bridge',event:'workflow_dispatch',head_branch:'main',conclusion:'success'}]])
   });
   assert.ok(multi.errors.some(e=>e.includes('publication parent does not equal authorized head')),'multi-commit advancement must fail');
 }
