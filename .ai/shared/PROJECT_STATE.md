@@ -49,3 +49,17 @@ Manager, Builder, Draft Strategy, R&D, Auditor, and Work Helper.
 ## Parallel workflow automation
 
 WR-091 is active on dedicated branch `manager/wr-091-workflow-v35-automation` to implement six bounded Workflow V3.5 automation improvements. This lane is independent of WR-082 and must not alter WR-082 audit evidence or frozen WR-081 target `b5fc0974e0766c24974034557a62044b4752716a`. Workflow V3.4 remains canonical until a fresh audit accepts one immutable WR-091 target and the required post-merge canary passes.
+
+
+## Workflow V3.5 candidate freeze
+
+WR-091 is Manager-frozen for fresh independent audit at exact PR #257 head `def590788eb615d9322d5cc8ae3eef14e8c1bc25`. Full War Room CI `35405857026` passed, protected bridge preflight `35405938497` passed, and exact-SHA bootstrap-reuse canary `35406347330` proved Governance/full-test deduplication on already-green content. WR-092 is assigned. V3.4 remains canonical until independent acceptance and post-merge canary.
+
+WR-082 independently PASSed the frozen WR-081 result with no findings; its audit evidence is merged at `916c53bef57e406baf3cb96bd6879594654a4f05`.
+
+
+## WR-092 audit disposition / WR-091 remediation
+
+WR-092 independently failed exact Workflow V3.5 candidate `def590788eb615d9322d5cc8ae3eef14e8c1bc25` with three HIGH fail-closed findings (AUD-01/02/03). Audit evidence is merged at `8a6ef495a5715eb416a23b0912c201ef49306e9f`. V3.4 remains canonical. WR-091 is back IN_PROGRESS for bounded remediation only.
+
+WR-081/WR-082 result work is complete. The historical model result is accepted as a valid `VALIDATION_FAILED` / `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE` outcome, with no rerun/tuning/confirmation/composition/production promotion authorized.

@@ -2,54 +2,35 @@
 
 HANDOFF
 
-STATUS: WR-082 AUDIT ACTIVE — WR-091 WORKFLOW V3.5 CANDIDATE RUNNING IN PARALLEL
-TASK: WR-082 — Independent Audit of Returning-Player v2 Historical Model Results
-ROLE: Manager / Architect -> Independent Auditor / QA
+STATUS: WR-091 REMEDIATION IN PROGRESS AFTER WR-092 FAIL
 CANONICAL WORKFLOW: V3.4
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-FROZEN WR-081 TARGET:
-- PR #251;
-- branch `wr-081-v2-historical-model-scoring-execution`;
-- exact SHA `b5fc0974e0766c24974034557a62044b4752716a`;
-- protected evidence parent `c586394bfe01d70b23c499c12902c712e591c627`;
-- protected workflow run `35402528405` — SUCCESS;
-- final exact-head War Room CI `35403434472` — SUCCESS;
-- classify `105788089428` SUCCESS;
-- governance `105788118328` SUCCESS;
-- report SHA-256 `b3ad0e426661a53970b57f0dafc63001dc1ec64ea8ad2dc4f81a999803f13a4c`;
-- evidence-manifest SHA-256 `5e9a53fcdca24b7898cd0cb17efc71a337cdc9e9e6145c4d8b645acc9de765cf`.
+WR-092 publication is accepted as historical failed-audit evidence:
+- exact failed target `def590788eb615d9322d5cc8ae3eef14e8c1bc25`;
+- audit PR #259;
+- Auditor head `c3e0513cbb5adb6f0e99d37e3e83cfa06d85c4ea`;
+- exact-head CI `35407119982` SUCCESS;
+- verdict `FAIL — REMEDIATION REQUIRED`;
+- findings: WR-092-AUD-01/02/03 HIGH.
 
-FROZEN RESULT:
-- development gate PASS;
-- validation gate FAIL;
-- terminal `VALIDATION_FAILED`;
-- status `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`;
-- confirmation 2022–2025 NOT EXPOSED / NOT SCORED;
-- confirmation bootstrap NOT RUN.
+WR-091 remediation is bounded to:
+1. always require exactly one complete Auditor upstream candidate even when an explicit target is supplied;
+2. independently verify authority-consumption evidence from canonical authority + committed receipt/publication identity before removing authority;
+3. reject replay/reuse of already consumed authority.
 
-MANAGER VERIFICATION:
-- packaging delta from protected head is exactly three R&D files;
-- all PR #251 changed paths are under `.ai/research/**`;
-- all 11 protected generated evidence Git blob identities match the manifest;
-- report and manifest SHA-256 values independently reproduce;
-- no rerun/tuning is authorized.
+Add direct adversarial regressions for each finding. Preserve upgrades 3/4/5 and all V3.4 safety/custody controls. V3.5 remains non-canonical.
 
-WR-082:
-Freshly and independently audit exactly the frozen WR-081 SHA above. Do not rely on R&D or Manager conclusions as proof. Write only `.ai/auditor/**`. Return exactly one verdict: `PASS`, `PASS WITH NON-BLOCKING FINDINGS`, or `FAIL — REMEDIATION REQUIRED`.
+WR-081/WR-082 result lane is complete: WR-082 PASSed the frozen model result; WR-081 is accepted only as baseline-only/insufficient-evidence historical result with no downstream promotion.
 
 ## Next Activation
 
-| Order | Employee / Role | Status | Current Task / Gate | Copy/paste activation prompt / next action |
+| Order | Employee / Role | Status | Current Task / Gate | Next action |
 | --- | --- | --- | --- | --- |
-| 1 | Manager / Architect | WAIT | Await WR-082 independent verdict | On Auditor return, verify exact audit head/CI and route the model result disposition. |
-| 2 | Implementation Engineer / Builder | IDLE | No active Builder task | Do not activate. |
-| 3 | Draft Strategy & Decision Intelligence Analyst | IDLE | No active Strategy task | Do not activate. |
-| 4 | Research & Development (R&D) | COMPLETE | WR-081 final frozen result published | No further WR-081 work unless a fresh audit finding requires Manager-routed remediation. |
-| 5 | Independent Auditor / QA | ACTIVATE NOW | WR-082 fresh independent audit of exact WR-081 target | Use the Manager WR-082 activation prompt. |
-| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | WR-074 remains separately PLANNED; no current WR-081 technical blocker | Do not activate unless a new technical/workflow blocker appears. |
-
-## Parallel lane — WR-091
-
-Manager is implementing the six approved workflow-automation upgrades on `manager/wr-091-workflow-v35-automation` under STANDARD_CHAT_HIGH. The lane is INDEPENDENT from WR-082 and must not touch `.ai/auditor/**` or move/rewrite the frozen WR-081 audit target. Canonical V3.4 remains authoritative until WR-091 independently audits and passes post-merge canary.
+| 1 | Manager / Architect | ACTIVATE NOW | WR-091 bounded remediation | Implement AUD-01/02/03, exact-head validate, freeze new candidate, activate fresh re-audit. |
+| 2 | Implementation Engineer / Builder | IDLE | No product implementation task | Do not activate. |
+| 3 | Draft Strategy & Decision Intelligence Analyst | IDLE | No strategy task | Do not activate. |
+| 4 | Research & Development (R&D) | COMPLETE | WR-081 historical result accepted as baseline-only | No action. |
+| 5 | Independent Auditor / QA | COMPLETE | WR-092 historical failed audit published | Wait for a new frozen WR-091 SHA and fresh audit task. |
+| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | No separate blocker beyond bounded remediation | Activate only if remediation hits a cross-layer blocker. |

@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-18T23:05:00Z",
+  "updated_at_utc": "2026-09-18T23:48:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -86,88 +86,6 @@
       "refresh_mode": "FAST_REFRESH"
     },
     {
-      "task_id": "WR-081",
-      "owner": "R&D",
-      "worker_slot": "rnd-v2-historical-model-scoring",
-      "status": "AUDIT_READY",
-      "task_file": ".ai/manager/WR-081.md",
-      "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": "11f1014ba73a70563c29a8c6d4b11f8303298cdf",
-      "worker_checkpoint_sha": "b5fc0974e0766c24974034557a62044b4752716a",
-      "branch": "wr-081-v2-historical-model-scoring-execution",
-      "pr": 251,
-      "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "audit_required": true,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": true,
-      "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/research/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/auditor/",
-        ".ai/work_helper/",
-        "src/",
-        "public/",
-        ".github/",
-        "scripts/"
-      ],
-      "forbidden_exact_paths": [
-        ".ai/research/generated/CONTEXT_SHADOW_2026_SNAPSHOT.csv",
-        ".ai/research/WR023_2026_PROSPECTIVE_EVALUATION_PROTOCOL.md",
-        ".ai/research/generated/WR023_PROTOCOL_MANIFEST.json"
-      ],
-      "next_gate": "Manager froze exact WR-081 result target b5fc0974e0766c24974034557a62044b4752716a on PR #251 after verifying the final report/manifest hashes, all 11 protected-evidence Git blob identities, exact-head CI 35403434472, and terminal VALIDATION_FAILED semantics. WR-082 fresh independent audit is now the next gate.",
-      "refresh_mode": "FAST_REFRESH"
-    },
-    {
-      "task_id": "WR-082",
-      "owner": "Auditor",
-      "worker_slot": "auditor-v2-historical-model-result",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-082.md",
-      "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": "92a314a4e22f94d3414b7da5d41849d99d486033",
-      "worker_checkpoint_sha": null,
-      "branch": "wr-082-v2-historical-model-result-audit",
-      "pr": null,
-      "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "audit_required": false,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/auditor/"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/research/",
-        ".ai/work_helper/",
-        ".github/",
-        "scripts/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [],
-      "next_gate": "Fresh independent audit of exact frozen WR-081 target b5fc0974e0766c24974034557a62044b4752716a. Auditor publishes one immutable WR-082 audit target and returns PASS, PASS WITH NON-BLOCKING FINDINGS, or FAIL — REMEDIATION REQUIRED.",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_target_task": "WR-081",
-      "audit_target_pr": 251,
-      "audit_target_branch": "wr-081-v2-historical-model-scoring-execution",
-      "audit_target_sha": "b5fc0974e0766c24974034557a62044b4752716a"
-    },
-    {
       "task_id": "WR-091",
       "owner": "Manager",
       "worker_slot": "manager-workflow-v35-automation",
@@ -175,9 +93,9 @@
       "task_file": ".ai/manager/WR-091.md",
       "role_handoff": ".ai/manager/HANDOFF.md",
       "assignment_main_sha": "16f766f1464656779d3e8e2fbab91998eca774f9",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "def590788eb615d9322d5cc8ae3eef14e8c1bc25",
       "branch": "manager/wr-091-workflow-v35-automation",
-      "pr": null,
+      "pr": 257,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
@@ -215,7 +133,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Implement the six approved Workflow V3.5 automation upgrades on the dedicated branch, preserve WR-082 and its frozen WR-081 target unchanged, self-validate exact-head CI, then Manager freezes one immutable WR-091 candidate for fresh independent audit."
+      "next_gate": "Remediate only WR-092-AUD-01/02/03 on PR #257: enforce unique Auditor target derivation despite explicit pins; independently bind authority-consumption evidence to canonical authority/committed receipt/publication; reject replay/reuse of consumed authority. Add direct adversarial regressions, reconcile current main, obtain exact-head Full CI/protected-boundary validation, then Manager freezes a new immutable WR-091 target for a fresh independent re-audit."
     }
   ]
 }
