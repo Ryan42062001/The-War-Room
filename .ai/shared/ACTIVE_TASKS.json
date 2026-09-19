@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T04:54:00Z",
+  "updated_at_utc": "2026-09-19T05:04:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -89,11 +89,11 @@
       "task_id": "WR-099",
       "owner": "Manager",
       "worker_slot": "manager-v21-protected-workflow-identity",
-      "status": "IN_PROGRESS",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-099.md",
       "role_handoff": ".ai/manager/HANDOFF.md",
       "assignment_main_sha": "21abf6e9d7bade0d638d40339b3ae4b699a6eacc",
-      "worker_checkpoint_sha": "fd51d7ab40456182457fd19915baac8a88ae4468",
+      "worker_checkpoint_sha": "33d8d6037b1922841a134b9aba01eb3ea11ad97b",
       "branch": "manager/wr-099-protected-workflow-identity-integration",
       "pr": 281,
       "dependency": "HARD",
@@ -128,7 +128,48 @@
         ".ai/research/WR081_PROTECTED_SCORING_CONSUMER.py",
         ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py"
       ],
-      "next_gate": "Bounded WR-099 remediation for WR-100 findings M-01/L-01 only: require exact completed run status, remove null-to-completed coercion, add focused wrong-event/direct consumer path+digest/unconsumed-authority replacement regressions, rerun direct regressions + Full War Room CI, freeze a new immutable PR #281 target, then reactivate fresh WR-100 independent re-audit. No canary or scoring authority before PASS-family re-audit."
+      "next_gate": "Fresh WR-100 independent re-audit of remediated WR-099 PR #281 exact head 33d8d6037b1922841a134b9aba01eb3ea11ad97b. Prior failed target fd51d7ab40456182457fd19915baac8a88ae4468 remains failed history. No merge/canary/scoring authority before PASS-family re-audit."
+    },
+    {
+      "task_id": "WR-100",
+      "owner": "Auditor",
+      "worker_slot": "auditor-v21-protected-workflow-identity-reaudit",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-100.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": "5d16516b0ee3ea7c2c0ed9cc6fedc543f955cf86",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-100-v21-protected-workflow-identity-reaudit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/auditor/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        ".github/",
+        "scripts/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Fresh independent re-audit of exact remediated WR-099 target. Re-test M-01 exact completed-status fail-close and L-01 focused adversaries plus all original workflow identity/repository/head/receipt/replay boundaries. Publish fresh Auditor report/handoff/PR; do not inherit prior FAIL or Manager conclusions.",
+      "audit_target_task": "WR-099",
+      "audit_target_pr": 281,
+      "audit_target_branch": "manager/wr-099-protected-workflow-identity-integration",
+      "audit_target_sha": "33d8d6037b1922841a134b9aba01eb3ea11ad97b"
     }
   ]
 }

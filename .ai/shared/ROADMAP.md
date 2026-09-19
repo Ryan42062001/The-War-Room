@@ -139,3 +139,12 @@ No active Phase 5B critical path.
 - Next gate — fix exact completed-status fail-close + focused adversarial gaps -> Full CI -> new immutable freeze -> fresh WR-100 re-audit.
 - Post-audit integration and second WR-097 NO-SCORING canary remain blocked until PASS-family re-audit.
 - No real scoring authority. Phase 6 remains blocked.
+
+
+## WR-099 remediation re-audit gate
+
+- WR-099 remediation target `33d8d6037b1922841a134b9aba01eb3ea11ad97b` — AUDIT_READY on PR #281; exactly two authorized scripts; Full CI `35422588449` SUCCESS.
+- Prior target `fd51d7ab40456182457fd19915baac8a88ae4468` remains failed historical evidence and must never be integrated.
+- WR-100 — ASSIGNED fresh independent re-audit on `wr-100-v21-protected-workflow-identity-reaudit` against exact new target.
+- Next gate — PASS-family re-audit -> exact audited integration -> canonical-main Full CI -> second WR-097 NO-SCORING canary.
+- No real scoring authority. Phase 6 remains blocked.

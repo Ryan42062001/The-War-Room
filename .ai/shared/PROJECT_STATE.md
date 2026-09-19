@@ -183,3 +183,14 @@ Blocking finding M-01: the live workflow-run verifier accepts missing/null `stat
 WR-099 is back IN_PROGRESS for exactly that bounded two-file remediation. Prior PR #281 head `fd51d7ab40456182457fd19915baac8a88ae4468` must not be merged. After remediation and Full CI, Manager must freeze a new immutable target and reactivate fresh WR-100 audit.
 
 No second canonical-main WR-097 NO-SCORING canary is authorized yet. No real v2.1 scoring authority exists. 2022–2025 remain unopened. Phase 6 remains blocked.
+
+
+## WR-099 remediation freeze / WR-100 fresh re-audit
+
+WR-099 remediation completed at exact new PR #281 head `33d8d6037b1922841a134b9aba01eb3ea11ad97b`. The scope remains exactly the two Manager transition scripts. M-01 is remediated by requiring exact completed status and removing status coercion; L-01 focused regressions now cover wrong event, missing/null status, direct verified-run consumer path/digest mismatch, and unconsumed-authority replacement.
+
+Exact-head push CI `35422586327` and PR Full War Room CI `35422588449` are SUCCESS; governance `105842869277` and product/browser test `105842885865` are SUCCESS.
+
+WR-100 is reactivated on a fresh Auditor branch to audit the complete remediated target independently. The prior FAIL remains bound only to old target `fd51d7ab40456182457fd19915baac8a88ae4468`.
+
+PR #281 remains unmerged. No second canonical-main WR-097 NO-SCORING canary or real scoring authority is authorized before PASS-family re-audit and exact audited integration. Phase 6 remains blocked.
