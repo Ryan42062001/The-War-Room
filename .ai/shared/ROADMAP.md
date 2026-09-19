@@ -1,8 +1,38 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT
-Last updated: 2026-09-19
+Status: ACTIVE DEVELOPMENT — WR-109 R&D assessment is the sole assigned lane
+Current-state snapshot: 2026-09-19; refresh against `.ai/shared/ACTIVE_TASKS.json` before routing or acting.
 Owner: Manager / Architect
+Workflow: V3.5 — CANONICAL
+
+> **Read this section for current authority and priority.** The historical milestone log below preserves status labels, PR states and next-gate language **as recorded at each historical checkpoint**. Earlier `ACTIVE`, `ASSIGNED`, `BLOCKED`, `PLANNED`, or `unmerged` statements there are not current instructions. Current executable assignments come only from the live active-task registry, canonical task specs, Manager decisions, and current GitHub state.
+
+## Current priorities and gates
+
+| Priority | Workstream | Current state | Required next gate / boundary |
+| --- | --- | --- | --- |
+| 1 | **WR-109 — draft-cycle readiness and ESPN Direct evidence assessment** | **ASSIGNED — R&D only**, `STANDARD_CHAT_HIGH`; branch `wr-109-draft-readiness-evidence-assessment`. | R&D publishes bounded evidence reports, a disposable-live-mock protocol, and separately scoped next-cycle source-intake prerequisites with exact-head CI. Manager reviews the report before activating anything downstream. Do not treat fixtures as real live Direct validation. |
+| 2 | **ESPN structured Direct live validation** | **PROPOSED / NOT ASSIGNED** — structured Direct capture has not been independently established in a real disposable live mock; live Board/Pick History fallback has separate previous validation evidence. | After WR-109 Manager review, explicitly authorize a consent-safe disposable mock and distinguish Direct evidence, fallback behavior, ownership, monotonic pick order, missed/reordered picks, terminal state and error recovery. Mark PASS only with real, sanitised, attributable live evidence; otherwise remain UNVERIFIED / INCONCLUSIVE. No authenticated ESPN capture is authorized by this roadmap. |
+| 3 | **Next draft-cycle rankings/source intake** | **PROPOSED / NOT ASSIGNED** — existing bundled 2026 baseline remains authoritative for the current application. | Separate Manager-scoped source/provenance and rights/availability review, seasonal identity/freshness, FantasyPros expert PPR ECR value vs ESPN board/ADP timing, import/baseline count/hash and compatibility assessment. No silent update, acquisition, source substitution, player/rank fabrication, or production dataset replacement. |
+| 4 | **Draft-day release readiness** | **PROPOSED / NOT ASSIGNED** — contingent on evidence and any separately accepted fixes/refresh. | Define explicit end-to-end mock/recovery and manual-fallback acceptance; verify draft-state ownership/pick order/terminal and saved-session recovery, phone/desktop usability, ranking freshness, extension/app compatibility, full regressions, deployment/rollback and a documented go/no-go gate before release. |
+| 5 | **Historical PR reconciliation** | **HOUSEKEEPING / NOT ASSIGNED** — historical open PR #251 (WR-081 Stage A) and #244 (V3.4 Next Activation) remain on GitHub. | Review whether already-superseded historical PRs should be closed or preserved with explanatory comments. Do not merge, retarget, delete, or reactivate them from roadmap wording alone. |
+
+### Completed milestones and hard limits
+
+- **Workflow V3.5 — CANONICAL.** WR-091 was accepted after WR-094 independent PASS and post-merge Full CI `35413697902` SUCCESS.
+- **WR-074 / WR-075 — CLOSED.** Dedicated Linux/WSL2 `[self-hosted, war-room-heavy-ci]` heavy-CI pilot passed independent audit and required canonical-main full CI `35475382820` SUCCESS. The bounded pilot does **not** authorize generic self-hosted routing, arbitrary/fork PR execution, custody/protected credentialed workloads on that runner, or automatic CI migration. Observed self-hosted timings did not demonstrate a speed advantage.
+- **WR-101 / WR-102 — CLOSED, BASELINE ONLY.** Returning-Player v2.1 validation passed, confirmation failed (`CONFIRMATION_FAILED`; `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`). No rerun, tuning, threshold/source/protocol change, new scoring authority, 2026 outcome inspection, production ranking/composition or Phase 6 is authorized. A later model attempt would need a new prospective Manager/R&D task and applicable audit gates.
+- **WR-D001 ranking authority unchanged.** FantasyPros expert PPR ECR determines value; ESPN rank/ADP informs draft-room timing. Proposed research or market freshness findings do not independently authorize recommendation-policy changes.
+
+### Routing rule
+
+WR-109 is the **only currently assigned task in the active-only registry at this snapshot**. Proposed work above is planning, not permission to run tests on the user's ESPN account, alter data/production, create downstream worker assignments, or expand infrastructure. Manager must refresh the registry and live PR/CI state before any transition; WR-109 R&D owns only the exact three research/handoff files granted by its task. This Manager roadmap cleanup changes no R&D file, task scope, status, registry, or live authority.
+
+---
+
+## Historical milestone log — checkpoint record, not current activation state
+
+The chronological entries below are preserved with their original headings, status language, milestone evidence, and then-current next actions. Where an earlier entry conflicts with the current-priorities section or live canonical state, the earlier entry describes **history only**.
 
 ## Workflow foundation
 
