@@ -577,10 +577,13 @@ def _retained_raw_sources(retained_manifest: Mapping[str, object]) -> list[dict]
 
 
 def _publication_family(rel: str) -> str:
-    match = V21_PUBLICATION_PATH.fullmatch(rel)
-    if not match or match.group(1) not in V21_PUBLICATION_FAMILIES:
+    if not rel.startswith(".ai/research/generated/") or not rel.endswith(".json") or ".." in Path(rel).parts:
         raise ContractError("publication path/family is not authorized")
-    return match.group(1)
+    stem=Path(rel).stem
+    matches=[family for family in V21_PUBLICATION_FAMILIES if stem==family or stem.startswith(family+"_")]
+    if len(matches)!=1:
+        raise ContractError("publication path/family is not authorized")
+    return matches[0]
 
 def _contains_credential_key(value: object) -> bool:
     if isinstance(value, dict):
