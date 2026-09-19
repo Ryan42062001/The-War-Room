@@ -38,9 +38,6 @@ jobs:
     if: needs.trust-gate.outputs.approved == 'true'
     runs-on: [self-hosted, war-room-heavy-ci]
     timeout-minutes: 45
-    defaults:
-      run:
-        shell: cmd
     steps:
       - name: Check out exact trusted push SHA
         uses: actions/checkout@v7
@@ -69,9 +66,6 @@ jobs:
 
       - name: Record sanitized runner environment evidence
         run: node scripts/ci/wr074-pilot.mjs environment
-
-      - name: Diagnose command-bar platform metrics
-        run: node scripts/ci/wr074-command-bar-diagnose.mjs
 
       - name: Stress browser determinism boundaries
         run: node scripts/ci/wr074-pilot.mjs stress
@@ -137,9 +131,6 @@ jobs:
 
       - name: Record sanitized runner environment evidence
         run: node scripts/ci/wr074-pilot.mjs environment
-
-      - name: Diagnose command-bar platform metrics
-        run: node scripts/ci/wr074-command-bar-diagnose.mjs
 
       - name: Stress browser determinism boundaries
         run: node scripts/ci/wr074-pilot.mjs stress
