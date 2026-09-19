@@ -2,38 +2,38 @@
 
 HANDOFF
 
-STATUS: WORKFLOW V3.5 CANONICAL — WR-091 / WR-094 CLOSED
+STATUS: WR-095 RETURNING-PLAYER V2.1 RESEARCH ACTIVATED
 CANONICAL WORKFLOW: V3.5
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-Workflow V3.5 is fully accepted.
+Workflow V3.5 is canonical and stable.
 
-Final acceptance chain:
-- WR-094 verdict: `PASS`, no findings;
-- exact audited WR-091 target: `77d3b182264ff71d723aa5e28335083692fb42fc`;
-- Auditor PR #266;
-- immutable Auditor head `f844a8884394fd53746df577993528dd63109537`;
-- Auditor exact-head CI `35413270322` SUCCESS;
-- audited implementation PR #257 merged as canonical commit `d9f617ae4553e40e5ee9389978cfcc1657fd3402`;
-- mandatory canonical-main Full War Room CI canary `35413697902` SUCCESS;
-- classify `105818093988` SUCCESS;
-- Governance `105818110367` SUCCESS;
-- full test `105818140464` SUCCESS.
+Returning-Player historical disposition remains:
+- WR-081 / WR-082 CLOSED;
+- exact frozen result `b5fc0974e0766c24974034557a62044b4752716a`;
+- terminal `VALIDATION_FAILED`;
+- status `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`;
+- confirmation 2022–2025 never exposed/scored.
 
-Historical failed audits remain preserved and SHA-scoped:
-- WR-092 FAIL applies only to `def590788eb615d9322d5cc8ae3eef14e8c1bc25`;
-- WR-093 FAIL applies only to `638a8e2af25f1c806fe8883de0c959c5caaff35e`.
+New critical research lane:
+- WR-095 — Returning-Player v2.1 Failure Analysis + Prospective Model-Protocol Design;
+- owner R&D;
+- branch `wr-095-returning-player-v21-failure-analysis-protocol`;
+- no scoring, retained-source access, confirmation exposure, production change, composition or Phase 6;
+- 2018–2021 are design-exposed for v2.1;
+- all 2022–2025 outcomes remain protected during protocol design;
+- next gate if protocol-ready: Manager freeze -> fresh independent protocol audit.
 
-Returning-Player v2 historical result lane is also closed: WR-082 PASSed the frozen WR-081 evidence, and the accepted disposition remains `VALIDATION_FAILED` / `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE` with no rerun, confirmation exposure, composition, or production promotion authorized.
+WR-074/WR-075 remain a separate optional infrastructure lane and do not block WR-095.
 
 ## Next Activation
 
 | Order | Employee / Role | Status | Current Task / Gate | Next action |
 | --- | --- | --- | --- | --- |
-| 1 | Manager / Architect | COMPLETE | Workflow V3.5 promotion complete | No immediate workflow action required. |
-| 2 | Implementation Engineer / Builder | IDLE | No active product implementation task | Await Manager assignment. |
-| 3 | Draft Strategy & Decision Intelligence Analyst | IDLE | No active strategy task | Await Manager assignment. |
-| 4 | Research & Development (R&D) | COMPLETE | WR-081 historical result lane closed | Any future model attempt must be a new R&D/protocol task. |
-| 5 | Independent Auditor / QA | BLOCKED | WR-075 remains blocked behind WR-074 | Await a frozen WR-074 target if the infrastructure lane is activated. |
-| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | WR-074 remains PLANNED at preserved checkpoint | Activate only if Manager chooses to resume the self-hosted heavy-CI pilot. |
+| 1 | Manager / Architect | WAIT | WR-095 assigned | Await R&D immutable protocol/discovery target, then verify/freeze if protocol-ready. |
+| 2 | Implementation Engineer / Builder | IDLE | No implementation authority | Wait for an independently accepted v2.1 protocol and later implementation assignment. |
+| 3 | Draft Strategy & Decision Intelligence Analyst | BLOCKED | Phase 6 not yet authorized | Wait for independently accepted v2.1 season-total evidence. |
+| 4 | Research & Development (R&D) | ACTIVATE NOW | WR-095 v2.1 failure analysis + protocol design | Execute discovery/design only under the task boundaries. |
+| 5 | Independent Auditor / QA | WAIT | Future v2.1 protocol audit not yet activated | Wait for Manager-frozen WR-095 target; WR-075 remains separately blocked behind WR-074. |
+| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | WR-074 remains optional/PLANNED | Do not activate unless Manager chooses to resume the infrastructure pilot or R&D escalates a cross-layer blocker. |

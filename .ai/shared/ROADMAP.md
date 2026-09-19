@@ -74,3 +74,13 @@ No active Phase 5B critical path.
 - PR #257 — MERGED as canonical-main commit `d9f617ae4553e40e5ee9389978cfcc1657fd3402`.
 - Mandatory post-merge Full War Room CI canary `35413697902` — SUCCESS.
 - Workflow V3.5 is the active canonical workflow.
+
+
+## Returning-Player v2.1 — ACTIVE RESEARCH
+
+- WR-095 — ASSIGNED / R&D failure analysis + prospective v2.1 protocol design.
+- WR-081/WR-082 remain immutable closed historical evidence; WR-095 is not a rerun.
+- 2018–2021 are design-exposed for v2.1 and cannot serve as untouched validation.
+- 2022–2025 outcomes remain unopened during WR-095.
+- Phase 6 remains blocked until a later v2.1 season-total path is independently accepted.
+- Next gate if protocol-ready: Manager exact freeze -> fresh independent protocol audit before any scoring.

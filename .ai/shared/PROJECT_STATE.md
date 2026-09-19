@@ -34,7 +34,7 @@ WR-083 and WR-090 are closed.
 
 WR-081 / WR-082 are closed. WR-082 independently returned PASS with no findings on exact WR-081 target `b5fc0974e0766c24974034557a62044b4752716a`. The accepted historical result is `VALIDATION_FAILED` / `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`: development passed, validation failed, confirmation seasons 2022–2025 were not exposed or scored, and no rerun/tuning/confirmation/composition/production promotion is authorized. Any future model attempt requires a new R&D/protocol task.
 
-There is no active Returning-Player v2 critical-path task.
+WR-095 is now the active Returning-Player research path: failure analysis of the accepted WR-081 validation failure plus prospective v2.1 protocol design only. It is not a rerun. 2018–2021 are design-exposed; 2022–2025 remain unopened and no scoring authority exists.
 
 WR-074 serialization is cleared. It is PLANNED at preserved checkpoint `7b4641499c50541abf523267eb4c0255813e8b6d`, but is not being spawned in this transition because the immediate critical path is WR-081.
 
@@ -88,3 +88,16 @@ Acceptance chain:
 - mandatory post-merge Full War Room CI canary `35413697902` SUCCESS, including full test job `105818140464`.
 
 Workflow V3.5 is now canonical. WR-091 and WR-094 are closed and removed from the active-only registry. Historical WR-092 and WR-093 FAIL evidence remains preserved and applies only to the exact old SHAs audited at those times.
+
+
+## Returning-Player v2.1 activation
+
+WR-095 is assigned to R&D on `wr-095-returning-player-v21-failure-analysis-protocol`.
+
+Purpose:
+- decompose the accepted WR-081 failure using only already-exposed 2018–2021 evidence;
+- prevent reuse of 2020–2021 as pseudo-untouched validation;
+- design one prospective v2.1 protocol with a new still-unexposed validation/confirmation chronology;
+- determine whether the accepted WR-059 source surface is sufficient.
+
+WR-095 has no retained-source, fitting, scoring, confirmation-outcome, production, composition or Phase-6 authority. If protocol-ready, the next gate is a fresh independent protocol audit.

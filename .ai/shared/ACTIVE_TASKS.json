@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T01:58:00Z",
+  "updated_at_utc": "2026-09-19T02:10:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -84,6 +84,43 @@
       "forbidden_exact_paths": [],
       "next_gate": "Manager freezes WR-074 exact target -> activate WR-075 fresh independent audit.",
       "refresh_mode": "FAST_REFRESH"
+    },
+    {
+      "task_id": "WR-095",
+      "owner": "R&D",
+      "worker_slot": "rnd-returning-player-v21-protocol",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-095.md",
+      "role_handoff": ".ai/research/HANDOFF.md",
+      "assignment_main_sha": "8d1ad6433c409ba096eb36ee320a277676bd64cd",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-095-returning-player-v21-failure-analysis-protocol",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": true,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/research/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/work_helper/",
+        ".github/",
+        "scripts/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "R&D publishes one immutable WR-095 v2.1 failure-analysis/protocol target -> Manager verifies and freezes exact target -> fresh independent protocol audit before any new retained-source access, fitting, scoring, target exposure, or Phase 6 work."
     }
   ]
 }
