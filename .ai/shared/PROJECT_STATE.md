@@ -306,3 +306,32 @@ Manager reverified PR #295 still pointed exactly to the audited target and integ
 WR-106 and WR-107 are CLOSED. WR-101 remains BLOCKED; R2 authority remains revoked and absent, R2 execution branch did not advance, and no rerun is authorized. WR-102 remains reserved for a future actual protected result target.
 
 WR-108 is now the mandatory canonical-main post-stage-gate-remediation NO-SCORING canary gate. No real scoring authority exists. Canary SUCCESS is readiness evidence only and permits only a separate later Manager review of whether to create a completely NEW execution identity and NEW one-time authority.
+
+
+## WR-108 passed / WR-101 fresh R3 authority activated
+
+Canonical-main WR-097 NO-SCORING canary run `35447178653` completed SUCCESS on canonical head `3d2f0ee09aad47a3190e4be6e83cc765543da387`.
+
+The canary verified:
+- preflight `105908010471` SUCCESS;
+- trust gate `105908196958` SUCCESS in exact `no-scoring` mode;
+- protected readiness `105908214310` SUCCESS;
+- future-authorized-v21-scoring `105908215055` SKIPPED;
+- 14 retained identities verified;
+- provider mutations 0;
+- consumer provider credentials absent;
+- re-hash/re-size 14/14;
+- corrected synthetic chronology/stage-gate conformance PASS;
+- cleanup PASS;
+- Actions artifacts 0;
+- no historical/2022-2025/2026 outcome exposure.
+
+WR-108 is CLOSED.
+
+Manager creates a fresh WR-101 R3 one-time authority:
+- execution branch `wr-101-v21-validation-scoring-execution-r3`;
+- exact pre-execution head `3d2f0ee09aad47a3190e4be6e83cc765543da387`;
+- consumer path `.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py`;
+- consumer SHA-256 `5fc302f54f554ba2db42606a204c94e1764599fc8c5687b7c7ef56d33423150a`.
+
+Both prior execution identities/authorities remain revoked historical evidence and must never be reused. No automatic rerun authority exists.
