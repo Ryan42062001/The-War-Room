@@ -169,3 +169,12 @@ No active Phase 5B critical path.
 - WR-104 — BLOCKED / fresh independent remediation audit after Manager freeze.
 - WR-102 — remains blocked/reserved for a later actual protected result target.
 - No rerun or replacement authority is authorized.
+
+
+## WR-103 remediation audit gate
+
+- WR-103 — AUDIT_READY / PR #289 frozen at exact SHA `1a572baac9e4393582db37ad43cbe8609628d8c3`; final Full CI `35425624460` SUCCESS.
+- WR-104 — ASSIGNED / fresh independent audit of that exact target on `wr-104-v21-target-ingest-remediation-audit`.
+- WR-101 — remains BLOCKED; prior one-time authority revoked.
+- WR-102 — remains blocked/reserved for a later actual protected result.
+- Next gate — WR-104 PASS-family -> integrate exact audited WR-103 target -> canonical validation/no-scoring proof -> separate Manager decision on any NEW one-time scoring authority.
