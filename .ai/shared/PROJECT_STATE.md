@@ -194,3 +194,20 @@ Exact-head push CI `35422586327` and PR Full War Room CI `35422588449` are SUCCE
 WR-100 is reactivated on a fresh Auditor branch to audit the complete remediated target independently. The prior FAIL remains bound only to old target `fd51d7ab40456182457fd19915baac8a88ae4468`.
 
 PR #281 remains unmerged. No second canonical-main WR-097 NO-SCORING canary or real scoring authority is authorized before PASS-family re-audit and exact audited integration. Phase 6 remains blocked.
+
+
+## WR-099/100 accepted / WR-101 one-time protected validation authority
+
+WR-100 fresh re-audit returned PASS with no findings on exact WR-099 target `33d8d6037b1922841a134b9aba01eb3ea11ad97b`. Auditor evidence was published through PR #286 at immutable head `453ce58c4ead8f3d734a8eea5568dfb22d4dfca6` with CI `35423220027` SUCCESS.
+
+Manager integrated only that exact audited target through PR #281 as canonical merge `6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9`. Canonical Full War Room CI `35423356815` completed SUCCESS.
+
+The required second canonical-main WR-097 NO-SCORING canary `35423633965` then completed SUCCESS at exact canonical head `6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9`: preflight/trust/readiness PASS, future scoring SKIPPED, 14/14 retained identities verified, provider mutations 0, consumer provider credentials absent, 14/14 re-hash/re-size, no Actions artifacts, no real scoring, no 2022–2025 target exposure, no 2026 outcome inspection, cleanup PASS.
+
+All prerequisites for a separate one-time real v2.1 validation task are therefore satisfied.
+
+Manager activates WR-101 on fresh branch `wr-101-v21-validation-scoring-execution` at exact head `6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9` with one-time canonical `future_execution_authority` bound to `.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py` / SHA-256 `f6e5eee35c0e769abc9cbc899c0eecc3e311ff3cd22973ebf2c7351ddd58c6f8`.
+
+WR-101 permits exactly one audited protected-workflow execution. Validation is 2022–2023; 2024–2025 confirmation is visible only if validation PASS unlocks it under the frozen protocol. No rerun/tuning/source substitution/2026/production/composition/Phase 6 authority is granted.
+
+WR-102 is blocked pending one immutable WR-101 result target.

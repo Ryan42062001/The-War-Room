@@ -148,3 +148,15 @@ No active Phase 5B critical path.
 - WR-100 — ASSIGNED fresh independent re-audit on `wr-100-v21-protected-workflow-identity-reaudit` against exact new target.
 - Next gate — PASS-family re-audit -> exact audited integration -> canonical-main Full CI -> second WR-097 NO-SCORING canary.
 - No real scoring authority. Phase 6 remains blocked.
+
+
+## Returning-Player v2.1 protected validation execution
+
+- WR-099 — CLOSED / exact independently audited integration accepted and merged as `6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9`.
+- WR-100 — CLOSED / fresh re-audit PASS with no findings.
+- canonical post-integration Full CI `35423356815` — SUCCESS.
+- second canonical-main WR-097 NO-SCORING canary `35423633965` — SUCCESS with zero scoring/outcome exposure.
+- WR-101 — IN_PROGRESS / one-time protected v2.1 validation authority on fresh branch `wr-101-v21-validation-scoring-execution` at exact pre-execution head `6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9`.
+- WR-102 — BLOCKED / fresh independent result audit after exact WR-101 freeze.
+- Next gate — canonicalize WR-101 authority -> one `authorized-v21-scoring` protected dispatch -> consume authority -> bounded result packaging -> exact freeze -> WR-102 audit.
+- No rerun/tuning/2026/production/ranking/composition/Phase 6 authority.

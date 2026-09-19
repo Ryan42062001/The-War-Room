@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T05:04:00Z",
+  "updated_at_utc": "2026-09-19T05:23:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -86,16 +86,16 @@
       "refresh_mode": "FAST_REFRESH"
     },
     {
-      "task_id": "WR-099",
-      "owner": "Manager",
-      "worker_slot": "manager-v21-protected-workflow-identity",
-      "status": "AUDIT_READY",
-      "task_file": ".ai/manager/WR-099.md",
-      "role_handoff": ".ai/manager/HANDOFF.md",
-      "assignment_main_sha": "21abf6e9d7bade0d638d40339b3ae4b699a6eacc",
-      "worker_checkpoint_sha": "33d8d6037b1922841a134b9aba01eb3ea11ad97b",
-      "branch": "manager/wr-099-protected-workflow-identity-integration",
-      "pr": 281,
+      "task_id": "WR-101",
+      "owner": "R&D",
+      "worker_slot": "rnd-v21-protected-validation-scoring",
+      "status": "IN_PROGRESS",
+      "task_file": ".ai/manager/WR-101.md",
+      "role_handoff": ".ai/research/HANDOFF.md",
+      "assignment_main_sha": "6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9",
+      "worker_checkpoint_sha": "6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9",
+      "branch": "wr-101-v21-validation-scoring-execution",
+      "pr": null,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
@@ -104,51 +104,53 @@
       "user_action_required": false,
       "blocked_on_tasks": [],
       "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": true,
+      "external_authority_evidence_required": true,
+      "post_merge_canary_required": false,
       "allowed_path_prefixes": [
-        "scripts/workflow-manager-transition.mjs",
-        "scripts/test-workflow-manager-transition.mjs"
+        ".ai/research/"
       ],
       "forbidden_path_prefixes": [
         ".ai/shared/",
+        ".ai/manager/",
         ".ai/auditor/",
-        ".ai/research/",
         ".ai/work_helper/",
         ".github/",
-        "scripts/custody/",
+        "scripts/",
         "src/",
         "public/"
       ],
-      "forbidden_exact_paths": [
-        ".github/workflows/wr083-protected-historical-scoring-bridge.yml",
-        ".github/workflows/wr097-v21-protected-scoring-bridge.yml",
-        "scripts/custody/wr083_protected_historical_scoring.py",
-        "scripts/custody/wr097_v21_protected_scoring.py",
-        ".ai/research/WR081_PROTECTED_SCORING_CONSUMER.py",
-        ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py"
-      ],
-      "next_gate": "Fresh WR-100 independent re-audit of remediated WR-099 PR #281 exact head 33d8d6037b1922841a134b9aba01eb3ea11ad97b. Prior failed target fd51d7ab40456182457fd19915baac8a88ae4468 remains failed history. No merge/canary/scoring authority before PASS-family re-audit."
+      "forbidden_exact_paths": [],
+      "next_gate": "Manager one-time authority must first be canonical on main. Then dispatch WR-097 Returning-Player v2.1 Protected Scoring Bridge on canonical main with mode authorized-v21-scoring. After one protected publication consumes the authority, R&D may package only the exact frozen result evidence and return an immutable WR-101 target for Manager freeze and WR-102 audit. No rerun/tuning/source substitution/2026/composition/production work.",
+      "future_execution_authority": {
+        "branch": "wr-101-v21-validation-scoring-execution",
+        "head_sha": "6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9",
+        "consumer_path": ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py",
+        "consumer_sha256": "f6e5eee35c0e769abc9cbc899c0eecc3e311ff3cd22973ebf2c7351ddd58c6f8"
+      }
     },
     {
-      "task_id": "WR-100",
+      "task_id": "WR-102",
       "owner": "Auditor",
-      "worker_slot": "auditor-v21-protected-workflow-identity-reaudit",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-100.md",
+      "worker_slot": "auditor-v21-validation-result",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-102.md",
       "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": "5d16516b0ee3ea7c2c0ed9cc6fedc543f955cf86",
+      "assignment_main_sha": null,
       "worker_checkpoint_sha": null,
-      "branch": "wr-100-v21-protected-workflow-identity-reaudit",
+      "branch": "wr-102-v21-validation-result-audit",
       "pr": null,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": false,
-      "blocker_type": "NONE",
+      "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on_tasks": [
+        "WR-101"
+      ],
+      "blocked_on": [
+        "WR-101 must complete the single Manager-authorized protected execution, consume the authority through a valid receipt, package one immutable result target, and receive Manager exact freeze before audit activation."
+      ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
@@ -165,11 +167,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Fresh independent re-audit of exact remediated WR-099 target. Re-test M-01 exact completed-status fail-close and L-01 focused adversaries plus all original workflow identity/repository/head/receipt/replay boundaries. Publish fresh Auditor report/handoff/PR; do not inherit prior FAIL or Manager conclusions.",
-      "audit_target_task": "WR-099",
-      "audit_target_pr": 281,
-      "audit_target_branch": "manager/wr-099-protected-workflow-identity-integration",
-      "audit_target_sha": "33d8d6037b1922841a134b9aba01eb3ea11ad97b"
+      "next_gate": "Manager freezes exact WR-101 protected result target -> activate fresh WR-102 independent result audit."
     }
   ]
 }
