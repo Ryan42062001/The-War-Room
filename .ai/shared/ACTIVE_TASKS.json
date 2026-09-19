@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T05:23:00Z",
+  "updated_at_utc": "2026-09-19T05:32:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -89,7 +89,7 @@
       "task_id": "WR-101",
       "owner": "R&D",
       "worker_slot": "rnd-v21-protected-validation-scoring",
-      "status": "IN_PROGRESS",
+      "status": "BLOCKED",
       "task_file": ".ai/manager/WR-101.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9",
@@ -100,10 +100,14 @@
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": true,
-      "blocker_type": "NONE",
+      "blocker_type": "TECHNICAL",
       "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on_tasks": [
+        "WR-103"
+      ],
+      "blocked_on": [
+        "Authorized run 35424042233 failed closed inside the protected consumer during target-ingest before any publication commit or authority-consumption receipt. Current authority is revoked; no rerun is authorized."
+      ],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
@@ -120,13 +124,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager one-time authority must first be canonical on main. Then dispatch WR-097 Returning-Player v2.1 Protected Scoring Bridge on canonical main with mode authorized-v21-scoring. After one protected publication consumes the authority, R&D may package only the exact frozen result evidence and return an immutable WR-101 target for Manager freeze and WR-102 audit. No rerun/tuning/source substitution/2026/composition/production work.",
-      "future_execution_authority": {
-        "branch": "wr-101-v21-validation-scoring-execution",
-        "head_sha": "6d49fa07b86ecdb5c92fcf127f83dd12d841c4c9",
-        "consumer_path": ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py",
-        "consumer_sha256": "f6e5eee35c0e769abc9cbc899c0eecc3e311ff3cd22973ebf2c7351ddd58c6f8"
-      }
+      "next_gate": "WR-103 bounded target-ingest failure analysis/remediation -> Full War Room CI -> Manager exact freeze -> WR-104 fresh independent audit. Only after PASS-family audit/integration may Manager separately decide whether to issue a NEW one-time execution authority."
     },
     {
       "task_id": "WR-102",
@@ -146,10 +144,12 @@
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
       "blocked_on_tasks": [
-        "WR-101"
+        "WR-101",
+        "WR-103",
+        "WR-104"
       ],
       "blocked_on": [
-        "WR-101 must complete the single Manager-authorized protected execution, consume the authority through a valid receipt, package one immutable result target, and receive Manager exact freeze before audit activation."
+        "WR-101 produced no result target because protected run 35424042233 failed before publication. WR-103 remediation and WR-104 fresh audit must complete before any new scoring decision; WR-102 remains reserved for a later actual result target."
       ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
@@ -167,7 +167,89 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager freezes exact WR-101 protected result target -> activate fresh WR-102 independent result audit."
+      "next_gate": "WR-103 remediation + WR-104 audit -> separate Manager decision on any new one-time authority -> successful protected result -> Manager exact freeze -> then activate WR-102."
+    },
+    {
+      "task_id": "WR-103",
+      "owner": "Work Helper",
+      "worker_slot": "work-helper-v21-target-ingest-failure",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-103.md",
+      "role_handoff": ".ai/work_helper/HANDOFF.md",
+      "assignment_main_sha": "bab6b8134e3be5837eec7a586353a8d185190857",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-103-v21-target-ingest-failure-remediation",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": true,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/work_helper/",
+        ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py",
+        ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py",
+        "scripts/custody/wr097_v21_protected_scoring.py",
+        "scripts/custody/test_wr097_v21_protected_scoring.py"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".github/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [
+        ".github/workflows/wr097-v21-protected-scoring-bridge.yml"
+      ],
+      "next_gate": "Reproduce the target-ingest failure deterministically without retained provider access, identify the exact fail-closed cause, apply the smallest bounded fix with regression coverage, run Full War Room CI, and return an immutable target. Do not dispatch scoring or access retained target outcomes."
+    },
+    {
+      "task_id": "WR-104",
+      "owner": "Auditor",
+      "worker_slot": "auditor-v21-target-ingest-remediation",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-104.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": null,
+      "worker_checkpoint_sha": null,
+      "branch": "wr-104-v21-target-ingest-remediation-audit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "UPSTREAM_TASK",
+      "user_action_required": false,
+      "blocked_on_tasks": [
+        "WR-103"
+      ],
+      "blocked_on": [
+        "WR-103 must publish one exact immutable remediation target with deterministic reproduction and Full War Room CI before audit activation."
+      ],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/auditor/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        ".github/",
+        "scripts/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Manager freezes exact WR-103 target -> activate fresh WR-104 independent audit."
     }
   ]
 }
