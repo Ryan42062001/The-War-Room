@@ -2,65 +2,80 @@
 
 HANDOFF
 
-STATUS: COMPLETE — FAIL — REMEDIATION REQUIRED
+STATUS: COMPLETE — PASS
 
-TASK: WR-093 — Independent Re-Audit of Workflow V3.5 Remediation
+TASK: WR-094 — Independent Re-Audit of Workflow V3.5 Final Remediation
 
 ROLE: Independent Auditor / QA
 
-BRANCH: `wr-093-workflow-v35-remediation-audit`
+BRANCH: `wr-094-workflow-v35-final-remediation-audit`
 
-HEAD: immutable Auditor head published by this branch; exact SHA and exact-head CI IDs are recorded in the WR-093 audit PR.
+HEAD: immutable Auditor head published by this branch; exact SHA and exact-head CI IDs are recorded in the WR-094 audit PR.
 
-BASE: canonical main verified at `8710f7106b11166040ac4c0798f23ddba710d610`; assigned audit branch started at `c4d92e7dd0d557df17de211d83b274160a7799cf` (one commit behind with zero file differences).
+BASE: canonical main verified at `7336303d0505f77a112d33adb1d7e8fd2448050d`; assigned audit branch started at `632d9b75c283254c49610253a010012f12f365b6` (one commit behind with zero file differences).
 
-AUDITED TARGET: WR-091 / PR #257 / branch `manager/wr-091-workflow-v35-automation` / exact frozen SHA `638a8e2af25f1c806fe8883de0c959c5caaff35e`.
+AUDITED TARGET: WR-091 / PR #257 / branch `manager/wr-091-workflow-v35-automation` / exact frozen SHA `77d3b182264ff71d723aa5e28335083692fb42fc`.
 
-VERDICT: `FAIL — REMEDIATION REQUIRED`
+VERDICT: `PASS`
 
-DONE: Fresh independent re-audit of the remediated V3.5 candidate. Historical WR-092 FAIL was not carried forward automatically. WR-092-AUD-01 is CLOSED. WR-092-AUD-02 is CLOSED. WR-092-AUD-03 is improved for normal replay but remains OPEN because machine-owned receipt/history state can be erased through remove+add task transitions and an identical consumed authority can then be replayed in a subsequent transition.
+DONE: Fresh independent audit of the final Workflow V3.5 remediation. Historical WR-092/WR-093 FAIL verdicts were used only as adversarial test cases. WR-093-AUD-01 is closed. WR-092-AUD-01 and WR-092-AUD-02 remain closed. No blocking or non-blocking findings remain.
 
-FINDING:
-- `WR-093-AUD-01` HIGH — machine-owned `authority_consumption_receipt` / `consumed_authority_sha256s` are protected only in `update_tasks`. `add_tasks` can directly inject them, and remove+re-add of the same task can silently omit/erase them. After history erasure, a later identical `future_execution_authority` is no longer recognized as consumed and is accepted.
+PRIMARY EVIDENCE:
+- add-task injection of `authority_consumption_receipt` fails;
+- add-task injection of `consumed_authority_sha256s` fails;
+- injection of both together fails;
+- verified consumption records exact authority identity into registry-level `authority_consumption_history`;
+- malformed and duplicate global ledger entries fail validation;
+- legitimate active-task removal remains allowed and retains global replay history;
+- same-task remove+re-add cannot erase global replay identity;
+- later exact replay fails through update;
+- direct exact replay through add fails after original task removal;
+- a genuinely different future authority remains allowed;
+- state checker independently rejects malformed/duplicate global history, task-local history/receipt missing from global ledger, and malformed task-local digests;
+- valid cross-bound global/task-local state passes;
+- ordinary plan input cannot directly clear/overwrite the global machine-owned ledger.
 
-CHANGED: Auditor evidence only — `.ai/auditor/WR-093_AUDIT.md` and this handoff.
+PRIOR FINDING PRESERVATION:
+- unique Auditor target derivation remains fail-closed and clean single-target auto-pin remains correct;
+- canonical authority digest/repository-bound receipt/terminal/run/payload verification remains intact;
+- failed/noncanonical/unavailable workflow-run verification fails closed;
+- normal same-authority replay remains blocked.
 
-TESTS / EVIDENCE:
-- independently re-ran all AUD-01 adversaries: explicit/current conflict, prior-target conflict, multiple candidates, incomplete frozen target, explicit PR/branch/SHA mismatches all fail closed; clean single upstream auto-pins correctly;
-- independently reviewed repository-bound AUD-02 verification: canonical authority digest recomputation, exact Git parent, committed receipt/terminal bytes, receipt SHA/content, branch/head/consumer identity, live successful canonical WR-083 workflow_dispatch, execution/result/decision cross-binding, and publication payload hash;
-- verified API/live workflow lookup failure aborts consumption;
-- verified normal same-authority replay fails when history is intact and a genuinely different future authority is allowed;
-- adversarially reproduced remove+re-add history erasure followed by successful identical-authority replay;
-- confirmed `workflow-state-check.mjs` has no independent protection for the machine-owned fields.
+PRESERVATION:
+- result-freeze verifier unchanged from the sound WR-093 target;
+- bootstrap classifier/tests/CI workflow unchanged;
+- WR-083 protected workflow/bridge/tests unchanged;
+- custody/provider read-only, credential isolation, RUNNER_TEMP raw-byte handling, retained-source publication rejection, prediction-lock chronology, live-head/race checks, release guards, exact-head/live-state/lane-collision controls, independent audit, Manager merge authority, and post-merge canary requirement preserved;
+- no product/model/ranking/recommendation semantics changed.
 
-CI: Exact frozen target Full War Room CI `35408373771` SUCCESS — classify `105802762153`, governance `105802782895`, full test `105802812745`, bootstrap reuse skipped. WR-083 protected preflight `35408373770` / `105802762435` SUCCESS. WR-069 `35408373783` / `105802764932` SUCCESS. WR-046 `35408373793` / `105802762499` SUCCESS. Consume this audit only after the immutable WR-093 audit head has green exact-head PR CI, recorded on the audit PR without mutating the head.
+SCOPE: PR #257 changes exactly 13 candidate workflow/control files relative to current main and no `.ai/auditor/**`, `.ai/research/**`, `.ai/work_helper/**`, `src/**`, or `public/**` paths.
 
-PRESERVATION: Upgrade 2 core freeze verification is preserved/strengthened. Upgrade 3 classifier + CI workflow and Upgrade 4/5 protected bridge files are byte-identical to the previously audited sound versions. Custody/provider read-only controls, provider credential isolation, RUNNER_TEMP raw bytes, retained-source publication rejection, prediction-lock chronology, live-head/race controls, release guards, lane collision controls, independent audit, Manager merge authority, and post-merge canary requirement remain preserved. No product/model/ranking/recommendation semantics changed.
+CI: Exact frozen target Full War Room CI `35410238089` SUCCESS — classify `105808252961`, governance `105808270320`, full test `105808300826`, bootstrap reuse skipped. WR-083 `35410238021` / preflight `105808252932` SUCCESS. WR-069 `35410238069` / contract preflight `105808253038` SUCCESS. WR-046 `35410238083` / contract preflight `105808252772` SUCCESS. Consume this audit only after the immutable WR-094 audit head itself has green exact-head PR CI recorded on the audit PR without mutating the head.
 
-BLOCKERS: WR-091 remains blocked on one bounded remediation: protect machine-owned authority-consumption state across add/remove transitions and preserve fail-closed replay history. V3.5 remains non-canonical. Do not merge PR #257.
+BLOCKERS: None in the audited target. Workflow V3.5 is still not canonical until Manager integrates exactly the audited target and the required canonical-main Full War Room CI post-merge canary succeeds.
 
-DECISIONS CONSUMED: canonical Workflow V3.4; exact Manager freeze `638a8e2af25f1c806fe8883de0c959c5caaff35e`; historical WR-092 findings only as adversarial test cases.
+DECISIONS CONSUMED: canonical Workflow V3.4; exact Manager freeze `77d3b182264ff71d723aa5e28335083692fb42fc`; historical failed targets used only as test evidence.
 
-NEXT ACTION: Manager returns WR-091 to bounded remediation. Reject protected receipt/history fields in `add_tasks`; prevent same-task remove+re-add from erasing machine history (or carry verified history forward); add direct two-transition history-erasure/replay regressions; obtain fresh exact-head validation; freeze a new immutable target; route a fresh independent re-audit.
+NEXT ACTION: Manager verifies immutable WR-094 publication/head/CI, integrates only exact audited WR-091 target `77d3b182264ff71d723aa5e28335083692fb42fc`, then runs the mandatory canonical-main Full War Room CI canary. Make Workflow V3.5 canonical only if the integrated target is exact and the post-merge canary succeeds.
 
-FILES / ARTIFACTS THAT MATTER: `.ai/auditor/WR-093_AUDIT.md`; PR #257; exact failed remediated target `638a8e2af25f1c806fe8883de0c959c5caaff35e`; Full CI `35408373771`.
+FILES / ARTIFACTS THAT MATTER: `.ai/auditor/WR-094_AUDIT.md`; PR #257; exact audited target `77d3b182264ff71d723aa5e28335083692fb42fc`; target Full CI `35410238089`.
 
-DO NOT REPEAT: Do not merge PR #257. Do not make V3.5 canonical. Do not reopen AUD-01/AUD-02 absent new contradictory evidence. Do not treat normal replay protection as sufficient until machine-owned history is protected across add/remove paths. Do not carry this verdict onto a changed WR-091 SHA without a fresh audit.
+DO NOT REPEAT: Do not merge PR #257 as Auditor. Do not make V3.5 canonical from the audit lane. Do not transfer this PASS to any later WR-091 SHA without fresh audit. Do not skip the required canonical-main post-merge Full CI canary.
 
 ## Next Activation
 
 | Order | Employee / Role | Status | Current Task / Gate | Copy/paste activation prompt / next action |
 | --- | --- | --- | --- | --- |
-| 1 | Manager / Architect | ACTIVATE NOW | WR-091 bounded remediation for WR-093-AUD-01 | Continue The War Room as the Manager / Architect under canonical Workflow V3.4. Fast Refresh live state and consume WR-093 FAIL only for exact WR-091 target `638a8e2af25f1c806fe8883de0c959c5caaff35e`. Preserve closed WR-092-AUD-01/AUD-02 behavior. Remediate WR-093-AUD-01 by making `authority_consumption_receipt` and `consumed_authority_sha256s` truly machine-owned across every transition path: reject direct injection through `add_tasks`, prevent remove+re-add of the same task from erasing history or carry verified history forward, and add a two-transition history-erasure + identical-authority replay regression. Run exact-head Full CI plus required protected/boundary regressions, freeze a new immutable WR-091 target, and route a fresh independent re-audit. Do not merge PR #257 or make V3.5 canonical. |
-| 2 | Implementation Engineer / Builder | IDLE | No separate Builder task | Do not activate unless Manager explicitly delegates remediation. |
-| 3 | Draft Strategy & Decision Intelligence Analyst | IDLE | No strategy work | Do not activate. |
-| 4 | Research & Development (R&D) | IDLE | No R&D work | Do not activate. |
-| 5 | Independent Auditor / QA | COMPLETE | WR-093 failed exact frozen target | Await a newly frozen remediated WR-091 SHA; fresh exact-SHA re-audit required. |
-| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | IDLE | No separate cross-layer blocker | Activate only if Manager hits a remediation blocker. |
+| 1 | Manager / Architect | ACTIVATE NOW | Integrate exact WR-091 target after WR-094 PASS, then canonical-main canary | Continue The War Room as Manager / Architect under canonical Workflow V3.4. Fast Refresh live state. Verify WR-094 Auditor-only PR, immutable Auditor head and exact-head CI. Consume PASS only for exact WR-091 SHA `77d3b182264ff71d723aa5e28335083692fb42fc` / PR #257. Integrate only that audited target using Manager merge authority. Then run and verify the mandatory canonical-main Full War Room CI post-merge canary. Make Workflow V3.5 canonical only if exact integration and the canary both succeed. |
+| 2 | Implementation Engineer / Builder | IDLE | No product implementation task | Do not activate. |
+| 3 | Draft Strategy & Decision Intelligence Analyst | IDLE | No strategy task | Do not activate. |
+| 4 | Research & Development (R&D) | COMPLETE | WR-081 historical result closed | No action. |
+| 5 | Independent Auditor / QA | COMPLETE | WR-094 PASS on exact frozen target | No further action unless Manager freezes a changed target requiring new audit. |
+| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | No separate blocker | Activate only if Manager encounters an integration/canary blocker. |
 
-Final verdict: `FAIL — REMEDIATION REQUIRED`
+Final verdict: `PASS`
 
-Findings by severity: CRITICAL — none. HIGH — 1. MEDIUM — none. LOW — none.
+Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — none.
 
 Auditor modified or merged PR #257: NO.
 
