@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T12:10:00Z",
+  "updated_at_utc": "2026-09-19T12:38:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -100,13 +100,13 @@
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": true,
-      "blocker_type": "TECHNICAL",
+      "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
       "blocked_on_tasks": [
-        "WR-103"
+        "WR-105"
       ],
       "blocked_on": [
-        "Authorized run 35424042233 failed closed inside the protected consumer during target-ingest before any publication commit or authority-consumption receipt. Current authority is revoked; no rerun is authorized."
+        "WR-105 canonical-main post-remediation NO-SCORING canary must succeed before Manager may consider a NEW one-time v2.1 scoring authority."
       ],
       "external_authority_evidence_required": true,
       "post_merge_canary_required": false,
@@ -124,7 +124,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "WR-103 bounded target-ingest failure analysis/remediation -> Full War Room CI -> Manager exact freeze -> WR-104 fresh independent audit. Only after PASS-family audit/integration may Manager separately decide whether to issue a NEW one-time execution authority."
+      "next_gate": "WR-105 canonical-main NO-SCORING canary SUCCESS -> separate Manager review -> fresh execution branch and NEW explicit one-time authority, if authorized. Do not reuse the revoked authority or dispatch real scoring before that decision."
     },
     {
       "task_id": "WR-102",
@@ -144,12 +144,10 @@
       "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
       "blocked_on_tasks": [
-        "WR-101",
-        "WR-103",
-        "WR-104"
+        "WR-101"
       ],
       "blocked_on": [
-        "WR-101 produced no result target because protected run 35424042233 failed before publication. WR-103 remediation and WR-104 fresh audit must complete before any new scoring decision; WR-102 remains reserved for a later actual result target."
+        "WR-102 remains reserved for a future actual WR-101 protected result target. WR-101 is blocked behind WR-105 and has no active scoring authority."
       ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
@@ -167,76 +165,37 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "WR-103 remediation + WR-104 audit -> separate Manager decision on any new one-time authority -> successful protected result -> Manager exact freeze -> then activate WR-102."
+      "next_gate": "Successful future protected WR-101 result -> R&D packaging -> Manager exact freeze -> activate WR-102 fresh result audit."
     },
     {
-      "task_id": "WR-103",
-      "owner": "Work Helper",
-      "worker_slot": "work-helper-v21-target-ingest-failure",
-      "status": "AUDIT_READY",
-      "task_file": ".ai/manager/WR-103.md",
-      "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "bab6b8134e3be5837eec7a586353a8d185190857",
-      "worker_checkpoint_sha": "1a572baac9e4393582db37ad43cbe8609628d8c3",
-      "branch": "wr-103-v21-target-ingest-failure-remediation",
-      "pr": 289,
-      "dependency": "HARD",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_required": true,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/work_helper/",
-        ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py",
-        ".ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER_TEST.py",
-        "scripts/custody/wr097_v21_protected_scoring.py",
-        "scripts/custody/test_wr097_v21_protected_scoring.py"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/auditor/",
-        ".github/",
-        "src/",
-        "public/"
-      ],
-      "forbidden_exact_paths": [
-        ".github/workflows/wr097-v21-protected-scoring-bridge.yml"
-      ],
-      "next_gate": "Fresh WR-104 independent audit of exact frozen WR-103 PR #289 head 1a572baac9e4393582db37ad43cbe8609628d8c3. No merge, no scoring rerun, and no new execution authority before PASS-family audit."
-    },
-    {
-      "task_id": "WR-104",
-      "owner": "Auditor",
-      "worker_slot": "auditor-v21-target-ingest-remediation",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-104.md",
-      "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": "d9886095f77ae0e03699309670ddc670762d6a74",
-      "worker_checkpoint_sha": null,
-      "branch": "wr-104-v21-target-ingest-remediation-audit",
+      "task_id": "WR-105",
+      "owner": "Manager",
+      "worker_slot": "manager-v21-remediation-no-scoring-canary",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-105.md",
+      "role_handoff": ".ai/manager/HANDOFF.md",
+      "assignment_main_sha": "55a8cb1d78d5e41a8ec5e57d7e1a913537921e7d",
+      "worker_checkpoint_sha": "55a8cb1d78d5e41a8ec5e57d7e1a913537921e7d",
+      "branch": "manager/wr-105-v21-remediation-no-scoring-canary",
       "pr": null,
       "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": false,
-      "blocker_type": "NONE",
-      "user_action_required": false,
+      "blocker_type": "USER_ACTION",
+      "user_action_required": true,
       "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on": [
+        "User must dispatch WR-097 Returning-Player v2.1 Protected Scoring Bridge on canonical main with mode no-scoring after this Manager gate is canonical."
+      ],
       "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
+      "post_merge_canary_required": true,
       "allowed_path_prefixes": [
-        ".ai/auditor/"
+        ".ai/manager/",
+        ".ai/shared/"
       ],
       "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
+        ".ai/auditor/",
         ".ai/research/",
         ".ai/work_helper/",
         ".github/",
@@ -245,11 +204,7 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Fresh independent audit of exact WR-103 PR #289 head 1a572baac9e4393582db37ad43cbe8609628d8c3. Reproduce root-cause evidence synthetically, verify bounded fix/cleanup correction and all V3.5 protected-execution boundaries, then publish Auditor-only verdict/evidence.",
-      "audit_target_task": "WR-103",
-      "audit_target_pr": 289,
-      "audit_target_branch": "wr-103-v21-target-ingest-failure-remediation",
-      "audit_target_sha": "1a572baac9e4393582db37ad43cbe8609628d8c3"
+      "next_gate": "After this gate is canonical, user dispatches WR-097 on main in no-scoring mode exactly once. Manager verifies trusted mode/ref, readiness, custody/no-exposure/cleanup evidence and zero artifacts. SUCCESS permits a separate Manager authority decision; failure keeps WR-101 blocked."
     }
   ]
 }
