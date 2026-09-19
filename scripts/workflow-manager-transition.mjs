@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import crypto from 'node:crypto';
 import { validateTaskSpecContract } from './workflow-task-contract.mjs';
 
 const STATUS = new Set(['PLANNED','BLOCKED','ASSIGNED','IN_PROGRESS','MANAGER_REVIEW_READY','AUDIT_READY','MERGE_READY','REWORK_REQUIRED','MERGED']);
@@ -83,6 +84,42 @@ function explicitlySerializedHardPair(a, b) {
 const ACTIVE_AUDITOR_STATUS = new Set(['ASSIGNED','IN_PROGRESS','MANAGER_REVIEW_READY','AUDIT_READY','MERGE_READY']);
 const SHA40 = /^[0-9a-f]{40}$/;
 const SHA64 = /^[0-9a-f]{64}$/;
+const AUTHORITY_RECEIPT_FIELD = 'authority_consumption_receipt';
+const AUTHORITY_HISTORY_FIELD = 'consumed_authority_sha256s';
+
+function canonicalize(value) {
+  if (Array.isArray(value)) return value.map(canonicalize);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.keys(value).sort().map(key => [key, canonicalize(value[key])]));
+  }
+  return value;
+}
+function canonicalJsonBytes(value) {
+  return Buffer.from(`${JSON.stringify(canonicalize(value))}\n`, 'utf8');
+}
+function sha256Bytes(value) {
+  return crypto.createHash('sha256').update(value).digest('hex');
+}
+function normalizeAuthority(authority) {
+  if (!authority || typeof authority !== 'object') return null;
+  const normalized = {
+    branch: String(authority.branch || ''),
+    head_sha: String(authority.head_sha || ''),
+    consumer_path: String(authority.consumer_path || ''),
+    consumer_sha256: String(authority.consumer_sha256 || '')
+  };
+  if (!normalized.branch || normalized.branch === 'main' ||
+      !SHA40.test(normalized.head_sha) ||
+      !normalized.consumer_path.startsWith('.ai/research/') ||
+      normalized.consumer_path.split('/').includes('..') ||
+      !SHA64.test(normalized.consumer_sha256)) return null;
+  return normalized;
+}
+export function authorityIdentitySha256(authority) {
+  const normalized = normalizeAuthority(authority);
+  if (!normalized) return null;
+  return sha256Bytes(canonicalJsonBytes(normalized));
+}
 
 export function autoPopulateAuditorPins(tasks, previousTasks, changes = []) {
   const errors = [];
@@ -97,16 +134,25 @@ export function autoPopulateAuditorPins(tasks, previousTasks, changes = []) {
       ...(previous?.blocked_on_tasks || []),
       ...(task.blocked_on_tasks || [])
     ].filter(Boolean))];
-    if (!task.audit_target_task) {
-      if (candidates.length !== 1) {
-        errors.push(`${task.task_id}: cannot auto-pin Auditor target; expected one unambiguous upstream task, got ${candidates.length}`);
-        continue;
-      }
-      task.audit_target_task = candidates[0];
+
+    if (candidates.length !== 1) {
+      errors.push(`${task.task_id}: cannot auto-pin Auditor target; expected one unambiguous upstream task, got ${candidates.length}`);
+      continue;
     }
-    const target = byId.get(task.audit_target_task);
+    const uniqueTarget = candidates[0];
+    if (task.audit_target_task && task.audit_target_task !== uniqueTarget) {
+      errors.push(`${task.task_id}: explicit audit_target_task contradicts unique upstream target ${uniqueTarget}`);
+      continue;
+    }
+    if (previous?.audit_target_task && previous.audit_target_task !== uniqueTarget) {
+      errors.push(`${task.task_id}: prior audit_target_task contradicts unique upstream target ${uniqueTarget}`);
+      continue;
+    }
+    task.audit_target_task = uniqueTarget;
+
+    const target = byId.get(uniqueTarget);
     if (!target) {
-      errors.push(`${task.task_id}: audit target ${task.audit_target_task} is not active`);
+      errors.push(`${task.task_id}: audit target ${uniqueTarget} is not active`);
       continue;
     }
     if (!['AUDIT_READY','MERGE_READY'].includes(target.status)) {
@@ -139,48 +185,189 @@ export function autoPopulateAuditorPins(tasks, previousTasks, changes = []) {
   return errors;
 }
 
-export function applyAuthorityConsumptionReceipts(previousTasks, nextTasks, plan, changes = []) {
+export function createGitAuthorityEvidenceReader(root) {
+  const cwd = path.resolve(root);
+  const gitText = args => execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore','pipe','pipe'] }).trim();
+  const gitBytes = args => execFileSync('git', args, { cwd, encoding: 'buffer', stdio: ['ignore','pipe','pipe'] });
+  return {
+    parentOf(commit) {
+      if (!SHA40.test(commit || '')) throw new Error('publication commit SHA is invalid');
+      return gitText(['rev-parse', `${commit}^`]);
+    },
+    readFile(commit, rel) {
+      if (!SHA40.test(commit || '')) throw new Error('publication commit SHA is invalid');
+      if (typeof rel !== 'string' || !rel || rel.startsWith('/') || rel.split('/').includes('..')) throw new Error('evidence path is invalid');
+      return gitBytes(['show', `${commit}:${rel}`]);
+    },
+    changedFiles(commit) {
+      if (!SHA40.test(commit || '')) throw new Error('publication commit SHA is invalid');
+      const raw = gitText(['diff-tree','--no-commit-id','--name-only','-r',commit]);
+      return raw ? raw.split(/\r?\n/).map(v => v.trim()).filter(Boolean) : [];
+    }
+  };
+}
+
+function parseJsonBytes(bytes, label) {
+  try { return JSON.parse(Buffer.from(bytes).toString('utf8')); }
+  catch { throw new Error(`${label} is not valid JSON`); }
+}
+
+export function verifyCommittedAuthorityConsumption(previousTask, nextTask, claim, evidenceReader) {
+  if (!evidenceReader) throw new Error(`${previousTask.task_id}: repository evidence reader is required for authority consumption`);
+  const oldAuthority = normalizeAuthority(previousTask.future_execution_authority);
+  if (!oldAuthority) throw new Error(`${previousTask.task_id}: prior future_execution_authority is malformed`);
+  const authoritySha = authorityIdentitySha256(oldAuthority);
+  const publicationHead = String(claim?.publication_head || '');
+  if (!SHA40.test(publicationHead) || publicationHead !== nextTask.worker_checkpoint_sha) {
+    throw new Error(`${previousTask.task_id}: authority receipt publication_head does not equal next worker checkpoint`);
+  }
+  const receiptPath = String(claim?.receipt_path || '');
+  const terminalPath = String(claim?.terminal_path || '');
+  if (!receiptPath.startsWith('.ai/research/generated/') || !terminalPath.startsWith('.ai/research/generated/') ||
+      receiptPath.split('/').includes('..') || terminalPath.split('/').includes('..')) {
+    throw new Error(`${previousTask.task_id}: authority receipt/terminal evidence path is invalid`);
+  }
+  const parent = evidenceReader.parentOf(publicationHead);
+  if (parent !== oldAuthority.head_sha) {
+    throw new Error(`${previousTask.task_id}: publication parent does not equal authorized head`);
+  }
+
+  const receiptBytes = evidenceReader.readFile(publicationHead, receiptPath);
+  const receiptSha = sha256Bytes(receiptBytes);
+  const receipt = parseJsonBytes(receiptBytes, 'authority consumption receipt');
+  if (claim.receipt_sha256 && claim.receipt_sha256 !== receiptSha) {
+    throw new Error(`${previousTask.task_id}: committed receipt SHA-256 mismatch`);
+  }
+  const requiredReceipt = {
+    task_id: previousTask.task_id,
+    authority_sha256: authoritySha,
+    branch: oldAuthority.branch,
+    authorized_head: oldAuthority.head_sha,
+    consumer_path: oldAuthority.consumer_path,
+    consumer_sha256: oldAuthority.consumer_sha256
+  };
+  for (const [field, value] of Object.entries(requiredReceipt)) {
+    if (receipt[field] !== value) throw new Error(`${previousTask.task_id}: committed receipt ${field} mismatch`);
+  }
+  if (receipt.schema_version !== 'wr081-authority-consumption-receipt-v1' ||
+      receipt.single_publication_commit_required !== true ||
+      receipt.execution_status !== 'SUCCESS' ||
+      typeof receipt.workflow_run_id !== 'string' || !receipt.workflow_run_id ||
+      typeof receipt.result_terminal !== 'string' || !receipt.result_terminal ||
+      typeof receipt.decision_status !== 'string' || !receipt.decision_status ||
+      !SHA64.test(receipt.publication_payload_sha256 || '')) {
+    throw new Error(`${previousTask.task_id}: committed authority receipt contract is incomplete`);
+  }
+  if (claim.workflow_run_id && String(claim.workflow_run_id) !== receipt.workflow_run_id) {
+    throw new Error(`${previousTask.task_id}: committed receipt workflow_run_id mismatch`);
+  }
+
+  const terminalBytes = evidenceReader.readFile(publicationHead, terminalPath);
+  const terminal = parseJsonBytes(terminalBytes, 'terminal result summary');
+  const terminalChecks = {
+    task_id: previousTask.task_id,
+    execution_status: receipt.execution_status,
+    result_terminal: receipt.result_terminal,
+    decision_status: receipt.decision_status,
+    authority_sha256: authoritySha,
+    authorized_head: oldAuthority.head_sha,
+    consumer_sha256: oldAuthority.consumer_sha256
+  };
+  for (const [field, value] of Object.entries(terminalChecks)) {
+    if (terminal[field] !== value) throw new Error(`${previousTask.task_id}: terminal summary ${field} mismatch`);
+  }
+
+  const changed = evidenceReader.changedFiles(publicationHead);
+  if (!changed.length || !changed.includes(receiptPath) || !changed.includes(terminalPath) ||
+      changed.some(rel => !rel.startsWith('.ai/research/'))) {
+    throw new Error(`${previousTask.task_id}: publication commit changed unexpected paths or omitted required evidence`);
+  }
+  const payloadEntries = changed.filter(rel => rel !== receiptPath).sort().map(rel => {
+    const bytes = evidenceReader.readFile(publicationHead, rel);
+    return { path: rel, sha256: sha256Bytes(bytes), byte_size: Buffer.byteLength(bytes) };
+  });
+  const payloadSha = sha256Bytes(canonicalJsonBytes(payloadEntries));
+  if (payloadSha !== receipt.publication_payload_sha256) {
+    throw new Error(`${previousTask.task_id}: publication payload SHA-256 mismatch`);
+  }
+
+  return {
+    schema_version: 'verified-authority-consumption-v1',
+    task_id: previousTask.task_id,
+    authority_sha256: authoritySha,
+    branch: oldAuthority.branch,
+    authorized_head: oldAuthority.head_sha,
+    consumer_path: oldAuthority.consumer_path,
+    consumer_sha256: oldAuthority.consumer_sha256,
+    publication_head: publicationHead,
+    publication_parent_verified: true,
+    single_publication_commit: true,
+    receipt_path: receiptPath,
+    receipt_sha256: receiptSha,
+    terminal_path: terminalPath,
+    workflow_run_id: receipt.workflow_run_id,
+    execution_status: receipt.execution_status,
+    result_terminal: receipt.result_terminal,
+    decision_status: receipt.decision_status,
+    publication_payload_sha256: payloadSha
+  };
+}
+
+export function applyAuthorityConsumptionReceipts(previousTasks, nextTasks, plan, changes = [], evidenceReader = null) {
   const errors = [];
-  const receipts = new Map();
-  for (const receipt of plan.authority_consumption_receipts || []) {
-    if (!receipt || typeof receipt.task_id !== 'string' || receipts.has(receipt.task_id)) {
+  const claims = new Map();
+  for (const claim of plan.authority_consumption_receipts || []) {
+    if (!claim || typeof claim.task_id !== 'string' || claims.has(claim.task_id)) {
       errors.push('authority_consumption_receipts must contain one unique task_id per receipt');
       continue;
     }
-    receipts.set(receipt.task_id, receipt);
+    claims.set(claim.task_id, claim);
   }
   const nextById = new Map(nextTasks.map(task => [task.task_id, task]));
+
   for (const previous of previousTasks) {
-    const oldAuthority = previous.future_execution_authority;
-    if (!oldAuthority || typeof oldAuthority !== 'object') continue;
     const next = nextById.get(previous.task_id);
     if (!next) continue;
-    const receipt = receipts.get(previous.task_id);
-    const nextAuthority = next.future_execution_authority;
-    const oldJson = JSON.stringify(oldAuthority);
-    const nextJson = nextAuthority == null ? null : JSON.stringify(nextAuthority);
-    if (nextJson && nextJson !== oldJson) {
+
+    const nextAuthority = normalizeAuthority(next.future_execution_authority);
+    const oldAuthority = normalizeAuthority(previous.future_execution_authority);
+    const consumed = new Set(Array.isArray(previous[AUTHORITY_HISTORY_FIELD]) ? previous[AUTHORITY_HISTORY_FIELD] : []);
+    if (previous[AUTHORITY_RECEIPT_FIELD]?.authority_sha256) consumed.add(previous[AUTHORITY_RECEIPT_FIELD].authority_sha256);
+
+    if (!oldAuthority && nextAuthority) {
+      const nextIdentity = authorityIdentitySha256(nextAuthority);
+      if (consumed.has(nextIdentity)) {
+        errors.push(`${previous.task_id}: previously consumed future_execution_authority cannot be reused`);
+      }
+      continue;
+    }
+    if (!oldAuthority) {
+      if (claims.has(previous.task_id)) errors.push(`${previous.task_id}: consumption claim supplied without prior future_execution_authority`);
+      continue;
+    }
+
+    const oldIdentity = authorityIdentitySha256(oldAuthority);
+    if (nextAuthority && authorityIdentitySha256(nextAuthority) !== oldIdentity) {
       errors.push(`${previous.task_id}: cannot replace an unconsumed future_execution_authority`);
       continue;
     }
+
+    const claim = claims.get(previous.task_id);
     const advanced = SHA40.test(next.worker_checkpoint_sha || '') && next.worker_checkpoint_sha !== oldAuthority.head_sha;
-    if (!advanced && !receipt) continue;
-    if (!receipt) {
-      errors.push(`${previous.task_id}: authorized branch advanced; authority consumption receipt is required before further transition`);
+    if (!advanced && !claim) continue;
+    if (!claim) {
+      errors.push(`${previous.task_id}: authorized branch advanced; verified authority consumption evidence is required`);
       continue;
     }
-    if (receipt.authorized_head !== oldAuthority.head_sha ||
-        receipt.publication_head !== next.worker_checkpoint_sha ||
-        receipt.single_publication_commit !== true ||
-        receipt.publication_parent_verified !== true ||
-        !SHA64.test(receipt.authority_sha256 || '') ||
-        !SHA64.test(receipt.receipt_sha256 || '')) {
-      errors.push(`${previous.task_id}: authority consumption receipt does not bind the authorized head to the frozen publication head`);
-      continue;
+    try {
+      const verified = verifyCommittedAuthorityConsumption(previous, next, claim, evidenceReader);
+      delete next.future_execution_authority;
+      next[AUTHORITY_RECEIPT_FIELD] = verified;
+      next[AUTHORITY_HISTORY_FIELD] = [...new Set([...consumed, verified.authority_sha256])].sort();
+      changes.push({ action: 'consume-authority', task_id: previous.task_id, fields: ['future_execution_authority',AUTHORITY_RECEIPT_FIELD,AUTHORITY_HISTORY_FIELD] });
+    } catch (error) {
+      errors.push(`${previous.task_id}: ${error.message}`);
     }
-    delete next.future_execution_authority;
-    next.authority_consumption_receipt = structuredClone(receipt);
-    changes.push({ action: 'consume-authority', task_id: previous.task_id, fields: ['future_execution_authority','authority_consumption_receipt'] });
   }
   return errors;
 }
@@ -226,10 +413,11 @@ function validateRegistryRelations(tasks) {
   return errors;
 }
 
-export function applyTransitionPlan({ registry, plan, taskSpecReader }) {
+export function applyTransitionPlan({ registry, plan, taskSpecReader, authorityEvidenceReader = null }) {
   if (plan.schema_version !== 1) throw new Error(`plan schema_version must be 1, got ${plan.schema_version}`);
   const next = structuredClone(registry);
   const changes = [];
+  const planErrors = [];
   const removed = new Set(plan.remove_tasks || []);
   next.tasks = next.tasks.filter(task => !removed.has(task.task_id));
   for (const id of removed) changes.push({ action: 'remove', task_id: id });
@@ -239,6 +427,11 @@ export function applyTransitionPlan({ registry, plan, taskSpecReader }) {
     changes.push({ action: 'add', task_id: addition.task_id });
   }
   for (const update of plan.update_tasks || []) {
+    for (const protectedField of [AUTHORITY_RECEIPT_FIELD, AUTHORITY_HISTORY_FIELD]) {
+      if (Object.prototype.hasOwnProperty.call(update.set || {}, protectedField) || (update.unset || []).includes(protectedField)) {
+        planErrors.push(`${update.task_id}: ${protectedField} is machine-owned and cannot be set/unset directly`);
+      }
+    }
     const task = next.tasks.find(item => item.task_id === update.task_id);
     if (!task) throw new Error(`cannot update missing task ${update.task_id}`);
     Object.assign(task, structuredClone(update.set || {}));
@@ -247,7 +440,8 @@ export function applyTransitionPlan({ registry, plan, taskSpecReader }) {
   }
   if (plan.updated_at_utc) next.updated_at_utc = plan.updated_at_utc;
   const transitionErrors = [
-    ...applyAuthorityConsumptionReceipts(registry.tasks || [], next.tasks, plan, changes),
+    ...planErrors,
+    ...applyAuthorityConsumptionReceipts(registry.tasks || [], next.tasks, plan, changes, authorityEvidenceReader),
     ...autoPopulateAuditorPins(next.tasks, registry.tasks || [], changes)
   ];
   const ids = new Set();
@@ -289,7 +483,8 @@ async function main() {
     taskSpecReader: rel => {
       const full = path.join(root, rel);
       return fs.existsSync(full) ? fs.readFileSync(full, 'utf8') : null;
-    }
+    },
+    authorityEvidenceReader: createGitAuthorityEvidenceReader(root)
   });
   if (result.errors.length) {
     const output = { ok: false, dry_run: !options.write, changes: result.changes, errors: result.errors };
