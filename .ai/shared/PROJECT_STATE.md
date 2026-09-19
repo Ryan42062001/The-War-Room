@@ -284,3 +284,12 @@ The R2 authority is revoked and removed. WR-101 is BLOCKED.
 Deterministic code inspection identifies a bounded stage-gate bridge contract omission: `_stage_gate()` computes/publishes `status_label` in the artifact but omits it from the bridge result that the wrapper correctly requires.
 
 WR-106 is ASSIGNED for independent synthetic reproduction and smallest consumer bridge-result remediation. WR-107 remains BLOCKED for fresh independent audit. No rerun or new authority is active.
+
+
+## WR-106 frozen / WR-107 fresh audit activated
+
+Manager freezes WR-106 PR #295 at exact final head `af988e4437cb45c920e18cbdcd4dc4c228dbf7c3` for independent audit. The immutable implementation SHA is `4b41ac8b12a4e9f029979eb29c92458e7b4cb640`; later WR-106 commits add only Work Helper reproduction/report/handoff evidence.
+
+Final-target Full War Room CI `35445518850` completed SUCCESS. Final-head WR-097, WR-046, WR-063, WR-069 and WR-083 protected/custody regressions are also SUCCESS.
+
+WR-107 is ASSIGNED on `wr-107-v21-stage-gate-status-remediation-audit` and must audit exactly the frozen WR-106 SHA. WR-101 remains BLOCKED and no scoring authority exists.
