@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T02:10:00Z",
+  "updated_at_utc": "2026-09-19T02:20:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -89,13 +89,13 @@
       "task_id": "WR-095",
       "owner": "R&D",
       "worker_slot": "rnd-returning-player-v21-protocol",
-      "status": "ASSIGNED",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-095.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "8d1ad6433c409ba096eb36ee320a277676bd64cd",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "738296ad38282fc91738203e7e1ced888ba862ed",
       "branch": "wr-095-returning-player-v21-failure-analysis-protocol",
-      "pr": null,
+      "pr": 270,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
@@ -120,7 +120,48 @@
         "public/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "R&D publishes one immutable WR-095 v2.1 failure-analysis/protocol target -> Manager verifies and freezes exact target -> fresh independent protocol audit before any new retained-source access, fitting, scoring, target exposure, or Phase 6 work."
+      "next_gate": "WR-096 fresh independent protocol audit of exact WR-095 target 738296ad38282fc91738203e7e1ced888ba862ed. No scoring/retained-source/confirmation/production authority until PASS-family Manager disposition."
+    },
+    {
+      "task_id": "WR-096",
+      "owner": "Auditor",
+      "worker_slot": "auditor-returning-player-v21-protocol",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-096.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": "1511ebc509f7e28426e3e27a351cb33acb9368f9",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-096-returning-player-v21-protocol-audit",
+      "pr": null,
+      "dependency": "HARD",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/auditor/"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/research/",
+        ".ai/work_helper/",
+        ".github/",
+        "scripts/",
+        "src/",
+        "public/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Fresh independent audit of exact WR-095 protocol target 738296ad38282fc91738203e7e1ced888ba862ed. Verify failure analysis, contamination handling, prospective chronology, protocol determinism, thresholds, source sufficiency, and no hidden scoring/outcome exposure.",
+      "audit_target_task": "WR-095",
+      "audit_target_pr": 270,
+      "audit_target_branch": "wr-095-returning-player-v21-failure-analysis-protocol",
+      "audit_target_sha": "738296ad38282fc91738203e7e1ced888ba862ed"
     }
   ]
 }
