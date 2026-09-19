@@ -273,3 +273,14 @@ Manager creates a fresh WR-101 R2 one-time authority:
 - consumer SHA-256 `74ae7a44bf60399957fdca57bad0c879486df07c4ff0524093a69c84d82e2296`.
 
 The old pre-remediation branch/authority remains revoked historical evidence and must not be reused. No automatic rerun authority exists.
+
+
+## WR-101 R2 fail-closed / WR-106 stage-gate remediation
+
+Fresh R2 protected run `35444278227` failed closed after all authority/head/consumer/retrieval checks passed, with exact error `stage gate decision status missing`. No publication or receipt occurred; cleanup passed; Actions artifacts were zero; the execution branch did not advance.
+
+The R2 authority is revoked and removed. WR-101 is BLOCKED.
+
+Deterministic code inspection identifies a bounded stage-gate bridge contract omission: `_stage_gate()` computes/publishes `status_label` in the artifact but omits it from the bridge result that the wrapper correctly requires.
+
+WR-106 is ASSIGNED for independent synthetic reproduction and smallest consumer bridge-result remediation. WR-107 remains BLOCKED for fresh independent audit. No rerun or new authority is active.
