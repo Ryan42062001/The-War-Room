@@ -38,6 +38,9 @@ jobs:
     if: needs.trust-gate.outputs.approved == 'true'
     runs-on: [self-hosted, war-room-heavy-ci]
     timeout-minutes: 45
+    defaults:
+      run:
+        shell: cmd
     steps:
       - name: Check out exact trusted push SHA
         uses: actions/checkout@v7
