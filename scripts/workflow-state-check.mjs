@@ -22,13 +22,27 @@ const DEPENDENCIES = new Set(['INDEPENDENT', 'SOFT', 'HARD']);
 const EXECUTION_MODES = new Set(['STANDARD_CHAT_HIGH', 'WORK_MODE']);
 const REFRESH_MODES = new Set(['FAST_REFRESH', 'FULL_REFRESH']);
 const SHA = /^[0-9a-f]{40}$/;
+const SHA64 = /^[0-9a-f]{64}$/;
 const WR = /^WR-\d{3}$/;
+const AUTHORITY_RECEIPT_FIELD = 'authority_consumption_receipt';
+const AUTHORITY_HISTORY_FIELD = 'consumed_authority_sha256s';
+const AUTHORITY_GLOBAL_HISTORY_FIELD = 'authority_consumption_history';
 
 if (registry.schema_version !== 3) errors.push(`schema_version must be 3, got ${registry.schema_version}`);
 if (registry.active_only !== true) errors.push('active_only must be true');
 if (!Array.isArray(registry.tasks)) errors.push('tasks must be an array');
 
 const tasks = Array.isArray(registry.tasks) ? registry.tasks : [];
+const globalAuthorityHistory = registry[AUTHORITY_GLOBAL_HISTORY_FIELD] == null ? [] : registry[AUTHORITY_GLOBAL_HISTORY_FIELD];
+if (!Array.isArray(globalAuthorityHistory)) errors.push(`${AUTHORITY_GLOBAL_HISTORY_FIELD} must be an array`);
+const globalConsumed = new Set();
+if (Array.isArray(globalAuthorityHistory)) {
+  for (const digest of globalAuthorityHistory) {
+    if (!SHA64.test(digest || '')) errors.push(`${AUTHORITY_GLOBAL_HISTORY_FIELD}: invalid SHA-256 ${digest}`);
+    else if (globalConsumed.has(digest)) errors.push(`${AUTHORITY_GLOBAL_HISTORY_FIELD}: duplicate SHA-256 ${digest}`);
+    else globalConsumed.add(digest);
+  }
+}
 const ids = new Set();
 const seenBranch = new Map();
 const seenSlot = new Map();
@@ -133,6 +147,25 @@ for (const task of tasks) {
     errors.push(...validateTaskSpecContract(task, text).errors);
   }
   if (typeof task.role_handoff === 'string' && !fs.existsSync(path.join(root, task.role_handoff))) errors.push(`${label}: role_handoff path missing: ${task.role_handoff}`);
+
+  const taskHistory = task[AUTHORITY_HISTORY_FIELD];
+  if (taskHistory != null && !Array.isArray(taskHistory)) errors.push(`${label}: ${AUTHORITY_HISTORY_FIELD} must be an array when present`);
+  if (Array.isArray(taskHistory)) {
+    const seenTaskHistory = new Set();
+    for (const digest of taskHistory) {
+      if (!SHA64.test(digest || '')) errors.push(`${label}: ${AUTHORITY_HISTORY_FIELD} contains invalid SHA-256 ${digest}`);
+      else {
+        if (seenTaskHistory.has(digest)) errors.push(`${label}: ${AUTHORITY_HISTORY_FIELD} contains duplicate SHA-256 ${digest}`);
+        seenTaskHistory.add(digest);
+        if (!globalConsumed.has(digest)) errors.push(`${label}: ${AUTHORITY_HISTORY_FIELD} digest missing from machine-owned ${AUTHORITY_GLOBAL_HISTORY_FIELD}`);
+      }
+    }
+  }
+  const receiptDigest = task[AUTHORITY_RECEIPT_FIELD]?.authority_sha256;
+  if (receiptDigest != null) {
+    if (!SHA64.test(receiptDigest)) errors.push(`${label}: ${AUTHORITY_RECEIPT_FIELD}.authority_sha256 is invalid`);
+    else if (!globalConsumed.has(receiptDigest)) errors.push(`${label}: ${AUTHORITY_RECEIPT_FIELD} digest missing from machine-owned ${AUTHORITY_GLOBAL_HISTORY_FIELD}`);
+  }
 }
 
 for (const task of tasks) {

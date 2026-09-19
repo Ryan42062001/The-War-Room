@@ -86,6 +86,7 @@ const SHA40 = /^[0-9a-f]{40}$/;
 const SHA64 = /^[0-9a-f]{64}$/;
 const AUTHORITY_RECEIPT_FIELD = 'authority_consumption_receipt';
 const AUTHORITY_HISTORY_FIELD = 'consumed_authority_sha256s';
+const AUTHORITY_GLOBAL_HISTORY_FIELD = 'authority_consumption_history';
 
 function canonicalize(value) {
   if (Array.isArray(value)) return value.map(canonicalize);
@@ -119,6 +120,28 @@ export function authorityIdentitySha256(authority) {
   const normalized = normalizeAuthority(authority);
   if (!normalized) return null;
   return sha256Bytes(canonicalJsonBytes(normalized));
+}
+
+function taskConsumedAuthorityDigests(task) {
+  const digests = [];
+  if (Array.isArray(task?.[AUTHORITY_HISTORY_FIELD])) digests.push(...task[AUTHORITY_HISTORY_FIELD]);
+  if (task?.[AUTHORITY_RECEIPT_FIELD]?.authority_sha256) digests.push(task[AUTHORITY_RECEIPT_FIELD].authority_sha256);
+  return [...new Set(digests.filter(value => typeof value === 'string'))];
+}
+
+function normalizeGlobalAuthorityHistory(value, errors = []) {
+  if (value == null) return [];
+  if (!Array.isArray(value)) {
+    errors.push(`${AUTHORITY_GLOBAL_HISTORY_FIELD} must be an array`);
+    return [];
+  }
+  const valid = [];
+  for (const digest of value) {
+    if (!SHA64.test(digest || '')) errors.push(`${AUTHORITY_GLOBAL_HISTORY_FIELD} contains invalid SHA-256 ${digest}`);
+    else valid.push(digest);
+  }
+  if (new Set(valid).size !== valid.length) errors.push(`${AUTHORITY_GLOBAL_HISTORY_FIELD} contains duplicate SHA-256 values`);
+  return [...new Set(valid)].sort();
 }
 
 export function autoPopulateAuditorPins(tasks, previousTasks, changes = []) {
@@ -321,7 +344,7 @@ export function verifyCommittedAuthorityConsumption(previousTask, nextTask, clai
   };
 }
 
-export function applyAuthorityConsumptionReceipts(previousTasks, nextTasks, plan, changes = [], evidenceReader = null, verifiedRuns = new Map()) {
+export function applyAuthorityConsumptionReceipts(previousTasks, nextTasks, plan, changes = [], evidenceReader = null, verifiedRuns = new Map(), globalConsumedHistory = []) {
   const errors = [];
   const claims = new Map();
   for (const claim of plan.authority_consumption_receipts || []) {
@@ -339,8 +362,8 @@ export function applyAuthorityConsumptionReceipts(previousTasks, nextTasks, plan
 
     const nextAuthority = normalizeAuthority(next.future_execution_authority);
     const oldAuthority = normalizeAuthority(previous.future_execution_authority);
-    const consumed = new Set(Array.isArray(previous[AUTHORITY_HISTORY_FIELD]) ? previous[AUTHORITY_HISTORY_FIELD] : []);
-    if (previous[AUTHORITY_RECEIPT_FIELD]?.authority_sha256) consumed.add(previous[AUTHORITY_RECEIPT_FIELD].authority_sha256);
+    const consumed = new Set(globalConsumedHistory);
+    for (const digest of taskConsumedAuthorityDigests(previous)) consumed.add(digest);
 
     if (!oldAuthority && nextAuthority) {
       const nextIdentity = authorityIdentitySha256(nextAuthority);
@@ -371,8 +394,10 @@ export function applyAuthorityConsumptionReceipts(previousTasks, nextTasks, plan
       const verified = verifyCommittedAuthorityConsumption(previous, next, claim, evidenceReader, verifiedRuns.get(previous.task_id) || null);
       delete next.future_execution_authority;
       next[AUTHORITY_RECEIPT_FIELD] = verified;
-      next[AUTHORITY_HISTORY_FIELD] = [...new Set([...consumed, verified.authority_sha256])].sort();
-      changes.push({ action: 'consume-authority', task_id: previous.task_id, fields: ['future_execution_authority',AUTHORITY_RECEIPT_FIELD,AUTHORITY_HISTORY_FIELD] });
+      next[AUTHORITY_HISTORY_FIELD] = [...new Set([...taskConsumedAuthorityDigests(previous), verified.authority_sha256])].sort();
+      if (!globalConsumedHistory.includes(verified.authority_sha256)) globalConsumedHistory.push(verified.authority_sha256);
+      globalConsumedHistory.sort();
+      changes.push({ action: 'consume-authority', task_id: previous.task_id, fields: ['future_execution_authority',AUTHORITY_RECEIPT_FIELD,AUTHORITY_HISTORY_FIELD,AUTHORITY_GLOBAL_HISTORY_FIELD] });
     } catch (error) {
       errors.push(`${previous.task_id}: ${error.message}`);
     }
@@ -426,11 +451,31 @@ export function applyTransitionPlan({ registry, plan, taskSpecReader, authorityE
   const next = structuredClone(registry);
   const changes = [];
   const planErrors = [];
+  const globalConsumedHistory = normalizeGlobalAuthorityHistory(registry[AUTHORITY_GLOBAL_HISTORY_FIELD], planErrors);
+  for (const previous of registry.tasks || []) {
+    for (const digest of taskConsumedAuthorityDigests(previous)) {
+      if (!SHA64.test(digest || '')) planErrors.push(`${previous.task_id}: machine-owned authority history contains invalid SHA-256 ${digest}`);
+      else if (!globalConsumedHistory.includes(digest)) globalConsumedHistory.push(digest);
+    }
+  }
+  globalConsumedHistory.sort();
+  next[AUTHORITY_GLOBAL_HISTORY_FIELD] = globalConsumedHistory;
+
   const removed = new Set(plan.remove_tasks || []);
   next.tasks = next.tasks.filter(task => !removed.has(task.task_id));
   for (const id of removed) changes.push({ action: 'remove', task_id: id });
   for (const addition of plan.add_tasks || []) {
     if (next.tasks.some(task => task.task_id === addition.task_id)) throw new Error(`cannot add existing task ${addition.task_id}`);
+    for (const protectedField of [AUTHORITY_RECEIPT_FIELD, AUTHORITY_HISTORY_FIELD]) {
+      if (Object.prototype.hasOwnProperty.call(addition, protectedField)) {
+        planErrors.push(`${addition.task_id}: ${protectedField} is machine-owned and cannot be supplied by add_tasks`);
+      }
+    }
+    const additionAuthority = normalizeAuthority(addition.future_execution_authority);
+    const additionIdentity = additionAuthority ? authorityIdentitySha256(additionAuthority) : null;
+    if (additionIdentity && globalConsumedHistory.includes(additionIdentity)) {
+      planErrors.push(`${addition.task_id}: previously consumed future_execution_authority cannot be reused`);
+    }
     next.tasks.push(structuredClone(addition));
     changes.push({ action: 'add', task_id: addition.task_id });
   }
@@ -449,7 +494,7 @@ export function applyTransitionPlan({ registry, plan, taskSpecReader, authorityE
   if (plan.updated_at_utc) next.updated_at_utc = plan.updated_at_utc;
   const transitionErrors = [
     ...planErrors,
-    ...applyAuthorityConsumptionReceipts(registry.tasks || [], next.tasks, plan, changes, authorityEvidenceReader, authorityVerifiedRuns),
+    ...applyAuthorityConsumptionReceipts(registry.tasks || [], next.tasks, plan, changes, authorityEvidenceReader, authorityVerifiedRuns, globalConsumedHistory),
     ...autoPopulateAuditorPins(next.tasks, registry.tasks || [], changes)
   ];
   const ids = new Set();

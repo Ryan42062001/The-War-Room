@@ -218,6 +218,57 @@ function testAuthorityConsumptionAndReplay() {
   });
   assert.ok(reserved.errors.some(e=>e.includes('machine-owned')),'receipt/history fields must not be caller writable');
 
+  const injectedAddTask=task('WR-907',{authority_consumption_receipt:{authority_sha256:fx.authoritySha}});
+  const injectedAdd=applyTransitionPlan({
+    registry:consumed.registry,
+    plan:{schema_version:1,add_tasks:[injectedAddTask]},
+    taskSpecReader:rel=>rel===injectedAddTask.task_file?spec(injectedAddTask):(replaySpecs.get(rel)??null)
+  });
+  assert.ok(injectedAdd.errors.some(e=>e.includes('machine-owned')&&e.includes('add_tasks')),'WR-093 protected-field injection through add_tasks must fail');
+
+  const replacementTask=task('WR-906',{status:'ASSIGNED',branch:'branch-WR-906-reopened'});
+  const replacementSpecs=new Map([[replacementTask.task_file,spec(replacementTask)]]);
+  const replaceLifecycle=applyTransitionPlan({
+    registry:consumed.registry,
+    plan:{schema_version:1,remove_tasks:['WR-906'],add_tasks:[replacementTask]},
+    taskSpecReader:rel=>replacementSpecs.get(rel)??null
+  });
+  assert.deepEqual(replaceLifecycle.errors,[],'WR-093 legitimate same-id lifecycle replacement without protected-field injection should remain allowed');
+  assert.ok(replaceLifecycle.registry.authority_consumption_history.includes(fx.authoritySha),'WR-093 remove+re-add must preserve global consumed-authority history');
+
+  const replayAfterReplacement=applyTransitionPlan({
+    registry:replaceLifecycle.registry,
+    plan:{schema_version:1,update_tasks:[{task_id:'WR-906',set:{future_execution_authority:fx.authority}}]},
+    taskSpecReader:rel=>replacementSpecs.get(rel)??null
+  });
+  assert.ok(replayAfterReplacement.errors.some(e=>e.includes('previously consumed future_execution_authority cannot be reused')),'WR-093 replay after remove+re-add history preservation must fail');
+
+  const directReAddReplayTask=task('WR-908',{future_execution_authority:fx.authority});
+  const directReAdd=applyTransitionPlan({
+    registry:replaceLifecycle.registry,
+    plan:{schema_version:1,add_tasks:[directReAddReplayTask]},
+    taskSpecReader:rel=>rel===directReAddReplayTask.task_file?spec(directReAddReplayTask):(replacementSpecs.get(rel)??null)
+  });
+  assert.ok(directReAdd.errors.some(e=>e.includes('previously consumed future_execution_authority cannot be reused')),'WR-093 add_tasks must reject a globally consumed authority');
+
+  const removeOnly=applyTransitionPlan({
+    registry:consumed.registry,
+    plan:{schema_version:1,remove_tasks:['WR-906']},
+    taskSpecReader:()=>null
+  });
+  assert.deepEqual(removeOnly.errors,[],'WR-093 legitimate task removal/closure must remain allowed');
+  assert.equal(removeOnly.registry.tasks.length,0);
+  assert.ok(removeOnly.registry.authority_consumption_history.includes(fx.authoritySha),'WR-093 legitimate removal must retain global replay history');
+
+  const differentAuthority={...fx.authority,head_sha:'f'.repeat(40)};
+  const differentTask=task('WR-909',{future_execution_authority:differentAuthority});
+  const differentAdd=applyTransitionPlan({
+    registry:removeOnly.registry,
+    plan:{schema_version:1,add_tasks:[differentTask]},
+    taskSpecReader:rel=>rel===differentTask.task_file?spec(differentTask):null
+  });
+  assert.deepEqual(differentAdd.errors,[],'WR-093 unrelated future authority must not be overblocked');
+
   fs.writeFileSync(path.join(fx.root,'second.txt'),'second\n');git(fx.root,['add','second.txt']);git(fx.root,['commit','-qm','second publication']);
   const second=git(fx.root,['rev-parse','HEAD']);
   const multi=applyTransitionPlan({
