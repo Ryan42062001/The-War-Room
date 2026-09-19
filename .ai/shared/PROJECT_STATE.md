@@ -442,3 +442,18 @@ WR-074:
 The old branch is 2 commits ahead / 348 behind current main, with exactly three task-unique paths: the dedicated WR-074 pilot workflow, pilot helper, and one release-validator recognition change. Work Helper must reconcile only those task changes onto current V3.5 main before continuing.
 
 WR-075 remains blocked until one immutable WR-074 target is Manager-frozen.
+
+
+## WR-074 exact self-hosted runner pilot freeze
+
+Manager independently froze WR-074 PR #307 at exact final SHA `75fcd3756956b2943f18aff03115f9783a16d0aa`; immutable implementation SHA `c2e511da5d3767cbc0688de7e95236135a6975b2`.
+
+Two complete repeated Linux/WSL2 self-hosted parity runs and matched hosted references are SUCCESS:
+- `35460866285`;
+- `35461197805`.
+
+Both self-hosted runs show clean preflight, no provider/custody authority, complete heavy-suite parity, and clean cleanup. Final-head pilot `35461615030` and War Room CI `35461622646` are SUCCESS.
+
+Benchmark evidence shows the self-hosted runner was slower than hosted in both observations; WR-074 claims functional/security viability, not performance advantage.
+
+PR #307 remains draft/unmerged. WR-075 remains blocked until this exact freeze is canonical.
