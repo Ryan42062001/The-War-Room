@@ -1,7 +1,7 @@
 # War Room Team Workflow
 
 Status: ACTIVE — WORKFLOW V3.5 CANONICAL
-Last updated: 2026-09-16
+Last updated: 2026-09-18
 Owner: Manager / Architect
 
 This is the canonical workflow for **The War Room**, the live fantasy-football **DRAFT** assistant. Repository state overrides stale chat memory. If older workflow guidance conflicts with this file, this file wins unless Manager records a newer approved workflow change.
@@ -10,7 +10,7 @@ This is the canonical workflow for **The War Room**, the live fantasy-football *
 
 Status: **CANONICAL / ACCEPTED**. WR-094 independently returned `PASS` with no findings on exact WR-091 target `77d3b182264ff71d723aa5e28335083692fb42fc`. Manager integrated only that audited target through PR #257 as canonical-main merge `d9f617ae4553e40e5ee9389978cfcc1657fd3402`. Mandatory canonical-main Full War Room CI canary `35413697902` completed `SUCCESS` across classify, Governance, browser determinism, WR-026 validation/evidence, `npm test`, resilience syntax, and backup/offline reload.
 
-WR-091 proposes six bounded automation upgrades while preserving V3.4 safety: Auditor activation auto-pins exact target metadata; a deterministic result-freeze verifier emits hash-bound freeze packets; exact-SHA branch-bootstrap pushes may reuse prior successful War Room CI; protected scoring dispatch reads execution identity only from canonical Manager authority; protected scoring publishes distinct execution/result/decision terminal fields; and one-time execution authority is consumed only with a receipt binding the authorized head to one publication head. Uncertainty fails closed or upward to normal validation.
+Workflow V3.5 introduces six bounded automation upgrades while preserving V3.4 safety: Auditor activation auto-pins exact target metadata; a deterministic result-freeze verifier emits hash-bound freeze packets; exact-SHA branch-bootstrap pushes may reuse prior successful War Room CI; protected scoring dispatch reads execution identity only from canonical Manager authority; protected scoring publishes distinct execution/result/decision terminal fields; and one-time execution authority is consumed only with a receipt binding the authorized head to one publication head. Uncertainty fails closed or upward to normal validation.
 
 ## V3.4 — ChatGPT usage efficiency (previous canonical; WR-085)
 
