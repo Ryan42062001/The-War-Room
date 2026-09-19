@@ -38,8 +38,12 @@ function forbiddenProviderAuthority() {
   const exact = new Set([
     'AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_SESSION_TOKEN',
     'B2_APPLICATION_KEY_ID', 'B2_APPLICATION_KEY',
+    'CLOUDFLARE_API_TOKEN', 'CLOUDFLARE_API_KEY',
   ]);
-  return Object.keys(process.env).filter((key) => key.startsWith('WR_CUSTODY_') || exact.has(key));
+  const blockedPrefixes = ['WR_CUSTODY_', 'B2_', 'R2_', 'CLOUDFLARE_R2_'];
+  return Object.keys(process.env).filter(
+    (key) => exact.has(key) || blockedPrefixes.some((prefix) => key.startsWith(prefix)),
+  );
 }
 
 function assertAuthorityAbsent() {
