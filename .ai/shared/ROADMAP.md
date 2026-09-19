@@ -199,3 +199,14 @@ No active Phase 5B critical path.
 - Old pre-remediation execution branch/authority remains revoked and must not be reused.
 - WR-102 — BLOCKED / reserved for a future immutable WR-101 result target.
 - Next gate — canonicalize new R2 authority -> one `authorized-v21-scoring` dispatch -> verify publication/receipt/authority consumption -> bounded R&D packaging -> Manager freeze -> WR-102 fresh result audit.
+
+
+## WR-106 stage-gate bridge remediation
+
+- WR-101 R2 run `35444278227` — technical FAIL-CLOSED before publication/receipt.
+- Exact failure: `stage gate decision status missing`.
+- R2 authority revoked; no active scoring authority.
+- WR-106 — ASSIGNED / bounded consumer bridge-result status remediation.
+- WR-107 — BLOCKED / fresh independent audit after exact WR-106 freeze.
+- WR-102 — BLOCKED/reserved for a future actual protected result.
+- Next gate — WR-106 synthetic reproduction + smallest fix -> Full CI -> Manager freeze -> WR-107 audit.
