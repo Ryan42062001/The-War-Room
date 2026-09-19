@@ -94,6 +94,19 @@ PUBLICATION_FAMILIES = (
     "RETURNING_PLAYER_V21_TERMINAL_RESULT",
     "RETURNING_PLAYER_V21_AUTHORITY_CONSUMPTION_RECEIPT",
 )
+CONSUMER_MODE_FAMILIES = {
+    "readiness": set(),
+    "predict": {
+        "RETURNING_PLAYER_V21_KEY_MANIFEST",
+        "RETURNING_PLAYER_V21_FEATURE_SURFACE",
+        "RETURNING_PLAYER_V21_PREPROCESSING_STATES",
+        "RETURNING_PLAYER_V21_MODEL_STATES",
+        "RETURNING_PLAYER_V21_PREDICTIONS_PRE_OUTCOME",
+        "RETURNING_PLAYER_V21_ENVIRONMENT_LOCK",
+    },
+    "target-ingest": {"RETURNING_PLAYER_V21_EVALUATIONS"},
+    "stage-gate": {"RETURNING_PLAYER_V21_STAGE_GATES"},
+}
 YEAR_STAGE = {y: s for s, years in STAGE_YEARS.items() for y in years}
 EXPECTED_COHORT_COUNTS = {
     2014: 410, 2015: 412, 2016: 423, 2017: 423,
@@ -674,6 +687,12 @@ def _publication(output_dir: Path, family: str, payload: Any, suffix: str | None
     return {"path": relpath, "sha256": digest, "byte_size": size, "family": family}
 
 def _finish(output_dir: Path, mode: str, bridge: Mapping[str, Any], publications: Sequence[dict[str, Any]]) -> None:
+    allowed = CONSUMER_MODE_FAMILIES.get(mode)
+    if allowed is None:
+        raise ContractError("publication mode is not authorized")
+    actual = {str(item.get("family") or "") for item in publications}
+    if not actual.issubset(allowed):
+        raise ContractError("publication family is not authorized for consumer mode")
     write_json(output_dir / "publication-manifest.json", {
         "schema_version": "wr097-v21-consumer-publication-manifest-v1",
         "files": list(publications),
