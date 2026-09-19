@@ -294,3 +294,14 @@ No active Phase 5B critical path.
 - Final v2.1 decision — `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`.
 - No downstream promotion, rerun, new scoring authority, tuning, gate/source/protocol change, composition, or Phase 6 authorization.
 - Any future Returning-Player model attempt requires a new explicit research/protocol task and cannot inherit WR-101 authority.
+
+
+## WR-074 infrastructure lane — ACTIVE
+
+- WR-074 — ASSIGNED / self-hosted heavy-CI runner pilot and hardening.
+- Execution mode — `STANDARD_CHAT_HIGH`; no Work credit required.
+- Activation main — `94cb4826fc477d5bf592a37585f8cbea7574daea`.
+- Preserved checkpoint — `7b4641499c50541abf523267eb4c0255813e8b6d`.
+- First gate — reconcile exactly three task-owned branch changes onto current main.
+- Then prove hosted reference + dedicated self-hosted parity, repeat-run cleanliness, security boundaries and benchmark.
+- WR-075 — BLOCKED pending one Manager-frozen immutable WR-074 target.
