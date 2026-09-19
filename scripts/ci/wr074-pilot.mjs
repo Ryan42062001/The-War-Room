@@ -101,7 +101,8 @@ if (mode === 'preflight') {
   const after = fs.readFileSync(browserPath, 'utf8');
 
   const commandBarPath = path.join(root, 'scripts', 'test-command-bar.mjs');
-  const commandSource = fs.readFileSync(commandBarPath, 'utf8');
+  const commandSourceRaw = fs.readFileSync(commandBarPath, 'utf8');
+  const commandSource = commandSourceRaw.replace(/\r\n/g, '\n');
   const anchor = "  await page.waitForFunction(() => typeof WarRoomCommandBarFixes === 'object');\n";
   const fontNormalization = "  await page.addStyleTag({content:'#draft-command-bar, #draft-command-bar * { font-family: sans-serif !important; }'});\n";
   if (!commandSource.includes(anchor)) fail('command-bar harness normalization anchor missing');
