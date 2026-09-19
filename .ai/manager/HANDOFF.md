@@ -2,40 +2,43 @@
 
 HANDOFF
 
-STATUS: WR-101 R2 TECHNICAL FAIL-CLOSED — AUTHORITY REVOKED — WR-106 ASSIGNED
+STATUS: WR-106 FROZEN — WR-107 FRESH AUDIT ASSIGNED
 
 CANONICAL WORKFLOW: V3.5
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-R2 failed authorized run:
-- WR-097 run `35444278227`;
-- canonical dispatch head `6dc3d5ff523f556302cc1b7fab5f3fe6ff4d3121`;
-- preflight `105900417742` SUCCESS;
-- trust gate `105900534166` SUCCESS;
-- protected scoring job `105900552923` FAILURE;
-- exact R2 execution branch `wr-101-v21-validation-scoring-execution-r2`;
-- exact authorized head `c47209cbd21ff3d42ee2867108cb9f2707212969`;
-- consumer SHA-256 `74ae7a44bf60399957fdca57bad0c879486df07c4ff0524093a69c84d82e2296`;
-- authority SHA-256 `2ef299a0de94fabda98095676208f9c50a34076d52ed14e53a322b963b411c0f`;
-- failure `WR-097 FAIL CLOSED: stage gate decision status missing`;
-- staging/publication/push/receipt verification skipped;
-- R2 branch did not advance;
-- Actions artifacts 0;
-- cleanup PASS.
+WR-101:
+- remains BLOCKED after R2 technical fail-closed run `35444278227`;
+- R2 authority remains revoked/removed;
+- no rerun or replacement scoring authority is active.
 
-Manager disposition:
-- revoke/remove R2 authority immediately;
-- no rerun authorized;
-- keep WR-101 BLOCKED;
-- keep WR-102 reserved for a later actual result;
-- assign WR-106 to Work Helper for deterministic synthetic reproduction + smallest consumer bridge-result remediation;
-- keep WR-107 blocked for fresh independent audit.
+Frozen WR-106 target:
+- PR #295;
+- branch `wr-106-v21-stage-gate-status-remediation`;
+- exact final head `af988e4437cb45c920e18cbdcd4dc4c228dbf7c3`;
+- implementation SHA `4b41ac8b12a4e9f029979eb29c92458e7b4cb640`;
+- six authorized changed files only;
+- implementation-to-final delta is Work Helper evidence/handoff only;
+- final-head Full War Room CI `35445518850` SUCCESS;
+- final-head WR-097/046/063/069/083 regressions SUCCESS.
 
-Exact code-path evidence to verify independently:
-- consumer `_stage_gate()` computes `status_label`;
-- stage-gate artifact contains `status_label`;
-- bridge payload passed to `_finish()` omits it;
-- wrapper correctly requires a non-empty bridge `status_label`.
+Manager diff review:
+- consumer stage-gate bridge now exports exact already-computed `status_label`;
+- gate formulas/label calculation unchanged;
+- protected wrapper unchanged;
+- WR-097 workflow unchanged;
+- accepted protocol unchanged.
 
-No new scoring authority may exist until WR-106/107 complete and Manager separately decides again.
+WR-107:
+- fresh independent Auditor lane ASSIGNED;
+- branch `wr-107-v21-stage-gate-status-remediation-audit`;
+- audit target exactly WR-106 PR #295 SHA `af988e4437cb45c920e18cbdcd4dc4c228dbf7c3`;
+- implementation SHA `4b41ac8b12a4e9f029979eb29c92458e7b4cb640`;
+- Auditor writes only `.ai/auditor/**`;
+- no scoring dispatch, authority creation, retained-target access, implementation edits, or merge authority.
+
+Next gate:
+WR-107 PASS-family -> Manager integrates only exact audited WR-106 target -> canonical validation/no-scoring proof as required -> separate explicit Manager decision on whether any NEW WR-101 scoring authority may be issued.
+
+Any WR-106 target movement requires Manager re-freeze.
