@@ -47,12 +47,21 @@ function assertAuthorityAbsent() {
   if (found.length) fail(`provider/custody authority environment present (${found.length} blocked variable name(s))`);
 }
 
+function restoreCanonicalBlob(relativePath) {
+  const bytes = execFileSync('git', ['cat-file', 'blob', `HEAD:${relativePath}`], {
+    cwd: root,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  fs.writeFileSync(path.join(root, relativePath), bytes);
+}
+
 function cleanWorkspace() {
   git(['reset', '--hard', 'HEAD']);
   git(['checkout-index', '--all', '--force']);
   git(['clean', '-ffdx']);
+  restoreCanonicalBlob('scripts/test-browser.mjs');
   const status = git(['status', '--porcelain']);
-  if (status) fail('workspace is not clean after reset/checkout-index/clean');
+  if (status) fail('workspace is not clean after reset/checkout-index/clean/canonical-blob restore');
 }
 
 function writeSummary(title, value) {
