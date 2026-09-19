@@ -329,3 +329,17 @@ No active Phase 5B critical path.
 - Audit target — exactly `75fcd3756956b2943f18aff03115f9783a16d0aa`.
 - PR #307 stays draft/unmerged.
 - Next gate — Auditor-only verdict/evidence -> Manager infrastructure disposition.
+
+
+## WR-074 / WR-075 self-hosted heavy-CI pilot — CLOSED
+
+- WR-074 exact audited target `75fcd3756956b2943f18aff03115f9783a16d0aa` integrated.
+- WR-075 — PASS, no findings; Auditor head `0968f3e84aa852d6fa528e3ca9a9ca3383cc6362`.
+- Audit evidence merge `2d860ab27fd0fe02e3614311a6f202d7a91439df`.
+- Exact WR-074 integration merge `3656d355351113bb4692759e4410e607b60967ea`.
+- Required canonical-main FULL CI `35475382820` — SUCCESS with full test.
+- Dedicated Linux/WSL2 `[self-hosted, war-room-heavy-ci]` pilot accepted as bounded functional/security infrastructure.
+- Hosted Governance/custody/protected separation remains mandatory.
+- No generic self-hosted routing, fork-PR execution, credential-bearing self-hosted workloads, or performance-superiority claim.
+- WR-074 and WR-075 — CLOSED.
+- Any broader self-hosted CI expansion requires a separate future Manager task and fresh applicable audit.

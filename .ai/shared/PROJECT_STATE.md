@@ -471,3 +471,28 @@ WR-075 is ASSIGNED to audit exactly:
 The fresh Auditor owns independent verification of security routing, trusted-trigger/fork boundaries, hosted/custody separation, secret absence, cleanup/repeatability, parity, benchmark claims, fallback, and exact final scope.
 
 PR #307 remains draft/unmerged. Self-hosted infrastructure is not canonical pending audit and Manager disposition.
+
+
+## WR-074 / WR-075 audited self-hosted heavy-CI pilot — CLOSED
+
+WR-075 independently returned PASS with no findings for exact WR-074 target `75fcd3756956b2943f18aff03115f9783a16d0aa`.
+
+Accepted chain:
+- Auditor PR #310 / head `0968f3e84aa852d6fa528e3ca9a9ca3383cc6362`;
+- Auditor CI `35463331283` SUCCESS;
+- audit evidence merge `2d860ab27fd0fe02e3614311a6f202d7a91439df`;
+- post-audit canonical CI `35475324576` SUCCESS;
+- exact audited WR-074 target integration `3656d355351113bb4692759e4410e607b60967ea`;
+- required canonical-main FULL War Room CI `35475382820` SUCCESS, including full test `105983665291`.
+
+Accepted infrastructure result:
+- dedicated Linux/WSL2 `[self-hosted, war-room-heavy-ci]` route;
+- push-only exact branch trust gate;
+- hosted Governance/custody/protected lanes remain hosted;
+- no provider/custody secrets on self-hosted;
+- repeated clean preflight/cleanup and matched heavy-suite parity;
+- hosted fallback/reference remains available.
+
+The pilot demonstrated functional/security viability, not speed superiority.
+
+WR-074 and WR-075 are closed and removed from the active-only registry.
