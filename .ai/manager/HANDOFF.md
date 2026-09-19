@@ -2,30 +2,30 @@
 
 HANDOFF
 
-STATUS: WR-109 ASSIGNED — DRAFT READINESS / ESPN DIRECT EVIDENCE ASSESSMENT
+STATUS: WR-109 CLOSED — RESEARCH EVIDENCE ACCEPTED; LIVE_DIRECT_UNVERIFIED
 
 CANONICAL WORKFLOW: V3.5
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-Verified preceding canonical main: `1288a9eb2e10765ec9e7a83c77d709268bfba709`.
-WR-074 and WR-075 are CLOSED after audited exact integration and canonical FULL CI.
-Active-only registry was empty at the preceding checkpoint.
+Current completed Manager gate:
+- Reviewed PR #314 at exact R&D head `03cc8b6366f666bf7fe3bbe168a031886a2b7f95`.
+- Three-file research-only diff: `.ai/research/WR109_DRAFT_READINESS_GAP_ASSESSMENT.md`, `.ai/research/WR109_ESPN_DIRECT_LIVE_VALIDATION_PLAN.md`, `.ai/research/HANDOFF.md`.
+- Push CI `35476965962` — SUCCESS.
+- PR CI `35476969561` — SUCCESS.
+- Product test was skipped as expected for a research-only change, not counted as fresh product regression evidence.
+- Exact target integrated via PR #314 / canonical merge `feb6e35898608a1fc656a3d6712d984a43b8ae59`.
+- Post-integration canonical War Room CI `35477156091` — SUCCESS.
 
-Manager roadmap review:
-- AGENTS.md leaves structured ESPN Direct capture in a live mock unverified; Board/Pick History fallback was validated in a live mock.
-- Current bundled player-value baseline is the existing 2026 FantasyPros PPR ECR system, with ESPN market data used only for draft timing.
-- WR-D016 forbids automatic v2.1 scoring rerun/tuning or production promotion after confirmation failure.
-- WR-D017 accepts only bounded dedicated self-hosted CI pilot, not generic CI migration.
-- Historical PR #251 and PR #244 remain open but are stale historical lanes, not current activation authority.
+Accepted disposition:
+- WR-109 CLOSED / research-only evidence and prospective plan accepted.
+- `LIVE_DIRECT_UNVERIFIED` remains: no eligible consent-safe live structured Direct full mock was run.
+- Existing live Board/Pick History fallback and synthetic Direct tests are separate evidence classes; post-fix live duplicate/off-board behavior remains unverified.
+- No source rights/refresh work, production implementation, recommendation-policy change, authenticated ESPN access, model scoring or infrastructure expansion authorized.
+- Active-only registry empty after this Manager reconciliation.
 
-New bounded task:
-- WR-109 — Draft-Cycle Readiness + ESPN Direct Evidence Assessment
-- owner R&D
-- assigned branch `wr-109-draft-readiness-evidence-assessment`
-- initial branch must be created from the exact canonical Manager activation merge after this control-plane transition, not from the older preceding checkpoint;
-- write scope `.ai/research/WR109_DRAFT_READINESS_GAP_ASSESSMENT.md`, `.ai/research/WR109_ESPN_DIRECT_LIVE_VALIDATION_PLAN.md`, `.ai/research/HANDOFF.md` only;
-- no app/source/protocol/runner/workflow changes and no authenticated live ESPN execution.
-- live Direct status remains UNVERIFIED until consent-safe real mock evidence exists.
+Next Manager gate:
+- When the user confirms a disposable ESPN practice/public mock is available **and explicitly consents**, independently refresh versions and decide whether to authorize a NEW bounded live-validation task based on the WR-109 plan. Do not initiate account access or mock entry from this handoff.
+- If no mock is available, leave `LIVE_DIRECT_UNVERIFIED` and defer live validation. Future next-cycle source intake remains proposed pending source availability/rights; Builder/Strategy work requires separately verified grounds.
 
-Next: R&D publishes a bounded PR/evidence + exact-head CI, then Manager reviews the readiness gaps and selects a subsequent separately authorized task. No other employee lane is currently active.
+Evidence pointers: `.ai/research/WR109_DRAFT_READINESS_GAP_ASSESSMENT.md` and `.ai/research/WR109_ESPN_DIRECT_LIVE_VALIDATION_PLAN.md` at exact WR-109 head.
