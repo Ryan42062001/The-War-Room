@@ -220,6 +220,39 @@ function testAuthorityConsumptionAndReplay() {
   });
   assert.ok(unverifiedRun.errors.some(e=>e.includes('not independently verified')),'AUD-02 failed workflow run must not authorize consumption');
 
+  const wrongVerifiedConsumerPath=applyTransitionPlan({
+    registry,
+    plan:{schema_version:1,authority_consumption_receipts:[{
+      task_id:'WR-906',publication_head:fx.publicationHead,receipt_path:fx.receiptPath,terminal_path:fx.terminalPath,
+      workflow_run_id:'12345',receipt_sha256:fx.receiptSha
+    }],update_tasks:[{task_id:'WR-906',set:{worker_checkpoint_sha:fx.publicationHead}}]},
+    taskSpecReader:reader,
+    authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root),
+    authorityVerifiedRuns:new Map([['WR-906',verifiedRunFor(fx,{consumer_path:V21_CONSUMER})]])
+  });
+  assert.ok(wrongVerifiedConsumerPath.errors.some(e=>e.includes('not independently verified')),'direct verified-run consumer path mismatch must fail closed');
+
+  const wrongVerifiedConsumerDigest=applyTransitionPlan({
+    registry,
+    plan:{schema_version:1,authority_consumption_receipts:[{
+      task_id:'WR-906',publication_head:fx.publicationHead,receipt_path:fx.receiptPath,terminal_path:fx.terminalPath,
+      workflow_run_id:'12345',receipt_sha256:fx.receiptSha
+    }],update_tasks:[{task_id:'WR-906',set:{worker_checkpoint_sha:fx.publicationHead}}]},
+    taskSpecReader:reader,
+    authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root),
+    authorityVerifiedRuns:new Map([['WR-906',verifiedRunFor(fx,{consumer_sha256:'0'.repeat(64)})]])
+  });
+  assert.ok(wrongVerifiedConsumerDigest.errors.some(e=>e.includes('not independently verified')),'direct verified-run consumer digest mismatch must fail closed');
+
+  const unconsumedReplacementAuthority={...fx.authority,head_sha:'f'.repeat(40)};
+  const unconsumedReplacement=applyTransitionPlan({
+    registry,
+    plan:{schema_version:1,update_tasks:[{task_id:'WR-906',set:{future_execution_authority:unconsumedReplacementAuthority}}]},
+    taskSpecReader:reader,
+    authorityEvidenceReader:createGitAuthorityEvidenceReader(fx.root)
+  });
+  assert.ok(unconsumedReplacement.errors.some(e=>e.includes('cannot replace an unconsumed future_execution_authority')),'unconsumed authority replacement must fail closed');
+
   const consumed=applyTransitionPlan({
     registry,
     plan:{schema_version:1,authority_consumption_receipts:[{
@@ -325,8 +358,13 @@ function testProtectedWorkflowIdentityBinding() {
   assert.equal(verifyProtectedWorkflowRun(legacy.authority,rawRunFor(legacy.authority),context).name,LEGACY_WORKFLOW);
   assert.equal(verifyProtectedWorkflowRun(v21.authority,rawRunFor(v21.authority),context).name,V21_WORKFLOW);
 
+  const missingStatusRun=rawRunFor(legacy.authority);
+  delete missingStatusRun.status;
   const badCases=[
     [legacy.authority,rawRunFor(legacy.authority,{name:'wrong workflow'}),'wrong workflow name'],
+    [legacy.authority,rawRunFor(legacy.authority,{event:'push'}),'wrong workflow event'],
+    [legacy.authority,missingStatusRun,'missing workflow run status'],
+    [legacy.authority,rawRunFor(legacy.authority,{status:null}),'null workflow run status'],
     [legacy.authority,rawRunFor(legacy.authority,{name:V21_WORKFLOW}),'WR-083 authority paired with WR-097 workflow'],
     [v21.authority,rawRunFor(v21.authority,{name:LEGACY_WORKFLOW}),'WR-097 authority paired with WR-083 workflow'],
     [legacy.authority,rawRunFor(legacy.authority,{repository:{full_name:'fork/repo'}}),'wrong repository'],

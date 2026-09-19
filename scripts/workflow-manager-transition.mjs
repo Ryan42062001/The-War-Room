@@ -190,7 +190,7 @@ export function verifyProtectedWorkflowRun(authority, run, {
   if (run.head_branch !== 'main') errors.push('workflow branch is not canonical main');
   if (run.head_sha !== controlPlaneHead) errors.push('workflow/control-plane head mismatch');
   if (runRepository !== repositoryFullName) errors.push('workflow repository mismatch');
-  if (run.status != null && run.status !== 'completed') errors.push('workflow run is not completed');
+  if (run.status !== 'completed') errors.push('workflow run is not completed');
   if (run.conclusion !== 'success') errors.push('workflow run conclusion is not success');
   if (errors.length) throw new Error(errors.join('; '));
   return {
@@ -200,7 +200,7 @@ export function verifyProtectedWorkflowRun(authority, run, {
     event: run.event,
     head_branch: run.head_branch,
     head_sha: run.head_sha,
-    status: run.status ?? 'completed',
+    status: run.status,
     conclusion: run.conclusion,
     repository_full_name: runRepository,
     control_plane_head: controlPlaneHead,
