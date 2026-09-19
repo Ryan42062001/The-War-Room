@@ -58,6 +58,9 @@ jobs:
       - name: Harden and verify persistent workspace
         run: node scripts/ci/wr074-pilot.mjs preflight
 
+      - name: Normalize parity-sensitive browser harness
+        run: node scripts/ci/wr074-pilot.mjs normalize
+
       - name: Install exact lockfile dependencies
         run: npm ci
 
