@@ -244,3 +244,32 @@ Post-integration Full War Room CI `35442985916` completed SUCCESS: classify, gov
 WR-103 and WR-104 are CLOSED. WR-101 remains BLOCKED with the prior authority revoked and absent. WR-102 remains reserved for a future actual result target.
 
 WR-105 is now the mandatory canonical-main post-remediation NO-SCORING canary gate. No real scoring authority exists. A successful canary permits only a separate later Manager review of whether to issue a NEW one-time authority.
+
+
+## WR-105 passed / WR-101 fresh R2 authority activated
+
+Post-remediation canonical-main WR-097 NO-SCORING canary run `35443640646` completed SUCCESS on canonical head `c47209cbd21ff3d42ee2867108cb9f2707212969`.
+
+The canary verified:
+- preflight `105898734724` SUCCESS;
+- trust gate `105898839805` SUCCESS in exact `no-scoring` mode;
+- protected readiness `105898850378` SUCCESS;
+- future-authorized-v21-scoring `105898851251` SKIPPED;
+- 14 retained identities verified;
+- provider mutations 0;
+- consumer provider credentials absent;
+- re-hash/re-size 14/14;
+- corrected synthetic chronology/target-ingest conformance PASS;
+- cleanup PASS;
+- Actions artifacts 0;
+- no historical/2022-2025/2026 outcome exposure.
+
+WR-105 is CLOSED.
+
+Manager creates a fresh WR-101 R2 one-time authority:
+- execution branch `wr-101-v21-validation-scoring-execution-r2`;
+- exact pre-execution head `c47209cbd21ff3d42ee2867108cb9f2707212969`;
+- consumer path `.ai/research/WR097_V21_PROTECTED_SCORING_CONSUMER.py`;
+- consumer SHA-256 `74ae7a44bf60399957fdca57bad0c879486df07c4ff0524093a69c84d82e2296`.
+
+The old pre-remediation branch/authority remains revoked historical evidence and must not be reused. No automatic rerun authority exists.
