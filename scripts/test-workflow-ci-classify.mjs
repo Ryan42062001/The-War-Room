@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import { classifyScope } from './workflow-ci-classify.mjs';
+const sha='a'.repeat(40);
+const reused=classifyScope({event:'push',base:'0'.repeat(40),head:sha,priorSuccessfulRun:{id:123,head_sha:sha,conclusion:'success'}});
+assert.equal(reused.scope,'BOOTSTRAP_REUSE'); assert.equal(reused.skip_governance,true); assert.equal(reused.full_ci,false); assert.equal(reused.reused_run_id,'123');
+const noReuse=classifyScope({event:'push',base:'0'.repeat(40),head:sha}); assert.equal(noReuse.full_ci,true); assert.equal(noReuse.skip_governance,false);
+const aiOnly=classifyScope({event:'pull_request',base:'b'.repeat(40),head:sha,changed:['.ai/manager/X.md']}); assert.equal(aiOnly.scope,'GOVERNANCE_ONLY');
+const code=classifyScope({event:'pull_request',base:'b'.repeat(40),head:sha,changed:['scripts/x.mjs']}); assert.equal(code.scope,'FULL');
+const uncertain=classifyScope({event:'push',base:'0'.repeat(40),head:sha,diffFailed:'network unavailable'}); assert.equal(uncertain.full_ci,true); assert.match(uncertain.reason,/bootstrap-lookup-failed/);
+console.log('workflow CI classifier regression: PASS');

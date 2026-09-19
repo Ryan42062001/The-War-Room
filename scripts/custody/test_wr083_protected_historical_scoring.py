@@ -111,6 +111,8 @@ def test_future_manager_bound_identity_gates() -> None:
     with tempfile.TemporaryDirectory() as td:
         repo=pathlib.Path(td); head,digest=git_init_with_consumer(repo)
         authority=manager_authority(repo,head,digest)
+        loaded=wr083.load_future_authorization(repo)
+        assert loaded["branch"] == authority["branch"] and loaded["head_sha"] == head
         approved=wr083.validate_future_authorization(repo,authority["branch"],head,authority["consumer_path"],digest)
         assert approved["authority_sha256"] == hashlib.sha256(
             wr083.canonical_json_bytes(authority)
@@ -207,6 +209,30 @@ def test_publication_manifest_restricts_paths_and_raw_passthrough() -> None:
             else: os.environ["RUNNER_TEMP"]=old
 
 
+def test_terminal_summary_and_authority_consumption_receipt() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        repo=pathlib.Path(td); head,digest=git_init_with_consumer(repo)
+        authority=manager_authority(repo,head,digest)
+        loaded=wr083.load_future_authorization(repo)
+        summary=wr083.build_terminal_result_summary(loaded,digest,"VALIDATION_FAILED","BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE",4,2)
+        assert summary["execution_status"]=="SUCCESS"
+        assert summary["result_terminal"]=="VALIDATION_FAILED"
+        receipt=wr083.build_authority_consumption_receipt(loaded,summary,"f"*64,"12345")
+        subprocess.run(["git","checkout","-b",authority["branch"]],cwd=repo,check=True,stdout=subprocess.DEVNULL)
+        path=repo/".ai/research/generated/WR081_AUTHORITY_CONSUMPTION_RECEIPT.json"; path.parent.mkdir(parents=True,exist_ok=True)
+        path.write_bytes(wr083.canonical_json_bytes(receipt))
+        subprocess.run(["git","add",str(path.relative_to(repo))],cwd=repo,check=True)
+        subprocess.run(["git","commit","-m","protected publication"],cwd=repo,check=True,stdout=subprocess.DEVNULL)
+        publication=subprocess.check_output(["git","rev-parse","HEAD"],cwd=repo,text=True).strip()
+        checked=wr083.validate_authority_consumption(repo,repo,publication)
+        assert checked["authorized_head"]==head and checked["publication_head"]==publication
+        assert checked["publication_parent_verified"] is True
+        (repo/"second.txt").write_text("second\n"); subprocess.run(["git","add","second.txt"],cwd=repo,check=True)
+        subprocess.run(["git","commit","-m","second"],cwd=repo,check=True,stdout=subprocess.DEVNULL)
+        second=subprocess.check_output(["git","rev-parse","HEAD"],cwd=repo,text=True).strip()
+        must_fail(lambda: wr083.validate_authority_consumption(repo,repo,second),"exactly one commit")
+
+
 def test_cleanup_helper() -> None:
     with tempfile.TemporaryDirectory() as td:
         root=pathlib.Path(td); raw=root/"raw"; raw.mkdir(); (raw/"source.raw").write_bytes(b"synthetic-not-retained")
@@ -227,7 +253,11 @@ def test_workflow_static_security_and_release_guard() -> None:
     assert "[wr083-no-scoring-proof]" in text
     assert "refs/heads/main" in text and "authorized-wr081-scoring" in text
     script=(ROOT / "scripts/custody/wr083_protected_historical_scoring.py").read_text()
-    assert "future-authorization" in text and "ACTIVE_TASKS.json" in script
+    dispatch=text.split("workflow_dispatch:",1)[1].split("permissions:",1)[0]
+    assert "execution_branch:" not in dispatch and "expected_head_sha:" not in dispatch and "consumer_path:" not in dispatch and "consumer_sha256:" not in dispatch
+    assert "future-authority" in text and "future-authorization" in text and "ACTIVE_TASKS.json" in script
+    assert "authority-consumption-check" in text and "WR081_AUTHORITY_CONSUMPTION_RECEIPT.json" in script
+    assert "WR081_TERMINAL_RESULT.json" in script
     assert "future-remote-head" in text and "future-checkout" in text
     assert "future_execution_authority" in script and "live authorized WR-081 branch head mismatch" in script
     assert "--retained-manifest" in text and "publication exactly matches retained raw source" in script
@@ -242,6 +272,7 @@ def main() -> int:
     test_authority_exact_14(); test_consumer_isolation(); test_chronology_fail_closed_and_serialization()
     test_future_manager_bound_identity_gates(); test_manager_authorization_and_fold_visibility()
     test_frozen_publication_paths_cannot_mutate(); test_publication_manifest_restricts_paths_and_raw_passthrough()
+    test_terminal_summary_and_authority_consumption_receipt()
     test_cleanup_helper(); test_workflow_static_security_and_release_guard()
     print("WR-083 protected historical scoring bridge regressions: PASS")
     return 0

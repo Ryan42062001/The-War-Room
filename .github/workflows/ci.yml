@@ -9,6 +9,8 @@ jobs:
       full_ci: ${{ steps.scope.outputs.full_ci }}
       scope: ${{ steps.scope.outputs.scope }}
       reason: ${{ steps.scope.outputs.reason }}
+      skip_governance: ${{ steps.scope.outputs.skip_governance }}
+      reused_run_id: ${{ steps.scope.outputs.reused_run_id }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -25,10 +27,21 @@ jobs:
           PUSH_BEFORE: ${{ github.event.before }}
           PUSH_HEAD: ${{ github.sha }}
           FORCE_FULL_CI: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'force-full-ci') }}
+          REPOSITORY: ${{ github.repository }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/workflow-ci-classify.mjs
+
+  bootstrap-reuse:
+    needs: classify
+    if: needs.classify.outputs.skip_governance == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Reusing successful War Room CI run ${{ needs.classify.outputs.reused_run_id }} for identical bootstrap SHA ${{ github.sha }}"
 
   governance:
     needs: classify
+    if: needs.classify.outputs.skip_governance != 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -52,6 +65,9 @@ jobs:
           node --check scripts/test-workflow-audit-readiness.mjs
           node --check scripts/workflow-manager-transition.mjs
           node --check scripts/test-workflow-manager-transition.mjs
+          node --check scripts/workflow-result-freeze-check.mjs
+          node --check scripts/test-workflow-result-freeze-check.mjs
+          node --check scripts/test-workflow-ci-classify.mjs
       - name: Test workflow state collision regression
         run: node scripts/test-workflow-state-collisions.mjs
       - name: Test workflow lane identity regression
@@ -60,6 +76,10 @@ jobs:
         run: node scripts/test-workflow-audit-readiness.mjs
       - name: Test Manager-transition regression
         run: node scripts/test-workflow-manager-transition.mjs
+      - name: Test result-freeze regression
+        run: node scripts/test-workflow-result-freeze-check.mjs
+      - name: Test CI classifier regression
+        run: node scripts/test-workflow-ci-classify.mjs
       - name: Validate canonical active-task state
         run: node scripts/workflow-state-check.mjs
       - name: Run audit-readiness preflight for active audit-required lane
@@ -106,7 +126,7 @@ jobs:
 
   test:
     needs: [classify, governance]
-    if: needs.classify.outputs.full_ci == 'true'
+    if: needs.classify.outputs.full_ci == 'true' && needs.governance.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
