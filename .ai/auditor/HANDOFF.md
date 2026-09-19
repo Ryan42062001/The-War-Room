@@ -4,96 +4,138 @@ HANDOFF
 
 STATUS: COMPLETE — PASS
 
-TASK: WR-096 — Independent Audit of Returning-Player v2.1 Protocol Candidate
+TASK: WR-098 — Independent Audit of Returning-Player v2.1 Protected Consumer + Execution Bridge
 
 ROLE: Independent Auditor / QA
 
-BRANCH: `wr-096-returning-player-v21-protocol-audit`
+BRANCH: `wr-098-v21-protected-execution-audit`
 
-HEAD: immutable Auditor head published by this branch; exact SHA and exact-head CI IDs are recorded in the WR-096 audit PR.
+HEAD: immutable Auditor head published by this branch; exact SHA and exact-head CI IDs are recorded in the WR-098 audit PR.
 
-BASE: canonical main verified at `15f5a668e2cf5752e24335a653db7cbc652476b9`; assigned audit branch started at `add2aead393a3b5a1217d2408c5cc1b2693a7a7a` (one commit behind with zero file differences).
+BASE: canonical main verified at `78df85ddac4e4b9c80212bb12eecad4f7ed8b7cb`; assigned audit branch started at `d3d0b041d6212e5ee8c4c61840762d3d424a0681`.
 
-AUDITED TARGET: WR-095 / PR #270 / branch `wr-095-returning-player-v21-failure-analysis-protocol` / exact frozen SHA `738296ad38282fc91738203e7e1ced888ba862ed`.
-
-PROTOCOL CANDIDATE: `returning-player-v2.1-model-protocol-candidate/1.0.0-wr095`
-
-MACHINE SHA-256: `5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39`
+AUDITED TARGET: WR-097 / PR #275 / branch `wr-097-v21-protected-execution-bridge` / exact frozen SHA `75c0fbcd518438a226a8c49e3e11951de3944638`.
 
 VERDICT: `PASS`
 
-DONE: Fresh independent protocol audit using exact frozen WR-081 evidence, accepted WR-059 source/cohort authority, accepted WR-072 protocol/gates, and exact WR-095 five-file target. No R&D/Manager/prior-audit conclusion was treated as proof.
+DONE: Fresh independent protected-implementation audit. The exact v2.1 consumer, custody bridge, protected workflow, regression suite, proof run, final-head CI and predecessor boundaries were independently inspected. Work Helper/Manager/WR-095/WR-096 conclusions were not used as proof.
 
-FAILURE ANALYSIS:
-- pooled validation candidate MAE independently reproduces `2.993134339333557` vs persistence `3.0584650236799114`;
-- candidate RMSE `6.123281943142595` vs persistence `4.267772207357228`;
-- QB/RB/TE improve both pooled MAE and RMSE; WR carries the failed position gate;
-- catastrophic 2021 WR row `00-0035864` reproduces candidate `-105.44209159462447`, baseline `-2.78`, target `3.5036363636363634`, candidate SSE `11869.171640355376`;
-- that row is `65.26948081688899%` of all candidate validation SSE and `85.22012734440817%` of WR candidate SSE;
-- its excess SSE is `126.50529104600962%` of the total candidate-minus-baseline SSE gap;
-- diagnostic exclusion makes remaining pooled validation and WR SSE/RMSE better than persistence;
-- exact 2021 WR scaler/model reconstruction produces z excursions +474.93 / +299.29 / -236.94 on sparse passing fields; top three linear contributions sum -107.0737 and full reconstructed prediction equals the frozen prediction to binary64 tolerance;
-- evidence supports tail/extrapolation concentration, but future recurrence remains UNKNOWN.
+MODEL CONFORMANCE:
+- exact WR-095 protocol SHA `5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39`;
+- exact ordered 28-feature schema;
+- separate QB/RB/WR/TE folds;
+- same-position StandardScaler before identical fit/predict `[-6,+6]` clipping;
+- exact Ridge alpha=100 / SVD constructor;
+- persistence baseline `prev1_ppr_pg`;
+- residual target `target_ppr_pg-prev1_ppr_pg`;
+- median/MAD/`1.4826` robust sigma;
+- center ± `3*robust_sigma` adjustment bound;
+- final persistence + bounded adjustment;
+- invalid/zero scale explicit persistence fallback;
+- prospective support requires `fallbacks=0`;
+- no named-player/WR exception, feature pruning, parameter search, alternate source or threshold relaxation.
 
-PROTOCOL:
-- same accepted 14-source WR-059 Player Summary Stats surface and 5,176-key cohort;
-- same exact 28 WR-072 stats-only features;
-- separate QB/RB/WR/TE StandardScaler + Ridge(alpha=100) models;
-- standardized feature clamp `[-6,+6]`, identical in training/prediction;
-- residual target `target_ppr_pg - prev1_ppr_pg`;
-- training residual median/MAD, robust sigma `1.4826*MAD`, bound center ± `3*robust_sigma`;
-- final = persistence baseline + bounded residual;
-- invalid/zero robust scale fails the learned fold closed through explicit persistence fallback; any prospective fallback makes support fail because `fallbacks=0` is required;
-- no player/WR-specific exception and no hidden parameter search.
+CHRONOLOGY:
+- 2022 prediction/model/preprocessing lock precedes 2022 target mount/read;
+- 2022 can enter 2023 training only after lawful 2022 evaluation state exists;
+- 2023 lock precedes 2023 target exposure;
+- complete 2022–2023 validation gate required before confirmation;
+- validation FAIL terminates `VALIDATION_FAILED` before any 2024/2025 mount;
+- 2024/2025 each preserve lock-before-target ordering;
+- phase-specific sandbox hides master raw inputs, unshares network and clears environment.
 
-CONTAMINATION / CHRONOLOGY:
-- 2018–2021 explicitly DESIGN-EXPOSED;
-- future validation 2022–2023;
-- 2022 outcome may enter 2023 training only after immutable 2022 prediction/model/preprocessing lock;
-- complete 2022–2023 validation must PASS before 2024/2025 confirmation may begin;
-- no 2022–2025 outcome exposure/scoring evidenced in WR-095;
-- no 2026 regular-season outcome inspection evidenced;
-- no row-specific future exclusion;
-- no threshold relaxation.
+CUSTODY / NO-SCORING PROOF:
+- proof SHA `123149f330338b02381fdabeb09f575b7a94c26c`;
+- protected run `35417205490` SUCCESS;
+- preflight `105828043700` SUCCESS;
+- trust gate `105828139958` SUCCESS;
+- protected NO-SCORING readiness `105828156958` SUCCESS;
+- future scoring `105828157786` SKIPPED;
+- exactly 14 accepted retained identities;
+- B2 digest/size 14/14;
+- R2 digest/size 14/14;
+- B2/R2 byte equality 14/14;
+- independent bridge re-hash/re-size 14/14;
+- provider mutation operations 0;
+- B2 mutation capabilities absent;
+- accepted R2 credential has bucket-scoped object permission but WR-097 executes only HeadObject/GetObject and zero mutation operations;
+- consumer provider credentials/config absent;
+- deliberate provider-variable injection fails closed;
+- retained rows parsed by consumer false;
+- historical/future target exposure false;
+- real retained-data fit/prediction/baseline/gate work false;
+- cleanup PASS;
+- protected Actions artifacts 0.
 
-GATES: WR-072 validation and confirmation thresholds are numerically preserved. Tail diagnostics are mandatory evidence only, not hidden promotion gates. Residual architecture preserves the expected-PPR/game output and identical baseline comparison universe, so inherited gates remain semantically coherent.
+PROOF-TO-FREEZE: comparison from proof SHA to final frozen target changes only `.ai/work_helper/HANDOFF.md`, `.ai/work_helper/WR097_V21_PROTECTED_EXECUTION_BRIDGE.md`, and `.ai/work_helper/WR097_V21_PROTECTED_READINESS_SUMMARY.json`. Reviewed executable bytes did not change after live proof.
 
-MACHINE CONTRACT: exact machine bytes independently hash to `5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39`; adjacent sidecar matches. Human/machine semantics materially match across IDs, source/cohort, features, preprocessing, clipping, Ridge, residual target/bounds, baselines, fallback/support rules, training windows, chronology, gates, bootstrap, metrics, environment, evidence/fail-closed/publication contracts, and source/custody disposition.
+V3.5 AUTHORITY / REPLAY:
+- dispatch exposes only bounded mode;
+- execution branch/head/consumer path/digest come only from canonical Manager authority;
+- canonical digest recomputed;
+- exact tuple substitutions rejected;
+- exactly one active unblocked authority required;
+- registry/task/receipt replay history checked;
+- remote head checked before retrieval, before consumer exposure, and before publication/push;
+- exact execution checkout and consumer digest required;
+- no unsafe `pull_request_target`;
+- PR code receives no protected credentials;
+- publication is one non-force commit whose parent is exact authorized head;
+- terminal/result/decision remain distinct;
+- receipt binds authority/head/consumer/run/result/payload;
+- failed execution cannot publish successful consumption.
 
-SOURCE / CUSTODY: `EXISTING_ACCEPTED_SOURCE_SUFFICIENT` independently justified. No Players metadata, draft capital, market data, external projections, new provider fields, or source substitution is needed.
+KNOWN EXTERNAL INTEGRATION GATE:
+- current canonical `scripts/workflow-manager-transition.mjs` still hard-codes successful protected workflow name `WR-083 Protected Historical Scoring Bridge` in both committed-consumption verification and live-run verification;
+- new workflow is `WR-097 Returning-Player v2.1 Protected Scoring Bridge`;
+- therefore real WR-097 authority consumption currently FAILS CLOSED;
+- WR-097 correctly did not modify Manager-owned transition tooling;
+- Manager must separately update that integration before real scoring;
+- that transition change is material protected-execution control-plane work and requires fresh independent audit before any real validation scoring authority.
 
-BOUNDARY: no WR-081 rerun, fitting, scoring, tuning, retained raw access, reacquisition/substitution, future outcome exposure, production/ranking change, season-total composition, or Phase 6 work occurred in the WR-095 target.
+PUBLICATION:
+- only the 12 accepted RETURNING_PLAYER_V21 evidence/terminal/receipt families may publish;
+- arbitrary paths/families, non-JSON, credential-bearing output, raw retained bytes, and mutation of already frozen execution-package evidence fail closed;
+- confirmation artifacts cannot exist before validation PASS.
 
-SCOPE: PR #270 changes exactly the five authorized R&D files and nothing else.
+SCOPE: PR #275 changes exactly the nine Manager-authorized WR-097 files and nothing else.
 
-CI: exact WR-095 target War Room CI `35414874364` SUCCESS — classify `105821418559`, governance `105821435920`, bootstrap reuse `105821436550` skipped, product test `105821467634` skipped as research-only, Actions artifacts 0. Consume this audit only after the immutable WR-096 audit head has green exact-head PR CI recorded on the audit PR without changing the head.
+FINAL-HEAD CI:
+- Full War Room CI `35418107240` SUCCESS — classify `105830548278`, governance `105830573914`, bootstrap reuse `105830574701` skipped, full test `105830601522` SUCCESS;
+- WR-097 protected workflow `35418107206` SUCCESS — preflight `105830548445` SUCCESS; trust/scoring/readiness skipped on ordinary frozen-head event;
+- WR-046 `35418107211` SUCCESS / contract preflight `105830548366`;
+- WR-063 `35418107209` SUCCESS / contract preflight `105830548620`;
+- WR-069 `35418107234` SUCCESS / contract preflight `105830548550`;
+- WR-083 `35418107218` SUCCESS / preflight `105830548753`.
 
-BLOCKERS: None for protocol acceptance. Scoring remains unauthorized. The current protected bridge/publication allowlist is WR-081-specific; any material v2.1 protected consumer/bridge implementation requires separate implementation authority and independent audit before one-time scoring authority.
+BOUNDARY: no real validation/confirmation scoring, future target exposure, 2026 outcome inspection, retained-data Ridge fit, real prediction/result publication, real baseline/gate evaluation, future_execution_authority creation, authority consumption, production/ranking change, composition or Phase 6 occurred.
 
-DECISIONS CONSUMED: Workflow V3.5; accepted WR-059 source/cohort; accepted WR-072 protocol/gates; exact frozen WR-081 result only as design-exposed historical evidence.
+BLOCKERS: None to accepting/integrating exact WR-097 protected implementation. Real scoring remains blocked on exact audited integration, canonical-main NO-SCORING canary, and separately audited Manager workflow-name/transition integration.
 
-NEXT ACTION: Manager verifies immutable WR-096 publication/head/CI and may accept only exact WR-095 target `738296ad38282fc91738203e7e1ced888ba862ed` as the v2.1 protocol. Then separately route protected consumer/bridge implementation as needed, require independent audit of material protected-execution changes, and create no scoring authority until those gates are satisfied.
+NEXT ACTION: Manager verifies the immutable WR-098 audit publication/head/CI and may consume PASS only for exact WR-097 SHA `75c0fbcd518438a226a8c49e3e11951de3944638`. If accepted, integrate only that target, run the mandatory canonical-main protected NO-SCORING canary, then separately implement and independently audit the Manager transition workflow-name integration. Do not create validation scoring authority until all those gates pass.
 
-FILES / ARTIFACTS THAT MATTER: `.ai/auditor/WR-096_AUDIT.md`; PR #270; exact WR-095 target `738296ad38282fc91738203e7e1ced888ba862ed`; machine candidate + sidecar; WR-081 frozen target `b5fc0974e0766c24974034557a62044b4752716a`; exact target CI `35414874364`.
+FILES / ARTIFACTS THAT MATTER: `.ai/auditor/WR-098_AUDIT.md`; PR #275; exact target `75c0fbcd518438a226a8c49e3e11951de3944638`; proof run `35417205490`; final target CI `35418107240`; canonical `scripts/workflow-manager-transition.mjs`.
 
-DO NOT REPEAT: Do not merge PR #270 as Auditor. Do not create scoring authority. Do not expose 2022–2025 outcomes. Do not treat 2018–2021 as untouched v2.1 validation. Do not claim the proposed architecture is proven performant; only the protocol is accepted. Do not transfer this PASS to a changed WR-095 SHA without fresh audit.
+DO NOT REPEAT: Do not merge PR #275 as Auditor. Do not modify Manager tooling from this lane. Do not create scoring authority. Do not expose 2022–2025 outcomes. Do not treat WR-098 PASS as performance evidence. Do not transfer PASS to a changed WR-097 SHA.
 
 ## Next Activation
 
 | Order | Employee / Role | Status | Current Task / Gate | Copy/paste activation prompt / next action |
 | --- | --- | --- | --- | --- |
-| 1 | Manager / Architect | ACTIVATE NOW | WR-096 protocol PASS disposition | Continue The War Room as Manager / Architect under canonical Workflow V3.5 with Fast Refresh. Verify WR-096 Auditor-only PR, immutable Auditor head and exact-head CI. Consume PASS only for exact WR-095 SHA `738296ad38282fc91738203e7e1ced888ba862ed` / PR #270 and machine protocol SHA-256 `5c86dacac044538422ca24fbeb13eaee3161050f917acc40f0dbdc1ca6547a39`. If accepting the protocol, preserve no-scoring authority and separately route any required v2.1 protected consumer/bridge implementation, followed by fresh independent audit of material protected-execution changes before one-time Manager scoring authority. Do not expose 2022–2025 outcomes or begin Phase 6. |
-| 2 | Implementation Engineer / Builder | IDLE | No production/product implementation authority | Do not activate for product work. |
+| 1 | Manager / Architect | ACTIVATE NOW | Consume WR-098 PASS; integrate exact WR-097; canonical-main NO-SCORING canary; then separate Manager transition integration | Continue The War Room as Manager / Architect under canonical Workflow V3.5 with Fast Refresh. Verify the WR-098 Auditor-only PR, immutable Auditor head and exact-head CI. Consume PASS only for WR-097 / PR #275 exact frozen SHA `75c0fbcd518438a226a8c49e3e11951de3944638`. If accepted, integrate only that audited target and run the mandatory canonical-main WR-097 protected NO-SCORING canary. Preserve NO scoring authority. After the canary succeeds, separately route a Manager-owned integration change so canonical `scripts/workflow-manager-transition.mjs` recognizes the audited `WR-097 Returning-Player v2.1 Protected Scoring Bridge` identity without weakening V3.5 receipt/live-run/replay verification. Treat that change as material protected-execution control-plane work and route a fresh independent audit before any real 2022–2023 validation scoring authority. Do not expose 2022–2025 outcomes or begin Phase 6. |
+| 2 | Implementation Engineer / Builder | IDLE | No product implementation task | Do not activate. |
 | 3 | Draft Strategy & Decision Intelligence Analyst | IDLE | No strategy task | Do not activate. |
-| 4 | Research & Development (R&D) | COMPLETE | WR-095 protocol candidate audited PASS | Await Manager disposition; no scoring/rerun/tuning. |
-| 5 | Independent Auditor / QA | COMPLETE | WR-096 PASS on exact frozen WR-095 target | No further action unless a changed protocol or protected-execution implementation requires fresh audit. |
-| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | Possible future protected bridge/consumer implementation only if Manager routes it | Do not activate until Manager defines exact implementation authority/scope. |
+| 4 | Research & Development (R&D) | COMPLETE | WR-095 protocol accepted upstream; no scoring work authorized | No action. |
+| 5 | Independent Auditor / QA | COMPLETE | WR-098 PASS on exact frozen WR-097 target | No further action until Manager freezes a material transition-integration target or later result target for fresh audit. |
+| 6 | Work Helper / Super Troubleshooter / Cross-Functional Operator | WAIT | WR-097 implementation complete; future work only if Manager separately routes a technical blocker | Do not activate unless Manager assigns bounded follow-up. |
 
 Final verdict: `PASS`
 
 Findings by severity: CRITICAL — none. HIGH — none. MEDIUM — none. LOW — none.
 
-Auditor modified or merged PR #270: NO.
+Auditor modified or merged PR #275: NO.
+
+Auditor modified Manager/shared tooling: NO.
 
 Auditor created scoring authority: NO.
 
