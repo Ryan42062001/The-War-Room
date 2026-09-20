@@ -2,30 +2,26 @@
 
 HANDOFF
 
-STATUS: WR-109 CLOSED — RESEARCH EVIDENCE ACCEPTED; LIVE_DIRECT_UNVERIFIED
+STATUS: WR-110 ASSIGNED — NEXT-GENERATION CUSTOM PROJECTION / SCORING RESEARCH
 
 CANONICAL WORKFLOW: V3.5
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-Current completed Manager gate:
-- Reviewed PR #314 at exact R&D head `03cc8b6366f666bf7fe3bbe168a031886a2b7f95`.
-- Three-file research-only diff: `.ai/research/WR109_DRAFT_READINESS_GAP_ASSESSMENT.md`, `.ai/research/WR109_ESPN_DIRECT_LIVE_VALIDATION_PLAN.md`, `.ai/research/HANDOFF.md`.
-- Push CI `35476965962` — SUCCESS.
-- PR CI `35476969561` — SUCCESS.
-- Product test was skipped as expected for a research-only change, not counted as fresh product regression evidence.
-- Exact target integrated via PR #314 / canonical merge `feb6e35898608a1fc656a3d6712d984a43b8ae59`.
-- Post-integration canonical War Room CI `35477156091` — SUCCESS.
+Preceding verified main: `0607fa5e6dcde7ace3fff24656b0def28fe3c137`. Active-only registry was empty; WR-109 is CLOSED / `LIVE_DIRECT_UNVERIFIED`. Separate user-initiated Work-mode ESPN Direct feasibility investigation is independent and must not modify WR-110 artifacts or its authority.
 
-Accepted disposition:
-- WR-109 CLOSED / research-only evidence and prospective plan accepted.
-- `LIVE_DIRECT_UNVERIFIED` remains: no eligible consent-safe live structured Direct full mock was run.
-- Existing live Board/Pick History fallback and synthetic Direct tests are separate evidence classes; post-fix live duplicate/off-board behavior remains unverified.
-- No source rights/refresh work, production implementation, recommendation-policy change, authenticated ESPN access, model scoring or infrastructure expansion authorized.
-- Active-only registry empty after this Manager reconciliation.
+Accepted model history:
+- WR-081 v2: `VALIDATION_FAILED`, baseline-only.
+- WR-101/102 v2.1: 2022–2023 validation PASS; 2024–2025 confirmation FAIL. Terminal `CONFIRMATION_FAILED`; `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`.
+- Frozen blocking RB position-MAE regression `0.107573057046809` > `0.05` cap, accepted under WR-D016.
+- 2018–2021 were design-exposed; 2022–2025 were scored/exposed under v2.1. None are untouched v2.1 confirmation for a new candidate.
+- No historical rerun, new protected authority, 2026 outcome access, source intake, model fit, rankings, composition, Phase 6 or recommendation policy change from this assignment.
 
-Next Manager gate:
-- When the user confirms a disposable ESPN practice/public mock is available **and explicitly consents**, independently refresh versions and decide whether to authorize a NEW bounded live-validation task based on the WR-109 plan. Do not initiate account access or mock entry from this handoff.
-- If no mock is available, leave `LIVE_DIRECT_UNVERIFIED` and defer live validation. Future next-cycle source intake remains proposed pending source availability/rights; Builder/Strategy work requires separately verified grounds.
+New assignment:
+- WR-110 — Next-Generation Custom Projection + Draft Scoring Research.
+- Owner R&D, `STANDARD_CHAT_HIGH`, `FAST_REFRESH`.
+- branch `wr-110-next-gen-projections-research`, create from the exact canonical Manager activation merge **after** this control-plane PR, not the preceding main above.
+- exact write allowlist: `.ai/research/WR110_NEXT_GEN_PROJECTION_EVIDENCE_ASSESSMENT.md`, `.ai/research/WR110_PROSPECTIVE_EXPERIMENT_PROPOSAL.md`, `.ai/research/HANDOFF.md`.
+- research only; no implementation, scoring, protected source access, policy decision or new source data.
 
-Evidence pointers: `.ai/research/WR109_DRAFT_READINESS_GAP_ASSESSMENT.md` and `.ai/research/WR109_ESPN_DIRECT_LIVE_VALIDATION_PLAN.md` at exact WR-109 head.
+Next: R&D publishes bounded three-file research PR and exact-head CI; Manager independently reviews and selects a separate future gate if evidence supports one. All other War Room roles idle.

@@ -516,3 +516,12 @@ Accepted research evidence: Companion v0.9.14 repository contract; bundled 2026 
 Exact-head War Room CI: push `35476965962` and PR `35476969561`, both SUCCESS (classify and Governance; product test skipped as research-only). Accepted exact target integrated through PR #314 at `feb6e35898608a1fc656a3d6712d984a43b8ae59`; post-integration canonical CI `35477156091` SUCCESS.
 
 WR-109 CLOSED and removed from active-only registry. No new task is activated. Future live ESPN observation requires eligible disposable mock, explicit user consent and a new Manager-scoped task. Source-intake is deferred pending next-cycle source availability/rights. No Builder/Strategy implementation or policy task is presently justified without new verified evidence. No live account access, ranking/source/model/runner/Phase-6 authority follows.
+
+
+## WR-110 custom player projection/scoring research — ASSIGNED
+
+Following WR-109 closure, Manager assigned an **independent research-only** next-generation model/scoring discovery task to R&D at `STANDARD_CHAT_HIGH`. This is parallel to a separate user-initiated Work-mode ESPN Direct feasibility investigation, which is not a War Room repo-writing task.
+
+WR-101/102 are CLOSED, with valid validation PASS (2022–2023), confirmation FAIL (2024–2025), `CONFIRMATION_FAILED`, and `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`. The frozen RB confirmation regression `0.107573057046809` exceeded cap `0.05`. The task may interpret **already accepted aggregate reports** for future prospective design only; no new scoring, outcome reopening, 2026 regular-season inspection, provider acquisition, new authority, model/threshold selection on exposed outcomes or protected execution.
+
+Existing FantasyPros ECR ranking/value and ESPN timing authority remain unchanged. R&D writes only its two WR-110 future-model evidence/protocol reports and role handoff; later source intake, protocol audit, Draft Strategy and Builder work require separate Manager authorizations and applicable independent audit.
