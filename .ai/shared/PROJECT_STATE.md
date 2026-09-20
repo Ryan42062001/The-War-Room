@@ -545,3 +545,12 @@ Research provides only a **non-executable** prospective study outline. The sugge
 Exact-head CI: push `35478836552` SUCCESS, PR `35478838143` SUCCESS (classify/Governance; product test skipped). Manager integrated exact PR #317 head as merge `0975029220eb7f95b5d76259b80f734610924046`; canonical-main War Room CI `35479105837` SUCCESS.
 
 WR-110 CLOSED and removed from active-only registry. A distinct Manager decision/task is required for even no-acquisition future source-rights/window feasibility research. Executable protocol, independent protocol audit, protected scoring, games/season-total composition, Draft Strategy and Builder implementation, production ranking or Phase 6 remain unauthorized.
+
+
+## WR-111 — Future Data Rights + Independent Evaluation Feasibility — ASSIGNED
+
+Manager assigned WR-111 to R&D in `STANDARD_CHAT_HIGH` after WR-110 research acceptance with `INSUFFICIENT_NEW_CONFIRMATION_DATA`. Its question is whether a legally permissible, genuinely independent point-in-time custom-projection validation and confirmation path is feasible, and the earliest conditional timeline based on public rights/release evidence. WR-110's 2027–2029 years are planning options, not mandatory or approved holdouts.
+
+Exact write scope: `.ai/research/WR111_FUTURE_SOURCE_RIGHTS_FEASIBILITY.md`, `.ai/research/WR111_INDEPENDENT_EVALUATION_WINDOW_ASSESSMENT.md`, `.ai/research/HANDOFF.md`. Public documentation research only: no provider dataset/API retrieval, private/authenticated access, 2026 regular-season outcomes, protected/raw retained data, model fit/scoring, executable protocol, licensing assumption, source admission, changed ranking/strategy or Phase 6.
+
+WR-D001, WR-D016 and WR-D018 remain unchanged. All future data rights, executable protocol, audit, scoring and production decisions require separate Manager authority.
