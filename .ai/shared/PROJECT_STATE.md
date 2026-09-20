@@ -1,7 +1,7 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-20 — WR-D033 scopes Track A2 source-aware ECR recommendation/explanation contract and assigns sole WR-121 Strategy-only task
+Last Manager gate: 2026-09-20 — WR-D034 accepts WR-121 Strategy PR #346; activates bounded WR-122 presentation-truthfulness Builder task
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
@@ -663,3 +663,10 @@ Manager independently accepted new WR-120 PASS on exact repaired WR-118 Builder 
 ## WR-D033 — Sole WR-121 Strategy contract assignment (2026-09-20)
 
 Canonical pre-activation main `07725c8b632a49911838dea6a88d1fb13659d085` with empty active registry after accepted/closed WR-118/WR-120. Track A2 is next: Strategy must inspect existing real recommendation/roster/phase/turn/survival/explanation code and relevant tests before proposing any changes, preserve WR-D001 FantasyPros ECR player value vs ESPN market timing, and produce a documentary expected-behavior/provenance/uncertainty/synthetic scenario contract. Existing code already implements VORP/roster/scarcity/tier/next-turn logic and a confidence score; no assertion of absent engine or calibrated probability. Exactly two `.ai/strategy/` docs and one unmerged paper-only PR permitted under `.ai/manager/WR-121.md`; no independent Auditor necessary for this documentary task, but any later product implementation requires separate Manager/Builder/fresh independent QA and exact-main full CI gates. Only Strategy assigned after control-plane PR and main CI; Builder, R&D, Auditor, Work Helper idle. Track B custom-model rights/reproducibility and explicit owner no-provider-contact gates unchanged. No ranking/data/production/Companion/deployment change authorized.
+
+
+## WR-D034 — WR-121 source-aware Strategy accepted; WR-122 scoped Builder UI-copy correction (2026-09-20)
+
+Manager independently read WR-121 Strategy report and handoff PR #346 at exact `9a3aa5b3a8c886947154687d7c42315918f80ddf`, two Strategy-only files, exact-head CI `35513928048` SUCCESS, and accepted/merged documentation-only to canonical `408de9da8118b6815258780c359d390ed0d7f984` with main CI `35514312341` SUCCESS. WR-121 CLOSED in active-only registry via WR-D034 Manager transition. Its 18 scenarios are hypotheses/acceptance proposals, NOT verified current player-winner outputs, calibrated forecasting or new scoring authority.
+
+Manager independently inspected existing `js/war-room-rankings.js`: compact card renders heuristic `confidenceScore` as N% and `calculateNextPickSurvival` as N% even when missing-market numeric neutral=50; existing market details already distinguish ESPN vs FantasyPros ADP fallback vs unknown. WR-D034 authorizes sole next task WR-122 Builder display/copy-only correction in `js/war-room-rankings.js` and `scripts/test-browser.mjs` plus two Builder docs. No ranking, source, data, score, recommendation action, weight/threshold, structured Direct, ESPN account, protected model, workflow/runner or deployment changes. Exact Builder target requires fresh independent Auditor/QA and canonical-main FULL CI canary before product integration/closure. Strategy, Auditor, R&D and Work Helper idle while Builder works; no automatic downstream activation. WR-D001 ECR value/ESPN market timing, WR-D018 fallback-first/`LIVE_DIRECT_UNVERIFIED`, WR-D027 explicit no-provider-contact and paused custom ranking `RIGHTS_UNVERIFIED / OPTION_C_UNPROVEN / NO_SOURCE_ADMISSION` persist.
