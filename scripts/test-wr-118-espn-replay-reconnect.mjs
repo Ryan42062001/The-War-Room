@@ -307,8 +307,9 @@ function expectOracleRejection(label, action, expectedMarker) {
 async function apply(page, label, payload, options = {}) {
   const fixture = fixtureByPage.get(page);
   assert.ok(fixture, label + ': expected synthetic fixture context');
-  const expected = expectedRows(options.expectedPicks || payload.picks, fixture.indexes);
-  const inputOrder = (payload.picks || []).map(pick => Number(pick.overallPick) || null);
+  const inputPicks = payload && Array.isArray(payload.picks) ? payload.picks : [];
+  const expected = expectedRows(options.expectedPicks || inputPicks, fixture.indexes);
+  const inputOrder = inputPicks.map(pick => Number(pick.overallPick) || null);
   let result = null;
   let applicationError = null;
   try {
