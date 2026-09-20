@@ -543,7 +543,11 @@ const wr122Presentation = await page.evaluate(() => {
     const explanation = buildRecommendationExplanation(recommendation, player, scored[1] || null);
     const displayedRecommendation = turn ? {...recommendation, turnPackageActive:true,
       turnRecommendedNow:player.name, turnTargetNext:scored[1]?.name || 'Best available'} : recommendation;
-    const displayedExplanation = turn ? {...explanation, type:'TURN_PACKAGE'} : explanation;
+    const displayedExplanation = turn ? {...explanation, type:'TURN_PACKAGE',
+      // This engine-style explanatory sentence is intentionally unqualified.
+      // Only the display may correct it; player/action/score internals stay put.
+      reasons:[...explanation.reasons,
+        'Fixture target is guaranteed to remain available at your next pick because no opponent selects between the two picks.']} : explanation;
     const capture = () => ({
       player:recommendation.player, action:recommendation.recommendation,
       confidenceScore:recommendation.confidenceScore, score:player.finalScore,
@@ -617,8 +621,14 @@ assert.match(wr122Presentation.fallback.source, /Source: FantasyPros ADP fallbac
 assert.doesNotMatch(wr122Presentation.fallback.marketDetail, /Source: ESPN/);
 assert.match(wr122Presentation.adjacent.compact, /Back-to-back own turns; second option remains conditional/);
 assert.match(wr122Presentation.adjacent.marketDetail, /no intervening opponent selection/);
+assert.match(wr122Presentation.adjacent.expanded, /No opponent selects between verified adjacent own picks/);
+assert.match(wr122Presentation.adjacent.expanded, /next target must still be eligible/);
+assert.doesNotMatch(wr122Presentation.adjacent.expanded, /guaranteed to remain available/);
 assert.doesNotMatch(wr122Presentation.invalid.compact +
   wr122Presentation.invalid.marketDetail, /no intervening opponent selection|Back-to-back own turns/i);
+assert.match(wr122Presentation.invalid.expanded, /Next-target availability is unverified/);
+assert.doesNotMatch(wr122Presentation.invalid.expanded,
+  /guaranteed to remain available|No opponent selects between verified adjacent own picks/i);
 assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-card').getAttribute('open'), null);
 const wr122CardSummary = page.locator('#wr122-presentation-fixture .recommendation-card-summary');
 await wr122CardSummary.focus();
