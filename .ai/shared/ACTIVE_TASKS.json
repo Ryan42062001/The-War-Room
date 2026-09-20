@@ -1,8 +1,49 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-20T00:33:00Z",
+  "updated_at_utc": "2026-09-20T00:45:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": []
+  "tasks": [
+    {
+      "task_id": "WR-111",
+      "owner": "R&D",
+      "worker_slot": "rnd-wr111-source-rights-window-feasibility",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-111.md",
+      "role_handoff": ".ai/research/HANDOFF.md",
+      "assignment_main_sha": "5e42fdbd60279ead10454a02feb5bec390944f3d",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-111-future-data-rights-evaluation-feasibility",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/research/WR111_FUTURE_SOURCE_RIGHTS_FEASIBILITY.md",
+        ".ai/research/WR111_INDEPENDENT_EVALUATION_WINDOW_ASSESSMENT.md",
+        ".ai/research/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/research/generated/",
+        ".github/",
+        "src/",
+        "scripts/",
+        "data/",
+        "extensions/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "R&D research-only three-file PR and exact-head Governance CI -> Manager verifies source-rights and earliest independent future-window evidence; no acquisition/protocol/scoring/Strategy/Builder authorization."
+    }
+  ]
 }
