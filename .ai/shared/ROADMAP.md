@@ -1,7 +1,7 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — WR-122 presentation-only Builder PR #348 FROZEN/AUDIT_READY; WR-123 independent QA ASSIGNED; Track B custom ranking paused
-Current-state snapshot: 2026-09-20, WR-D035 freezes exact Builder PR #348 and assigns sole WR-123 Independent Auditor. Refresh live main/CI/registry. Refresh actual `.ai/shared/ACTIVE_TASKS.json`, canonical main and live PR/CI before routing.
+Status: ACTIVE DEVELOPMENT — WR-123 historical audit FAIL accepted; WR-122 same-branch/PR display-only F01/F02 remediation ASSIGNED; Track B custom ranking paused
+Current-state snapshot: 2026-09-20, WR-D036 accepts WR-123 F01/F02 and returns sole WR-122 Builder for bounded in-place repair; WR-124 not assigned. Refresh live main/CI/registry. Refresh actual `.ai/shared/ACTIVE_TASKS.json`, canonical main and live PR/CI before routing.
 Owner: Manager / Architect
 Workflow: V3.5 — CANONICAL
 
@@ -534,3 +534,8 @@ WR-121 Strategy PR #346 exact two-file documentation-only report/handoff accepte
 ## WR-D035 — exact WR-122 presentation target frozen / WR-123 fresh QA activation (2026-09-20)
 
 Builder PR #348 OPEN/UNMERGED exact `126268055332470ef4884706a404ed63d02d96ae`; branch head/PR head equal, original Builder base `836de1e7ed543d9dba48437eeda57922b2c4afa3`; cumulative diff exactly `js/war-room-rankings.js`, `scripts/test-browser.mjs` and two Builder evidence/handoff docs. Exact final-head FULL CI `35516672078` SUCCESS (classify/Governance/full `npm test`), including browser/phone/responsive/375px layout and WR-118 synthetic replay regression. Historical intermediary failures remain historical. Standalone `node --check scripts/test-browser.mjs` was not observed; auditor must decide its materiality, not claim it ran. This is Manager **audit readiness**, not independent implementation PASS. WR-123 assigned as sole actionable fresh Independent Auditor on dedicated branch from post-activation canonical main, two Auditor-only docs and separate OPEN/UNMERGED audit PR with exact-head Governance CI. WR-122 Builder target must not move or merge during review; independent PASS-family + new Manager merge decision + canonical-main FULL CI canary required. Existing ECR value/ESPN timing, no-provider-contact, source/model rights and no-deployment safeguards unchanged.
+
+
+## WR-D036 — historical WR-123 FAIL; narrowly bounded WR-122 same-task remediation (2026-09-20)
+
+Independent Auditor PR #350 remains OPEN/UNMERGED at head `9be550f24c25e0a265e0d13c6951501f147c2cdb`, exact two Auditor docs, Governance `35518505933` SUCCESS; verdict FAIL on HISTORICAL Builder PR #348 SHA `126268055332470ef4884706a404ed63d02d96ae`. F01 MEDIUM/BLOCKING: display-only adjacent-own-turn guard can privilege calculatedNextPick=11 over contradictory nextPick=20/intervening=9 in 10-team slot-10 current-pick-10 synthetic input, wrongly claiming no intervening opponents in compact/expanded wording. F02 LOW: separate literal browser-MJS syntax command missing from observed prior CI. Manager independently accepted both, closed WR-123 as historical failed audit and returned sole WR-122 Builder to EXISTING four-file PR #348/branch for fail-closed display guard + focused contradictions/browser tests/evidence and both literal syntax commands, NEW exact-head FULL CI. Builder PR #348 and historical Auditor PR #350 stay OPEN/UNMERGED; no Builder merge or Auditor reassignment yet. After new Manager freeze, a separately assigned fresh WR-124 independent audit is required, then possible Manager integration and mandatory exact canonical-main FULL CI. No engine/source/market selection/strategy/ranking changes, live ESPN/Companion/provider contact, data/model or deployment authorization.

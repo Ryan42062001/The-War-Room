@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-20T14:48:00Z",
+  "updated_at_utc": "2026-09-20T15:06:37Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -9,11 +9,11 @@
       "task_id": "WR-122",
       "owner": "Builder",
       "worker_slot": "builder-wr122-recommendation-presentation-truthfulness",
-      "status": "AUDIT_READY",
+      "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-122.md",
       "role_handoff": ".ai/builder/HANDOFF.md",
       "assignment_main_sha": "408de9da8118b6815258780c359d390ed0d7f984",
-      "worker_checkpoint_sha": "126268055332470ef4884706a404ed63d02d96ae",
+      "worker_checkpoint_sha": null,
       "branch": "wr-122-ecr-recommendation-presentation-truthfulness",
       "pr": 348,
       "dependency": "INDEPENDENT",
@@ -55,57 +55,7 @@
         "js/war-room-recommendations-canonical.js",
         "js/war-room-draft-state.js"
       ],
-      "next_gate": "WR-D035 Manager freezes exact Builder PR #348 head 126268055332470ef4884706a404ed63d02d96ae after exact-head FULL CI 35516672078 SUCCESS and exact four-file diff. Do not modify/merge Builder PR while fresh WR-123 Independent Auditor separately reviews only frozen head. Historical intermediate CI failures remain historical; standalone node --check scripts/test-browser.mjs was not witnessed, although browser script executed in full CI. Auditor publishes two-file report and unmerged PR with exact-head Governance CI and PASS-family/FAIL. Manager alone decides later integration and mandatory exact canonical-main FULL CI canary."
-    },
-    {
-      "task_id": "WR-123",
-      "owner": "Auditor",
-      "worker_slot": "auditor-wr123-presentation-truthfulness",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-123.md",
-      "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": "836de1e7ed543d9dba48437eeda57922b2c4afa3",
-      "worker_checkpoint_sha": null,
-      "branch": "wr-123-recommendation-presentation-independent-audit",
-      "pr": null,
-      "dependency": "INDEPENDENT",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_required": false,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "audit_target_task": "WR-122",
-      "audit_target_pr": 348,
-      "audit_target_branch": "wr-122-ecr-recommendation-presentation-truthfulness",
-      "audit_target_sha": "126268055332470ef4884706a404ed63d02d96ae",
-      "allowed_path_prefixes": [
-        ".ai/auditor/WR123_RECOMMENDATION_PRESENTATION_AUDIT.md",
-        ".ai/auditor/HANDOFF.md"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/builder/",
-        ".ai/strategy/",
-        ".ai/research/",
-        "js/",
-        "scripts/",
-        "extensions/",
-        "data/",
-        ".github/",
-        "src/"
-      ],
-      "forbidden_exact_paths": [
-        "package.json",
-        "README.md",
-        "index.html",
-        "script.js"
-      ],
-      "next_gate": "Independent fresh audit exact frozen WR-122 Builder PR #348 SHA 126268055332470ef4884706a404ed63d02d96ae, authorized four-file diff, exact full CI and actual display source/tests, including safe escaping, contradictory inherited turn reasons, missing/invalid vs valid own snake turn, ECR-vs-market provenance, 390px and native keyboard details, unchanged engine scoring/decision. Preserve standalone browser-MJS syntax-check caveat. Publish two Auditor documents on distinct branch, separate OPEN/UNMERGED audit PR with exact-head Governance CI; one PASS/PASS WITH NON-BLOCKING FINDINGS/FAIL verdict for Manager. No Builder modifications or merges, provider contact, data/model/ranking changes or deployment."
+      "next_gate": "WR-D036 accepted historical independent WR-123 FAIL on exact frozen WR-122 Builder SHA 126268055332470ef4884706a404ed63d02d96ae. Builder PR #348 stays OPEN/UNMERGED on EXISTING branch for narrowly bounded IN-PLACE test/display-only remediation of F01 conflicting calculatedNextPick/nextPick and contradictory intervening count, plus F02 execute/log both literal node --check commands. Preserve failed old SHA, original creation base 836de1e7ed543d9dba48437eeda57922b2c4afa3, historical unmerged Auditor PR #350 FAIL. Four exact allowed Builder files unchanged. Require fresh focused browser including contradictory actual compact+expanded context, valid/invalid ownership/boundary, invariant unchanged engine, named suites, new exact-final-head FULL CI. Manager then freezes new SHA and separately assigns FRESH independent WR-124 re-audit before any Builder integration; canonical-main FULL CI canary after later merge."
     }
   ]
 }
