@@ -400,7 +400,7 @@ async function runScenario(browser, iteration) {
       });
     } catch (error) {
       if (error && error.name === 'WR118SyntheticInvariantFailure') {
-        diagnosticControl = JSON.parse(String(error.message).split('\\n').slice(1).join('\\n'));
+        diagnosticControl = JSON.parse(String(error.message).split('\n').slice(1).join('\n'));
       } else throw error;
     }
     assert.ok(diagnosticControl && diagnosticControl.session === aId &&
