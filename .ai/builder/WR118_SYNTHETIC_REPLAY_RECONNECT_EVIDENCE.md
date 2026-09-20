@@ -41,6 +41,18 @@ At initial implementation checkpoint, candidate code/package commits were publis
 
 Required validation: named test twice within its single invocation, explicit syntax check in named command, existing draft-invariants, persistence-recovery, recovery-failures, espn-offboard, extension and the full npm test chain. Local terminal execution is not established by a GitHub connector read; actual CI command execution is authoritative when observed in CI logs, with its own constraints. Existing suite CI stress/checkpoint runs are separately recorded in the workflow job.
 
+### Observed execution checkpoint — code-bearing candidate
+
+The exact code-and-registration checkpoint 2e1c30182604b0052db89f3051d4c4e183218c1f completed [War Room CI #35488356124](https://github.com/Ryan42062001/The-War-Room/actions/runs/35488356124) with **SUCCESS** for classify, Governance and the full test job (bootstrap-reuse skipped). Its full test-job log [job 106018847020](https://github.com/Ryan42062001/The-War-Room/actions/runs/35488356124/job/106018847020) explicitly shows npm test PASS, test:extension executed in the chain, test:espn-offboard PASS, test:draft-invariants PASS, test:persistence-recovery PASS, test:recovery-failures PASS, and test:wr118-espn-replay-reconnect completed two independent deterministic scenarios with zero page errors and equal hashes. The named command at that checkpoint ran Node itself; subsequent package registration added explicit node --check to the named command without changing test logic. Do not conflate this earlier successful code checkpoint with final-head CI.
+
+Observed seed: 88211736 (0x5420118); scenario iterations: 1 and 2; opening count 12; correction #5; unresolved #13; replay count 20; provisional 159; authoritative terminal 160. Both iterations logged:
+- baseline source SHA-256: ef335d5bc79b36d46c32a19e1372db8405ff92956307e15b209d65fba632b070
+- final A ledger SHA-256: 8dcf7c772d03bdf1b2e91e614bdd8ce74cfcd19d9858e6d86cd9146de36d7340
+- isolated B ledger SHA-256: 92c057e6a4f58d73deb26b559a32505262401bc5a4afdc6aaa5b79b0ceb7ef85
+- browserErrors: 0.
+
+The logged checkpoint proves the actual assertions executed at that code SHA: unique numbered/identity/source/ownership state through the enumerated stages, A/B isolation, stable ECR/source-row fingerprint, saved/reloaded pick IDs and terminal/provisional status. It does **not** prove live ESPN, Companion delivery or an unmodified future head. A local terminal test run was not performed in this Builder session; all asserted executions are GitHub Actions-hosted. Final PR #338 exact-head full CI, four-file scope and fresh independent audit must still be observed/reviewed before freeze/merge.
+
 ## 4. Authority and handoff
 
 WR-D001 keeps FantasyPros ECR as player-value authority and ESPN board/ADP as market timing only. WR-D018 keeps Board/Pick History fallback-first reliability positioning and LIVE_DIRECT_UNVERIFIED; WR-D027/D028 allow this test-only app-side work, not Companion/live/production/source/model expansion. WR-117 inventory is accepted/closed, not reopened.
