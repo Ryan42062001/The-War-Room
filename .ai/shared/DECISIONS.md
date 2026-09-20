@@ -347,3 +347,20 @@ RATIONALE: WR-111 separates a possible early one-year test from the stronger cro
 EVIDENCE: `.ai/research/WR111_FUTURE_SOURCE_RIGHTS_FEASIBILITY.md`; `.ai/research/WR111_INDEPENDENT_EVALUATION_WINDOW_ASSESSMENT.md`; `.ai/research/HANDOFF.md`; WR-D001/009/010/016; PR #321 and exact-head CI `35481092223`.
 ALTERNATIVES NOT SELECTED FOR CROSS-SEASON CLAIM: one-year-only proof as cross-season confirmation; automatic three-season 2027–2029 requirement; historical randomized or provider-republished 2018–2025 pseudo-independent results; retroactive full-season 2026 preseason lock; immediate data intake/scoring.
 REVISIT CONDITION: documented future source rights/timeline, point-in-time pre-2027 feasibility or preregistered position/power assessment disproves a defensible two-season design. Manager must explicitly change the prospective plan before first target exposure, never after viewing a result to select the more favorable evidence standard.
+
+
+---
+
+## DECISION WR-D020
+
+DATE: 2026-09-19
+TASK: WR-112 acceptance / WR-113 no-acquisition rights-clarification and pre-2027 readiness
+STATUS: ACTIVE — RESEARCH-ONLY / NO SOURCE ADMISSION
+DECISION:
+- Accept only the WR-112 paper reports in PR #323 exact head `b635d8005e7a1fc3c5422f5ea8786da56eae04d6`, exact-head CI `35483333620` SUCCESS, canonical merge `7129608c5ea86044552dcfba4f5c6792730be563`. Close WR-112; preserve `INSUFFICIENT_NEW_CONFIRMATION_DATA`, WR-D001, WR-D016, and WR-D019's conditional 2027 validation -> separate 2028 confirmation evidence standard.
+- Name **Ryan, War Room project owner acting through Manager / Architect**, the accountable RIGHTS AND CUSTODY DECISION OWNER for future source use, lawful raw/derived retention and independent Auditor access. R&D prepares documentation only; any operational custodian, user-approved private/public/commercial use, vendor contract/entitlement, security controls and actual auditor access remain to be explicitly established. Naming the owner does not grant a license, data access, or storage authority.
+- Authorize only distinct WR-113: no-data-acquisition, no-provider-contact public-documentation rights clarification and prospective pre-2027 protocol/power-readiness analysis. Prepare an unsent owner/provider permission-question matrix; future per-instance provenance and custody approval checklist; first-game-relative deadline/stop dependencies and purely symbolic or wholly fabricated QB/RB/WR/TE position effective-cluster, pooled and simultaneous-uncertainty readiness criteria. No actual future asset, real cohort count, numerical power, executable threshold or holdout is established.
+- No source or provider data/API acquisition, external vendor contact, account/credential/terms interaction, new source/cohort admission, raw historical/protected/2026 outcomes, operational custody/storage deployment, model selection/fitting/scoring, executable protocol/freeze, prediction lock, independent audit activation, Strategy/Builder/Work Helper downstream work, production rankings, season totals or Phase 6. Source intake, executable protocol, independent source/protocol/result audits and real scoring require **separate later explicit Manager tasks and authorization**, never automatic transition after WR-113.
+RATIONALE: WR-112 identifies documentation-level options and material legal, temporal, custody and statistical uncertainties; a narrower owner-named clarification/readiness packet can make them decision-ready without acquiring data or prejudging the independent two-season evidence standard.
+EVIDENCE: WR-112 accepted two research reports and handoff; PR #323, exact-head CI `35483333620`; WR-D009/010/016/019.
+REVISIT CONDITION: documented asset-specific use rights, permitted reproducible custody/auditor access, an actual pre-2027 availability window and an independently reviewable all-position adequacy basis permit the Manager to decide whether further separately scoped source and prospective protocol work is warranted. A missed pregame lock cannot be repaired retrospectively.
