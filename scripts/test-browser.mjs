@@ -533,7 +533,6 @@ const wr122Presentation = await page.evaluate(() => {
   const fallback = {...unknown, adp:85};
   function render(label, player, context, turn) {
     const scored = [player].concat(live.scored.filter(item => item.name !== player.name));
-    const state = {...live, context, scored};
     const recommendation = calculateDraftRecommendation(player, scored, context);
     if (!recommendation) throw new Error('Missing actual recommendation for ' + label);
     const explanation = buildRecommendationExplanation(recommendation, player, scored[1] || null);
@@ -547,6 +546,12 @@ const wr122Presentation = await page.evaluate(() => {
       order:scored.map(item => item.name), market:getMarketTimingDetails(player, context)
     });
     const before = capture();
+    // Scoring may populate a next-pick default. Recreate the explicitly missing
+    // context AFTER scoring to exercise the display guard, not engine fallback.
+    const displayContext = label === 'invalid next context'
+      ? {...context, calculatedNextPick:null, nextPick:null, calculatedPicksUntilNext:null}
+      : context;
+    const state = {...live, context:displayContext, scored};
     renderCompactRecommendationCard(element, displayedRecommendation, displayedExplanation, player, state);
     const card = element.querySelector('.recommendation-card');
     return {label, before, after:capture(),
