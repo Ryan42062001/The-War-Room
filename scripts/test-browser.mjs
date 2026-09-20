@@ -504,7 +504,12 @@ const wr122Presentation = await page.evaluate(() => {
   const primary = live.scored[0];
   const element = document.createElement('div');
   element.id = 'wr122-presentation-fixture';
-  document.getElementById('recommended-pick-text').after(element);
+  // The existing overall-board card may be hidden in Position view. Mount this
+  // isolated fixture visibly so native summary keyboard focus is actually tested.
+  element.style.width = '100%';
+  element.style.maxWidth = '480px';
+  element.style.boxSizing = 'border-box';
+  document.body.appendChild(element);
   const originalRows = [...document.querySelectorAll('tr.draftrow')].map(row => [
     row.getAttribute('data-name'), row.getAttribute('data-ecr'),
     row.getAttribute('data-espn-rank'), row.getAttribute('data-espn-adp'),
