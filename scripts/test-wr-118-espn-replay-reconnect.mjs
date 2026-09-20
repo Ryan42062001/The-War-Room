@@ -130,7 +130,7 @@ async function inspect(page, indexes) {
       return {name:candidate.name, available, rosterEligible};
     });
     const active = !completion.complete && !completion.authoritative &&
-      completion.myRosterCount < ROUNDS && state.currentPick < state.totalPicks;
+      completion.myRosterCount < state.rounds && state.currentPick < state.totalPicks;
     const decision = active && candidates.length &&
       typeof calculateDraftRecommendation === 'function'
       ? calculateDraftRecommendation(candidates[0], scored, debug.context) : null;
