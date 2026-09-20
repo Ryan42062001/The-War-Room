@@ -28,7 +28,7 @@
     "baseline:accept": "node scripts/validate-fantasypros-baseline.mjs --accept",
     "test:modules": "node scripts/validate-production-modules.mjs",
     "test:release": "node scripts/validate-release-candidate.mjs",
-    "test:wr118-espn-replay-reconnect": "node scripts/test-wr-118-espn-replay-reconnect.mjs"
+    "test:wr118-espn-replay-reconnect": "node --check scripts/test-wr-118-espn-replay-reconnect.mjs && node scripts/test-wr-118-espn-replay-reconnect.mjs"
   },
   "devDependencies": {
     "playwright": "^1.55.0"
