@@ -127,7 +127,8 @@ async function inspect(page, indexes) {
         !row.classList.contains('drafted-other') && candidate.available !== false);
       const rosterEligible = typeof isRecommendationRosterEligible === 'function' &&
         Boolean(isRecommendationRosterEligible(candidate, debug.context.rosterCounts));
-      return {name:candidate.name, available, rosterEligible};
+      return {name:candidate.name, canonicalName:row && row.getAttribute('data-name'),
+        available, rosterEligible};
     });
     const active = !completion.complete && !completion.authoritative &&
       completion.myRosterCount < state.rounds && state.currentPick < state.totalPicks;
@@ -140,8 +141,9 @@ async function inspect(page, indexes) {
       currentPick:state.currentPick, nextPick:state.myNextPick,
       onClock:state.onClock, picksUntilMyTurn:state.picksUntilMyTurn,
       active, candidateCount:scored.length, inspectedCandidateCount:candidates.length,
-      primaryName:candidates[0] ? candidates[0].name : null,
-      decisionPlayer:decision && decision.player || null,
+      primaryName:eligible[0] ? eligible[0].canonicalName : null,
+      decisionPlayer:decision && decision.player &&
+        findDraftRowByExpertName(decision.player)?.getAttribute('data-name') || null,
       decisionAction:decision && decision.recommendation || null,
       decisionAvailable:Boolean(decision && eligible[0] && eligible[0].available &&
         decision.player === eligible[0].name),
