@@ -1643,7 +1643,7 @@ function getCompactRecommendationReason(explanation, marketKnown, adjacentOwnTur
   var reasons = explanation && Array.isArray(explanation.reasons) ? explanation.reasons : [];
   var reason = reasons.length ? String(reasons[0]).replace(/<[^>]*>/g, '').slice(0, 105) : '';
   // A neutral unknown-market engine value is not a probability or a reason to wait.
-  if (!marketKnown && /chance|surviv|likely|probab|\\d+%|able to wait/i.test(reason)) reason = '';
+  if (/chance|surviv|likely|probab|\d+%|able to wait/i.test(reason)) reason = '';
   if (reason) return reason;
   if (adjacentOwnTurn) return 'Adjacent own selections; the second option must remain eligible';
   return marketKnown
