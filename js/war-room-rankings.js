@@ -1755,7 +1755,7 @@ function buildMarketTimingDetailsHtml(player, context) {
   if (market.espnAdp != null) parts.push('ESPN ADP <b>' + market.espnAdp.toFixed(1) + '</b>');
   if (market.source === 'FantasyPros ADP fallback' && market.marketRank != null) parts.push('FantasyPros ADP <b>' + market.marketRank.toFixed(1) + '</b>');
   if (market.espnRank != null && market.espnAdp != null) parts.push('weights <b>' + Math.round(market.boardWeight * 100) + '/' + Math.round(market.adpWeight * 100) + '</b>');
-  if (market.autoOpponentPicks) parts.push('confirmed Auto picks before next turn <b>' + market.autoOpponentPicks + '/' + market.totalOpponentPicks + '</b>');
+  if (turnEvidence.validNextPick && market.autoOpponentPicks) parts.push('confirmed Auto picks before next turn <b>' + market.autoOpponentPicks + '/' + market.totalOpponentPicks + '</b>');
   if (market.marketRank != null) parts.push('estimated market pick <b>' + market.marketRank.toFixed(1) + '</b>');
   if (turnEvidence.validNextPick) parts.push('next pick <b>#' + turnEvidence.nextPick + '</b> (' + (turnEvidence.nextPick - turnEvidence.currentPick) + ' away)');
   else parts.push('next pick unverified — incomplete or conflicting turn context');
