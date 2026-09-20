@@ -1,7 +1,7 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-20 — WR-D031 freezes exact repaired WR-118 test-only candidate and assigns fresh WR-120 independent re-audit
+Last Manager gate: 2026-09-20 — WR-D032 accepts WR-120 PASS, integrates exact repaired WR-118 and verifies mandatory canonical-main FULL CI; closes both tasks
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
@@ -653,3 +653,8 @@ Canonical pre-activation main `4188657af731fe7f2e32c8bbdbb0f348b7b5e053`. Builde
 New exact-final-head War Room CI `35491052010` SUCCESS: classify `106025927564`, Governance `106025949438`, FULL test `106025970045`. Observed CI logs demonstrate `npm test`, syntax-checked WR-118 named test, two independent fixed-seed synthetic browser iterations with matching source/A/B hashes and zero browser errors, and eight actually executed F01/F02 negative controls. F02 diagnostic counter control records a real synthetic session, numbered order and distinct expected 11/actual 12 hashes and mismatch. Earlier intermediate failed test-harness runs were corrected within the authorized test-only scope. This is audit readiness, NOT independent finding closure, provider/real ESPN/Companion/reconnect proof or draft-ready release.
 
 WR-118 status AUDIT_READY and frozen at new SHA; Builder must not advance/merge pending WR-120, separately assigned fresh independent re-audit on its own Auditor branch/report/PR. Only a published independent PASS-family exact-head review and separate Manager integration decision could precede the mandatory exact canonical-main FULL CI canary after any Builder merge. WR-D001 FantasyPros ECR current authority, WR-D018 fallback-first/Direct-unverified, Ryan's no-provider-contact, Track B rights/source admission block and all no-production/no-ranking/no-deployment limits remain.
+
+
+## WR-D032 — WR-118 / WR-120 closed after audited exact integration and FULL main canary (2026-09-20)
+
+Manager independently accepted new WR-120 PASS on exact repaired WR-118 Builder SHA `c80aaa8807ed9ef94619b1117988e64d9b773234`; integrated separate Auditor evidence PR #343 at `34d852e5fea021548c76d0ff803113097eabeff4` (post-audit main CI `35510971264` SUCCESS), then exact Builder PR #338 at `396462a0649a6bb6f1e0b212f7bfda700759ba6c`. Mandatory post-Builder-merge canonical-main FULL CI `35511010222` SUCCESS including full test `106078842642`: `npm test`, two deterministic app-side scenario runs, stable source/A/B ledger digests, zero reported page errors and eight intended negative-control rejections. WR-118 and WR-120 closed and removed from active-only registry by this control-plane closure; no other task assigned. Historical WR-119 FAIL for old SHA and OPEN/UNMERGED PR #340 remain historical negative evidence. Scope is test-only synthetic app-side snapshot/reload/replay, NOT verified live ESPN/Companion E2E/Direct, real network reconnect, draft-day release or production/ranking change. WR-D001/018/027 source/contact gates and blocked custom rankings unchanged.
