@@ -301,3 +301,30 @@ RATIONALE: WR-075 independently reproduced the exact frozen target scope, truste
 EVIDENCE: WR-074 target `75fcd3756956b2943f18aff03115f9783a16d0aa`; implementation `c2e511da5d3767cbc0688de7e95236135a6975b2`; parity runs `35460866285`, `35461197805`, final pilot `35461615030`; WR-075 Auditor head `0968f3e84aa852d6fa528e3ca9a9ca3383cc6362`; PR #310; audit CI `35463331283`; audit evidence merge `2d860ab27fd0fe02e3614311a6f202d7a91439df`; exact target integration `3656d355351113bb4692759e4410e607b60967ea`; canonical full CI `35475382820`.
 ALTERNATIVES REJECTED: broaden routing to generic self-hosted; run fork PR code on the host; migrate custody/protected credentialed workflows; treat self-hosted as faster despite measured regressions; skip canonical full-CI validation.
 REVISIT CONDITION: any change to runner trust model, trigger surface, labels/routing, credential scope, host operating model, or migration of additional workloads requires a separate Manager task and applicable fresh audit.
+
+
+---
+
+## DECISION WR-D018
+
+DATE: 2026-09-19
+TASK: Manager disposition — user-provided external ESPN Direct feasibility investigation, following closed WR-109
+STATUS: ACTIVE — FALLBACK-FIRST RELIABILITY CLAIM / STRUCTURED OBSERVATION OPPORTUNISTIC
+
+DECISION:
+- Describe The War Room's production ESPN synchronization as **Board/Pick History fallback-first for demonstrated reliability, with opportunistic passive structured-source acceleration**. "Fallback-first" defines the supported reliability claim and planning priority; it does **not** reorder existing WR-D003 per-pick source confidence, suppress a genuinely ledger-eligible structured observation, or authorize a code change.
+- Preserve WR-D003's layered, monotonic numbered-pick ledger: accept attributable structured picks when truly eligible, use conditional accepted REST recovery and live-proven DOM Board/Pick History when structured sources lag or are empty, and require War Room application/ACK for end-to-end success. Do not claim independent structured Direct coverage from a live/network status lamp, decoded candidates, or a DOM-repaired final ledger.
+- Record the investigation disposition `DIRECT_NOT_SUPPORTED_BY_AVAILABLE_EVIDENCE`; independent full-draft structured Direct remains `LIVE_DIRECT_UNVERIFIED`. This is **not** a proof of universal or permanent infeasibility.
+- Stop open-ended speculative Direct engineering, repeated mock hunting, unverified endpoint adaptation and permission expansion. Preserve current passive observers and functioning fallback. If a new concrete, attributable structured source emerges, or a user explicitly requests one bounded consent-safe disposable-mock observation, Manager may scope a **separate** limited R&D experiment; no automatic retry or authentication authorization follows from this decision.
+- Keep the active WR-110 custom-projection research independent and unchanged. No Builder, R&D, Draft Strategy or Auditor downstream task is activated by this disposition. Existing FantasyPros ECR player-value authority and WR-D016 baseline-only model result remain unchanged.
+- Investigate reported source-label/provenance ambiguity only if separately verified and prioritized; do not describe the investigator's source-attribution hypothesis as an independently reproduced production defect.
+
+EVIDENCE:
+- Accepted canonical WR-109 reports `.ai/research/WR109_DRAFT_READINESS_GAP_ASSESSMENT.md` and `.ai/research/WR109_ESPN_DIRECT_LIVE_VALIDATION_PLAN.md`, merged through PR #314 at `feb6e35898608a1fc656a3d6712d984a43b8ae59`, and WR-D003's existing layered-source contract.
+- Existing `extensions/espn-companion/LIVE_VALIDATION.md`: 2026-08-24 Board/Pick History 192/192 and 16 Mine in a real mock using Companion v0.8.7; 2026-09-06 224 captured / 223 applied duplicate issue in v0.9.13, followed by v0.9.14 deterministic repair **not re-proven in a later real mock**; 2026-09-07 288/288 DOM numbered slots with zero observed structured WebSocket/worker candidates, empty REST then 404 and an off-board application case. These format- and version-specific observations do not establish independently completed structured Direct sync.
+- The user's separately supplied Work-mode feasibility report (2026-09-19) examined documented APIs, REST/mock identity, frame/worker/React hooks and provenance; reported `DIRECT_NOT_SUPPORTED_BY_AVAILABLE_EVIDENCE`, 110 focused credential-free tests passed, no live authenticated mock, and a broad test suite **stopped before completion**. The report was supplied through chat and is not a versioned repository audit artifact; individual novel technical hypotheses and reported local tests were **not independently reproduced in this Manager documentation review**. Do not promote them to canonical runtime proof.
+- Repository's accepted WR-109 and WR-D003 evidence supports this narrower production reliability posture without changing software behavior.
+
+ALTERNATIVES REJECTED: market Direct as independently live-validated; declare all possible ESPN structured integrations impossible; disable safe passive observers or replace WR-D003 with DOM-only source authority; authorize broad new browser permissions or account capture; assign speculative Builder work or block WR-110 on this question.
+
+REVISIT CONDITION: a new documented/supported ESPN completed-pick API contract, a reproducible attributable source emitting a correctly numbered and identity-resolved real pick, or a new explicit Manager-approved consent-safe disposable-mock protocol with sufficient source-before-DOM per-pick evidence. Any new production source adapter, telemetry correction, source-priority change, extension permission change or other implementation requires its own bounded task and applicable independent audit before deployment.

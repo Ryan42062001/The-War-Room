@@ -525,3 +525,12 @@ Following WR-109 closure, Manager assigned an **independent research-only** next
 WR-101/102 are CLOSED, with valid validation PASS (2022–2023), confirmation FAIL (2024–2025), `CONFIRMATION_FAILED`, and `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`. The frozen RB confirmation regression `0.107573057046809` exceeded cap `0.05`. The task may interpret **already accepted aggregate reports** for future prospective design only; no new scoring, outcome reopening, 2026 regular-season inspection, provider acquisition, new authority, model/threshold selection on exposed outcomes or protected execution.
 
 Existing FantasyPros ECR ranking/value and ESPN timing authority remain unchanged. R&D writes only its two WR-110 future-model evidence/protocol reports and role handoff; later source intake, protocol audit, Draft Strategy and Builder work require separate Manager authorizations and applicable independent audit.
+
+
+## ESPN Direct feasibility Manager disposition — 2026-09-19
+
+Following WR-109, the user supplied a separate Work-mode investigation report. Its bounded conclusion is `DIRECT_NOT_SUPPORTED_BY_AVAILABLE_EVIDENCE`; independent full-mock Direct sync remains `LIVE_DIRECT_UNVERIFIED`. The investigation reports 110 targeted credential-free tests passing and a broad full suite stopped before completion; these are **investigator-reported** results without independent Manager test-log reproduction. No live authenticated mock or repo-writing PR was produced by the investigation.
+
+Manager rechecked the accepted WR-D003 layered-source design and `extensions/espn-companion/LIVE_VALIDATION.md`. Prior live 192/192 fallback completion is supported; 224/223 and 288/288 observations reveal version-scoped application/identity gaps and do not establish independently sufficient structured picks. Manager records WR-D018: production-facing reliability posture is **Board/Pick History fallback-first, opportunistic passive structured acceleration**. This does not change production code or the WR-D003 source-resolution algorithm; Direct is unverified, not universally impossible.
+
+The broad Direct feasibility lane is closed/deferred. A concrete new source lead or voluntary explicit user consent for one bounded disposable mock is required before separate authorization; no new account work, Builder fix, extension permission change or production implementation is currently assigned. WR-110 remains the sole active R&D assignment, independent of ESPN sync.
