@@ -1,34 +1,36 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-20T02:25:00Z",
+  "updated_at_utc": "2026-09-20T03:00:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
   "tasks": [
     {
-      "task_id": "WR-113",
+      "task_id": "WR-114",
       "owner": "R&D",
-      "worker_slot": "rnd-wr113-rights-clarification-readiness",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-113.md",
+      "worker_slot": "rnd-wr114-rights-adjudication-readiness",
+      "status": "BLOCKED",
+      "task_file": ".ai/manager/WR-114.md",
       "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": "7129608c5ea86044552dcfba4f5c6792730be563",
+      "assignment_main_sha": "d352a92f254bb7247892be7a32b939781792af50",
       "worker_checkpoint_sha": null,
-      "branch": "wr-113-rights-clarification-protocol-readiness",
+      "branch": null,
       "pr": null,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": false,
-      "blocker_type": "NONE",
-      "user_action_required": false,
+      "blocker_type": "USER_ACTION",
+      "user_action_required": true,
       "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on": [
+        "Ryan / Manager must first document project intended use, permitted publication/distribution, raw/derived retention horizon, and independent-auditor access requirements and approve them as an owner declaration. No R&D execution, worker branch, or provider contact before subsequent Manager unblock."
+      ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
-        ".ai/research/WR113_RIGHTS_CLARIFICATION_CUSTODY_READINESS.md",
-        ".ai/research/WR113_PRE2027_PROTOCOL_POWER_READINESS.md",
+        ".ai/research/WR114_RIGHTS_EVIDENCE_ADJUDICATION.md",
+        ".ai/research/WR114_PRE2027_READINESS_SCOPE.md",
         ".ai/research/HANDOFF.md"
       ],
       "forbidden_path_prefixes": [
@@ -43,7 +45,7 @@
         "extensions/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "R&D documentary rights/custody and pre-2027 protocol/power readiness paper-only three-file PR and exact-head Governance CI -> Manager review. No provider contact, data acquisition, source admission, executable protocol, independent audit or scoring."
+      "next_gate": "Ryan's owner declaration -> Manager documents and accepts intent/retention/auditor scope in canonical state -> separately unblocks WR-114 and bootstraps R&D branch -> public-documentary evidence adjudication/pre-2027 scoping only; no provider contact or data access."
     }
   ]
 }

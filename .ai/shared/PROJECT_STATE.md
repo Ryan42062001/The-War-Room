@@ -1,7 +1,7 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-19 — WR-112 research accepted; WR-113 paper-only gate assigned
+Last Manager gate: 2026-09-19 — WR-113 research accepted; WR-114 blocked on owner declaration
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
@@ -570,3 +570,10 @@ WR-112 alone is authorized to determine, on public documentation and synthetic/p
 Manager independently reviewed WR-112 research-only PR #323 exact head `b635d8005e7a1fc3c5422f5ea8786da56eae04d6`, three authorized research/handoff files, and exact-head War Room CI `35483333620` SUCCESS (Governance passed; product skipped). Canonical research merge: `7129608c5ea86044552dcfba4f5c6792730be563`. WR-112 CLOSED. Its reports identify public source terms, future asset/upstream ML/retention/auditor-rights gaps, conditional 2027/2028 cutoff chronology and symbolic all-position statistical requirements. No actual project entitlement, future source, real cohort/power, executable protocol, forecast lock or evaluation was accepted; `INSUFFICIENT_NEW_CONFIRMATION_DATA` remains.
 
 WR-D020 authorizes only WR-113, a distinct no-data-acquisition documentary rights/custody clarification and pre-2027 protocol/power-readiness gate. Named accountable rights/custody decision owner: **Ryan, the War Room project owner acting through Manager / Architect**. R&D owns paper evidence, not licenses/credentials/operational custody. User's intended private/public/commercial use remains UNKNOWN until explicit approval. WR-113 authorizes no external provider contact, asset/API download, accounts/terms, source admission, actual player data or 2026 outcomes, real power estimation, protocol freeze, independent audit activation, scoring, downstream Strategy/Builder/Work Helper, ranking change or Phase 6. Source intake, executable protocol, independent source/protocol/result audits and protected scoring each require later separately numbered authority.
+
+
+## WR-113 accepted / WR-114 owner-declaration-blocked rights adjudication (2026-09-19)
+
+Manager independently reviewed WR-113 PR #325 exact head `af35bf0b59f733c7c31473a6a24006467e445834`, exactly three authorized research/handoff paths, and exact-head CI `35483971036` SUCCESS (classify/Governance; product skipped). Canonical research merge: `d352a92f254bb7247892be7a32b939781792af50`. WR-113 CLOSED and removed from active-only registry. Its source-rights and kickoff-relative paper reports establish no new provider entitlement, actual source/cohort/power, custody, executable protocol, model performance or authority to score; `RIGHTS_UNVERIFIED / INSUFFICIENT_NEW_CONFIRMATION_DATA` remains. WR-D001/D016/D019/D020 preserved.
+
+WR-D021 authorizes distinct WR-114 as **BLOCKED / USER_ACTION**, not an active R&D worker. Ryan, accountable project rights/custody decision owner, must first document intended private/public/commercial use and future outputs, raw/derived retention purpose/horizon and independent-auditor access/recipient requirements. This owner declaration is NOT assumed from GitHub/research; Manager must capture and approve the actual supplied choices, reconcile a new task/registry ASSIGNED transition and create the R&D branch only then. No operational custodian is appointed and no provider contact, grant, source intake, data/2026 outcome, real-player power or numerical model protocol, independent audit, fitting or scoring is authorized. The later R&D report will adjudicate existing documentary evidence against owner-defined uses rather than repeat generic rights reviews. Each real provider clarification, source admission, operational custodian, executable protocol, audit and scoring remains a future separately approved gate.
