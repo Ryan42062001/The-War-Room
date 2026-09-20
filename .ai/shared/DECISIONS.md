@@ -381,3 +381,24 @@ DECISION:
 RATIONALE: WR-113 defines the questions, but the rights implications cannot be adjudicated meaningfully without the actual intended project use, reproducibility horizon and independent auditor access requirements. Owner-first blocking prevents a fourth circular abstract provider-research task and avoids treating ownership as provider permission. All temporal confirmations remain conditional, with 2027 preseason prediction lock strictly before first included target-year game; no retrospective 2026 or known 2018–2025 outcome relabeling.
 EVIDENCE: WR-113 research reports and handoff in PR #325; exact-head CI `35483971036`; WR-D009/010/016/019/020. No separate user owner declaration has been supplied or accepted in this transition.
 REVISIT CONDITION: Ryan explicitly supplies the owner declaration above and Manager integrates and verifies its authoritative scope. If it remains unavailable, WR-114 stays blocked; no provider/account/data/model/scoring work follows.
+
+
+---
+
+## DECISION WR-D022
+
+DATE: 2026-09-19
+TASK: Ryan's WR-114 owner declaration / rights-adjudication worker unblock
+STATUS: ACTIVE — OWNER USE DECLARED; RETENTION/AUDITOR ACCESS NOT YET CHOSEN
+OWNER DECLARATION (Ryan, War Room project owner / accountable rights-custody decision owner; explicit in current Manager conversation):
+- Intended use: **private/personal research and fantasy-draft use**. Any future validated custom projection is intended only to rank players **inside Ryan's private War Room**. This expresses a future intended purpose, NOT authorization for new source/model, production ranking, recommendation policy or distribution. WR-D001 FantasyPros ECR remains current production value authority.
+- Published outputs: **nothing will be published**; do not plan public raw records, player-level forecasts, aggregate results, source-derived datasets or public model/other-user distribution. Do not confuse the existence of repository documentation or a fantasy-draft application with permission to publish data/model results.
+- Raw and derived, prediction, target and audit-evidence retention: **UNDECIDED**. Ryan requests a paper assessment of legally permitted retention options, deletion obligations, and reproducibility/security tradeoffs **before approving a duration, storage implementation or operator**.
+- Independent Auditor access: **UNDECIDED**. Ryan requests assessment of the **minimum lawful independent-auditor reference/evidence access and reproducibility requirements before approving a recipient, scope or actual access**.
+- Additional constraints: **none specified**. No provider contact, source acquisition, operational custodian appointment, contract acceptance, executable protocol, independent audit or scoring is authorized by the declaration.
+MANAGER DECISION:
+- Accept this declaration as authoritative **only for WR-114 documentary rights adjudication and readiness scoping**. Private use/no publication is sufficiently specified to prevent repeated generic provider-survey work. The explicitly undecided retention and independent Auditor access are the subject of WR-114's options assessment, not reasons to keep R&D blocked or approvals to access data.
+- Unblock sole task WR-114 from `BLOCKED / USER_ACTION` to `ASSIGNED / NONE` using a distinct exact-main Manager control-plane transition and bootstrap branch `wr-114-rights-evidence-adjudication-pre2027-readiness` only from its verified post-merge canonical-main SHA. No other worker or workflow authority is activated. R&D reports supported versus unknown legal source-use rights, minimally required legal retention/auditor options, and purely symbolic 2027/2028 readiness. No model/source actual execution.
+- Ryan / Manager retains all **future** decisions regarding a concrete lawful retention period, auditor recipient and controls, operational custodian and provider outreach. Unresolved project-specific asset/upstream ownership, ML, derivative, retained evidence and auditor access stays `RIGHTS_UNVERIFIED`; `INSUFFICIENT_NEW_CONFIRMATION_DATA` and WR-D016 historical failed confirmation remain.
+EVIDENCE: Ryan's explicit WR-114 owner-declaration message in current Manager conversation; accepted WR-111/112/113 research reports; WR-D001/016/019/020/021; exact canonical WR-114 blocked registry at `e10328c18da8237b592c7d1ebf6bbadaa7bb64da`.
+FUTURE GATES: Explicit separate Ryan/Manager approval for any provider clarification, source/data intake, operational custodian/storage, independently audited executable protocol, independent source/protocol/result audits, scoring and possible future private ranking change. WR-114 confers none.

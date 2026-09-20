@@ -1,7 +1,7 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — WR-114 documentary rights adjudication blocked on Ryan owner declaration; no source/scoring authority
-Current-state snapshot: 2026-09-19 after WR-113 research acceptance / WR-114 Manager blocked-task authorization; refresh against `.ai/shared/ACTIVE_TASKS.json` before routing or acting.
+Status: ACTIVE DEVELOPMENT — WR-114 owner-declaration unblocked for documentary R&D; no source/scoring authority
+Current-state snapshot: 2026-09-19 after Ryan owner declaration and WR-114 Manager unblocking; refresh against `.ai/shared/ACTIVE_TASKS.json` before routing or acting.
 Owner: Manager / Architect
 Workflow: V3.5 — CANONICAL
 
@@ -11,7 +11,7 @@ Workflow: V3.5 — CANONICAL
 
 | Priority | Workstream | Current state | Required next gate / boundary |
 | --- | --- | --- | --- |
-| 0 | **WR-114 — rights-evidence adjudication + pre-2027 readiness scoping** | **BLOCKED / USER_ACTION — no R&D execution or worker branch yet**; Ryan/Manager is accountable rights/custody decision owner. | Ryan first documents intended use/publication, raw+derived retention horizon and independent-auditor access requirements; Manager accepts owner declaration and separately unblocks R&D. WR-114 is paper-only thereafter. No operational custodian, provider contact, source intake, executable protocol/audit or scoring authorization. |
+| 0 | **WR-114 — rights-evidence adjudication + pre-2027 readiness scoping** | **ASSIGNED — R&D documentary/paper-only;** branch `wr-114-rights-evidence-adjudication-pre2027-readiness`, `STANDARD_CHAT_HIGH`; Ryan/Manager remains accountable rights/custody decision owner. | WR-D022 records private/personal use, private in-app player ranking intent, and no published outputs. Assess legally permitted retention/deletion tradeoffs and minimum lawful independent-auditor access **as undecided options**, adjudicate source evidence against private intended use, and scope symbolic pre-2027 readiness. No operational custodian, provider contact, source intake, protocol freeze, audit, scoring or production-ranking authorization. |
 | 1 | **WR-113 / WR-112 / WR-111 / WR-110 — prior prospective research** | **CLOSED — research accepted only**; WR-113 PR #325 exact head `af35bf0b59f733c7c31473a6a24006467e445834` integrated as `d352a92f254bb7247892be7a32b939781792af50`. | `RIGHTS_UNVERIFIED / INSUFFICIENT_NEW_CONFIRMATION_DATA`; no new future source or protocol, and no automatic 2029 season. |
 | 2 | **WR-109 — draft-cycle readiness and ESPN Direct evidence assessment** | **CLOSED — evidence accepted only**, PR #314 exact head `03cc8b6366f666bf7fe3bbe168a031886a2b7f95`; canonical merge `feb6e35898608a1fc656a3d6712d984a43b8ae59`. | The two research reports and consent-safe future mock plan are accepted; `LIVE_DIRECT_UNVERIFIED` remains. Separate approval is required for live testing or data/source work. |
 | 3 | **ESPN sync reliability: fallback-first, opportunistic structured acceleration** | **ACCEPTED POSTURE / NO NEW TASK** — WR-D018 clarifies WR-D003: Board/Pick History is the live-proven complete source class in observed mocks; independent structured Direct remains `LIVE_DIRECT_UNVERIFIED` / `DIRECT_NOT_SUPPORTED_BY_AVAILABLE_EVIDENCE`, not proven impossible. | Preserve current layered code and fallback; no open-ended Direct pursuit. Revisit only upon newly attributable structured-source evidence or a separately authorized, consent-safe disposable mock with user readiness. Do not request credentials or treat synthetic hooks/tests as live Direct proof. |
@@ -28,7 +28,7 @@ Workflow: V3.5 — CANONICAL
 
 ### Routing rule
 
-WR-114 is the **only active task in the registry, status BLOCKED / USER_ACTION; no employee is executable yet**. Proposed work above is planning, not permission to run tests on the user's ESPN account, alter data/production, create downstream worker assignments, or expand infrastructure. Manager must refresh the registry and live PR/CI state before any transition; WR-110, WR-111, WR-112 and WR-113 are closed after research-only integration. Previous task branches grant no further write or scoring authority. The external ESPN Direct Work investigation concluded without repository writes. WR-D018 records the bounded feasibility disposition; it grants no new task, browser permission, account access, or implementation authority.
+WR-114 is the **only assigned task in the active-only registry; R&D may execute paper-only evidence adjudication on its dedicated assigned branch once Manager activation is merged and CI-verified**. Proposed work above is planning, not permission to run tests on the user's ESPN account, alter data/production, create downstream worker assignments, or expand infrastructure. Manager must refresh the registry and live PR/CI state before any transition; WR-110, WR-111, WR-112 and WR-113 are closed after research-only integration. Previous task branches grant no further write or scoring authority. The external ESPN Direct Work investigation concluded without repository writes. WR-D018 records the bounded feasibility disposition; it grants no new task, browser permission, account access, or implementation authority.
 
 ---
 
@@ -440,3 +440,8 @@ Manager accepted research-only WR-112 PR #323 exact head `b635d8005e7a1fc3c5422f
 ## WR-113 accepted / WR-114 owner-declaration gate (2026-09-19)
 
 WR-113 paper-only PR #325 exact head `af35bf0b59f733c7c31473a6a24006467e445834`, three-file diff, exact-head CI `35483971036` SUCCESS, accepted and merged into canonical main `d352a92f254bb7247892be7a32b939781792af50`. No future asset/license/operational custody/protocol/power/model scored. WR-D021 prepares WR-114 as **BLOCKED / USER_ACTION** until Ryan supplies and approves a specific use, publication, raw/derived retention and independent-auditor access declaration. Only after Manager canonicalizes that owner statement, unblocks and bootstraps a fresh R&D branch may narrow paper-only rights-evidence adjudication and cutoff scoping proceed. No provider outreach, operational custodian appointment, actual source intake, independent protocol/security/result audit or scoring is authorized.
+
+
+## Ryan owner declaration accepted / WR-114 paper-only R&D unblocked (2026-09-19)
+
+WR-D022 records **private/personal research and draft use, no published outputs, and desired future private in-War-Room player ranking**. This future purpose does NOT authorize a model/ranking production change or supersede current FantasyPros ECR value authority. Ryan explicitly leaves **retention duration/deletion duties and independent Auditor access undecided** and requests WR-114 to assess minimum lawful alternatives and tradeoffs first. These are research questions rather than continued user-action blockers. WR-114 is assigned solely to bounded existing-evidence rights adjudication and symbolic pre-2027 readiness scoping. Actual provider clarification/contact, source/data intake, licensed retention and storage deployment, operational custodian, independent source/protocol/result audit, executable protocol, training/scoring and any future private ranking update require separate owner/Manager approvals; disposition stays `RIGHTS_UNVERIFIED / INSUFFICIENT_NEW_CONFIRMATION_DATA`.

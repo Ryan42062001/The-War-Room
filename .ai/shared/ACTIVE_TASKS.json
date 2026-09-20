@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-20T03:00:00Z",
+  "updated_at_utc": "2026-09-20T02:44:21.277Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -9,23 +9,21 @@
       "task_id": "WR-114",
       "owner": "R&D",
       "worker_slot": "rnd-wr114-rights-adjudication-readiness",
-      "status": "BLOCKED",
+      "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-114.md",
       "role_handoff": ".ai/research/HANDOFF.md",
       "assignment_main_sha": "d352a92f254bb7247892be7a32b939781792af50",
       "worker_checkpoint_sha": null,
-      "branch": null,
+      "branch": "wr-114-rights-evidence-adjudication-pre2027-readiness",
       "pr": null,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": false,
-      "blocker_type": "USER_ACTION",
-      "user_action_required": true,
+      "blocker_type": "NONE",
+      "user_action_required": false,
       "blocked_on_tasks": [],
-      "blocked_on": [
-        "Ryan / Manager must first document project intended use, permitted publication/distribution, raw/derived retention horizon, and independent-auditor access requirements and approve them as an owner declaration. No R&D execution, worker branch, or provider contact before subsequent Manager unblock."
-      ],
+      "blocked_on": [],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
@@ -45,7 +43,7 @@
         "extensions/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Ryan's owner declaration -> Manager documents and accepts intent/retention/auditor scope in canonical state -> separately unblocks WR-114 and bootstraps R&D branch -> public-documentary evidence adjudication/pre-2027 scoping only; no provider contact or data access."
+      "next_gate": "Ryan's actual owner declaration accepted in WR-D022: private/personal rank-use only, no published outputs, retention and Auditor access undecided for R&D options assessment. R&D documentary no-data rights-evidence adjudication and pre-2027 readiness scope -> exact 3-file PR and exact-head Governance CI -> Manager; no source intake, data, operational custody, provider contact, protocol or scoring."
     }
   ]
 }
