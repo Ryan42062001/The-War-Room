@@ -546,9 +546,8 @@ const wr122Presentation = await page.evaluate(() => {
     const displayedExplanation = turn ? {...explanation, type:'TURN_PACKAGE',
       // This engine-style explanatory sentence is intentionally unqualified.
       // Only the display may correct it; player/action/score internals stay put.
-      reasons:[explanation.reasons[0],
-        'Fixture target is guaranteed to remain available at your next pick because no opponent selects between the two picks.',
-        ...explanation.reasons.slice(1)]} : explanation;
+      reasons:['Fixture target is guaranteed to remain available at your next pick because no opponent selects between the two picks.',
+        ...explanation.reasons]} : explanation;
     const capture = () => ({
       player:recommendation.player, action:recommendation.recommendation,
       confidenceScore:recommendation.confidenceScore, score:player.finalScore,
