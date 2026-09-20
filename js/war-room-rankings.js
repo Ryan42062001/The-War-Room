@@ -1664,26 +1664,53 @@ function getCompactRecommendationReason(explanation, marketKnown, adjacentOwnTur
     : 'ECR value and roster fit; market timing is unknown';
 }
 
-// Display-only: do not infer an adjacent own turn from a missing next-pick field
-// or the engine's neutral/zero-opponent fallback.
-function hasVerifiedAdjacentOwnTurn(context) {
-  if (!context) return false;
-  var teams = Number(context.teams);
-  var slot = Number(context.draftSlot);
-  var current = Number(context.currentPick);
-  var rawNext = context.calculatedNextPick != null ? context.calculatedNextPick : context.nextPick;
-  var next = Number(rawNext);
-  var total = Number(context.totalPicks) || teams * (Number(context.rounds) || 16);
-  if (!Number.isInteger(teams) || teams < 2 || !Number.isInteger(slot) ||
-      slot < 1 || slot > teams || !Number.isInteger(current) ||
-      !Number.isInteger(next) || current < 1 || next !== current + 1 ||
-      next > total || current >= total) return false;
+// Presentation-only evidence: never select a favorable next-pick field when
+// another supplied field contradicts it. This does not calculate or repair turns.
+function getRecommendationDisplayTurnEvidence(context) {
+  var unverified = {adjacentOwnTurn:false, validNextPick:false, nextPick:null, currentPick:null};
+  if (!context || typeof context !== 'object') return unverified;
+  function integerInput(raw, allowZero) {
+    if (typeof raw !== 'number' && (typeof raw !== 'string' ||
+        !/^(?:0|[1-9]\\d*)$/.test(raw))) return null;
+    var value = Number(raw);
+    return Number.isSafeInteger(value) && value >= (allowZero ? 0 : 1) ? value : null;
+  }
+  var teams = integerInput(context.teams, false);
+  var rounds = integerInput(context.rounds, false);
+  var slot = integerInput(context.draftSlot, false);
+  var current = integerInput(context.currentPick, false);
+  var total = integerInput(context.totalPicks, false);
+  // A supplied total must agree with the configured team and round bounds.
+  if (teams === null || teams < 2 || rounds === null || slot === null ||
+      slot > teams || current === null || total === null ||
+      !Number.isSafeInteger(teams * rounds) || total !== teams * rounds ||
+      current > total) return unverified;
+
+  var hasCalculated = context.calculatedNextPick != null;
+  var hasNext = context.nextPick != null;
+  if (!hasCalculated && !hasNext) return unverified;
+  var calculated = hasCalculated ? integerInput(context.calculatedNextPick, false) : null;
+  var supplied = hasNext ? integerInput(context.nextPick, false) : null;
+  if ((hasCalculated && calculated === null) || (hasNext && supplied === null) ||
+      (hasCalculated && hasNext && calculated !== supplied)) return unverified;
+  var next = hasCalculated ? calculated : supplied;
+  if (next <= current || next > total) return unverified;
   function owner(pick) {
     var round = Math.ceil(pick / teams);
     var index = (pick - 1) % teams;
     return round % 2 ? index + 1 : teams - index;
   }
-  return owner(current) === slot && owner(next) === slot;
+  if (owner(current) !== slot || owner(next) !== slot) return unverified;
+  if (context.calculatedPicksUntilNext != null) {
+    var intervening = integerInput(context.calculatedPicksUntilNext, true);
+    if (intervening === null || intervening !== next - current - 1) return unverified;
+  }
+  return {adjacentOwnTurn:next === current + 1, validNextPick:true,
+    nextPick:next, currentPick:current};
+}
+
+function hasVerifiedAdjacentOwnTurn(context) {
+  return getRecommendationDisplayTurnEvidence(context).adjacentOwnTurn;
 }
 
 function getCompactMarketPresentation(player, context) {
@@ -1722,14 +1749,7 @@ function buildCompactFactorHtml(label, value) {
 function buildMarketTimingDetailsHtml(player, context) {
   var presentation = getCompactMarketPresentation(player, context);
   var market = presentation.market;
-  var rawNext = context && (context.calculatedNextPick != null ? context.calculatedNextPick : context.nextPick);
-  var nextPick = Number(rawNext);
-  var currentPick = Number(context && context.currentPick);
-  var totalPicks = Number(context && context.totalPicks) ||
-    Number(context && context.teams) * Number(context && context.rounds || 16);
-  var validNextPick = Number.isInteger(currentPick) && currentPick > 0 &&
-    Number.isInteger(nextPick) && nextPick > currentPick &&
-    Number.isFinite(totalPicks) && nextPick <= totalPicks;
+  var turnEvidence = getRecommendationDisplayTurnEvidence(context);
   var parts = [];
   if (market.espnRank != null) parts.push('ESPN board <b>#' + market.espnRank.toFixed(0) + '</b>');
   if (market.espnAdp != null) parts.push('ESPN ADP <b>' + market.espnAdp.toFixed(1) + '</b>');
@@ -1737,7 +1757,8 @@ function buildMarketTimingDetailsHtml(player, context) {
   if (market.espnRank != null && market.espnAdp != null) parts.push('weights <b>' + Math.round(market.boardWeight * 100) + '/' + Math.round(market.adpWeight * 100) + '</b>');
   if (market.autoOpponentPicks) parts.push('confirmed Auto picks before next turn <b>' + market.autoOpponentPicks + '/' + market.totalOpponentPicks + '</b>');
   if (market.marketRank != null) parts.push('estimated market pick <b>' + market.marketRank.toFixed(1) + '</b>');
-  if (validNextPick) parts.push('next pick <b>#' + nextPick + '</b> (' + (nextPick - currentPick) + ' away)');
+  if (turnEvidence.validNextPick) parts.push('next pick <b>#' + turnEvidence.nextPick + '</b> (' + (turnEvidence.nextPick - turnEvidence.currentPick) + ' away)');
+  else parts.push('next pick unverified — incomplete or conflicting turn context');
   return '<details class="recommendation-score-details recommendation-market-details"><summary>Market timing basis</summary><div>' +
     escapeSummaryHtml(presentation.basis) + ' ' +
     (parts.length ? parts.join(' · ') : 'No ESPN or FantasyPros market data is available for this player.') +
@@ -1757,10 +1778,10 @@ function renderCompactRecommendationCard(element, recommendation, explanation, p
   var scoreGap = alternative ? Number(primary.finalScore || 0) - Number(alternative.finalScore || 0) : 0;
   var team = primary.team || (primary.row && primary.row.getAttribute('data-team')) || '';
   var isTurn = explanation.type === 'TURN_PACKAGE' && recommendation.turnPackageActive;
-  var summaryTitle = isTurn
+  var summaryTitle = isTurn && marketPresentation.adjacentOwnTurn
     ? escapeSummaryHtml(recommendation.turnRecommendedNow || primary.name) + ' + ' + escapeSummaryHtml(recommendation.turnTargetNext || 'Best available')
     : escapeSummaryHtml(primary.name);
-  var summaryPositions = isTurn
+  var summaryPositions = isTurn && marketPresentation.adjacentOwnTurn
     ? [recommendation.turnPick1Position, recommendation.turnPick2Position].filter(Boolean).join(' + ')
     : primary.position + (team ? ' · ' + team : '');
   var summaryReason = isTurn && marketPresentation.adjacentOwnTurn
@@ -1771,7 +1792,7 @@ function renderCompactRecommendationCard(element, recommendation, explanation, p
   if (isTurn) {
     details += '<div class="recommendation-turn-grid"><div><small>1 · DRAFT NOW</small><b>' +
       escapeSummaryHtml(recommendation.turnRecommendedNow || primary.name) + '</b><span>' + escapeSummaryHtml(recommendation.turnPick1Position || '') + '</span></div>' +
-      '<div><small>2 · TARGET NEXT</small><b>' + escapeSummaryHtml(recommendation.turnTargetNext || 'Best available') + '</b><span>' +
+      '<div><small>' + (marketPresentation.adjacentOwnTurn ? '2 · TARGET NEXT (ELIGIBILITY CONDITIONAL)' : '2 · CONDITIONAL TARGET (NEXT TURN UNVERIFIED)') + '</small><b>' + escapeSummaryHtml(recommendation.turnTargetNext || 'Best available') + '</b><span>' +
       escapeSummaryHtml(recommendation.turnPick2Position || '') + '</span></div></div>';
   }
   if (reasons.length) {
@@ -1788,7 +1809,7 @@ function renderCompactRecommendationCard(element, recommendation, explanation, p
     details += '<div class="recommendation-alternative"><span>Best alternative</span><b>' + escapeSummaryHtml(alternative.name) +
       ' · ' + escapeSummaryHtml(alternative.position) + '</b><small>' + (scoreGap >= 0 ? '+' : '') + scoreGap.toFixed(1) + ' score gap</small></div>';
   }
-  if (explanation.nextAction) details += '<div class="recommendation-next"><span>Next</span>' + escapeSummaryHtml(explanation.nextAction) + '</div>';
+  if (explanation.nextAction) details += '<div class="recommendation-next"><span>Next</span>' + escapeSummaryHtml(getTruthfulTurnDisplayReason(explanation.nextAction, marketPresentation.adjacentOwnTurn)) + '</div>';
   details += buildMarketTimingDetailsHtml(primary, state.context);
   details += '<details class="recommendation-score-details"><summary>Scoring details</summary><div>Base value <b>' + Number(primary.baseScore || 0).toFixed(1) +
     '</b> · Strategy impact <b>' + (Number(primary.cappedStrategyAdjustment || 0) >= 0 ? '+' : '') + Number(primary.cappedStrategyAdjustment || 0).toFixed(1) +
