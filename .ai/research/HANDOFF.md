@@ -1,51 +1,50 @@
 # R&D Handoff
 
-STATUS: READY FOR MANAGER — WR-111 FUTURE RIGHTS / INDEPENDENT WINDOW FEASIBILITY COMPLETE
-TASK: WR-111 — Future Data Rights + Independent Evaluation Feasibility
-ROLE: Research & Development
-WORKFLOW / EXECUTION: V3.5 / STANDARD_CHAT_HIGH / FAST_REFRESH
-BRANCH: `wr-111-future-data-rights-evaluation-feasibility`
-STARTING MAIN AND BRANCH: `999ef157ec62e2d816be9fa4ef273e6def3dbce5`
-MANAGER ACTIVATION: PR #320 MERGED; canonical War Room CI `35480609273` SUCCESS
-PR: #321 — OPEN / UNMERGED
-FINAL HEAD: live PR #321 head containing this final handoff; R&D stops writing after this commit
-DISPOSITION: `INSUFFICIENT_NEW_CONFIRMATION_DATA`
+STATUS: READY FOR MANAGER — WR-112 PAPER-ONLY FEASIBILITY COMPLETE
+TASK: WR-112 — Prospective Source-Rights + Two-Season Protocol Feasibility Gate
+ROLE: Research & Development (R&D)
+WORKFLOW / MODE: V3.5 / STANDARD_CHAT_HIGH / FAST_REFRESH
+STARTING CANONICAL MAIN / ASSIGNED BRANCH: `e422756d4ffe28c7383d066c99784f082e78aa40`
+BRANCH: `wr-112-prospective-rights-protocol-feasibility`
+ACTIVATION: Manager PR #322 MERGED; WR-111 PR #321 accepted and merged.
+PR: #323 — OPEN / UNMERGED; R&D must not merge.
+FINAL HEAD: exact final PR #323 head after this handoff commit; no subsequent R&D writes permitted.
+DISPOSITION: `INSUFFICIENT_NEW_CONFIRMATION_DATA`; prospective 2027 validation / distinct 2028 confirmation is CONDITIONAL ONLY.
 
 ## DONE
 
-1. Independently confirmed canonical main / branch equal `999ef157ec62e2d816be9fa4ef273e6def3dbce5` at task start, only WR-111 active, exact task scope, accepted WR-D001/009/010/016 and WR-110 research. Read only bounded preexisting source-rights/aggregate-result documentation.
-2. Published dated public-page/accepted-repository source-rights inventory for nflverse `stats_player` regular/weekly stats, nflverse metadata/component license hazards, CC BY 4.0 attribution/upstream data ownership, and alternative SportsDataIO contractual/private-use versus Sports Reference/Stathead restrictions. A publicly offered dataset or provider package is **not** an actual War Room future source right, future instance, or permission to store raw bytes/derived outputs for independent audit.
-3. Defined exact future source instance, field-level permitted pre-target features, stable player ID, full PPR / recorded-game target, cohort, missingness, update/correction timestamp, license/derivative use, retention and independent auditor/custody prerequisites. Accepted WR-059 historical 14 source assets **do not admit future seasons**. `players.csv` and `draft_picks.csv` remain excluded.
-4. Classified exposures: 2018–2021 design-exposed; 2022–2025 v2.1 scoring-exposed; 2026 regular-season outcomes **not inspected or used** and, because season has begun, a full-season 2026 preseason prediction cannot be locked retroactively.
-5. Compared conditional (A) single-stage fully predeclared 2027 full-season prospective evaluation; (B) 2027 validation → distinct 2028 temporal confirmation; (C) optional 2027 + 2028–2029 multi-season conservative test when power/generalizability calls for it; (D) separate as-yet-unplayed 2026 weekly/remainder target **different estimand**; rejected historical splits/new-provider copies as independent confirmation. An eventual 2027→2028 protocol could complete **after the 2028 season**, not necessarily require the 2029 season. No future data or outcome set is presently available/rights-cleared/approved or measured.
-6. Recorded prospective prediction-before-target locking and position/cluster sample, missingness, correction, provider-rights, independence and audit gates. Synthetic paper conformance can precede real data but cannot establish independent model quality.
+- Verified starting main and branch exact SHA, one active WR-112 registry lane and exact three-file allowlist; consumed V3.5 role/task, WR-D001/009/010/016/019, accepted WR-110/111 paper research and bounded public official provider/license/schedule documentation as of 2026-09-19.
+- Published public-documentation-only rights decision report: conditional minimal future nflverse `stats_player` regular-season Player Summary Stats source class for prior-Y forecast features and separately released post-Y target labels, distinct per-season/version source instance admission, explicit ML/evaluation, derivative, controlled raw/derived retention, independent Auditor access, attribution/public display if later sought, upstream/component rights, modification/correction, provider license-change/termination and exact user/provider/documentary decision gates. **No project entitlement, new source right or future dataset is proved.**
+- Published symbolic prospective two-season feasibility report: 2027 preseason feature/roster/prediction and separate 2028 preseason locks strictly before the earliest included target-year regular-season game; G0 rights/contract and protocol readiness, G1 exact prior-source as-of version, G2 pre-2027 prediction lock, G3 post-2027 target correction/validation gate, G4 pre-2028 confirmation lock only after 2027 PASS, G5 post-2028 target closure/independent result audit. Failure to meet a pregame lock is irreversible for that preseason full-season estimand.
+- Required future independent statistician/Auditor to predeclare four-position QB/RB/WR/TE effective player-cluster counts, paired relative MAE/noninferiority plus pooled benefit, simultaneous position uncertainty and multiplicity, year-regime sensitivity, missing/zero-game/dropout, target identity/retention and power limitations. Hypothetical formulas/examples are **not actual cohort measurements, chosen numeric gates or pass probabilities**. If one 2028 season cannot support the narrowly claimed temporal inference, a different pre-outcome contract, potentially including 2029+, must be independently justified **before outcome exposure**; 2029 is not automatic.
+- Recorded separately authorized source-free fabricated schema/forecast-lock conformance option; synthetic success can verify mechanics only and cannot establish rights or independent model validity.
 
-## CHANGED / FILES
+## CHANGED / ARTIFACTS
 
 Exactly:
-- `.ai/research/WR111_FUTURE_SOURCE_RIGHTS_FEASIBILITY.md`
-- `.ai/research/WR111_INDEPENDENT_EVALUATION_WINDOW_ASSESSMENT.md`
+- `.ai/research/WR112_SOURCE_RIGHTS_DECISION_GATE.md`
+- `.ai/research/WR112_PROSPECTIVE_PROTOCOL_FEASIBILITY.md`
 - `.ai/research/HANDOFF.md`
 
-No other research, source, generated/protected evidence, registry, task, production, scoring, ranking, Strategy, ESPN, code, tests, runner, workflow or CI configuration file altered.
+No product/source/ranking/code/tests/workflows/runner, `.ai/shared/**`, `.ai/manager/**`, `.ai/research/generated/**`, strategy, protected-model evidence, ESPN Direct or Phase 6 changes.
 
 ## TESTS / CI
 
-Read-only repository/activation/assignment/branch and accepted aggregate-evidence verification. Public official/provider/license **documentation only** read 2026-09-19; no dataset download, user account, credential, provider API or new release asset access. No model fit, score, replay, data/2026 outcome inspection, synthetic code execution, backend/account action, production test or source admission. Verify exact-head War Room Governance/CI for final PR #321 SHA before Manager review; product test may be skipped for docs-only scope.
+Read-only actual GitHub main/branch/registry/task/activation and scoped reports/public-provider-documentation verification. No model fit/train/scoring, user or vendor API/account/credentials, provider asset/data download, protected/raw or 2026 outcome access, synthetic code execution, provider license acceptance, new source/cohort admission, executable protocol/prediction lock, production test or new downstream activation. Verify PR #323 exact final head and exactly three changed-file scope, and exact-head War Room Governance/CI; product tests may legitimately skip on docs-only diff.
 
-## BLOCKERS
+## BLOCKERS / UNVERIFIED
 
-- `INSUFFICIENT_NEW_CONFIRMATION_DATA`: no future rights-cleared per-instance source/cohort/target, consent/contract for all intended training/auditor/derived retention uses, pre-season source availability + immutable prediction lock, or new independent completed 2027/2028 season targets.
-- Future QB/RB/WR/TE stable ID coverage, effective cluster counts, sample power/uncertainty and corrected regular-season full-PPR per-recorded-game target unknown.
-- Shorter one-season versus separate-year confirmatory inference scope/power not chosen or accepted; any shorter future protocol must be newly versioned/frozen/audited **before** 2027 outcome exposure, not modified after validation.
-- Actual future-provider asset license/upstream restrictions, release/version/time and rights to independently reproducible restricted retention **unknown**; public CC BY label and loader's MIT code license not sufficient alone.
+- Future released per-season source-instance rights (including upstream ML/derivative/auditor/custody/publication), project use and licensed raw/derived retention remain UNVERIFIED; historical WR-059 identities are not a blanket future license.
+- No newly accepted as-of prior-2026 player-summary asset for 2027 forecast, no audited runnable candidate/protocol, no independently verified *pre-2027-first-game* prediction lock, no 2027/2028 actual target/cluster/coverage sample and no 2028 target-year confirmation data exist in WR-112.
+- Future provider releases, exact kickoff/correction timestamps, stable IDs/positions, full-PPR recorded-games/missingness and four-position effective cluster power/precision cannot be guaranteed now.
+- WR-D016 failed v2.1 `CONFIRMATION_FAILED / BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE` remains final; 2018–2021 design-exposed, 2022–2025 scoring-exposed, 2026 regular-season outcomes uninspected. Nothing in WR-112 rehabilitates exposed prior seasons or creates a new scoring authority.
 
 ## DECISIONS CONSUMED
 
-WR-D001 retains FantasyPros ECR as live draft-value authority; WR-D009/WR-D010 constrain past source/protocol identities; WR-D016 accepts immutable v2.1 `CONFIRMATION_FAILED / BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE` and prohibits WR-101 rerun/promotion. WR-110 research remains non-executable. No new source/protocol/strategy decision issued here.
+WR-D001 production FantasyPros ECR value vs ESPN market timing; WR-D009/010 historical source/protocol only; WR-D016 v2.1 baseline-only failed confirmation; WR-D019 intended conditional 2027 validation → distinct 2028 temporal confirmation, 2029 not automatically required.
 
 ## NEXT ACTION — MANAGER ONLY
 
-Independently review exact PR #321 final SHA, three-file diff, applicable exact-head Governance CI and source links/dated limitations. Decide the *intended inference claim*: one future season of predeclared standalone evidence **versus** 2027 validation followed by an independently predeclared different-season 2028 confirmation (or a longer protocol if prospective position/power justification requires it). If warranted, separately authorize a bounded **no-data-acquisition, pre-target provider/source-rights + exact cutoff/coverage and statistical-power/protocol-scoping gate**, with provider/user consent handled in the proper new task. No rights grant, model, prediction lock, source ingestion, scoring, future-employee activation, promotion or merge follows automatically.
+Independently inspect PR #323 exact final SHA, exact three-file diff, dated official-source/rights limitations and applicable exact-head Governance CI. Decide whether to accept the conditional two-season paper feasibility and, **if warranted**, authorize a separately numbered **no-data-acquisition rights clarification plus pre-2027 source-as-of/cutoff, four-position power and prospective executable-protocol scoping gate**, naming user/project-intended use and rights/auditor custody owner. The new gate must report missing entitlement/timing/position information before any real source intake. Future source-admission, executable model/protocol freeze and independent protocol audit, protected scoring, result audit, season-total composition or Draft Strategy/Builder remain **separate Manager decisions**, never WR-112 automatic continuations.
 
-DO NOT REPEAT: no protected results/raw stats/2026 regular-season outcomes, private ESPN/other Work-lane work, provider downloads, API/credentials/accounts, model fitting/scoring, source/cohort admission, new one-time authority, v2.1 retuning/replay, production/Strategy/ranking changes, season-total composition, Phase 6, merge or self-audit.
+DO NOT REPEAT: no source/provider data or API/account/credential/term acceptance, retained raw/protected/2026 outcomes, new model fitting or scoring authority, retroactive 2026 preseason lock, v2.1 rerun or post-hoc threshold, production/ranking/ESPN Direct, Phase 6, downstream activation, merge or self-audit.
