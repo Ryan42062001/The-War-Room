@@ -1639,9 +1639,22 @@ function clampRecommendationFactor(value) {
   return Math.max(0, Math.min(100, Number(value) || 0));
 }
 
+function getTruthfulTurnDisplayReason(reason, adjacentOwnTurn) {
+  var text = String(reason || '').replace(/<[^>]*>/g, '');
+  if (/guaranteed to remain available at your next pick because no opponent selects between the two picks/i.test(text)) {
+    return adjacentOwnTurn
+      ? 'No opponent selects between verified adjacent own picks; the next target must still be eligible after the first selection.'
+      : 'Next-target availability is unverified without a valid adjacent own-turn context.';
+  }
+  if (!adjacentOwnTurn && /no opponent (?:picks|selects)|no intervening opponent|back-to-back own turns|guaranteed to remain available/i.test(text)) {
+    return 'Next-target availability is unverified without a valid adjacent own-turn context.';
+  }
+  return text;
+}
+
 function getCompactRecommendationReason(explanation, marketKnown, adjacentOwnTurn) {
   var reasons = explanation && Array.isArray(explanation.reasons) ? explanation.reasons : [];
-  var reason = reasons.length ? String(reasons[0]).replace(/<[^>]*>/g, '').slice(0, 105) : '';
+  var reason = reasons.length ? getTruthfulTurnDisplayReason(reasons[0], adjacentOwnTurn).slice(0, 105) : '';
   // A neutral unknown-market engine value is not a probability or a reason to wait.
   if (/chance|surviv|likely|probab|\d+%|able to wait/i.test(reason)) reason = '';
   if (reason) return reason;
@@ -1763,7 +1776,7 @@ function renderCompactRecommendationCard(element, recommendation, explanation, p
   }
   if (reasons.length) {
     details += '<section class="recommendation-why"><h3>Why this pick</h3><ul>' + reasons.map(function(item) {
-      return '<li>' + escapeSummaryHtml(String(item).replace(/<[^>]*>/g, '')) + '</li>';
+      return '<li>' + escapeSummaryHtml(getTruthfulTurnDisplayReason(item, marketPresentation.adjacentOwnTurn)) + '</li>';
     }).join('') + '</ul></section>';
   }
   details += '<section class="recommendation-factors"><h3>Decision factors · heuristic scores, not probabilities</h3><div class="recommendation-factor-grid">' +
