@@ -3,10 +3,19 @@ import {createRequire} from 'node:module';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import {execFileSync} from 'node:child_process';
 import {waitForWarRoomQuiescence} from './browser-test-helpers.mjs';
 const {chromium} = createRequire(import.meta.url)('playwright');
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(.:)/, '$1')), '..');
+// WR-123-F02: execute BOTH literal standalone syntax commands, not merely the
+// implicit parse of this browser script. The full CI browser job retains logs.
+for (const file of ['js/war-room-rankings.js', 'scripts/test-browser.mjs']) {
+  console.log('WR-122 literal syntax command: node --check ' + file);
+  execFileSync('node', ['--check', file], {cwd:root, stdio:'inherit'});
+  console.log('WR-122 literal syntax PASS: node --check ' + file);
+}
+
 const server = process.env.WAR_ROOM_URL ? null : http.createServer((request, response) => {
   const relative = request.url === '/' ? 'index.html' : request.url.split('?')[0].replace(/^\//, '');
   fs.readFile(path.join(root, relative), (error, data) => { response.statusCode = error ? 404 : 200; response.end(error ? 'not found' : data); });
@@ -536,7 +545,10 @@ const wr122Presentation = await page.evaluate(() => {
   if (!es) throw new Error('No existing ESPN market candidate for WR-122');
   const unknown = {...es, espnRank:null, espnAdp:null, adp:null, realTimeAdp:null, adpRank:null};
   const fallback = {...unknown, adp:85};
-  function render(label, player, context, turn) {
+  function render(label, player, context, turn, turnDisplayOverride) {
+    // Snapshot the requested synthetic turn BEFORE scoring, which may calculate
+    // and overwrite turn fields. Only the display receives test contradictions.
+    const requestedTurn = {...context, ...(turnDisplayOverride || {})};
     const scored = [player].concat(live.scored.filter(item => item.name !== player.name));
     const recommendation = calculateDraftRecommendation(player, scored, context);
     if (!recommendation) throw new Error('Missing actual recommendation for ' + label);
@@ -555,11 +567,9 @@ const wr122Presentation = await page.evaluate(() => {
       order:scored.map(item => item.name), market:getMarketTimingDetails(player, context)
     });
     const before = capture();
-    // Scoring may populate a next-pick default. Recreate the explicitly missing
-    // context AFTER scoring to exercise the display guard, not engine fallback.
-    const displayContext = label === 'invalid next context'
-      ? {...context, calculatedNextPick:null, nextPick:null, calculatedPicksUntilNext:null}
-      : context;
+    // Reapply the requested synthetic turn AFTER scoring; never modify the
+    // recommendation engine or score fields to manufacture a passing guard.
+    const displayContext = {...context, ...requestedTurn};
     const state = {...live, context:displayContext, scored};
     renderCompactRecommendationCard(element, displayedRecommendation, displayedExplanation, player, state);
     const card = element.querySelector('.recommendation-card');
@@ -580,6 +590,35 @@ const wr122Presentation = await page.evaluate(() => {
     fallback:render('FantasyPros fallback', fallback, nonadjacent, false),
     adjacent:render('verified adjacent', es, adjacent, true),
     invalid:render('invalid next context', es, invalid, true),
+    // WR-123-F01 concrete independent negative control: real rendered summary,
+    // reasons, market basis and next-pick detail must ALL reject contradictory
+    // context despite an individually legal 10/11 snake pair.
+    contradictoryNext:render('auditor contradictory next', es, adjacent, true,
+      {teams:10, draftSlot:10, currentPick:10, calculatedNextPick:11,
+       nextPick:20, calculatedPicksUntilNext:9, rounds:16, totalPicks:160}),
+    contradictoryCount:render('contradictory intervening count', es, adjacent, true,
+      {calculatedNextPick:11, nextPick:11, calculatedPicksUntilNext:9}),
+    oneCalculated:render('one calculated next source', es, adjacent, true, {nextPick:null}),
+    oneSupplied:render('one supplied next source', es, adjacent, true, {calculatedNextPick:null}),
+    missingBoth:render('both next sources absent', es, adjacent, true,
+      {calculatedNextPick:null, nextPick:null, calculatedPicksUntilNext:null}),
+    wrongOwner:render('wrong own-turn slot', es, adjacent, true, {draftSlot:9}),
+    wrongNextOwner:render('wrong next-pick ownership', es, adjacent, true, {nextPick:12, calculatedNextPick:12, calculatedPicksUntilNext:1}),
+    zeroNext:render('zero next pick', es, adjacent, true, {calculatedNextPick:0, nextPick:0}),
+    pastNext:render('past next pick', es, adjacent, true, {calculatedNextPick:9, nextPick:9}),
+    nonintegerNext:render('noninteger next pick', es, adjacent, true, {calculatedNextPick:11.5, nextPick:11.5}),
+    outOfRangeNext:render('out-of-range next pick', es, adjacent, true, {calculatedNextPick:161, nextPick:161}),
+    invalidCount:render('noninteger intervening count', es, adjacent, true, {calculatedPicksUntilNext:0.5}),
+    inconsistentTotal:render('inconsistent team-round total', es, adjacent, true, {totalPicks:159}),
+    invalidRounds:render('noninteger draft rounds', es, adjacent, true, {rounds:16.5}),
+    invalidTeams:render('noninteger teams', es, adjacent, true, {teams:10.5}),
+    invalidSlot:render('noninteger draft slot', es, adjacent, true, {draftSlot:10.5}),
+    terminal:render('terminal draft boundary', es, adjacent, true,
+      {currentPick:160, calculatedNextPick:161, nextPick:161, calculatedPicksUntilNext:0}),
+    oneRoundTerminal:render('single-round terminal boundary', es, adjacent, true,
+      {rounds:1, totalPicks:10, currentPick:10, calculatedNextPick:11, nextPick:11, calculatedPicksUntilNext:0}),
+    lastRoundAdjacent:render('last-round valid 150/151 own pair', es, adjacent, true,
+      {currentPick:150, calculatedNextPick:151, nextPick:151, calculatedPicksUntilNext:0}),
     liveBefore, liveAfter:currentEngine(),
     unchangedRows:JSON.stringify(originalRows) === JSON.stringify(
       [...document.querySelectorAll('tr.draftrow')].map(row => [
@@ -629,6 +668,29 @@ assert.doesNotMatch(wr122Presentation.invalid.compact +
 assert.match(wr122Presentation.invalid.expanded, /Next-target availability is unverified/);
 assert.doesNotMatch(wr122Presentation.invalid.expanded,
   /guaranteed to remain available|No opponent selects between verified adjacent own picks/i);
+const wr122ForbiddenTurnClaims = /back-to-back own turns|no intervening opponent|no opponent selects between|guaranteed to remain available|verified adjacent own picks|next pick\\s*#\\s*\\d+/i;
+for (const key of ['contradictoryNext','contradictoryCount','missingBoth','wrongOwner',
+  'wrongNextOwner','zeroNext','pastNext','nonintegerNext','outOfRangeNext',
+  'invalidCount','inconsistentTotal','invalidRounds','invalidTeams','invalidSlot',
+  'terminal','oneRoundTerminal']) {
+  const shown = wr122Presentation[key];
+  assert.doesNotMatch(shown.compact + ' ' + shown.expanded + ' ' + shown.marketDetail,
+    wr122ForbiddenTurnClaims, 'WR-123-F01 fail-closed rendered turn: ' + key);
+  assert.match(shown.compact, /Next-turn context unverified; second target conditional/i);
+  assert.match(shown.expanded, /Next-target availability is unverified/);
+  assert.match(shown.expanded, /CONDITIONAL TARGET \\(NEXT TURN UNVERIFIED\\)/);
+  assert.match(shown.marketDetail, /next pick unverified — incomplete or conflicting turn context/i);
+}
+for (const key of ['adjacent','oneCalculated','oneSupplied','lastRoundAdjacent']) {
+  const shown = wr122Presentation[key];
+  assert.match(shown.compact, /Back-to-back own turns; second option remains conditional/);
+  assert.match(shown.marketDetail, /Verified adjacent own snake picks: no intervening opponent selection/);
+  assert.match(shown.expanded, /No opponent selects between verified adjacent own picks/);
+  assert.match(shown.expanded, /next target must still be eligible after the first selection/);
+  assert.match(shown.expanded, /TARGET NEXT \\(ELIGIBILITY CONDITIONAL\\)/);
+  assert.doesNotMatch(shown.expanded, /guaranteed to remain available/i);
+}
+assert.match(wr122Presentation.contradictoryNext.before.market.source, /ESPN/);
 assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-card').getAttribute('open'), null);
 const wr122CardSummary = page.locator('#wr122-presentation-fixture .recommendation-card-summary');
 await wr122CardSummary.focus();
