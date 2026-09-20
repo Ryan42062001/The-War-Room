@@ -1,49 +1,8 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-20T03:19:17.363Z",
+  "updated_at_utc": "2026-09-20T03:40:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": [
-    {
-      "task_id": "WR-116",
-      "owner": "R&D",
-      "worker_slot": "rnd-wr116-release-policy-rightsholder-closure",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-116.md",
-      "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": "71a3fb88cc890d7b521fa5674edf4f45a51da045",
-      "worker_checkpoint_sha": null,
-      "branch": "wr-116-release-policy-upstream-rights-closure",
-      "pr": null,
-      "dependency": "INDEPENDENT",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_required": false,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/research/WR116_PUBLISHER_RELEASE_POLICY_EVIDENCE.md",
-        ".ai/research/WR116_UPSTREAM_RIGHTS_AUDITOR_DECISION.md",
-        ".ai/research/HANDOFF.md"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/auditor/",
-        ".ai/research/generated/",
-        ".github/",
-        "src/",
-        "scripts/",
-        "data/",
-        "extensions/"
-      ],
-      "forbidden_exact_paths": [],
-      "next_gate": "WR-D025 one final non-contact, no-data source-specific official release-policy and actual upstream-rights documentary gap check. Compare exact existing WR115 gap ledger against NEW publisher policy/licensor documents if available; no general provider/licensing/GitHub survey or actual release-asset/API inspection. Record evidence or EXTERNAL_CLARIFICATION_REQUIRED and stop. Exact 3-file PR/CI -> Manager. Provider outreach requires later explicit owner/Manager approval. Option C remains unproven and source intake blocked."
-    }
-  ]
+  "tasks": []
 }
