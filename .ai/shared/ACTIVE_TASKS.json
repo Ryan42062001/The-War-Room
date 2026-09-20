@@ -1,8 +1,49 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-20T03:40:00Z",
+  "updated_at_utc": "2026-09-20T03:45:32.559Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": []
+  "tasks": [
+    {
+      "task_id": "WR-117",
+      "owner": "Builder",
+      "worker_slot": "builder-wr117-draft-day-coverage-inventory",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-117.md",
+      "role_handoff": ".ai/builder/HANDOFF.md",
+      "assignment_main_sha": "10607bf9d55e9797ada6560c1a72096f3d2a266a",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-117-draft-day-reliability-simulator-gap-inventory",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/builder/WR117_DRAFT_DAY_RELIABILITY_SIMULATOR_INVENTORY.md",
+        ".ai/builder/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/research/",
+        "data/",
+        "extensions/",
+        "js/",
+        "scripts/",
+        ".github/",
+        "src/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "Read-only inventory and synthetic-fixture coverage map of existing draft-state recovery, ESPN Board/Pick History fallback, queue/tiers and recommendation tests, saved-session behavior, phone/desktop views and release-check gates; prioritize only missing cases. Exactly one paper report + Builder handoff PR, exact-head Governance CI then Manager. No source/provider outreach or data, no code/UI/tests changes, no live ESPN, no scoring/model/ranking changes."
+    }
+  ]
 }
