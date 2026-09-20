@@ -801,7 +801,7 @@ assert.deepEqual(opponentRosterOwnership, {team1:0, team3:1});
 await page.locator('.recommendation-card-summary').click();
 assert.equal(await recommendationCard.getAttribute('open'), '');
 assert.equal(await page.locator('.recommendation-factor').count(), 4);
-assert.equal(await page.locator('.recommendation-market-details summary').textContent(), 'Market timing basis');
+assert.equal(await page.locator('.recommendation-market-details summary').textContent(), 'Why this survival?');
 assert.match(await page.locator('.recommendation-market-details').textContent(), /estimated market pick/);
 assert.equal(await page.getByRole('progressbar').count(), 4);
 const recommendationRender = await page.evaluate(() => {
