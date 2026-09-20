@@ -1,7 +1,7 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last verified: 2026-09-18
+Last Manager gate: 2026-09-19 — WR-111 research integrated; WR-112 activation proposed
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
@@ -554,3 +554,12 @@ Manager assigned WR-111 to R&D in `STANDARD_CHAT_HIGH` after WR-110 research acc
 Exact write scope: `.ai/research/WR111_FUTURE_SOURCE_RIGHTS_FEASIBILITY.md`, `.ai/research/WR111_INDEPENDENT_EVALUATION_WINDOW_ASSESSMENT.md`, `.ai/research/HANDOFF.md`. Public documentation research only: no provider dataset/API retrieval, private/authenticated access, 2026 regular-season outcomes, protected/raw retained data, model fit/scoring, executable protocol, licensing assumption, source admission, changed ranking/strategy or Phase 6.
 
 WR-D001, WR-D016 and WR-D018 remain unchanged. All future data rights, executable protocol, audit, scoring and production decisions require separate Manager authority.
+
+
+## WR-111 accepted / WR-112 rights-and-protocol feasibility gate (2026-09-19)
+
+Manager reviewed the exact three-file WR-111 PR #321 at `31413aa9b2708dc02c4e3bebe23dab98953072d2`, including public-documentation rights limitations, prospective chronology and exact-head War Room CI `35481092223` SUCCESS (Governance passed; product tests skipped). PR #321 integrated at canonical merge `a4dcbbaca52915898cc2da437506fd0f4ebdd975`. WR-111 is CLOSED and removed from the active-only registry. No actual new source license, source instance, frozen protocol, model, future sample or outcome was accepted; status remains `INSUFFICIENT_NEW_CONFIRMATION_DATA`.
+
+WR-D019 sets the intended independent *cross-season confirmation* evidence standard: a predeclared 2027 validation and separate 2028 temporal confirmation, subject to point-in-time locks, rights, per-position effective sample/power and independent audits. A single prospective season may support only a narrow one-season claim and is not cross-season confirmation; neither a 2029 target nor 2027/2028 actual data entitlement is assumed. No post-validation retuning can preserve the identity of the original confirmatory candidate.
+
+WR-112 alone is authorized to determine, on public documentation and synthetic/paper design assumptions only, whether rights-compatible source/time and statistically supportable prospective 2027/2028 planning are plausible, and what smallest later Manager/user/provider gates remain. No acquisition, provider API/account/credential access or new terms acceptance, protected or 2026 outcomes, model, executable protocol, forecast lock, scoring, production ranking, Draft Strategy or Builder lane, or Phase 6 is authorized. If 2027 point-in-time prerequisites cannot be established before its preseason cutoff, report the missed gate rather than retroactively designating another target.
