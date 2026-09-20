@@ -1,7 +1,7 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — WR-123 historical audit FAIL accepted; WR-122 same-branch/PR display-only F01/F02 remediation ASSIGNED; Track B custom ranking paused
-Current-state snapshot: 2026-09-20, WR-D036 accepts WR-123 F01/F02 and returns sole WR-122 Builder for bounded in-place repair; WR-124 not assigned. Refresh live main/CI/registry. Refresh actual `.ai/shared/ACTIVE_TASKS.json`, canonical main and live PR/CI before routing.
+Status: ACTIVE DEVELOPMENT — WR-122 exact repaired Builder PR #348 FROZEN/AUDIT_READY; WR-124 fresh independent re-audit ASSIGNED; Track B custom ranking paused
+Current-state snapshot: 2026-09-20, WR-D037 freezes repaired WR-122 SHA and assigns sole WR-124 independent Auditor. Refresh live main/CI/registry. Refresh live main/CI/registry. Refresh actual `.ai/shared/ACTIVE_TASKS.json`, canonical main and live PR/CI before routing.
 Owner: Manager / Architect
 Workflow: V3.5 — CANONICAL
 
@@ -539,3 +539,10 @@ Builder PR #348 OPEN/UNMERGED exact `126268055332470ef4884706a404ed63d02d96ae`; 
 ## WR-D036 — historical WR-123 FAIL; narrowly bounded WR-122 same-task remediation (2026-09-20)
 
 Independent Auditor PR #350 remains OPEN/UNMERGED at head `9be550f24c25e0a265e0d13c6951501f147c2cdb`, exact two Auditor docs, Governance `35518505933` SUCCESS; verdict FAIL on HISTORICAL Builder PR #348 SHA `126268055332470ef4884706a404ed63d02d96ae`. F01 MEDIUM/BLOCKING: display-only adjacent-own-turn guard can privilege calculatedNextPick=11 over contradictory nextPick=20/intervening=9 in 10-team slot-10 current-pick-10 synthetic input, wrongly claiming no intervening opponents in compact/expanded wording. F02 LOW: separate literal browser-MJS syntax command missing from observed prior CI. Manager independently accepted both, closed WR-123 as historical failed audit and returned sole WR-122 Builder to EXISTING four-file PR #348/branch for fail-closed display guard + focused contradictions/browser tests/evidence and both literal syntax commands, NEW exact-head FULL CI. Builder PR #348 and historical Auditor PR #350 stay OPEN/UNMERGED; no Builder merge or Auditor reassignment yet. After new Manager freeze, a separately assigned fresh WR-124 independent audit is required, then possible Manager integration and mandatory exact canonical-main FULL CI. No engine/source/market selection/strategy/ranking changes, live ESPN/Companion/provider contact, data/model or deployment authorization.
+
+
+## WR-D037 — repaired WR-122 exact-head audit-ready freeze and distinct WR-124 QA (2026-09-20)
+
+Existing Builder PR #348 remains OPEN/UNMERGED at NEW frozen exact SHA `8238ccaf80fb844a5e7e0b9444764d8dfb7552a9`, original historical creation/base `836de1e7ed543d9dba48437eeda57922b2c4afa3`; cumulative original-base and historical failed SHA→repaired head diffs both contain exactly the FOUR authorized UI/browser/Builder-doc paths, NO engine, data, Companion, package or workflow changes. New repaired exact-head FULL War Room PR CI `35540981347` SUCCESS with full job `106158519937`, and same-head FULL push `35540875377` SUCCESS; hosted logs verify BOTH literal JS/MJS syntax checks, repeated rendered adversarial contradictory-turn/valid/invalid browser scenarios, responsive/375px/phone and WR-118 regression. Intermediate repair CI `35540582814` remains historical FAILED. Historical WR-123 independent FAIL on OLD Builder SHA `126268055332470ef4884706a404ed63d02d96ae` with unmerged Auditor PR #350 is historical evidence, not a verdict on this repaired SHA.
+
+This is Manager AUDIT_READY only. WR-122 Builder PR/head MUST NOT move or merge while separately assigned WR-124 Independent Auditor reviews exact repaired target on distinct branch and two-file audit-only PR. Only fresh PASS-family, separate Manager integration decision and subsequent mandatory exact canonical-main FULL CI canary can close WR-122. Synthetic app/browser display does not verify live ESPN/Companion, calibrated survival, physical phone or draft-ready release. Source/ECR value-vs-ESPN timing, no provider contact and paused custom ranking constraints remain.
