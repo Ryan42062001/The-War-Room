@@ -2,35 +2,30 @@
 
 HANDOFF
 
-STATUS: WR-110 ASSIGNED — NEXT-GENERATION CUSTOM PROJECTION / SCORING RESEARCH
+STATUS: WR-110 CLOSED — RESEARCH ACCEPTED; INSUFFICIENT_NEW_CONFIRMATION_DATA
 
 CANONICAL WORKFLOW: V3.5
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-Preceding verified main: `0607fa5e6dcde7ace3fff24656b0def28fe3c137`. Active-only registry was empty; WR-109 is CLOSED / `LIVE_DIRECT_UNVERIFIED`. Separate user-initiated Work-mode ESPN Direct feasibility investigation is independent and must not modify WR-110 artifacts or its authority.
+Completed Manager review and integration:
+- PR #317 R&D exact immutable reviewed head: `42f69351f24fbb4db5ca1dbf5f1830a7c49c5ac9`.
+- Three approved paths only: `.ai/research/WR110_NEXT_GEN_PROJECTION_EVIDENCE_ASSESSMENT.md`, `.ai/research/WR110_PROSPECTIVE_EXPERIMENT_PROPOSAL.md`, `.ai/research/HANDOFF.md`.
+- Exact-head push War Room CI `35478836552` SUCCESS; PR War Room CI `35478838143` SUCCESS. Classify and Governance passed; product test skipped because research-only.
+- Main advanced independently of R&D through Manager ESPN feasibility docs only; no changed-file overlap or new R&D authority.
+- Accepted exact WR-110 research head merged via PR #317: canonical merge `0975029220eb7f95b5d76259b80f734610924046`.
+- Post-merge canonical War Room CI `35479105837` SUCCESS (classify/Governance; product test skipped).
 
-Accepted model history:
-- WR-081 v2: `VALIDATION_FAILED`, baseline-only.
-- WR-101/102 v2.1: 2022–2023 validation PASS; 2024–2025 confirmation FAIL. Terminal `CONFIRMATION_FAILED`; `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`.
-- Frozen blocking RB position-MAE regression `0.107573057046809` > `0.05` cap, accepted under WR-D016.
-- 2018–2021 were design-exposed; 2022–2025 were scored/exposed under v2.1. None are untouched v2.1 confirmation for a new candidate.
-- No historical rerun, new protected authority, 2026 outcome access, source intake, model fit, rankings, composition, Phase 6 or recommendation policy change from this assignment.
+Evidence disposition:
+- WR-D016 preserved: 2022–2023 validation PASS, 2024–2025 confirmation FAIL; RB relative MAE regression `0.107573057046809` > `0.05`; baseline-only, not production-qualified.
+- R&D's three candidate directions and 2027/2028–2029 chronology are non-executable future research possibilities, not a new rights-cleared independent holdout, selected model or audited protocol.
+- `INSUFFICIENT_NEW_CONFIRMATION_DATA` remains; causality of RB confirmation miss remains unknown.
+- WR-D001 remains: FantasyPros ECR production player value, ESPN market timing only.
+- WR-D018 remains: ESPN sync fallback-first reliability with opportunistic structured evidence; separate and no Direct worker activated.
 
-New assignment:
-- WR-110 — Next-Generation Custom Projection + Draft Scoring Research.
-- Owner R&D, `STANDARD_CHAT_HIGH`, `FAST_REFRESH`.
-- branch `wr-110-next-gen-projections-research`, create from the exact canonical Manager activation merge **after** this control-plane PR, not the preceding main above.
-- exact write allowlist: `.ai/research/WR110_NEXT_GEN_PROJECTION_EVIDENCE_ASSESSMENT.md`, `.ai/research/WR110_PROSPECTIVE_EXPERIMENT_PROPOSAL.md`, `.ai/research/HANDOFF.md`.
-- research only; no implementation, scoring, protected source access, policy decision or new source data.
+Current registry: WR-110 CLOSED; active-only registry empty after this Manager reconciliation.
 
-Next: R&D publishes bounded three-file research PR and exact-head CI; Manager independently reviews and selects a separate future gate if evidence supports one. All other War Room roles idle.
-
-
-## Concurrent external ESPN Direct feasibility disposition — 2026-09-19
-
-User-supplied separate Work report: `DIRECT_NOT_SUPPORTED_BY_AVAILABLE_EVIDENCE`; independent real full-draft Direct `LIVE_DIRECT_UNVERIFIED`, not proven impossible. Report states 110 focused tests passed, broad suite incomplete, no live authenticated mock or repo edits; Manager did not independently reproduce novel technical hypotheses or those local test logs.
-
-WR-D018 clarifies WR-D003's existing layered-source contract: fallback-first **reliability claim** based on live Board/Pick History evidence; retain opportunistic eligible passive structured observations and current source/ledger behavior. Stop open-ended speculative Direct work. No new task, credentialed observation, source adapter, extension permission, production or ranking change from this decision. Future limited live mock only with new evidence, explicit user consent and separate Manager scope.
-
-WR-110 continues as the only active task, same owner/branch/scope. This concurrent Manager decision does not grant its R&D lane access to ESPN work or modify the model/protocol boundaries.
+Next gate:
+- A **separate Manager decision** would be needed to authorize a no-data-acquisition future source-rights and genuinely independent evaluation-window feasibility intake. No such task is currently activated; if unavailable, defer scoring/protocol.
+- Any provider/source admission, executable model selection/protocol, independent audit, new protected scoring authority, games/season-total composition, production rankings, Draft Strategy or Builder implementation and Phase 6 each require separately scoped authority and applicable independent verification.
+- Do not rerun WR-101, reuse 2022–2025 as untouched, inspect 2026 regular-season outcomes, weaken prior gates or use green CI as proof of model success.

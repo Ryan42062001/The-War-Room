@@ -534,3 +534,14 @@ Following WR-109, the user supplied a separate Work-mode investigation report. I
 Manager rechecked the accepted WR-D003 layered-source design and `extensions/espn-companion/LIVE_VALIDATION.md`. Prior live 192/192 fallback completion is supported; 224/223 and 288/288 observations reveal version-scoped application/identity gaps and do not establish independently sufficient structured picks. Manager records WR-D018: production-facing reliability posture is **Board/Pick History fallback-first, opportunistic passive structured acceleration**. This does not change production code or the WR-D003 source-resolution algorithm; Direct is unverified, not universally impossible.
 
 The broad Direct feasibility lane is closed/deferred. A concrete new source lead or voluntary explicit user consent for one bounded disposable mock is required before separate authorization; no new account work, Builder fix, extension permission change or production implementation is currently assigned. WR-110 remains the sole active R&D assignment, independent of ESPN sync.
+
+
+## WR-110 final Manager acceptance — CLOSED / INSUFFICIENT_NEW_CONFIRMATION_DATA (2026-09-19)
+
+Manager independently reviewed exact WR-110 R&D PR #317 head `42f69351f24fbb4db5ca1dbf5f1830a7c49c5ac9` and exactly three authorized research/handoff paths. Published v2 and v2.1 aggregate figures and protected terminal match accepted WR-D016 and WR-101/102 reports; known v2 WR extrapolation does not establish a cause for v2.1 RB confirmation regression. R&D reported no raw/protected per-player accesses, 2026 regular-season outcome inspection, model fitting/training/scoring, source acquisition or production changes.
+
+Research provides only a **non-executable** prospective study outline. The suggested 2027 validation and 2028–2029 confirmation windows are not currently rights-cleared, available or independently locked. Architecture-dependent numerical gates, source rights and model identity remain unresolved. Disposition `INSUFFICIENT_NEW_CONFIRMATION_DATA`; no new model/production/scoring authority.
+
+Exact-head CI: push `35478836552` SUCCESS, PR `35478838143` SUCCESS (classify/Governance; product test skipped). Manager integrated exact PR #317 head as merge `0975029220eb7f95b5d76259b80f734610924046`; canonical-main War Room CI `35479105837` SUCCESS.
+
+WR-110 CLOSED and removed from active-only registry. A distinct Manager decision/task is required for even no-acquisition future source-rights/window feasibility research. Executable protocol, independent protocol audit, protected scoring, games/season-total composition, Draft Strategy and Builder implementation, production ranking or Phase 6 remain unauthorized.
