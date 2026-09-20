@@ -1,54 +1,51 @@
 # R&D Handoff
 
-STATUS: READY FOR MANAGER — WR-110 RESEARCH-ONLY PROSPECTIVE DESIGN COMPLETE
-TASK: WR-110 — Next-Generation Custom Projection + Draft Scoring Research
-ROLE: Research & Development (R&D)
-WORKFLOW / MODE: V3.5 / STANDARD_CHAT_HIGH / FAST_REFRESH
-BRANCH: `wr-110-next-gen-projections-research`
-BASE AT START: `b94180105846d1e18c5b5f6d51de2133d13ab674`
-MANAGER ACTIVATION: PR #316 MERGED; canonical War Room CI `35478420044` SUCCESS
-PR: #317 — R&D-only; OPEN / UNMERGED
-FINAL HEAD: exact live head of PR #317 containing this final handoff; R&D stops writing after this commit
-RESULT DISPOSITION: `INSUFFICIENT_NEW_CONFIRMATION_DATA`
-MODEL / RANKING DISPOSITION: `BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE`; preserve WR-D001 and WR-D016
+STATUS: READY FOR MANAGER — WR-111 FUTURE RIGHTS / INDEPENDENT WINDOW FEASIBILITY COMPLETE
+TASK: WR-111 — Future Data Rights + Independent Evaluation Feasibility
+ROLE: Research & Development
+WORKFLOW / EXECUTION: V3.5 / STANDARD_CHAT_HIGH / FAST_REFRESH
+BRANCH: `wr-111-future-data-rights-evaluation-feasibility`
+STARTING MAIN AND BRANCH: `999ef157ec62e2d816be9fa4ef273e6def3dbce5`
+MANAGER ACTIVATION: PR #320 MERGED; canonical War Room CI `35480609273` SUCCESS
+PR: #321 — OPEN / UNMERGED
+FINAL HEAD: live PR #321 head containing this final handoff; R&D stops writing after this commit
+DISPOSITION: `INSUFFICIENT_NEW_CONFIRMATION_DATA`
 
 ## DONE
 
-- Read canonical Workflow V3.5 and task/registry/role, WR-D001/WR-D016, accepted WR-095 v2 failure/protocol reports, accepted WR-101/102 protected-result summary, only pertinent historic source/production ranking/recommendation contracts. No raw retained or protected per-player scoring evidence was accessed.
-- Produced evidence-classified assessment separating WR-081 v2 `VALIDATION_FAILED` (documented 2021 WR feature extrapolation) from WR-101 v2.1 **2022–2023 validation PASS / 2024–2025 confirmation FAIL**. Confirmed frozen RB confirmation relative position-MAE regression `0.107573057046809` versus `0.05` cap, with no asserted causal RB diagnosis.
-- Marked 2018–2021 `DESIGN_EXPOSED`, 2022–2025 `V21_SCORING_EXPOSED`, earlier training outcomes exposed and **no currently established untouched independent confirmation set**. 2026 regular-season outcomes not inspected or designated for new holdout. Future 2027 validation and 2028–2029 confirmation are **conditional planning windows**, not currently rights-cleared/available/locked.
-- Proposed three **unranked and unfitted** research directions: persistence-only control/limited adjustment; position-aware train-only residual shrinkage with availability evaluated separately; distributional rate uncertainty with explicit abstention. No candidate or parameter chosen on exposed outcomes.
-- Proposed separate no-acquisition future source-rights/window feasibility intake, then one-primary-arm versioned protocol with predeclared training/holdout chronology, baselines, position/tail/rank/season/uncertainty gates, immutable pre-outcome prediction locks, fail-closed safeguards, fresh protocol and result audits. Architecture-dependent numerical uncertainty/availability gates are deliberately **not yet executable** and must be frozen before any future outcome exposure.
-- Mapped **conceptual only** VORP/replacement, tiers/scarcity, ESPN-ADP next-turn survival and confidence/decision-utility relationships while preserving FantasyPros ECR as production value authority and separate games-played/season-total composition and Draft Strategy policy gates.
+1. Independently confirmed canonical main / branch equal `999ef157ec62e2d816be9fa4ef273e6def3dbce5` at task start, only WR-111 active, exact task scope, accepted WR-D001/009/010/016 and WR-110 research. Read only bounded preexisting source-rights/aggregate-result documentation.
+2. Published dated public-page/accepted-repository source-rights inventory for nflverse `stats_player` regular/weekly stats, nflverse metadata/component license hazards, CC BY 4.0 attribution/upstream data ownership, and alternative SportsDataIO contractual/private-use versus Sports Reference/Stathead restrictions. A publicly offered dataset or provider package is **not** an actual War Room future source right, future instance, or permission to store raw bytes/derived outputs for independent audit.
+3. Defined exact future source instance, field-level permitted pre-target features, stable player ID, full PPR / recorded-game target, cohort, missingness, update/correction timestamp, license/derivative use, retention and independent auditor/custody prerequisites. Accepted WR-059 historical 14 source assets **do not admit future seasons**. `players.csv` and `draft_picks.csv` remain excluded.
+4. Classified exposures: 2018–2021 design-exposed; 2022–2025 v2.1 scoring-exposed; 2026 regular-season outcomes **not inspected or used** and, because season has begun, a full-season 2026 preseason prediction cannot be locked retroactively.
+5. Compared conditional (A) single-stage fully predeclared 2027 full-season prospective evaluation; (B) 2027 validation → distinct 2028 temporal confirmation; (C) optional 2027 + 2028–2029 multi-season conservative test when power/generalizability calls for it; (D) separate as-yet-unplayed 2026 weekly/remainder target **different estimand**; rejected historical splits/new-provider copies as independent confirmation. An eventual 2027→2028 protocol could complete **after the 2028 season**, not necessarily require the 2029 season. No future data or outcome set is presently available/rights-cleared/approved or measured.
+6. Recorded prospective prediction-before-target locking and position/cluster sample, missingness, correction, provider-rights, independence and audit gates. Synthetic paper conformance can precede real data but cannot establish independent model quality.
 
-## CHANGED / ARTIFACTS
+## CHANGED / FILES
 
 Exactly:
-- `.ai/research/WR110_NEXT_GEN_PROJECTION_EVIDENCE_ASSESSMENT.md`
-- `.ai/research/WR110_PROSPECTIVE_EXPERIMENT_PROPOSAL.md`
+- `.ai/research/WR111_FUTURE_SOURCE_RIGHTS_FEASIBILITY.md`
+- `.ai/research/WR111_INDEPENDENT_EVALUATION_WINDOW_ASSESSMENT.md`
 - `.ai/research/HANDOFF.md`
 
-No `.ai/research/generated/**` or any production, source, ranking, tests, workflows, shared registry, manager, runner or strategy-policy files were changed.
+No other research, source, generated/protected evidence, registry, task, production, scoring, ranking, Strategy, ESPN, code, tests, runner, workflow or CI configuration file altered.
 
 ## TESTS / CI
 
-Read-only exact main/assigned-branch/activation PR/CI, task scope, accepted report and product-contract evidence verification performed. No model fit, hyperparameter search, backtest, replay or scoring; no ESPN/other Work investigation participation. Exact-head War Room CI to be independently verified on final PR #317 SHA before Manager freeze.
+Read-only repository/activation/assignment/branch and accepted aggregate-evidence verification. Public official/provider/license **documentation only** read 2026-09-19; no dataset download, user account, credential, provider API or new release asset access. No model fit, score, replay, data/2026 outcome inspection, synthetic code execution, backend/account action, production test or source admission. Verify exact-head War Room Governance/CI for final PR #321 SHA before Manager review; product test may be skipped for docs-only scope.
 
-## BLOCKERS / UNVERIFIED
+## BLOCKERS
 
-- `INSUFFICIENT_NEW_CONFIRMATION_DATA`: no accepted future-season source instance/provider permission/release schedule, point-in-time forecast cutoff/cohort or immutable independent forecast lock presently exists. 2027/2028/2029 outcome availability is future and unproven.
-- Cause of v2.1 RB confirmation miss and its future recurrence **UNKNOWN**. Published aggregates do not identify a causal factor; no protected rows reopened.
-- Which if any new model architecture generalizes; games/availability calibration, position-specific uncertainty, numerical tail performance and incremental draft-decision value **UNKNOWN**.
-- Proposed full executable feature/model/custody/version, any games/interval-specific numeric gates, legal access and protocol audit not complete. No protected execution authority exists or is requested here.
+- `INSUFFICIENT_NEW_CONFIRMATION_DATA`: no future rights-cleared per-instance source/cohort/target, consent/contract for all intended training/auditor/derived retention uses, pre-season source availability + immutable prediction lock, or new independent completed 2027/2028 season targets.
+- Future QB/RB/WR/TE stable ID coverage, effective cluster counts, sample power/uncertainty and corrected regular-season full-PPR per-recorded-game target unknown.
+- Shorter one-season versus separate-year confirmatory inference scope/power not chosen or accepted; any shorter future protocol must be newly versioned/frozen/audited **before** 2027 outcome exposure, not modified after validation.
+- Actual future-provider asset license/upstream restrictions, release/version/time and rights to independently reproducible restricted retention **unknown**; public CC BY label and loader's MIT code license not sufficient alone.
 
 ## DECISIONS CONSUMED
 
-WR-D001 current FantasyPros ECR value versus ESPN market timing; WR-D009/WR-D010 accepted historical source/protocol boundaries; WR-D016 accepted WR-101/102 baseline-only result. No change to any accepted decision or historical evaluation.
+WR-D001 retains FantasyPros ECR as live draft-value authority; WR-D009/WR-D010 constrain past source/protocol identities; WR-D016 accepts immutable v2.1 `CONFIRMATION_FAILED / BASELINE_ONLY_OR_INSUFFICIENT_EVIDENCE` and prohibits WR-101 rerun/promotion. WR-110 research remains non-executable. No new source/protocol/strategy decision issued here.
 
 ## NEXT ACTION — MANAGER ONLY
 
-1. Independently review PR #317 exact final head, exact three-file diff, applicable exact-head Governance CI and research-only disposition; do not construe CI or audit of evidence as model success.
-2. Decide whether to authorize a **new, separate, no-data-acquisition source-rights and future-independent-window feasibility intake**. If source rights, cohort, pre-target lock and genuine future confirmation cannot be established, defer execution with `INSUFFICIENT_NEW_CONFIRMATION_DATA`.
-3. Only after evidence/rights feasibility and new prospective model/protocol choice, independently freeze/audit an executable, singly designated candidate and every architecture-specific gate **before any future target exposure**. Protected model execution, season-total composition, production integration, Draft Strategy or Builder work each require their own later explicit Manager decisions/audits.
+Independently review exact PR #321 final SHA, three-file diff, applicable exact-head Governance CI and source links/dated limitations. Decide the *intended inference claim*: one future season of predeclared standalone evidence **versus** 2027 validation followed by an independently predeclared different-season 2028 confirmation (or a longer protocol if prospective position/power justification requires it). If warranted, separately authorize a bounded **no-data-acquisition, pre-target provider/source-rights + exact cutoff/coverage and statistical-power/protocol-scoping gate**, with provider/user consent handled in the proper new task. No rights grant, model, prediction lock, source ingestion, scoring, future-employee activation, promotion or merge follows automatically.
 
-DO NOT REPEAT: no WR-101 rerun or new scoring authority, no model fit/train/backtest/tuning, no protected per-player or raw retained source reads, no new source acquisition, no 2026 regular-season outcome inspection, no post-hoc v2.1 gate repair, no ranking/production/strategy change, no ESPN Direct work, no season-total composition, no Phase 6, no merge or self-audit.
+DO NOT REPEAT: no protected results/raw stats/2026 regular-season outcomes, private ESPN/other Work-lane work, provider downloads, API/credentials/accounts, model fitting/scoring, source/cohort admission, new one-time authority, v2.1 retuning/replay, production/Strategy/ranking changes, season-total composition, Phase 6, merge or self-audit.
