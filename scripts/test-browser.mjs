@@ -668,7 +668,7 @@ assert.doesNotMatch(wr122Presentation.invalid.compact +
 assert.match(wr122Presentation.invalid.expanded, /Next-target availability is unverified/);
 assert.doesNotMatch(wr122Presentation.invalid.expanded,
   /guaranteed to remain available|No opponent selects between verified adjacent own picks/i);
-const wr122ForbiddenTurnClaims = /back-to-back own turns|no intervening opponent|no opponent selects between|guaranteed to remain available|verified adjacent own picks|next pick\\s*#\\s*\\d+/i;
+const wr122ForbiddenTurnClaims = /back-to-back own turns|no intervening opponent|no opponent selects between|guaranteed to remain available|verified adjacent own picks|next pick\s*#\s*\d+/i;
 for (const key of ['contradictoryNext','contradictoryCount','missingBoth','wrongOwner',
   'wrongNextOwner','zeroNext','pastNext','nonintegerNext','outOfRangeNext',
   'invalidCount','inconsistentTotal','invalidRounds','invalidTeams','invalidSlot',
@@ -678,7 +678,7 @@ for (const key of ['contradictoryNext','contradictoryCount','missingBoth','wrong
     wr122ForbiddenTurnClaims, 'WR-123-F01 fail-closed rendered turn: ' + key);
   assert.match(shown.compact, /Next-turn context unverified; second target conditional/i);
   assert.match(shown.expanded, /Next-target availability is unverified/);
-  assert.match(shown.expanded, /CONDITIONAL TARGET \\(NEXT TURN UNVERIFIED\\)/);
+  assert.match(shown.expanded, /CONDITIONAL TARGET \(NEXT TURN UNVERIFIED\)/);
   assert.match(shown.marketDetail, /next pick unverified — incomplete or conflicting turn context/i);
 }
 for (const key of ['adjacent','oneCalculated','oneSupplied','lastRoundAdjacent']) {
@@ -687,7 +687,7 @@ for (const key of ['adjacent','oneCalculated','oneSupplied','lastRoundAdjacent']
   assert.match(shown.marketDetail, /Verified adjacent own snake picks: no intervening opponent selection/);
   assert.match(shown.expanded, /No opponent selects between verified adjacent own picks/);
   assert.match(shown.expanded, /next target must still be eligible after the first selection/);
-  assert.match(shown.expanded, /TARGET NEXT \\(ELIGIBILITY CONDITIONAL\\)/);
+  assert.match(shown.expanded, /TARGET NEXT \(ELIGIBILITY CONDITIONAL\)/);
   assert.doesNotMatch(shown.expanded, /guaranteed to remain available/i);
 }
 assert.match(wr122Presentation.contradictoryNext.before.market.source, /ESPN/);
