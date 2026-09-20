@@ -1,20 +1,20 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-20T00:45:00Z",
+  "updated_at_utc": "2026-09-20T02:00:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
   "tasks": [
     {
-      "task_id": "WR-111",
+      "task_id": "WR-112",
       "owner": "R&D",
-      "worker_slot": "rnd-wr111-source-rights-window-feasibility",
+      "worker_slot": "rnd-wr112-prospective-rights-protocol-gate",
       "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-111.md",
+      "task_file": ".ai/manager/WR-112.md",
       "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": "5e42fdbd60279ead10454a02feb5bec390944f3d",
+      "assignment_main_sha": "a4dcbbaca52915898cc2da437506fd0f4ebdd975",
       "worker_checkpoint_sha": null,
-      "branch": "wr-111-future-data-rights-evaluation-feasibility",
+      "branch": "wr-112-prospective-rights-protocol-feasibility",
       "pr": null,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
@@ -27,8 +27,8 @@
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
-        ".ai/research/WR111_FUTURE_SOURCE_RIGHTS_FEASIBILITY.md",
-        ".ai/research/WR111_INDEPENDENT_EVALUATION_WINDOW_ASSESSMENT.md",
+        ".ai/research/WR112_SOURCE_RIGHTS_DECISION_GATE.md",
+        ".ai/research/WR112_PROSPECTIVE_PROTOCOL_FEASIBILITY.md",
         ".ai/research/HANDOFF.md"
       ],
       "forbidden_path_prefixes": [
@@ -43,7 +43,7 @@
         "extensions/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "R&D research-only three-file PR and exact-head Governance CI -> Manager verifies source-rights and earliest independent future-window evidence; no acquisition/protocol/scoring/Strategy/Builder authorization."
+      "next_gate": "R&D public-documentation-only rights-path and 2027/2028 protocol/power feasibility packet -> exact-head Governance CI -> Manager review; no source acquisition/admission, executable protocol, audit, model fitting or scoring from WR-112."
     }
   ]
 }
