@@ -1684,6 +1684,13 @@ function getCompactMarketPresentation(player, context) {
     adjacentOwnTurn:adjacentOwnTurn,
     headline:marketKnown ? 'Market timing · ' + source + ' (heuristic)' :
       'Market timing unknown — no survival estimate',
+    // Mobile's one-line metric permits a short visible source label; the
+    // full heuristic/unknown explanation remains in its accessible name/details.
+    compactLabel:!marketKnown ? 'Timing UNKNOWN' :
+      source === 'ESPN board + ESPN ADP' ? 'ESPN B+ADP' :
+      source === 'ESPN board' ? 'ESPN board' :
+      source === 'ESPN ADP' ? 'ESPN ADP' :
+      source === 'FantasyPros ADP fallback' ? 'FP ADP fallback' : 'Market heuristic',
     basis:adjacentOwnTurn
       ? 'Verified adjacent own snake picks: no intervening opponent selection; second choice remains conditional on eligibility.'
       : marketKnown
@@ -1782,8 +1789,9 @@ function renderCompactRecommendationCard(element, recommendation, explanation, p
     '<span class="recommendation-player"><b>' + summaryTitle + '</b><small>' + escapeSummaryHtml(summaryPositions) + '</small></span>' +
     '<span class="recommendation-confidence"><b>' + escapeSummaryHtml(confidenceLabel) + '</b><small>Decision strength · heuristic</small></span>' +
     '<span class="recommendation-chevron" aria-hidden="true">⌄</span>' +
-    '<span class="recommendation-one-line">' + escapeSummaryHtml(summaryReason) + '<b>' +
-    escapeSummaryHtml(marketPresentation.headline) + '</b></span>' +
+    '<span class="recommendation-one-line">' + escapeSummaryHtml(summaryReason) +
+    '<b aria-label="' + escapeSummaryHtml(marketPresentation.headline) + '">' +
+    escapeSummaryHtml(marketPresentation.compactLabel) + '</b></span>' +
     '</summary>' + details + '</details>';
   if (element._recommendationMarkup === markup) return;
   var wasOpen = Boolean(element.querySelector('.recommendation-card[open]'));
