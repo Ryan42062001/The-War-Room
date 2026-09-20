@@ -1,8 +1,55 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-20T12:45:00Z",
+  "updated_at_utc": "2026-09-20T13:17:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": []
+  "tasks": [
+    {
+      "task_id": "WR-121",
+      "owner": "Strategy",
+      "worker_slot": "strategy-wr121-ecr-explainable-draft-policy",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-121.md",
+      "role_handoff": ".ai/strategy/HANDOFF.md",
+      "assignment_main_sha": "07725c8b632a49911838dea6a88d1fb13659d085",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-121-ecr-draft-recommendation-explanation-contract",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/strategy/WR121_ECR_RECOMMENDATION_EXPLANATION_CONTRACT.md",
+        ".ai/strategy/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/builder/",
+        ".ai/auditor/",
+        ".ai/research/",
+        "scripts/",
+        "js/",
+        "extensions/",
+        "data/",
+        "src/",
+        ".github/"
+      ],
+      "forbidden_exact_paths": [
+        "package.json",
+        "README.md",
+        "index.html",
+        "script.js"
+      ],
+      "next_gate": "Draft Strategy performs source-aware READ-ONLY existing recommendation/explanation behavior and tests inventory; defines bounded synthetic policy scenarios and source/provenance/uncertainty-safe ECR-value vs ESPN-timing explanation contract, identifies ALREADY_PRESENT vs GAP vs NEEDS_MANAGER_CHOICE. Exactly two Strategy-owned documentation paths and one OPEN/UNMERGED 2-file PR with exact-head Governance CI. No feature code, data, provider contact, ESPN account, model scoring, ranking weights or proposed policy in production. Manager reviews and separately approves a small Builder implementation/QA scope only if verified gaps justify it."
+    }
+  ]
 }

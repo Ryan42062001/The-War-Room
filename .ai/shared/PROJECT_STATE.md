@@ -1,7 +1,7 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-20 — WR-D032 accepts WR-120 PASS, integrates exact repaired WR-118 and verifies mandatory canonical-main FULL CI; closes both tasks
+Last Manager gate: 2026-09-20 — WR-D033 scopes Track A2 source-aware ECR recommendation/explanation contract and assigns sole WR-121 Strategy-only task
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
@@ -658,3 +658,8 @@ WR-118 status AUDIT_READY and frozen at new SHA; Builder must not advance/merge 
 ## WR-D032 — WR-118 / WR-120 closed after audited exact integration and FULL main canary (2026-09-20)
 
 Manager independently accepted new WR-120 PASS on exact repaired WR-118 Builder SHA `c80aaa8807ed9ef94619b1117988e64d9b773234`; integrated separate Auditor evidence PR #343 at `34d852e5fea021548c76d0ff803113097eabeff4` (post-audit main CI `35510971264` SUCCESS), then exact Builder PR #338 at `396462a0649a6bb6f1e0b212f7bfda700759ba6c`. Mandatory post-Builder-merge canonical-main FULL CI `35511010222` SUCCESS including full test `106078842642`: `npm test`, two deterministic app-side scenario runs, stable source/A/B ledger digests, zero reported page errors and eight intended negative-control rejections. WR-118 and WR-120 closed and removed from active-only registry by this control-plane closure; no other task assigned. Historical WR-119 FAIL for old SHA and OPEN/UNMERGED PR #340 remain historical negative evidence. Scope is test-only synthetic app-side snapshot/reload/replay, NOT verified live ESPN/Companion E2E/Direct, real network reconnect, draft-day release or production/ranking change. WR-D001/018/027 source/contact gates and blocked custom rankings unchanged.
+
+
+## WR-D033 — Sole WR-121 Strategy contract assignment (2026-09-20)
+
+Canonical pre-activation main `07725c8b632a49911838dea6a88d1fb13659d085` with empty active registry after accepted/closed WR-118/WR-120. Track A2 is next: Strategy must inspect existing real recommendation/roster/phase/turn/survival/explanation code and relevant tests before proposing any changes, preserve WR-D001 FantasyPros ECR player value vs ESPN market timing, and produce a documentary expected-behavior/provenance/uncertainty/synthetic scenario contract. Existing code already implements VORP/roster/scarcity/tier/next-turn logic and a confidence score; no assertion of absent engine or calibrated probability. Exactly two `.ai/strategy/` docs and one unmerged paper-only PR permitted under `.ai/manager/WR-121.md`; no independent Auditor necessary for this documentary task, but any later product implementation requires separate Manager/Builder/fresh independent QA and exact-main full CI gates. Only Strategy assigned after control-plane PR and main CI; Builder, R&D, Auditor, Work Helper idle. Track B custom-model rights/reproducibility and explicit owner no-provider-contact gates unchanged. No ranking/data/production/Companion/deployment change authorized.
