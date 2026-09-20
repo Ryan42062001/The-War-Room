@@ -302,8 +302,14 @@ async function apply(page, label, payload, options = {}) {
   assert.ok(fixture, label + ': expected synthetic fixture context');
   const expected = expectedRows(options.expectedPicks || payload.picks, fixture.indexes);
   const inputOrder = (payload.picks || []).map(pick => Number(pick.overallPick) || null);
-  const result = await page.evaluate(value => window.WarRoomEspnSync.applySnapshot(value), payload);
-  const goodResult = Boolean(result);
+  let result = null;
+  let applicationError = null;
+  try {
+    result = await page.evaluate(value => window.WarRoomEspnSync.applySnapshot(value), payload);
+  } catch (error) {
+    applicationError = 'APP_APPLY_FAILED: ' + String(error && error.name || 'Error');
+  }
+  const goodResult = Boolean(result) && !applicationError;
   const goodCounters = goodResult && (options.applied == null || (
     result.applied === options.applied &&
     (result.unmatched || []).length === (options.unmatched || 0) &&
@@ -320,6 +326,7 @@ async function apply(page, label, payload, options = {}) {
       ': snapshot rejected by app interface'), actual, expected, {
       pick:options.pick ?? (inputOrder.length ? inputOrder[inputOrder.length - 1] : null),
       inputOrder, observationError, detail:{
+        applicationError,
         expectedCounters:{applied:options.applied ?? null,
           unmatched:options.unmatched || 0, rejected:options.rejected ?? null},
         actualCounters:goodResult ? {captured:result.captured, applied:result.applied,
