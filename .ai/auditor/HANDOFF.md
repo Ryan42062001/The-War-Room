@@ -2,103 +2,44 @@
 
 HANDOFF
 
-STATUS: COMPLETE — PASS
-
-TASK: WR-075 — Independent Audit of Self-Hosted Heavy-CI Runner Pilot
-
+STATUS: REPORT/VERDICT PUBLISHED — PASS; distinct audit PR/exact-head Governance CI publication verification pending.
+TASK: WR-120 — Fresh Independent Re-Audit of Repaired WR-118 Synthetic Replay + Reconnect Regression
 ROLE: Independent Auditor / QA
+WORKFLOW: V3.5
+EXECUTION MODE: STANDARD_CHAT_HIGH
+REFRESH MODE: FAST_REFRESH
 
-BRANCH: `wr-075-self-hosted-heavy-ci-runner-audit`
+BRANCH: `wr-120-repaired-synthetic-replay-reconnect-reaudit`
+BASE: independently verified main and initial assigned Auditor branch `f1aae74395e5ebf6a57f616ccd2bddb9e595a26c` (identical before writes).
+SOURCE TASK: WR-118
+BUILDER PR: #338 OPEN/UNMERGED; branch `wr-118-synthetic-espn-replay-reconnect-regression`
+AUDITED REPAIRED BUILDER SHA: `c80aaa8807ed9ef94619b1117988e64d9b773234` (immutable, Manager WR-D031 freeze).
+HISTORICAL FAILED BUILDER SHA: `39491e672b6177834aa029b7a716c612c7cc892d` — historical WR-119 FAIL remains limited to that old SHA; Auditor PR #340 historical OPEN/UNMERGED.
+HISTORICAL BUILDER BASE: `5dc8906d5285d1c51b51ef0068bd0a98753610ba`.
 
-BASE: canonical main verified at `26060aa426ca9ec3bebdeb38735c1b5ae351b09c`.
-
-AUDITED TARGET:
-- WR-074
-- PR #307
-- branch `wr-074-self-hosted-heavy-ci-runner-pilot`
-- exact frozen SHA `75fcd3756956b2943f18aff03115f9783a16d0aa`
-- immutable implementation SHA `c2e511da5d3767cbc0688de7e95236135a6975b2`
-- canonical implementation base `cb544da20c7b82ded5552d425d69b8a47c880f30`
-
-VERDICT: `PASS`
+VERDICT: `PASS` — only for repaired exact Builder SHA and the bounded synthetic app-side test oracle.
 
 FINDINGS:
-- CRITICAL: none
-- HIGH: none
-- MEDIUM: none
-- LOW: none
+- CRITICAL: none.
+- HIGH: none.
+- MEDIUM: none.
+- LOW: none.
 
-INDEPENDENTLY VERIFIED:
-- PR #307 open, draft, unmerged at exact frozen target;
-- exact six-path WR-074 scope;
-- base-to-implementation contains only pilot workflow/helper/validator + Work Helper activation evidence;
-- implementation-to-final contains only Work Helper report/activation/handoff evidence;
-- no Windows diagnostic/shim files remain;
-- exact push-only WR-074 branch trigger;
-- exact dedicated `[self-hosted, war-room-heavy-ci]` route;
-- no `pull_request` or `pull_request_target` route;
-- GitHub-hosted exact repo/ref/actor trust gate;
-- top-level `contents: read`;
-- checkout `persist-credentials: false`;
-- no WR-074 `secrets.*` references;
-- provider/custody authority absent in successful self-hosted evidence;
-- no retained-provider retrieval on self-hosted;
-- canonical `ci.yml` byte-identical and fully GitHub-hosted;
-- custody/protected workflows byte-identical and still GitHub-hosted;
-- repeated self-hosted preflight + cleanup proves no node_modules/artifacts/sentinel residue, Git clean, provider authority absent;
-- two distinct successful self-hosted parity runs plus matched hosted references;
-- final frozen head was actually fetched/checked out at `75fcd3756956b2943f18aff03115f9783a16d0aa`;
-- final target pilot and canonical War Room CI succeeded;
-- Linux / X64 / WSL2 environment evidence;
-- non-Linux helper path fails closed;
-- helper hashes runner-name evidence, does not deliberately print precise workspace path, does not enumerate unrelated files, and does not expose credential values;
-- standard GitHub self-hosted bootstrap metadata remains a platform-level operational privacy characteristic, not WR-074-authored logging;
-- release validator changed by exactly one allowlist entry for WR-074 while preserving all existing V3.5 workflows;
-- release validation succeeded on repeated parity runs and final frozen target;
-- no production/ranking/strategy/research/model/custody/Phase-6/Manager/shared contamination.
+F01: CLOSED on repaired target — independently derived full accepted-count snake next-user-pick/on-clock/picks-until-turn asserted at all relevant A/B/reload/replay/provisional/terminal states, and actual scored candidates/top existing decision are nonempty/available/roster-eligible at unfinished active stages. Actual CI executed negative empty-candidate/wrong-next-pick/wrong-on-clock assertion-path controls twice each; no policy winner invented.
+F02: CLOSED on repaired target — rejected app/counter paths inspect actual app ledger and independent expected fixture model; include safe session/stage/pick/input order, real separate digests, first mismatch and explicit observation failure fallback. Actual CI twice exercised wrong 11-versus-real 12 counter case with unequal hashes and first missing expected #12.
+PRESERVED: exact numbered/duplicate/reordered/stale/unresolved/correction ledger and owner/source/ID; saved A/B isolation; A20 save/reload/synthetic replay; 159 provisional and 160 authoritative terminal; 717-row ECR/source fingerprint stable; deterministic actual-state A/B/source digests across two independently initialized browser contexts.
+BOUNDARY: synthetic APP-SIDE snapshot ingress with controlled local reload/replay ONLY. No real ESPN connectivity/actual network reconnect, Companion-to-app E2E, independent structured Direct, physical-phone or draft-ready release evidence. No production/Companion/ranking/source/workflow edits and no provider contact.
 
-REPEATED PARITY:
-- run `35460866285`: trust `105944368659` SUCCESS; self `105944382151` SUCCESS; hosted `105944382105` SUCCESS.
-- run `35461197805`: trust `105945263537` SUCCESS; self `105945274820` SUCCESS; hosted `105945274919` SUCCESS.
+BUILDER EXACT-HEAD CI: [run 35491052010](https://github.com/Ryan42062001/The-War-Room/actions/runs/35491052010) COMPLETED/SUCCESS at `c80aaa8807ed9ef94619b1117988e64d9b773234`; classify `106025927564`, Governance `106025949438`, full test `106025970045` SUCCESS; bootstrap-reuse SKIPPED. Independently read real full-test logs: full npm chain, named syntax-checked fixture, 2 browser iterations, all 8 negative controls rejected, stable A/B/source hashes, zero page errors. Earlier intermediary red CI runs `35490108994` and `35490407352` involved corrected test-only harness errors, not independently proved app defects.
 
-BENCHMARK:
-- run 1 stress: self 183154 ms vs hosted 160436 ms = 14.16% slower;
-- run 2 stress: self 182270 ms vs hosted 137516 ms = 32.54% slower;
-- mean stress: self 182712 ms vs hosted 148976 ms = 22.65% slower;
-- run 1 resilience: self 17624 ms vs hosted 16211 ms = 8.72% slower;
-- run 2 resilience: self 18956 ms vs hosted 14655 ms = 29.35% slower;
-- mean resilience: self 18290 ms vs hosted 15433 ms = 18.51% slower.
-- conclusion: functional/security viability only; no speed advantage.
+AUDITOR PUBLICATION:
+- Report: `.ai/auditor/WR120_REPAIRED_SYNTHETIC_REPLAY_RECONNECT_AUDIT.md`.
+- This handoff: `.ai/auditor/HANDOFF.md`.
+- PR / immutable Auditor head / exact-head Governance CI: verify and announce after publication; do not say COMPLETE until all exist.
+- Exactly two Auditor paths authorized; target Builder PR/branch unchanged.
 
-FINAL TARGET:
-- pilot run `35461615030` — SUCCESS
-  - trust `105946380768`
-  - hosted `105946392493`
-  - self-hosted `105946392540`
-- War Room CI `35461622646` — SUCCESS
-  - classify `105946400743`
-  - governance `105946432859`
-  - bootstrap-reuse `105946433631` SKIPPED
-  - test `105946457088` SUCCESS
+NEXT ACTION: Manager reviews published WR-120 evidence and independently verifies exact final Auditor PR/head/CI plus live Builder PR #338 head still `c80aaa8807ed9ef94619b1117988e64d9b773234`. Only Manager may separately integrate evidence and exact audited Builder target, then require mandatory exact canonical-main FULL CI canary before WR-118 closure. Keep both PRs open/unmerged pending Manager; do not activate downstream employees or claim release readiness.
 
-CANONICAL MANAGER EVIDENCE:
-- Manager freeze checkpoint `58eded3958d296d3392aac2cb1fdd92a0cd513c8`
-- post-freeze CI `35462263434` SUCCESS
-- post-activation CI `35462363341` SUCCESS
+FILES / ARTIFACTS THAT MATTER: Auditor report above, Builder PR #338, WR-119 historical PR #340, frozen Builder SHA, final Builder CI run `35491052010`, WR-D001/018/027/028/029/030/031.
 
-BOUNDARY:
-No WR-074 target/workflow/helper modification, runner reconfiguration, custody/provider access, product/research/Manager/shared write, remediation, or target merge occurred in this audit.
-
-NEXT ACTION:
-Manager may consume PASS only for exact WR-074 SHA `75fcd3756956b2943f18aff03115f9783a16d0aa`. If accepted, integrate only that exact audited target and run required canonical-main post-merge/full-CI validation before treating the pilot as accepted infrastructure. This PASS does not authorize broader triggers, generic self-hosted routing, credential-bearing self-hosted workloads, arbitrary PR execution, or a performance-superiority claim.
-
-FILES / ARTIFACTS THAT MATTER:
-- `.ai/auditor/WR-075_AUDIT.md`
-- `.ai/auditor/HANDOFF.md`
-- PR #307
-- frozen target `75fcd3756956b2943f18aff03115f9783a16d0aa`
-- pilot runs `35460866285`, `35461197805`, `35461615030`
-- final War Room CI `35461622646`
-
-DO NOT REPEAT:
-Do not transfer this PASS to a changed WR-074 SHA. Do not merge PR #307 as Auditor. Do not broaden runner labels/triggers, change runner configuration, or route credential-bearing/custody work onto self-hosted from this lane.
+DO NOT REPEAT: Do not transfer PASS to later Builder movement, do not reuse WR-119 verdict as the repaired verdict, do not merge either PR or claim live ESPN/Companion/phone/release evidence.
