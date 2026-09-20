@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-20T04:27:00Z",
+  "updated_at_utc": "2026-09-20T05:00:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -9,7 +9,7 @@
       "task_id": "WR-118",
       "owner": "Builder",
       "worker_slot": "builder-wr118-synthetic-replay-reconnect",
-      "status": "AUDIT_READY",
+      "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-118.md",
       "role_handoff": ".ai/builder/HANDOFF.md",
       "assignment_main_sha": "44ac8b88c4949465fcbcd7124e4b7119124e36e4",
@@ -45,53 +45,7 @@
         "scripts/workflow-"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "Manager froze exact Builder PR #338 head 39491e672b6177834aa029b7a716c612c7cc892d after exact-head full War Room CI 35488672532 SUCCESS. WR-119 fresh Independent Auditor assigned to this immutable target; WR-118 Builder must not write/move its target pending audit; no merge or production change. FAIL routes bounded Manager remediation/new audit; PASS-family plus published audit PR and CI -> Manager integration and exact main full CI canary."
-    },
-    {
-      "task_id": "WR-119",
-      "owner": "Auditor",
-      "worker_slot": "auditor-wr119-synthetic-replay-reconnect",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-119.md",
-      "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": "5dc8906d5285d1c51b51ef0068bd0a98753610ba",
-      "worker_checkpoint_sha": null,
-      "branch": "wr-119-synthetic-replay-reconnect-independent-audit",
-      "pr": null,
-      "dependency": "INDEPENDENT",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_required": false,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "audit_target_task": "WR-118",
-      "audit_target_pr": 338,
-      "audit_target_branch": "wr-118-synthetic-espn-replay-reconnect-regression",
-      "audit_target_sha": "39491e672b6177834aa029b7a716c612c7cc892d",
-      "allowed_path_prefixes": [
-        ".ai/auditor/WR119_SYNTHETIC_REPLAY_RECONNECT_AUDIT.md",
-        ".ai/auditor/HANDOFF.md"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/builder/",
-        ".ai/research/",
-        "scripts/",
-        "extensions/",
-        "js/",
-        "data/",
-        ".github/",
-        "src/"
-      ],
-      "forbidden_exact_paths": [
-        "package.json"
-      ],
-      "next_gate": "Fresh independent adversarial audit of exactly WR-118 PR #338 frozen Builder SHA 39491e672b6177834aa029b7a716c612c7cc892d, four-file diff and actual exact-head full CI. Challenge mechanical oracle, source/ownership correction, stale/unresolved/reorder/duplicates, A/B isolation, source digest, error diagnostics, app-only boundary. Auditor publishes exactly two auditor evidence/handoff files, one unmerged audit PR and exact-head CI, PASS-family or FAIL verdict -> Manager. No edits or merge of Builder target, live ESPN or provider contact."
+      "next_gate": "WR-D030 accepted independent WR-119 FAIL findings F01 MEDIUM BLOCKING (vacuous candidate list and missing nonterminal next-pick/on-clock oracle) and F02 LOW diagnostic loss. Builder is authorized to remediate existing PR #338 SAME branch test-only at historical failed target 39491e672b6177834aa029b7a716c612c7cc892d, in-place test fixture + Builder evidence/handoff; package.json test registration already accepted and MUST NOT be changed. Add non-vacuous candidate/actual decision eligibility and independently derived next-user-turn assertions at legitimate active states; strengthen failure diagnostics with safe actual/expected ledger digests and synthetic session/stage/pick. Demonstrate bounded negative controls, repeat named test and full npm test/full exact-new-head CI. No js/ production, extension, source, weights, ranks, runner, provider or live ESPN. Leave Builder PR #338 OPEN/UNMERGED; historical audit PR #340 OPEN/UNMERGED. Manager later freezes new head and commissions a NEW fresh distinct WR-120 independent re-audit; WR-119 verdict does not transfer."
     }
   ]
 }

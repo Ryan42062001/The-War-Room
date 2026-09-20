@@ -1,7 +1,7 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-20 — WR-D029 freezes WR-118 Builder PR #338 exact head for fresh independent WR-119 QA
+Last Manager gate: 2026-09-20 — WR-D030 accepts WR-119 F01/F02 historical FAIL and reassigns WR-118 bounded in-place test-only remediation
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
@@ -637,3 +637,10 @@ Manager verified canonical main `5dc8906d5285d1c51b51ef0068bd0a98753610ba`; WR-1
 WR-118 is now `AUDIT_READY` on frozen Builder SHA; do not move/merge PR #338 while review is in progress. WR-119 is separately ASSIGNED to fresh Independent Auditor / QA on a distinct branch from verified post-activation main, auditing only Builder PR #338 at the exact immutable head with exact two Auditor evidence/handoff paths and an independent OPEN/UNMERGED audit PR. If the frozen Builder SHA moves, current audit authority fails closed and Manager must refreeze and separately authorize fresh review. PASS-family independent audit publication, Manager integration, and exact canonical-main FULL CI canary are still required before WR-118 closure. A FAIL demands bounded new Manager remediation and fresh re-audit; no self-audit.
 
 No production app/Companion/dataset/workflow changes, user ESPN access, provider email/issue/form/contact, custom model source/scoring/2026 outcomes, ranking-policy changes or deployment authorized. WR-D001 ECR value/ESPN timing, WR-D018 fallback-first/LIVE_DIRECT_UNVERIFIED, WR-D027 no outreach and Track B `RIGHTS_UNVERIFIED / OPTION_C_UNPROVEN / NO_SOURCE_ADMISSION` all persist; Strategy and other roles are not assigned.
+
+
+## WR-D030 — WR-119 failed audit accepted; bounded WR-118 test-only remediation (2026-09-20)
+
+Independent WR-119 PR #340 is OPEN/UNMERGED at Auditor head `4e1432e306ade195816d685c5b3065e8a4be99c8`, two auditor-only files and exact-head Governance CI `35489592441` SUCCESS. Manager independently checked its findings against frozen WR-118 PR #338 historical Builder SHA `39491e672b6177834aa029b7a716c612c7cc892d`: WR-119-F01 MEDIUM/BLOCKING (vacuous empty recommendation debug list; missing independent active next user turn/on-clock oracle) and F02 LOW/non-blocking (snapshot apply/counter failure records null session and equal empty ledger digests). Historical audit verdict **FAIL — REMEDIATION REQUIRED** remains bound to old Builder SHA; this is a test-oracle/diagnostic gap, not proven production app defect. Both #338 and #340 remain OPEN/UNMERGED; WR-119 closed in active-only registry without merging audit evidence.
+
+WR-D030 reassigns WR-118 Builder **same original branch/PR #338** for narrowly bounded test-only repair of F01/F02. New edits allowed ONLY `scripts/test-wr-118-espn-replay-reconnect.mjs`, `.ai/builder/WR118_SYNTHETIC_REPLAY_RECONNECT_EVIDENCE.md`, `.ai/builder/HANDOFF.md`; existing `package.json` registration MUST stay unchanged. Prove nonempty eligible candidates at legitimately active stages, independently computed next user pick/on-clock and test-only negative controls; on failed apply/counters emit safe real expected/actual ledger digests, synthetic session/stage/pick/order and mismatch. NO production `js/`, Companion, player data/ESPN account, provider contact, ranking policy or deployment. Builder must prove new head with named/relevant tests plus FULL exact-head CI, then Manager freezes NEW immutable target and assigns **fresh distinct WR-120 Auditor** (not reuse WR-119 FAIL). No automatic integration or employee activation beyond Builder.
