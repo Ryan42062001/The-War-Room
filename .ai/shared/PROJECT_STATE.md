@@ -1,7 +1,7 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-19 — WR-117 inventory accepted; WR-D028 scopes WR-118 test-only synthetic replay/reconnect mechanical regression
+Last Manager gate: 2026-09-20 — WR-D029 freezes WR-118 Builder PR #338 exact head for fresh independent WR-119 QA
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
@@ -628,3 +628,12 @@ Manager independently reviewed WR-117 PR #336 exact Builder head `f5cb69949e607c
 WR-D028 authorizes only Builder WR-118 to add ONE deterministic synthetic **app-side** ESPN-like numbered replay/reconnect browser regression, `package.json` registration and two Builder evidence/handoff files. Compose existing already-tested draft invariants and ESPN fallback, duplicate/permuted/stale/partial snapshot processing, accepted-authority correction, two isolated saved sessions, controlled reload/replay, terminal/provisional state. No application code, Companion, player dataset, ranking algorithm/weights, live ESPN, provider contact or new source/model scoring. Builder must stop and provide reproducible evidence rather than modifying production files if a new test fails existing behavior. `AUDIT REQUIRED: YES`: Manager later freezes exact implementation SHA and assigns **fresh independent Auditor**, then integrates only accepted target and verifies canonical-main full CI canary for test-harness changes. Sole active task after this Manager transition is WR-118; no other employee activated now.
 
 A new recommendation-winner/threshold oracle for QB/WR/RB runs, high-ECR fallers and value-versus-need requires distinct later Draft Strategy contract, **not** a precondition for mechanical WR-118. WR-D001 current FantasyPros ECR value source and ESPN timing split and WR-D018 fallback-first/Direct-unverified unchanged. Custom-ranking Track B stays `RIGHTS_UNVERIFIED / INSUFFICIENT_NEW_CONFIRMATION_DATA`, `OPTION_C_UNPROVEN / NO_SOURCE_ADMISSION` and WR-D016 historic failed confirmation. Ryan's later no-provider-contact direction remains in force; do not draft, email, issue or message any third party.
+
+
+## WR-D029 — frozen WR-118 test-only candidate and WR-119 independent audit (2026-09-20)
+
+Manager verified canonical main `5dc8906d5285d1c51b51ef0068bd0a98753610ba`; WR-118 Builder PR #338 OPEN/UNMERGED, on dedicated branch and exact head `39491e672b6177834aa029b7a716c612c7cc892d`, with exactly four authorized files: one deterministic synthetic app-side snapshot replay/reconnect fixture, package test registration, Builder evidence and handoff. Exact-head PR War Room CI `35488672532` completed SUCCESS across classify `106019608130`, Governance `106019627767` and full product-test job `106019654656` (bootstrap reuse skipped). Actual full-test log shows `npm test` with existing extension/draft/recovery suites and syntax-checked WR-118 fixture. Two fixed-seed fresh browser contexts reported identical source / saved A / isolated B digests and zero browser page errors. These are test-execution results only, not an independent verdict or live ESPN/Companion transport certification.
+
+WR-118 is now `AUDIT_READY` on frozen Builder SHA; do not move/merge PR #338 while review is in progress. WR-119 is separately ASSIGNED to fresh Independent Auditor / QA on a distinct branch from verified post-activation main, auditing only Builder PR #338 at the exact immutable head with exact two Auditor evidence/handoff paths and an independent OPEN/UNMERGED audit PR. If the frozen Builder SHA moves, current audit authority fails closed and Manager must refreeze and separately authorize fresh review. PASS-family independent audit publication, Manager integration, and exact canonical-main FULL CI canary are still required before WR-118 closure. A FAIL demands bounded new Manager remediation and fresh re-audit; no self-audit.
+
+No production app/Companion/dataset/workflow changes, user ESPN access, provider email/issue/form/contact, custom model source/scoring/2026 outcomes, ranking-policy changes or deployment authorized. WR-D001 ECR value/ESPN timing, WR-D018 fallback-first/LIVE_DIRECT_UNVERIFIED, WR-D027 no outreach and Track B `RIGHTS_UNVERIFIED / OPTION_C_UNPROVEN / NO_SOURCE_ADMISSION` all persist; Strategy and other roles are not assigned.
