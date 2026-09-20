@@ -611,11 +611,15 @@ assert.match(wr122Presentation.adjacent.marketDetail, /no intervening opponent s
 assert.doesNotMatch(wr122Presentation.invalid.compact +
   wr122Presentation.invalid.marketDetail, /no intervening opponent selection|Back-to-back own turns/i);
 assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-card').getAttribute('open'), null);
-await page.locator('#wr122-presentation-fixture .recommendation-card-summary').focus();
-await page.keyboard.press('Enter');
+const wr122CardSummary = page.locator('#wr122-presentation-fixture .recommendation-card-summary');
+await wr122CardSummary.focus();
+assert.equal(await wr122CardSummary.evaluate(el => document.activeElement === el), true);
+await wr122CardSummary.press('Space');
 assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-card').getAttribute('open'), '');
-await page.locator('#wr122-presentation-fixture .recommendation-market-details summary').focus();
-await page.keyboard.press('Enter');
+const wr122MarketSummary = page.locator('#wr122-presentation-fixture .recommendation-market-details summary');
+await wr122MarketSummary.focus();
+assert.equal(await wr122MarketSummary.evaluate(el => document.activeElement === el), true);
+await wr122MarketSummary.press('Space');
 assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-market-details').getAttribute('open'), '');
 await page.setViewportSize({width:390,height:844});
 assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), 0);
