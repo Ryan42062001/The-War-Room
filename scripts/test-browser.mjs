@@ -497,6 +497,128 @@ assert.equal(await recommendationCard.getAttribute('open'), null);
 assert.equal(await page.locator('.recommendation-card-summary .recommendation-player b').count(), 1);
 assert.equal(await page.locator('.recommendation-one-line').count(), 1);
 
+// WR-122: isolated synthetic compact/expanded rendering using actual app interfaces.
+// No source rows, saved draft, engine policy, or ranking order are changed.
+const wr122Presentation = await page.evaluate(() => {
+  const live = buildLiveDraftDebugState();
+  const primary = live.scored[0];
+  const element = document.createElement('div');
+  element.id = 'wr122-presentation-fixture';
+  document.getElementById('recommended-pick-text').after(element);
+  const originalRows = [...document.querySelectorAll('tr.draftrow')].map(row => [
+    row.getAttribute('data-name'), row.getAttribute('data-ecr'),
+    row.getAttribute('data-espn-rank'), row.getAttribute('data-espn-adp'),
+    row.getAttribute('data-adp'), row.className
+  ]);
+  function currentEngine() {
+    return {
+      player:window.latestDraftRecommendation?.player,
+      action:window.latestDraftRecommendation?.recommendation,
+      confidenceScore:window.latestDraftRecommendation?.confidenceScore,
+      numericSurvival:calculateNextPickSurvival(primary, live.context),
+      finalScore:primary.finalScore, order:live.scored.map(player => player.name)
+    };
+  }
+  const liveBefore = currentEngine();
+  const standard = {...live.context};
+  const nonadjacent = {...standard, currentPick:5, calculatedNextPick:7,
+    nextPick:7, calculatedPicksUntilNext:1, teams:10, draftSlot:7,
+    rounds:16, totalPicks:160};
+  const adjacent = {...nonadjacent, currentPick:10, calculatedNextPick:11,
+    nextPick:11, calculatedPicksUntilNext:0, draftSlot:10};
+  const invalid = {...adjacent, calculatedNextPick:null, nextPick:null};
+  const es = live.scored.find(player => getMarketTimingDetails(player, standard).source.startsWith('ESPN'));
+  if (!es) throw new Error('No existing ESPN market candidate for WR-122');
+  const unknown = {...es, espnRank:null, espnAdp:null, adp:null, realTimeAdp:null, adpRank:null};
+  const fallback = {...unknown, adp:85};
+  function render(label, player, context, turn) {
+    const scored = [player].concat(live.scored.filter(item => item.name !== player.name));
+    const state = {...live, context, scored};
+    const recommendation = calculateDraftRecommendation(player, scored, context);
+    if (!recommendation) throw new Error('Missing actual recommendation for ' + label);
+    const explanation = buildRecommendationExplanation(recommendation, player, scored[1] || null);
+    const displayedRecommendation = turn ? {...recommendation, turnPackageActive:true,
+      turnRecommendedNow:player.name, turnTargetNext:scored[1]?.name || 'Best available'} : recommendation;
+    const displayedExplanation = turn ? {...explanation, type:'TURN_PACKAGE'} : explanation;
+    const capture = () => ({
+      player:recommendation.player, action:recommendation.recommendation,
+      confidenceScore:recommendation.confidenceScore, score:player.finalScore,
+      survival:calculateNextPickSurvival(player, context),
+      order:scored.map(item => item.name), market:getMarketTimingDetails(player, context)
+    });
+    const before = capture();
+    renderCompactRecommendationCard(element, displayedRecommendation, displayedExplanation, player, state);
+    const card = element.querySelector('.recommendation-card');
+    return {label, before, after:capture(),
+      compact:card.querySelector('summary.recommendation-card-summary').textContent,
+      expanded:card.querySelector('.recommendation-expanded').textContent,
+      marketDetail:card.querySelector('.recommendation-market-details').textContent,
+      marketSummary:card.querySelector('.recommendation-market-details summary').textContent,
+      confidence:card.querySelector('.recommendation-confidence').textContent,
+      factorCount:card.querySelectorAll('.recommendation-factor').length,
+      scoreDetails:card.querySelector('.recommendation-score-details:not(.recommendation-market-details)').textContent,
+      source:card.querySelector('.recommendation-market-details small').textContent};
+  }
+  const result = {
+    regular:render('ESPN market', es, standard, false),
+    unknown:render('unknown nonadjacent', unknown, nonadjacent, false),
+    fallback:render('FantasyPros fallback', fallback, nonadjacent, false),
+    adjacent:render('verified adjacent', es, adjacent, true),
+    invalid:render('invalid next context', es, invalid, true),
+    liveBefore, liveAfter:currentEngine(),
+    unchangedRows:JSON.stringify(originalRows) === JSON.stringify(
+      [...document.querySelectorAll('tr.draftrow')].map(row => [
+        row.getAttribute('data-name'), row.getAttribute('data-ecr'),
+        row.getAttribute('data-espn-rank'), row.getAttribute('data-espn-adp'),
+        row.getAttribute('data-adp'), row.className]))
+  };
+  render('verified adjacent', es, adjacent, true);
+  return result;
+});
+for (const item of Object.values(wr122Presentation).filter(value => value && value.before && value.after)) {
+  assert.deepEqual(item.after, item.before, 'WR-122 engine unchanged: ' + item.label);
+  assert.match(item.confidence, /Decision strength · heuristic/);
+  assert.doesNotMatch(item.confidence, /\d+%/);
+  assert.equal(item.factorCount, 4);
+  assert.equal(item.marketSummary, 'Market timing basis');
+  assert.match(item.expanded, /heuristic scores, not probabilities/);
+  assert.doesNotMatch(item.compact + item.scoreDetails, /\d+% (?:survival|confidence)|Survival \d+%/i);
+  assert.match(item.source, /Per-player market freshness not verified/);
+}
+assert.deepEqual(wr122Presentation.liveAfter, wr122Presentation.liveBefore);
+assert.equal(wr122Presentation.unchangedRows, true);
+assert.match(wr122Presentation.regular.compact, /ESPN (?:board|ADP)/);
+assert.match(wr122Presentation.regular.marketDetail, /Source: ESPN/);
+assert.match(wr122Presentation.regular.marketDetail, /not a calibrated probability/);
+assert.equal(wr122Presentation.unknown.before.market.marketRank, null);
+assert.equal(wr122Presentation.unknown.before.survival, 50);
+assert.match(wr122Presentation.unknown.compact, /Market timing unknown — no survival estimate/);
+assert.match(wr122Presentation.unknown.expanded, /No ESPN or FantasyPros market input/);
+assert.match(wr122Presentation.unknown.source, /Source: Unknown market/);
+assert.doesNotMatch(wr122Presentation.unknown.compact + wr122Presentation.unknown.expanded,
+  /50% survival|50% chance|low chance|you may be able to wait/i);
+assert.equal(wr122Presentation.fallback.before.market.source, 'FantasyPros ADP fallback');
+assert.match(wr122Presentation.fallback.compact, /FantasyPros ADP fallback/);
+assert.match(wr122Presentation.fallback.source, /Source: FantasyPros ADP fallback/);
+assert.doesNotMatch(wr122Presentation.fallback.marketDetail, /Source: ESPN/);
+assert.match(wr122Presentation.adjacent.compact, /Back-to-back own turns; second option remains conditional/);
+assert.match(wr122Presentation.adjacent.marketDetail, /no intervening opponent selection/);
+assert.doesNotMatch(wr122Presentation.invalid.compact +
+  wr122Presentation.invalid.marketDetail, /no intervening opponent selection|Back-to-back own turns/i);
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-card').getAttribute('open'), null);
+await page.locator('#wr122-presentation-fixture .recommendation-card-summary').focus();
+await page.keyboard.press('Enter');
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-card').getAttribute('open'), '');
+await page.locator('#wr122-presentation-fixture .recommendation-market-details summary').focus();
+await page.keyboard.press('Enter');
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-market-details').getAttribute('open'), '');
+await page.setViewportSize({width:390,height:844});
+assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), 0);
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-card-summary').isVisible(), true);
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-market-details').isVisible(), true);
+await page.setViewportSize({width:1280,height:900});
+await page.evaluate(() => document.getElementById('wr122-presentation-fixture').remove());
+
 const websiteSettingsSync = await page.evaluate(async () => {
   const fields = ['pcTeams', 'pcSlot', 'pcRounds'].map(id => document.getElementById(id));
   const original = fields.map(field => field.value);
