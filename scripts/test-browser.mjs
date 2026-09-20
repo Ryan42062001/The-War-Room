@@ -706,6 +706,10 @@ await page.setViewportSize({width:390,height:844});
 assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), 0);
 assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-card-summary').isVisible(), true);
 assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-market-details').isVisible(), true);
+await page.setViewportSize({width:375,height:812});
+assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), 0);
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-card-summary').isVisible(), true);
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-market-details').isVisible(), true);
 await page.setViewportSize({width:1280,height:900});
 await page.evaluate(() => document.getElementById('wr122-presentation-fixture').remove());
 
