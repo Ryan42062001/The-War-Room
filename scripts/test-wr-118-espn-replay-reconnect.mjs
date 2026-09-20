@@ -241,9 +241,16 @@ function assertUserTurn(label, state, expectedLedger) {
   }});
 }
 function assertActiveCandidates(label, state, expectedLedger) {
-  if (!state.active) return;
-  check(state.completed < TOTAL && state.completion.myRosterCount < ROUNDS &&
-    !state.completion.complete && state.candidateCount > 0 &&
+  const shouldBeActive = state.completed < TOTAL &&
+    state.completion.myRosterCount < ROUNDS;
+  check(state.active === shouldBeActive &&
+    (!shouldBeActive || !state.completion.complete),
+  label + ': independently active roster-eligible stage', state, expectedLedger,
+  {detail:{shouldBeActive, actualActive:state.active,
+    completed:state.completed, myRosterCount:state.completion.myRosterCount,
+    completion:state.completion}});
+  if (!shouldBeActive) return;
+  check(state.candidateCount > 0 &&
     state.inspectedCandidateCount > 0 &&
     state.invalidCandidates === 0 && state.primaryIndex != null &&
     state.decisionPlayerIndex === state.primaryIndex &&
