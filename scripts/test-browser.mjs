@@ -565,6 +565,7 @@ const wr122Presentation = await page.evaluate(() => {
       marketDetail:card.querySelector('.recommendation-market-details').textContent,
       marketSummary:card.querySelector('.recommendation-market-details summary').textContent,
       confidence:card.querySelector('.recommendation-confidence').textContent,
+      compactTimingAccessible:card.querySelector('.recommendation-one-line b').getAttribute('aria-label'),
       factorCount:card.querySelectorAll('.recommendation-factor').length,
       scoreDetails:card.querySelector('.recommendation-score-details:not(.recommendation-market-details)').textContent,
       source:card.querySelector('.recommendation-market-details small').textContent};
@@ -594,21 +595,24 @@ for (const item of Object.values(wr122Presentation).filter(value => value && val
   assert.match(item.expanded, /heuristic scores, not probabilities/);
   assert.doesNotMatch(item.compact + item.scoreDetails, /\d+% (?:survival|confidence)|Survival \d+%/i);
   assert.match(item.source, /Per-player market freshness not verified/);
+  assert.match(item.compactTimingAccessible, /Market timing/);
 }
 assert.deepEqual(wr122Presentation.liveAfter, wr122Presentation.liveBefore);
 assert.equal(wr122Presentation.unchangedRows, true);
-assert.match(wr122Presentation.regular.compact, /ESPN (?:board|ADP)/);
+assert.match(wr122Presentation.regular.compact, /ESPN (?:B\+ADP|board|ADP)/);
 assert.match(wr122Presentation.regular.marketDetail, /Source: ESPN/);
 assert.match(wr122Presentation.regular.marketDetail, /not a calibrated probability/);
 assert.equal(wr122Presentation.unknown.before.market.marketRank, null);
 assert.equal(wr122Presentation.unknown.before.survival, 50);
-assert.match(wr122Presentation.unknown.compact, /Market timing unknown — no survival estimate/);
+assert.match(wr122Presentation.unknown.compact, /Timing UNKNOWN/);
+assert.match(wr122Presentation.unknown.compactTimingAccessible, /Market timing unknown — no survival estimate/);
 assert.match(wr122Presentation.unknown.expanded, /No ESPN or FantasyPros market input/);
 assert.match(wr122Presentation.unknown.source, /Source: Unknown market/);
 assert.doesNotMatch(wr122Presentation.unknown.compact + wr122Presentation.unknown.expanded,
   /50% survival|50% chance|low chance|you may be able to wait/i);
 assert.equal(wr122Presentation.fallback.before.market.source, 'FantasyPros ADP fallback');
-assert.match(wr122Presentation.fallback.compact, /FantasyPros ADP fallback/);
+assert.match(wr122Presentation.fallback.compact, /FP ADP fallback/);
+assert.match(wr122Presentation.fallback.compactTimingAccessible, /FantasyPros ADP fallback/);
 assert.match(wr122Presentation.fallback.source, /Source: FantasyPros ADP fallback/);
 assert.doesNotMatch(wr122Presentation.fallback.marketDetail, /Source: ESPN/);
 assert.match(wr122Presentation.adjacent.compact, /Back-to-back own turns; second option remains conditional/);
