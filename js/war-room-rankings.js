@@ -1671,7 +1671,7 @@ function getRecommendationDisplayTurnEvidence(context) {
   if (!context || typeof context !== 'object') return unverified;
   function integerInput(raw, allowZero) {
     if (typeof raw !== 'number' && (typeof raw !== 'string' ||
-        !/^(?:0|[1-9]\\d*)$/.test(raw))) return null;
+        !/^(?:0|[1-9]\d*)$/.test(raw))) return null;
     var value = Number(raw);
     return Number.isSafeInteger(value) && value >= (allowZero ? 0 : 1) ? value : null;
   }
@@ -1784,8 +1784,10 @@ function renderCompactRecommendationCard(element, recommendation, explanation, p
   var summaryPositions = isTurn && marketPresentation.adjacentOwnTurn
     ? [recommendation.turnPick1Position, recommendation.turnPick2Position].filter(Boolean).join(' + ')
     : primary.position + (team ? ' · ' + team : '');
-  var summaryReason = isTurn && marketPresentation.adjacentOwnTurn
-    ? 'Back-to-back own turns; second option remains conditional'
+  var summaryReason = isTurn
+    ? marketPresentation.adjacentOwnTurn
+      ? 'Back-to-back own turns; second option remains conditional'
+      : 'Next-turn context unverified; second target conditional'
     : reason;
 
   var details = '<div class="recommendation-expanded">';
