@@ -1639,12 +1639,57 @@ function clampRecommendationFactor(value) {
   return Math.max(0, Math.min(100, Number(value) || 0));
 }
 
-function getCompactRecommendationReason(explanation, survival) {
+function getCompactRecommendationReason(explanation, marketKnown, adjacentOwnTurn) {
   var reasons = explanation && Array.isArray(explanation.reasons) ? explanation.reasons : [];
-  if (reasons.length) return String(reasons[0]).replace(/<[^>]*>/g, '').slice(0, 105);
-  if (survival < 30) return 'Strong value with a low chance of reaching your next pick';
-  if (survival >= 70) return 'Good option, but the market suggests you may be able to wait';
-  return 'Best available fit for value, roster construction, and timing';
+  var reason = reasons.length ? String(reasons[0]).replace(/<[^>]*>/g, '').slice(0, 105) : '';
+  // A neutral unknown-market engine value is not a probability or a reason to wait.
+  if (!marketKnown && /chance|surviv|likely|probab|\\d+%|able to wait/i.test(reason)) reason = '';
+  if (reason) return reason;
+  if (adjacentOwnTurn) return 'Adjacent own selections; the second option must remain eligible';
+  return marketKnown
+    ? 'Heuristic fit for ECR value, roster construction, and market timing'
+    : 'ECR value and roster fit; market timing is unknown';
+}
+
+// Display-only: do not infer an adjacent own turn from a missing next-pick field
+// or the engine's neutral/zero-opponent fallback.
+function hasVerifiedAdjacentOwnTurn(context) {
+  if (!context) return false;
+  var teams = Number(context.teams);
+  var slot = Number(context.draftSlot);
+  var current = Number(context.currentPick);
+  var rawNext = context.calculatedNextPick != null ? context.calculatedNextPick : context.nextPick;
+  var next = Number(rawNext);
+  var total = Number(context.totalPicks) || teams * (Number(context.rounds) || 16);
+  if (!Number.isInteger(teams) || teams < 2 || !Number.isInteger(slot) ||
+      slot < 1 || slot > teams || !Number.isInteger(current) ||
+      !Number.isInteger(next) || current < 1 || next !== current + 1 ||
+      next > total || current >= total) return false;
+  function owner(pick) {
+    var round = Math.ceil(pick / teams);
+    var index = (pick - 1) % teams;
+    return round % 2 ? index + 1 : teams - index;
+  }
+  return owner(current) === slot && owner(next) === slot;
+}
+
+function getCompactMarketPresentation(player, context) {
+  var market = getMarketTimingDetails(player, context);
+  var adjacentOwnTurn = hasVerifiedAdjacentOwnTurn(context);
+  var marketKnown = market.marketRank != null &&
+    Number.isFinite(Number(market.marketRank)) && Number(market.marketRank) > 0;
+  var source = marketKnown ? String(market.source) : 'Unknown market';
+  return {
+    market:market, marketKnown:marketKnown, source:source,
+    adjacentOwnTurn:adjacentOwnTurn,
+    headline:marketKnown ? 'Market timing · ' + source + ' (heuristic)' :
+      'Market timing unknown — no survival estimate',
+    basis:adjacentOwnTurn
+      ? 'Verified adjacent own snake picks: no intervening opponent selection; second choice remains conditional on eligibility.'
+      : marketKnown
+        ? 'Next-turn market timing is a heuristic, not a calibrated probability.'
+        : 'No ESPN or FantasyPros market input; next-turn survival cannot be estimated.'
+  };
 }
 
 function buildCompactFactorHtml(label, value) {
@@ -1655,9 +1700,16 @@ function buildCompactFactorHtml(label, value) {
 }
 
 function buildMarketTimingDetailsHtml(player, context) {
-  var market = getMarketTimingDetails(player, context);
-  var nextPick = Number(context && (context.calculatedNextPick || context.nextPick)) || 0;
-  var currentPick = Number(context && context.currentPick) || 0;
+  var presentation = getCompactMarketPresentation(player, context);
+  var market = presentation.market;
+  var rawNext = context && (context.calculatedNextPick != null ? context.calculatedNextPick : context.nextPick);
+  var nextPick = Number(rawNext);
+  var currentPick = Number(context && context.currentPick);
+  var totalPicks = Number(context && context.totalPicks) ||
+    Number(context && context.teams) * Number(context && context.rounds || 16);
+  var validNextPick = Number.isInteger(currentPick) && currentPick > 0 &&
+    Number.isInteger(nextPick) && nextPick > currentPick &&
+    Number.isFinite(totalPicks) && nextPick <= totalPicks;
   var parts = [];
   if (market.espnRank != null) parts.push('ESPN board <b>#' + market.espnRank.toFixed(0) + '</b>');
   if (market.espnAdp != null) parts.push('ESPN ADP <b>' + market.espnAdp.toFixed(1) + '</b>');
@@ -1665,19 +1717,21 @@ function buildMarketTimingDetailsHtml(player, context) {
   if (market.espnRank != null && market.espnAdp != null) parts.push('weights <b>' + Math.round(market.boardWeight * 100) + '/' + Math.round(market.adpWeight * 100) + '</b>');
   if (market.autoOpponentPicks) parts.push('confirmed Auto picks before next turn <b>' + market.autoOpponentPicks + '/' + market.totalOpponentPicks + '</b>');
   if (market.marketRank != null) parts.push('estimated market pick <b>' + market.marketRank.toFixed(1) + '</b>');
-  if (nextPick) parts.push('next pick <b>#' + nextPick + '</b> (' + Math.max(0, nextPick - currentPick) + ' away)');
-  return '<details class="recommendation-score-details recommendation-market-details"><summary>Why this survival?</summary><div>' +
+  if (validNextPick) parts.push('next pick <b>#' + nextPick + '</b> (' + (nextPick - currentPick) + ' away)');
+  return '<details class="recommendation-score-details recommendation-market-details"><summary>Market timing basis</summary><div>' +
+    escapeSummaryHtml(presentation.basis) + ' ' +
     (parts.length ? parts.join(' · ') : 'No ESPN or FantasyPros market data is available for this player.') +
-    '</div><small>' + escapeSummaryHtml(market.source) + '</small></details>';
+    '</div><small>Source: ' + escapeSummaryHtml(presentation.source) +
+    ' · Per-player market freshness not verified · No calibrated survival probability</small></details>';
 }
 
 function renderCompactRecommendationCard(element, recommendation, explanation, primary, state) {
   var action = String(recommendation.recommendation || 'CONSIDER').toUpperCase();
   var actionClass = action.toLowerCase().replace(/[^a-z]+/g, '-');
-  var confidenceScore = Math.round(clampRecommendationFactor(recommendation.confidenceScore));
   var confidenceLabel = explanation.confidence || recommendation.confidence || 'LOW';
-  var survival = Math.round(clampRecommendationFactor(calculateNextPickSurvival(primary, state.context)));
-  var reason = getCompactRecommendationReason(explanation, survival);
+  var marketPresentation = getCompactMarketPresentation(primary, state.context);
+  var reason = getCompactRecommendationReason(
+    explanation, marketPresentation.marketKnown, marketPresentation.adjacentOwnTurn);
   var reasons = (Array.isArray(explanation.reasons) ? explanation.reasons : []).slice(0, 3);
   var alternative = state.scored[1] || null;
   var scoreGap = alternative ? Number(primary.finalScore || 0) - Number(alternative.finalScore || 0) : 0;
@@ -1689,7 +1743,9 @@ function renderCompactRecommendationCard(element, recommendation, explanation, p
   var summaryPositions = isTurn
     ? [recommendation.turnPick1Position, recommendation.turnPick2Position].filter(Boolean).join(' + ')
     : primary.position + (team ? ' · ' + team : '');
-  var summaryReason = isTurn ? 'Best back-to-back package with no opponent pick between' : reason;
+  var summaryReason = isTurn && marketPresentation.adjacentOwnTurn
+    ? 'Back-to-back own turns; second option remains conditional'
+    : reason;
 
   var details = '<div class="recommendation-expanded">';
   if (isTurn) {
@@ -1703,7 +1759,7 @@ function renderCompactRecommendationCard(element, recommendation, explanation, p
       return '<li>' + escapeSummaryHtml(String(item).replace(/<[^>]*>/g, '')) + '</li>';
     }).join('') + '</ul></section>';
   }
-  details += '<section class="recommendation-factors"><h3>Decision factors</h3><div class="recommendation-factor-grid">' +
+  details += '<section class="recommendation-factors"><h3>Decision factors · heuristic scores, not probabilities</h3><div class="recommendation-factor-grid">' +
     buildCompactFactorHtml('ECR value', primary.rankScore) +
     buildCompactFactorHtml('Roster need', primary.rosterNeedScore) +
     buildCompactFactorHtml('Scarcity', primary.scarcityScore) +
@@ -1717,15 +1773,17 @@ function renderCompactRecommendationCard(element, recommendation, explanation, p
   details += '<details class="recommendation-score-details"><summary>Scoring details</summary><div>Base value <b>' + Number(primary.baseScore || 0).toFixed(1) +
     '</b> · Strategy impact <b>' + (Number(primary.cappedStrategyAdjustment || 0) >= 0 ? '+' : '') + Number(primary.cappedStrategyAdjustment || 0).toFixed(1) +
     '</b> · Guardrails <b>' + (Number(primary.guardrailAdjustment || 0) >= 0 ? '+' : '') + Number(primary.guardrailAdjustment || 0).toFixed(1) +
-    '</b> · Final <b>' + Number(primary.finalScore || 0).toFixed(1) + '</b> · Survival <b>' + survival + '%</b>' +
+    '</b> · Final <b>' + Number(primary.finalScore || 0).toFixed(1) + '</b> · ' +
+    escapeSummaryHtml(marketPresentation.headline) +
     (isTurn ? ' · Package advantage <b>+' + Number(recommendation.turnPackageAdvantage || 0).toFixed(1) + '</b>' : '') + '</div></details></div>';
 
   var markup = '<details class="recommendation-card" data-action="' + actionClass + '"><summary class="recommendation-card-summary">' +
     '<span class="recommendation-action">' + escapeSummaryHtml(isTurn ? 'TURN PLAN' : action) + '</span>' +
     '<span class="recommendation-player"><b>' + summaryTitle + '</b><small>' + escapeSummaryHtml(summaryPositions) + '</small></span>' +
-    '<span class="recommendation-confidence"><b>' + confidenceScore + '%</b><small>' + escapeSummaryHtml(confidenceLabel) + '</small></span>' +
+    '<span class="recommendation-confidence"><b>' + escapeSummaryHtml(confidenceLabel) + '</b><small>Decision strength · heuristic</small></span>' +
     '<span class="recommendation-chevron" aria-hidden="true">⌄</span>' +
-    '<span class="recommendation-one-line">' + escapeSummaryHtml(summaryReason) + '<b>' + survival + '% survival</b></span>' +
+    '<span class="recommendation-one-line">' + escapeSummaryHtml(summaryReason) + '<b>' +
+    escapeSummaryHtml(marketPresentation.headline) + '</b></span>' +
     '</summary>' + details + '</details>';
   if (element._recommendationMarkup === markup) return;
   var wasOpen = Boolean(element.querySelector('.recommendation-card[open]'));
