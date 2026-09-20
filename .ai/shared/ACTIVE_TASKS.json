@@ -1,20 +1,20 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-20T02:00:00Z",
+  "updated_at_utc": "2026-09-20T02:25:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
   "tasks": [
     {
-      "task_id": "WR-112",
+      "task_id": "WR-113",
       "owner": "R&D",
-      "worker_slot": "rnd-wr112-prospective-rights-protocol-gate",
+      "worker_slot": "rnd-wr113-rights-clarification-readiness",
       "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-112.md",
+      "task_file": ".ai/manager/WR-113.md",
       "role_handoff": ".ai/research/HANDOFF.md",
-      "assignment_main_sha": "a4dcbbaca52915898cc2da437506fd0f4ebdd975",
+      "assignment_main_sha": "7129608c5ea86044552dcfba4f5c6792730be563",
       "worker_checkpoint_sha": null,
-      "branch": "wr-112-prospective-rights-protocol-feasibility",
+      "branch": "wr-113-rights-clarification-protocol-readiness",
       "pr": null,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
@@ -27,8 +27,8 @@
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
-        ".ai/research/WR112_SOURCE_RIGHTS_DECISION_GATE.md",
-        ".ai/research/WR112_PROSPECTIVE_PROTOCOL_FEASIBILITY.md",
+        ".ai/research/WR113_RIGHTS_CLARIFICATION_CUSTODY_READINESS.md",
+        ".ai/research/WR113_PRE2027_PROTOCOL_POWER_READINESS.md",
         ".ai/research/HANDOFF.md"
       ],
       "forbidden_path_prefixes": [
@@ -43,7 +43,7 @@
         "extensions/"
       ],
       "forbidden_exact_paths": [],
-      "next_gate": "R&D public-documentation-only rights-path and 2027/2028 protocol/power feasibility packet -> exact-head Governance CI -> Manager review; no source acquisition/admission, executable protocol, audit, model fitting or scoring from WR-112."
+      "next_gate": "R&D documentary rights/custody and pre-2027 protocol/power readiness paper-only three-file PR and exact-head Governance CI -> Manager review. No provider contact, data acquisition, source admission, executable protocol, independent audit or scoring."
     }
   ]
 }

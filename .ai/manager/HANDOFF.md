@@ -1,13 +1,14 @@
 # Manager / Architect Handoff
 
-STATUS: WR-111 CLOSED / WR-112 ASSIGNED — NO-DATA-ACQUISITION PROSPECTIVE GATE
+STATUS: WR-112 CLOSED / WR-113 ASSIGNED — NO-DATA RIGHTS AND PRE-2027 READINESS
 WORKFLOW: V3.5 CANONICAL
-MODE: STANDARD_CHAT_HIGH / FAST_REFRESH
+EXECUTION MODE: STANDARD_CHAT_HIGH
+REFRESH MODE: FAST_REFRESH
 
-WR-111 research PR #321 exact head `31413aa9b2708dc02c4e3bebe23dab98953072d2`: three research-only files; exact-head War Room CI `35481092223` SUCCESS (classify/Governance passed, product skipped). Manager merged it at canonical `a4dcbbaca52915898cc2da437506fd0f4ebdd975`. Research accepted without any new data/source, model, protocol, outcome or production authorization. Disposition `INSUFFICIENT_NEW_CONFIRMATION_DATA`.
+WR-112 paper-only research PR #323 exact head `b635d8005e7a1fc3c5422f5ea8786da56eae04d6`: three authorized research/handoff paths; exact-head CI `35483333620` SUCCESS (Governance passed; product skipped). Accepted canonical research merge `7129608c5ea86044552dcfba4f5c6792730be563`. WR-112 CLOSED. `INSUFFICIENT_NEW_CONFIRMATION_DATA` remains; no project-specific future source right, data, measured power, runnable protocol or model result.
 
-WR-D019 selects the intended inference claim: prospectively locked 2027 validation and distinct 2028 confirmation, subject to future rights, independently audited pre-outcome protocol and four-position power. A standalone one-year test is not cross-season confirmation; 2029 is not automatically required.
+WR-D020 authorizes only WR-113, a distinct public-documentation and paper-only no-data-acquisition source-rights clarification and pre-2027 protocol/power-readiness task. **Accountable rights and custody decision owner: Ryan, War Room project owner acting via Manager / Architect.** R&D is responsible only for published evidence and unsent documentary questions; user's intended private/public/commercial use, operational custodian and future lawful entitlement remain UNKNOWN until separately approved. The conditional 2027 validation / 2028 confirmation evidence standard in WR-D019 is unchanged.
 
-Next sole active task: WR-112 — `.ai/manager/WR-112.md`, owner R&D, branch `wr-112-prospective-rights-protocol-feasibility`. Only two WR112 public-documentation/synthetic-paper rights/protocol-feasibility reports and `.ai/research/HANDOFF.md` are writable. New R&D branch must start from the exact post-activation canonical main. No data/provider account/API/credential, 2026/protected outcomes, licensed source admission, executable protocol, fitting/scoring, new one-time authority, Strategy/Builder/QA activation, ranking changes, season-total composition or Phase 6.
+Sole active task: WR-113, spec `.ai/manager/WR-113.md`, branch `wr-113-rights-clarification-protocol-readiness` to bootstrap from exact post-activation canonical-main merge after Governance CI. Allowed writes exactly `.ai/research/WR113_RIGHTS_CLARIFICATION_CUSTODY_READINESS.md`, `.ai/research/WR113_PRE2027_PROTOCOL_POWER_READINESS.md`, `.ai/research/HANDOFF.md`. Mode `STANDARD_CHAT_HIGH`; Fast Refresh.
 
-Manager next: verify WR-112 three-file diff and exact-head Governance CI; decide whether documented specific source rights and preseason/power gates justify a separately authorized rights/source intake or pre-outcome executable protocol/audit. Do not auto-advance from a research-only feasibility PASS.
+No provider outreach, API/account/credentials/terms, data/2026 or protected outcomes, source intake, real position/power measurement, storage deployment, executable protocol/model/threshold/prediction lock, fitting/scoring, independent audit activation, Strategy/Builder/Work Helper, rankings or Phase 6. R&D final three-file PR and exact-head Governance CI return to Manager only. Any source-intake, protocol-freeze, separate independent audit or protected-scoring task requires later distinct Manager authorization.

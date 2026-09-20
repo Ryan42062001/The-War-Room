@@ -1,7 +1,7 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — WR-112 no-acquisition prospective rights/protocol feasibility assigned; no scoring authority
-Current-state snapshot: 2026-09-19 after WR-111 research acceptance / WR-112 Manager activation; refresh against `.ai/shared/ACTIVE_TASKS.json` before routing or acting.
+Status: ACTIVE DEVELOPMENT — WR-113 paper-only rights clarification and pre-2027 readiness assigned; no source or scoring authority
+Current-state snapshot: 2026-09-19 after WR-112 research acceptance / WR-113 Manager activation; refresh against `.ai/shared/ACTIVE_TASKS.json` before routing or acting.
 Owner: Manager / Architect
 Workflow: V3.5 — CANONICAL
 
@@ -11,8 +11,8 @@ Workflow: V3.5 — CANONICAL
 
 | Priority | Workstream | Current state | Required next gate / boundary |
 | --- | --- | --- | --- |
-| 0 | **WR-112 — no-acquisition prospective source-rights / protocol feasibility** | **ASSIGNED — R&D documentation and synthetic/paper assumptions only**, `STANDARD_CHAT_HIGH`; branch `wr-112-prospective-rights-protocol-feasibility`. | Resolve source-instance rights questions and prerequisite dates, define auditable pre-2027 cutoff, QB/RB/WR/TE position power and 2027 validation → 2028 confirmation feasibility decision packet. Exactly two research reports plus handoff; no rights grant, source acquisition, protected outcome, runnable protocol, model fitting/scoring or production authority. |
-| 1 | **WR-111 / WR-110 — prior prospective research** | **CLOSED — research accepted only**; WR-111 PR #321 exact head `31413aa9b2708dc02c4e3bebe23dab98953072d2` integrated as `a4dcbbaca52915898cc2da437506fd0f4ebdd975`. | Disposition `INSUFFICIENT_NEW_CONFIRMATION_DATA`; WR-D019 sets the intended two-stage evidence claim without assuming actual 2027/2028 rights, statistical adequacy, or a mandatory 2029 season. |
+| 0 | **WR-113 — rights clarification and pre-2027 protocol/power readiness** | **ASSIGNED — R&D public-documentation/paper-only**, `STANDARD_CHAT_HIGH`; branch `wr-113-rights-clarification-protocol-readiness`. Named accountable rights/custody decision owner **Ryan / Manager**. | Document future asset/use/retention/auditor permission questions and kickoff-relative protocol/position-power readiness; exactly two reports + handoff. No provider contact, source intake, real-player estimates, executable protocol, audit or scoring authority. |
+| 1 | **WR-112 / WR-111 / WR-110 — prior prospective research** | **CLOSED — research accepted only**; WR-112 PR #323 exact head `b635d8005e7a1fc3c5422f5ea8786da56eae04d6` integrated as `7129608c5ea86044552dcfba4f5c6792730be563`. | `INSUFFICIENT_NEW_CONFIRMATION_DATA`; WR-D019's cross-season standard remains conditional on rights, custody, cutoff and four-position power; 2029 not automatically required. |
 | 2 | **WR-109 — draft-cycle readiness and ESPN Direct evidence assessment** | **CLOSED — evidence accepted only**, PR #314 exact head `03cc8b6366f666bf7fe3bbe168a031886a2b7f95`; canonical merge `feb6e35898608a1fc656a3d6712d984a43b8ae59`. | The two research reports and consent-safe future mock plan are accepted; `LIVE_DIRECT_UNVERIFIED` remains. Separate approval is required for live testing or data/source work. |
 | 3 | **ESPN sync reliability: fallback-first, opportunistic structured acceleration** | **ACCEPTED POSTURE / NO NEW TASK** — WR-D018 clarifies WR-D003: Board/Pick History is the live-proven complete source class in observed mocks; independent structured Direct remains `LIVE_DIRECT_UNVERIFIED` / `DIRECT_NOT_SUPPORTED_BY_AVAILABLE_EVIDENCE`, not proven impossible. | Preserve current layered code and fallback; no open-ended Direct pursuit. Revisit only upon newly attributable structured-source evidence or a separately authorized, consent-safe disposable mock with user readiness. Do not request credentials or treat synthetic hooks/tests as live Direct proof. |
 | 4 | **Next draft-cycle rankings/source intake** | **PROPOSED / NOT ASSIGNED** — existing bundled 2026 baseline remains authoritative for the current application. | Separate Manager-scoped source/provenance and rights/availability review, seasonal identity/freshness, FantasyPros expert PPR ECR value vs ESPN board/ADP timing, import/baseline count/hash and compatibility assessment. No silent update, acquisition, source substitution, player/rank fabrication, or production dataset replacement. |
@@ -28,7 +28,7 @@ Workflow: V3.5 — CANONICAL
 
 ### Routing rule
 
-WR-112 is the **only assigned task in the active-only registry at this snapshot**. Proposed work above is planning, not permission to run tests on the user's ESPN account, alter data/production, create downstream worker assignments, or expand infrastructure. Manager must refresh the registry and live PR/CI state before any transition; WR-110 and WR-111 are closed after accepted research-only integration. Its previously authorized three-file branch grants no continuing write or scoring authority. The external ESPN Direct Work investigation concluded without repository writes. WR-D018 records the bounded feasibility disposition; it grants no new task, browser permission, account access, or implementation authority.
+WR-113 is the **only assigned task in the active-only registry at this snapshot**. Proposed work above is planning, not permission to run tests on the user's ESPN account, alter data/production, create downstream worker assignments, or expand infrastructure. Manager must refresh the registry and live PR/CI state before any transition; WR-110, WR-111 and WR-112 are closed after research-only integration. Previous task branches grant no further write or scoring authority. The external ESPN Direct Work investigation concluded without repository writes. WR-D018 records the bounded feasibility disposition; it grants no new task, browser permission, account access, or implementation authority.
 
 ---
 
@@ -430,3 +430,8 @@ R&D is authorized for **public documentation/read-only** investigation of provid
 ## WR-111 accepted / WR-112 narrow prospective planning gate (2026-09-19)
 
 Manager accepted only WR-111 three-file research PR #321 at immutable `31413aa9b2708dc02c4e3bebe23dab98953072d2` with exact-head CI `35481092223` SUCCESS and canonical research merge `a4dcbbaca52915898cc2da437506fd0f4ebdd975`. New WR-D019 chooses a prospective 2027 validation plus independent 2028 season confirmation as the *intended cross-season claim*, contingent on separately audited point-in-time/source/position-power design; a one-season test supports only its one-season estimand, and a 2029 season is not automatically required. `INSUFFICIENT_NEW_CONFIRMATION_DATA` remains. WR-112 is a new research-only, no-data-acquisition rights/protocol-feasibility task; it cannot admit data, freeze an executable model/protocol, run scoring, or promote rankings. All such steps require later explicit Manager decisions and applicable independent audit.
+
+
+## WR-112 accepted / WR-113 no-data rights/readiness gate (2026-09-19)
+
+Manager accepted research-only WR-112 PR #323 exact head `b635d8005e7a1fc3c5422f5ea8786da56eae04d6` after exact-head Governance CI `35483333620` SUCCESS and merged it at `7129608c5ea86044552dcfba4f5c6792730be563`. No project license, future source, actual player/position power, runnable protocol or new model result exists; `INSUFFICIENT_NEW_CONFIRMATION_DATA` remains. WR-D020 designates Ryan / Manager accountable for future rights and custody decisions and authorizes only WR-113 documentary clarification and symbolic pre-2027 readiness. Any provider contact, real source intake, executable protocol/freeze, independent audit, fitting or scoring requires later specific authority.

@@ -1,7 +1,7 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-19 — WR-111 research integrated; WR-112 activation proposed
+Last Manager gate: 2026-09-19 — WR-112 research accepted; WR-113 paper-only gate assigned
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
@@ -563,3 +563,10 @@ Manager reviewed the exact three-file WR-111 PR #321 at `31413aa9b2708dc02c4e3be
 WR-D019 sets the intended independent *cross-season confirmation* evidence standard: a predeclared 2027 validation and separate 2028 temporal confirmation, subject to point-in-time locks, rights, per-position effective sample/power and independent audits. A single prospective season may support only a narrow one-season claim and is not cross-season confirmation; neither a 2029 target nor 2027/2028 actual data entitlement is assumed. No post-validation retuning can preserve the identity of the original confirmatory candidate.
 
 WR-112 alone is authorized to determine, on public documentation and synthetic/paper design assumptions only, whether rights-compatible source/time and statistically supportable prospective 2027/2028 planning are plausible, and what smallest later Manager/user/provider gates remain. No acquisition, provider API/account/credential access or new terms acceptance, protected or 2026 outcomes, model, executable protocol, forecast lock, scoring, production ranking, Draft Strategy or Builder lane, or Phase 6 is authorized. If 2027 point-in-time prerequisites cannot be established before its preseason cutoff, report the missed gate rather than retroactively designating another target.
+
+
+## WR-112 accepted / WR-113 no-acquisition rights and readiness gate (2026-09-19)
+
+Manager independently reviewed WR-112 research-only PR #323 exact head `b635d8005e7a1fc3c5422f5ea8786da56eae04d6`, three authorized research/handoff files, and exact-head War Room CI `35483333620` SUCCESS (Governance passed; product skipped). Canonical research merge: `7129608c5ea86044552dcfba4f5c6792730be563`. WR-112 CLOSED. Its reports identify public source terms, future asset/upstream ML/retention/auditor-rights gaps, conditional 2027/2028 cutoff chronology and symbolic all-position statistical requirements. No actual project entitlement, future source, real cohort/power, executable protocol, forecast lock or evaluation was accepted; `INSUFFICIENT_NEW_CONFIRMATION_DATA` remains.
+
+WR-D020 authorizes only WR-113, a distinct no-data-acquisition documentary rights/custody clarification and pre-2027 protocol/power-readiness gate. Named accountable rights/custody decision owner: **Ryan, the War Room project owner acting through Manager / Architect**. R&D owns paper evidence, not licenses/credentials/operational custody. User's intended private/public/commercial use remains UNKNOWN until explicit approval. WR-113 authorizes no external provider contact, asset/API download, accounts/terms, source admission, actual player data or 2026 outcomes, real power estimation, protocol freeze, independent audit activation, scoring, downstream Strategy/Builder/Work Helper, ranking change or Phase 6. Source intake, executable protocol, independent source/protocol/result audits and protected scoring each require later separately numbered authority.
