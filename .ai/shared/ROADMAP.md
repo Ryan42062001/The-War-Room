@@ -1,7 +1,7 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — WR-110 custom projection/scoring R&D assigned; ESPN Direct feasibility is a separate external Work track
-Current-state snapshot: 2026-09-19 after WR-110 activation; refresh against `.ai/shared/ACTIVE_TASKS.json` before routing or acting.
+Status: ACTIVE DEVELOPMENT — WR-110 custom projection/scoring R&D assigned; ESPN Direct feasibility investigation completed, Direct remains unverified
+Current-state snapshot: 2026-09-19 after ESPN feasibility disposition; refresh against `.ai/shared/ACTIVE_TASKS.json` before routing or acting.
 Owner: Manager / Architect
 Workflow: V3.5 — CANONICAL
 
@@ -11,9 +11,9 @@ Workflow: V3.5 — CANONICAL
 
 | Priority | Workstream | Current state | Required next gate / boundary |
 | --- | --- | --- | --- |
-| 1 | **WR-110 — next-generation custom projections and draft scoring research** | **ASSIGNED — R&D only**, `STANDARD_CHAT_HIGH` on `wr-110-next-gen-projections-research`; independent of ESPN Direct Work investigation. | Evidence-classify v2/v2.1 results, prospective untouched-data feasibility and future protocol; exactly two reports and R&D handoff, exact-head CI, then Manager review. No scoring, source intake, implementation, policy/ranking change or production promotion. |
+| 1 | **WR-110 — next-generation custom projections and draft scoring research** | **ASSIGNED — R&D only**, `STANDARD_CHAT_HIGH` on `wr-110-next-gen-projections-research`; independent of the completed external ESPN Direct feasibility investigation. | Evidence-classify v2/v2.1 results, prospective untouched-data feasibility and future protocol; exactly two reports and R&D handoff, exact-head CI, then Manager review. No scoring, source intake, implementation, policy/ranking change or production promotion. |
 | 2 | **WR-109 — draft-cycle readiness and ESPN Direct evidence assessment** | **CLOSED — evidence accepted only**, PR #314 exact head `03cc8b6366f666bf7fe3bbe168a031886a2b7f95`; canonical merge `feb6e35898608a1fc656a3d6712d984a43b8ae59`. | The two research reports and consent-safe future mock plan are accepted; `LIVE_DIRECT_UNVERIFIED` remains. Separate approval is required for live testing or data/source work. |
-| 3 | **ESPN structured Direct live validation** | **DEFERRED / USER READINESS NEEDED — NOT ASSIGNED** — structured Direct capture has not been independently established in a real disposable live mock; live Board/Pick History fallback has separate previous validation evidence. | When the user confirms an eligible disposable mock and consents, Manager may separately authorize a consent-safe disposable mock and distinguish Direct evidence, fallback behavior, ownership, monotonic pick order, missed/reordered picks, terminal state and error recovery. Mark PASS only with real, sanitised, attributable live evidence; otherwise remain UNVERIFIED / INCONCLUSIVE. No authenticated ESPN capture is authorized by this roadmap. |
+| 3 | **ESPN sync reliability: fallback-first, opportunistic structured acceleration** | **ACCEPTED POSTURE / NO NEW TASK** — WR-D018 clarifies WR-D003: Board/Pick History is the live-proven complete source class in observed mocks; independent structured Direct remains `LIVE_DIRECT_UNVERIFIED` / `DIRECT_NOT_SUPPORTED_BY_AVAILABLE_EVIDENCE`, not proven impossible. | Preserve current layered code and fallback; no open-ended Direct pursuit. Revisit only upon newly attributable structured-source evidence or a separately authorized, consent-safe disposable mock with user readiness. Do not request credentials or treat synthetic hooks/tests as live Direct proof. |
 | 4 | **Next draft-cycle rankings/source intake** | **PROPOSED / NOT ASSIGNED** — existing bundled 2026 baseline remains authoritative for the current application. | Separate Manager-scoped source/provenance and rights/availability review, seasonal identity/freshness, FantasyPros expert PPR ECR value vs ESPN board/ADP timing, import/baseline count/hash and compatibility assessment. No silent update, acquisition, source substitution, player/rank fabrication, or production dataset replacement. |
 | 5 | **Draft-day release readiness** | **PROPOSED / NOT ASSIGNED** — contingent on evidence and any separately accepted fixes/refresh. | Define explicit end-to-end mock/recovery and manual-fallback acceptance; verify draft-state ownership/pick order/terminal and saved-session recovery, phone/desktop usability, ranking freshness, extension/app compatibility, full regressions, deployment/rollback and a documented go/no-go gate before release. |
 | 6 | **Historical PR reconciliation** | **HOUSEKEEPING / NOT ASSIGNED** — historical open PR #251 (WR-081 Stage A) and #244 (V3.4 Next Activation) remain on GitHub. | Review whether already-superseded historical PRs should be closed or preserved with explanatory comments. Do not merge, retarget, delete, or reactivate them from roadmap wording alone. |
@@ -27,7 +27,7 @@ Workflow: V3.5 — CANONICAL
 
 ### Routing rule
 
-WR-110 is the **only currently assigned task in the active-only registry at this snapshot**. Proposed work above is planning, not permission to run tests on the user's ESPN account, alter data/production, create downstream worker assignments, or expand infrastructure. Manager must refresh the registry and live PR/CI state before any transition; WR-110 R&D owns only the exact three research/handoff files granted by its task. The separate ESPN Direct Work investigation is not an authorized repo-writing worker lane.
+WR-110 is the **only currently assigned task in the active-only registry at this snapshot**. Proposed work above is planning, not permission to run tests on the user's ESPN account, alter data/production, create downstream worker assignments, or expand infrastructure. Manager must refresh the registry and live PR/CI state before any transition; WR-110 R&D owns only the exact three research/handoff files granted by its task. The external ESPN Direct Work investigation concluded without repository writes. WR-D018 records the bounded feasibility disposition; it grants no new task, browser permission, account access, or implementation authority.
 
 ---
 
@@ -403,3 +403,10 @@ No active Phase 5B critical path.
 - R&D branch: `wr-110-next-gen-projections-research`; execution `STANDARD_CHAT_HIGH`.
 - R&D may publish exactly two prospective research reports plus its handoff. No fitting, historical/2026 scoring, data/source intake, protected authority, production rankings, draft recommendation-policy change or Phase 6.
 - Next gate: bounded R&D PR / exact-head CI -> Manager evidence review and decision whether any later independent-source/protocol/Strategy/Builder work is justified.
+
+
+## External ESPN Direct feasibility investigation — Manager disposition (2026-09-19)
+
+- User provided a separate Work-mode report with disposition `DIRECT_NOT_SUPPORTED_BY_AVAILABLE_EVIDENCE`; independent full-draft structured Direct remains `LIVE_DIRECT_UNVERIFIED`, **not proven impossible**. Work reported 110 focused credential-free tests passing, but the full suite was stopped before completion and is not a full-suite PASS. Work performed no live authenticated mock or repository writes; novel root-cause hypotheses are not independently reproduced by Manager.
+- WR-D018 clarifies the existing WR-D003 layered architecture as **fallback-first for demonstrated reliability, structured capture opportunistic when genuinely ledger-eligible**. This is a source-of-truth/product-positioning decision, not a change to source-priority implementation or current Companion behavior.
+- Close broad speculative Direct investigation. Keep current observers and Board/Pick History fallback; only revisit upon a new attributable real structured-source lead or a separately authorized one-off consent-safe mock if the user chooses. No new task/credential/extension permission/deployment granted; WR-110 custom projections research continues independently.

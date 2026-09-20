@@ -25,3 +25,12 @@ New assignment:
 - research only; no implementation, scoring, protected source access, policy decision or new source data.
 
 Next: R&D publishes bounded three-file research PR and exact-head CI; Manager independently reviews and selects a separate future gate if evidence supports one. All other War Room roles idle.
+
+
+## Concurrent external ESPN Direct feasibility disposition — 2026-09-19
+
+User-supplied separate Work report: `DIRECT_NOT_SUPPORTED_BY_AVAILABLE_EVIDENCE`; independent real full-draft Direct `LIVE_DIRECT_UNVERIFIED`, not proven impossible. Report states 110 focused tests passed, broad suite incomplete, no live authenticated mock or repo edits; Manager did not independently reproduce novel technical hypotheses or those local test logs.
+
+WR-D018 clarifies WR-D003's existing layered-source contract: fallback-first **reliability claim** based on live Board/Pick History evidence; retain opportunistic eligible passive structured observations and current source/ledger behavior. Stop open-ended speculative Direct work. No new task, credentialed observation, source adapter, extension permission, production or ranking change from this decision. Future limited live mock only with new evidence, explicit user consent and separate Manager scope.
+
+WR-110 continues as the only active task, same owner/branch/scope. This concurrent Manager decision does not grant its R&D lane access to ESPN work or modify the model/protocol boundaries.
