@@ -1,13 +1,17 @@
 # War Room Roadmap
 
-Status: ACTIVE DEVELOPMENT — no assigned work; next gate is eligible disposable ESPN mock / explicit Manager authorization
-Current-state snapshot: 2026-09-19 after WR-109 acceptance; refresh against `.ai/shared/ACTIVE_TASKS.json` before routing or acting.
+Status: ACTIVE DEVELOPMENT — WR-110 custom projection/scoring R&D assigned; ESPN Direct feasibility is a separate external Work track
+Current-state snapshot: 2026-09-19 after WR-110 activation; refresh against `.ai/shared/ACTIVE_TASKS.json` before routing or acting.
 Owner: Manager / Architect
 Workflow: V3.5 — CANONICAL
 
 > **Read this section for current authority and priority.** The historical milestone log below preserves status labels, PR states and next-gate language **as recorded at each historical checkpoint**. Earlier `ACTIVE`, `ASSIGNED`, `BLOCKED`, `PLANNED`, or `unmerged` statements there are not current instructions. Current executable assignments come only from the live active-task registry, canonical task specs, Manager decisions, and current GitHub state.
 
 ## Current priorities and gates
+
+| Priority | Workstream | Current state | Required next gate / boundary |
+| --- | --- | --- | --- |
+| 0 | **WR-110 — next-generation custom projections and draft scoring research** | **ASSIGNED — R&D only**, `STANDARD_CHAT_HIGH` on `wr-110-next-gen-projections-research`; independent of ESPN Direct Work investigation. | Evidence-classify v2/v2.1 results, prospective untouched-data feasibility and future protocol; exactly two reports and R&D handoff, exact-head CI, then Manager review. No scoring, source intake, implementation, policy/ranking change or production promotion. |
 
 | Priority | Workstream | Current state | Required next gate / boundary |
 | --- | --- | --- | --- |
@@ -26,7 +30,7 @@ Workflow: V3.5 — CANONICAL
 
 ### Routing rule
 
-There are **no currently assigned tasks in the active-only registry at this snapshot**. Proposed work above is planning, not permission to run tests on the user's ESPN account, alter data/production, create downstream worker assignments, or expand infrastructure. Manager must refresh the registry and live PR/CI state before any transition; WR-109 R&D owns only the exact three research/handoff files granted by its task. This Manager roadmap cleanup changes no R&D file, task scope, status, registry, or live authority.
+WR-110 is the **only currently assigned task in the active-only registry at this snapshot**. Proposed work above is planning, not permission to run tests on the user's ESPN account, alter data/production, create downstream worker assignments, or expand infrastructure. Manager must refresh the registry and live PR/CI state before any transition; WR-110 R&D owns only the exact three research/handoff files granted by its task. The separate ESPN Direct Work investigation is not an authorized repo-writing worker lane.
 
 ---
 
@@ -394,3 +398,11 @@ No active Phase 5B critical path.
 - No new task activated. A separate disposable ESPN validation requires a real eligible mock, user's consent and a fresh Manager task with pinned runtime, safety/privacy and stop criteria. If no eligible mock is available, leave this gate deferred.
 - Separate next-cycle source-rights/intake research is deferred until the target draft season and sources are actually available; no ranking/data update or automatic promotion.
 - No verified new product defect or approved recommendation-policy question currently merits Builder or Draft Strategy activation. WR-D016 baseline-only model and WR-D017 runner boundaries remain unchanged.
+
+
+## WR-110 next-generation custom projection/scoring research — ASSIGNED
+
+- Manager activated research-only WR-110 after accepted WR-D016 baseline-only v2.1 result, independently of the separately user-initiated ESPN Direct feasibility Work investigation.
+- R&D branch: `wr-110-next-gen-projections-research`; execution `STANDARD_CHAT_HIGH`.
+- R&D may publish exactly two prospective research reports plus its handoff. No fitting, historical/2026 scoring, data/source intake, protected authority, production rankings, draft recommendation-policy change or Phase 6.
+- Next gate: bounded R&D PR / exact-head CI -> Manager evidence review and decision whether any later independent-source/protocol/Strategy/Builder work is justified.

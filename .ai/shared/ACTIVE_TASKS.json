@@ -1,8 +1,51 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-19T23:50:00Z",
+  "updated_at_utc": "2026-09-19T23:59:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": []
+  "tasks": [
+    {
+      "task_id": "WR-110",
+      "owner": "R&D",
+      "worker_slot": "rnd-wr110-nextgen-projections",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-110.md",
+      "role_handoff": ".ai/research/HANDOFF.md",
+      "assignment_main_sha": "0607fa5e6dcde7ace3fff24656b0def28fe3c137",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-110-next-gen-projections-research",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/research/WR110_NEXT_GEN_PROJECTION_EVIDENCE_ASSESSMENT.md",
+        ".ai/research/WR110_PROSPECTIVE_EXPERIMENT_PROPOSAL.md",
+        ".ai/research/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/work_helper/",
+        ".ai/research/generated/",
+        ".github/",
+        "src/",
+        "public/",
+        "scripts/",
+        "data/",
+        "extensions/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "R&D submits research-only two-report prospective custom projection/scoring design, exact three-file PR and exact-head CI. Manager reviews before any source/intake, protected scoring, protocol freeze, Draft Strategy or Builder authorization."
+    }
+  ]
 }
