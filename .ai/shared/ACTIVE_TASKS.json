@@ -1,8 +1,49 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-20T03:45:00Z",
+  "updated_at_utc": "2026-09-20T03:03:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": []
+  "tasks": [
+    {
+      "task_id": "WR-115",
+      "owner": "R&D",
+      "worker_slot": "rnd-wr115-source-specific-refetch-rights",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-115.md",
+      "role_handoff": ".ai/research/HANDOFF.md",
+      "assignment_main_sha": "c86464cb0b085130ce2ce126b43c318013aa1bcf",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-115-source-specific-immutable-refetch-rights",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/research/WR115_SOURCE_SPECIFIC_RIGHTS_REFETCH_FEASIBILITY.md",
+        ".ai/research/WR115_AUDIT_CUSTODY_STOP_GATES.md",
+        ".ai/research/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/research/generated/",
+        ".github/",
+        "src/",
+        "scripts/",
+        "data/",
+        "extensions/"
+      ],
+      "forbidden_exact_paths": [],
+      "next_gate": "WR-D024 selected no-local-raw immutable lawful independent auditor re-fetch plus full reference-level read-only reproduction. R&D source-specific documentary feasibility of future F27/T27/F28/T28 roles using official public legal/versioning metadata pages only, without opening source releases/data or provider outreach; exact 3-file PR and exact-head Governance CI -> Manager. Fail closed if rights/immutability/persistence/retrieval cannot be evidenced. No data/source/custody/auditor/protocol/scoring."
+    }
+  ]
 }
