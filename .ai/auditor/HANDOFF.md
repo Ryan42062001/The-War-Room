@@ -1,45 +1,31 @@
-# Independent Auditor / QA Handoff
+# Independent Auditor / QA — WR-124 Handoff
 
-HANDOFF
+TASK: WR-124 — Fresh Independent Re-Audit of Repaired WR-122 Recommendation Presentation Truthfulness
+ROLE: Independent Auditor / QA | WORKFLOW: V3.5 | EXECUTION: STANDARD_CHAT_HIGH | REFRESH: FAST_REFRESH
+STATUS: FRESH INDEPENDENT AUDIT REPORT/HANDOFF PUBLISHED — PASS; verify separate Auditor PR and exact-head Governance CI using final PR comment.
+SINGLE INDEPENDENT VERDICT: **PASS** — no CRITICAL, HIGH, MEDIUM or LOW findings at repaired exact Builder target.
 
-STATUS: REPORT/VERDICT PUBLISHED — PASS; distinct audit PR/exact-head Governance CI publication verification pending.
-TASK: WR-120 — Fresh Independent Re-Audit of Repaired WR-118 Synthetic Replay + Reconnect Regression
-ROLE: Independent Auditor / QA
-WORKFLOW: V3.5
-EXECUTION MODE: STANDARD_CHAT_HIGH
-REFRESH MODE: FAST_REFRESH
+## Immutable review target and scope
+Repository: `Ryan42062001/The-War-Room`
+Initial independently verified canonical main/assigned Auditor branch: `7ab25b25e8e33d961a8091ee8afe32d148398dd0`, IDENTICAL before Auditor-only commits.
+Assigned fresh branch: `wr-124-repaired-recommendation-presentation-independent-reaudit`.
+Builder source task WR-122; PR #348 OPEN/UNMERGED; assigned Builder branch `wr-122-ecr-recommendation-presentation-truthfulness`; exact Manager-frozen repaired/audited SHA `8238ccaf80fb844a5e7e0b9444764d8dfb7552a9`.
+Historical FAILED Builder SHA `126268055332470ef4884706a404ed63d02d96ae`, historical WR-123 FAIL Auditor PR #350 OPEN/UNMERGED; no historical verdict transferred.
+Original Builder creation/PR base `836de1e7ed543d9dba48437eeda57922b2c4afa3` (not new Manager control-plane main).
+Cumulative original-base and failed-head→repaired-head comparisons: exactly FOUR paths, `js/war-room-rankings.js`, `scripts/test-browser.mjs`, `.ai/builder/WR122_RECOMMENDATION_PRESENTATION_EVIDENCE.md`, `.ai/builder/HANDOFF.md`. No engine/scoring/ECR/dataset/source resolver/draft state/Companion/package/workflow/deployment edit.
 
-BRANCH: `wr-120-repaired-synthetic-replay-reconnect-reaudit`
-BASE: independently verified main and initial assigned Auditor branch `f1aae74395e5ebf6a57f616ccd2bddb9e595a26c` (identical before writes).
-SOURCE TASK: WR-118
-BUILDER PR: #338 OPEN/UNMERGED; branch `wr-118-synthetic-espn-replay-reconnect-regression`
-AUDITED REPAIRED BUILDER SHA: `c80aaa8807ed9ef94619b1117988e64d9b773234` (immutable, Manager WR-D031 freeze).
-HISTORICAL FAILED BUILDER SHA: `39491e672b6177834aa029b7a716c612c7cc892d` — historical WR-119 FAIL remains limited to that old SHA; Auditor PR #340 historical OPEN/UNMERGED.
-HISTORICAL BUILDER BASE: `5dc8906d5285d1c51b51ef0068bd0a98753610ba`.
+## Independent closure and methods
+F01: CLOSED on repaired SHA. Source-path and actual browser assertions reject old 10-team slot10 current10 calculatedNext11 versus next20 / intervening9, independent count-only contradiction, missing/malformed/zero/past/out-of-range next, invalid bounds/ownership/terminal state; no compact, displayed top-three reasons, next action or expanded market details assert false own adjacency, no-opponent, guarantee or verified numbered next. Both-source agreement and optional count consistency are required. Valid single-next-source own 10→11 and last-round 150→151 retain factual no intervening opponents while second-target eligibility remains conditional.
+F02: CLOSED on repaired SHA. Actual exact-final Builder full-test log records literal child process executions and post-success markers for BOTH `node --check js/war-room-rankings.js` and `node --check scripts/test-browser.mjs`; source's synchronous `execFileSync` throws before PASS marker on failure. Historical old-head omission remains historical.
 
-VERDICT: `PASS` — only for repaired exact Builder SHA and the bounded synthetic app-side test oracle.
+Read live GitHub canonical workflow/registry/role, Manager WR-122/123/124 tasks and handoffs, accepted WR-121/WR-D001/018/027/034/035/036/037, historical WR-123 audit, exact repaired source and browser fixture, app scoring/market/draft/turn/escaping interfaces, original-base/repair-only diff, Builder evidence and exact-head CI job logs. Challenge actual nonvacuous existing candidate/action/score/order/confidenceScore/survival and source rows before/after rendered synthetic fixture; no in-scope product engine or ranking changes. Unknown market numeric internal 50 is visibly UNKNOWN/no estimate, named ESPN/FP fallback is heuristic, categorical confidence/market freshness caveat maintained. Check actual 390px and 375px browser viewport, native keyboard nested details, existing card DOM reuse/open preservation and source-escaped untrusted text. No Auditor-run independent browser mutation/local command/physical device or live ESPN claimed.
 
-FINDINGS:
-- CRITICAL: none.
-- HIGH: none.
-- MEDIUM: none.
-- LOW: none.
+## Actual validation
+NEW repaired exact Builder-head PR [FULL CI #35540981347](https://github.com/Ryan42062001/The-War-Room/actions/runs/35540981347) completed SUCCESS: classify `106158458394`, Governance `106158476947`, full test `106158519937`; bootstrap-reuse `106158477752` SKIPPED. Independently inspected actual full job logs: repeated browser, both literal node checks, `npm test`, 375/390 responsive/layout, phone, scoring corrections, WR-118 synthetic app replay. Same exact Builder-head push FULL CI #35540875377 also SUCCESS. Earlier intermediate repair CI #35540582814 test job FAILED; do not relabel historical failure.
+Evidence and boundary: synthetic app/browser presentation ONLY. No empirical odds calibration, attributable per-player freshness, actual ESPN/Companion E2E, independent structured Direct, physical phone certification or draft-ready release proof.
 
-F01: CLOSED on repaired target — independently derived full accepted-count snake next-user-pick/on-clock/picks-until-turn asserted at all relevant A/B/reload/replay/provisional/terminal states, and actual scored candidates/top existing decision are nonempty/available/roster-eligible at unfinished active stages. Actual CI executed negative empty-candidate/wrong-next-pick/wrong-on-clock assertion-path controls twice each; no policy winner invented.
-F02: CLOSED on repaired target — rejected app/counter paths inspect actual app ledger and independent expected fixture model; include safe session/stage/pick/input order, real separate digests, first mismatch and explicit observation failure fallback. Actual CI twice exercised wrong 11-versus-real 12 counter case with unequal hashes and first missing expected #12.
-PRESERVED: exact numbered/duplicate/reordered/stale/unresolved/correction ledger and owner/source/ID; saved A/B isolation; A20 save/reload/synthetic replay; 159 provisional and 160 authoritative terminal; 717-row ECR/source fingerprint stable; deterministic actual-state A/B/source digests across two independently initialized browser contexts.
-BOUNDARY: synthetic APP-SIDE snapshot ingress with controlled local reload/replay ONLY. No real ESPN connectivity/actual network reconnect, Companion-to-app E2E, independent structured Direct, physical-phone or draft-ready release evidence. No production/Companion/ranking/source/workflow edits and no provider contact.
-
-BUILDER EXACT-HEAD CI: [run 35491052010](https://github.com/Ryan42062001/The-War-Room/actions/runs/35491052010) COMPLETED/SUCCESS at `c80aaa8807ed9ef94619b1117988e64d9b773234`; classify `106025927564`, Governance `106025949438`, full test `106025970045` SUCCESS; bootstrap-reuse SKIPPED. Independently read real full-test logs: full npm chain, named syntax-checked fixture, 2 browser iterations, all 8 negative controls rejected, stable A/B/source hashes, zero page errors. Earlier intermediary red CI runs `35490108994` and `35490407352` involved corrected test-only harness errors, not independently proved app defects.
-
-AUDITOR PUBLICATION:
-- Report: `.ai/auditor/WR120_REPAIRED_SYNTHETIC_REPLAY_RECONNECT_AUDIT.md`.
-- This handoff: `.ai/auditor/HANDOFF.md`.
-- PR / immutable Auditor head / exact-head Governance CI: verify and announce after publication; do not say COMPLETE until all exist.
-- Exactly two Auditor paths authorized; target Builder PR/branch unchanged.
-
-NEXT ACTION: Manager reviews published WR-120 evidence and independently verifies exact final Auditor PR/head/CI plus live Builder PR #338 head still `c80aaa8807ed9ef94619b1117988e64d9b773234`. Only Manager may separately integrate evidence and exact audited Builder target, then require mandatory exact canonical-main FULL CI canary before WR-118 closure. Keep both PRs open/unmerged pending Manager; do not activate downstream employees or claim release readiness.
-
-FILES / ARTIFACTS THAT MATTER: Auditor report above, Builder PR #338, WR-119 historical PR #340, frozen Builder SHA, final Builder CI run `35491052010`, WR-D001/018/027/028/029/030/031.
-
-DO NOT REPEAT: Do not transfer PASS to later Builder movement, do not reuse WR-119 verdict as the repaired verdict, do not merge either PR or claim live ESPN/Companion/phone/release evidence.
+## Publication and Manager gate
+Task-specific report: `.ai/auditor/WR124_REPAIRED_RECOMMENDATION_PRESENTATION_AUDIT.md`.
+This compact handoff: `.ai/auditor/HANDOFF.md`.
+Exactly two Auditor file paths authorized; distinct Auditor-only OPEN/UNMERGED PR, immutable final Auditor head and its exact-head Governance CI identifiers to be recorded and independently verified in PR body/final Manager comment. This handoff is authored BEFORE PR/CI exist; do not falsely self-reference uncreated artifacts here.
+Manager next action: independently review the published fresh PASS, exact Auditor head/CI, confirm Builder PR #348 STILL at `8238ccaf80fb844a5e7e0b9444764d8dfb7552a9`; only Manager separately authorizes integration of exact audited Builder and evidence, followed by mandatory exact canonical-main FULL War Room CI canary before WR-122 closure. Preserve Builder PR #348, historical WR-123 Auditor PR #350 and fresh WR-124 Auditor PR OPEN/UNMERGED pending Manager. No Auditor merge, Builder target edit, deployment, provider contact, protected model/ranking/source change or downstream employee activation.
