@@ -42,6 +42,20 @@ const appUrl = 'http://127.0.0.1:' + server.address().port + '/';
 function hash(value) {
   return createHash('sha256').update(JSON.stringify(value)).digest('hex');
 }
+// Independent accepted-ledger user-turn oracle; never use state.myNextPick as input.
+function expectedUserTurn(acceptedCount) {
+  const currentPick = Math.min(acceptedCount + 1, TOTAL);
+  const userSlots = Array.from({length:ROUNDS}, (_, round) =>
+    round * TEAMS + (round % 2 === 0 ? SLOT : TEAMS - SLOT + 1));
+  const nextPick = userSlots.find(pick => pick >= currentPick) ?? null;
+  return {
+    currentPick, nextPick,
+    onClock:nextPick !== null && nextPick === currentPick,
+    picksUntilMyTurn:nextPick === null ? null : nextPick - currentPick
+  };
+}
+const fixtureByPage = new WeakMap();
+
 function snakeTeam(pick) {
   const round = Math.ceil(pick / TEAMS);
   const index = (pick - 1) % TEAMS;
@@ -104,11 +118,33 @@ async function inspect(page, indexes) {
     const state = getDraftAssistantState();
     const completion = getDraftCompletionStatus(state);
     const debug = completion.authoritative ? null : buildLiveDraftDebugState();
-    const candidates = debug && Array.isArray(debug.scored) ? debug.scored.slice(0, 12) : [];
+    const scored = debug && Array.isArray(debug.scored) ? debug.scored : [];
+    const candidates = scored.slice(0, 12);
+    const eligible = candidates.map(candidate => {
+      const row = typeof findDraftRowByExpertName === 'function'
+        ? findDraftRowByExpertName(candidate.name) : null;
+      const available = Boolean(row && !row.classList.contains('drafted-mine') &&
+        !row.classList.contains('drafted-other') && candidate.available !== false);
+      const rosterEligible = typeof isRecommendationRosterEligible === 'function' &&
+        Boolean(isRecommendationRosterEligible(candidate, debug.context.rosterCounts));
+      return {name:candidate.name, available, rosterEligible};
+    });
+    const active = !completion.complete && !completion.authoritative &&
+      completion.myRosterCount < ROUNDS && state.currentPick < state.totalPicks;
+    const decision = active && candidates.length &&
+      typeof calculateDraftRecommendation === 'function'
+      ? calculateDraftRecommendation(candidates[0], scored, debug.context) : null;
     return {
       session:String(window.activeDraftSessionId || ''),
       rows:drafted, completed:getCompletedDraftPickCount(),
       currentPick:state.currentPick, nextPick:state.myNextPick,
+      onClock:state.onClock, picksUntilMyTurn:state.picksUntilMyTurn,
+      active, candidateCount:scored.length, inspectedCandidateCount:candidates.length,
+      primaryName:candidates[0] ? candidates[0].name : null,
+      decisionPlayer:decision && decision.player || null,
+      decisionAction:decision && decision.recommendation || null,
+      decisionAvailable:Boolean(decision && eligible[0] && eligible[0].available &&
+        decision.player === eligible[0].name),
       completion:{
         complete:completion.complete, provisional:completion.provisional,
         authoritative:completion.authoritative, externalComplete:completion.externalComplete,
@@ -118,12 +154,7 @@ async function inspect(page, indexes) {
         row.getAttribute('data-name'), row.getAttribute('data-ecr'),
         row.getAttribute('data-rank'), row.getAttribute('data-adp')
       ]),
-      invalidCandidates:candidates.filter(candidate => {
-        const row = typeof findDraftRowByExpertName === 'function'
-          ? findDraftRowByExpertName(candidate.name) : null;
-        return !row || row.classList.contains('drafted-mine') ||
-          row.classList.contains('drafted-other') || candidate.available === false;
-      }).length,
+      invalidCandidates:eligible.filter(item => !item.available || !item.rosterEligible).length,
       rowCount:rows.length,
       externalCount:window.WarRoomEspnExternalPicks
         ? window.WarRoomEspnExternalPicks.getAll().length : 0
@@ -137,6 +168,12 @@ async function inspect(page, indexes) {
       espnPlayerId:row.espnPlayerId
     })).sort((a, b) => a.pick - b.pick || a.index - b.index),
     completed:raw.completed, currentPick:raw.currentPick, nextPick:raw.nextPick,
+    onClock:raw.onClock, picksUntilMyTurn:raw.picksUntilMyTurn,
+    active:raw.active, candidateCount:raw.candidateCount,
+    inspectedCandidateCount:raw.inspectedCandidateCount,
+    primaryIndex:indexes.get(raw.primaryName) ?? null,
+    decisionPlayerIndex:indexes.get(raw.decisionPlayer) ?? null,
+    decisionAction:raw.decisionAction, decisionAvailable:raw.decisionAvailable,
     completion:raw.completion, sourceHash:hash(raw.sourceRows),
     invalidCandidates:raw.invalidCandidates, rowCount:raw.rowCount,
     externalCount:raw.externalCount
@@ -153,28 +190,73 @@ function expectedRows(picks, indexes) {
 function check(condition, label, state, expected, extra = {}) {
   if (condition) return;
   const expectedRowsValue = expected || [];
-  const actualRowsValue = state && state.rows || [];
+  const actualRowsValue = state ? state.rows : null;
+  const observationFailed = !state;
   let firstMismatch = null;
-  for (let i = 0; i < Math.max(expectedRowsValue.length, actualRowsValue.length); i++) {
-    if (JSON.stringify(expectedRowsValue[i]) !== JSON.stringify(actualRowsValue[i])) {
-      firstMismatch = {expected:expectedRowsValue[i] || null, actual:actualRowsValue[i] || null};
-      break;
+  if (!observationFailed) {
+    for (let i = 0; i < Math.max(expectedRowsValue.length, actualRowsValue.length); i++) {
+      if (JSON.stringify(expectedRowsValue[i]) !== JSON.stringify(actualRowsValue[i])) {
+        firstMismatch = {expected:expectedRowsValue[i] || null,
+          actual:actualRowsValue[i] || null};
+        break;
+      }
     }
   }
   const failure = {
     task:'WR-118', seed:SEED, stage:label,
     session:state && state.session || null, pick:extra.pick ?? null,
-    expectedLedgerDigest:hash(expectedRowsValue), actualLedgerDigest:hash(actualRowsValue),
-    expectedCount:expectedRowsValue.length, actualCount:actualRowsValue.length,
-    firstMismatch, observed:state ? {
+    expectedLedgerDigest:hash(expectedRowsValue),
+    actualLedgerDigest:observationFailed ? null : hash(actualRowsValue),
+    expectedCount:expectedRowsValue.length,
+    actualCount:observationFailed ? null : actualRowsValue.length,
+    firstMismatch, observationError:extra.observationError ||
+      (observationFailed ? 'NO_OBSERVED_APP_STATE' : null),
+    inputOrder:extra.inputOrder || null,
+    observed:state ? {
       completed:state.completed, currentPick:state.currentPick, nextPick:state.nextPick,
-      completion:state.completion, invalidCandidates:state.invalidCandidates,
-      externalCount:state.externalCount, sourceHash:state.sourceHash
+      onClock:state.onClock, picksUntilMyTurn:state.picksUntilMyTurn,
+      candidateCount:state.candidateCount, inspectedCandidateCount:state.inspectedCandidateCount,
+      primaryIndex:state.primaryIndex, decisionPlayerIndex:state.decisionPlayerIndex,
+      decisionAction:state.decisionAction, completion:state.completion,
+      invalidCandidates:state.invalidCandidates, externalCount:state.externalCount,
+      sourceHash:state.sourceHash
     } : null, detail:extra.detail || null
   };
   const error = new Error('Deterministic synthetic app-side invariant failure\n' + JSON.stringify(failure));
   error.name = 'WR118SyntheticInvariantFailure';
   throw error;
+}
+function assertUserTurn(label, state, expectedLedger) {
+  const expected = expectedUserTurn(state.completed);
+  check(state.currentPick === expected.currentPick &&
+    state.nextPick === expected.nextPick &&
+    state.onClock === expected.onClock &&
+    state.picksUntilMyTurn === expected.picksUntilMyTurn,
+  label + ': independently derived user turn/clock',
+  state, expectedLedger, {pick:expected.nextPick, detail:{
+    expectedTurn:expected, actualTurn:{
+      currentPick:state.currentPick, nextPick:state.nextPick,
+      onClock:state.onClock, picksUntilMyTurn:state.picksUntilMyTurn
+    }
+  }});
+}
+function assertActiveCandidates(label, state, expectedLedger) {
+  if (!state.active) return;
+  check(state.completed < TOTAL && state.completion.myRosterCount < ROUNDS &&
+    !state.completion.complete && state.candidateCount > 0 &&
+    state.inspectedCandidateCount > 0 &&
+    state.invalidCandidates === 0 && state.primaryIndex != null &&
+    state.decisionPlayerIndex === state.primaryIndex &&
+    state.decisionAvailable &&
+    typeof state.decisionAction === 'string' && state.decisionAction.length > 0,
+  label + ': non-vacuous actual eligible decision candidates',
+  state, expectedLedger, {detail:{
+    active:state.active, candidateCount:state.candidateCount,
+    inspectedCandidateCount:state.inspectedCandidateCount,
+    invalidCandidates:state.invalidCandidates,
+    primaryIndex:state.primaryIndex, decisionPlayerIndex:state.decisionPlayerIndex,
+    decisionAvailable:state.decisionAvailable, decisionAction:state.decisionAction
+  }});
 }
 function assertState(label, state, picks, indexes, baselineSourceHash, extra = {}) {
   const expected = expectedRows(picks, indexes);
@@ -190,20 +272,60 @@ function assertState(label, state, picks, indexes, baselineSourceHash, extra = {
     state.currentPick === Math.min(state.completed + 1, TOTAL) &&
     state.sourceHash === baselineSourceHash;
   check(validLedger, label, state, expected, extra);
+  assertUserTurn(label, state, expected);
+  assertActiveCandidates(label, state, expected);
+}
+function expectOracleRejection(label, action, expectedMarker) {
+  let failure = null;
+  try {
+    action();
+  } catch (error) {
+    if (error && error.name === 'WR118SyntheticInvariantFailure') {
+      failure = JSON.parse(String(error.message).split('\n').slice(1).join('\n'));
+    } else {
+      throw error;
+    }
+  }
+  assert.ok(failure && String(failure.stage).includes(expectedMarker),
+    label + ': ephemeral bad state must be rejected by the intended oracle');
+  console.log('WR118_NEGATIVE_CONTROL ' + JSON.stringify({
+    label, rejected:true, stage:failure.stage,
+    expectedLedgerDigest:failure.expectedLedgerDigest,
+    actualLedgerDigest:failure.actualLedgerDigest,
+    session:failure.session, pick:failure.pick,
+    observationError:failure.observationError
+  }));
+  return failure;
 }
 async function apply(page, label, payload, options = {}) {
+  const fixture = fixtureByPage.get(page);
+  assert.ok(fixture, label + ': expected synthetic fixture context');
+  const expected = expectedRows(options.expectedPicks || payload.picks, fixture.indexes);
+  const inputOrder = (payload.picks || []).map(pick => Number(pick.overallPick) || null);
   const result = await page.evaluate(value => window.WarRoomEspnSync.applySnapshot(value), payload);
-  check(Boolean(result), label + ': snapshot accepted by app interface', null, [], options);
-  if (options.applied != null) {
-    check(result.applied === options.applied &&
-      (result.unmatched || []).length === (options.unmatched || 0) &&
-      (options.rejected == null || (result.rejected || 0) === options.rejected),
-    label + ': reconciliation counters', null, [], {
-      ...options, detail:{
-        captured:result.captured, applied:result.applied,
-        unmatched:(result.unmatched || []).map(item => ({
-          pick:item.overallPick, reason:item.reason || 'unresolved'
-        })), rejected:result.rejected || 0
+  const goodResult = Boolean(result);
+  const goodCounters = goodResult && (options.applied == null || (
+    result.applied === options.applied &&
+    (result.unmatched || []).length === (options.unmatched || 0) &&
+    (options.rejected == null || (result.rejected || 0) === options.rejected)));
+  if (!goodCounters) {
+    let actual = null;
+    let observationError = null;
+    try {
+      actual = await inspect(page, fixture.indexes);
+    } catch (error) {
+      observationError = 'APP_INSPECTION_FAILED: ' + String(error && error.name || 'Error');
+    }
+    check(false, label + (goodResult ? ': reconciliation counters' :
+      ': snapshot rejected by app interface'), actual, expected, {
+      pick:options.pick ?? (inputOrder.length ? inputOrder[inputOrder.length - 1] : null),
+      inputOrder, observationError, detail:{
+        expectedCounters:{applied:options.applied ?? null,
+          unmatched:options.unmatched || 0, rejected:options.rejected ?? null},
+        actualCounters:goodResult ? {captured:result.captured, applied:result.applied,
+          unmatched:(result.unmatched || []).map(item => ({
+            pick:item.overallPick, reason:item.reason || 'unresolved'
+          })), rejected:result.rejected || 0} : null
       }
     });
   }
@@ -243,6 +365,7 @@ async function runScenario(browser, iteration) {
       'initial local setup', null, [], {detail:{saved:setup.saved, universe:setup.universe.length}});
     const plan = shuffle(setup.universe);
     const indexes = new Map(plan.map((player, index) => [player.name, index]));
+    fixtureByPage.set(page, {indexes});
     const initialState = await inspect(page, indexes);
     const sourceHash = initialState.sourceHash;
     assertState('empty board', initialState, [], indexes, sourceHash);
@@ -255,6 +378,49 @@ async function runScenario(browser, iteration) {
     let a = await inspect(page, indexes);
     assertState('A initial 12 ledger', a, first12, indexes, sourceHash);
     const firstHash = hash(a.rows);
+    // F01 controls mutate only ephemeral inspected state, never app rows/storage.
+    const openingExpected = expectedRows(first12, indexes);
+    expectOracleRejection('active empty candidate list', () =>
+      assertActiveCandidates('negative empty candidate', {
+        ...a, candidateCount:0, inspectedCandidateCount:0, invalidCandidates:0,
+        primaryIndex:null, decisionPlayerIndex:null, decisionAvailable:false
+      }, openingExpected), 'non-vacuous actual eligible');
+    expectOracleRejection('incorrect nonterminal user next pick', () =>
+      assertUserTurn('negative wrong next pick', {...a, nextPick:a.nextPick + 1},
+        openingExpected), 'independently derived user turn');
+    expectOracleRejection('incorrect nonterminal on-clock', () =>
+      assertUserTurn('negative wrong on clock', {...a, onClock:!a.onClock},
+        openingExpected), 'independently derived user turn');
+    // F02: force a counter failure while a real 12-pick app ledger is inspectable.
+    // The deliberately wrong 11-pick model proves meaningful unequal digests.
+    let diagnosticControl = null;
+    try {
+      await apply(page, 'negative diagnostic counter failure', snapshot(first12), {
+        applied:11, expectedPicks:first12.slice(0,11), pick:12
+      });
+    } catch (error) {
+      if (error && error.name === 'WR118SyntheticInvariantFailure') {
+        diagnosticControl = JSON.parse(String(error.message).split('\\n').slice(1).join('\\n'));
+      } else throw error;
+    }
+    assert.ok(diagnosticControl && diagnosticControl.session === aId &&
+      diagnosticControl.inputOrder.length === 12 && diagnosticControl.pick === 12 &&
+      diagnosticControl.expectedCount === 11 && diagnosticControl.actualCount === 12 &&
+      diagnosticControl.firstMismatch &&
+      diagnosticControl.expectedLedgerDigest !== diagnosticControl.actualLedgerDigest &&
+      diagnosticControl.observationError === null,
+      'F02 negative counter control must inspect real unequal ledgers and session/order');
+    console.log('WR118_NEGATIVE_CONTROL ' + JSON.stringify({
+      label:'counter failure diagnostics', rejected:true,
+      stage:diagnosticControl.stage, session:diagnosticControl.session,
+      pick:diagnosticControl.pick, inputOrder:diagnosticControl.inputOrder,
+      expectedLedgerDigest:diagnosticControl.expectedLedgerDigest,
+      actualLedgerDigest:diagnosticControl.actualLedgerDigest,
+      firstMismatch:diagnosticControl.firstMismatch,
+      observationError:diagnosticControl.observationError
+    }));
+    a = await inspect(page, indexes);
+    assertState('A after ephemeral negative controls', a, first12, indexes, sourceHash);
 
     await apply(page, 'A duplicate identical', snapshot(first12), {applied:12});
     a = await inspect(page, indexes);
@@ -263,13 +429,13 @@ async function runScenario(browser, iteration) {
 
     const reordered = first12.slice().reverse().concat({...first12[2]});
     await apply(page, 'A reordered + duplicate number', snapshot(reordered, {expectedCompleted:12}),
-      {applied:12, rejected:1, pick:3});
+      {applied:12, rejected:1, pick:3, expectedPicks:first12});
     a = await inspect(page, indexes);
     assertState('A permutation convergence', a, first12, indexes, sourceHash);
     check(hash(a.rows) === firstHash, 'A permutation stable digest', a, expectedRows(first12, indexes));
 
     await apply(page, 'A stale shorter 9', snapshot(first12.slice(0, 9)),
-      {applied:12, pick:10});
+      {applied:12, pick:10, expectedPicks:first12});
     a = await inspect(page, indexes);
     assertState('A stale does not regress', a, first12, indexes, sourceHash);
 
@@ -277,7 +443,7 @@ async function runScenario(browser, iteration) {
       position:'WR', espnPlayerId:'wr118-unresolved-013'};
     await apply(page, 'A partial 13 with unresolved player',
       snapshot(first12.concat(missing), {expectedCompleted:13}),
-      {applied:12, unmatched:1, pick:13});
+      {applied:12, unmatched:1, pick:13, expectedPicks:first12});
     a = await inspect(page, indexes);
     assertState('A unresolved does not invent owner', a, first12, indexes, sourceHash);
     check(a.currentPick === 13, 'A partial next turn remains 13', a, expectedRows(first12, indexes), {pick:13});
@@ -294,7 +460,7 @@ async function runScenario(browser, iteration) {
 
     await apply(page, 'A corrected permutation replay',
       snapshot(corrected13.slice().reverse().concat({...corrected13[1]}),
-        {expectedCompleted:13}), {applied:13, rejected:1, pick:2});
+        {expectedCompleted:13}), {applied:13, rejected:1, pick:2, expectedPicks:corrected13});
     a = await inspect(page, indexes);
     assertState('A corrected permutation convergence', a, corrected13, indexes, sourceHash);
     check(await save(page), 'A save before second session', a, expectedRows(corrected13, indexes));
