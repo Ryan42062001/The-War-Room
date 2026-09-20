@@ -197,7 +197,7 @@ async function apply(page, label, payload, options = {}) {
   if (options.applied != null) {
     check(result.applied === options.applied &&
       (result.unmatched || []).length === (options.unmatched || 0) &&
-      (result.rejected || 0) === (options.rejected || 0),
+      (options.rejected == null || (result.rejected || 0) === options.rejected),
     label + ': reconciliation counters', null, [], {
       ...options, detail:{
         captured:result.captured, applied:result.applied,
