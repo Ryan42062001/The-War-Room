@@ -713,6 +713,181 @@ assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-mar
 await page.setViewportSize({width:1280,height:900});
 await page.evaluate(() => document.getElementById('wr122-presentation-fixture').remove());
 
+// WR-126: Actual mounted Overall Board Pressure diagnostic. Use real available
+// row-backed player objects with naturally missing market fields, a genuine
+// configured nonadjacent draft window, and the unchanged production renderer.
+// This intentionally does NOT assert that "50%" is correct display wording.
+const wr126BoardPressure = [];
+for (const [width, height] of [[390, 844], [1280, 900]]) {
+  await page.setViewportSize({width, height});
+  const observed = await page.evaluate(async viewport => {
+    const settle = () => new Promise(resolve =>
+      requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    const live = buildLiveDraftDebugState();
+    const state = getDraftAssistantState();
+    const context = live.context;
+    const owner = pick => {
+      const round = Math.ceil(pick / state.teams);
+      const index = (pick - 1) % state.teams;
+      return round % 2 ? index + 1 : state.teams - index;
+    };
+    const validWindow = Number.isSafeInteger(state.teams) && state.teams >= 2 &&
+      Number.isSafeInteger(state.rounds) && state.rounds >= 2 &&
+      Number.isSafeInteger(state.draftSlot) && state.draftSlot >= 1 &&
+      state.draftSlot <= state.teams && Number.isSafeInteger(context.currentPick) &&
+      context.currentPick >= 1 && Number.isSafeInteger(context.calculatedNextPick) &&
+      context.calculatedNextPick > context.currentPick &&
+      context.calculatedNextPick <= state.totalPicks &&
+      context.calculatedNextPick === context.nextPick &&
+      owner(context.calculatedNextPick) === state.draftSlot &&
+      Number.isSafeInteger(context.calculatedPicksUntilNext) &&
+      context.calculatedPicksUntilNext ===
+        context.calculatedNextPick - context.currentPick - 1 &&
+      context.calculatedPicksUntilNext > 0;
+    if (!validWindow) throw new Error('WR-126 fixture lacks a valid nonadjacent configured draft turn: ' +
+      JSON.stringify({state, context:{currentPick:context.currentPick,
+        nextPick:context.nextPick, calculatedNextPick:context.calculatedNextPick,
+        calculatedPicksUntilNext:context.calculatedPicksUntilNext}}));
+
+    const positions = ['QB','RB','WR','TE','K','DST'];
+    const options = live.players.filter(player =>
+      player && player.available && player.row &&
+      player.ecr != null && positions.includes(player.position) &&
+      getMarketTimingDetails(player, context).marketRank === null &&
+      [player.espnRank, player.espnAdp, player.adp, player.realTimeAdp,
+        player.adpRank].every(value => value == null || value === '') &&
+      [player.row.getAttribute('data-espn-rank'),
+        player.row.getAttribute('data-espn-adp'),
+        player.row.getAttribute('data-adp'),
+        player.row.getAttribute('data-realtime-adp'),
+        player.row.getAttribute('data-adp-rank')].every(value =>
+        value == null || value === ''));
+    const absent = options.sort((a,b) =>
+      positions.indexOf(a.position) - positions.indexOf(b.position) ||
+      a.ecr - b.ecr)[0];
+    if (!absent) throw new Error('WR-126: no real available row-backed player with naturally absent ESPN/FP market');
+    const known = live.players.find(player => player && player.available &&
+      player.position === absent.position && player.row &&
+      Number.isFinite(getMarketTimingDetails(player, context).marketRank));
+    if (!known) throw new Error('WR-126: no same-position real row-backed known-market control');
+    const widget = document.getElementById('board-pressure-widget');
+    const dashboard = document.getElementById('draft-day-dashboard');
+    if (!widget || !dashboard) throw new Error('WR-126 existing production Board Pressure widget missing');
+    const originalDashboard = dashboard.innerHTML;
+    const initialRecommendation = {
+      player:window.latestDraftRecommendation?.player,
+      action:window.latestDraftRecommendation?.recommendation,
+      source:live.scored[0] && getMarketTimingDetails(live.scored[0],context).source,
+      order:live.scored.map(player => player.name),
+      scored:live.scored.map(player => player.finalScore)
+    };
+    const originalRows = [absent.row, known.row].map(row => [
+      row.getAttribute('data-name'), row.getAttribute('data-ecr'),
+      row.getAttribute('data-espn-rank'), row.getAttribute('data-espn-adp'),
+      row.getAttribute('data-adp'), row.getAttribute('data-realtime-adp'),
+      row.getAttribute('data-adp-rank'), row.className
+    ]);
+    const snapshot = player => {
+      const market = getMarketTimingDetails(player, context);
+      const survival = calculateNextPickSurvival(player, context);
+      // The synthetic positional pool contains exactly one real, available,
+      // row-backed eligible player; no fake player, source row or ranking edit.
+      const source = {...live, players:[player], context:{...context},
+        draftState:state};
+      const scarcity = {positions:{
+        [player.position]:{bestAvailable:player, status:'NORMAL',
+          playersBeforeCliff:0}
+      }};
+      updateDraftDayDashboard(source, scarcity);
+      const card = [...dashboard.querySelectorAll('.board-pressure-card')].find(el =>
+        el.querySelector('.pos-pill')?.textContent.trim() === player.position);
+      if (!card) throw new Error('WR-126 actual position card not rendered for ' + player.position);
+      const rect = card.getBoundingClientRect();
+      const meter = card.querySelector('.board-pressure-meter > span');
+      return {player:player.name, position:player.position,
+        rowName:getDraftRowDisplayName(player.row), available:player.available,
+        ecr:player.ecr, market:{source:market.source,rank:market.marketRank,
+          espnRank:player.espnRank, espnAdp:player.espnAdp, adp:player.adp,
+          realTimeAdp:player.realTimeAdp, adpRank:player.adpRank},
+        numericSurvival:survival,
+        bestText:card.querySelector('.pressure-best')?.textContent.trim(),
+        text:card.textContent.replace(/\s+/g,' ').trim(),
+        meterInlineWidth:meter?.style.width ?? null,
+        meterAccessibleLabel:meter?.getAttribute('aria-label') ?? null,
+        widgetVisible:getComputedStyle(widget).display !== 'none' &&
+          getComputedStyle(widget).visibility !== 'hidden' &&
+          widget.getClientRects().length > 0,
+        cardRendered:rect.width > 0 && rect.height > 0};
+    };
+    let unknown, knownMarket, positionHidden;
+    try {
+      setBoardView('overall', {persist:false});
+      await settle();
+      unknown = snapshot(absent);
+      knownMarket = snapshot(known);
+      setBoardView('position', {persist:false});
+      await settle();
+      positionHidden = getComputedStyle(widget).display === 'none' ||
+        widget.getClientRects().length === 0;
+    } finally {
+      dashboard.innerHTML = originalDashboard;
+      setBoardView('position', {persist:false});
+      await settle();
+    }
+    const afterRecommendation = {
+      player:window.latestDraftRecommendation?.player,
+      action:window.latestDraftRecommendation?.recommendation,
+      source:live.scored[0] && getMarketTimingDetails(live.scored[0],context).source,
+      order:live.scored.map(player => player.name),
+      scored:live.scored.map(player => player.finalScore)
+    };
+    const afterRows = [absent.row,known.row].map(row => [
+      row.getAttribute('data-name'), row.getAttribute('data-ecr'),
+      row.getAttribute('data-espn-rank'), row.getAttribute('data-espn-adp'),
+      row.getAttribute('data-adp'), row.getAttribute('data-realtime-adp'),
+      row.getAttribute('data-adp-rank'), row.className
+    ]);
+    return {viewport, currentPick:context.currentPick,
+      nextPick:context.calculatedNextPick,
+      intervening:context.calculatedPicksUntilNext,
+      teams:state.teams, slot:state.draftSlot, rounds:state.rounds,
+      totalPicks:state.totalPicks, unknown, knownMarket, positionHidden,
+      before:initialRecommendation, after:afterRecommendation,
+      originalRows, afterRows};
+  }, {width, height});
+  assert.ok(observed.unknown.widgetVisible && observed.unknown.cardRendered,
+    'WR-126 unknown: actual Overall widget and card must be rendered');
+  assert.ok(observed.knownMarket.widgetVisible && observed.knownMarket.cardRendered,
+    'WR-126 known: actual Overall widget and card must be rendered');
+  assert.equal(observed.unknown.available, true);
+  assert.equal(observed.unknown.player, observed.unknown.rowName);
+  assert.equal(observed.unknown.bestText, observed.unknown.player);
+  assert.equal(observed.unknown.market.rank, null);
+  assert.equal(observed.unknown.market.source, 'Unknown market');
+  assert.equal(observed.unknown.numericSurvival, 50);
+  assert.ok(observed.unknown.text.includes(observed.unknown.player));
+  assert.ok(observed.unknown.meterInlineWidth !== null);
+  assert.ok(observed.knownMarket.market.rank > 0);
+  assert.equal(observed.knownMarket.bestText, observed.knownMarket.player);
+  assert.ok(observed.knownMarket.text.includes(observed.knownMarket.player));
+  assert.ok(observed.knownMarket.meterInlineWidth !== null);
+  assert.equal(observed.positionHidden, true, 'WR-126 Position must hide legacy Board Pressure');
+  assert.deepEqual(observed.after, observed.before, 'WR-126 recommendation, action, source, scores, order unchanged');
+  assert.deepEqual(observed.afterRows, observed.originalRows, 'WR-126 source-row attributes unchanged');
+  wr126BoardPressure.push(observed);
+  console.log('WR126_RENDERED_BOARD_PRESSURE ' + JSON.stringify(observed));
+}
+const wr126Reproduced = wr126BoardPressure.every(item =>
+  item.unknown.text.includes('50% next-pick survival') &&
+  item.unknown.meterInlineWidth === '50%' &&
+  item.unknown.widgetVisible && item.unknown.cardRendered);
+console.log('WR126_RENDERED_OUTCOME ' + JSON.stringify({
+  classification:wr126Reproduced ? 'REPRODUCED' : 'NOT_REPRODUCED',
+  viewports:wr126BoardPressure.map(item => item.viewport),
+  observedUnknownCopy:wr126BoardPressure.map(item => item.unknown.text),
+  observedUnknownMeter:wr126BoardPressure.map(item => item.unknown.meterInlineWidth)
+}));
+
 const websiteSettingsSync = await page.evaluate(async () => {
   const fields = ['pcTeams', 'pcSlot', 'pcRounds'].map(id => document.getElementById(id));
   const original = fields.map(field => field.value);
