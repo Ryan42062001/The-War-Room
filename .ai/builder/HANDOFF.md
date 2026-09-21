@@ -1,35 +1,35 @@
-# Implementation Engineer / Builder — WR-129 compact handoff
+# Implementation Engineer / Builder — WR-130 compact handoff
 
-STATUS | TASK | ROLE | BRANCH | HEAD | BASE | PR | DONE | CHANGED | TESTS / INSPECTIONS | CI | BLOCKERS | DECISIONS CONSUMED | NEXT ACTION | FILES / ARTIFACTS THAT MATTER | DO NOT REPEAT
+STATUS | TASK | ROLE | BRANCH | HEAD | BASE | PR | DONE | CHANGED | TESTS | CI | BLOCKERS | DECISIONS CONSUMED | NEXT ACTION | FILES / ARTIFACTS THAT MATTER | DO NOT REPEAT
 
-**STATUS:** BUILDER READ-ONLY INVENTORY COMPLETE — paper-only PR must remain OPEN / UNMERGED; no production/test/source change authorized or performed.
+**STATUS:** IMPLEMENTATION COMPLETE / FINAL EXACT-HEAD FULL CI REQUIRED FOR MANAGER FREEZE. Audit required; Builder must leave one PR OPEN / UNMERGED and perform no writes after final publication.
 
-**TASK:** WR-129 — League Settings & Personalization Existing-State Inventory.
+**TASK:** WR-130 — Round-Count 5–30 Contract Unification.
 
-**ROLE:** Implementation Engineer / Builder, canonical V3.5; WR-D044; STANDARD_CHAT_HIGH / FAST_REFRESH. Inventory only.
+**ROLE:** Implementation Engineer / Builder; Workflow V3.5; STANDARD_CHAT_HIGH / FAST_REFRESH; WR-D045.
 
-**BRANCH:** `wr-129-league-settings-personalization-inventory`.
+**BRANCH:** `wr-130-round-count-contract-unification`.
 
-**BASE:** `911a74dcf790ac781a21dfe7d0b936ff5e65fccb`. Live GitHub comparison verified assigned branch initially IDENTICAL to canonical main: 0 ahead / 0 behind.
+**BASE:** `333601ee04457b3fb90895f0d6d99e8c2d31d6f0`. Branch was independently/live verified IDENTICAL to canonical main at activation: 0 ahead / 0 behind.
 
-**HEAD:** Final immutable Builder head is the commit containing this handoff and `.ai/builder/WR129_LEAGUE_SETTINGS_PERSONALIZATION_INVENTORY.md`; resolve from the OPEN PR/exact branch after this final authorized write. Do not move it after exact-head Governance validation.
+**HEAD:** Immutable final Builder head is the commit containing this handoff. Resolve from live branch/PR after this final authorized write and do not move it after final CI.
 
-**PR:** One paper-only PR against `main`; leave OPEN / UNMERGED. PR number and exact-head CI are live GitHub evidence recorded after the final documentary commit, not by mutating this file after validation.
+**PR:** Open exactly one Builder PR against `main`; leave OPEN / UNMERGED. PR number is live publication evidence and is not written back after freeze.
 
-**DONE:** Read-only inventory completed for team count, rounds, snake/user slot, PPR assumptions, starter/FLEX/roster config, saved sessions, migration/persistence/isolation, settings-aware recommendation/VORP behavior, phone/desktop settings, post-draft reporting, audit export, alternate scoring/custom roster/keepers/risk/defaults, unsupported input and cross-session leakage. Every material item is classified in the detailed inventory with exact code/function/test pointers.
+**DONE:** Unified authorized current round-count settings/persistence paths on the established 5–30 inclusive contract. Command-bar canonical settings and generated input use 5–30; app ESPN sync and saved-draft normalization use 5–30; external ESPN pick restored/snapshot settings and fallbacks use 5–30; Companion popup advertises 5–30; Companion bridge rejects out-of-range settings; Companion stored/live config normalizes to 5–30. Existing default 16, teams 2–20 and slot 1..teams are preserved.
 
-**CHANGED:** EXACTLY two authorized documentary paths cumulatively: `.ai/builder/WR129_LEAGUE_SETTINGS_PERSONALIZATION_INVENTORY.md` and `.ai/builder/HANDOFF.md`. No `js/`, `scripts/`, `extensions/`, ranking/source/data, package, workflow, deployment or product test file changed.
+**CHANGED:** Final cumulative scope must be exactly the 11 Manager-authorized paths: six production/Companion paths, three focused test paths, `.ai/builder/WR130_ROUND_COUNT_CONTRACT_EVIDENCE.md`, and this handoff. No other path.
 
-**TESTS / INSPECTIONS:** No product tests were modified or locally executed; WR-129 is read-only paper inventory. Static live-repository inspection covered `war-room-config.js`, `index.html`, relevant app settings/draft-state/scoring/recommendation/session/UI modules, Companion settings paths, and existing browser/invariant/persistence/hardening/phone tests. Existing test evidence was treated as evidence only, not rerun proof. Key direct evidence: `scripts/test-draft-invariants.mjs` complete 10x16 and 14x16 fixtures; `scripts/test-persistence-recovery.mjs` explicit A/B contamination checks; `scripts/test-browser.mjs` migration/sanitization/failure behavior; `scripts/test-hardening.mjs` config-driven roster fixture; `scripts/test-layout-efficiency-behavior.mjs` 12/7/18 save/reload; phone settings tests.
+**TESTS:** New browser regression proves command input min/max plus app canonical, saved-payload and external-pick restore/snapshot 1–4→5, 5/30 preserved and >30→30. New Companion tests prove popup min/max, real content-bridge rejection of 1–4/>30 with 5/30 forwarding, and background stored/live normalization. Existing `scripts/test-browser.mjs` literally executes `node --check scripts/test-browser.mjs` before browser assertions. Canonical FULL `npm test` must execute Companion, browser, persistence/recovery, draft/scoring/recommendation and related invariant suites. Chat-local clone/test execution is not claimed because the sandbox could not resolve GitHub DNS.
 
-**CI:** Exact-final-head Governance result is a required post-write observation. Product test is expected to be docs-only skipped if canonical classifier behavior applies; do not report PASS/SKIP until observed on the final PR head.
+**CI:** Genuine exact-final-head FULL War Room CI is mandatory. Record only the observed run/job results in the final chat handoff; do not mutate this branch after CI merely to add run IDs.
 
-**BLOCKERS:** No blocker to completing WR-129 inventory. One demonstrated existing-state mismatch is recorded: documented/legacy app contract says rounds 5–30, while command-bar/app sync/persistence and Companion settings paths accept 1–30.
+**BLOCKERS:** None known in implementation. Any final CI failure is a Builder blocker to freeze and must be remediated only inside the existing 11-path authorization.
 
-**DECISIONS CONSUMED:** WR-D044 activation; WR-D001 PPR ECR value authority vs ESPN market timing; WR-D018 fallback-first / `LIVE_DIRECT_UNVERIFIED`; WR-D027 NO PROVIDER CONTACT; WR-D038 accepted recommendation-card repair; WR-D043 accepted A3 closure; paused Track B source-rights/custom-ranking gates. A4 2027 ranking/source refresh remains season-gated and unassigned.
+**DECISIONS CONSUMED:** WR-D001 PPR ECR value authority / ESPN timing; WR-D018 fallback-first / `LIVE_DIRECT_UNVERIFIED`; WR-D027 NO PROVIDER CONTACT; WR-D038 accepted recommendation-card repair; WR-D043 accepted A3 closure; WR-D045 accepted WR-129 finding and bounded WR-130. Track B remains paused; A4/2027 refresh remains unassigned.
 
-**NEXT ACTION:** Manager reviews the WR-129 paper inventory and makes exactly one next decision. Builder recommendation is one bounded implementation/testing task to unify the already documented round-count contract at **5–30** across current app/Companion/settings-persistence ingress paths with focused 1–4 rejection/normalization and 5/30 boundary tests, followed by the normal independent audit gate. Do not activate it from WR-129.
+**NEXT ACTION:** After exact-final-head FULL CI succeeds, stop Builder writes and return this unchanged target to Manager. Manager independently verifies branch/PR head, exact cumulative 11-path scope and CI, freezes the target and activates a FRESH Independent Auditor / QA lane. Builder does not self-audit or merge.
 
-**FILES / ARTIFACTS THAT MATTER:** `.ai/builder/WR129_LEAGUE_SETTINGS_PERSONALIZATION_INVENTORY.md`; `.ai/builder/HANDOFF.md`; `.ai/manager/WR-129.md`; `.ai/shared/ACTIVE_TASKS.json`; `war-room-config.js`; `index.html`; `js/war-room-command-bar-fixes.js`; `js/war-room-espn-sync.js`; `js/war-room-draft-state.js`; `js/war-room-scoring.js`; `js/war-room-recommendations.js`; `js/war-room-rankings.js`; `js/war-room-ui.js`; Companion settings files; named existing test files in the inventory.
+**FILES / ARTIFACTS THAT MATTER:** `.ai/builder/WR130_ROUND_COUNT_CONTRACT_EVIDENCE.md`; this handoff; `.ai/manager/WR-130.md`; the six authorized production/Companion paths and three authorized focused tests; final Builder PR/head and exact-head FULL War Room CI.
 
-**DO NOT REPEAT:** Do not implement WR-129 findings, activate a new task, fetch/import/evaluate 2027 rankings, contact providers, change scoring/ranking policy, add custom roster/keeper/risk/default settings, rerun Track B gates, merge this Builder PR, or treat missing tests as automatic product defects.
+**DO NOT REPEAT:** Do not modify `index.html`, README/package/config/scoring/recommendation/ranking/draft-state policy, datasets, CI/workflows/runners, permissions/auth/endpoints; do not add alternate scoring, custom roster slots, keepers, risk preferences or reusable profiles; do not fetch/evaluate 2027 rankings, contact providers, deploy/release, self-audit or merge.
