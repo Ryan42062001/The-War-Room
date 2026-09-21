@@ -42,7 +42,7 @@
     var rounds = Number(value.rounds);
     if (!Number.isInteger(teams) || teams < 2 || teams > 20) return null;
     if (!Number.isInteger(draftSlot) || draftSlot < 1 || draftSlot > teams) return null;
-    if (!Number.isInteger(rounds) || rounds < 1 || rounds > 30) return null;
+    if (!Number.isInteger(rounds) || rounds < 5 || rounds > 30) return null;
     return {teams:teams, draftSlot:draftSlot, rounds:rounds, totalPicks:teams * rounds};
   }
 

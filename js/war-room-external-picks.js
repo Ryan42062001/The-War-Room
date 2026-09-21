@@ -56,18 +56,19 @@ function clearEspnExternalDraftPicks() {
 }
 
 function readEspnExternalDraftState(id) {
+  var fallbackRounds = Math.max(5, Math.min(30, Math.trunc(Number(TOTAL_ROUNDS) || 16)));
   if (!isAutosaveEnabled()) {
-    return {teams:LEAGUE_SIZE, rounds:TOTAL_ROUNDS, draftSlot:MY_DRAFT_SLOT, picks:[]};
+    return {teams:LEAGUE_SIZE, rounds:fallbackRounds, draftSlot:MY_DRAFT_SLOT, picks:[]};
   }
   try {
     var raw = localStorage.getItem(getEspnExternalDraftStateKey(id));
-    if (!raw) return {teams:LEAGUE_SIZE, rounds:TOTAL_ROUNDS, draftSlot:MY_DRAFT_SLOT, picks:[]};
+    if (!raw) return {teams:LEAGUE_SIZE, rounds:fallbackRounds, draftSlot:MY_DRAFT_SLOT, picks:[]};
     var parsed = JSON.parse(raw);
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
       throw new Error('external pick state is not an object');
     }
     var teams = Math.max(2, Math.min(20, Math.trunc(Number(parsed.teams) || Number(LEAGUE_SIZE) || 10)));
-    var rounds = Math.max(1, Math.min(30, Math.trunc(Number(parsed.rounds) || Number(TOTAL_ROUNDS) || 16)));
+    var rounds = Math.max(5, Math.min(30, Math.trunc(Number(parsed.rounds) || fallbackRounds)));
     var draftSlot = Math.max(1, Math.min(teams, Math.trunc(Number(parsed.draftSlot) || Number(MY_DRAFT_SLOT) || 1)));
     var totalPicks = teams * rounds;
     var picks = [];
@@ -81,7 +82,7 @@ function readEspnExternalDraftState(id) {
     return {teams:teams, rounds:rounds, draftSlot:draftSlot, picks:picks};
   } catch (error) {
     console.warn('External ESPN pick state could not be restored safely:', error);
-    return {teams:LEAGUE_SIZE, rounds:TOTAL_ROUNDS, draftSlot:MY_DRAFT_SLOT, picks:[]};
+    return {teams:LEAGUE_SIZE, rounds:fallbackRounds, draftSlot:MY_DRAFT_SLOT, picks:[]};
   }
 }
 
@@ -154,7 +155,7 @@ function snapshotSettingsForExternalPicks(snapshot) {
   var current = getEspnSyncSettings();
   var config = snapshot && snapshot.config && typeof snapshot.config === 'object' ? snapshot.config : {};
   var teams = Math.max(2, Math.min(20, Math.trunc(Number(config.teams) || Number(current.teams) || 10)));
-  var rounds = Math.max(1, Math.min(30, Math.trunc(Number(config.rounds) || Number(current.rounds) || 16)));
+  var rounds = Math.max(5, Math.min(30, Math.trunc(Number(config.rounds) || Number(current.rounds) || 16)));
   var draftSlot = Math.max(1, Math.min(teams, Math.trunc(Number(config.draftSlot) || Number(current.draftSlot) || 1)));
   return {teams:teams, rounds:rounds, draftSlot:draftSlot, totalPicks:teams * rounds};
 }

@@ -33,7 +33,7 @@
     values = values || {};
     var teams = clampInt(values.teams, 2, 20, window.LEAGUE_SIZE || 10);
     var slot = clampInt(values.slot, 1, teams, window.MY_DRAFT_SLOT || 1);
-    var rounds = clampInt(values.rounds, 1, 30, window.TOTAL_ROUNDS || 16);
+    var rounds = clampInt(values.rounds, 5, 30, window.TOTAL_ROUNDS || 16);
     return {teams:teams, slot:slot, rounds:rounds};
   }
 
@@ -104,7 +104,7 @@
       '<div class="draft-command-setup-fields">' +
         '<label>Teams<input data-command-setting="teams" type="number" min="2" max="20" inputmode="numeric" aria-label="League teams" value="' + values.teams + '"></label>' +
         '<label>Pick<input data-command-setting="slot" type="number" min="1" max="' + values.teams + '" inputmode="numeric" aria-label="Your draft slot" value="' + values.slot + '"></label>' +
-        '<label>Rounds<input data-command-setting="rounds" type="number" min="1" max="30" inputmode="numeric" aria-label="Draft rounds" value="' + values.rounds + '"></label>' +
+        '<label>Rounds<input data-command-setting="rounds" type="number" min="5" max="30" inputmode="numeric" aria-label="Draft rounds" value="' + values.rounds + '"></label>' +
       '</div>';
 
     setup.querySelectorAll('input').forEach(function(input) {

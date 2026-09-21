@@ -93,6 +93,52 @@ test('startup sanitizes corrupt stored settings and discards incompatible ledger
   assert.equal(Object.keys(context.state.marketAdpByName).length, 0);
 });
 
+test('round-count contract normalizes stored and live companion config to 5-30', async () => {
+  for (const rounds of [1, 2, 3, 4]) {
+    const context = loadBackground({
+      config: {teams: 10, draftSlot: 1, rounds},
+      ledgerTeams: 10,
+      picksByNumber: {},
+      espn: {}
+    });
+    await context.ready;
+    assert.equal(context.state.config.rounds, 5, 'stored rounds ' + rounds + ' should normalize to 5');
+  }
+
+  for (const rounds of [5, 30]) {
+    const context = loadBackground({
+      config: {teams: 10, draftSlot: 1, rounds},
+      ledgerTeams: 10,
+      picksByNumber: {},
+      espn: {}
+    });
+    await context.ready;
+    assert.equal(context.state.config.rounds, rounds, 'stored supported boundary should be preserved');
+  }
+
+  const high = loadBackground({
+    config: {teams: 10, draftSlot: 1, rounds: 31},
+    ledgerTeams: 10,
+    picksByNumber: {},
+    espn: {}
+  });
+  await high.ready;
+  assert.equal(high.state.config.rounds, 30);
+
+  const live = loadBackground(null);
+  await live.ready;
+  for (const rounds of [1, 2, 3, 4]) {
+    live.updateConfig({teams: 10, draftSlot: 1, rounds});
+    assert.equal(live.state.config.rounds, 5, 'live rounds ' + rounds + ' should normalize to 5');
+  }
+  live.updateConfig({teams: 10, draftSlot: 1, rounds: 5});
+  assert.equal(live.state.config.rounds, 5);
+  live.updateConfig({teams: 10, draftSlot: 1, rounds: 30});
+  assert.equal(live.state.config.rounds, 30);
+  live.updateConfig({teams: 10, draftSlot: 1, rounds: 31});
+  assert.equal(live.state.config.rounds, 30);
+});
+
 test('startup rejects malformed stored map shapes without breaking a valid league config', async () => {
   const context = loadBackground({
     config: {teams: 12, draftSlot: 11, rounds: 16},
