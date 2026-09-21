@@ -713,10 +713,8 @@ assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-mar
 await page.setViewportSize({width:1280,height:900});
 await page.evaluate(() => document.getElementById('wr122-presentation-fixture').remove());
 
-// WR-126: Actual mounted Overall Board Pressure diagnostic. Use real available
-// row-backed player objects with naturally missing market fields, a genuine
-// configured nonadjacent draft window, and the unchanged production renderer.
-// This intentionally does NOT assert that "50%" is correct display wording.
+// WR-127: Retain the WR-126 actual-mounted browser reproducer and assert
+// repaired UNKNOWN and known-market presentation, not misleading old copy.
 const wr126BoardPressure = [];
 for (const [width, height] of [[390, 844], [1280, 900]]) {
   await page.setViewportSize({width, height});
@@ -792,7 +790,7 @@ for (const [width, height] of [[390, 844], [1280, 900]]) {
       row.getAttribute('data-adp'), row.getAttribute('data-realtime-adp'),
       row.getAttribute('data-adp-rank'), row.className
     ]);
-    const snapshot = player => {
+    const snapshot = (player, tierStatus = 'NORMAL', playersBeforeCliff = 0) => {
       const market = getMarketTimingDetails(player, context);
       const survival = calculateNextPickSurvival(player, context);
       // The synthetic positional pool contains exactly one real, available,
@@ -800,8 +798,8 @@ for (const [width, height] of [[390, 844], [1280, 900]]) {
       const source = {...live, players:[player], context:{...context},
         draftState:state};
       const scarcity = {positions:{
-        [player.position]:{bestAvailable:player, status:'NORMAL',
-          playersBeforeCliff:0}
+        [player.position]:{bestAvailable:player, status:tierStatus,
+          playersBeforeCliff}
       }};
       updateDraftDayDashboard(source, scarcity);
       const card = [...dashboard.querySelectorAll('.board-pressure-card')].find(el =>
@@ -817,18 +815,26 @@ for (const [width, height] of [[390, 844], [1280, 900]]) {
         numericSurvival:survival,
         bestText:card.querySelector('.pressure-best')?.textContent.trim(),
         text:card.textContent.replace(/\s+/g,' ').trim(),
+        visibleDetail:card.querySelector('small')?.innerText.trim() ?? null,
+        tone:card.className,
+        meterPresent:Boolean(meter),
         meterInlineWidth:meter?.style.width ?? null,
         meterAccessibleLabel:meter?.getAttribute('aria-label') ?? null,
+        meterAccessibilityHidden:meter?.parentElement?.getAttribute('aria-hidden') ?? null,
+        accessibleNumericLabels:[...card.querySelectorAll('[aria-label]')]
+          .map(el => el.getAttribute('aria-label'))
+          .filter(label => /50%|survival|timing index/i.test(label || '')),
         widgetVisible:getComputedStyle(widget).display !== 'none' &&
           getComputedStyle(widget).visibility !== 'hidden' &&
           widget.getClientRects().length > 0,
         cardRendered:rect.width > 0 && rect.height > 0};
     };
-    let unknown, knownMarket, positionHidden;
+    let unknown, unknownTier, knownMarket, positionHidden;
     try {
       setBoardView('overall', {persist:false});
       await settle();
       unknown = snapshot(absent);
+      unknownTier = snapshot(absent, 'TIER CLOSING', 1);
       knownMarket = snapshot(known);
       setBoardView('position', {persist:false});
       await settle();
@@ -856,7 +862,7 @@ for (const [width, height] of [[390, 844], [1280, 900]]) {
       nextPick:context.calculatedNextPick,
       intervening:context.calculatedPicksUntilNext,
       teams:state.teams, slot:state.draftSlot, rounds:state.rounds,
-      totalPicks:state.totalPicks, unknown, knownMarket, positionHidden,
+      totalPicks:state.totalPicks, unknown, unknownTier, knownMarket, positionHidden,
       before:initialRecommendation, after:afterRecommendation,
       originalRows, afterRows};
   }, {width, height});
@@ -871,19 +877,36 @@ for (const [width, height] of [[390, 844], [1280, 900]]) {
   assert.equal(observed.unknown.market.source, 'Unknown market');
   assert.equal(observed.unknown.numericSurvival, 50);
   assert.ok(observed.unknown.text.includes(observed.unknown.player));
-  assert.ok(observed.unknown.meterInlineWidth !== null);
+  assert.match(observed.unknown.visibleDetail, /Market timing UNKNOWN — no survival estimate/);
+  assert.doesNotMatch(observed.unknown.text, /50\s*%|\b50\s*\/\s*100\b|\b\d+\s*% next-pick survival/i);
+  assert.equal(observed.unknown.meterPresent, false);
+  assert.equal(observed.unknown.meterInlineWidth, null);
+  assert.equal(observed.unknown.meterAccessibleLabel, null);
+  assert.deepEqual(observed.unknown.accessibleNumericLabels, []);
+  assert.match(observed.unknown.tone, /pressure-unknown/);
+  assert.doesNotMatch(observed.unknown.tone, /pressure-(fair|plenty|limited|scarce)/);
+  assert.match(observed.unknownTier.visibleDetail, /Market timing UNKNOWN — no survival estimate/);
+  assert.match(observed.unknownTier.text, /1 before tier drop/);
+  assert.match(observed.unknownTier.tone, /pressure-limited/,
+    'Genuine independent tier closing remains visible without unknown-market urgency');
+  assert.equal(observed.unknownTier.meterPresent, false);
   assert.ok(observed.knownMarket.market.rank > 0);
   assert.equal(observed.knownMarket.bestText, observed.knownMarket.player);
   assert.ok(observed.knownMarket.text.includes(observed.knownMarket.player));
-  assert.ok(observed.knownMarket.meterInlineWidth !== null);
-  assert.equal(observed.positionHidden, true, 'WR-126 Position must hide legacy Board Pressure');
-  assert.deepEqual(observed.after, observed.before, 'WR-126 recommendation, action, source, scores, order unchanged');
-  assert.deepEqual(observed.afterRows, observed.originalRows, 'WR-126 source-row attributes unchanged');
+  assert.match(observed.knownMarket.visibleDetail, /Timing index \d+\/100/);
+  assert.doesNotMatch(observed.knownMarket.text, /\d+% next-pick survival|calibrated probability/i);
+  assert.equal(observed.knownMarket.meterPresent, true);
+  assert.equal(observed.knownMarket.meterInlineWidth, observed.knownMarket.numericSurvival + '%');
+  assert.equal(observed.knownMarket.meterAccessibilityHidden, 'true');
+  assert.deepEqual(observed.knownMarket.accessibleNumericLabels, []);
+  assert.equal(observed.positionHidden, true, 'WR-127 Position must hide legacy Board Pressure');
+  assert.deepEqual(observed.after, observed.before, 'WR-127 recommendation, action, source, scores, order unchanged');
+  assert.deepEqual(observed.afterRows, observed.originalRows, 'WR-127 source-row attributes unchanged');
   wr126BoardPressure.push(observed);
   // Keep CI evidence human-reviewable: assert full order/scores/source rows
   // above but log only the necessary bounded display and identity evidence.
   const {before, after, originalRows, afterRows, ...displayEvidence} = observed;
-  console.log('WR126_RENDERED_BOARD_PRESSURE ' + JSON.stringify({
+  console.log('WR127_RENDERED_BOARD_PRESSURE ' + JSON.stringify({
     ...displayEvidence,
     unchangedRecommendation:{
       player:before.player, action:before.action, marketSource:before.source,
@@ -897,15 +920,19 @@ for (const [width, height] of [[390, 844], [1280, 900]]) {
     }
   }));
 }
-const wr126Reproduced = wr126BoardPressure.every(item =>
-  item.unknown.text.includes('50% next-pick survival') &&
-  item.unknown.meterInlineWidth === '50%' &&
-  item.unknown.widgetVisible && item.unknown.cardRendered);
-console.log('WR126_RENDERED_OUTCOME ' + JSON.stringify({
-  classification:wr126Reproduced ? 'REPRODUCED' : 'NOT_REPRODUCED',
+const wr127Truthful = wr126BoardPressure.every(item =>
+  item.unknown.visibleDetail.includes('Market timing UNKNOWN — no survival estimate') &&
+  !item.unknown.meterPresent &&
+  /Timing index \d+\/100/.test(item.knownMarket.visibleDetail) &&
+  item.knownMarket.meterAccessibilityHidden === 'true' &&
+  item.positionHidden);
+assert.equal(wr127Truthful, true, 'WR-127 actual Overall unknown/known display controls pass');
+console.log('WR127_RENDERED_OUTCOME ' + JSON.stringify({
+  classification:'TRUTHFUL_DISPLAY_VERIFIED',
   viewports:wr126BoardPressure.map(item => item.viewport),
   observedUnknownCopy:wr126BoardPressure.map(item => item.unknown.text),
-  observedUnknownMeter:wr126BoardPressure.map(item => item.unknown.meterInlineWidth)
+  observedUnknownMeter:wr126BoardPressure.map(item => item.unknown.meterInlineWidth),
+  observedKnownCopy:wr126BoardPressure.map(item => item.knownMarket.visibleDetail)
 }));
 
 const websiteSettingsSync = await page.evaluate(async () => {

@@ -8043,13 +8043,22 @@ function updateDraftDayDashboard(liveState, scarcityState){
     });
     var positionState = positions[pos] || null;
     var best = positionState && positionState.bestAvailable ? positionState.bestAvailable : available[0] || null;
-    var survival = best ? Math.round(calculateNextPickSurvival(best, context)) : 0;
+    // WR-127: 50 is an internal neutral timing fallback when the market is
+    // missing, never evidence of 50% survival. Preserve all engine internals.
+    var marketRank = best ? getMarketTimingDetails(best, context).marketRank : null;
+    var hasMarketTiming = marketRank != null && Number.isFinite(marketRank) && marketRank > 0;
+    var survival = hasMarketTiming ? Math.round(calculateNextPickSurvival(best, context)) : null;
     var status = positionState ? positionState.status : 'ENDGAME';
-    var urgency = status === 'CRITICAL CLIFF' || survival < 25
+    // An independently observed tier/cliff may still warrant attention.
+    // Otherwise missing-market urgency is UNKNOWN, not derived from sentinel 50.
+    var urgency = status === 'CRITICAL CLIFF'
       ? 'scarce'
-      : status === 'TIER CLOSING' || status === 'HIGH SCARCITY' || survival < 50
+      : status === 'TIER CLOSING' || status === 'HIGH SCARCITY'
         ? 'limited'
-        : survival < 75 ? 'fair' : 'plenty';
+        : !hasMarketTiming ? 'unknown'
+          : survival < 25 ? 'scarce'
+            : survival < 50 ? 'limited'
+              : survival < 75 ? 'fair' : 'plenty';
     var playerName = best && best.row ? getDraftRowDisplayName(best.row) : best && best.name ? best.name : 'None';
     var cliffText = positionState && positionState.playersBeforeCliff > 0
       ? positionState.playersBeforeCliff + ' before tier drop'
@@ -8057,8 +8066,15 @@ function updateDraftDayDashboard(liveState, scarcityState){
     html += '<div class="board-pressure-card pressure-'+urgency+'">';
     html += '<div><span class="pos-pill pos-'+pos+'">'+pos+'</span><b>'+relevant.length+(pos === 'K' || pos === 'DST' ? ' ranked' : ' relevant')+'</b></div>';
     html += '<strong class="pressure-best">'+escapeSummaryHtml(playerName)+'</strong>';
-    html += '<div class="board-pressure-meter"><span style="width:'+survival+'%"></span></div>';
-    html += '<small>'+survival+'% next-pick survival · '+escapeSummaryHtml(cliffText)+'</small>';
+    if (hasMarketTiming) {
+      // This 0–100 meter is an uncalibrated heuristic index, not a probability.
+      html += '<div class="board-pressure-meter" aria-hidden="true"><span style="width:'+survival+'%"></span></div>';
+      html += '<small>Timing index '+survival+'/100 · '+escapeSummaryHtml(cliffText)+'</small>';
+    } else {
+      // Omit the meter entirely: neither visible nor accessible UI may
+      // expose the internal neutral 50 as an estimate for unknown timing.
+      html += '<small>Market timing UNKNOWN — no survival estimate · '+escapeSummaryHtml(cliffText)+'</small>';
+    }
     html += '</div>';
   });
   html += '</div>';
