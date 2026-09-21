@@ -1,17 +1,17 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-21 — WR-D048 activates WR-132 cross-functional A6 draft-ready release evidence inventory
+Last Manager gate: 2026-09-21 — WR-D049 accepts WR-132 A6 evidence matrix and assigns WR-133 bounded synthetic Companion→War Room E2E regression
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current Track A gate — WR-D048 / A6 release-evidence inventory
+## Current Track A gate — WR-D049 / A6 cross-layer synthetic regression
 
-WR-130 / WR-131 are closed through WR-D047. Exact audited integration `dc0fdad005b1e391f488c1ab561787e815e3b49f` passed genuine canonical-main FULL War Room CI #35644877329, and the closure transition is canonical at `c1c5eaa548872332a9547ccefa418f1df2b3459d` with post-closure Governance success.
+WR-132 evidence inventory is accepted and closed. Work Helper PR #372 exact head `56e14b8b8c8725a1ecb9bc84062332a84b42cf9e` changed exactly its two authorized evidence paths and passed exact-head Governance; it was merged as canonical `6e5280ef77e761e163dfdba376899b53517ea079`, followed by successful canonical-main Governance.
 
-A4 remains season-gated and unassigned; no 2027 source should be invented or fetched. A5's mandatory 5–30 repair is complete; its remaining advanced settings are optional and separately gated.
+The accepted A6 matrix found one bounded current cross-layer evidence gap: Companion background/content bridge behavior and WR-118 app-side terminal/reconnect behavior are separately strong, but no one current deterministic executable regression spans the real Companion numbered ledger through the real War Room bridge into the real app ledger across replay/correction/reconnect/terminal state.
 
-WR-D048 assigns only WR-132 Work Helper as a paper-only cross-functional A6 release-evidence inventory. It may broadly inspect current code/tests/accepted evidence but write only its evidence matrix and Work Helper handoff. It does not authorize a draft-ready go/no-go, production/test changes, live ESPN/provider actions, source admission, deployment, rollback or release.
+WR-D049 assigns only WR-133 Builder as TEST/EVIDENCE ONLY to close that synthetic cross-layer gap with four exact paths. No production/Companion remediation, live ESPN/provider action, source/ranking/policy change, deployment, rollback, release or draft-ready go/no-go is authorized. A4 remains season-gated and Track B remains paused.
 
 
 ## Returning-Player v2

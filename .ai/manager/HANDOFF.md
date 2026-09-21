@@ -1,89 +1,75 @@
 # Manager / Architect Handoff
 
-STATUS: WR-D048 — A6 DRAFT-READY RELEASE EVIDENCE INVENTORY ACTIVATION
+STATUS: WR-D049 — WR-132 ACCEPTED/CLOSED; WR-133 SYNTHETIC COMPANION→WAR ROOM E2E REGRESSION ACTIVATION
 WORKFLOW: V3.5 CANONICAL
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-## Verified closed chain
+## Accepted WR-132 evidence
 
-WR-130 / WR-131 are CLOSED through WR-D047.
+Work Helper PR #372 exact head:
+`56e14b8b8c8725a1ecb9bc84062332a84b42cf9e`
 
-Accepted production integration:
-`dc0fdad005b1e391f488c1ab561787e815e3b49f`
-
-Mandatory canonical-main FULL War Room CI #35644877329:
-- classify #106482774335 — SUCCESS
-- Governance #106482835967 — SUCCESS
-- full product test #106483138780 — SUCCESS
-- bootstrap-reuse #106482838162 — SKIPPED
-
-WR-D047 closure PR #370 exact head:
-`a96c22b473e9097e7965383bd30cd8f210bb08f5`
-
-PR #370 War Room CI #35646006584:
-- classify #106486516161 — SUCCESS
-- Governance #106486579353 — SUCCESS
-- product test #106486710622 — correctly SKIPPED
-
-Canonical closure main:
-`c1c5eaa548872332a9547ccefa418f1df2b3459d`
-
-Post-closure canonical-main War Room CI #35646107641:
-- classify #106486847388 — SUCCESS
-- Governance #106487098081 — SUCCESS
-- product test #106487182731 — correctly SKIPPED
-
-Active registry is empty before WR-D048 activation.
-
-## Next bounded gate
-
-A4 remains DEFERRED / season-gated. Do not invent or fetch a 2027 ranking source.
-
-A5 mandatory bounded repair is complete; optional Half-PPR/Standard, custom roster settings, keepers, risk preferences and reusable profiles remain unassigned and are not automatically release prerequisites.
-
-A6 is the next primary Track A gate.
-
-WR-D048 assigns only:
-**WR-132 — Draft-Ready Release Evidence & Gap Inventory**
-
-Role:
-Work Helper / Super Troubleshooter / Cross-Functional Operator
-
-Assignment mode:
-CROSS-FUNCTIONAL RELEASE-READINESS EVIDENCE INVENTORY
-
-Purpose:
-Build one current cross-functional evidence matrix before any formal draft-ready go/no-go, test remediation, deployment or release decision.
-
-This is PAPER-ONLY. Work Helper may broadly inspect repository and accepted GitHub evidence but may write only:
+Cumulative scope:
 - `.ai/work_helper/WR132_DRAFT_READY_RELEASE_EVIDENCE_MATRIX.md`
 - `.ai/work_helper/HANDOFF.md`
 
-No production/test/workflow/data/provider/deployment mutation.
+Exact-head War Room CI #35651310217:
+- classify #106504127238 — SUCCESS
+- Governance #106504181690 — SUCCESS
+- product test #106504247185 — correctly SKIPPED
 
-## Required outcome
+PR #372 merged as canonical:
+`6e5280ef77e761e163dfdba376899b53517ea079`
 
-The matrix must cover:
-- end-to-end synthetic draft flow;
-- manual fallback/recovery;
-- authoritative pick/order/session state;
-- league inputs;
-- ranking freshness/rights and A4 season gate;
-- recommendation/provenance truthfulness;
-- desktop/phone/accessibility;
-- Companion/app compatibility;
-- security/trust boundaries;
-- current full CI/determinism;
-- deployment/rollback evidence;
-- real-draft operational boundaries.
+Post-merge canonical-main War Room CI #35652926860:
+- classify #106509432368 — SUCCESS
+- Governance #106509540543 — SUCCESS
+- product test #106509674064 — correctly SKIPPED
 
-Work Helper does NOT issue final draft-ready go/no-go.
+WR-132 is CLOSED.
 
-It must recommend exactly one next Manager gate based on independently cited current evidence.
+## Accepted bounded gap
 
-## Activation gate
+Current evidence proves:
+- strong current Companion parser/background/content/bridge layer coverage;
+- strong WR-118 application-side replay/reconnect terminal coverage.
 
-This Manager activation PR must pass exact-head Governance and merge.
-Genuine canonical-main push Governance must then succeed.
-Only afterward may Manager create `wr-132-draft-ready-release-evidence-inventory` from the exact new canonical main and verify 0 ahead / 0 behind before activating the Work Helper.
+It does NOT yet prove one executable current end-to-end path through:
+Companion numbered ledger -> real runtime snapshot delivery -> real war-room-content bridge -> real War Room page listener/app snapshot ingress -> app ledger/ownership -> reconnect/terminal convergence.
+
+This is an evidence gap, not an assumed product defect.
+
+## WR-133 sole activation
+
+Task:
+WR-133 — Synthetic Companion→War Room End-to-End Regression
+
+Role:
+Implementation Engineer / Builder
+
+Scope:
+TEST/EVIDENCE ONLY.
+
+Exact authorized writes:
+1. `scripts/test-wr-133-companion-war-room-e2e.mjs`
+2. `package.json` — named test + aggregate registration only
+3. `.ai/builder/WR133_COMPANION_WAR_ROOM_E2E_EVIDENCE.md`
+4. `.ai/builder/HANDOFF.md`
+
+No production, Companion, existing fixture, ranking, recommendation, workflow, dataset, deployment or release write is authorized.
+
+The test must execute current real source read-only, use synthetic local fixtures only, prove Companion/app ledger and ownership convergence across duplicate/reordered/stale/conflict/correction/session/reload/terminal checkpoints, execute non-vacuous negative controls and make zero provider requests.
+
+If honest testing reveals a production defect, Builder must STOP and report it. WR-133 has no remediation authority.
+
+WR-133 is AUDIT REQUIRED. Exact-final-head FULL CI -> Manager freeze -> fresh independent Auditor -> PASS-family on unchanged target before any later integration -> canonical-main FULL CI after merge before closure.
+
+## Preserved boundaries
+
+- WR-D001 ECR VALUE / ESPN TIMING.
+- WR-D018 fallback-first / LIVE_DIRECT_UNVERIFIED.
+- WR-D027 NO PROVIDER CONTACT.
+- A4 next-cycle source/freshness remains season-gated.
+- Track B remains RIGHTS_UNVERIFIED / OPTION_C_UNPROVEN / NO_SOURCE_ADMISSION / PAUSED.
+- No live ESPN, provider contact, 2027 source work, deployment, rollback, release or draft-ready declaration.
