@@ -1,15 +1,15 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-21 — WR-D045 accepts/closes WR-129 inventory and assigns WR-130 bounded 5–30 round-contract remediation
+Last Manager gate: 2026-09-21 — WR-D047 closes WR-130 / WR-131 after fresh independent PASS, exact audited integration and genuine canonical-main FULL CI SUCCESS
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current Track A gate — WR-D045 / WR-130
+## Current Track A gate — WR-D047 / A5 bounded repair complete
 
-WR-129 inventory is accepted and merged at canonical `3adb811322e13b354e1f4538d66c52c56abd56e6`; its exact-head and post-merge Governance gates are green. The inventory confirmed mature team/slot/snake/session/persistence behavior, fixed Full-PPR authority and one narrow mechanical defect: the documented 5–30 round contract is not enforced uniformly across app/persistence/external-pick/Companion settings paths.
+WR-130 / WR-131 are closed. The exact WR-130 Builder target `616541256c43a2d05a3831b254c53b200ca5950a` received fresh independent WR-131 PASS with no findings, was integrated without target movement as canonical `dc0fdad005b1e391f488c1ab561787e815e3b49f`, and passed genuine canonical-main FULL War Room CI #35644877329.
 
-WR-D045 assigns only WR-130 after Manager activation gates: bounded production/test remediation to unify those existing paths to 5–30. It does not authorize alternate scoring, custom rosters, keepers, risk preferences, reusable profiles, ranking refresh, provider contact, deployment or release. WR-130 requires fresh independent audit before any production merge.
+The existing 5–30 round-count contract is now unified across the approved app/persistence/external-pick/Companion settings surfaces. A4 remains season-gated and unassigned. Alternate scoring, custom rosters, keepers, risk preferences, reusable profiles, ranking/source refresh, provider contact, deployment and release remain separately gated and unassigned.
 
 
 ## Returning-Player v2
