@@ -826,3 +826,23 @@ RATIONALE: A4 is inherently time/source dependent and cannot be truthfully execu
 EVIDENCE: canonical main `1e72e035147b413627b3052a6172ac0589267eba`; WR-D043; War Room CI #35633016284 SUCCESS; current README documented 2–20 teams / 5–30 rounds / snake drafts / saved sessions; ROADMAP A4/A5 gates; Workflow V3.5 role and activation rules.
 NEXT GATE: exact-head Governance on this Manager activation PR -> merge -> genuine canonical-main push Governance -> create `wr-129-league-settings-personalization-inventory` at exact new main -> Builder two-file WR-129 inventory PR + exact-head Governance -> separate Manager review/decision.
 
+---
+
+## DECISION WR-D045
+
+DATE: 2026-09-21 (America/New_York)
+TASK: Accept/close WR-129 and activate bounded WR-130 round-count contract remediation
+STATUS: ACTIVE — WR-129 CLOSED; WR-130 ASSIGNED AFTER MANAGER ACTIVATION GATES; AUDIT REQUIRED
+DECISION:
+- Accept WR-129 paper inventory only at exact Builder PR #365 head `fb9f2ad94c767f75df2099c0917e8112afc30a92`. Cumulative diff is exactly `.ai/builder/WR129_LEAGUE_SETTINGS_PERSONALIZATION_INVENTORY.md` and `.ai/builder/HANDOFF.md`. Exact-head War Room CI #35638544907 completed SUCCESS: classify `106461926961`, Governance `106461996747`; product test `106462074536` correctly SKIPPED.
+- Manager independently verified the substantive finding in source: `index.html#pcRounds` exposes min 5/max 30, while command-bar canonicalization/rendered duplicate, app sync and saved-payload normalization, external ESPN pick-state restore/snapshot normalization, Companion popup/content/background settings paths use or accept a round floor of 1.
+- Manager additionally identifies `js/war-room-external-picks.js` as part of the remediation surface so the fix is complete across current persisted/snapshot ESPN state rather than limited to the Builder's initial file suggestion.
+- Merge WR-129 paper PR #365 only with expected-head guard; accepted merge is canonical `3adb811322e13b354e1f4538d66c52c56abd56e6`. Genuine post-merge main War Room CI #35639459932 completed SUCCESS: classify `106464935132`, Governance `106464999309`; product test `106465092851` correctly SKIPPED. Close WR-129.
+- Assign WR-130 Builder to change only the existing round lower bound from 1 to 5 across the exact authorized app/persistence/external-pick/Companion paths and focused tests. Preserve 5 and 30 as valid, default 16, team/slot/session isolation, pick authority, rankings, scoring and recommendation behavior.
+- WR-130 is a production/Companion behavior change and therefore requires exact-final-head FULL War Room CI, Manager freeze, fresh independent Auditor on the unchanged target, separate Manager merge decision and genuine canonical-main FULL CI before closure.
+- Do not activate Half-PPR, Standard, custom roster UI, keeper, risk preference, reusable planning defaults, A4/2027 source refresh, provider contact, Track B model/source work, deployment or release.
+- Preserve WR-D001 ECR value vs ESPN timing, WR-D018 fallback-first/`LIVE_DIRECT_UNVERIFIED`, WR-D027 NO PROVIDER CONTACT, WR-D038 recommendation-card repair, WR-D043 A3 closure and paused Track B gates.
+RATIONALE: WR-129 found a narrow, independently confirmed contract inconsistency in already-supported settings behavior. Aligning all active round-setting ingress/persistence paths to the existing documented 5–30 contract is a bounded mechanical repair that needs no new recommendation policy, but it touches production and Companion state boundaries and therefore warrants fresh independent audit.
+EVIDENCE: Builder PR #365 / `fb9f2ad94c767f75df2099c0917e8112afc30a92` / CI #35638544907; canonical merge `3adb811322e13b354e1f4538d66c52c56abd56e6`; post-merge main CI #35639459932; `index.html`, `js/war-room-command-bar-fixes.js`, `js/war-room-espn-sync.js`, `js/war-room-external-picks.js`, `extensions/espn-companion/popup.html`, `war-room-content.js`, `background.js`.
+NEXT GATE: this Manager activation PR exact-head Governance -> merge -> genuine canonical-main push Governance -> create `wr-130-round-count-contract-unification` at exact new main -> WR-130 bounded implementation/test PR + exact-final-head FULL CI -> Manager freeze -> fresh independent audit.
+
