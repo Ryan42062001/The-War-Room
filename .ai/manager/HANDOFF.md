@@ -1,31 +1,22 @@
 # Manager / Architect Handoff
 
-STATUS: WR-D042 — WR-127 AUDIT_READY / exact Builder target FROZEN; fresh WR-128 independent QA assigned after Manager activation gates
+STATUS: WR-D043 — WR-127 AND WR-128 CLOSED / audited integration + canonical-main FULL canary SUCCESS
 WORKFLOW: V3.5 CANONICAL
-EXECUTION MODE: STANDARD_CHAT_HIGH for fresh WR-128 Auditor
+EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-## Frozen Builder candidate
+## Exact acceptance and integration
 
-Canonical pre-activation main: `907ed83b301fae0340c07f124a431952990918b9`.
-Builder PR #360: OPEN / UNMERGED / mergeable.
-Builder branch: `wr-127-overall-board-pressure-truthful-market-display`.
-Manager-frozen exact audit target: `1198882b049087d4be82e01b40171d63756de42b`.
-Verified Builder creation base: `907ed83b301fae0340c07f124a431952990918b9`.
-Cumulative scope: 12 commits ahead / 0 behind, exactly `js/war-room-ui.js`, `scripts/test-browser.mjs`, `.ai/builder/WR127_OVERALL_BOARD_PRESSURE_TRUTHFUL_DISPLAY_EVIDENCE.md`, `.ai/builder/HANDOFF.md`.
-Exact-head FULL CI #35559439436 SUCCESS: test #106348285460, classify #106348285850, Governance #106348325746; bootstrap-reuse #106348286738 skipped. Historical failed WR-127 CI attempts remain preserved.
+WR-128 fresh independent PASS was published on Auditor PR #362 at immutable head `4fd0a294d75f91369cfa7aa5a11f3c6198abb071`, exactly two authorized Auditor files. Exact-head War Room CI #35631316505 completed SUCCESS: classify `106437926532`, Governance `106437986393`; documentary-only product test `106438083900` correctly SKIPPED. Manager merged Auditor evidence first as `12b140bbf6393aa5f54fb9e1d4fe28f3fc8ac021`.
 
-Manager independently inspected full logs: mounted 390x844/1280x900 unknown state says `Market timing UNKNOWN — no survival estimate`, omits meter/numeric accessible survival labels and uses neutral `pressure-unknown`; TIER CLOSING still preserves independent tier urgency; known ESPN state says `Timing index 0/100` with decorative meter aria-hidden; recommendation player/action/source, complete scored order/final scores and tested source-row attributes unchanged. This is Builder evidence/Manager preflight, not independent Auditor verdict.
+Builder PR #360 remained exactly at the independently audited SHA `1198882b049087d4be82e01b40171d63756de42b` with no target movement. Manager merged only that expected head, producing canonical merge `886dc51c7b16d1068c7e5489f212f64e67b6c2c6`.
 
-Canonical main previously had WR-127 ASSIGNED/`pr:null` and stale WR-126 Builder handoff. WR-D042 reconciles only Manager-owned lifecycle state; correct Builder WR-127 evidence/handoff remains on the frozen target and MUST be read there. Do not move Builder target to fix main documentation.
+Genuine canonical-main PUSH FULL War Room CI #35631780343 on exact merge `886dc51c7b16d1068c7e5489f212f64e67b6c2c6` completed SUCCESS: classify `106439451301`, Governance `106439494470`, full test `106439569669`; bootstrap-reuse `106439496555` SKIPPED. Browser determinism, phone decision view, `npm test`, resilience syntax and backup/offline reload all succeeded.
 
-## Sole next worker
+Historical WR-127 failures remain preserved as failures: #35558446453, #35558486470 and #35559042883, plus earlier same-frozen-head failed test attempt `106209388469`. No historical evidence is rewritten.
 
-WR-128 — Fresh Independent Audit of WR-127 Truthful Overall Board Pressure Display.
-Assigned fresh branch: `wr-128-wr127-overall-board-pressure-independent-audit`, to be created by Manager ONLY at exact verified post-WR-D042 canonical main after Manager PR merge and genuine main-push Governance SUCCESS.
-Immutable audit target metadata: WR-127 / PR #360 / Builder branch / exact `1198882b049087d4be82e01b40171d63756de42b`.
-Auditor writes exactly `.ai/auditor/WR128_OVERALL_BOARD_PRESSURE_TRUTHFUL_DISPLAY_AUDIT.md` and `.ai/auditor/HANDOFF.md`, publishes separate OPEN/UNMERGED Auditor PR and exact-head Governance with one required verdict. If Builder target moves, STOP; do not transfer verdict.
+## Current routing gate
 
-No implementation merge, deployment or release before fresh PASS-family on exact unchanged target and separate Manager decision. Genuine canonical-main FULL War Room CI is mandatory after any later Builder merge before WR-127 closure.
+WR-D043 closes WR-127 and WR-128 and removes both from the active-only registry. This closure is control-plane only and activates no new employee.
 
-Preserve WR-D001 ECR VALUE/ESPN timing, WR-D018 fallback-first/`LIVE_DIRECT_UNVERIFIED`, WR-D027 NO PROVIDER CONTACT, WR-D038 accepted WR-122 repair, historical failures and paused source/model rights. No live ESPN/provider contact or protected source/model lane.
+Preserve WR-D001 ECR VALUE/ESPN timing, WR-D018 fallback-first/`LIVE_DIRECT_UNVERIFIED`, WR-D027 NO PROVIDER CONTACT, WR-D038 accepted WR-122 repair, historical audit/CI evidence and paused source/model-rights gates. The repaired synthetic/browser presentation path is not live ESPN/Companion E2E, calibrated odds, physical-phone certification, deployment or draft-ready release. Any future work requires a separate Manager decision and task.

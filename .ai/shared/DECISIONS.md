@@ -789,3 +789,21 @@ DECISION:
 RATIONALE: Builder implementation is mechanically and behaviorally ready for independent audit, but canonical lifecycle/PR metadata lagged the frozen branch. Manager reconciliation restores authoritative state without mutating the production target and preserves independent audit separation.
 EVIDENCE: live PR #360/head/branch/base comparison; exact-head full CI #35559439436 and full test logs; frozen Builder report/handoff at `1198882b049087d4be82e01b40171d63756de42b`; WR-D041/WR-127 contract; canonical Workflow V3.5 audit-target metadata rules.
 NEXT GATE: Manager activation PR exact-head Governance -> merge -> genuine canonical-main push Governance -> create/verify fresh WR-128 branch at exact post-activation main -> fresh independent audit exact `1198882b049087d4be82e01b40171d63756de42b` -> Auditor two-file PR/Governance/verdict -> separate Manager disposition. No Builder implementation merge now.
+
+---
+
+## DECISION WR-D043
+
+DATE: 2026-09-21 (America/New_York)
+TASK: WR-127 / WR-128 independent audit acceptance, exact integration and canonical closure
+STATUS: ACTIVE — BOTH TASKS CLOSED; NO NEW EMPLOYEE OR RELEASE AUTHORIZATION
+DECISION:
+- Accept WR-128's fresh independent PASS with no CRITICAL/HIGH/MEDIUM/LOW findings ONLY for immutable WR-127 Builder SHA `1198882b049087d4be82e01b40171d63756de42b`; exact Auditor PR #362 head `4fd0a294d75f91369cfa7aa5a11f3c6198abb071`, exactly two Auditor files and exact-head War Room CI #35631316505 SUCCESS (classify `106437926532`, Governance `106437986393`; product test `106438083900` correctly SKIPPED).
+- Verify Auditor PR #362 merged first as `12b140bbf6393aa5f54fb9e1d4fe28f3fc8ac021`. Re-verify Builder PR #360 and branch remained exactly at audited frozen SHA (0 ahead / 0 behind), then merge ONLY that expected head, producing canonical merge `886dc51c7b16d1068c7e5489f212f64e67b6c2c6`.
+- Verify genuine post-Builder-merge canonical-main PUSH FULL War Room CI #35631780343 on exact `886dc51c7b16d1068c7e5489f212f64e67b6c2c6` completed SUCCESS: classify `106439451301`, Governance `106439494470`, actual full test `106439569669`; bootstrap-reuse `106439496555` SKIPPED. Browser determinism, phone view, `npm test`, resilience syntax and backup/offline reload all succeeded.
+- CLOSE WR-127 and WR-128; remove both from `.ai/shared/ACTIVE_TASKS.json` as one Manager-only atomic reconciliation. Preserve exact task specs, Auditor report/handoff, Builder evidence, commits, PRs and CI as durable history.
+- Preserve historical WR-127 failures #35558446453, #35558486470 and #35559042883 and earlier same-frozen-head failed test attempt `106209388469` exactly as historical failures. Do not relabel them green.
+- Preserve WR-D001 ECR player VALUE vs ESPN market TIMING, WR-D018 fallback-first/`LIVE_DIRECT_UNVERIFIED`, WR-D027 NO PROVIDER CONTACT, WR-D038 accepted WR-122 repair and paused Track B `RIGHTS_UNVERIFIED / OPTION_C_UNPROVEN / NO_SOURCE_ADMISSION`. This closure is not live ESPN/Companion E2E, empirical calibration, physical-device certification, deployment or release authorization.
+RATIONALE: The exact WR-127 implementation has fresh independent PASS evidence, was integrated without target movement, and passed the mandatory genuine full canonical-main canary. V3.5 closure gates are met without altering historical failures or expanding scope.
+EVIDENCE: Auditor PR #362 / `4fd0a294d75f91369cfa7aa5a11f3c6198abb071` / merge `12b140bbf6393aa5f54fb9e1d4fe28f3fc8ac021` / CI #35631316505; Builder PR #360 / exact audited `1198882b049087d4be82e01b40171d63756de42b` / merge `886dc51c7b16d1068c7e5489f212f64e67b6c2c6`; canonical-main FULL CI #35631780343 and jobs `106439451301`, `106439494470`, `106439569669`; Manager comments #5764644573 and #5764645754; WR-D041–042.
+NEXT GATE: Merge this Manager-only closure PR after exact-head Governance, verify canonical main and empty active-only registry, then scope any future work separately. No new employee activation here.
