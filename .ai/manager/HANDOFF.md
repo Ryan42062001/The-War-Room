@@ -1,14 +1,31 @@
 # Manager / Architect Handoff
 
-STATUS: WR-D041 — WR-126 diagnostic ACCEPTED/CLOSED; sole WR-127 truthful legacy Overall Board Pressure display repair assigned after activation gates
+STATUS: WR-D042 — WR-127 AUDIT_READY / exact Builder target FROZEN; fresh WR-128 independent QA assigned after Manager activation gates
 WORKFLOW: V3.5 CANONICAL
-EXECUTION MODE: WORK_MODE for assigned WR-127 Builder
+EXECUTION MODE: STANDARD_CHAT_HIGH for fresh WR-128 Auditor
 REFRESH MODE: FAST_REFRESH
 
-Manager independently verified WR-126 Builder PR #358 exact `2bb97458bf08151d6cac3ae8259f62a3a794caf4`, three authorized test/evidence paths, merge `e69bd96d549786e5b3d8c045d086dd5884ce3266`, exact-head FULL CI `35555586954` SUCCESS and genuine canonical-main push FULL CI `35556294071` SUCCESS. ACCEPT bounded `REPRODUCED`: actual mounted Overall Board Pressure can show internal missing-market neutral 50 as `50% next-pick survival` and a 50%-width meter at 390x844 and 1280x900 under the documented restricted synthetic display pool. This is not natural-draft prevalence, calibrated probability, live ESPN or physical-device proof. WR-126 is CLOSED and removed from active registry.
+## Frozen Builder candidate
 
-Sole next lane: WR-127 Builder `.ai/manager/WR-127.md`, WORK_MODE / FAST_REFRESH. Manager creates `wr-127-overall-board-pressure-truthful-market-display` only from exact verified post-WR-D041 canonical main after this activation PR merges and genuine main-push Governance succeeds. Exact writes: `js/war-room-ui.js`, `scripts/test-browser.mjs`, `.ai/builder/WR127_OVERALL_BOARD_PRESSURE_TRUTHFUL_DISPLAY_EVIDENCE.md`, `.ai/builder/HANDOFF.md`. Unknown market must show UNKNOWN/no survival estimate with no numeric 50/meter/accessibility label or urgency derived solely from the sentinel; known numeric output must be labeled an internal heuristic/timing index, not calibrated probability. Preserve engine, ranking, source resolver, recommendation identity/action/order/scores, draft state, Companion and WR-122 card. Both 390x844 and 1280x900, known/unknown/Position/accessibility/invariance controls, literal syntax checks and exact-head FULL CI are required.
+Canonical pre-activation main: `907ed83b301fae0340c07f124a431952990918b9`.
+Builder PR #360: OPEN / UNMERGED / mergeable.
+Builder branch: `wr-127-overall-board-pressure-truthful-market-display`.
+Manager-frozen exact audit target: `1198882b049087d4be82e01b40171d63756de42b`.
+Verified Builder creation base: `907ed83b301fae0340c07f124a431952990918b9`.
+Cumulative scope: 12 commits ahead / 0 behind, exactly `js/war-room-ui.js`, `scripts/test-browser.mjs`, `.ai/builder/WR127_OVERALL_BOARD_PRESSURE_TRUTHFUL_DISPLAY_EVIDENCE.md`, `.ai/builder/HANDOFF.md`.
+Exact-head FULL CI #35559439436 SUCCESS: test #106348285460, classify #106348285850, Governance #106348325746; bootstrap-reuse #106348286738 skipped. Historical failed WR-127 CI attempts remain preserved.
 
-WR-127 is AUDIT REQUIRED. Builder publishes one exact-scope immutable PR/head and stops. Manager freezes the exact target and separately activates a fresh Independent Auditor; no implementation merge or closure before PASS-family on that unchanged target and subsequent genuine canonical-main FULL CI canary.
+Manager independently inspected full logs: mounted 390x844/1280x900 unknown state says `Market timing UNKNOWN — no survival estimate`, omits meter/numeric accessible survival labels and uses neutral `pressure-unknown`; TIER CLOSING still preserves independent tier urgency; known ESPN state says `Timing index 0/100` with decorative meter aria-hidden; recommendation player/action/source, complete scored order/final scores and tested source-row attributes unchanged. This is Builder evidence/Manager preflight, not independent Auditor verdict.
 
-Preserve WR-D001 ECR VALUE/ESPN TIMING, WR-D018 fallback-first/`LIVE_DIRECT_UNVERIFIED`, WR-D027 NO PROVIDER CONTACT, WR-D038 corrected recommendation display, and paused protected source/model. No new Strategy/R&D/Auditor/Work Helper assignment, provider contact, live ESPN, deployment or draft-ready release.
+Canonical main previously had WR-127 ASSIGNED/`pr:null` and stale WR-126 Builder handoff. WR-D042 reconciles only Manager-owned lifecycle state; correct Builder WR-127 evidence/handoff remains on the frozen target and MUST be read there. Do not move Builder target to fix main documentation.
+
+## Sole next worker
+
+WR-128 — Fresh Independent Audit of WR-127 Truthful Overall Board Pressure Display.
+Assigned fresh branch: `wr-128-wr127-overall-board-pressure-independent-audit`, to be created by Manager ONLY at exact verified post-WR-D042 canonical main after Manager PR merge and genuine main-push Governance SUCCESS.
+Immutable audit target metadata: WR-127 / PR #360 / Builder branch / exact `1198882b049087d4be82e01b40171d63756de42b`.
+Auditor writes exactly `.ai/auditor/WR128_OVERALL_BOARD_PRESSURE_TRUTHFUL_DISPLAY_AUDIT.md` and `.ai/auditor/HANDOFF.md`, publishes separate OPEN/UNMERGED Auditor PR and exact-head Governance with one required verdict. If Builder target moves, STOP; do not transfer verdict.
+
+No implementation merge, deployment or release before fresh PASS-family on exact unchanged target and separate Manager decision. Genuine canonical-main FULL War Room CI is mandatory after any later Builder merge before WR-127 closure.
+
+Preserve WR-D001 ECR VALUE/ESPN timing, WR-D018 fallback-first/`LIVE_DIRECT_UNVERIFIED`, WR-D027 NO PROVIDER CONTACT, WR-D038 accepted WR-122 repair, historical failures and paused source/model rights. No live ESPN/provider contact or protected source/model lane.
