@@ -1,30 +1,54 @@
 # Manager / Architect Handoff
 
-STATUS: WR-D045 — WR-129 ACCEPTED/CLOSED / WR-130 ROUND-CONTRACT REMEDIATION ACTIVATION
+STATUS: WR-D046 — WR-130 EXACT TARGET FROZEN / WR-131 FRESH INDEPENDENT AUDIT ACTIVATION
 WORKFLOW: V3.5 CANONICAL
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-## Verified WR-129 acceptance
+## Frozen implementation target
 
-WR-129 Builder PR #365 exact head `fb9f2ad94c767f75df2099c0917e8112afc30a92` changed exactly two authorized Builder documentary paths and passed exact-head War Room CI #35638544907: classify `106461926961`, Governance `106461996747`; product test correctly SKIPPED.
+Builder PR #367 remains OPEN / UNMERGED and mergeable at exact head:
+`616541256c43a2d05a3831b254c53b200ca5950a`
 
-Manager independently verified the key source mismatch and found one additional affected existing path, `js/war-room-external-picks.js`, beyond the Builder's proposed minimum list.
+Builder branch:
+`wr-130-round-count-contract-unification`
 
-PR #365 merged with expected-head guard as canonical `3adb811322e13b354e1f4538d66c52c56abd56e6`. Genuine canonical-main War Room CI #35639459932 then completed SUCCESS: classify `106464935132`, Governance `106464999309`; product test `106465092851` correctly SKIPPED.
+Verified creation base / canonical main:
+`333601ee04457b3fb90895f0d6d99e8c2d31d6f0`
 
-WR-129 is CLOSED.
+Manager independently verified:
+- branch still identical to frozen target;
+- cumulative base→target = 12 ahead / 0 behind;
+- exactly 11 WR-130-authorized paths;
+- exact-head FULL War Room CI #35641063617 SUCCESS;
+- classify #106470215167 SUCCESS;
+- Governance #106470279743 SUCCESS;
+- full product test #106470347214 SUCCESS;
+- bootstrap-reuse #106470282022 SKIPPED;
+- source-level 5–30 enforcement across command-bar, app sync/persistence, external-pick state and Companion settings surfaces.
 
-## Current decision
+WR-130 is AUDIT_READY. Passing CI is not an audit verdict.
 
-Assign only WR-130: unify the already documented 5–30 round contract across current command-bar, app sync/persistence, external ESPN pick state and ESPN Companion settings paths.
+## Freeze
 
-This is a mechanics repair, not a new Draft Strategy policy decision. WR-130 is audit-required and post-merge-full-canary-required.
+Do not modify, force-push or merge Builder PR #367 / branch while WR-131 is auditing it. Any movement from `616541256c43a2d05a3831b254c53b200ca5950a` invalidates target continuity and fails closed.
 
-Do not add alternate scoring, custom roster UI, keepers, risk preference, reusable planning defaults, ranking/source refresh or provider contact.
+## Fresh audit assignment
+
+Assign only WR-131 Independent Auditor / QA in STANDARD_CHAT_HIGH / FAST_REFRESH.
+
+Auditor target:
+- task WR-130
+- PR #367
+- branch `wr-130-round-count-contract-unification`
+- exact SHA `616541256c43a2d05a3831b254c53b200ca5950a`
+
+Auditor writes exactly:
+- `.ai/auditor/WR131_ROUND_COUNT_CONTRACT_AUDIT.md`
+- `.ai/auditor/HANDOFF.md`
+
+Auditor publishes a separate OPEN / UNMERGED two-file PR with one immutable head and one PASS-family/FAIL verdict. No Builder integration occurs until Manager separately accepts a PASS-family verdict on the exact unchanged target.
 
 ## Activation gate
 
-This Manager control-plane PR must pass exact-head Governance and merge. Genuine canonical-main push Governance must then succeed. Only after that may Manager create `wr-130-round-count-contract-unification` from the exact new main and activate the Builder.
-
-Builder must publish one immutable implementation PR/head with exact-final-head FULL War Room CI, then stop for Manager freeze and a fresh independent Auditor task.
+This Manager control-plane PR must pass exact-head Governance and merge. Genuine canonical-main push Governance must then succeed. Only afterward create `wr-131-wr130-round-count-contract-independent-audit` from that exact new main and verify 0 ahead / 0 behind before activating the fresh Auditor chat.
