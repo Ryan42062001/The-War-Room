@@ -807,3 +807,22 @@ DECISION:
 RATIONALE: The exact WR-127 implementation has fresh independent PASS evidence, was integrated without target movement, and passed the mandatory genuine full canonical-main canary. V3.5 closure gates are met without altering historical failures or expanding scope.
 EVIDENCE: Auditor PR #362 / `4fd0a294d75f91369cfa7aa5a11f3c6198abb071` / merge `12b140bbf6393aa5f54fb9e1d4fe28f3fc8ac021` / CI #35631316505; Builder PR #360 / exact audited `1198882b049087d4be82e01b40171d63756de42b` / merge `886dc51c7b16d1068c7e5489f212f64e67b6c2c6`; canonical-main FULL CI #35631780343 and jobs `106439451301`, `106439494470`, `106439569669`; Manager comments #5764644573 and #5764645754; WR-D041–042.
 NEXT GATE: Merge this Manager-only closure PR after exact-head Governance, verify canonical main and empty active-only registry, then scope any future work separately. No new employee activation here.
+
+---
+
+## DECISION WR-D044
+
+DATE: 2026-09-21 (America/New_York)
+TASK: Track A post-A3 routing — defer season-gated A4 refresh and activate A5 existing-settings inventory
+STATUS: ACTIVE — WR-129 ASSIGNED AFTER MANAGER ACTIVATION GATES; A4 DEFERRED / UNASSIGNED
+DECISION:
+- Independently verify WR-D043 closure on canonical main `1e72e035147b413627b3052a6172ac0589267eba`, empty active-only registry, and genuine canonical-main War Room CI #35633016284 SUCCESS.
+- Do not start A4 next-draft-cycle rankings/source freshness work merely because A3 closed. The application already carries the accepted 2026 baseline; a 2027 refresh requires an actual season-specific source, lawful/terms/freshness evidence and a separate Manager admission decision. A4 remains DEFERRED / NOT ASSIGNED.
+- Advance only the non-destructive A5 prerequisite already stated in the roadmap: assign WR-129 to the Builder as a read-only internal code/test inventory of existing 2–20 team / 5–30 round / snake/PPR assumptions, starter/FLEX and roster-setting behavior, saved-session persistence/isolation, settings/recommendation consumers and corresponding tests.
+- WR-129 is documentation-only. Exact writes are `.ai/builder/WR129_LEAGUE_SETTINGS_PERSONALIZATION_INVENTORY.md` and `.ai/builder/HANDOFF.md`. No production/test/source/ranking/workflow/dataset modification, no live ESPN/Companion use, no provider contact and no release/deployment.
+- WR-129 must classify already-built capability versus demonstrated gaps/unknowns and recommend exactly one smallest next Manager decision. It does not self-authorize that next step. If a policy gap exists, route it to Draft Strategy before Builder implementation.
+- Preserve WR-D001 ECR value vs ESPN timing, WR-D018 fallback-first/`LIVE_DIRECT_UNVERIFIED`, WR-D027 NO PROVIDER CONTACT, WR-D038 accepted recommendation-card repair, WR-D043 A3 closure and paused Track B source-rights/custom-ranking gates.
+RATIONALE: A4 is inherently time/source dependent and cannot be truthfully executed by inventing a future refresh target. A5 can advance safely now through the roadmap's own read-only inventory prerequisite, avoiding duplicate features and unnecessary production work.
+EVIDENCE: canonical main `1e72e035147b413627b3052a6172ac0589267eba`; WR-D043; War Room CI #35633016284 SUCCESS; current README documented 2–20 teams / 5–30 rounds / snake drafts / saved sessions; ROADMAP A4/A5 gates; Workflow V3.5 role and activation rules.
+NEXT GATE: exact-head Governance on this Manager activation PR -> merge -> genuine canonical-main push Governance -> create `wr-129-league-settings-personalization-inventory` at exact new main -> Builder two-file WR-129 inventory PR + exact-head Governance -> separate Manager review/decision.
+

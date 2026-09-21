@@ -5,6 +5,13 @@ Last Manager gate: 2026-09-21 — WR-D043 closes WR-127 / WR-128 after fresh ind
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
+## Current Track A gate — WR-D044 / WR-129
+
+WR-D043 closure is fully verified on canonical main `1e72e035147b413627b3052a6172ac0589267eba` with post-merge War Room CI #35633016284 SUCCESS. A4 next-draft-cycle ranking/source freshness remains season-gated and unassigned because the current application already carries the accepted 2026 baseline and no 2027 source admission is authorized.
+
+WR-D044 activates only WR-129 after Manager PR/main-push Governance gates: a read-only Builder inventory of existing league settings, scoring assumptions, roster/starter configuration, persistence/session isolation and relevant test coverage. WR-129 may write only its inventory report plus Builder handoff. No production settings change, recommendation policy, ranking refresh, ESPN/provider interaction, deployment or release is authorized.
+
+
 ## Returning-Player v2
 
 The protected historical-scoring bridge is fully accepted.

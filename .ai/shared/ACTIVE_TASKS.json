@@ -1,8 +1,61 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-21T17:33:00Z",
+  "updated_at_utc": "2026-09-21T18:03:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": []
+  "tasks": [
+    {
+      "task_id": "WR-129",
+      "owner": "Builder",
+      "worker_slot": "builder-wr129-league-settings-personalization-inventory",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-129.md",
+      "role_handoff": ".ai/builder/HANDOFF.md",
+      "assignment_main_sha": "1e72e035147b413627b3052a6172ac0589267eba",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-129-league-settings-personalization-inventory",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/builder/WR129_LEAGUE_SETTINGS_PERSONALIZATION_INVENTORY.md",
+        ".ai/builder/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/research/",
+        ".ai/strategy/",
+        "js/",
+        "scripts/",
+        "extensions/",
+        "data/",
+        ".github/",
+        "src/"
+      ],
+      "forbidden_exact_paths": [
+        "README.md",
+        "index.html",
+        "script.js",
+        "package.json",
+        "style.css",
+        "style-base.css",
+        "command-bar.css",
+        "draft-polish.css",
+        "layout-efficiency.css",
+        "phone-decision-view.css"
+      ],
+      "next_gate": "WR-D044 Manager activation PR exact-head Governance -> merge -> genuine canonical-main push Governance SUCCESS -> create wr-129-league-settings-personalization-inventory from that exact new main -> Builder read-only two-file inventory PR with exact-head Governance -> Manager review and separate decision. A4 2027 ranking/source refresh remains season-gated and unassigned; no production/settings/ranking/provider change is authorized by WR-129."
+    }
+  ]
 }
