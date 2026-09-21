@@ -1,15 +1,17 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-21 — WR-D047 closes WR-130 / WR-131 after fresh independent PASS, exact audited integration and genuine canonical-main FULL CI SUCCESS
+Last Manager gate: 2026-09-21 — WR-D048 activates WR-132 cross-functional A6 draft-ready release evidence inventory
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current Track A gate — WR-D047 / A5 bounded repair complete
+## Current Track A gate — WR-D048 / A6 release-evidence inventory
 
-WR-130 / WR-131 are closed. The exact WR-130 Builder target `616541256c43a2d05a3831b254c53b200ca5950a` received fresh independent WR-131 PASS with no findings, was integrated without target movement as canonical `dc0fdad005b1e391f488c1ab561787e815e3b49f`, and passed genuine canonical-main FULL War Room CI #35644877329.
+WR-130 / WR-131 are closed through WR-D047. Exact audited integration `dc0fdad005b1e391f488c1ab561787e815e3b49f` passed genuine canonical-main FULL War Room CI #35644877329, and the closure transition is canonical at `c1c5eaa548872332a9547ccefa418f1df2b3459d` with post-closure Governance success.
 
-The existing 5–30 round-count contract is now unified across the approved app/persistence/external-pick/Companion settings surfaces. A4 remains season-gated and unassigned. Alternate scoring, custom rosters, keepers, risk preferences, reusable profiles, ranking/source refresh, provider contact, deployment and release remain separately gated and unassigned.
+A4 remains season-gated and unassigned; no 2027 source should be invented or fetched. A5's mandatory 5–30 repair is complete; its remaining advanced settings are optional and separately gated.
+
+WR-D048 assigns only WR-132 Work Helper as a paper-only cross-functional A6 release-evidence inventory. It may broadly inspect current code/tests/accepted evidence but write only its evidence matrix and Work Helper handoff. It does not authorize a draft-ready go/no-go, production/test changes, live ESPN/provider actions, source admission, deployment, rollback or release.
 
 
 ## Returning-Player v2
