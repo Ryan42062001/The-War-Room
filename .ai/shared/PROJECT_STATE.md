@@ -1,7 +1,7 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-20 — WR-D041 accepts/closes WR-126 rendered diagnostic and scopes sole audit-required WR-127 truthful legacy Overall Board Pressure display repair
+Last Manager gate: 2026-09-21 — WR-D042 freezes exact WR-127 Builder target for audit and assigns fresh WR-128 independent QA after control-plane activation gates
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
@@ -716,3 +716,7 @@ WR-125 documentary two-file PR #356 exact head 309a6df679593bbb99cd7429ba41449c0
 Manager independently verified WR-126 Builder PR #358 exact head `2bb97458bf08151d6cac3ae8259f62a3a794caf4`, exact three authorized diagnostic/evidence paths, exact-head FULL CI `35555586954` SUCCESS and canonical merge `e69bd96d549786e5b3d8c045d086dd5884ce3266`. Genuine canonical-main push FULL CI `35556294071` also completed SUCCESS on that merge. ACCEPT bounded `REPRODUCED`: actual mounted legacy Overall Board Pressure displayed the internal missing-market neutral 50 as `50% next-pick survival` with a 50%-width meter at 390x844 and 1280x900 under the documented restricted synthetic display pool using a genuine unmodified row. Preserve that this does not establish natural full-board frequency, live ESPN behavior, calibrated odds, physical-phone behavior or release readiness. WR-126 CLOSED and removed from active-only registry.
 
 Sole WR-127 Builder production correction is separately ASSIGNED in WORK_MODE/FAST_REFRESH after Manager activation PR/main Governance and exact-postmerge branch bootstrap. Exact allowed files: `js/war-room-ui.js`, `scripts/test-browser.mjs`, `.ai/builder/WR127_OVERALL_BOARD_PRESSURE_TRUTHFUL_DISPLAY_EVIDENCE.md`, `.ai/builder/HANDOFF.md`. Unknown market must show UNKNOWN/no estimate with no numeric 50 or probability-like meter/accessibility label/urgency derived solely from sentinel; known numeric timing must be labeled heuristic, not calibrated probability. Engine, ranking, resolver, recommendation identity/action/order/scores, draft state, Companion and WR-122 card remain invariant. WR-127 requires exact-head FULL CI, Manager freeze, fresh independent Auditor PASS-family before implementation merge and genuine canonical-main FULL CI canary before closure. No other role or product/source/release lane is activated.
+
+## WR-D042 — WR-127 frozen audit target / WR-128 assigned (2026-09-21)
+
+Manager independently verified Builder PR #360 OPEN/UNMERGED at exact `1198882b049087d4be82e01b40171d63756de42b`, creation base `907ed83b301fae0340c07f124a431952990918b9`, 12 ahead / 0 behind, exactly four authorized paths and exact-head FULL CI #35559439436 SUCCESS including actual product test #106348285460. Full logs show repaired mounted unknown/known market presentation and recommendation/scoring/source-row invariants at both required viewports; historical failed WR-127 CI attempts remain historical. WR-127 is now AUDIT_READY and frozen at that SHA; canonical stale lifecycle metadata is reconciled without moving the Builder candidate. Fresh WR-128 Auditor is the sole next worker after Manager activation PR/main Governance and branch bootstrap. No implementation merge, provider/source change, deployment or release; PASS-family on exact unchanged target plus later main FULL CI remain mandatory.
