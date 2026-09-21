@@ -725,7 +725,12 @@ for (const [width, height] of [[390, 844], [1280, 900]]) {
       requestAnimationFrame(() => requestAnimationFrame(resolve)));
     const live = buildLiveDraftDebugState();
     const state = getDraftAssistantState();
-    const context = live.context;
+    // The real draft state describes the upcoming OWN pick, whereas the debug
+    // engine context may look one turn further ahead for scoring. For this
+    // display-only diagnostic, use the actual configured upcoming own turn.
+    const context = {...live.context, currentPick:state.currentPick,
+      calculatedNextPick:state.myNextPick, nextPick:state.myNextPick,
+      calculatedPicksUntilNext:state.myNextPick - state.currentPick - 1};
     const owner = pick => {
       const round = Math.ceil(pick / state.teams);
       const index = (pick - 1) % state.teams;
