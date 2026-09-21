@@ -2,9 +2,56 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'manifest.json'), 'utf8'));
+
+function loadWarRoomBridge() {
+  const runtimeMessages = [];
+  let pageMessageListener = null;
+  const location = {
+    href: 'http://127.0.0.1:8765/',
+    origin: 'http://127.0.0.1:8765'
+  };
+  const window = {
+    location,
+    addEventListener: (type, listener) => {
+      if (type === 'message') pageMessageListener = listener;
+    },
+    postMessage: () => {}
+  };
+  const document = {
+    body: {
+      getAttribute: name => name === 'data-war-room-app' ? 'the-war-room' : null
+    }
+  };
+  const chrome = {
+    runtime: {
+      getManifest: () => ({version: '0.9.14'}),
+      sendMessage: message => {
+        runtimeMessages.push(message);
+        return Promise.resolve();
+      },
+      onMessage: {addListener: () => {}}
+    }
+  };
+  const context = vm.createContext({window, location, document, chrome, URL, console, Promise});
+  const source = fs.readFileSync(path.join(root, 'war-room-content.js'), 'utf8');
+  vm.runInContext(source, context);
+
+  return {
+    runtimeMessages,
+    dispatch(data) {
+      assert.equal(typeof pageMessageListener, 'function');
+      pageMessageListener({
+        source: window,
+        origin: location.origin,
+        data
+      });
+    }
+  };
+}
 
 test('uses Manifest V3 with a service worker', () => {
   assert.equal(manifest.manifest_version, 3);
@@ -49,6 +96,42 @@ test('popup prioritizes ESPN Live Sync trust while retaining technical diagnosti
   assert.match(script, /Live sources active/);
   assert.match(script, /Ledger confirmed\/conflicts\/unresolved IDs/);
   assert.match(script, /document\.execCommand\('copy'\)/);
+});
+
+test('Companion popup exposes the 5-30 round-count contract', () => {
+  const html = fs.readFileSync(path.join(root, 'popup.html'), 'utf8');
+  assert.match(html, /id="rounds" type="number" min="5" max="30"/);
+});
+
+test('War Room bridge rejects unsupported rounds and forwards 5/30 boundaries', () => {
+  const bridge = loadWarRoomBridge();
+  const channel = 'the-war-room:espn-sync:v1';
+  const settingsMessages = () => bridge.runtimeMessages.filter(message => message.type === 'WAR_ROOM_SETTINGS_UPDATE');
+
+  for (const rounds of [1, 2, 3, 4, 31]) {
+    const before = settingsMessages().length;
+    bridge.dispatch({
+      channel,
+      type: 'SETTINGS_UPDATE',
+      settings: {teams: 10, draftSlot: 1, rounds},
+      requiredExtensionVersion: '0.9.14'
+    });
+    assert.equal(settingsMessages().length, before, 'unsupported rounds ' + rounds + ' must not be forwarded');
+  }
+
+  for (const rounds of [5, 30]) {
+    bridge.dispatch({
+      channel,
+      type: 'SETTINGS_UPDATE',
+      settings: {teams: 10, draftSlot: 1, rounds},
+      requiredExtensionVersion: '0.9.14'
+    });
+    const message = settingsMessages().at(-1);
+    assert.deepEqual(
+      JSON.parse(JSON.stringify(message.config)),
+      {teams: 10, draftSlot: 1, rounds, totalPicks: 10 * rounds}
+    );
+  }
 });
 
 test('War Room bridge forwards explicit website draft-setting edits', () => {
