@@ -810,6 +810,47 @@ async function main() {
       openSlotCount:0,
       httpStatus:200
     }, SYNTHETIC_DRAFT_A);
+
+    // A passive snapshot for an EXISTING saved ESPN draft cannot switch away
+    // from an in-progress B draft: the real command-bar session guard requires
+    // an intentional Draft-menu change. Assert the protection before the
+    // user-equivalent transition instead of mistaking it for ledger loss.
+    const passiveReturn = await appObservation(page);
+    const guarded = await page.evaluate(key =>
+      WarRoomCommandBarFixes.shouldProtectEspnSessionSwitch(key),
+      companion.status().picks.length ? companion.context.state.draftKey : null
+    );
+    assert.equal(guarded, true, 'real command-bar guard must protect in-progress B');
+    assert.equal(passiveReturn.session, sessionB,
+      'passive A snapshot must not switch an in-progress B draft');
+    assertEquivalent('G passive A delivery must preserve B ledger',
+      isolatedB.appLedger, canonicalAppLedger(passiveReturn));
+    assert.equal(companion.picks().length, 13,
+      'Companion must retain the corrected A ledger while the app protects B');
+    console.log('WR133_SESSION_GUARD ' + JSON.stringify({
+      passiveSwitchBlocked:true, protectedAppSession:sessionB,
+      appLedgerDigest:hash(canonicalAppLedger(passiveReturn)),
+      companionLedgerDigest:hash(canonicalCompanionLedger(companion.picks())),
+      companionCount:companion.picks().length,
+      appCount:passiveReturn.rows.length
+    }));
+
+    // Exercise the real user-facing Draft selector (onchange ->
+    // switchDraftSession) and inspect the saved A state BEFORE any replay.
+    // This must not erase or silently reconstruct A or B from test fixtures.
+    await page.selectOption('#draftSessionSelect', sessionA);
+    await waitFor(async () => (await appObservation(page)).session === sessionA,
+      'G explicit Draft-menu selection of A');
+    const selectedA = await appObservation(page);
+    assertEquivalent('G saved A ledger after explicit Draft-menu return',
+      corrected.companionLedger, canonicalAppLedger(selectedA));
+    assert.equal(hash(canonicalAppLedger(selectedA)), a13Digest,
+      'saved A ledger must be intact before Companion replay');
+
+    // Re-broadcast the actual current Companion ledger using the real
+    // background snapshot producer -> real content bridge -> real app listener
+    // -> real ACK path. No app-side applySnapshot call or algorithm mock.
+    await companion.context.broadcastWarRoom(true);
     const restoredA = await checkpoint('G session A restored after B', corrected13, 13, {
       expectedOwnership:corrected13
     });
