@@ -1,7 +1,7 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-20 — WR-D039 launches evidence-first Track A3 Command Center planning; sole documentary WR-125 assigned after activation PR/main CI
+Last Manager gate: 2026-09-20 — WR-D040 accepts/closes WR-125 current-UX inventory and scopes sole WR-126 test-only Overall Board Pressure rendered diagnostic
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
@@ -704,3 +704,8 @@ Manager integrated exactly the independently audited four-file Builder PR #348 h
 ## WR-D039 — Track A3 source-aware planning (2026-09-20)
 
 Post-WR-D038 all prior tasks are CLOSED. Fresh Manager source/test review at a1d9bb3236fd08e54ebec06d4ae29e6ea9f51885 credits current command bar, tier/position and Overall board, My Draft, session-specific Targets/alerts, phone focus and ESPN status. Sole WR-125 Builder paper-only two-file inventory, after Manager activation merge/main Governance, will verify mixed on-clock/phone/trust/target scenarios, legacy Board Pressure heuristic-percentage reachability and usefulness of paired candidate explanations versus existing alternatives. WR-016 already uses non-sticky coordinated layout. No new UI code, test, policy, source/model, provider contact, live ESPN, deployment or release authorization.
+
+
+## WR-D040 — WR-125 current-UX inventory accepted; WR-126 test-first gate (2026-09-20)
+
+WR-125 documentary two-file PR #356 exact head 309a6df679593bbb99cd7429ba41449c0f598984 merged at a2bd5cf55946ff64612276f7f82785b905bcc797; PR Governance #35553931808 and main Governance #35554148469 SUCCESS, full product jobs skipped. WR-125 CLOSED. Existing Command Center UI already implements on-clock command, alternatives, tiers, My Draft, Targets, phone and sync status. WR-126 is the ONLY assigned Builder test-only browser reproduction of source-level legacy Overall Board Pressure heuristic-percentage risk; no user-visible flaw claimed until actual rendered evidence. No implementation, scoring/ranking, external source, live ESPN, provider contact, deployment or release authorized.

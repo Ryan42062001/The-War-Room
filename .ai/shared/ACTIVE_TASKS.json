@@ -1,20 +1,20 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-21T02:00:00Z",
+  "updated_at_utc": "2026-09-21T02:24:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
   "tasks": [
     {
-      "task_id": "WR-125",
+      "task_id": "WR-126",
       "owner": "Builder",
-      "worker_slot": "builder-wr125-draft-command-center-ux-inventory",
+      "worker_slot": "builder-wr126-overall-board-pressure-rendered-repro",
       "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-125.md",
+      "task_file": ".ai/manager/WR-126.md",
       "role_handoff": ".ai/builder/HANDOFF.md",
-      "assignment_main_sha": "a1d9bb3236fd08e54ebec06d4ae29e6ea9f51885",
+      "assignment_main_sha": "a2bd5cf55946ff64612276f7f82785b905bcc797",
       "worker_checkpoint_sha": null,
-      "branch": "wr-125-draft-command-center-current-state-inventory",
+      "branch": "wr-126-overall-board-pressure-rendered-truthfulness-reproducer",
       "pr": null,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
@@ -25,9 +25,10 @@
       "blocked_on_tasks": [],
       "blocked_on": [],
       "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
+      "post_merge_canary_required": true,
       "allowed_path_prefixes": [
-        ".ai/builder/WR125_DRAFT_COMMAND_CENTER_UX_INVENTORY.md",
+        "scripts/test-browser.mjs",
+        ".ai/builder/WR126_OVERALL_BOARD_PRESSURE_REPRO_EVIDENCE.md",
         ".ai/builder/HANDOFF.md"
       ],
       "forbidden_path_prefixes": [
@@ -36,12 +37,11 @@
         ".ai/auditor/",
         ".ai/research/",
         ".ai/strategy/",
-        "js/",
-        "scripts/",
         "extensions/",
         "data/",
         ".github/",
-        "src/"
+        "src/",
+        "js/"
       ],
       "forbidden_exact_paths": [
         "README.md",
@@ -55,7 +55,7 @@
         "layout-efficiency.css",
         "phone-decision-view.css"
       ],
-      "next_gate": "Manager WR-D039 activation PR/main Governance SUCCESS; create WR-125 branch at exact post-activation main. Builder two-document read-only current Command Center evidence inventory and narrow recommended next slice; no implementation."
+      "next_gate": "Manager WR-D040 activation PR/main Governance SUCCESS and exact-postmerge branch bootstrap; Builder existing-browser-harness synthetic Overall no-market displayed truthfulness repro, report actual results and no product patch. Full exact-head CI, later Manager review and main full canary if integrated."
     }
   ]
 }
