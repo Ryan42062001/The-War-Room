@@ -1,7 +1,7 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-20 — WR-D038 closes WR-122 / WR-124 after exact audited integration and genuine canonical-main FULL CI SUCCESS
+Last Manager gate: 2026-09-20 — WR-D039 launches evidence-first Track A3 Command Center planning; sole documentary WR-125 assigned after activation PR/main CI
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
@@ -699,3 +699,8 @@ Manager accepted fresh WR-124 independent **PASS** on exact repaired WR-122 Buil
 Manager integrated exactly the independently audited four-file Builder PR #348 head `8238ccaf80fb844a5e7e0b9444764d8dfb7552a9` as canonical merge `bbca68fb8c6f39e8d1bd8f59db918b7119dba586` (not a new or moved Builder target). The genuine canonical-main **PUSH** War Room CI [#35551044066](https://github.com/Ryan42062001/The-War-Room/actions/runs/35551044066), event `push`, branch `main`, head `bbca68fb8c6f39e8d1bd8f59db918b7119dba586`, completed **SUCCESS**: classify job `106185731472` SUCCESS, Governance job `106185762860` SUCCESS, actual FULL test job `106185792196` SUCCESS; bootstrap-reuse SKIPPED. This is the REQUIRED post-Builder-merge FULL CI canary, not substituted pre-merge or documentation-only CI.
 
 **WR-122 CLOSED / WR-124 CLOSED.** Remove both from the active-only registry as one Manager reconciliation; retain their completed task specs, accepted audit report, decisions, commits, PRs and historical negative evidence. Track A2 display/copy truthfulness repair is complete within the approved scope; it is not live ESPN/Companion E2E, independently validated structured Direct, measured odds/calibration, physical-phone certification, draft-ready release or deployment. WR-D001 ECR player-value versus ESPN timing, WR-D018 fallback-first with `LIVE_DIRECT_UNVERIFIED`, WR-D027 NO PROVIDER CONTACT, and paused Track B `RIGHTS_UNVERIFIED / OPTION_C_UNPROVEN / NO_SOURCE_ADMISSION` remain unchanged. No new employee, production/source/ranking/model/permission or release authorization is created by closure.
+
+
+## WR-D039 — Track A3 source-aware planning (2026-09-20)
+
+Post-WR-D038 all prior tasks are CLOSED. Fresh Manager source/test review at a1d9bb3236fd08e54ebec06d4ae29e6ea9f51885 credits current command bar, tier/position and Overall board, My Draft, session-specific Targets/alerts, phone focus and ESPN status. Sole WR-125 Builder paper-only two-file inventory, after Manager activation merge/main Governance, will verify mixed on-clock/phone/trust/target scenarios, legacy Board Pressure heuristic-percentage reachability and usefulness of paired candidate explanations versus existing alternatives. WR-016 already uses non-sticky coordinated layout. No new UI code, test, policy, source/model, provider contact, live ESPN, deployment or release authorization.
