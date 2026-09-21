@@ -1,7 +1,7 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-20 — WR-D040 accepts/closes WR-125 current-UX inventory and scopes sole WR-126 test-only Overall Board Pressure rendered diagnostic
+Last Manager gate: 2026-09-20 — WR-D041 accepts/closes WR-126 rendered diagnostic and scopes sole audit-required WR-127 truthful legacy Overall Board Pressure display repair
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
@@ -709,3 +709,10 @@ Post-WR-D038 all prior tasks are CLOSED. Fresh Manager source/test review at a1d
 ## WR-D040 — WR-125 current-UX inventory accepted; WR-126 test-first gate (2026-09-20)
 
 WR-125 documentary two-file PR #356 exact head 309a6df679593bbb99cd7429ba41449c0f598984 merged at a2bd5cf55946ff64612276f7f82785b905bcc797; PR Governance #35553931808 and main Governance #35554148469 SUCCESS, full product jobs skipped. WR-125 CLOSED. Existing Command Center UI already implements on-clock command, alternatives, tiers, My Draft, Targets, phone and sync status. WR-126 is the ONLY assigned Builder test-only browser reproduction of source-level legacy Overall Board Pressure heuristic-percentage risk; no user-visible flaw claimed until actual rendered evidence. No implementation, scoring/ranking, external source, live ESPN, provider contact, deployment or release authorized.
+
+
+## WR-D041 — WR-126 accepted/closed; WR-127 truthful Overall display repair assigned (2026-09-20)
+
+Manager independently verified WR-126 Builder PR #358 exact head `2bb97458bf08151d6cac3ae8259f62a3a794caf4`, exact three authorized diagnostic/evidence paths, exact-head FULL CI `35555586954` SUCCESS and canonical merge `e69bd96d549786e5b3d8c045d086dd5884ce3266`. Genuine canonical-main push FULL CI `35556294071` also completed SUCCESS on that merge. ACCEPT bounded `REPRODUCED`: actual mounted legacy Overall Board Pressure displayed the internal missing-market neutral 50 as `50% next-pick survival` with a 50%-width meter at 390x844 and 1280x900 under the documented restricted synthetic display pool using a genuine unmodified row. Preserve that this does not establish natural full-board frequency, live ESPN behavior, calibrated odds, physical-phone behavior or release readiness. WR-126 CLOSED and removed from active-only registry.
+
+Sole WR-127 Builder production correction is separately ASSIGNED in WORK_MODE/FAST_REFRESH after Manager activation PR/main Governance and exact-postmerge branch bootstrap. Exact allowed files: `js/war-room-ui.js`, `scripts/test-browser.mjs`, `.ai/builder/WR127_OVERALL_BOARD_PRESSURE_TRUTHFUL_DISPLAY_EVIDENCE.md`, `.ai/builder/HANDOFF.md`. Unknown market must show UNKNOWN/no estimate with no numeric 50 or probability-like meter/accessibility label/urgency derived solely from sentinel; known numeric timing must be labeled heuristic, not calibrated probability. Engine, ranking, resolver, recommendation identity/action/order/scores, draft state, Companion and WR-122 card remain invariant. WR-127 requires exact-head FULL CI, Manager freeze, fresh independent Auditor PASS-family before implementation merge and genuine canonical-main FULL CI canary before closure. No other role or product/source/release lane is activated.

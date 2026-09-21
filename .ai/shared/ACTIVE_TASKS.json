@@ -1,25 +1,25 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-21T02:24:00Z",
+  "updated_at_utc": "2026-09-21T03:30:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
   "tasks": [
     {
-      "task_id": "WR-126",
+      "task_id": "WR-127",
       "owner": "Builder",
-      "worker_slot": "builder-wr126-overall-board-pressure-rendered-repro",
+      "worker_slot": "builder-wr127-overall-board-pressure-truthful-display",
       "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-126.md",
+      "task_file": ".ai/manager/WR-127.md",
       "role_handoff": ".ai/builder/HANDOFF.md",
-      "assignment_main_sha": "a2bd5cf55946ff64612276f7f82785b905bcc797",
+      "assignment_main_sha": "e69bd96d549786e5b3d8c045d086dd5884ce3266",
       "worker_checkpoint_sha": null,
-      "branch": "wr-126-overall-board-pressure-rendered-truthfulness-reproducer",
+      "branch": "wr-127-overall-board-pressure-truthful-market-display",
       "pr": null,
       "dependency": "INDEPENDENT",
-      "execution_mode": "STANDARD_CHAT_HIGH",
+      "execution_mode": "WORK_MODE",
       "refresh_mode": "FAST_REFRESH",
-      "audit_required": false,
+      "audit_required": true,
       "blocker_type": "NONE",
       "user_action_required": false,
       "blocked_on_tasks": [],
@@ -27,8 +27,9 @@
       "external_authority_evidence_required": false,
       "post_merge_canary_required": true,
       "allowed_path_prefixes": [
+        "js/war-room-ui.js",
         "scripts/test-browser.mjs",
-        ".ai/builder/WR126_OVERALL_BOARD_PRESSURE_REPRO_EVIDENCE.md",
+        ".ai/builder/WR127_OVERALL_BOARD_PRESSURE_TRUTHFUL_DISPLAY_EVIDENCE.md",
         ".ai/builder/HANDOFF.md"
       ],
       "forbidden_path_prefixes": [
@@ -40,8 +41,7 @@
         "extensions/",
         "data/",
         ".github/",
-        "src/",
-        "js/"
+        "src/"
       ],
       "forbidden_exact_paths": [
         "README.md",
@@ -55,7 +55,7 @@
         "layout-efficiency.css",
         "phone-decision-view.css"
       ],
-      "next_gate": "Manager WR-D040 activation PR/main Governance SUCCESS and exact-postmerge branch bootstrap; Builder existing-browser-harness synthetic Overall no-market displayed truthfulness repro, report actual results and no product patch. Full exact-head CI, later Manager review and main full canary if integrated."
+      "next_gate": "Manager WR-D041 activation PR exact-head Governance SUCCESS, merge and genuine main-push Governance SUCCESS; Manager creates exact-postmerge Builder branch. Builder implements only the truthful legacy Overall Board Pressure display repair, extends the existing mounted browser diagnostic, publishes exact-head FULL CI and returns for Manager freeze. Fresh independent Auditor PASS-family is mandatory before any implementation merge; canonical-main FULL CI canary is mandatory before closure."
     }
   ]
 }
