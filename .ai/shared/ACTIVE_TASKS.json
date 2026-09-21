@@ -1,45 +1,44 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-21T19:50:00Z",
+  "updated_at_utc": "2026-09-21T20:47:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
   "tasks": [
     {
-      "task_id": "WR-132",
-      "owner": "Work Helper",
-      "worker_slot": "work-helper-wr132-draft-ready-release-evidence-inventory",
+      "task_id": "WR-133",
+      "owner": "Builder",
+      "worker_slot": "builder-wr133-companion-war-room-synthetic-e2e",
       "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-132.md",
-      "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "c1c5eaa548872332a9547ccefa418f1df2b3459d",
+      "task_file": ".ai/manager/WR-133.md",
+      "role_handoff": ".ai/builder/HANDOFF.md",
+      "assignment_main_sha": "6e5280ef77e761e163dfdba376899b53517ea079",
       "worker_checkpoint_sha": null,
-      "branch": "wr-132-draft-ready-release-evidence-inventory",
+      "branch": "wr-133-companion-war-room-synthetic-e2e-regression",
       "pr": null,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
-      "audit_required": false,
+      "audit_required": true,
       "blocker_type": "NONE",
       "user_action_required": false,
       "blocked_on_tasks": [],
       "blocked_on": [],
       "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "assignment_mode": "CROSS-FUNCTIONAL RELEASE-READINESS EVIDENCE INVENTORY",
+      "post_merge_canary_required": true,
       "allowed_path_prefixes": [
-        ".ai/work_helper/WR132_DRAFT_READY_RELEASE_EVIDENCE_MATRIX.md",
-        ".ai/work_helper/HANDOFF.md"
+        "scripts/test-wr-133-companion-war-room-e2e.mjs",
+        "package.json",
+        ".ai/builder/WR133_COMPANION_WAR_ROOM_E2E_EVIDENCE.md",
+        ".ai/builder/HANDOFF.md"
       ],
       "forbidden_path_prefixes": [
         ".ai/shared/",
         ".ai/manager/",
-        ".ai/builder/",
         ".ai/auditor/",
         ".ai/research/",
         ".ai/strategy/",
         "js/",
-        "scripts/",
         "extensions/",
         "data/",
         ".github/",
@@ -47,12 +46,11 @@
       ],
       "forbidden_exact_paths": [
         "README.md",
-        "package.json",
         "index.html",
         "script.js",
         "war-room-config.js"
       ],
-      "next_gate": "Manager activation PR exact-head Governance -> merge -> genuine canonical-main push Governance SUCCESS -> create wr-132-draft-ready-release-evidence-inventory from exact new main -> Work Helper cross-functional read-only evidence inventory with exactly two .ai/work_helper writes -> one OPEN/UNMERGED paper-only PR + exact-head Governance -> Manager independently accepts/rejects matrix and scopes exactly one next A6 gate. No draft-ready declaration, live ESPN/provider contact, deployment or release under WR-132."
+      "next_gate": "Builder creates one deterministic source-free synthetic Companion→War Room cross-layer regression using real current extension/app source read-only, package test registration only, and two Builder evidence files. Exact-final-head FULL War Room CI -> Manager verifies exact four-path scope/oracles and freezes one immutable target -> fresh Independent Auditor / QA -> PASS-family on unchanged target required before any merge -> genuine canonical-main FULL CI before WR-133 closure. Any observed production/Companion defect must be reported, not fixed under WR-133. No live ESPN/provider contact, ranking/policy/source change, deployment or release."
     }
   ]
 }
