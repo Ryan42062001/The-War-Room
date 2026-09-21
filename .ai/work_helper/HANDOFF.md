@@ -1,5 +1,34 @@
 # Work Helper / Super Troubleshooter Handoff
 
+STATUS: WR-132 COMPLETE — EVIDENCE INVENTORY PUBLISHED IN TASK REPORT; NOT A DRAFT-READY DECLARATION
+TASK: WR-132 — Draft-Ready Release Evidence & Gap Inventory
+ROLE: Work Helper / Super Troubleshooter / Cross-Functional Operator
+ASSIGNMENT MODE: CROSS-FUNCTIONAL RELEASE-READINESS EVIDENCE INVENTORY
+BASE / INITIAL BRANCH: `d0c4f59606df579c429f622c6b2ab88a4d8c8b3e`
+BRANCH: `wr-132-draft-ready-release-evidence-inventory`
+EXECUTION MODE: STANDARD_CHAT_HIGH
+REFRESH MODE: FAST_REFRESH
+
+## WR-132 checkpoint — 2026-09-21
+
+Live start state was independently verified: canonical main and assigned branch both `d0c4f59606df579c429f622c6b2ab88a4d8c8b3e`, 0 ahead / 0 behind. WR-132 performed read-only cross-functional inspection except for the two authorized Work Helper markdown paths.
+
+Primary artifact: `.ai/work_helper/WR132_DRAFT_READY_RELEASE_EVIDENCE_MATRIX.md`.
+
+Key result: the current product tree has strong current synthetic/browser/Companion/state/recovery evidence, including canonical FULL War Room CI #35644877329 on accepted production integration `dc0fdad005b1e391f488c1ab561787e815e3b49f`; current main differs from that product SHA only by Manager/shared documentation. The report preserves the critical boundaries: WR-118 is app-snapshot-side only, Companion 167/167 does not create a full Companion→app terminal draft proof, current exact-version live fallback is not newly proven, structured Direct remains `LIVE_DIRECT_UNVERIFIED`, browser viewports are not physical-device proof, 2027 ranking freshness is season/external-gated, and repository evidence does not establish an immutable deployment/rollback rehearsal.
+
+Release-evidence blockers are recorded, not converted into product-defect claims. Optional Half-PPR/Standard/custom-roster/keeper/risk/profile features remain non-prerequisites absent a new Manager decision. Track B remains `RIGHTS_UNVERIFIED / OPTION_C_UNPROVEN / NO_SOURCE_ADMISSION / PAUSED`.
+
+Exactly one recommendation is made and **not activated**: a bounded Builder test/evidence task for one deterministic, source-free, synthetic **Companion→War Room end-to-end** draft regression reusing existing Companion and WR-118 interfaces/oracles, with no live ESPN/provider interaction and no second simulator.
+
+Publication must remain one paper-only OPEN/UNMERGED Work Helper PR with cumulative diff exactly:
+1. `.ai/work_helper/WR132_DRAFT_READY_RELEASE_EVIDENCE_MATRIX.md`
+2. `.ai/work_helper/HANDOFF.md`
+
+Manager independently accepts/rejects the matrix and decides the next A6 gate. No provider contact, 2027 ranking fetch/import, product/test/workflow/deployment/rollback/release action or draft-ready declaration occurred.
+
+---
+
 STATUS: COMPLETE — MANAGER FREEZE REQUIRED; WR-075 REMAINS BLOCKED  
 TASK: WR-074 — Self-Hosted Heavy-CI Runner Pilot + Hardening  
 WORKFLOW: V3.5  
