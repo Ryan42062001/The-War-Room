@@ -1,7 +1,7 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-21 — WR-D042 freezes exact WR-127 Builder target for audit and assigns fresh WR-128 independent QA after control-plane activation gates
+Last Manager gate: 2026-09-21 — WR-D043 closes WR-127 / WR-128 after fresh independent PASS, exact audited integration and genuine canonical-main FULL CI SUCCESS
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
@@ -720,3 +720,11 @@ Sole WR-127 Builder production correction is separately ASSIGNED in WORK_MODE/FA
 ## WR-D042 — WR-127 frozen audit target / WR-128 assigned (2026-09-21)
 
 Manager independently verified Builder PR #360 OPEN/UNMERGED at exact `1198882b049087d4be82e01b40171d63756de42b`, creation base `907ed83b301fae0340c07f124a431952990918b9`, 12 ahead / 0 behind, exactly four authorized paths and exact-head FULL CI #35559439436 SUCCESS including actual product test #106348285460. Full logs show repaired mounted unknown/known market presentation and recommendation/scoring/source-row invariants at both required viewports; historical failed WR-127 CI attempts remain historical. WR-127 is now AUDIT_READY and frozen at that SHA; canonical stale lifecycle metadata is reconciled without moving the Builder candidate. Fresh WR-128 Auditor is the sole next worker after Manager activation PR/main Governance and branch bootstrap. No implementation merge, provider/source change, deployment or release; PASS-family on exact unchanged target plus later main FULL CI remain mandatory.
+
+## WR-D043 — FINAL CANONICAL CLOSURE (2026-09-21)
+
+Manager accepted fresh WR-128 independent **PASS** with no CRITICAL, HIGH, MEDIUM or LOW findings on exact WR-127 Builder target `1198882b049087d4be82e01b40171d63756de42b`. Exact two-file Auditor PR #362 at immutable head `4fd0a294d75f91369cfa7aa5a11f3c6198abb071` passed exact-head War Room CI #35631316505 (classify `106437926532` SUCCESS, Governance `106437986393` SUCCESS; product test `106438083900` correctly SKIPPED) and was merged first as `12b140bbf6393aa5f54fb9e1d4fe28f3fc8ac021`.
+
+Manager then re-verified Builder PR #360 and its branch were still exactly the audited frozen SHA (0 ahead / 0 behind) and merged **only** that expected head. Builder PR #360 produced canonical merge `886dc51c7b16d1068c7e5489f212f64e67b6c2c6`. The genuine canonical-main **PUSH FULL War Room CI #35631780343** on that exact merge completed **SUCCESS**: classify `106439451301`, Governance `106439494470`, full product test `106439569669`; bootstrap-reuse `106439496555` SKIPPED. Browser determinism, phone decision view, `npm test`, resilience syntax and backup/offline reload all completed successfully.
+
+**WR-127 CLOSED / WR-128 CLOSED.** Remove both from the active-only registry as one Manager reconciliation. Preserve WR-127's three historical failed CI runs (#35558446453, #35558486470, #35559042883), the earlier same-frozen-head failed test attempt `106209388469`, the accepted WR-128 PASS, and all immutable PR/SHA/CI evidence without relabeling history. The truthful Overall Board Pressure display repair is complete within its approved scope; this is not live ESPN/Companion E2E, calibrated probability validation, physical-device certification, protected-source admission, deployment or draft-ready release. WR-D001 ECR VALUE vs ESPN timing, WR-D018 fallback-first/`LIVE_DIRECT_UNVERIFIED`, WR-D027 NO PROVIDER CONTACT, WR-D038 accepted WR-122 repair, and paused Track B source-rights/custom-ranking gates remain unchanged. No new employee or unrelated work is authorized by closure.
