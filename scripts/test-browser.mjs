@@ -3,10 +3,19 @@ import {createRequire} from 'node:module';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import {execFileSync} from 'node:child_process';
 import {waitForWarRoomQuiescence} from './browser-test-helpers.mjs';
 const {chromium} = createRequire(import.meta.url)('playwright');
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(.:)/, '$1')), '..');
+// WR-123-F02: execute BOTH literal standalone syntax commands, not merely the
+// implicit parse of this browser script. The full CI browser job retains logs.
+for (const file of ['js/war-room-rankings.js', 'scripts/test-browser.mjs']) {
+  console.log('WR-122 literal syntax command: node --check ' + file);
+  execFileSync('node', ['--check', file], {cwd:root, stdio:'inherit'});
+  console.log('WR-122 literal syntax PASS: node --check ' + file);
+}
+
 const server = process.env.WAR_ROOM_URL ? null : http.createServer((request, response) => {
   const relative = request.url === '/' ? 'index.html' : request.url.split('?')[0].replace(/^\//, '');
   fs.readFile(path.join(root, relative), (error, data) => { response.statusCode = error ? 404 : 200; response.end(error ? 'not found' : data); });
@@ -496,6 +505,213 @@ const recommendationCard = page.locator('.recommendation-card');
 assert.equal(await recommendationCard.getAttribute('open'), null);
 assert.equal(await page.locator('.recommendation-card-summary .recommendation-player b').count(), 1);
 assert.equal(await page.locator('.recommendation-one-line').count(), 1);
+
+// WR-122: isolated synthetic compact/expanded rendering using actual app interfaces.
+// No source rows, saved draft, engine policy, or ranking order are changed.
+const wr122Presentation = await page.evaluate(() => {
+  const live = buildLiveDraftDebugState();
+  const primary = live.scored[0];
+  const element = document.createElement('div');
+  element.id = 'wr122-presentation-fixture';
+  // The existing overall-board card may be hidden in Position view. Mount this
+  // isolated fixture visibly so native summary keyboard focus is actually tested.
+  element.style.width = '100%';
+  element.style.maxWidth = '480px';
+  element.style.boxSizing = 'border-box';
+  document.body.appendChild(element);
+  const originalRows = [...document.querySelectorAll('tr.draftrow')].map(row => [
+    row.getAttribute('data-name'), row.getAttribute('data-ecr'),
+    row.getAttribute('data-espn-rank'), row.getAttribute('data-espn-adp'),
+    row.getAttribute('data-adp'), row.className
+  ]);
+  function currentEngine() {
+    return {
+      player:window.latestDraftRecommendation?.player,
+      action:window.latestDraftRecommendation?.recommendation,
+      confidenceScore:window.latestDraftRecommendation?.confidenceScore,
+      numericSurvival:calculateNextPickSurvival(primary, live.context),
+      finalScore:primary.finalScore, order:live.scored.map(player => player.name)
+    };
+  }
+  const liveBefore = currentEngine();
+  const standard = {...live.context};
+  const nonadjacent = {...standard, currentPick:5, calculatedNextPick:7,
+    nextPick:7, calculatedPicksUntilNext:1, teams:10, draftSlot:7,
+    rounds:16, totalPicks:160};
+  const adjacent = {...nonadjacent, currentPick:10, calculatedNextPick:11,
+    nextPick:11, calculatedPicksUntilNext:0, draftSlot:10};
+  const invalid = {...adjacent, calculatedNextPick:null, nextPick:null};
+  const es = live.scored.find(player => getMarketTimingDetails(player, standard).source.startsWith('ESPN'));
+  if (!es) throw new Error('No existing ESPN market candidate for WR-122');
+  const unknown = {...es, espnRank:null, espnAdp:null, adp:null, realTimeAdp:null, adpRank:null};
+  const fallback = {...unknown, adp:85};
+  function render(label, player, context, turn, turnDisplayOverride) {
+    // Snapshot the requested synthetic turn BEFORE scoring, which may calculate
+    // and overwrite turn fields. Only the display receives test contradictions.
+    const requestedTurn = {...context, ...(turnDisplayOverride || {})};
+    const scored = [player].concat(live.scored.filter(item => item.name !== player.name));
+    const recommendation = calculateDraftRecommendation(player, scored, context);
+    if (!recommendation) throw new Error('Missing actual recommendation for ' + label);
+    const explanation = buildRecommendationExplanation(recommendation, player, scored[1] || null);
+    const displayedRecommendation = turn ? {...recommendation, turnPackageActive:true,
+      turnRecommendedNow:player.name, turnTargetNext:scored[1]?.name || 'Best available'} : recommendation;
+    const displayedExplanation = turn ? {...explanation, type:'TURN_PACKAGE',
+      // This engine-style explanatory sentence is intentionally unqualified.
+      // Only the display may correct it; player/action/score internals stay put.
+      reasons:['Fixture target is guaranteed to remain available at your next pick because no opponent selects between the two picks.',
+        ...explanation.reasons]} : explanation;
+    const capture = () => ({
+      player:recommendation.player, action:recommendation.recommendation,
+      confidenceScore:recommendation.confidenceScore, score:player.finalScore,
+      survival:calculateNextPickSurvival(player, context),
+      order:scored.map(item => item.name), market:getMarketTimingDetails(player, context)
+    });
+    const before = capture();
+    // Reapply the requested synthetic turn AFTER scoring; never modify the
+    // recommendation engine or score fields to manufacture a passing guard.
+    const displayContext = {...context, ...requestedTurn};
+    const state = {...live, context:displayContext, scored};
+    renderCompactRecommendationCard(element, displayedRecommendation, displayedExplanation, player, state);
+    const card = element.querySelector('.recommendation-card');
+    return {label, before, after:capture(),
+      compact:card.querySelector('summary.recommendation-card-summary').textContent,
+      expanded:card.querySelector('.recommendation-expanded').textContent,
+      marketDetail:card.querySelector('.recommendation-market-details').textContent,
+      marketSummary:card.querySelector('.recommendation-market-details summary').textContent,
+      confidence:card.querySelector('.recommendation-confidence').textContent,
+      compactTimingAccessible:card.querySelector('.recommendation-one-line b').getAttribute('aria-label'),
+      factorCount:card.querySelectorAll('.recommendation-factor').length,
+      scoreDetails:card.querySelector('.recommendation-score-details:not(.recommendation-market-details)').textContent,
+      source:card.querySelector('.recommendation-market-details small').textContent};
+  }
+  const result = {
+    regular:render('ESPN market', es, standard, false),
+    unknown:render('unknown nonadjacent', unknown, nonadjacent, false),
+    fallback:render('FantasyPros fallback', fallback, nonadjacent, false),
+    adjacent:render('verified adjacent', es, adjacent, true),
+    invalid:render('invalid next context', es, invalid, true),
+    // WR-123-F01 concrete independent negative control: real rendered summary,
+    // reasons, market basis and next-pick detail must ALL reject contradictory
+    // context despite an individually legal 10/11 snake pair.
+    contradictoryNext:render('auditor contradictory next', es, adjacent, true,
+      {teams:10, draftSlot:10, currentPick:10, calculatedNextPick:11,
+       nextPick:20, calculatedPicksUntilNext:9, rounds:16, totalPicks:160}),
+    contradictoryCount:render('contradictory intervening count', es, adjacent, true,
+      {calculatedNextPick:11, nextPick:11, calculatedPicksUntilNext:9}),
+    oneCalculated:render('one calculated next source', es, adjacent, true, {nextPick:null}),
+    oneSupplied:render('one supplied next source', es, adjacent, true, {calculatedNextPick:null}),
+    missingBoth:render('both next sources absent', es, adjacent, true,
+      {calculatedNextPick:null, nextPick:null, calculatedPicksUntilNext:null}),
+    wrongOwner:render('wrong own-turn slot', es, adjacent, true, {draftSlot:9}),
+    wrongNextOwner:render('wrong next-pick ownership', es, adjacent, true, {nextPick:12, calculatedNextPick:12, calculatedPicksUntilNext:1}),
+    zeroNext:render('zero next pick', es, adjacent, true, {calculatedNextPick:0, nextPick:0}),
+    pastNext:render('past next pick', es, adjacent, true, {calculatedNextPick:9, nextPick:9}),
+    nonintegerNext:render('noninteger next pick', es, adjacent, true, {calculatedNextPick:11.5, nextPick:11.5}),
+    outOfRangeNext:render('out-of-range next pick', es, adjacent, true, {calculatedNextPick:161, nextPick:161}),
+    invalidCount:render('noninteger intervening count', es, adjacent, true, {calculatedPicksUntilNext:0.5}),
+    inconsistentTotal:render('inconsistent team-round total', es, adjacent, true, {totalPicks:159}),
+    invalidRounds:render('noninteger draft rounds', es, adjacent, true, {rounds:16.5}),
+    invalidTeams:render('noninteger teams', es, adjacent, true, {teams:10.5}),
+    invalidSlot:render('noninteger draft slot', es, adjacent, true, {draftSlot:10.5}),
+    terminal:render('terminal draft boundary', es, adjacent, true,
+      {currentPick:160, calculatedNextPick:161, nextPick:161, calculatedPicksUntilNext:0}),
+    oneRoundTerminal:render('single-round terminal boundary', es, adjacent, true,
+      {rounds:1, totalPicks:10, currentPick:10, calculatedNextPick:11, nextPick:11, calculatedPicksUntilNext:0}),
+    lastRoundAdjacent:render('last-round valid 150/151 own pair', es, adjacent, true,
+      {currentPick:150, calculatedNextPick:151, nextPick:151, calculatedPicksUntilNext:0}),
+    liveBefore, liveAfter:currentEngine(),
+    unchangedRows:JSON.stringify(originalRows) === JSON.stringify(
+      [...document.querySelectorAll('tr.draftrow')].map(row => [
+        row.getAttribute('data-name'), row.getAttribute('data-ecr'),
+        row.getAttribute('data-espn-rank'), row.getAttribute('data-espn-adp'),
+        row.getAttribute('data-adp'), row.className]))
+  };
+  render('verified adjacent', es, adjacent, true);
+  return result;
+});
+for (const item of Object.values(wr122Presentation).filter(value => value && value.before && value.after)) {
+  assert.deepEqual(item.after, item.before, 'WR-122 engine unchanged: ' + item.label);
+  assert.match(item.confidence, /Decision strength · heuristic/);
+  assert.doesNotMatch(item.confidence, /\d+%/);
+  assert.equal(item.factorCount, 4);
+  assert.equal(item.marketSummary, 'Market timing basis');
+  assert.match(item.expanded, /heuristic scores, not probabilities/);
+  assert.doesNotMatch(item.compact + item.scoreDetails, /\d+% (?:survival|confidence)|Survival \d+%/i);
+  assert.match(item.source, /Per-player market freshness not verified/);
+  assert.match(item.compactTimingAccessible, /Market timing/);
+}
+assert.deepEqual(wr122Presentation.liveAfter, wr122Presentation.liveBefore);
+assert.equal(wr122Presentation.unchangedRows, true);
+assert.match(wr122Presentation.regular.compact, /ESPN (?:B\+ADP|board|ADP)/);
+assert.match(wr122Presentation.regular.marketDetail, /Source: ESPN/);
+assert.match(wr122Presentation.regular.marketDetail, /not a calibrated probability/);
+assert.equal(wr122Presentation.unknown.before.market.marketRank, null);
+assert.equal(wr122Presentation.unknown.before.survival, 50);
+assert.match(wr122Presentation.unknown.compact, /Timing UNKNOWN/);
+assert.match(wr122Presentation.unknown.compactTimingAccessible, /Market timing unknown — no survival estimate/);
+assert.match(wr122Presentation.unknown.expanded, /No ESPN or FantasyPros market input/);
+assert.match(wr122Presentation.unknown.source, /Source: Unknown market/);
+assert.doesNotMatch(wr122Presentation.unknown.compact + wr122Presentation.unknown.expanded,
+  /50% survival|50% chance|low chance|you may be able to wait/i);
+assert.equal(wr122Presentation.fallback.before.market.source, 'FantasyPros ADP fallback');
+assert.match(wr122Presentation.fallback.compact, /FP ADP fallback/);
+assert.match(wr122Presentation.fallback.compactTimingAccessible, /FantasyPros ADP fallback/);
+assert.match(wr122Presentation.fallback.source, /Source: FantasyPros ADP fallback/);
+assert.doesNotMatch(wr122Presentation.fallback.marketDetail, /Source: ESPN/);
+assert.match(wr122Presentation.adjacent.compact, /Back-to-back own turns; second option remains conditional/);
+assert.match(wr122Presentation.adjacent.marketDetail, /no intervening opponent selection/);
+assert.match(wr122Presentation.adjacent.expanded, /No opponent selects between verified adjacent own picks/);
+assert.match(wr122Presentation.adjacent.expanded, /next target must still be eligible/);
+assert.doesNotMatch(wr122Presentation.adjacent.expanded, /guaranteed to remain available/);
+assert.doesNotMatch(wr122Presentation.invalid.compact +
+  wr122Presentation.invalid.marketDetail, /no intervening opponent selection|Back-to-back own turns/i);
+assert.match(wr122Presentation.invalid.expanded, /Next-target availability is unverified/);
+assert.doesNotMatch(wr122Presentation.invalid.expanded,
+  /guaranteed to remain available|No opponent selects between verified adjacent own picks/i);
+const wr122ForbiddenTurnClaims = /back-to-back own turns|no intervening opponent|no opponent selects between|guaranteed to remain available|verified adjacent own picks|next pick\s*#\s*\d+/i;
+for (const key of ['contradictoryNext','contradictoryCount','missingBoth','wrongOwner',
+  'wrongNextOwner','zeroNext','pastNext','nonintegerNext','outOfRangeNext',
+  'invalidCount','inconsistentTotal','invalidRounds','invalidTeams','invalidSlot',
+  'terminal','oneRoundTerminal']) {
+  const shown = wr122Presentation[key];
+  assert.doesNotMatch(shown.compact + ' ' + shown.expanded + ' ' + shown.marketDetail,
+    wr122ForbiddenTurnClaims, 'WR-123-F01 fail-closed rendered turn: ' + key);
+  assert.match(shown.compact, /Next-turn context unverified; second target conditional/i);
+  assert.match(shown.expanded, /Next-target availability is unverified/);
+  assert.match(shown.expanded, /CONDITIONAL TARGET \(NEXT TURN UNVERIFIED\)/);
+  assert.match(shown.marketDetail, /next pick unverified — incomplete or conflicting turn context/i);
+}
+for (const key of ['adjacent','oneCalculated','oneSupplied','lastRoundAdjacent']) {
+  const shown = wr122Presentation[key];
+  assert.match(shown.compact, /Back-to-back own turns; second option remains conditional/);
+  assert.match(shown.marketDetail, /Verified adjacent own snake picks: no intervening opponent selection/);
+  assert.match(shown.expanded, /No opponent selects between verified adjacent own picks/);
+  assert.match(shown.expanded, /next target must still be eligible after the first selection/);
+  assert.match(shown.expanded, /TARGET NEXT \(ELIGIBILITY CONDITIONAL\)/);
+  assert.doesNotMatch(shown.expanded, /guaranteed to remain available/i);
+}
+assert.match(wr122Presentation.contradictoryNext.before.market.source, /ESPN/);
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-card').getAttribute('open'), null);
+const wr122CardSummary = page.locator('#wr122-presentation-fixture .recommendation-card-summary');
+await wr122CardSummary.focus();
+assert.equal(await wr122CardSummary.evaluate(el => document.activeElement === el), true);
+await wr122CardSummary.press('Space');
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-card').getAttribute('open'), '');
+const wr122MarketSummary = page.locator('#wr122-presentation-fixture .recommendation-market-details summary');
+await wr122MarketSummary.focus();
+assert.equal(await wr122MarketSummary.evaluate(el => document.activeElement === el), true);
+await wr122MarketSummary.press('Space');
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-market-details').getAttribute('open'), '');
+await page.setViewportSize({width:390,height:844});
+assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), 0);
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-card-summary').isVisible(), true);
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-market-details').isVisible(), true);
+await page.setViewportSize({width:375,height:812});
+assert.equal(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), 0);
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-card-summary').isVisible(), true);
+assert.equal(await page.locator('#wr122-presentation-fixture .recommendation-market-details').isVisible(), true);
+await page.setViewportSize({width:1280,height:900});
+await page.evaluate(() => document.getElementById('wr122-presentation-fixture').remove());
 
 const websiteSettingsSync = await page.evaluate(async () => {
   const fields = ['pcTeams', 'pcSlot', 'pcRounds'].map(id => document.getElementById(id));
