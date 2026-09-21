@@ -893,7 +893,7 @@ for (const [width, height] of [[390, 844], [1280, 900]]) {
   assert.ok(observed.knownMarket.market.rank > 0);
   assert.equal(observed.knownMarket.bestText, observed.knownMarket.player);
   assert.ok(observed.knownMarket.text.includes(observed.knownMarket.player));
-  assert.match(observed.knownMarket.visibleDetail, /Timing index \d+\/100 \(heuristic\)/);
+  assert.match(observed.knownMarket.visibleDetail, /Timing index \d+\/100/);
   assert.doesNotMatch(observed.knownMarket.text, /\d+% next-pick survival|calibrated probability/i);
   assert.equal(observed.knownMarket.meterPresent, true);
   assert.equal(observed.knownMarket.meterInlineWidth, observed.knownMarket.numericSurvival + '%');
@@ -923,7 +923,7 @@ for (const [width, height] of [[390, 844], [1280, 900]]) {
 const wr127Truthful = wr126BoardPressure.every(item =>
   item.unknown.visibleDetail.includes('Market timing UNKNOWN — no survival estimate') &&
   !item.unknown.meterPresent &&
-  /Timing index \d+\/100 \(heuristic\)/.test(item.knownMarket.visibleDetail) &&
+  /Timing index \d+\/100/.test(item.knownMarket.visibleDetail) &&
   item.knownMarket.meterAccessibilityHidden === 'true' &&
   item.positionHidden);
 assert.equal(wr127Truthful, true, 'WR-127 actual Overall unknown/known display controls pass');
