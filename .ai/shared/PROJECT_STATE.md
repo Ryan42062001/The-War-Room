@@ -1,15 +1,15 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-21 — WR-D043 closes WR-127 / WR-128 after fresh independent PASS, exact audited integration and genuine canonical-main FULL CI SUCCESS
+Last Manager gate: 2026-09-21 — WR-D045 accepts/closes WR-129 inventory and assigns WR-130 bounded 5–30 round-contract remediation
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current Track A gate — WR-D044 / WR-129
+## Current Track A gate — WR-D045 / WR-130
 
-WR-D043 closure is fully verified on canonical main `1e72e035147b413627b3052a6172ac0589267eba` with post-merge War Room CI #35633016284 SUCCESS. A4 next-draft-cycle ranking/source freshness remains season-gated and unassigned because the current application already carries the accepted 2026 baseline and no 2027 source admission is authorized.
+WR-129 inventory is accepted and merged at canonical `3adb811322e13b354e1f4538d66c52c56abd56e6`; its exact-head and post-merge Governance gates are green. The inventory confirmed mature team/slot/snake/session/persistence behavior, fixed Full-PPR authority and one narrow mechanical defect: the documented 5–30 round contract is not enforced uniformly across app/persistence/external-pick/Companion settings paths.
 
-WR-D044 activates only WR-129 after Manager PR/main-push Governance gates: a read-only Builder inventory of existing league settings, scoring assumptions, roster/starter configuration, persistence/session isolation and relevant test coverage. WR-129 may write only its inventory report plus Builder handoff. No production settings change, recommendation policy, ranking refresh, ESPN/provider interaction, deployment or release is authorized.
+WR-D045 assigns only WR-130 after Manager activation gates: bounded production/test remediation to unify those existing paths to 5–30. It does not authorize alternate scoring, custom rosters, keepers, risk preferences, reusable profiles, ranking refresh, provider contact, deployment or release. WR-130 requires fresh independent audit before any production merge.
 
 
 ## Returning-Player v2

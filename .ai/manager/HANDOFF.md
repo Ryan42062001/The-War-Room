@@ -1,28 +1,30 @@
 # Manager / Architect Handoff
 
-STATUS: WR-D044 — A4 SEASON-GATED / WR-129 A5 INVENTORY ACTIVATION
+STATUS: WR-D045 — WR-129 ACCEPTED/CLOSED / WR-130 ROUND-CONTRACT REMEDIATION ACTIVATION
 WORKFLOW: V3.5 CANONICAL
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-## Verified starting state
+## Verified WR-129 acceptance
 
-Canonical main before this activation transition: `1e72e035147b413627b3052a6172ac0589267eba`.
+WR-129 Builder PR #365 exact head `fb9f2ad94c767f75df2099c0917e8112afc30a92` changed exactly two authorized Builder documentary paths and passed exact-head War Room CI #35638544907: classify `106461926961`, Governance `106461996747`; product test correctly SKIPPED.
 
-WR-D043 closure is complete. WR-127 and WR-128 are CLOSED, the active-only registry was empty, and genuine canonical-main War Room CI #35633016284 on WR-D043 closure completed SUCCESS.
+Manager independently verified the key source mismatch and found one additional affected existing path, `js/war-room-external-picks.js`, beyond the Builder's proposed minimum list.
 
-## Current Manager decision
+PR #365 merged with expected-head guard as canonical `3adb811322e13b354e1f4538d66c52c56abd56e6`. Genuine canonical-main War Room CI #35639459932 then completed SUCCESS: classify `106464935132`, Governance `106464999309`; product test `106465092851` correctly SKIPPED.
 
-Do not manufacture an A4 2027 rankings/source refresh while only the accepted bundled 2026 baseline exists. A4 remains season-gated and unassigned until a real next-cycle source can be lawfully and technically evaluated.
+WR-129 is CLOSED.
 
-Activate only WR-129, the explicit A5 prerequisite: a read-only Builder inventory of existing league settings and personalization behavior. The Builder may inspect application/tests and write exactly:
-- `.ai/builder/WR129_LEAGUE_SETTINGS_PERSONALIZATION_INVENTORY.md`
-- `.ai/builder/HANDOFF.md`
+## Current decision
 
-No production code/test/source change, ranking refresh, ESPN/provider contact, Strategy policy change, deployment or release is authorized.
+Assign only WR-130: unify the already documented 5–30 round contract across current command-bar, app sync/persistence, external ESPN pick state and ESPN Companion settings paths.
+
+This is a mechanics repair, not a new Draft Strategy policy decision. WR-130 is audit-required and post-merge-full-canary-required.
+
+Do not add alternate scoring, custom roster UI, keepers, risk preference, reusable planning defaults, ranking/source refresh or provider contact.
 
 ## Activation gate
 
-This Manager control-plane PR must pass exact-head Governance and merge first. Then genuine canonical-main push Governance must succeed. Only then create `wr-129-league-settings-personalization-inventory` from that exact new main and activate the Builder in STANDARD_CHAT_HIGH / FAST_REFRESH.
+This Manager control-plane PR must pass exact-head Governance and merge. Genuine canonical-main push Governance must then succeed. Only after that may Manager create `wr-130-round-count-contract-unification` from the exact new main and activate the Builder.
 
-Next Manager gate after WR-129: independently review its exact two-file PR/evidence and decide whether A5 needs no change, a Draft Strategy contract, or one bounded implementation task. Nothing downstream self-activates.
+Builder must publish one immutable implementation PR/head with exact-final-head FULL War Room CI, then stop for Manager freeze and a fresh independent Auditor task.
