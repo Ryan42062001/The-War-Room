@@ -1,21 +1,35 @@
-# Implementation Engineer / Builder — WR-127 compact handoff
+# Implementation Engineer / Builder — WR-129 compact handoff
 
-STATUS | TASK | ROLE | BRANCH | HEAD | BASE | PR | DONE | CHANGED | TESTS | CI | BLOCKERS | DECISIONS CONSUMED | NEXT ACTION | FILES / ARTIFACTS THAT MATTER | DO NOT REPEAT
+STATUS | TASK | ROLE | BRANCH | HEAD | BASE | PR | DONE | CHANGED | TESTS / INSPECTIONS | CI | BLOCKERS | DECISIONS CONSUMED | NEXT ACTION | FILES / ARTIFACTS THAT MATTER | DO NOT REPEAT
 
-**STATUS:** BUILDER IMPLEMENTATION CANDIDATE — exact-final-head FULL CI and Manager freeze are separate required gates; Auditor not activated.
-**TASK:** WR-127 — Overall Board Pressure truthful market display.
-**ROLE:** Implementation Engineer / Builder, canonical V3.5; Manager WR-D041; execution assignment WORK_MODE / FAST_REFRESH. Client did not accept local Work-mode handoff; in-scope code was edited via connected GitHub, browser/Node verification via actual GitHub-hosted full CI; no local terminal execution claimed.
-**BRANCH:** `wr-127-overall-board-pressure-truthful-market-display`.
-**BASE:** `907ed83b301fae0340c07f124a431952990918b9` (independently verified exact both untouched branch and post-activation canonical main before Builder writes).
-**HEAD / PR:** Resolve and freeze only AFTER final documentary commit, PR creation, complete exact-head full browser/CI validation and Manager's independent verification. Never substitute an earlier code-head green CI as a final-head gate.
-**DONE:** Only legacy `js/war-room-ui.js:updateDraftDayDashboard`: unknown market timing displays `Market timing UNKNOWN — no survival estimate` without 50% sentinel text/meter/numeric accessible labels; non-tier-derived urgency becomes neutral `pressure-unknown` while genuine CRITICAL CLIFF/TIER CLOSING/HIGH SCARCITY and original cliff/position/count remain. Known-market 0–100 number remains unchanged but labeled `Timing index N/100` and meter is decorative/aria-hidden. The accepted WR-126 real-mounted `scripts/test-browser.mjs` diagnostic is extended into desired repaired assertions for 390x844 and 1280x900, known/unknown/tier-closing/Position-hidden, actual DOM visible/accessibility text/meter, saved source-row attributes, unchanged original selected recommendation player/action and entire scored ordering and scores; legacy WR-122 browser checks are preserved.
-**CHANGED:** EXACTLY `js/war-room-ui.js`, `scripts/test-browser.mjs`, `.ai/builder/WR127_OVERALL_BOARD_PRESSURE_TRUTHFUL_DISPLAY_EVIDENCE.md`, `.ai/builder/HANDOFF.md`.
-**TESTS:** Existing GitHub FULL CI performs actual Chromium browser-determinism, `npm test` (including focused `test:browser`, `test:phone-decision-view`, `test:responsive-overflow`, `test:scoring-corrections`, WR-118 synthetic), syntax, resilience and offline checks; separately verify literal checks of both edited JS/MJS in final test logs. DO NOT claim local commands, private ESPN access, physical device, or a result before observing GitHub.
-**INTERMEDIATE REGRESSION / FIX:** Initial code/test FULL CI #35558486470 FAILED existing 375×812 Overall first-actionable-choice vertical layout by 15px despite passing rendered truthfulness. Known-market visible text was shortened on same authorized display file to `Timing index N/100`; corresponding browser oracle changed without weakening layout test or editing CSS. See detailed evidence. Final-head FULL CI must independently pass layout before Manager freezes. Historical pre-test code-only CI #35558446453 failed the old WR-126 oracle and is not green validation.
-**SECOND PRESERVED CI FAIL / THIRD BOUNDED CANDIDATE:** Previous exact head fd4577fd50ba1041a631eebd3c9428e9b39e2dd3 full PR CI #35559042883 FAILED existing 900×900 Overall layout threshold (first choice 1012.6px vs baseline 1019.6px; 7px improvement <10px required), despite both mounted truthful-display controls passing. The subsequent in-scope source/test copy `Timing index N/100` explicitly identifies the uncalibrated index while reducing line wrap; MUST verify a new exact-final-head actual full CI including 375/900 layout with no guard weakening. If still failing, preserve failure and route to Manager rather than continuing broad/unsanctioned CSS work.
-**CI:** Only exact PR final-head FULL War Room CI with actual successful FULL test and Governance jobs counts for freeze. Record final run/job IDs/observed output in immutable PR description/comment, not by changing the branch after validation.
-**BLOCKERS:** None in authorized source scope found. Local Work-mode computer handoff was not accepted; GitHub-hosted real-browser CI is the execution evidence.
-**DECISIONS CONSUMED:** WR-D001 ECR value vs ESPN/FP ADP market timing; WR-D018 fallback-first / LIVE_DIRECT_UNVERIFIED; WR-D027 no provider outreach; WR-D038 accepted WR-122 repaired card; WR-D040 closed WR-126 reproduced limited synthetic display problem; WR-D041 sole WR-127 four-file authorization and mandatory independent Auditor.
-**NEXT ACTION:** Builder opens ONE OPEN/UNMERGED implementation PR then independently rechecks branch SHA/cumulative exact-four-file scope and exact-head FULL CI; Manager alone freezes exact target and assigns fresh Independent Auditor. Builder does not self-audit, move frozen target, merge or deploy. On later independent PASS-family and separate Manager authorization, merge must be followed by genuine canonical-main FULL CI canary before closure.
-**FILES / ARTIFACTS THAT MATTER:** `.ai/builder/WR127_OVERALL_BOARD_PRESSURE_TRUTHFUL_DISPLAY_EVIDENCE.md` (actual render/expected controls/bounded limitations); `js/war-room-ui.js`, `scripts/test-browser.mjs`; `.ai/manager/WR-127.md`; `.ai/shared/ACTIVE_TASKS.json`; original WR-126 evidence and PR #358; original WR-122 audited display.
-**DO NOT REPEAT:** Historical WR-126 test-only diagnostic or WR-122/WR-124 implementation/audit/merge; both are accepted upstream facts. Do not introduce duplicate command center or alter engine/market resolution.
+**STATUS:** BUILDER READ-ONLY INVENTORY COMPLETE — paper-only PR must remain OPEN / UNMERGED; no production/test/source change authorized or performed.
+
+**TASK:** WR-129 — League Settings & Personalization Existing-State Inventory.
+
+**ROLE:** Implementation Engineer / Builder, canonical V3.5; WR-D044; STANDARD_CHAT_HIGH / FAST_REFRESH. Inventory only.
+
+**BRANCH:** `wr-129-league-settings-personalization-inventory`.
+
+**BASE:** `911a74dcf790ac781a21dfe7d0b936ff5e65fccb`. Live GitHub comparison verified assigned branch initially IDENTICAL to canonical main: 0 ahead / 0 behind.
+
+**HEAD:** Final immutable Builder head is the commit containing this handoff and `.ai/builder/WR129_LEAGUE_SETTINGS_PERSONALIZATION_INVENTORY.md`; resolve from the OPEN PR/exact branch after this final authorized write. Do not move it after exact-head Governance validation.
+
+**PR:** One paper-only PR against `main`; leave OPEN / UNMERGED. PR number and exact-head CI are live GitHub evidence recorded after the final documentary commit, not by mutating this file after validation.
+
+**DONE:** Read-only inventory completed for team count, rounds, snake/user slot, PPR assumptions, starter/FLEX/roster config, saved sessions, migration/persistence/isolation, settings-aware recommendation/VORP behavior, phone/desktop settings, post-draft reporting, audit export, alternate scoring/custom roster/keepers/risk/defaults, unsupported input and cross-session leakage. Every material item is classified in the detailed inventory with exact code/function/test pointers.
+
+**CHANGED:** EXACTLY two authorized documentary paths cumulatively: `.ai/builder/WR129_LEAGUE_SETTINGS_PERSONALIZATION_INVENTORY.md` and `.ai/builder/HANDOFF.md`. No `js/`, `scripts/`, `extensions/`, ranking/source/data, package, workflow, deployment or product test file changed.
+
+**TESTS / INSPECTIONS:** No product tests were modified or locally executed; WR-129 is read-only paper inventory. Static live-repository inspection covered `war-room-config.js`, `index.html`, relevant app settings/draft-state/scoring/recommendation/session/UI modules, Companion settings paths, and existing browser/invariant/persistence/hardening/phone tests. Existing test evidence was treated as evidence only, not rerun proof. Key direct evidence: `scripts/test-draft-invariants.mjs` complete 10x16 and 14x16 fixtures; `scripts/test-persistence-recovery.mjs` explicit A/B contamination checks; `scripts/test-browser.mjs` migration/sanitization/failure behavior; `scripts/test-hardening.mjs` config-driven roster fixture; `scripts/test-layout-efficiency-behavior.mjs` 12/7/18 save/reload; phone settings tests.
+
+**CI:** Exact-final-head Governance result is a required post-write observation. Product test is expected to be docs-only skipped if canonical classifier behavior applies; do not report PASS/SKIP until observed on the final PR head.
+
+**BLOCKERS:** No blocker to completing WR-129 inventory. One demonstrated existing-state mismatch is recorded: documented/legacy app contract says rounds 5–30, while command-bar/app sync/persistence and Companion settings paths accept 1–30.
+
+**DECISIONS CONSUMED:** WR-D044 activation; WR-D001 PPR ECR value authority vs ESPN market timing; WR-D018 fallback-first / `LIVE_DIRECT_UNVERIFIED`; WR-D027 NO PROVIDER CONTACT; WR-D038 accepted recommendation-card repair; WR-D043 accepted A3 closure; paused Track B source-rights/custom-ranking gates. A4 2027 ranking/source refresh remains season-gated and unassigned.
+
+**NEXT ACTION:** Manager reviews the WR-129 paper inventory and makes exactly one next decision. Builder recommendation is one bounded implementation/testing task to unify the already documented round-count contract at **5–30** across current app/Companion/settings-persistence ingress paths with focused 1–4 rejection/normalization and 5/30 boundary tests, followed by the normal independent audit gate. Do not activate it from WR-129.
+
+**FILES / ARTIFACTS THAT MATTER:** `.ai/builder/WR129_LEAGUE_SETTINGS_PERSONALIZATION_INVENTORY.md`; `.ai/builder/HANDOFF.md`; `.ai/manager/WR-129.md`; `.ai/shared/ACTIVE_TASKS.json`; `war-room-config.js`; `index.html`; `js/war-room-command-bar-fixes.js`; `js/war-room-espn-sync.js`; `js/war-room-draft-state.js`; `js/war-room-scoring.js`; `js/war-room-recommendations.js`; `js/war-room-rankings.js`; `js/war-room-ui.js`; Companion settings files; named existing test files in the inventory.
+
+**DO NOT REPEAT:** Do not implement WR-129 findings, activate a new task, fetch/import/evaluate 2027 rankings, contact providers, change scoring/ranking policy, add custom roster/keeper/risk/default settings, rerun Track B gates, merge this Builder PR, or treat missing tests as automatic product defects.
