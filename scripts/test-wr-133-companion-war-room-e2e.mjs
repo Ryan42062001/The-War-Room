@@ -365,7 +365,7 @@ function createCompanionHarness() {
       );
       return result == null ? null : JSON.parse(JSON.stringify(result));
     },
-    async settle,
+    settle,
     status() {
       return JSON.parse(JSON.stringify(context.statusSnapshot()));
     },
