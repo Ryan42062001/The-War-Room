@@ -130,6 +130,55 @@ assert.deepEqual(boundedSyncSnapshot, {
   invalid:null
 });
 
+await page.waitForSelector('[data-command-setting="rounds"]');
+const roundCountContract = await page.evaluate(() => {
+  const commandRounds = document.querySelector('[data-command-setting="rounds"]');
+  const original = {teams:LEAGUE_SIZE, slot:MY_DRAFT_SLOT, rounds:TOTAL_ROUNDS};
+  function appRound(value) {
+    WarRoomCommandBarFixes.applySettings(original, false);
+    return WarRoomCommandBarFixes.applySettings({teams:10, slot:1, rounds:value}, false).rounds;
+  }
+  const app = [1,2,3,4,5,30,31].map(appRound);
+  WarRoomCommandBarFixes.applySettings(original, false);
+
+  const persisted = [1,2,3,4,5,30,31].map(rounds =>
+    normalizeSavedDraftPayload({
+      version:2, savedAt:'wr130', teams:10, slot:1, rounds,
+      recommendationAudit:[], autoDraftTeamSlots:[], state:{}, draftMeta:{}, order:[]
+    }).rounds
+  );
+
+  const snapshot = [1,2,3,4,5,30,31].map(rounds =>
+    snapshotSettingsForExternalPicks({config:{teams:10, draftSlot:1, rounds}}).rounds
+  );
+
+  const autosaveWasEnabled = isAutosaveEnabled();
+  setAutosaveEnabled(true);
+  const restored = [1,2,3,4,5,30,31].map(rounds => {
+    const id = 'wr130-round-' + rounds;
+    const key = getEspnExternalDraftStateKey(id);
+    localStorage.setItem(key, JSON.stringify({version:1, teams:10, draftSlot:1, rounds, picks:[]}));
+    const value = readEspnExternalDraftState(id).rounds;
+    localStorage.removeItem(key);
+    return value;
+  });
+  setAutosaveEnabled(autosaveWasEnabled);
+  WarRoomCommandBarFixes.applySettings(original, false);
+
+  return {
+    commandInput:{min:commandRounds && commandRounds.min, max:commandRounds && commandRounds.max},
+    app,
+    persisted,
+    snapshot,
+    restored
+  };
+});
+assert.deepEqual(roundCountContract.commandInput, {min:'5', max:'30'});
+assert.deepEqual(roundCountContract.app, [5,5,5,5,5,30,30]);
+assert.deepEqual(roundCountContract.persisted, [5,5,5,5,5,30,30]);
+assert.deepEqual(roundCountContract.snapshot, [5,5,5,5,5,30,30]);
+assert.deepEqual(roundCountContract.restored, [5,5,5,5,5,30,30]);
+
 const persistenceContext = await browser.newContext();
 const persistencePage = await persistenceContext.newPage({viewport:{width:1280,height:900}});
 const persistenceErrors = [];
