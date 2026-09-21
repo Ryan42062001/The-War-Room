@@ -880,7 +880,22 @@ for (const [width, height] of [[390, 844], [1280, 900]]) {
   assert.deepEqual(observed.after, observed.before, 'WR-126 recommendation, action, source, scores, order unchanged');
   assert.deepEqual(observed.afterRows, observed.originalRows, 'WR-126 source-row attributes unchanged');
   wr126BoardPressure.push(observed);
-  console.log('WR126_RENDERED_BOARD_PRESSURE ' + JSON.stringify(observed));
+  // Keep CI evidence human-reviewable: assert full order/scores/source rows
+  // above but log only the necessary bounded display and identity evidence.
+  const {before, after, originalRows, afterRows, ...displayEvidence} = observed;
+  console.log('WR126_RENDERED_BOARD_PRESSURE ' + JSON.stringify({
+    ...displayEvidence,
+    unchangedRecommendation:{
+      player:before.player, action:before.action, marketSource:before.source,
+      scoredCandidates:before.order.length,
+      samePlayer:before.player === after.player,
+      sameAction:before.action === after.action,
+      sameSource:before.source === after.source,
+      sameOrder:JSON.stringify(before.order) === JSON.stringify(after.order),
+      sameScores:JSON.stringify(before.scored) === JSON.stringify(after.scored),
+      sameRowAttributes:JSON.stringify(originalRows) === JSON.stringify(afterRows)
+    }
+  }));
 }
 const wr126Reproduced = wr126BoardPressure.every(item =>
   item.unknown.text.includes('50% next-pick survival') &&
