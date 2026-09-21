@@ -60,7 +60,7 @@ function sanitizeStoredConfig(config) {
   return {
     teams: teams,
     draftSlot: clampStoredInteger(config.draftSlot, 1, teams, 1),
-    rounds: clampStoredInteger(config.rounds, 1, 30, 16)
+    rounds: clampStoredInteger(config.rounds, 5, 30, 16)
   };
 }
 
@@ -983,7 +983,7 @@ function updateConfig(config) {
   var next = {
     teams: teams,
     draftSlot: Math.max(1, Math.min(teams, Number(config.draftSlot) || state.config.draftSlot || 1)),
-    rounds: Math.max(1, Math.min(30, Number(config.rounds) || state.config.rounds || 16))
+    rounds: Math.max(5, Math.min(30, Number(config.rounds) || state.config.rounds || 16))
   };
   var teamsChanged = previousTeams !== next.teams;
 
