@@ -67,7 +67,7 @@ function readEspnExternalDraftState(id) {
       throw new Error('external pick state is not an object');
     }
     var teams = Math.max(2, Math.min(20, Math.trunc(Number(parsed.teams) || Number(LEAGUE_SIZE) || 10)));
-    var rounds = Math.max(1, Math.min(30, Math.trunc(Number(parsed.rounds) || Number(TOTAL_ROUNDS) || 16)));
+    var rounds = Math.max(5, Math.min(30, Math.trunc(Number(parsed.rounds) || Number(TOTAL_ROUNDS) || 16)));
     var draftSlot = Math.max(1, Math.min(teams, Math.trunc(Number(parsed.draftSlot) || Number(MY_DRAFT_SLOT) || 1)));
     var totalPicks = teams * rounds;
     var picks = [];
@@ -154,7 +154,7 @@ function snapshotSettingsForExternalPicks(snapshot) {
   var current = getEspnSyncSettings();
   var config = snapshot && snapshot.config && typeof snapshot.config === 'object' ? snapshot.config : {};
   var teams = Math.max(2, Math.min(20, Math.trunc(Number(config.teams) || Number(current.teams) || 10)));
-  var rounds = Math.max(1, Math.min(30, Math.trunc(Number(config.rounds) || Number(current.rounds) || 16)));
+  var rounds = Math.max(5, Math.min(30, Math.trunc(Number(config.rounds) || Number(current.rounds) || 16)));
   var draftSlot = Math.max(1, Math.min(teams, Math.trunc(Number(config.draftSlot) || Number(current.draftSlot) || 1)));
   return {teams:teams, rounds:rounds, draftSlot:draftSlot, totalPicks:teams * rounds};
 }
