@@ -8069,7 +8069,7 @@ function updateDraftDayDashboard(liveState, scarcityState){
     if (hasMarketTiming) {
       // This 0–100 meter is an uncalibrated heuristic index, not a probability.
       html += '<div class="board-pressure-meter" aria-hidden="true"><span style="width:'+survival+'%"></span></div>';
-      html += '<small>Market timing index (heuristic): '+survival+' / 100 · '+escapeSummaryHtml(cliffText)+'</small>';
+      html += '<small>Timing index '+survival+'/100 (heuristic) · '+escapeSummaryHtml(cliffText)+'</small>';
     } else {
       // Omit the meter entirely: neither visible nor accessible UI may
       // expose the internal neutral 50 as an estimate for unknown timing.
