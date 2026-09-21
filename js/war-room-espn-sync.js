@@ -163,7 +163,7 @@ function applyEspnSyncSettings(config) {
     return getEspnSyncSettings();
   }
   var teams = Math.max(2, Math.min(20, Number(config.teams) || LEAGUE_SIZE));
-  var rounds = Math.max(1, Math.min(30, Number(config.rounds) || TOTAL_ROUNDS));
+  var rounds = Math.max(5, Math.min(30, Number(config.rounds) || TOTAL_ROUNDS));
   var draftSlot = Math.max(1, Math.min(teams, Number(config.draftSlot) || MY_DRAFT_SLOT));
   var pcTeams = document.getElementById('pcTeams');
   var pcSlot = document.getElementById('pcSlot');
@@ -788,7 +788,7 @@ function normalizeSavedDraftPayload(payload) {
 
   var teams = clampDraftStorageInteger(payload.teams, 2, 20, LEAGUE_SIZE || 10);
   var slot = clampDraftStorageInteger(payload.slot, 1, teams, Math.min(MY_DRAFT_SLOT || 1, teams));
-  var rounds = clampDraftStorageInteger(payload.rounds, 1, 30, TOTAL_ROUNDS || 16);
+  var rounds = clampDraftStorageInteger(payload.rounds, 5, 30, TOTAL_ROUNDS || 16);
   var totalPicks = teams * rounds;
   var state = {};
   var draftMeta = {};
