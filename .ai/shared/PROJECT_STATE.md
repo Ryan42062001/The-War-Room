@@ -1,11 +1,15 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-21 — WR-D062 freezes NEW repaired WR-139 R1 draft PR #394 and assigns fresh WR-141 independent re-audit; old FAILED PR #389 frozen; A6 open
+Last Manager gate: 2026-09-22 — WR-D063 accepts WR-141 FAIL on frozen R1 #394 and authorizes fresh R2 docs-only remediation after control-plane gates; #389 frozen; A6 open
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current workflow-control gate — WR-D062 / NEW repaired WR-139 R1 proposed addendum AUDIT_READY, WR-141 fresh independent re-audit assigned
+## Current workflow-control gate — WR-D063 / WR-141 FAIL ACCEPTED / FRESH WR-139 R2 AUTHORIZED
+
+Manager PR #394 comment 5780481220 accepts the fresh WR-141 FAIL — REMEDIATION REQUIRED on frozen NEW R1 #394 head 39eb55ce26354bca0798fca266f57529e6723624. Auditor PR #396 exact head c263da69937920a126f94c14bb208034aaf58cf6 published exactly two authorized files, actual exact-Auditor-head Governance #35686411608 SUCCESS; Auditor evidence landed canonical main a37aaba7c6fcbdcdd0013a18f9f0f835c17a5229, genuine post-merge canonical-main push Governance #35686732395 SUCCESS; no workflow adoption (canonical WORKFLOW blob 02507f73b182d11ccc9d3525cc7c2e4e15376ccd unchanged). WR-141 CLOSED as completed independently FAILED audit; R1 #394 and old #389 head 69ff526e7016189b2acc167c7837a4d224217e97 remain OPEN/DRAFT/UNMERGED/FROZEN. WR141-M01 MEDIUM/BLOCKING accepted: current PR-label force-FULL cannot produce mandated genuinely same-original-landed-SHA FULL canonical-main PUSH for all-.ai/** docs, stop unsupported preforced-FULL docs BEFORE integration, never substitute PR FULL/Governance/later C; if already externally merged original A with no mandated FULL, preserve FAILED/UNVERIFIED, NO AS-IS, separate prospective corrected/reverted B with its own CI. WR141-L01 LOW accepted: external merge after valid earlier Manager receipt still requires factual out-of-order custody. WR140-M01/M02 history separate. Authorize fresh distinct WR-139 R2 docs-only ONE .ai/shared/WORKFLOW.md path after WR-D063 Manager control-plane exact-head Governance, guarded merge, genuine post-merge main push Governance and NEW branch exact-main bootstrap 0/0; no CI implementation or branch-settings/product/provider/release task now. New R2 exact-head Governance, new freeze, fresh distinct independent audit and separate accepted PASS-family before any guarded adoption/post-adoption main Governance. WR-135/138 scoped CLOSED, old failed PR379 frozen, LOW WR137-F01, Companion E2E/formal A6/provider/A4/2027/Track B/deployment/release/draft readiness unchanged.
+
+## Historical workflow-control gate — WR-D062 / NEW repaired WR-139 R1 proposed addendum AUDIT_READY, WR-141 fresh independent re-audit assigned
 
 Independent WR-140 AUDIT of original DRAFT workflow proposal PR #389 (immutable `69ff526e7016189b2acc167c7837a4d224217e97`) returned **FAIL — REMEDIATION REQUIRED** on M01 original failed/missing canary recovery deadlock and M02 improper docs-only FULL-product requirement; Manager accepted that FAIL and froze original PR389 OPEN/DRAFT/UNMERGED. Auditor-only PR #392 was separately integrated as canonical `facffe7e7083ec6103998ce55f585294bebdacfc`; WR-D061 Manager PR #393 integrated as `b69a143144ef8729a825beae98abc016b5f6696e` after exact-head Governance #35685442573 SUCCESS and genuine post-merge canonical-main Governance #35685532139 SUCCESS. WR-140 remains CLOSED as completed failed audit.
 
