@@ -1,17 +1,19 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-21 — WR-D051 closes WR-133 / WR-134 after independent PASS, audited integration and post-merge canonical FULL CI
+Last Manager gate: 2026-09-21 — WR-D052 assigns WR-135 bounded app-side full-draft supported-envelope synthetic regression after WR-133 / WR-134 closure
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current Track A gate — WR-D051 / A6 synthetic cross-layer evidence accepted; formal release gate remains open
+## Current Track A gate — WR-D052 / A6 supported-envelope boundary regression assignment
 
-WR-133/WR-134 are CLOSED. WR-133's synthetic local Companion background→real content bridge→real War Room page/ledger/ACK regression was independently audited by WR-134 (PASS, zero findings, PR #376 immutable `acb4717d0ebfbe4b2029574b56b7b05aeaa4ad30`, exact-head CI #35673159065 SUCCESS), Auditor evidence integrated as `f770fd29641fb583c53d4843985fda645472e591`, and unchanged frozen Builder PR #374 `f463f73b7e2d92a34b358f61742c4af5abfefb76` integrated as `53e0c652a1d9043e6abce8f297b6fbff8128d8e8`.
+WR-133/WR-134 remain CLOSED after independently audited, integrated 10×16 local synthetic Companion→real bridge→app/ACK regression, mandatory canonical-main FULL CI #35673699491 SUCCESS and WR-D051 closure canonical `b4bfd575f913fbdf00865fa88d3ca1ef17d744ff` with post-closure Governance #35674360648 SUCCESS.
 
-Genuine canonical-main push FULL War Room CI #35673699491 on the integrated product SHA completed SUCCESS, including classify #106575617629, Governance #106575637018 and full product test #106575680004. Its actual logs show WR-133 A–I, protected B session / explicit A restore, reconnect, 159/160 and terminal 160/160/reload, three detected negative controls, browser errors 0, unexpected external requests 0, Companion fetches 0. Historical earlier Builder run #35655679877 remains a genuine historical FAILURE, not relabeled.
+WR-132 identified another independent A6 evidence gap: no accepted complete current draft execution at both supported extremes 2 teams × 5 rounds and 20 teams × 30 rounds. Manager inspected existing `scripts/test-draft-invariants.mjs`, which runs full 10×16 and 14×16 browser/app drafts but not the 2×5/20×30 extremes. WR-D052 assigns only WR-135 Builder to extend that existing actual application/browser harness with deterministic local full 10- and 600-pick boundary scenarios, per-pick numbering/Mine-Taken ownership, terminal, persistence and error/traffic checks. Exactly three test/evidence files may change; package, product/Companion sources and accepted WR-133 test remain untouched.
 
-The accepted proof is bounded deterministic synthetic local cross-layer integration, not live ESPN or full draft-release evidence. WR-132's remaining external/current-version fallback, extreme full-draft envelope and deployment/rollback evidence gaps remain separately gated. Structured Direct remains LIVE_DIRECT_UNVERIFIED. A4/2027 source refresh remains season-gated and unassigned, Track B remains paused / no source admission, and NO PROVIDER CONTACT remains effective. No draft-ready go/no-go, release or deployment is authorized by this closure. The active-only registry is empty; no new work is activated by WR-D051.
+WR-135 is audit-required and post-merge-FULL-CI-required. Activation requires Manager PR exact-head Governance SUCCESS, canonical merge, successful genuine canonical-main push Governance, and fresh Builder branch creation from exact then-current main. This is app-side synthetic supported-envelope evidence, NOT an extreme cross-layer E2E, live ESPN, provider, release or draft-ready certification.
+
+A4/2027 season/source gate, NO PROVIDER CONTACT, fallback-first / LIVE_DIRECT_UNVERIFIED, paused Track B, deployment/rollback and formal A6 release-go/no-go remain separately gated and unactivated.
 
 ## Returning-Player v2
 

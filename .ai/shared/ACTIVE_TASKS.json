@@ -1,8 +1,58 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-22T01:01:00Z",
+  "updated_at_utc": "2026-09-22T01:10:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": []
+  "tasks": [
+    {
+      "task_id": "WR-135",
+      "owner": "Builder",
+      "worker_slot": "builder-wr135-supported-envelope-full-draft-invariants",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-135.md",
+      "role_handoff": ".ai/builder/HANDOFF.md",
+      "assignment_main_sha": "b4bfd575f913fbdf00865fa88d3ca1ef17d744ff",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-135-supported-envelope-full-draft-invariants",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": true,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": true,
+      "allowed_path_prefixes": [
+        "scripts/test-draft-invariants.mjs",
+        ".ai/builder/WR135_SUPPORTED_ENVELOPE_FULL_DRAFT_EVIDENCE.md",
+        ".ai/builder/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/research/",
+        ".ai/strategy/",
+        "js/",
+        "extensions/",
+        "data/",
+        ".github/",
+        "src/"
+      ],
+      "forbidden_exact_paths": [
+        "package.json",
+        "README.md",
+        "index.html",
+        "script.js",
+        "war-room-config.js",
+        "scripts/test-wr-133-companion-war-room-e2e.mjs",
+        "scripts/test-wr-118-espn-replay-reconnect.mjs"
+      ],
+      "next_gate": "WR-D052 Manager activation PR must pass exact-head Governance, merge, and genuine post-merge canonical-main push Governance SUCCESS. Only then Manager creates assigned Builder branch from exact new canonical main and verifies identical 0 ahead/behind before WR-135 Builder starts. Builder extends only existing app-side draft-invariant harness with 2x5 and 20x30 full 10/600-pick synthetic boundary scenarios, explicit deterministic ledger/ownership/terminal/persistence checks while preserving existing 10x16,14x16 and ESPN segment. Actual focused test + npm test + exact-final-head FULL CI, immutable three-path PR -> Manager exact-target freeze -> FRESH independent audit -> Manager exact-target integration only after accepted PASS-family -> genuine post-merge canonical-main FULL CI before closure. No ESPN/provider contact, product/Companion source, ranking, package/workflow, deployment, release or full-envelope cross-layer claim."
+    }
+  ]
 }
