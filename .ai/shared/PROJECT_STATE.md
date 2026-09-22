@@ -1,9 +1,17 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-21 — WR-D058 closes scoped WR-135 R1/WR-138 after exact audited integration and genuine canonical FULL CI; out-of-order merge explicitly recorded; A6 remains open
+Last Manager gate: 2026-09-21 — WR-D060 freezes draft WR-139 workflow merge-receipt proposal and assigns fresh WR-140 independent audit after completed WR-D058 closure; A6 remains open
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
+
+## Current workflow-control gate — WR-D060 / WR-139 proposal frozen, WR-140 independent audit assigned
+
+WR-135/WR-138 scoped local synthetic boundary tasks are CLOSED with documented prior integration-order exception and genuine canonical FULL #35683269053 SUCCESS, followed by WR-D058 Manager closure PR #390 merged `ada3ddcb6dc9131636edd734fdf18f96c66af55f` and genuine post-closure canonical-main Governance #35684250109 SUCCESS. Original failed historical WR-135 PR #379 remains OPEN/UNMERGED/FROZEN. LOW WR137-F01 remains unresolved; formal A6, extreme Companion E2E, live/provider, A4/2027 rights, Track B, deployment/release/draft-ready still separate.
+
+Distinct draft workflow safeguard proposal PR #389 is OPEN/UNMERGED at immutable `69ff526e7016189b2acc167c7837a4d224217e97`, one `.ai/shared/WORKFLOW.md` path, exact-head Governance #35683703468 SUCCESS. Canonical main WORKFLOW.md remains byte-identical to original proposal base; intervening main is nonoverlapping Manager documentation. WR-D060 freezes WR-139 proposal as AUDIT_READY and assigns FRESH separate WR-140 Independent Auditor/QA only after Manager control-plane exact-head Governance/merge/genuine post-merge canonical Governance and fresh exact-new-main separate Auditor branch 0/0.
+
+The proposal is NOT YET canonical and does NOT technically enforce GitHub merge permissions/rulesets. Auditor must publish exactly two authorized Auditor-only files/one distinct PR and independent verdict on immutable exact head; Manager later separately accepts/rejects and decides whether/how to adopt. No workflow merge until that decision.
 
 ## Current Track A gate — WR-D058 / WR-135 scoped local synthetic envelope evidence CLOSED, formal A6 OPEN
 
