@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-21T20:47:00Z",
+  "updated_at_utc": "2026-09-22T00:20:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -9,13 +9,13 @@
       "task_id": "WR-133",
       "owner": "Builder",
       "worker_slot": "builder-wr133-companion-war-room-synthetic-e2e",
-      "status": "ASSIGNED",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-133.md",
       "role_handoff": ".ai/builder/HANDOFF.md",
       "assignment_main_sha": "6e5280ef77e761e163dfdba376899b53517ea079",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "f463f73b7e2d92a34b358f61742c4af5abfefb76",
       "branch": "wr-133-companion-war-room-synthetic-e2e-regression",
-      "pr": null,
+      "pr": 374,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
@@ -50,7 +50,58 @@
         "script.js",
         "war-room-config.js"
       ],
-      "next_gate": "Builder creates one deterministic source-free synthetic Companion→War Room cross-layer regression using real current extension/app source read-only, package test registration only, and two Builder evidence files. Exact-final-head FULL War Room CI -> Manager verifies exact four-path scope/oracles and freezes one immutable target -> fresh Independent Auditor / QA -> PASS-family on unchanged target required before any merge -> genuine canonical-main FULL CI before WR-133 closure. Any observed production/Companion defect must be reported, not fixed under WR-133. No live ESPN/provider contact, ranking/policy/source change, deployment or release."
+      "next_gate": "WR-D050 Manager froze exact WR-133 Builder PR #374 at f463f73b7e2d92a34b358f61742c4af5abfefb76 after verifying 7 ahead / 0 behind, exactly four authorized paths, and exact-head FULL War Room CI #35670686238 SUCCESS (classify 106566220511, Governance 106566252568, full test 106566300474; bootstrap-reuse 106566253713 SKIPPED). No Builder writes/merge while WR-134 independently audits this immutable target. Only independent PASS-family on unchanged target permits separate Manager integration; later canonical-main FULL CI is mandatory before WR-133 closure."
+    },
+    {
+      "task_id": "WR-134",
+      "owner": "Auditor",
+      "worker_slot": "auditor-wr134-wr133-companion-war-room-e2e",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-134.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": "3a0c5a9ad8f4e3641ef3953b89d807a550941df9",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-134-wr133-companion-war-room-e2e-independent-audit",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "audit_target_task": "WR-133",
+      "audit_target_pr": 374,
+      "audit_target_branch": "wr-133-companion-war-room-synthetic-e2e-regression",
+      "audit_target_sha": "f463f73b7e2d92a34b358f61742c4af5abfefb76",
+      "allowed_path_prefixes": [
+        ".ai/auditor/WR134_COMPANION_WAR_ROOM_E2E_INDEPENDENT_AUDIT.md",
+        ".ai/auditor/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/builder/",
+        ".ai/research/",
+        ".ai/strategy/",
+        "js/",
+        "scripts/",
+        "extensions/",
+        "data/",
+        ".github/",
+        "src/"
+      ],
+      "forbidden_exact_paths": [
+        "package.json",
+        "README.md",
+        "index.html",
+        "script.js",
+        "war-room-config.js"
+      ],
+      "next_gate": "After WR-D050 Manager control-plane PR exact-head Governance SUCCESS, merge and genuine post-merge canonical-main Governance SUCCESS, Manager creates untouched WR-134 Auditor branch at the exact then-current canonical main and verifies 0 ahead/0 behind. FRESH Independent Auditor audits only frozen WR-133 PR #374 target f463f73b7e2d92a34b358f61742c4af5abfefb76; independently verifies actual source-free cross-layer harness, session guard, A-I checkpoints, oracle validity/negative controls, network boundary, four-path custody and exact-head FULL CI logs. Publish exactly two Auditor-only files in a separate OPEN/UNMERGED PR, one immutable head and exact-head Governance. Manager separately reviews verdict. No implementation merge absent PASS-family on unchanged target; no release/provider contact."
     }
   ]
 }
