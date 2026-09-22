@@ -1,20 +1,17 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-21 — WR-D050 freezes WR-133 exact synthetic cross-layer regression and assigns fresh WR-134 independent audit
+Last Manager gate: 2026-09-21 — WR-D051 closes WR-133 / WR-134 after independent PASS, audited integration and post-merge canonical FULL CI
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current Track A gate — WR-D050 / A6 synthetic cross-layer independent audit
+## Current Track A gate — WR-D051 / A6 synthetic cross-layer evidence accepted; formal release gate remains open
 
-WR-132's earlier accepted evidence gap led to WR-133's bounded test/evidence-only Builder regression. Manager independently froze WR-133 PR #374 exact final head `f463f73b7e2d92a34b358f61742c4af5abfefb76` after confirming seven ahead / zero behind, exactly four authorized paths, and exact-final-head FULL War Room CI #35670686238 SUCCESS (classify #106566220511, Governance #106566252568, full test #106566300474; bootstrap-reuse #106566253713 SKIPPED).
+WR-133/WR-134 are CLOSED. WR-133's synthetic local Companion background→real content bridge→real War Room page/ledger/ACK regression was independently audited by WR-134 (PASS, zero findings, PR #376 immutable `acb4717d0ebfbe4b2029574b56b7b05aeaa4ad30`, exact-head CI #35673159065 SUCCESS), Auditor evidence integrated as `f770fd29641fb583c53d4843985fda645472e591`, and unchanged frozen Builder PR #374 `f463f73b7e2d92a34b358f61742c4af5abfefb76` integrated as `53e0c652a1d9043e6abce8f297b6fbff8128d8e8`.
 
-Actual final CI logs show deterministic local A–I Companion→real bridge→War Room checkpoints, expected passive B-session protection, explicit A restore and ACK replay, 20-pick reconnect, 159/160 and terminal 160/160/reload, three detected test-only negative controls and zero unexpected external requests or Companion fetches. Historical intermediate failed CI #35655679877 remains a historical FAIL; its passive-switch fixture was corrected without production edits. These are Manager audit-readiness findings, NOT a fresh Auditor verdict.
+Genuine canonical-main push FULL War Room CI #35673699491 on the integrated product SHA completed SUCCESS, including classify #106575617629, Governance #106575637018 and full product test #106575680004. Its actual logs show WR-133 A–I, protected B session / explicit A restore, reconnect, 159/160 and terminal 160/160/reload, three detected negative controls, browser errors 0, unexpected external requests 0, Companion fetches 0. Historical earlier Builder run #35655679877 remains a genuine historical FAILURE, not relabeled.
 
-WR-133 is AUDIT_READY and immutable at `f463f73b7e2d92a34b358f61742c4af5abfefb76`, OPEN / UNMERGED; WR-134 is assigned for a FRESH Independent Auditor / QA review after Manager control-plane merge, genuine canonical-main Governance and verified untouched Auditor branch creation from exact new main. Only later independent PASS-family on the unchanged Builder head may permit a separate Manager integration decision, followed by genuine canonical-main FULL CI before WR-133 closure.
-
-No live ESPN/provider contact, ranking/source/policy/production change, A4/2027 admission, Track B, deployment, rollback, draft-ready go/no-go or release is authorized. A4 remains season-gated and Track B paused.
-
+The accepted proof is bounded deterministic synthetic local cross-layer integration, not live ESPN or full draft-release evidence. WR-132's remaining external/current-version fallback, extreme full-draft envelope and deployment/rollback evidence gaps remain separately gated. Structured Direct remains LIVE_DIRECT_UNVERIFIED. A4/2027 source refresh remains season-gated and unassigned, Track B remains paused / no source admission, and NO PROVIDER CONTACT remains effective. No draft-ready go/no-go, release or deployment is authorized by this closure. The active-only registry is empty; no new work is activated by WR-D051.
 
 ## Returning-Player v2
 
