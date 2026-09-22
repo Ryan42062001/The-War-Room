@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-22T04:10:00Z",
+  "updated_at_utc": "2026-09-22T16:50:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -9,7 +9,7 @@
       "task_id": "WR-139",
       "owner": "Manager",
       "worker_slot": "manager-wr139-r1-merge-guard-repair",
-      "status": "AUDIT_READY",
+      "status": "REWORK_REQUIRED",
       "task_file": ".ai/manager/WR-139.md",
       "role_handoff": ".ai/manager/HANDOFF.md",
       "assignment_main_sha": "facffe7e7083ec6103998ce55f585294bebdacfc",
@@ -20,10 +20,12 @@
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": true,
-      "blocker_type": "NONE",
+      "blocker_type": "TECHNICAL",
       "user_action_required": false,
       "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on": [
+        "WR141-M01 accepted: R1 force-FULL docs push route unsupported; R2 docs-only remediation pending fresh branch after WR-D063 Manager control-plane merge and post-main Governance."
+      ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
@@ -47,56 +49,7 @@
         "war-room-config.js",
         ".ai/shared/ACTIVE_TASKS.json"
       ],
-      "next_gate": "WR-D062 Manager freezes NEW separate repaired WR-139 R1 DRAFT PR #394 at immutable 39eb55ce26354bca0798fca266f57529e6723624 exact one .ai/shared/WORKFLOW.md path, original repaired-canonical base b69a143144ef8729a825beae98abc016b5f6696e, genuine exact-head Governance CI #35685717457 SUCCESS (classify #106611967261, Governance #106611993351; product correctly SKIPPED). Original failed draft PR #389 remains OPEN/UNMERGED/FROZEN at 69ff526e7016189b2acc167c7837a4d224217e97 with prior WR-140 independent FAIL (MEDIUM M01/M02) unchanged and no verdict transfer. Freeze PR394/branch/source writes while fresh WR-141 separately audits EXACT 39eb55ce26354bca0798fca266f57529e6723624; any target movement must be newly re-frozen and fresh audit repeated. WR-141 activation only after this Manager control-plane PR exact-head Governance SUCCESS, guarded merge, genuine post-merge canonical-main PUSH Governance SUCCESS, then untouched separate WR-141 Auditor branch from exact THEN-CURRENT main 0 ahead/behind. Auditor publishes exactly two authorized Auditor-only files/one OPEN UNMERGED PR and actual exact-final-Auditor-head Governance + independent PASS-family/FAIL verdict. ONLY separate Manager acceptance of PASS-family on unchanged exact PR394 may permit guarded proposal adoption and genuine post-adoption canonical-main Governance. Original failed PR389 is never merged; no technical GitHub ruleset enforcement assumed; no provider/release."
-    },
-    {
-      "task_id": "WR-141",
-      "owner": "Auditor",
-      "worker_slot": "auditor-wr141-wr139-r1-merge-guard-independent-reaudit",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-141.md",
-      "role_handoff": ".ai/auditor/HANDOFF.md",
-      "assignment_main_sha": "b69a143144ef8729a825beae98abc016b5f6696e",
-      "worker_checkpoint_sha": null,
-      "branch": "wr-141-wr139-r1-merge-guard-independent-reaudit",
-      "pr": null,
-      "dependency": "INDEPENDENT",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_required": false,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "audit_target_task": "WR-139",
-      "audit_target_pr": 394,
-      "audit_target_branch": "manager/wr-139-r1-failed-canary-and-docs-only-gate-remediation",
-      "audit_target_sha": "39eb55ce26354bca0798fca266f57529e6723624",
-      "allowed_path_prefixes": [
-        ".ai/auditor/WR141_WR139_R1_MERGE_GUARD_WORKFLOW_INDEPENDENT_REAUDIT.md",
-        ".ai/auditor/HANDOFF.md"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/shared/",
-        ".ai/manager/",
-        ".ai/builder/",
-        "js/",
-        "scripts/",
-        "extensions/",
-        "data/",
-        ".github/",
-        "src/"
-      ],
-      "forbidden_exact_paths": [
-        "package.json",
-        "README.md",
-        "index.html",
-        "script.js",
-        "war-room-config.js"
-      ],
-      "next_gate": "After WR-D062 exact-head Manager control-plane Governance/merge and genuine post-merge canonical-main PUSH Governance SUCCESS, Manager bootstraps fresh distinct wr-141-wr139-r1-merge-guard-independent-reaudit from exact THEN-CURRENT main with 0 ahead/behind. Fresh Independent Auditor independently reviews NEW DRAFT WR-139 R1 PR #394 exact 39eb55ce26354bca0798fca266f57529e6723624, one .ai/shared/WORKFLOW.md path and actual exact-final-head Governance #35685717457; challenge remediation of prior WR140-M01/M02 plus all V3.5 merge/CI classes, failure/stranded canary correction/rollback path, non-retroactive custody/exception, original canary and corrected SHA, force-full docs, deadlock/release interlocks and prose-vs-GitHub-enforcement limits. Publish EXACT two Auditor-only files in one distinct OPEN/UNMERGED Auditor PR with immutable final head, exact-Auditor-head applicable Governance and independent one PASS/PASS WITH NON-BLOCKING FINDINGS/FAIL verdict. No proposal edit/merge, old failed PR389 write, branch/ruleset/settings/CI change or release."
+      "next_gate": "WR-D063 accepted independent WR-141 FAIL on R1 PR394 exact 39eb55ce26354bca0798fca266f57529e6723624 in PR394 comment 5780481220. Auditor PR396 head c263da69937920a126f94c14bb208034aaf58cf6, two files, exact-head Governance #35686411608 SUCCESS, evidence landed main a37aaba7c6fcbdcdd0013a18f9f0f835c17a5229 with canonical push Governance #35686732395 SUCCESS. WR-141 CLOSED as completed FAILED audit; R1 PR394 and old PR389 69ff526e7016189b2acc167c7837a4d224217e97 OPEN/DRAFT/UNMERGED/FROZEN, no workflow adoption. After WR-D063 Manager control-plane exact-head Governance, guarded merge and genuine post-merge main PUSH Governance SUCCESS, bootstrap NEW R2 branch from exact THEN-current main 0/0, update Manager-owned task branch/checkpoint through separate atomic state transition, then author only .ai/shared/WORKFLOW.md in new distinct DRAFT proposal PR. M01: before any preforced-FULL all-.ai/** guarded merge STOP unless genuine same-landed-SHA canonical PUSH FULL eligibility independently proven; no PR FULL/Governance/later C substitute, no waiver. Already-landed no original mandatory FULL: preserve A FAILED/UNVERIFIED, NO AS-IS, separate prospective corrected/revert B with B own required CI. L01: external merge even with existing prior Manager acceptance receipt requires out-of-order factual custody/exception. Preserve WR140-M01 failed canary correction and WR140-M02 normal docs Governance vs source FULL, exact head acceptance, independent audit, canary/interlock, atomic reconciliation, release holds and prose-not-GitHub-enforcement. No CI/classifier/scripts/product/settings/provider/release task authorized now. NEW R2 exact head Governance, new Manager freeze, FRESH distinct independent Auditor and separate accepted PASS-family required before guarded workflow adoption and post-adoption same-main Governance. WR135/138 scoped CLOSED, old PR379 OPEN/FROZEN, LOW WR137-F01, extreme Companion E2E, A6/providers/A4/2027/Track B/deployment/release/draft ready unchanged."
     }
   ]
 }
