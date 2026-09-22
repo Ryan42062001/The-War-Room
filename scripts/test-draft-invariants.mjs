@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {createRequire} from 'node:module';
 import http from 'node:http';
 import fs from 'node:fs';
@@ -10,6 +11,12 @@ const PLAYER_UNIVERSE = 717;
 const SEED_10X16 = 0x54201016;
 const SEED_14X16 = 0x54201416;
 const SEED_ESPN = 0x5420e5a1;
+const SEED_2X5 = 0x54200205;
+const SEED_20X30 = 0x54202030;
+
+function hash(value) {
+  return createHash('sha256').update(JSON.stringify(value)).digest('hex');
+}
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(.:)/, '$1')), '..');
 const server = process.env.WAR_ROOM_URL ? null : http.createServer((request, response) => {
@@ -74,8 +81,31 @@ function failInvariant({seed, operation, operationType: type, player, pick, viol
   throw error;
 }
 
-async function createDraftPage(browser, teams, rounds, draftSlot) {
+async function createDraftPage(browser, teams, rounds, draftSlot, {localOnly=false} = {}) {
   const context = await browser.newContext();
+  const unexpectedRequests = [];
+  if (localOnly) {
+    const allowed = new URL(appUrl);
+    assert.equal(allowed.protocol, 'http:', 'WR-135 boundary scenarios require a local HTTP server');
+    assert.ok(['127.0.0.1', 'localhost'].includes(allowed.hostname),
+      'WR-135 boundary scenarios cannot use a remote test page');
+    await context.route('**/*', async route => {
+      const requestUrl = route.request().url();
+      let authorized = false;
+      try { authorized = new URL(requestUrl).origin === allowed.origin; } catch {}
+      if (!authorized) {
+        let label = 'invalid-url';
+        try {
+          const parsed = new URL(requestUrl);
+          label = parsed.protocol + '//' + parsed.hostname;
+        } catch {}
+        unexpectedRequests.push(label);
+        await route.abort();
+        return;
+      }
+      await route.continue();
+    });
+  }
   const page = await context.newPage({viewport:{width:1280,height:900}});
   const errors = [];
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -111,7 +141,7 @@ async function createDraftPage(browser, teams, rounds, draftSlot) {
     if (typeof updatePositionTierBoard === 'function') updatePositionTierBoard();
   }, {teams, rounds, draftSlot});
 
-  return {context, page, errors};
+  return {context, page, errors, unexpectedRequests};
 }
 
 async function getPlayerNames(page) {
@@ -293,12 +323,155 @@ async function assertPersistenceEquivalent(page, meta) {
   }
 }
 
-async function runFullDraftScenario(browser, {label, teams, rounds, draftSlot, seed, expensiveEvery, persistencePicks, viewPicks}) {
-  const {context, page, errors} = await createDraftPage(browser, teams, rounds, draftSlot);
+// WR-135: independent, per-pick boundary oracle over the REAL app's rendered
+// numbered rows and draft-state/completion interfaces. This is not another
+// draft engine or a synthetic replacement for the application's pick logic.
+async function assertBoundaryLedger(page, {label, seed, teams, rounds, draftSlot, plan, pick, phase}) {
+  const total = teams * rounds;
+  const observed = await page.evaluate(() => {
+    const state = getDraftAssistantState();
+    const completion = getDraftCompletionStatus(state);
+    const rows = Array.from(document.querySelectorAll('tr.draftrow'));
+    const drafted = rows.filter(row =>
+      row.classList.contains('drafted-mine') || row.classList.contains('drafted-other')
+    ).map(row => ({
+      pick:Number(row.getAttribute('data-pick')),
+      name:String(row.getAttribute('data-name') || ''),
+      slot:Number(row.getAttribute('data-team-slot')),
+      status:row.classList.contains('drafted-mine') ? 'mine' : 'taken'
+    })).sort((left,right) => left.pick - right.pick);
+    return {
+      rows:drafted,
+      boardRows:rows.length,
+      available:rows.length - drafted.length,
+      completed:getCompletedDraftPickCount(),
+      settings:{
+        teams:state.teams, rounds:state.rounds, draftSlot:state.draftSlot,
+        totalPicks:state.totalPicks
+      },
+      controls:{
+        teams:Number(document.getElementById('pcTeams')?.value),
+        rounds:Number(document.getElementById('pcRounds')?.value),
+        draftSlot:Number(document.getElementById('pcSlot')?.value)
+      },
+      currentPick:state.currentPick,
+      nextPick:state.myNextPick,
+      picksUntilMyTurn:state.picksUntilMyTurn,
+      onClock:state.onClock,
+      completion:{
+        complete:Boolean(completion.complete),
+        authoritative:Boolean(completion.authoritative),
+        provisional:Boolean(completion.provisional),
+        myRosterCount:Number(completion.myRosterCount)
+      },
+      externalCount:window.WarRoomEspnExternalPicks
+        ? window.WarRoomEspnExternalPicks.getAll().length : 0
+    };
+  });
+  const expected = plan.slice(0, pick).map((name, index) => {
+    const numberedPick = index + 1;
+    const slot = snakeTeamForPick(numberedPick, teams);
+    return {pick:numberedPick, name, slot, status:slot === draftSlot ? 'mine' : 'taken'};
+  });
+  const meta = {
+    seed, operation:pick, operationType:'BOUNDARY_' + phase, player:plan[pick - 1] || null, pick
+  };
+  const validate = (condition, violation, detail={}) => {
+    if (!condition) failInvariant({
+      ...meta, violation, state:{
+        label, phase, teams, rounds, draftSlot, expectedCount:pick,
+        expectedLedgerDigest:hash(expected), observedLedgerDigest:hash(observed.rows),
+        observedCompleted:observed.completed, observedSettings:observed.settings,
+        observedCompletion:observed.completion, ...detail
+      }
+    });
+  };
+  validate(observed.boardRows === PLAYER_UNIVERSE, 'boundary board row universe changed', {rows:observed.boardRows});
+  validate(observed.available === PLAYER_UNIVERSE - pick,
+    'boundary available-player count incorrect', {available:observed.available});
+  validate(observed.completed === pick && observed.rows.length === pick,
+    'boundary monotonic progress/count incorrect', {actualCount:observed.rows.length});
+  validate(JSON.stringify(observed.settings) === JSON.stringify({
+    teams, rounds, draftSlot, totalPicks:total
+  }), 'boundary real draft-state settings incorrect');
+  validate(JSON.stringify(observed.controls) === JSON.stringify({teams, rounds, draftSlot}),
+    'boundary visible control settings incorrect', {controls:observed.controls});
+  validate(observed.externalCount === 0,
+    'boundary manual draft must not acquire synthetic external-pick entries',
+    {externalCount:observed.externalCount});
+  const seenNames = new Set(observed.rows.map(item => item.name));
+  const seenNumbers = new Set(observed.rows.map(item => item.pick));
+  validate(seenNames.size === pick && seenNumbers.size === pick,
+    'boundary player identities or pick numbers duplicated',
+    {names:seenNames.size, numbers:seenNumbers.size});
+  const mismatch = expected.findIndex((item, index) =>
+    JSON.stringify(item) !== JSON.stringify(observed.rows[index])
+  );
+  validate(mismatch < 0,
+    'boundary numbered ledger/independent snake team/Mine-Taken ownership mismatch',
+    {firstMismatchPick:mismatch + 1, expected:expected[mismatch] || null,
+      actual:observed.rows[mismatch] || null});
+  const mine = expected.filter(item => item.status === 'mine').length;
+  const nextCurrent = Math.min(pick + 1, total);
+  const nextOwnPick = pick === total ? null : Array.from({length:rounds}, (_, index) => {
+    const round = index + 1;
+    return index * teams + (round % 2 === 1 ? draftSlot : teams - draftSlot + 1);
+  }).find(number => number >= nextCurrent) ?? null;
+  validate(observed.completion.myRosterCount === mine,
+    'boundary actual owned roster count incorrect', {expectedMine:mine});
+  validate(observed.currentPick === nextCurrent,
+    'boundary current pick incorrect', {expectedCurrent:nextCurrent, actual:observed.currentPick});
+  validate(observed.nextPick === nextOwnPick,
+    'boundary next-turn state incorrect, including no-next-pick at terminal',
+    {expectedNextPick:nextOwnPick, actualNextPick:observed.nextPick});
+  validate(observed.picksUntilMyTurn === (nextOwnPick === null ? null : nextOwnPick - nextCurrent),
+    'boundary picks-until-own-turn incorrect', {nextOwnPick,
+      actualPicksUntil:observed.picksUntilMyTurn});
+  validate(observed.onClock === (nextOwnPick !== null && nextOwnPick === nextCurrent),
+    'boundary on-clock state incorrect', {actualOnClock:observed.onClock});
+  validate(observed.completion.authoritative === (pick === total) &&
+    observed.completion.complete === (pick === total) &&
+    !observed.completion.provisional,
+    'boundary N-1/terminal completion truth incorrect',
+    {terminal:pick === total});
+  validate(observed.rows.every(item => item.pick <= total),
+    'boundary beyond-N row present');
+  return {
+    label, phase, seed, teams, rounds, draftSlot, totalPicks:total, count:pick,
+    mine, taken:pick - mine, available:observed.available,
+    fixtureDigest:hash(plan.slice(0,pick).map((name,index)=>[index+1,name])),
+    expectedLedgerDigest:hash(expected), actualLedgerDigest:hash(observed.rows),
+    ownershipDigest:hash(observed.rows.map(item=>[item.pick,item.slot,item.status])),
+    currentPick:observed.currentPick, nextPick:observed.nextPick,
+    authoritative:observed.completion.authoritative
+  };
+}
+
+async function runFullDraftScenario(browser, {label, teams, rounds, draftSlot, seed, expensiveEvery, persistencePicks, viewPicks, boundary=false}) {
+  const scenarioStartedAt = performance.now();
+  const {context, page, errors, unexpectedRequests} =
+    await createDraftPage(browser, teams, rounds, draftSlot, {localOnly:boundary});
+  if (boundary) {
+    const actual = await page.evaluate(({teams, rounds, draftSlot}) =>
+      WarRoomCommandBarFixes.applySettings({teams, rounds, slot:draftSlot}, false),
+      {teams, rounds, draftSlot}
+    );
+    assert.deepEqual(actual, {teams, rounds, slot:draftSlot},
+      label + ': real canonical settings must accept exact supported boundary');
+  }
   const names = await getPlayerNames(page);
   assert.equal(names.length, PLAYER_UNIVERSE, `${label}: player universe`);
   const plan = shuffled(names, seed).slice(0, teams * rounds);
+  if (boundary) {
+    assert.equal(plan.length, teams * rounds, label + ': complete boundary plan length');
+    assert.equal(new Set(plan).size, teams * rounds,
+      label + ': every planned player must be a different committed local board row');
+  }
   const random = mulberry32(seed ^ 0xa5a5a5a5);
+  const checkpoints = [];
+  const significantPicks = new Set(boundary
+    ? [persistencePicks[0], teams * rounds - 1, teams * rounds]
+    : []);
   let previousCompleted = 0;
   const operationCounts = {ROW_TOGGLE:0, POSITION_TIER_CARD:0, DIRECT_AUTHORITATIVE:0};
 
@@ -323,6 +496,15 @@ async function runFullDraftScenario(browser, {label, teams, rounds, draftSlot, s
       expensive:expensiveEvery === 1 || pick % expensiveEvery === 0 || pick === plan.length
     });
     previousCompleted = invariant.completed;
+    if (boundary) {
+      const observed = await assertBoundaryLedger(page, {
+        label, seed, teams, rounds, draftSlot, plan, pick, phase:'live'
+      });
+      if (significantPicks.has(pick)) {
+        checkpoints.push(observed);
+        console.log('WR135_BOUNDARY_CHECKPOINT ' + JSON.stringify(observed));
+      }
+    }
 
     if (viewPicks.includes(pick)) await assertViewIndependence(page, meta);
     if (persistencePicks.includes(pick)) {
@@ -337,14 +519,44 @@ async function runFullDraftScenario(browser, {label, teams, rounds, draftSlot, s
         expensive:true
       });
       previousCompleted = afterReload.completed;
+      if (boundary) {
+        const restored = await assertBoundaryLedger(page, {
+          label, seed, teams, rounds, draftSlot, plan, pick, phase:'intermediate-reload'
+        });
+        checkpoints.push(restored);
+        console.log('WR135_BOUNDARY_CHECKPOINT ' + JSON.stringify(restored));
+      }
     }
+  }
+
+  if (boundary) {
+    await assertPersistenceEquivalent(page, {
+      seed, operation:teams*rounds, operationType:'TERMINAL_PERSISTENCE_RELOAD',
+      player:plan.at(-1), pick:teams*rounds
+    });
+    const terminalReload = await assertBoundaryLedger(page, {
+      label, seed, teams, rounds, draftSlot, plan,
+      pick:teams*rounds, phase:'terminal-reload'
+    });
+    checkpoints.push(terminalReload);
+    console.log('WR135_BOUNDARY_CHECKPOINT ' + JSON.stringify(terminalReload));
+    assert.deepEqual(unexpectedRequests, [], label + ': unexpected external network requests');
   }
 
   const final = await captureAuthoritativeState(page);
   assert.equal(final.completed, teams * rounds, `${label}: full draft must complete`);
   assert.deepEqual(errors, [], `${label}: browser errors\n${errors.join('\n')}`);
   await context.close();
-  return {label, seed, picks:teams * rounds, operationCounts};
+  return {
+    label, seed, teams, rounds, draftSlot, picks:teams * rounds, operationCounts,
+    ...(boundary ? {
+      expectedMine:rounds, expectedTaken:teams*rounds-rounds,
+      plannedUniquePlayers:new Set(plan).size,
+      unexpectedExternalRequests:unexpectedRequests.length,
+      checkpoints,
+      runtimeMs:Number((performance.now()-scenarioStartedAt).toFixed(1))
+    } : {})
+  };
 }
 
 async function assertEspnSegment(browser, playerNames) {
@@ -436,6 +648,21 @@ try {
     viewPicks:[1, 113, 223]
   });
 
+  const boundaryMin = await runFullDraftScenario(browser, {
+    label:'2x5-slot2', teams:2, rounds:5, draftSlot:2, seed:SEED_2X5,
+    expensiveEvery:1,
+    persistencePicks:[5],
+    viewPicks:[1, 5, 9],
+    boundary:true
+  });
+  const boundaryMax = await runFullDraftScenario(browser, {
+    label:'20x30-slot20', teams:20, rounds:30, draftSlot:20, seed:SEED_20X30,
+    expensiveEvery:50,
+    persistencePicks:[300],
+    viewPicks:[1, 300, 599],
+    boundary:true
+  });
+
   const referenceContext = await browser.newContext();
   const referencePage = await referenceContext.newPage();
   await referencePage.goto(appUrl, {waitUntil:'load'});
@@ -446,7 +673,8 @@ try {
 
   const runtimeMs = performance.now() - startedAt;
   console.log('Draft invariant torture harness passed.');
-  console.log(JSON.stringify({scenarioA, scenarioB, espn, runtimeMs:Number(runtimeMs.toFixed(1))}, null, 2));
+  console.log(JSON.stringify({scenarioA, scenarioB, boundaryMin, boundaryMax, espn,
+    runtimeMs:Number(runtimeMs.toFixed(1))}, null, 2));
 } finally {
   await browser.close();
   if (server) await new Promise(resolve => server.close(resolve));
