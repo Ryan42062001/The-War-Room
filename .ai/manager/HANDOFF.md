@@ -1,75 +1,32 @@
 # Manager / Architect Handoff
 
-STATUS: WR-D049 — WR-132 ACCEPTED/CLOSED; WR-133 SYNTHETIC COMPANION→WAR ROOM E2E REGRESSION ACTIVATION
+STATUS: WR-D050 — WR-133 EXACT FINAL HEAD FROZEN / WR-134 FRESH INDEPENDENT AUDIT ACTIVATION
 WORKFLOW: V3.5 CANONICAL
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-## Accepted WR-132 evidence
+## Exact frozen Builder target
 
-Work Helper PR #372 exact head:
-`56e14b8b8c8725a1ecb9bc84062332a84b42cf9e`
+Canonical main at Manager freeze: `3a0c5a9ad8f4e3641ef3953b89d807a550941df9`.
+Builder PR #374 OPEN / UNMERGED, branch `wr-133-companion-war-room-synthetic-e2e-regression`, immutable target `f463f73b7e2d92a34b358f61742c4af5abfefb76`.
+Cumulative base→target: 7 ahead / 0 behind; exactly four paths: `scripts/test-wr-133-companion-war-room-e2e.mjs`, `package.json` named/aggregate test registration only, `.ai/builder/WR133_COMPANION_WAR_ROOM_E2E_EVIDENCE.md`, `.ai/builder/HANDOFF.md`.
 
-Cumulative scope:
-- `.ai/work_helper/WR132_DRAFT_READY_RELEASE_EVIDENCE_MATRIX.md`
-- `.ai/work_helper/HANDOFF.md`
+Exact-head FULL War Room CI #35670686238 SUCCESS: classify #106566220511, Governance #106566252568, full test #106566300474 SUCCESS; bootstrap-reuse #106566253713 SKIPPED.
 
-Exact-head War Room CI #35651310217:
-- classify #106504127238 — SUCCESS
-- Governance #106504181690 — SUCCESS
-- product test #106504247185 — correctly SKIPPED
+Actual job logs contain the WR-133 A–I full synthetic scenario, protected B session, intentional passive-switch block, real explicit A restore/replay, 20 reconnect, 159/160, authoritative 160/160, terminal reload, three detected negative controls, zero external requests/fetches. Earlier CI #35655679877 remains historical FAIL from incorrect passive A-return fixture expectation.
 
-PR #372 merged as canonical:
-`6e5280ef77e761e163dfdba376899b53517ea079`
+WR-133 status AUDIT_READY, NOT audited PASS or merge/release-ready. No Builder writes, PR movement, merge or force-push while Auditor reviews exact `f463f73b7e2d92a34b358f61742c4af5abfefb76`. Target movement fails closed.
 
-Post-merge canonical-main War Room CI #35652926860:
-- classify #106509432368 — SUCCESS
-- Governance #106509540543 — SUCCESS
-- product test #106509674064 — correctly SKIPPED
+## WR-134 fresh Auditor assignment
 
-WR-132 is CLOSED.
+Assign ONLY WR-134 to a new INDEPENDENT Auditor / QA chat; STANDARD_CHAT_HIGH / FAST_REFRESH.
+Auditor branch: `wr-134-wr133-companion-war-room-e2e-independent-audit`.
+Audit target: WR-133 PR #374, Builder branch `wr-133-companion-war-room-synthetic-e2e-regression`, exact `f463f73b7e2d92a34b358f61742c4af5abfefb76`.
+Auditor writes only `.ai/auditor/WR134_COMPANION_WAR_ROOM_E2E_INDEPENDENT_AUDIT.md` and `.ai/auditor/HANDOFF.md`.
+Auditor independently examines real source/bridge/session guard/oracles/negative controls/network boundary and exact-head CI, publishes a separate OPEN / UNMERGED Auditor PR with one immutable head and PASS-family/FAIL verdict. A Builder PASS assertion or green CI does not replace independent audit.
 
-## Accepted bounded gap
+## Activation gate
 
-Current evidence proves:
-- strong current Companion parser/background/content/bridge layer coverage;
-- strong WR-118 application-side replay/reconnect terminal coverage.
+This Manager control-plane PR must pass exact-head Governance and merge; genuine canonical-main push Governance must then succeed. ONLY AFTERWARD create untouched Auditor branch `wr-134-wr133-companion-war-room-e2e-independent-audit` from exact new canonical main, verify initial 0 ahead / 0 behind and activate a fresh Auditor chat. The pre-activation `3a0c5a9ad8f4e3641ef3953b89d807a550941df9` checkpoint is NOT the allowed Auditor branch creation SHA.
 
-It does NOT yet prove one executable current end-to-end path through:
-Companion numbered ledger -> real runtime snapshot delivery -> real war-room-content bridge -> real War Room page listener/app snapshot ingress -> app ledger/ownership -> reconnect/terminal convergence.
-
-This is an evidence gap, not an assumed product defect.
-
-## WR-133 sole activation
-
-Task:
-WR-133 — Synthetic Companion→War Room End-to-End Regression
-
-Role:
-Implementation Engineer / Builder
-
-Scope:
-TEST/EVIDENCE ONLY.
-
-Exact authorized writes:
-1. `scripts/test-wr-133-companion-war-room-e2e.mjs`
-2. `package.json` — named test + aggregate registration only
-3. `.ai/builder/WR133_COMPANION_WAR_ROOM_E2E_EVIDENCE.md`
-4. `.ai/builder/HANDOFF.md`
-
-No production, Companion, existing fixture, ranking, recommendation, workflow, dataset, deployment or release write is authorized.
-
-The test must execute current real source read-only, use synthetic local fixtures only, prove Companion/app ledger and ownership convergence across duplicate/reordered/stale/conflict/correction/session/reload/terminal checkpoints, execute non-vacuous negative controls and make zero provider requests.
-
-If honest testing reveals a production defect, Builder must STOP and report it. WR-133 has no remediation authority.
-
-WR-133 is AUDIT REQUIRED. Exact-final-head FULL CI -> Manager freeze -> fresh independent Auditor -> PASS-family on unchanged target before any later integration -> canonical-main FULL CI after merge before closure.
-
-## Preserved boundaries
-
-- WR-D001 ECR VALUE / ESPN TIMING.
-- WR-D018 fallback-first / LIVE_DIRECT_UNVERIFIED.
-- WR-D027 NO PROVIDER CONTACT.
-- A4 next-cycle source/freshness remains season-gated.
-- Track B remains RIGHTS_UNVERIFIED / OPTION_C_UNPROVEN / NO_SOURCE_ADMISSION / PAUSED.
-- No live ESPN, provider contact, 2027 source work, deployment, rollback, release or draft-ready declaration.
+No WR-133 merge until independent PASS-family is separately accepted by Manager on unchanged `f463f73b7e2d92a34b358f61742c4af5abfefb76`; afterward canonical-main FULL CI is required before closure. No live ESPN/provider contact, A4/2027 source refresh, Track B, deployment, rollback, release or draft-ready declaration.

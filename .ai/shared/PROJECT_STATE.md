@@ -1,17 +1,19 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-21 — WR-D049 accepts WR-132 A6 evidence matrix and assigns WR-133 bounded synthetic Companion→War Room E2E regression
+Last Manager gate: 2026-09-21 — WR-D050 freezes WR-133 exact synthetic cross-layer regression and assigns fresh WR-134 independent audit
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current Track A gate — WR-D049 / A6 cross-layer synthetic regression
+## Current Track A gate — WR-D050 / A6 synthetic cross-layer independent audit
 
-WR-132 evidence inventory is accepted and closed. Work Helper PR #372 exact head `56e14b8b8c8725a1ecb9bc84062332a84b42cf9e` changed exactly its two authorized evidence paths and passed exact-head Governance; it was merged as canonical `6e5280ef77e761e163dfdba376899b53517ea079`, followed by successful canonical-main Governance.
+WR-132's earlier accepted evidence gap led to WR-133's bounded test/evidence-only Builder regression. Manager independently froze WR-133 PR #374 exact final head `f463f73b7e2d92a34b358f61742c4af5abfefb76` after confirming seven ahead / zero behind, exactly four authorized paths, and exact-final-head FULL War Room CI #35670686238 SUCCESS (classify #106566220511, Governance #106566252568, full test #106566300474; bootstrap-reuse #106566253713 SKIPPED).
 
-The accepted A6 matrix found one bounded current cross-layer evidence gap: Companion background/content bridge behavior and WR-118 app-side terminal/reconnect behavior are separately strong, but no one current deterministic executable regression spans the real Companion numbered ledger through the real War Room bridge into the real app ledger across replay/correction/reconnect/terminal state.
+Actual final CI logs show deterministic local A–I Companion→real bridge→War Room checkpoints, expected passive B-session protection, explicit A restore and ACK replay, 20-pick reconnect, 159/160 and terminal 160/160/reload, three detected test-only negative controls and zero unexpected external requests or Companion fetches. Historical intermediate failed CI #35655679877 remains a historical FAIL; its passive-switch fixture was corrected without production edits. These are Manager audit-readiness findings, NOT a fresh Auditor verdict.
 
-WR-D049 assigns only WR-133 Builder as TEST/EVIDENCE ONLY to close that synthetic cross-layer gap with four exact paths. No production/Companion remediation, live ESPN/provider action, source/ranking/policy change, deployment, rollback, release or draft-ready go/no-go is authorized. A4 remains season-gated and Track B remains paused.
+WR-133 is AUDIT_READY and immutable at `f463f73b7e2d92a34b358f61742c4af5abfefb76`, OPEN / UNMERGED; WR-134 is assigned for a FRESH Independent Auditor / QA review after Manager control-plane merge, genuine canonical-main Governance and verified untouched Auditor branch creation from exact new main. Only later independent PASS-family on the unchanged Builder head may permit a separate Manager integration decision, followed by genuine canonical-main FULL CI before WR-133 closure.
+
+No live ESPN/provider contact, ranking/source/policy/production change, A4/2027 admission, Track B, deployment, rollback, draft-ready go/no-go or release is authorized. A4 remains season-gated and Track B paused.
 
 
 ## Returning-Player v2
