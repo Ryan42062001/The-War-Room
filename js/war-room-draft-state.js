@@ -39,10 +39,15 @@ var currentPick = Math.min(
 
   var myNextPick = null;
 
-  for (var i = 0; i < myPicks.length; i++) {
-    if (myPicks[i] >= currentPick) {
-      myNextPick = myPicks[i];
-      break;
+  // currentPick is intentionally capped at totalPicks for existing consumers.
+  // Once every numbered pick is complete, that capped value is already consumed:
+  // do not expose the final own pick as a future turn.
+  if (completedPicks < totalPicks) {
+    for (var i = 0; i < myPicks.length; i++) {
+      if (myPicks[i] >= currentPick) {
+        myNextPick = myPicks[i];
+        break;
+      }
     }
   }
 
