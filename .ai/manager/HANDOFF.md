@@ -1,35 +1,32 @@
 # Manager / Architect Handoff
 
-STATUS: WR-D052 — WR-135 BOUNDED SUPPORTED-ENVELOPE FULL-DRAFT APP-SIDE SYNTHETIC REGRESSION ACTIVATION
+STATUS: WR-D053 — WR-135 FROZEN BLOCKED / DISTINCT WR-136 TERMINAL NEXT-TURN PRODUCTION REMEDIATION AUTHORIZED
 WORKFLOW: V3.5 CANONICAL
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-## Accepted completed baseline
+## Canonical incident and independently reviewed evidence
 
-WR-133/WR-134 are CLOSED through WR-D051, canonical main checkpoint `b4bfd575f913fbdf00865fa88d3ca1ef17d744ff`. The exact audited WR-133 Builder target `f463f73b7e2d92a34b358f61742c4af5abfefb76` integrated as `53e0c652a1d9043e6abce8f297b6fbff8128d8e8`, passed mandatory genuine post-merge FULL CI #35673699491. Closure PR #377 integrated as `b4bfd575f913fbdf00865fa88d3ca1ef17d744ff` and genuine post-closure canonical-main Governance #35674360648 completed SUCCESS. The active-only registry was reconciled empty.
+Canonical main at decision: `413be06069e395a87a2e0a0849b2f893d0b81451`. WR-135 PR #379 remains OPEN/UNMERGED, currently frozen documentary head `62fe08807f5db0105f078f7ccb80fd3bdb7ad59a`, cumulative diff exactly three originally authorized WR-135 test/evidence/handoff paths. First failed test target `69b3e6d9e568292dc1f005f9639323bea3c28b09` genuine FULL CI #35675133071 FAILED, product job #106579993743 FAILURE at actual 2×5/slot2 terminal pick 10. PR current-head FULL CI #35675575501 also FAILED (its Governance succeeded). No passing WR-135 FULL CI, 20×30 execution or terminal-reload proof exists.
 
-WR-132 A6 inventory identified separate gaps: current full-draft supported-envelope extremes, exact-current live ESPN fallback, deployment/served-SHA/rollback and future target-season source freshness. WR-133's accepted 10×16 synthetic cross-layer result does not prove 2×5 or 20×30 drafts.
+Independent Manager read-only source and log review: at 10/10 complete, actual/expected ledger digests equal, authoritative completion true, own roster 5, but actual `getDraftAssistantState().myNextPick=10` instead of null. Unchanged `js/war-room-draft-state.js` caps currentPick at totalPicks and selects first own pick >= currentPick, reshowing already consumed owned final selection. `js/war-room-command-bar.js` treats null myNextPick as complete. WR-135 retains its strict failing oracle, with 5/10 reload and 9/10 nonterminal PASS, 10/10 terminal FAIL, terminal reload and 20×30 not run.
 
-Manager inspected current `scripts/test-draft-invariants.mjs`: it already runs complete 10×16 and 14×16 actual app/browser drafts plus a synthetic ESPN segment; no 2×5/20×30 full-draft scenario was present. Reuse this real app-side harness, avoid duplicating WR-133.
+## Sole runnable assignment: WR-136 production repair
 
-## Sole bounded assignment — WR-135
+WR-135 status BLOCKED, dependency HARD on WR-136; no further WR-135 Builder writes, rebase, test relaxation, self-audit or merge. Preserve exact blocked branch/PR #379. No independent audit for WR-135 until it is lawfully resumed and fully validated.
 
-ROLE: Implementation Engineer / Builder
-TASK: WR-135 — Supported-Envelope Full-Draft Synthetic Boundary Regression
-MODE: STANDARD_CHAT_HIGH / FAST_REFRESH
-BRANCH: `wr-135-supported-envelope-full-draft-invariants`
-TASK SPEC: `.ai/manager/WR-135.md`
+WR-136 is a DISTINCT Builder production-remediation task, STANDARD_CHAT_HIGH / FAST_REFRESH, assigned branch `wr-136-terminal-next-turn-production-remediation`. Full task spec: `.ai/manager/WR-136.md`.
 
-Exactly three authorized Builder writes:
-- `scripts/test-draft-invariants.mjs`
-- `.ai/builder/WR135_SUPPORTED_ENVELOPE_FULL_DRAFT_EVIDENCE.md`
-- `.ai/builder/HANDOFF.md`
+WR-136 exact four authorized writes:
+- `js/war-room-draft-state.js` — minimum terminal-only `getDraftAssistantState()` correction;
+- `scripts/test-browser.mjs` — focused real-app terminal owned-final, unowned-final, N−1 and saved/reloaded regression; preserve preterminal semantics;
+- `.ai/builder/WR136_TERMINAL_TURN_REPAIR_EVIDENCE.md`;
+- `.ai/builder/WR136_TERMINAL_TURN_REPAIR_HANDOFF.md` (NOT shared `.ai/builder/HANDOFF.md`).
 
-Run the full 2-team×5-round×slot-2 (10 picks) and 20-team×30-round×slot-20 (600 picks) synthetic local app-side drafts; prove per-pick numbered identity/snake ownership, full-state persistence/terminal, no fabricated next pick, deterministic digests and zero unexpected network use. Preserve existing full-draft / ESPN / WR-133 evidence. Named focused test, `npm test`, exact-final-head FULL CI, then freeze Builder head and STOP for Manager freeze/fresh independent audit.
+No production change under WR-135 and NO modifications to its existing strict test/branch; no WR-133 regression edits. Require focused browser, npm test, exact-final-head genuine FULL CI and Builder frozen OPEN/UNMERGED PR. Manager then freezes and assigns a FRESH distinct WR-137 independent audit only on that immutable WR-136 target; no self-audit/automatic merge. Separate Manager acceptance/guarded integration and genuine canonical-main FULL CI required before WR-136 closure. Only after that can Manager separately authorize controlled WR-135 resumption and full two-extreme strict tests.
 
-**Activation gate:** This Manager control-plane PR must pass exact-head Governance and merge. Genuine post-merge canonical-main push Governance must pass. Only afterward Manager creates `wr-135-supported-envelope-full-draft-invariants` from the exact THEN-CURRENT canonical main and verifies 0 ahead / 0 behind. Historical checkpoint `b4bfd575f913fbdf00865fa88d3ca1ef17d744ff` is NOT an eligible stale Builder branch creation SHA.
+**Activation:** Manager WR-D053 PR exact-head Governance SUCCESS → merge → genuine canonical-main push Governance SUCCESS → create untouched WR-136 Builder branch at exact THEN-CURRENT canonical main; verify 0 ahead / 0 behind. The pre-activation checkpoint `413be06069e395a87a2e0a0849b2f893d0b81451` is NOT the lawful Builder creation SHA.
 
-## Out of scope
+## Boundaries
 
-This is app-side synthetic full-draft boundary evidence only; it does not certify extreme Companion E2E, exact-current live ESPN fallback, independent structured Direct, deployment/rollback, physical devices, 2027 source freshness or draft-ready release. No source/provider contact, A4/2027 refresh, Track B, production/Companion/policy/ranking/dataset/package/workflow edit, deployment, rollback or release. No other employee activated pending WR-135 Builder result.
+No provider contact, A4/2027 source work, ranking/scoring/recommendation policy change, Companion/deployment/workflow changes, structured Direct promotion, paused Track B work, rollback/release or draft-ready declaration.

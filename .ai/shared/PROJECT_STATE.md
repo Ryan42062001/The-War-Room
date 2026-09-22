@@ -1,19 +1,17 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-21 — WR-D052 assigns WR-135 bounded app-side full-draft supported-envelope synthetic regression after WR-133 / WR-134 closure
+Last Manager gate: 2026-09-21 — WR-D053 blocks WR-135 on confirmed terminal-turn production defect and separately authorizes WR-136 narrow audited remediation
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current Track A gate — WR-D052 / A6 supported-envelope boundary regression assignment
+## Current Track A gate — WR-D053 / WR-135 blocked, WR-136 production terminal-turn repair assigned
 
-WR-133/WR-134 remain CLOSED after independently audited, integrated 10×16 local synthetic Companion→real bridge→app/ACK regression, mandatory canonical-main FULL CI #35673699491 SUCCESS and WR-D051 closure canonical `b4bfd575f913fbdf00865fa88d3ca1ef17d744ff` with post-closure Governance #35674360648 SUCCESS.
+WR-133/WR-134 remain CLOSED; accepted synthetic 10×16 real Companion→bridge→app evidence is preserved. WR-135 original strict existing-browser draft-boundary test PR #379 remains OPEN/UNMERGED and FROZEN at documentary head `62fe08807f5db0105f078f7ccb80fd3bdb7ad59a`, three authorized paths. First failing candidate `69b3e6d9e568292dc1f005f9639323bea3c28b09` genuine FULL War Room CI #35675133071 FAILED in actual browser test job #106579993743; current PR-head FULL CI #35675575501 FAILED. The real local 2×5 slot2 scenario reached 10/10 with equal expected/actual numbered ledger and authoritative completion, but production `getDraftAssistantState().myNextPick=10` wrongly reshowed completed own pick instead of null. Manager read unmodified `js/war-room-draft-state.js`: capped currentPick and >= owned-pick lookup explain defect. 5/10 intermediate reload and 9/10 nonterminal passed; 10/10 terminal reload and 20×30/600 picks were NOT executed. No WR-135 PASS or supported-envelope claim is accepted.
 
-WR-132 identified another independent A6 evidence gap: no accepted complete current draft execution at both supported extremes 2 teams × 5 rounds and 20 teams × 30 rounds. Manager inspected existing `scripts/test-draft-invariants.mjs`, which runs full 10×16 and 14×16 browser/app drafts but not the 2×5/20×30 extremes. WR-D052 assigns only WR-135 Builder to extend that existing actual application/browser harness with deterministic local full 10- and 600-pick boundary scenarios, per-pick numbering/Mine-Taken ownership, terminal, persistence and error/traffic checks. Exactly three test/evidence files may change; package, product/Companion sources and accepted WR-133 test remain untouched.
+**WR-135 BLOCKED — HARD UPSTREAM WR-136:** preserve frozen Builder branch/PR, no more WR-135 writes/rebases/self-audit/merge. **WR-136 ASSIGNED** after Manager WR-D053 activation gates: separate Builder branch and EXACT four files only (terminal-only draft-state production correction, focused existing-browser test, task-specific evidence and distinct handoff). FRESH independent audit WR-137 of one immutable successful WR-136 final head required, then separate Manager guarded integration and genuine canonical-main FULL War Room CI SUCCESS. Only after WR-136 closure may Manager issue a separate WR-135 resumption/branch-reconciliation decision.
 
-WR-135 is audit-required and post-merge-FULL-CI-required. Activation requires Manager PR exact-head Governance SUCCESS, canonical merge, successful genuine canonical-main push Governance, and fresh Builder branch creation from exact then-current main. This is app-side synthetic supported-envelope evidence, NOT an extreme cross-layer E2E, live ESPN, provider, release or draft-ready certification.
-
-A4/2027 season/source gate, NO PROVIDER CONTACT, fallback-first / LIVE_DIRECT_UNVERIFIED, paused Track B, deployment/rollback and formal A6 release-go/no-go remain separately gated and unactivated.
+Formal A6 release remains open and unactivated; live ESPN/provider contact barred under WR-D027; structured Direct LIVE_DIRECT_UNVERIFIED, A4/2027 season/source gate, paused Track B, deployment/rollback and draft-ready go/no-go remain distinct.
 
 ## Returning-Player v2
 
