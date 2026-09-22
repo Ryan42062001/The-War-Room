@@ -8,24 +8,22 @@
     {
       "task_id": "WR-135",
       "owner": "Builder",
-      "worker_slot": "builder-wr135-supported-envelope-full-draft-invariants",
-      "status": "BLOCKED",
+      "worker_slot": "builder-wr135-r1-supported-envelope-post-wr136",
+      "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-135.md",
       "role_handoff": ".ai/builder/HANDOFF.md",
-      "assignment_main_sha": "b4bfd575f913fbdf00865fa88d3ca1ef17d744ff",
-      "worker_checkpoint_sha": "62fe08807f5db0105f078f7ccb80fd3bdb7ad59a",
-      "branch": "wr-135-supported-envelope-full-draft-invariants",
-      "pr": 379,
+      "assignment_main_sha": "c091236a6106f50fa26a113335aac8d6777bb06d",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-135-r1-supported-envelope-post-wr136",
+      "pr": null,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": true,
-      "blocker_type": "TECHNICAL",
+      "blocker_type": "NONE",
       "user_action_required": false,
       "blocked_on_tasks": [],
-      "blocked_on": [
-        "WR-136 production repair / WR-137 independent audit are integrated and closed after mandatory canonical-main FULL CI #35678978298 SUCCESS, but WR-135's historical failing test-only PR #379 remains frozen OPEN/UNMERGED at 62fe08807f5db0105f078f7ccb80fd3bdb7ad59a. The remaining technical/control-plane block is a SEPARATE Manager-approved, custody-safe same-task resumption/reconciliation of unchanged strict boundary tests onto repaired canonical main, with new exact-head FULL CI, fresh independent test audit, and post-merge FULL CI; none has been authorized by WR-D055 closure. Historical WR-135 FULL CI #35675133071 and #35675575501 remain FAILURE; 20x30/600 UNEXECUTED."
-      ],
+      "blocked_on": [],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": true,
       "allowed_path_prefixes": [
@@ -54,7 +52,7 @@
         "scripts/test-wr-133-companion-war-room-e2e.mjs",
         "scripts/test-wr-118-espn-replay-reconnect.mjs"
       ],
-      "next_gate": "WR-D055 closes repaired WR-136 and WR-137 ONLY. WR-135 remains BLOCKED/TECHNICAL solely pending separately scoped Manager resumption/rebase authorization after preserved PR #379 frozen HEAD 62fe08807f5db0105f078f7ccb80fd3bdb7ad59a and compatibility inspection against canon main bea75625ce18b3839bec71f436390902cdf6fa14. Do not alter existing frozen WR-135 branch/PR or weaken 2x5/20x30 strict oracle under this closure. Later Manager may authorize an explicit safe same-task integration plan: preserve historical failing PR & CI; move test-only changes onto repaired main by separately scoped path/custody mechanism, prove actual complete strict 10-/600-pick browser tests and FULL exact-head CI, then FRESH independent audit, guarded merge and genuine canonical-main FULL CI. Unresolved LOW WR137-F01 inherited slot1 9/10 command-bar premature complete copy remains accepted nonblocking for WR-136 and is not repaired/authorized here."
+      "next_gate": "WR-D056 NEW distinct same-task R1 Builder resumption branch wr-135-r1-supported-envelope-post-wr136 is ONLY runnable branch after exact-head Manager PR Governance SUCCESS, Manager merge, genuine post-merge canonical-main push Governance SUCCESS and fresh branch from exact THEN-CURRENT main, verified 0 ahead/behind. Original WR-135 PR #379 remains OPEN/UNMERGED, immutable historical head 62fe08807f5db0105f078f7ccb80fd3bdb7ad59a (first failed FULL #35675133071, documentary-head failed FULL #35675575501), no writes/rebase/force-push/merge there. On NEW branch, Builder reads frozen historical source/three-file diff, restores scripts/test-draft-invariants.mjs as byte-identical frozen blob 0b709b56ff8a0370ff1cfdb9c335593ed093193b (no weakening/modifying strict tests), creates/updates only .ai/builder/WR135_SUPPORTED_ENVELOPE_FULL_DRAFT_EVIDENCE.md and .ai/builder/HANDOFF.md with separately truthful new-run evidence and historical fail custody. New final PR contains EXACT THREE authorized paths, no production/Companion/command-bar/test-browser/package/workflow/ranking files. Run actual focused 2x5 full terminal/save/reload and full 20x30 600 unique picks, untouched baseline 10x16/14x16, WR133 named regression, npm test and exact FINAL HEAD FULL CI, record actual 600-pick runtime/evidence. If another genuine defect/capacity blocker, stop/fail closed with reproducer (no assertion relaxation). Manager freezes immutable new PR head, FRESH independent audit in separately authorized lane, only accepted PASS-family allows guarded new PR merge and mandatory genuine canonical-main FULL CI before WR135 closure. This does NOT authorize provider contact, LOW WR137-F01 repair, A4/2027 source work, release or draft-ready claim."
     }
   ]
 }
