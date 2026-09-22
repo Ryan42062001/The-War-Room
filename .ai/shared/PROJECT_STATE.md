@@ -1,17 +1,17 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-21 — WR-D060 freezes draft WR-139 workflow merge-receipt proposal and assigns fresh WR-140 independent audit after completed WR-D058 closure; A6 remains open
+Last Manager gate: 2026-09-21 — WR-D061 accepts independent WR-140 FAIL, freezes original draft WR-139 PR #389 and assigns fresh narrow WR-139 R1 proposal remediation after Manager gates; A6 remains open
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current workflow-control gate — WR-D060 / WR-139 proposal frozen, WR-140 independent audit assigned
+## Current workflow-control gate — WR-D061 / FAILED original WR-139 proposal frozen; separate R1 repair assigned
 
-WR-135/WR-138 scoped local synthetic boundary tasks are CLOSED with documented prior integration-order exception and genuine canonical FULL #35683269053 SUCCESS, followed by WR-D058 Manager closure PR #390 merged `ada3ddcb6dc9131636edd734fdf18f96c66af55f` and genuine post-closure canonical-main Governance #35684250109 SUCCESS. Original failed historical WR-135 PR #379 remains OPEN/UNMERGED/FROZEN. LOW WR137-F01 remains unresolved; formal A6, extreme Companion E2E, live/provider, A4/2027 rights, Track B, deployment/release/draft-ready still separate.
+WR-140 independent audit PR #392 exact Auditor head `51f61b50e0d3aa8ed480be5e63583af4237cc23b`, two Auditor-only files, exact-head Governance #35684995855 SUCCESS, verdict **FAIL — REMEDIATION REQUIRED** (MEDIUM/BLOCKING WR140-M01 original failed/absent/stalled full-canary correction deadlock, WR140-M02 docs-only Governance vs blanket FULL contradiction). Manager accepted the FAIL, NOT a PASS, in original DRAFT PR #389 comment 5771012435. Separate Auditor EVIDENCE PR #392 merged `facffe7e7083ec6103998ce55f585294bebdacfc`; genuine post-evidence canonical-main Governance #35685268974 SUCCESS. WR-140 is CLOSED as completed FAILED independent audit publication.
 
-Distinct draft workflow safeguard proposal PR #389 is OPEN/UNMERGED at immutable `69ff526e7016189b2acc167c7837a4d224217e97`, one `.ai/shared/WORKFLOW.md` path, exact-head Governance #35683703468 SUCCESS. Canonical main WORKFLOW.md remains byte-identical to original proposal base; intervening main is nonoverlapping Manager documentation. WR-D060 freezes WR-139 proposal as AUDIT_READY and assigns FRESH separate WR-140 Independent Auditor/QA only after Manager control-plane exact-head Governance/merge/genuine post-merge canonical Governance and fresh exact-new-main separate Auditor branch 0/0.
+Original WR-139 DRAFT proposal PR #389 at `69ff526e7016189b2acc167c7837a4d224217e97` remains OPEN/UNMERGED/FROZEN and is NOT canonical or approved. WR-D061 separately authorizes SAME-TASK WR-139 R1 narrow documentation-only remediation on NEW distinct branch `manager/wr-139-r1-failed-canary-and-docs-only-gate-remediation` ONLY after Manager audit-failure control-plane PR exact-head Governance/merge, genuine post-merge canonical-main PUSH Governance SUCCESS, then new exact-current-main branch bootstrap verified 0 ahead/behind. R1 may write ONLY `.ai/shared/WORKFLOW.md`: correct M01 to permit separately authorized prospective correction/revert after original failed/absent/cancelled/stalled canary while retaining original failure and requiring corrected SHA's own applicable genuine CI; correct M02 to require actual original-merge-SHA canonical PUSH Governance for genuinely docs-only applicable class and FULL product for all originally FULL-required changes, including prior `force-full-ci`. No substitute later green run, no fabricated pre-merge authority, no direct GitHub ruleset enforcement claim. Publish NEW distinct draft PR and undergo FRESH separate independent audit; old FAIL never transfers.
 
-The proposal is NOT YET canonical and does NOT technically enforce GitHub merge permissions/rulesets. Auditor must publish exactly two authorized Auditor-only files/one distinct PR and independent verdict on immutable exact head; Manager later separately accepts/rejects and decides whether/how to adopt. No workflow merge until that decision.
+WR-135/138 scoped closure and FULL #35683269053 remain accepted historical. Original failed WR-135 PR #379 untouched OPEN/UNMERGED/frozen, inherited LOW WR137-F01 unresolved; extreme Companion E2E, A6/provider/A4/2027/Track B/deployment/release/draft-ready holds unchanged.
 
 ## Current Track A gate — WR-D058 / WR-135 scoped local synthetic envelope evidence CLOSED, formal A6 OPEN
 
