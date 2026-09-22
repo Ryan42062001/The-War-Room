@@ -1397,6 +1397,196 @@ const auditDeduped = await page.evaluate(() => {
 assert.equal(auditDeduped.length, 1);
 assert.equal(auditDeduped.action, 'DRAFT');
 
+// WR-136: actual browser/app terminal-turn regression in fresh draft sessions.
+// Use the loaded production state function, real row toggle, real command-bar
+// rendering and real app persistence. No copied production implementation.
+async function runTerminalTurnBrowserCase({slot, finalOwned}) {
+  const context = await browser.newContext();
+  const unexpectedRequests = [];
+  const appOrigin = new URL(appUrl);
+  assert.equal(appOrigin.protocol, 'http:', 'WR-136 focused browser test must use local HTTP');
+  assert.ok(['127.0.0.1', 'localhost'].includes(appOrigin.hostname),
+    'WR-136 focused browser test must not use a remote origin');
+  await context.route('**/*', async route => {
+    let permitted = false;
+    try { permitted = new URL(route.request().url()).origin === appOrigin.origin; } catch {}
+    if (!permitted) {
+      const url = route.request().url();
+      unexpectedRequests.push(url.split('?')[0].slice(0, 150));
+      await route.abort();
+      return;
+    }
+    await route.continue();
+  });
+  const draftPage = await context.newPage();
+  const focusedErrors = [];
+  draftPage.on('pageerror', error => focusedErrors.push(error.message));
+  draftPage.on('console', message => {
+    if (message.type() === 'error') focusedErrors.push(message.text());
+  });
+  await draftPage.goto(appUrl, {waitUntil:'load'});
+  await draftPage.waitForSelector('tr.draftrow', {state:'attached'});
+  const setup = await draftPage.evaluate(slot => {
+    const applied = WarRoomCommandBarFixes.applySettings({
+      teams:2, rounds:5, slot
+    }, false);
+    const rows = Array.from(document.querySelectorAll('tr.draftrow')).slice(0, 10);
+    return {applied, rows:rows.map(row => row.getAttribute('data-name'))};
+  }, slot);
+  assert.deepEqual(setup.applied, {teams:2, rounds:5, slot},
+    'WR-136 actual app boundary settings');
+  assert.equal(new Set(setup.rows).size, 10, 'WR-136 10 distinct committed board rows');
+  const expectedOwnPicks = slot === 2 ? [2, 3, 6, 7, 10] : [1, 4, 5, 8, 9];
+  const snapshots = [];
+  const snapshot = async (label, completed, expectedNext, expectedCurrent, expectedMode) => {
+    const result = await draftPage.evaluate(() => {
+      const state = getDraftAssistantState();
+      const completion = getDraftCompletionStatus(state);
+      const rows = Array.from(document.querySelectorAll('tr.draftrow'));
+      const drafted = rows.filter(row =>
+        row.classList.contains('drafted-mine') || row.classList.contains('drafted-other')
+      ).map(row => ({
+        name:row.getAttribute('data-name'),
+        pick:Number(row.getAttribute('data-pick')),
+        teamSlot:Number(row.getAttribute('data-team-slot')),
+        status:row.classList.contains('drafted-mine') ? 'mine' : 'taken'
+      })).sort((left, right) => left.pick - right.pick);
+      return {
+        state, completion:{complete:completion.complete,
+          authoritative:completion.authoritative, provisional:completion.provisional,
+          myRosterCount:completion.myRosterCount},
+        drafted, boardRows:rows.length,
+        mode:document.body.getAttribute('data-draft-command-mode'),
+        modeLabel:document.querySelector('#draft-command-bar .draft-command-mode')?.textContent?.trim(),
+        controls:{
+          teams:Number(document.getElementById('pcTeams').value),
+          rounds:Number(document.getElementById('pcRounds').value),
+          slot:Number(document.getElementById('pcSlot').value)
+        }
+      };
+    });
+    const prefix = 'WR-136 slot' + slot + ' ' + label + ': ';
+    assert.deepEqual(result.controls, {teams:2, rounds:5, slot},
+      prefix + 'actual visible settings');
+    assert.equal(result.boardRows, 717, prefix + 'board universe');
+    assert.deepEqual({
+      teams:result.state.teams, rounds:result.state.rounds,
+      draftSlot:result.state.draftSlot, totalPicks:result.state.totalPicks
+    }, {teams:2, rounds:5, draftSlot:slot, totalPicks:10},
+    prefix + 'actual effective settings');
+    assert.deepEqual(result.state.myPicks, expectedOwnPicks,
+      prefix + 'unchanged snake-owned pick sequence');
+    assert.equal(result.state.currentPick, expectedCurrent,
+      prefix + 'preserved capped currentPick');
+    assert.equal(result.state.myNextPick, expectedNext,
+      prefix + 'next turn, including terminal null');
+    assert.equal(result.state.picksUntilMyTurn,
+      expectedNext === null ? null : expectedNext - expectedCurrent,
+      prefix + 'turn countdown');
+    assert.equal(result.state.onClock,
+      expectedNext !== null && expectedNext === expectedCurrent,
+      prefix + 'on-clock truth');
+    assert.equal(result.drafted.length, completed, prefix + 'exact numbered ledger count');
+    assert.equal(new Set(result.drafted.map(row => row.pick)).size, completed,
+      prefix + 'unique numbered picks');
+    assert.equal(new Set(result.drafted.map(row => row.name)).size, completed,
+      prefix + 'unique player identities');
+    assert.deepEqual(result.drafted, setup.rows.slice(0, completed).map((name, index) => {
+      const pick = index + 1;
+      const round = Math.ceil(pick / 2);
+      const teamSlot = round % 2 ? (pick - 1) % 2 + 1 : 2 - (pick - 1) % 2;
+      return {name, pick, teamSlot, status:teamSlot === slot ? 'mine' : 'taken'};
+    }), prefix + 'real numbered row metadata and Mine/Taken ownership');
+    assert.deepEqual(result.completion, {
+      complete:completed === 10, authoritative:completed === 10,
+      provisional:false,
+      myRosterCount:expectedOwnPicks.filter(pick => pick <= completed).length
+    }, prefix + 'actual authoritative completion and roster');
+    if (expectedMode !== null) {
+      await draftPage.waitForFunction(mode =>
+        document.body.getAttribute('data-draft-command-mode') === mode,
+        expectedMode);
+      const rendered = await draftPage.evaluate(() => ({
+        mode:document.body.getAttribute('data-draft-command-mode'),
+        modeLabel:document.querySelector('#draft-command-bar .draft-command-mode')?.textContent?.trim()
+      }));
+      assert.equal(rendered.mode, expectedMode, prefix + 'real command-bar mode');
+      assert.equal(rendered.modeLabel, expectedMode === 'complete'
+        ? 'DRAFT COMPLETE' : expectedMode === 'on-clock' ? 'ON THE CLOCK' : 'WAITING',
+      prefix + 'real command-bar label');
+    }
+    const summary = {
+      slot, label, completed, ownCount:result.completion.myRosterCount,
+      currentPick:result.state.currentPick, nextPick:result.state.myNextPick,
+      picksUntilMyTurn:result.state.picksUntilMyTurn, onClock:result.state.onClock,
+      authoritative:result.completion.authoritative, mode:expectedMode
+    };
+    snapshots.push(summary);
+    console.log('WR136_TERMINAL_TURN_CHECKPOINT ' + JSON.stringify(summary));
+    return result;
+  };
+  const mark = async pick => {
+    const result = await draftPage.evaluate(({pick, slot}) => {
+      const row = Array.from(document.querySelectorAll('tr.draftrow'))[pick - 1];
+      const round = Math.ceil(pick / 2);
+      const teamSlot = round % 2 ? (pick - 1) % 2 + 1 : 2 - (pick - 1) % 2;
+      setDraftMarkMode(teamSlot === slot ? 'mine' : 'taken');
+      toggleDraft(row);
+      return {pick:Number(row.getAttribute('data-pick')),
+        status:getDraftRowStatus(row), teamSlot:Number(row.getAttribute('data-team-slot'))};
+    }, {pick, slot});
+    assert.deepEqual(result, {
+      pick, status:(slot === (Math.ceil(pick / 2) % 2
+        ? (pick - 1) % 2 + 1 : 2 - (pick - 1) % 2)) ? 'mine' : 'taken',
+      teamSlot:Math.ceil(pick / 2) % 2
+        ? (pick - 1) % 2 + 1 : 2 - (pick - 1) % 2
+    }, 'WR-136 real toggle operation #' + pick);
+  };
+
+  await snapshot('empty-on-clock-or-waiting', 0, slot, 1,
+    slot === 1 ? 'on-clock' : 'waiting');
+  for (let pick = 1; pick <= 10; pick++) {
+    await mark(pick);
+    if (pick === 1) await snapshot('ordinary-nonterminal', 1,
+      slot === 2 ? 2 : 4, 2, slot === 2 ? 'on-clock' : 'waiting');
+    if (pick === 8) await snapshot('ordinary-last-round-turn', 8,
+      slot === 2 ? 10 : 9, 9, slot === 2 ? 'waiting' : 'on-clock');
+    if (pick === 9) await snapshot('penultimate-9-of-10', 9,
+      slot === 2 ? 10 : null, 10, slot === 2 ? 'on-clock' : null);
+    if (pick === 10) await snapshot(finalOwned ? 'terminal-own-final' : 'terminal-other-final',
+      10, null, 10, 'complete');
+  }
+  const saved = await draftPage.evaluate(() => saveState());
+  assert.equal(saved, true, 'WR-136 real saved terminal draft');
+  await draftPage.reload({waitUntil:'load'});
+  await draftPage.waitForSelector('tr.draftrow', {state:'attached'});
+  await snapshot('terminal-reload', 10, null, 10, 'complete');
+
+  // Undo the final pick through the same real row handler: a valid incomplete
+  // own turn must return, rather than being suppressed by a sticky completion flag.
+  await draftPage.evaluate(() => {
+    const row = Array.from(document.querySelectorAll('tr.draftrow'))[9];
+    setDraftMarkMode(getDraftRowStatus(row));
+    toggleDraft(row);
+  });
+  await snapshot('undo-reopened-9-of-10', 9,
+    slot === 2 ? 10 : null, 10, slot === 2 ? 'on-clock' : null);
+  await mark(10);
+  await snapshot('recompleted-10-of-10', 10, null, 10, 'complete');
+  assert.deepEqual(focusedErrors, [], 'WR-136 browser errors: ' + focusedErrors.join(' | '));
+  assert.deepEqual(unexpectedRequests, [],
+    'WR-136 unexpected non-local request(s): ' + unexpectedRequests.join(' | '));
+  await context.close();
+  return {slot, finalOwned, validated:10, checkpoints:snapshots.length,
+    externalRequests:unexpectedRequests.length, browserErrors:focusedErrors.length};
+}
+
+const terminalTurnRepair = {
+  ownFinal:await runTerminalTurnBrowserCase({slot:2, finalOwned:true}),
+  otherFinal:await runTerminalTurnBrowserCase({slot:1, finalOwned:false})
+};
+console.log('WR136_TERMINAL_TURN_REPAIR_PASS ' + JSON.stringify(terminalTurnRepair));
+
 await browser.close();
 if (server) await new Promise(resolve => server.close(resolve));
 if (errors.length) throw new Error('Browser console errors: ' + errors.join(' | '));
