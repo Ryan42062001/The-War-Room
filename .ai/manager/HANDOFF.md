@@ -1,32 +1,35 @@
 # Manager / Architect Handoff
 
-STATUS: WR-D053 — WR-135 FROZEN BLOCKED / DISTINCT WR-136 TERMINAL NEXT-TURN PRODUCTION REMEDIATION AUTHORIZED
+STATUS: WR-D054 — WR-136 EXACT FINAL TARGET FROZEN / WR-137 FRESH INDEPENDENT AUDIT ACTIVATION
 WORKFLOW: V3.5 CANONICAL
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-## Canonical incident and independently reviewed evidence
+## Immutable production-repair audit target
 
-Canonical main at decision: `413be06069e395a87a2e0a0849b2f893d0b81451`. WR-135 PR #379 remains OPEN/UNMERGED, currently frozen documentary head `62fe08807f5db0105f078f7ccb80fd3bdb7ad59a`, cumulative diff exactly three originally authorized WR-135 test/evidence/handoff paths. First failed test target `69b3e6d9e568292dc1f005f9639323bea3c28b09` genuine FULL CI #35675133071 FAILED, product job #106579993743 FAILURE at actual 2×5/slot2 terminal pick 10. PR current-head FULL CI #35675575501 also FAILED (its Governance succeeded). No passing WR-135 FULL CI, 20×30 execution or terminal-reload proof exists.
+Canonical main at Manager freeze: `0a713d25d05520f2c0b9843cd0a8781bb5e19dbf`.
+WR-136 Builder PR #381: OPEN / UNMERGED and mergeable.
+Builder branch: `wr-136-terminal-next-turn-production-remediation`.
+Frozen exact Builder head: `685dbb051865b7d512fcfff446cfe4788c018944`.
+Verified creation base/cumulative diff: 4 commits ahead / 0 behind; exactly four WR-136-authorized paths: `js/war-room-draft-state.js`, `scripts/test-browser.mjs`, `.ai/builder/WR136_TERMINAL_TURN_REPAIR_EVIDENCE.md`, `.ai/builder/WR136_TERMINAL_TURN_REPAIR_HANDOFF.md`.
+Do not move, merge, force-push or modify Builder head/PR while WR-137 independently audits. Target movement invalidates verdict transfer and requires Manager new freeze/re-audit.
 
-Independent Manager read-only source and log review: at 10/10 complete, actual/expected ledger digests equal, authoritative completion true, own roster 5, but actual `getDraftAssistantState().myNextPick=10` instead of null. Unchanged `js/war-room-draft-state.js` caps currentPick at totalPicks and selects first own pick >= currentPick, reshowing already consumed owned final selection. `js/war-room-command-bar.js` treats null myNextPick as complete. WR-135 retains its strict failing oracle, with 5/10 reload and 9/10 nonterminal PASS, 10/10 terminal FAIL, terminal reload and 20×30 not run.
+## Actual source/test and CI inspected
 
-## Sole runnable assignment: WR-136 production repair
+Production fix only guards existing own-pick search with `completedPicks < totalPicks`; capped currentPick, snake-pick list and ordinary incomplete turns retain their original behavior. Current real-browser test performs 2×5 slot2 own-final / slot1 other-final scenarios, 16 checkpoints, 9/10, completed 10/10 null-next/false on-clock, real command-bar DRAFT COMPLETE, saved terminal reload, undo/recomplete, row ownership and local-only request check.
 
-WR-135 status BLOCKED, dependency HARD on WR-136; no further WR-135 Builder writes, rebase, test relaxation, self-audit or merge. Preserve exact blocked branch/PR #379. No independent audit for WR-135 until it is lawfully resumed and fully validated.
+Exact FINAL Builder head `685dbb051865b7d512fcfff446cfe4788c018944` War Room CI #35677379184 completed SUCCESS: classify #106586624387, Governance #106586665125, full product #106586696077 SUCCESS; bootstrap #106586665477 SKIPPED. Manager independently read decoded job logs, confirming real browser focused 16 checkpoints and named PASS twice (browser-stress and npm test), Companion 167/167, baseline draft-invariants, WR-118, WR-133 three negative controls, zero focused browser errors/unexpected external requests. Earlier code candidate #35676911990 also green but is NOT final target. Historical WR-135 CI #35675133071 and #35675575501 remain genuine FAILURES.
 
-WR-136 is a DISTINCT Builder production-remediation task, STANDARD_CHAT_HIGH / FAST_REFRESH, assigned branch `wr-136-terminal-next-turn-production-remediation`. Full task spec: `.ai/manager/WR-136.md`.
+This verifies AUDIT_READY only; no Independent Auditor PASS yet. The production fix does NOT validate the still-unexecuted WR-135 20×30/600 boundary or authorize WR-135 resumption.
 
-WR-136 exact four authorized writes:
-- `js/war-room-draft-state.js` — minimum terminal-only `getDraftAssistantState()` correction;
-- `scripts/test-browser.mjs` — focused real-app terminal owned-final, unowned-final, N−1 and saved/reloaded regression; preserve preterminal semantics;
-- `.ai/builder/WR136_TERMINAL_TURN_REPAIR_EVIDENCE.md`;
-- `.ai/builder/WR136_TERMINAL_TURN_REPAIR_HANDOFF.md` (NOT shared `.ai/builder/HANDOFF.md`).
+## Fresh independent WR-137 assignment
 
-No production change under WR-135 and NO modifications to its existing strict test/branch; no WR-133 regression edits. Require focused browser, npm test, exact-final-head genuine FULL CI and Builder frozen OPEN/UNMERGED PR. Manager then freezes and assigns a FRESH distinct WR-137 independent audit only on that immutable WR-136 target; no self-audit/automatic merge. Separate Manager acceptance/guarded integration and genuine canonical-main FULL CI required before WR-136 closure. Only after that can Manager separately authorize controlled WR-135 resumption and full two-extreme strict tests.
+Assign ONLY WR-137 to fresh Independent Auditor / QA chat, STANDARD_CHAT_HIGH / FAST_REFRESH, on distinct branch `wr-137-wr136-terminal-next-turn-independent-audit`.
 
-**Activation:** Manager WR-D053 PR exact-head Governance SUCCESS → merge → genuine canonical-main push Governance SUCCESS → create untouched WR-136 Builder branch at exact THEN-CURRENT canonical main; verify 0 ahead / 0 behind. The pre-activation checkpoint `413be06069e395a87a2e0a0849b2f893d0b81451` is NOT the lawful Builder creation SHA.
+READ `.ai/manager/WR-137.md` plus canonical workflow, active registry, Auditor charter, WR-136 task spec and frozen Builder source/evidence. Audit EXACT WR-136 Builder PR #381 `685dbb051865b7d512fcfff446cfe4788c018944`, not a floating PR or earlier green code candidate. Auditor writes EXACTLY `.ai/auditor/WR137_TERMINAL_NEXT_TURN_PRODUCTION_INDEPENDENT_AUDIT.md` and `.ai/auditor/HANDOFF.md`; publish one open/unmerged two-file PR with immutable Auditor head and applicable exact-head Governance. Neither WR-136 nor WR-135 Builder lane may write or merge during audit.
 
-## Boundaries
+**Activation gate:** This WR-D054 Manager control-plane PR must pass exact-head Governance and merge; genuine post-merge canonical-main push Governance must then succeed. ONLY THEN create untouched WR-137 audit branch from exact new canonical main and verify 0 ahead/behind. The pre-activation `0a713d25d05520f2c0b9843cd0a8781bb5e19dbf` checkpoint is NOT an authorized stale Auditor branch creation SHA.
 
-No provider contact, A4/2027 source work, ranking/scoring/recommendation policy change, Companion/deployment/workflow changes, structured Direct promotion, paused Track B work, rollback/release or draft-ready declaration.
+## Still blocked
+
+WR-135 PR #379 remains OPEN / UNMERGED / HARD BLOCKED at exact `62fe08807f5db0105f078f7ccb80fd3bdb7ad59a`; its historical CI failures stay failures; 20×30/600 remains UNEXECUTED. Even a fresh WR-137 PASS is not authority to merge WR-136 automatically. Manager separately accepts a verdict, guardedly integrates only exact unchanged Builder head if justified, requires genuine canonical-main FULL War Room CI before closure, and later separately decides WR-135 resumption. NO PROVIDER CONTACT, A4/2027 source refresh, Track B, deployment/rollback, release or draft-ready go/no-go.

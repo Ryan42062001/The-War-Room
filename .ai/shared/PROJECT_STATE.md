@@ -1,17 +1,19 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-21 — WR-D053 blocks WR-135 on confirmed terminal-turn production defect and separately authorizes WR-136 narrow audited remediation
+Last Manager gate: 2026-09-21 — WR-D054 freezes WR-136 exact terminal-turn repair and assigns WR-137 fresh independent audit after activation gates
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current Track A gate — WR-D053 / WR-135 blocked, WR-136 production terminal-turn repair assigned
+## Current Track A gate — WR-D054 / WR-136 immutable repair frozen, fresh WR-137 independent audit assigned
 
-WR-133/WR-134 remain CLOSED; accepted synthetic 10×16 real Companion→bridge→app evidence is preserved. WR-135 original strict existing-browser draft-boundary test PR #379 remains OPEN/UNMERGED and FROZEN at documentary head `62fe08807f5db0105f078f7ccb80fd3bdb7ad59a`, three authorized paths. First failing candidate `69b3e6d9e568292dc1f005f9639323bea3c28b09` genuine FULL War Room CI #35675133071 FAILED in actual browser test job #106579993743; current PR-head FULL CI #35675575501 FAILED. The real local 2×5 slot2 scenario reached 10/10 with equal expected/actual numbered ledger and authoritative completion, but production `getDraftAssistantState().myNextPick=10` wrongly reshowed completed own pick instead of null. Manager read unmodified `js/war-room-draft-state.js`: capped currentPick and >= owned-pick lookup explain defect. 5/10 intermediate reload and 9/10 nonterminal passed; 10/10 terminal reload and 20×30/600 picks were NOT executed. No WR-135 PASS or supported-envelope claim is accepted.
+WR-135 remains BLOCKED/HARD on WR-136, PR #379 OPEN/UNMERGED at frozen `62fe08807f5db0105f078f7ccb80fd3bdb7ad59a`. Its historical FULL CI #35675133071 / #35675575501 remain FAILED; 20×30/600-pick full draft and its 2×5 terminal reload were not executed in that failing WR-135 run. No WR-135 Builder write, self-audit, merge or resumption is authorized.
 
-**WR-135 BLOCKED — HARD UPSTREAM WR-136:** preserve frozen Builder branch/PR, no more WR-135 writes/rebases/self-audit/merge. **WR-136 ASSIGNED** after Manager WR-D053 activation gates: separate Builder branch and EXACT four files only (terminal-only draft-state production correction, focused existing-browser test, task-specific evidence and distinct handoff). FRESH independent audit WR-137 of one immutable successful WR-136 final head required, then separate Manager guarded integration and genuine canonical-main FULL War Room CI SUCCESS. Only after WR-136 closure may Manager issue a separate WR-135 resumption/branch-reconciliation decision.
+WR-136 Builder PR #381 is now **AUDIT_READY**, OPEN/UNMERGED at immutable exact head `685dbb051865b7d512fcfff446cfe4788c018944` from creation base `0a713d25d05520f2c0b9843cd0a8781bb5e19dbf`, four authorized cumulative files. Narrow production `getDraftAssistantState()` fix guards own-pick lookup only when `completedPicks < totalPicks`; focused real-browser test covers slot2 own-final and slot1 opponent-final 2×5 states, 9/10→10/10, saved terminal/reload, undo/recomplete, real command bar, zero browser errors or unexpected external requests. Manager independently verified actual exact-final-head FULL War Room CI #35677379184 SUCCESS with product #106586696077, Companion 167/167, existing draft-invariants baseline, WR-118 and accepted WR-133. This is **Manager audit-readiness**, not an independent verdict or approval to integrate.
 
-Formal A6 release remains open and unactivated; live ESPN/provider contact barred under WR-D027; structured Direct LIVE_DIRECT_UNVERIFIED, A4/2027 season/source gate, paused Track B, deployment/rollback and draft-ready go/no-go remain distinct.
+WR-D054 assigns distinct fresh Independent Auditor/QA WR-137 to challenge ONLY immutable PR #381/`685dbb051865b7d512fcfff446cfe4788c018944`, after Manager PR exact-head Governance/merge, genuine post-merge canonical-main push Governance, and 0-ahead/0-behind Auditor branch bootstrap from exact new main. WR-136 Builder head must not move during audit. Auditor publishes one two-file open/unmerged evidence PR with exact-head Governance and independent PASS-family/FAIL. Manager separately disposes the audit; any later exact-head-guarded WR-136 integration requires genuine canonical-main FULL CI before WR-136 closure, and only a later separate Manager decision may resume WR-135.
+
+WR-133/134 remain CLOSED; formal A6 release gate remains open/unactivated; WR-D027 NO PROVIDER CONTACT, WR-D018 fallback-first/LIVE_DIRECT_UNVERIFIED, A4/2027 source season-gate, paused Track B, deployment/rollback and draft-ready go/no-go remain unchanged.
 
 ## Returning-Player v2
 

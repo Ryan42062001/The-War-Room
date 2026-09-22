@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-22T01:35:00Z",
+  "updated_at_utc": "2026-09-22T02:08:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -62,13 +62,13 @@
       "task_id": "WR-136",
       "owner": "Builder",
       "worker_slot": "builder-wr136-terminal-next-turn-production-remediation",
-      "status": "ASSIGNED",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-136.md",
       "role_handoff": ".ai/builder/HANDOFF.md",
       "assignment_main_sha": "413be06069e395a87a2e0a0849b2f893d0b81451",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "685dbb051865b7d512fcfff446cfe4788c018944",
       "branch": "wr-136-terminal-next-turn-production-remediation",
-      "pr": null,
+      "pr": 381,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
@@ -109,7 +109,58 @@
         "js/war-room-command-bar.js",
         "js/war-room-recommendations.js"
       ],
-      "next_gate": "WR-D053 Manager authorization PR must pass exact-head Governance, merge and genuine post-merge canonical-main push Governance SUCCESS. Only then create fresh assigned WR-136 branch from exact THEN-CURRENT main and verify 0 ahead/behind. Implement minimum production terminal-turn getDraftAssistantState() repair and focused real-browser regressions, exactly four paths, no WR-135 branch writes. Actual focused browser, npm test, exact-final-head FULL CI -> Manager target freeze -> FRESH independent Auditor new WR-137 task/PR on immutable exact target -> separate Manager acceptance/guarded integration -> genuine canonical-main FULL CI before WR-136 closure. Only after WR-136 closure can Manager separately authorize WR-135 safe resumption on repaired main. At activation registry role_handoff temporarily points to frozen existing .ai/builder/HANDOFF.md only as READ-ONLY incident context, because new WR-136-specific handoff does not exist until Builder publishes. WR-136 MUST NOT write that existing WR-135 handoff; publish separate WR136_TERMINAL_TURN_REPAIR_HANDOFF.md and Manager repoints registry in later acceptance transition."
+      "next_gate": "WR-D054 Manager independently froze unchanged WR-136 Builder PR #381 exact 685dbb051865b7d512fcfff446cfe4788c018944 (four authorized cumulative paths; base 0a713d25d05520f2c0b9843cd0a8781bb5e19dbf; exact-final-head FULL War Room CI #35677379184 SUCCESS with classify #106586624387, Governance #106586665125, test #106586696077; bootstrap #106586665477 SKIPPED). Code patch only guards terminal own-pick search; actual browser logs prove slot2 and slot1 2x5 16 total checkpoints, correct 9/10, 10/10, terminal reload, undo/recomplete, and zero browser errors/unexpected requests; historical WR-135 failed CI remains failure. STOP WR-136 Builder edits, force-push and merge while WR-137 independently audits exact frozen target. Registry role_handoff stays existing main-path read-only until separately reconciled; task-specific WR-136 handoff resides at frozen Builder head, and is the authoritative Builder task handoff for audit. WR-137 must publish exactly two Auditor-only files on a separate branch/PR with actual exact-head Governance and one PASS-family/FAIL verdict. Manager separately reviews; only accepted PASS-family on unchanged target allows later guarded Builder integration + genuine canonical-main FULL CI before WR-136 closure or any WR-135 resumption."
+    },
+    {
+      "task_id": "WR-137",
+      "owner": "Auditor",
+      "worker_slot": "auditor-wr137-wr136-terminal-next-turn-independent-audit",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-137.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": "0a713d25d05520f2c0b9843cd0a8781bb5e19dbf",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-137-wr136-terminal-next-turn-independent-audit",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "audit_target_task": "WR-136",
+      "audit_target_pr": 381,
+      "audit_target_branch": "wr-136-terminal-next-turn-production-remediation",
+      "audit_target_sha": "685dbb051865b7d512fcfff446cfe4788c018944",
+      "allowed_path_prefixes": [
+        ".ai/auditor/WR137_TERMINAL_NEXT_TURN_PRODUCTION_INDEPENDENT_AUDIT.md",
+        ".ai/auditor/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/builder/",
+        ".ai/research/",
+        ".ai/strategy/",
+        "js/",
+        "scripts/",
+        "extensions/",
+        "data/",
+        ".github/",
+        "src/"
+      ],
+      "forbidden_exact_paths": [
+        "package.json",
+        "README.md",
+        "index.html",
+        "script.js",
+        "war-room-config.js"
+      ],
+      "next_gate": "WR-D054 Manager control-plane PR exact-head Governance SUCCESS -> merge -> genuine canonical-main push Governance SUCCESS -> Manager creates untouched separate Auditor branch from exact new main (0 ahead/behind) -> activate fresh WR-137 independent chat. Auditor independently challenges immutable WR-136 PR #381 head 685dbb051865b7d512fcfff446cfe4788c018944, source diff, actual browser oracles, exact-head FULL CI #35677379184 and remaining boundaries; one two-file Auditor-only OPEN/UNMERGED PR with exact-head applicable Governance and one PASS-family/FAIL verdict. WR-136 and frozen WR-135 branches/PRs remain unchanged; no merge, provider, ranking, deployment or release."
     }
   ]
 }
