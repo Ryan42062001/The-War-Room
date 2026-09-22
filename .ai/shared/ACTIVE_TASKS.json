@@ -4,5 +4,99 @@
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": []
+  "tasks": [
+    {
+      "task_id": "WR-139",
+      "owner": "Manager",
+      "worker_slot": "manager-wr139-merge-guard-workflow-proposal",
+      "status": "AUDIT_READY",
+      "task_file": ".ai/manager/WR-139.md",
+      "role_handoff": ".ai/manager/HANDOFF.md",
+      "assignment_main_sha": "ada3ddcb6dc9131636edd734fdf18f96c66af55f",
+      "worker_checkpoint_sha": "69ff526e7016189b2acc167c7837a4d224217e97",
+      "branch": "manager/wr-d059-exact-merge-receipt-and-race-reconciliation",
+      "pr": 389,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": true,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/shared/WORKFLOW.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/builder/",
+        ".ai/auditor/",
+        "js/",
+        "scripts/",
+        "extensions/",
+        "data/",
+        ".github/",
+        "src/"
+      ],
+      "forbidden_exact_paths": [
+        "package.json",
+        "README.md",
+        "index.html",
+        "script.js",
+        "war-room-config.js",
+        ".ai/shared/ACTIVE_TASKS.json"
+      ],
+      "next_gate": "WR-D060 freezes existing separate DRAFT workflow proposal PR #389 at immutable 69ff526e7016189b2acc167c7837a4d224217e97 (exact one .ai/shared/WORKFLOW.md path, exact-head Governance #35683703468 SUCCESS) as WR-139 AUDIT_READY for fresh WR-140 independent workflow audit only. Freeze all proposal branch/PR writes or merges until independent verdict and separate Manager acceptance. Original WR-135 historical PR #379 untouched; WR-135/138 already CLOSED. After distinct WR-140 Auditor PR exact-head Governance and accepted PASS-family, Manager separately decides whether to adopt proposed text, ensure integration compatibility and post-workflow-main Governance. A workflow document is not GitHub technical branch/ruleset enforcement. Do not authorize source/CI/package change, provider, A6/release."
+    },
+    {
+      "task_id": "WR-140",
+      "owner": "Auditor",
+      "worker_slot": "auditor-wr140-wr139-merge-guard-workflow-independent-audit",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-140.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": "ada3ddcb6dc9131636edd734fdf18f96c66af55f",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-140-wr139-merge-guard-independent-audit",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "audit_target_task": "WR-139",
+      "audit_target_pr": 389,
+      "audit_target_branch": "manager/wr-d059-exact-merge-receipt-and-race-reconciliation",
+      "audit_target_sha": "69ff526e7016189b2acc167c7837a4d224217e97",
+      "allowed_path_prefixes": [
+        ".ai/auditor/WR140_WR139_MERGE_GUARD_WORKFLOW_INDEPENDENT_AUDIT.md",
+        ".ai/auditor/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/builder/",
+        "js/",
+        "scripts/",
+        "extensions/",
+        "data/",
+        ".github/",
+        "src/"
+      ],
+      "forbidden_exact_paths": [
+        "package.json",
+        "README.md",
+        "index.html",
+        "script.js",
+        "war-room-config.js"
+      ],
+      "next_gate": "WR-D060 Manager control-plane PR exact-head Governance SUCCESS -> merge -> genuine post-merge canonical-main PUSH Governance SUCCESS -> Manager creates separate WR-140 audit branch from exact THEN-CURRENT main, verifies identical 0 ahead/behind. Independently audit frozen DRAFT WR-139 proposal PR #389 at 69ff526e7016189b2acc167c7837a4d224217e97, exact one .ai/shared/WORKFLOW.md doc path and actual exact-head Governance #35683703468 SUCCESS. Publish one distinct OPEN/UNMERGED two-file Auditor PR with exact-final-Auditor-head applicable Governance and PASS/PASS WITH NON-BLOCKING FINDINGS/FAIL. No PR389 edit/merge, no CI scripts/branch settings modification, no WR135 reopening or release."
+    }
+  ]
 }
