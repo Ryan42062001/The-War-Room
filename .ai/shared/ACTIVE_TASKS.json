@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-22T01:10:00Z",
+  "updated_at_utc": "2026-09-22T01:35:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -9,21 +9,25 @@
       "task_id": "WR-135",
       "owner": "Builder",
       "worker_slot": "builder-wr135-supported-envelope-full-draft-invariants",
-      "status": "ASSIGNED",
+      "status": "BLOCKED",
       "task_file": ".ai/manager/WR-135.md",
       "role_handoff": ".ai/builder/HANDOFF.md",
       "assignment_main_sha": "b4bfd575f913fbdf00865fa88d3ca1ef17d744ff",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "62fe08807f5db0105f078f7ccb80fd3bdb7ad59a",
       "branch": "wr-135-supported-envelope-full-draft-invariants",
-      "pr": null,
-      "dependency": "INDEPENDENT",
+      "pr": 379,
+      "dependency": "HARD",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
       "audit_required": true,
-      "blocker_type": "NONE",
+      "blocker_type": "UPSTREAM_TASK",
       "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
+      "blocked_on_tasks": [
+        "WR-136"
+      ],
+      "blocked_on": [
+        "WR-136 separately authorized production terminal-turn repair must be implemented, fresh-independently-audited, exactly integrated and pass genuine canonical-main FULL CI before any WR-135 resumed execution. Preserve frozen blocked WR-135 PR #379 at 62fe08807f5db0105f078f7ccb80fd3bdb7ad59a; no further WR-135 Builder writes, tests as success, self-audit or merge."
+      ],
       "external_authority_evidence_required": false,
       "post_merge_canary_required": true,
       "allowed_path_prefixes": [
@@ -52,7 +56,60 @@
         "scripts/test-wr-133-companion-war-room-e2e.mjs",
         "scripts/test-wr-118-espn-replay-reconnect.mjs"
       ],
-      "next_gate": "WR-D052 Manager activation PR must pass exact-head Governance, merge, and genuine post-merge canonical-main push Governance SUCCESS. Only then Manager creates assigned Builder branch from exact new canonical main and verifies identical 0 ahead/behind before WR-135 Builder starts. Builder extends only existing app-side draft-invariant harness with 2x5 and 20x30 full 10/600-pick synthetic boundary scenarios, explicit deterministic ledger/ownership/terminal/persistence checks while preserving existing 10x16,14x16 and ESPN segment. Actual focused test + npm test + exact-final-head FULL CI, immutable three-path PR -> Manager exact-target freeze -> FRESH independent audit -> Manager exact-target integration only after accepted PASS-family -> genuine post-merge canonical-main FULL CI before closure. No ESPN/provider contact, product/Companion source, ranking, package/workflow, deployment, release or full-envelope cross-layer claim."
+      "next_gate": "WR-D053 BLOCKED after genuine source-defect reproducer. PR #379 head 62fe08807f5db0105f078f7ccb80fd3bdb7ad59a OPEN/UNMERGED; initial CI at 69b3e6d9e568292dc1f005f9639323bea3c28b09 FULL #35675133071 FAILED, documentary-head FULL #35675575501 also FAILED. At 2x5 slot2 10/10, expected/observed numbered ledgers equal and authoritative complete but getDraftAssistantState().myNextPick=10 instead of null. 20x30 and terminal reload UNEXECUTED. WR-136 distinct narrowly scoped production repair, fresh independent audit, exact integration and canonical-main FULL CI are HARD prerequisite. Manager must issue a separate WR-135 resumption/rebase plan after upstream closure; no edits to frozen WR-135 branch until then."
+    },
+    {
+      "task_id": "WR-136",
+      "owner": "Builder",
+      "worker_slot": "builder-wr136-terminal-next-turn-production-remediation",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-136.md",
+      "role_handoff": ".ai/builder/WR136_TERMINAL_TURN_REPAIR_HANDOFF.md",
+      "assignment_main_sha": "413be06069e395a87a2e0a0849b2f893d0b81451",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-136-terminal-next-turn-production-remediation",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": true,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": true,
+      "allowed_path_prefixes": [
+        "js/war-room-draft-state.js",
+        "scripts/test-browser.mjs",
+        ".ai/builder/WR136_TERMINAL_TURN_REPAIR_EVIDENCE.md",
+        ".ai/builder/WR136_TERMINAL_TURN_REPAIR_HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/auditor/",
+        ".ai/research/",
+        ".ai/strategy/",
+        "extensions/",
+        "data/",
+        ".github/",
+        "src/"
+      ],
+      "forbidden_exact_paths": [
+        ".ai/builder/HANDOFF.md",
+        "scripts/test-draft-invariants.mjs",
+        "scripts/test-wr-133-companion-war-room-e2e.mjs",
+        "scripts/test-wr-118-espn-replay-reconnect.mjs",
+        "package.json",
+        "README.md",
+        "index.html",
+        "script.js",
+        "war-room-config.js",
+        "js/war-room-command-bar.js",
+        "js/war-room-recommendations.js"
+      ],
+      "next_gate": "WR-D053 Manager authorization PR must pass exact-head Governance, merge and genuine post-merge canonical-main push Governance SUCCESS. Only then create fresh assigned WR-136 branch from exact THEN-CURRENT main and verify 0 ahead/behind. Implement minimum production terminal-turn getDraftAssistantState() repair and focused real-browser regressions, exactly four paths, no WR-135 branch writes. Actual focused browser, npm test, exact-final-head FULL CI -> Manager target freeze -> FRESH independent Auditor new WR-137 task/PR on immutable exact target -> separate Manager acceptance/guarded integration -> genuine canonical-main FULL CI before WR-136 closure. Only after WR-136 closure can Manager separately authorize WR-135 safe resumption on repaired main."
     }
   ]
 }
