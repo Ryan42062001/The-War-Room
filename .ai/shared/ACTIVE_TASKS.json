@@ -64,7 +64,7 @@
       "worker_slot": "builder-wr136-terminal-next-turn-production-remediation",
       "status": "ASSIGNED",
       "task_file": ".ai/manager/WR-136.md",
-      "role_handoff": ".ai/builder/WR136_TERMINAL_TURN_REPAIR_HANDOFF.md",
+      "role_handoff": ".ai/builder/HANDOFF.md",
       "assignment_main_sha": "413be06069e395a87a2e0a0849b2f893d0b81451",
       "worker_checkpoint_sha": null,
       "branch": "wr-136-terminal-next-turn-production-remediation",
@@ -109,7 +109,7 @@
         "js/war-room-command-bar.js",
         "js/war-room-recommendations.js"
       ],
-      "next_gate": "WR-D053 Manager authorization PR must pass exact-head Governance, merge and genuine post-merge canonical-main push Governance SUCCESS. Only then create fresh assigned WR-136 branch from exact THEN-CURRENT main and verify 0 ahead/behind. Implement minimum production terminal-turn getDraftAssistantState() repair and focused real-browser regressions, exactly four paths, no WR-135 branch writes. Actual focused browser, npm test, exact-final-head FULL CI -> Manager target freeze -> FRESH independent Auditor new WR-137 task/PR on immutable exact target -> separate Manager acceptance/guarded integration -> genuine canonical-main FULL CI before WR-136 closure. Only after WR-136 closure can Manager separately authorize WR-135 safe resumption on repaired main."
+      "next_gate": "WR-D053 Manager authorization PR must pass exact-head Governance, merge and genuine post-merge canonical-main push Governance SUCCESS. Only then create fresh assigned WR-136 branch from exact THEN-CURRENT main and verify 0 ahead/behind. Implement minimum production terminal-turn getDraftAssistantState() repair and focused real-browser regressions, exactly four paths, no WR-135 branch writes. Actual focused browser, npm test, exact-final-head FULL CI -> Manager target freeze -> FRESH independent Auditor new WR-137 task/PR on immutable exact target -> separate Manager acceptance/guarded integration -> genuine canonical-main FULL CI before WR-136 closure. Only after WR-136 closure can Manager separately authorize WR-135 safe resumption on repaired main. At activation registry role_handoff temporarily points to frozen existing .ai/builder/HANDOFF.md only as READ-ONLY incident context, because new WR-136-specific handoff does not exist until Builder publishes. WR-136 MUST NOT write that existing WR-135 handoff; publish separate WR136_TERMINAL_TURN_REPAIR_HANDOFF.md and Manager repoints registry in later acceptance transition."
     }
   ]
 }
