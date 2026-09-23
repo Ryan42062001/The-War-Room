@@ -1,16 +1,18 @@
 # Manager / Architect Handoff
 
-STATUS: WR-D072 — WR-146 ACCEPTED/CLOSED; WR-147 ROLLBACK/RESTORE PREFLIGHT ACTIVATION
+STATUS: WR-D073 — WR-147 ACCEPTED/CLOSED; CURRENT ROADMAP RECONCILED; NO WORKER ASSIGNED
 WORKFLOW: V3.5 CANONICAL
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-WR-146: accepted PR #411 exact afce7bcd50d181908cc0e248e141c294ca9d9813, exactly two files; exact-head CI #35898079375 SUCCESS / Governance #107306983909; acceptance comment 5800036567. Pages run #35896736306 independently confirms dynamic main/root build/deploy at bcb2e89d... and production URL. Evidence integrated 72c888e426a44155f928c71dfcfe58bdfcddd515; post-integration main CI #35898669523 SUCCESS / Governance #107308989302. WR-146 CLOSED.
+WR-147 PR #413 exact Worker head b132cba0bf60d631bffc3570167c6bd1e898b15d; exact-two-file evidence; final-head War Room CI #35900428974 SUCCESS, Governance #107314975248 SUCCESS, product #107315066501 SKIPPED. Manager acceptance comment 5800335740. Worker diagnosis REHEARSAL_NOT_SAFE; recommendation DO_NOT_RUN_PRODUCTION_ROLLBACK_USE_NONPRODUCTION_EVIDENCE. Evidence integrated canonical cc76aa9f1b865d54f58ac40bbed3b8fd4c37f186; genuine post-integration main War Room CI #35900984817 SUCCESS incl Governance #107316905710 SUCCESS, product skipped.
 
-SOLE NEXT TASK: WR-147 Work Helper / DIAGNOSIS ONLY on wr-147-rollback-restore-rehearsal-qualification. Qualify a materially distinct historical rollback candidate and exact reversible rollback/restore contract. Pre-WR-143 command-bar target family has known WR137-F01 and is not automatically safe; docs-only rollback is not materially distinct.
+MANAGER DISPOSITION: No production rollback/restore rehearsal. Historical materially distinct canonical product targets have known user-misleading manual completion/terminal behavior and current FULL regression conflict; documentation-only SHAs are product-byte-identical and cannot prove material rollback. The accepted worker's time-bound 29-file served manifest plus independently verified Pages build/deploy is deployment identity evidence, NOT a passed restoration test.
 
-WR-147 MUST NOT mutate main, deploy, rollback, restore, or change Pages settings. It returns one overall readiness class, exactly one candidate if ready, one reversible mechanism, cache/service-worker/smoke/abort contract, and exactly one next Manager recommendation.
+NEXT MANAGER PLANNING GATE (not yet assigned): define a fresh bounded, isolated nonproduction Pages-equivalent deployment/restore evidence task with a materially distinct safe fixture/candidate, same-source/artifact/served-byte checks, CDN/client/service-worker behaviors and independent evidence/admissibility review. Nonproduction evidence does not establish an actual production rollback; later A6 must separately accept its relevance or document the outstanding operational limitation and decide how it affects the intended supported release. Do not silently waive the recovery gate.
 
-ACTIVATION: this WR-D072 PR exact-head Governance -> guarded merge -> genuine main PUSH Governance -> fresh Work Helper branch exact current main 0/0.
+ROADMAP: Current executive status and A2/A4/A6 milestones reconciled; historical entries remain archive. Planned next public draft-cycle target is 2027 conditional on lawful fresh next-cycle ECR/ESPN availability, exact-version fallback evidence and independent A6; no fixed launch date or current ranking authority change.
 
-UNCHANGED HOLDS: formal A6, exact-current live fallback, production rollback, release/draft-ready, A4/2027 and Track B remain unissued.
+SOLE ACTIVE TASK: NONE. Before a new worker task, Manager must scope and activate it via canonical V3.5 Manager controls and genuine exact-head PR Governance/main PUSH Governance/new exact-main 0/0 branch as applicable.
+
+UNCHANGED HOLDS: No production rollback, deployment/Pages mutation, live ESPN/account/provider, formal A6, 2027 source intake, Track B/model/ranking-policy substitution, draft-ready or release authorization.
