@@ -1,11 +1,11 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-22 — WR-D065 freezes NEW WR-139 R2 draft PR #399 exact c501def8016632e053ecffded2ad3005fc586848 and assigns fresh WR-142 independent audit after Manager activation gates; A6 open
+Last Manager gate: 2026-09-23 — WR-D070 assigns WR-145 A6 current release-evidence reconciliation after WR-D069 clean closure; formal A6 remains unissued
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current workflow-control gate — WR-D065 / NEW R2 exact one-file PR #399 AUDIT_READY, WR-142 fresh independent audit assigned
+## Current Track A gate — WR-D070 / WR-145 A6 evidence reconciliation assigned after activation gates
 
 Manager verified NEW R2 branch `manager/wr-139-r2-premerge-force-full-docs-guard` from initial R2 base `4e38ec3c9298ee37493a5ceadf7f89b2fc41b6f9`, current canonical main `0f33e65a7964bfba7f122b75b0bd75f25d657264` advanced two nonoverlapping Manager/control-plane-only commits; canonical WORKFLOW blob unchanged. NEW R2 DRAFT PR #399 OPEN/UNMERGED exact frozen `c501def8016632e053ecffded2ad3005fc586848` changes ONE `.ai/shared/WORKFLOW.md` path only (+35/-0). Genuine exact-final-head PR CI #35800899097 SUCCESS, classify #106990758023 and Governance #106990803654 SUCCESS, product correctly SKIPPED; decoded exact PR-head logs show GOVERNANCE_ONLY unforced docs scope, workflow regressions PASS and state errors []. This is Manager audit-READINESS, not independent verdict, canonical workflow adoption, actual runtime preforced-FULL mechanism or GitHub branch protection.
 
@@ -799,3 +799,10 @@ The expected-head-guarded Builder integration landed exact audited WR-143 as can
 **WR-143 CLOSED / WR-144 CLOSED.** Remove both from the active-only registry. Retained LOW WR137-F01 is resolved by the audited WR-143 command-bar completion-truth repair. Historical failed Builder candidate CIs #35880594349 and #35880998233 remain immutable failures; WR-D068's initial failed Governance run #35883313281 also remains historical and is not relabeled. This closure does not reopen WR-136/137 history and does not convert existing regression coverage into new live/provider/release certification.
 
 No new employee or unrelated task is authorized by this closure. Live ESPN/provider evidence, extreme external Companion-to-app evidence, formal A6, A4/2027/provider rights, Track B, deployment, release and draft-readiness remain separate gates.
+
+
+## WR-D070 — WR-145 A6 current release-evidence reconciliation activation (2026-09-23)
+
+After WR-D069, canonical main 9de14670618f7ed19a814c3b43cebce01bd05d61 is clean with an empty active-only registry. Manager does not launch formal A6, live ESPN validation, deployment/rollback, A4/2027 or release directly because the accepted WR-132 release-evidence matrix predates material later evidence. WR-133/134 added deterministic synthetic Companion-to-bridge-to-real-app E2E; WR-135 R1/138 added strict app-side 2x5/10 and 20x30/600 full-draft envelope evidence; WR-143/144 resolved command-bar completion truth; landed WR-143 SHA 45cab0c189c284b4a3011b78ce953b99dd857194 passed genuine canonical-main FULL CI #35885632498 including product #107265099200.
+
+WR-145 is the sole assigned Work Helper DIAGNOSIS-ONLY task after this Manager activation PR exact-head Governance SUCCESS -> guarded merge -> genuine canonical-main PUSH Governance SUCCESS -> create fresh wr-145-a6-current-release-evidence-reconciliation from exact THEN-CURRENT main and verify 0 ahead / 0 behind. WR-145 may write only .ai/work_helper/WR145_A6_CURRENT_RELEASE_EVIDENCE_RECONCILIATION.md and .ai/work_helper/HANDOFF.md. It must refresh WR-132's A6 dimensions/blockers against current accepted evidence, distinguish resolved synthetic/envelope evidence from still-unverified live/deployment/future-season evidence, and return exactly one next Manager recommendation. No A6 go/no-go, live ESPN/account/provider action, deployment/rollback, source/ranking change or release is authorized.
