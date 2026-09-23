@@ -1,8 +1,56 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-23T16:11:00Z",
+  "updated_at_utc": "2026-09-23T17:05:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": []
+  "tasks": [
+    {
+      "task_id": "WR-145",
+      "owner": "Work Helper",
+      "worker_slot": "work-helper-wr145-a6-current-release-evidence-reconciliation",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-145.md",
+      "role_handoff": ".ai/work_helper/HANDOFF.md",
+      "assignment_main_sha": "9de14670618f7ed19a814c3b43cebce01bd05d61",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-145-a6-current-release-evidence-reconciliation",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/work_helper/WR145_A6_CURRENT_RELEASE_EVIDENCE_RECONCILIATION.md",
+        ".ai/work_helper/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/auditor/",
+        ".ai/manager/",
+        ".ai/shared/",
+        ".ai/builder/",
+        ".ai/research/",
+        ".ai/strategy/",
+        ".github/",
+        "js/",
+        "scripts/",
+        "extensions/",
+        "data/"
+      ],
+      "forbidden_exact_paths": [
+        "package.json",
+        "README.md",
+        "index.html",
+        "script.js",
+        "war-room-config.js"
+      ],
+      "next_gate": "WR-D070 activation exact-head Governance -> guarded merge -> genuine canonical-main PUSH Governance -> bootstrap wr-145-a6-current-release-evidence-reconciliation from exact then-current main 0/0. Work Helper reconciles stale WR-132 A6 matrix against accepted WR-133/134, WR-135/138, WR-143/144 and landed-SHA FULL CI #35885632498; publishes exact two Work Helper files and exact-head Governance; returns exactly one next Manager recommendation. No final A6, live account/provider action, deployment/rollback, ranking/source or release."
+    }
+  ]
 }
