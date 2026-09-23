@@ -6,6 +6,8 @@ Base: `c180c1cf91ce39cf6616ad1f921ec38e38683760` on `main` and the assigned Buil
 
 The command bar now calls that loaded authority and selects `complete` only for literal `true`. Missing authority or an exception leaves the ordinary on-clock/waiting presentation. No completion algorithm or draft-state code was added.
 
+The first exact-head FULL CI candidate `521802306b85221bfa0db49058527d22ea4e23ea`, War Room CI `35880594349`, failed product job `107247921726`. Its real browser checkpoints passed slot 1 9/10 waiting, both 10/10 terminal states, and slot 2 undo/recompletion. At slot 1 undo, command mode/label returned to WAITING but the command bar mirrored stale `DRAFT COMPLETE` recommendation copy from the still-rendering app panel. The browser assertion caught it. The command bar now replaces that terminal recommendation with neutral tracking copy while its canonical mode is incomplete. The failed run remains historical evidence, not a PASS.
+
 The existing WR-136 actual-browser case now requires slot 1 at 9/10 and after undo to render `waiting`/`WAITING`, checks canonical completion false, and rejects complete-only copy. It retains slot 2 on-clock, both terminal 10/10 and reload/recompletion checks, real row toggles, local-request guard and browser-error checks.
 
 ## Validation in this workspace
@@ -19,4 +21,4 @@ The existing WR-136 actual-browser case now requires slot 1 at 9/10 and after un
 
 ## Exact-head CI and observed browser results
 
-Pending genuine FULL War Room CI on immutable final Builder head. CI logs must be inspected for browser checkpoints and entire `npm test` result before Manager audit routing. Slot 1 9/10, slot 2 9/10, both 10/10, undo and recompletion remain **locally unverified** pending that run.
+Pending genuine FULL War Room CI on revised immutable final Builder head. CI logs must be inspected for browser checkpoints and entire `npm test` result before Manager audit routing. Local actual-browser execution remains unavailable; the first CI candidate demonstrated the boundary and exposed the stale copy after undo.
