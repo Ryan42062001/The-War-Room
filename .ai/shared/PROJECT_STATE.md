@@ -1,11 +1,25 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-23 — WR-D072 accepts/closes WR-146 and assigns WR-147 rollback/restore rehearsal target qualification preflight
+Last Manager gate: 2026-09-23 — WR-D073 independently accepts/closes WR-147, declines production rollback rehearsal and reconciles next-cycle release roadmap
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current Track A gate — WR-D072 / WR-147 rollback/restore preflight assigned after activation gates
+## Current Track A gate — WR-D073 / release-evidence planning (2026-09-23)
+
+WR-147 PR #413 exact Worker head b132cba0bf60d631bffc3570167c6bd1e898b15d; exact-two-file evidence; final-head War Room CI #35900428974 SUCCESS, Governance #107314975248 SUCCESS, product #107315066501 SKIPPED. Manager acceptance comment 5800335740. Worker diagnosis REHEARSAL_NOT_SAFE; recommendation DO_NOT_RUN_PRODUCTION_ROLLBACK_USE_NONPRODUCTION_EVIDENCE. Evidence integrated canonical cc76aa9f1b865d54f58ac40bbed3b8fd4c37f186; genuine post-integration main War Room CI #35900984817 SUCCESS incl Governance #107316905710 SUCCESS, product skipped.
+
+**Current active-only registry:** EMPTY. WR-147 CLOSED; no worker assigned. The Manager requested roadmap reconciliation at this checkpoint; historical headings below are archival, not live assignments.
+
+**Recovery disposition:** Do NOT run a public/production rollback rehearsal using the rejected historical products. The older command bar produces premature manual DRAFT COMPLETE at 9/10 and conflicts with current FULL browser assertions; some earlier candidates also lack terminal-turn repair. A docs-only SHA cannot demonstrate a materially distinct product rollback. A future isolated nonproduction deployment/restore proof may be independently evaluated for its limited relevance, but no such proof yet exists and no production recovery check has been passed. Preserve this as an open A6 operational-evidence/admissibility decision.
+
+**Current candidate identity:** Accepted product origin `45cab0c189c284b4a3011b78ce953b99dd857194` and landed-SHA FULL CI #35885632498 SUCCESS. WR-146/147 established time-bounded Pages build/deployment and 29 checked served-file matches for then-current docs-only main; latest cited observed Pages SHA `ecb433d1168ff16f7a092a611540214bfe66364c`, manifest `d98e7b891cf673e8933744b9ee3ac35120bccf316450a08e4041b0f30b33a1e6`. New docs-only main integrations can produce NEW Pages deployments. Reverify actual served SHA/product-byte manifest, service-worker/browser cache and installed Companion version for any later live evidence.
+
+**Release posture:** Nominal 10×16 synthetic real Companion→bridge→app E2E accepted under WR-133/134, strict 2×5/20×30 app-side extremes under WR-135/138, and WR-143/144 command-bar terminal truth repaired/audited. Exact-current live ESPN Board/Pick History fallback completion is not established; structured Direct remains LIVE_DIRECT_UNVERIFIED. 2026 source integrity is accepted but current intended-date freshness adequacy is not independently decided; fresh lawful 2027 sources require separate season-gated A4 admission. Formal independent A6/release/production deployment remains unissued.
+
+**Planning:** 2027 is the intended next draft-cycle public release target, conditional on actual data availability/rights, real-world fallback validation, bounded recovery evidence/admissibility and formal A6. No fixed launch date or guarantee. Track B and optional modes remain off the initial supported release critical path unless an independently documented gap requires them.
+
+## Historical workflow-control snapshot — WR-D065 / WR-142 (preserved, superseded by current gate above)
 
 Manager verified NEW R2 branch `manager/wr-139-r2-premerge-force-full-docs-guard` from initial R2 base `4e38ec3c9298ee37493a5ceadf7f89b2fc41b6f9`, current canonical main `0f33e65a7964bfba7f122b75b0bd75f25d657264` advanced two nonoverlapping Manager/control-plane-only commits; canonical WORKFLOW blob unchanged. NEW R2 DRAFT PR #399 OPEN/UNMERGED exact frozen `c501def8016632e053ecffded2ad3005fc586848` changes ONE `.ai/shared/WORKFLOW.md` path only (+35/-0). Genuine exact-final-head PR CI #35800899097 SUCCESS, classify #106990758023 and Governance #106990803654 SUCCESS, product correctly SKIPPED; decoded exact PR-head logs show GOVERNANCE_ONLY unforced docs scope, workflow regressions PASS and state errors []. This is Manager audit-READINESS, not independent verdict, canonical workflow adoption, actual runtime preforced-FULL mechanism or GitHub branch protection.
 
