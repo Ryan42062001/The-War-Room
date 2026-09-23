@@ -12,7 +12,7 @@
 
 **DONE:** Canonical completion authority governs command-bar completion, failing closed if missing. The command bar suppresses stale terminal recommendation copy after undo while incomplete. Existing real-browser WR-136 boundary case asserts truthful slot 1 9/10 and undo behavior. See evidence file for precise assertions and local checks.
 
-**TESTS / CI:** Both requested syntax checks passed on first candidate; rerun on revision. Local browser execution unavailable because Chromium is missing and browser download failed. Local `npm test` has no PASS. First exact-head CI `35880594349` failed product job `107247921726` on stale terminal copy after undo; see evidence. Genuine revised exact-final-head FULL CI and browser logs must be verified.
+**TESTS / CI:** Both requested syntax checks passed on prior candidates; rerun on revision. Local browser execution unavailable because Chromium is missing and browser download failed. Local `npm test` has no PASS. First exact-head CI `35880594349` failed product job `107247921726`; second CI `35880998233` failed product job `107249280611` on stale terminal reason after undo. See evidence. Genuine revised exact-final-head FULL CI and browser logs must be verified.
 
 **BLOCKERS / LIMITATIONS:** No local actual-browser observation. Do not present source assertions as observed results. Manager independently checks exact scope/head and successful FULL CI before fresh WR-144 audit.
 

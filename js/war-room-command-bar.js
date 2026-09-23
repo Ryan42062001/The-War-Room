@@ -206,7 +206,10 @@
     var recommendation = getRecommendationSummary();
     // The recommendation panel may still carry terminal copy immediately after
     // undo. Do not mirror that stale claim into an incomplete command bar.
-    if (mode !== 'complete' && recommendation.player === 'DRAFT COMPLETE') {
+    if (mode !== 'complete' && [recommendation.player, recommendation.reason,
+      recommendation.action, recommendation.confidence].some(function(value) {
+      return /DRAFT COMPLETE|All configured rounds finished/i.test(value || '');
+    })) {
       recommendation = {
         player: 'Tracking draft position', position: '', action: 'RECOMMENDED',
         confidence: '', reason: 'Waiting for the next draft update.'
