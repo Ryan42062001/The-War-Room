@@ -1,16 +1,18 @@
 # Manager / Architect Handoff
 
-STATUS: WR-D066 — WR-139 / WR-142 FINAL CANONICAL CLOSURE
+STATUS: WR-D067 — WR-143 COMMAND-BAR COMPLETION-TRUTH REMEDIATION ACTIVATION
 WORKFLOW: V3.5 CANONICAL
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-**CANONICAL MAIN BEFORE THIS RECONCILIATION:** `d993a6242d5ff415c49feab83c3257e9d27192ce`.
+**BASELINE:** canonical main `16fcb013195cee256d328ee84987f8a0737ad94a`; WR-D066 closed WR-139/WR-142 and left ACTIVE_TASKS empty.
 
-**WR-142 ACCEPTED PASS:** Auditor PR #401 final head `5a7ddf0d1a7473ade0b36864640751d922959497`, exactly two Auditor-only files, exact-head War Room CI #35876712009 SUCCESS, zero CRITICAL/HIGH/MEDIUM/LOW findings. Manager accepted PASS on unchanged R2 in PR #399 comment `5797057329`. Auditor evidence merged first as `5ff0047773d7356b0cf47111de18926b0a22c0dd`; canonical-main PUSH CI #35877591856 SUCCESS.
+**PRIORITIZED OPEN FINDING:** LOW `WR137-F01`. Current command bar treats `myNextPick:null` as whole-draft complete. In 2×5 slot1 at 9/10 the user's final own pick is already consumed, `myNextPick:null`, while overall pick 10 remains; existing WR-136 browser coverage intentionally skips the command-mode assertion there.
 
-**WR-139 R2 CANONICAL ADOPTION:** Frozen audited target PR #399 exact head `c501def8016632e053ecffded2ad3005fc586848`, exactly one `.ai/shared/WORKFLOW.md` path. Separate Manager prospective adoption authority is PR #399 comment `5797164148`. Exact-head guarded merge produced `d993a6242d5ff415c49feab83c3257e9d27192ce`. Genuine post-adoption canonical-main PUSH CI #35877999823 SUCCESS: classify `107238848812`, Governance `107238923712`; product `107238994124` correctly SKIPPED.
+**SOLE NEXT TASK:** WR-143 Builder on `wr-143-command-bar-completion-truth-remediation`, STANDARD_CHAT_HIGH / FAST_REFRESH. Exact four-file scope: `js/war-room-command-bar.js`, `scripts/test-browser.mjs`, WR-143 Builder evidence, WR-143 Builder handoff. Use existing canonical whole-draft completion authority; do not modify draft-state/UI authority, rankings, ESPN/Companion, provider, workflow or release surfaces.
 
-**CLOSURE:** WR-139 CLOSED. WR-142 CLOSED. Active-only registry becomes empty. Historical failed PR #389 / WR-140 and PR #394 / WR-141 remain frozen historical failures. R2 is documentary policy only; no technical PUSH-FULL mechanism was implemented.
+**ACTIVATION GATE:** this WR-D067 Manager PR exact-head Governance SUCCESS -> guarded merge -> genuine post-merge canonical-main PUSH Governance SUCCESS -> create Builder branch from exact THEN-CURRENT main and verify 0 ahead/0 behind.
 
-**UNCHANGED HOLDS:** LOW WR137-F01, extreme Companion-to-app E2E, formal A6, provider/A4/2027 rights, Track B, deployment, release and draft-readiness remain separately gated. No new employee task is authorized by WR-D066.
+**FINISH GATE:** exact-final-head FULL CI -> Manager immutable freeze -> fresh distinct WR-144 independent audit -> Manager PASS-family acceptance -> guarded exact-target integration -> genuine canonical-main FULL CI before closure.
+
+**UNCHANGED HOLDS:** extreme Companion-to-app E2E, formal A6, provider/A4/2027 rights, Track B, deployment, release and draft-readiness remain separate.
