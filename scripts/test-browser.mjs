@@ -1502,18 +1502,22 @@ async function runTerminalTurnBrowserCase({slot, finalOwned}) {
       provisional:false,
       myRosterCount:expectedOwnPicks.filter(pick => pick <= completed).length
     }, prefix + 'actual authoritative completion and roster');
-    if (expectedMode !== null) {
-      await draftPage.waitForFunction(mode =>
-        document.body.getAttribute('data-draft-command-mode') === mode,
-        expectedMode);
-      const rendered = await draftPage.evaluate(() => ({
-        mode:document.body.getAttribute('data-draft-command-mode'),
-        modeLabel:document.querySelector('#draft-command-bar .draft-command-mode')?.textContent?.trim()
-      }));
-      assert.equal(rendered.mode, expectedMode, prefix + 'real command-bar mode');
-      assert.equal(rendered.modeLabel, expectedMode === 'complete'
-        ? 'DRAFT COMPLETE' : expectedMode === 'on-clock' ? 'ON THE CLOCK' : 'WAITING',
-      prefix + 'real command-bar label');
+    await draftPage.waitForFunction(mode =>
+      document.body.getAttribute('data-draft-command-mode') === mode,
+      expectedMode);
+    const rendered = await draftPage.evaluate(() => ({
+      mode:document.body.getAttribute('data-draft-command-mode'),
+      modeLabel:document.querySelector('#draft-command-bar .draft-command-mode')?.textContent?.trim(),
+      copy:document.querySelector('#draft-command-bar')?.textContent || ''
+    }));
+    assert.equal(rendered.mode, expectedMode, prefix + 'real command-bar mode');
+    assert.equal(rendered.modeLabel, expectedMode === 'complete'
+      ? 'DRAFT COMPLETE' : expectedMode === 'on-clock' ? 'ON THE CLOCK' : 'WAITING',
+    prefix + 'real command-bar label');
+    if (completed === 9 && slot === 1) {
+      assert.equal(result.completion.complete, false, prefix + 'canonical completion remains false');
+      assert.doesNotMatch(rendered.copy, /DRAFT COMPLETE|All configured rounds finished/i,
+        prefix + 'no complete-only copy before other-owned final pick');
     }
     const summary = {
       slot, label, completed, ownCount:result.completion.myRosterCount,
@@ -1552,7 +1556,7 @@ async function runTerminalTurnBrowserCase({slot, finalOwned}) {
     if (pick === 8) await snapshot('ordinary-last-round-turn', 8,
       slot === 2 ? 10 : 9, 9, slot === 2 ? 'waiting' : 'on-clock');
     if (pick === 9) await snapshot('penultimate-9-of-10', 9,
-      slot === 2 ? 10 : null, 10, slot === 2 ? 'on-clock' : null);
+      slot === 2 ? 10 : null, 10, slot === 2 ? 'on-clock' : 'waiting');
     if (pick === 10) await snapshot(finalOwned ? 'terminal-own-final' : 'terminal-other-final',
       10, null, 10, 'complete');
   }
@@ -1570,7 +1574,7 @@ async function runTerminalTurnBrowserCase({slot, finalOwned}) {
     toggleDraft(row);
   });
   await snapshot('undo-reopened-9-of-10', 9,
-    slot === 2 ? 10 : null, 10, slot === 2 ? 'on-clock' : null);
+    slot === 2 ? 10 : null, 10, slot === 2 ? 'on-clock' : 'waiting');
   await mark(10);
   await snapshot('recompleted-10-of-10', 10, null, 10, 'complete');
   assert.deepEqual(focusedErrors, [], 'WR-136 browser errors: ' + focusedErrors.join(' | '));

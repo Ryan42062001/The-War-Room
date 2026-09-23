@@ -186,7 +186,13 @@
 
   function commandModeForState(state) {
     if (!state) return 'waiting';
-    if (state.myNextPick === null) return 'complete';
+    if (typeof window.getDraftCompletionStatus === 'function') {
+      try {
+        if (window.getDraftCompletionStatus(state).complete === true) return 'complete';
+      } catch (error) {
+        console.warn('Draft command bar completion unavailable.', error);
+      }
+    }
     return state.onClock ? 'on-clock' : 'waiting';
   }
 
@@ -196,8 +202,19 @@
     if (!bar) return;
 
     var state = safeDraftState();
-    var recommendation = getRecommendationSummary();
     var mode = commandModeForState(state);
+    var recommendation = getRecommendationSummary();
+    // The recommendation panel may still carry terminal copy immediately after
+    // undo. Do not mirror that stale claim into an incomplete command bar.
+    if (mode !== 'complete' && [recommendation.player, recommendation.reason,
+      recommendation.action, recommendation.confidence].some(function(value) {
+      return /DRAFT COMPLETE|All configured rounds finished/i.test(value || '');
+    })) {
+      recommendation = {
+        player: 'Tracking draft position', position: '', action: 'RECOMMENDED',
+        confidence: '', reason: 'Waiting for the next draft update.'
+      };
+    }
     var teams = state ? state.teams : 10;
     var current = state ? formatRoundPick(state.currentPick, teams) : '--';
     var next = state && state.myNextPick ? formatRoundPick(state.myNextPick, teams) : '--';
