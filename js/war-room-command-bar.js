@@ -186,7 +186,13 @@
 
   function commandModeForState(state) {
     if (!state) return 'waiting';
-    if (state.myNextPick === null) return 'complete';
+    if (typeof window.getDraftCompletionStatus === 'function') {
+      try {
+        if (window.getDraftCompletionStatus(state).complete === true) return 'complete';
+      } catch (error) {
+        console.warn('Draft command bar completion unavailable.', error);
+      }
+    }
     return state.onClock ? 'on-clock' : 'waiting';
   }
 
