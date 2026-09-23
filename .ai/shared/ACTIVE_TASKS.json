@@ -1,20 +1,20 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-23T17:35:00Z",
+  "updated_at_utc": "2026-09-23T17:56:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
   "tasks": [
     {
-      "task_id": "WR-146",
+      "task_id": "WR-147",
       "owner": "Work Helper",
-      "worker_slot": "work-helper-wr146-pages-deployment-identity",
+      "worker_slot": "work-helper-wr147-rollback-restore-preflight",
       "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-146.md",
+      "task_file": ".ai/manager/WR-147.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "82d4add25aab57efe1fa05d1f79e652d7d48a1cd",
+      "assignment_main_sha": "72c888e426a44155f928c71dfcfe58bdfcddd515",
       "worker_checkpoint_sha": null,
-      "branch": "wr-146-pages-deployment-identity-evidence",
+      "branch": "wr-147-rollback-restore-rehearsal-qualification",
       "pr": null,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
@@ -27,7 +27,7 @@
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
-        ".ai/work_helper/WR146_PAGES_DEPLOYMENT_IDENTITY_EVIDENCE.md",
+        ".ai/work_helper/WR147_ROLLBACK_RESTORE_REHEARSAL_QUALIFICATION.md",
         ".ai/work_helper/HANDOFF.md"
       ],
       "forbidden_path_prefixes": [
@@ -50,7 +50,7 @@
         "script.js",
         "war-room-config.js"
       ],
-      "next_gate": "WR-D071 activation exact-head Governance -> guarded merge -> genuine canonical-main PUSH Governance -> bootstrap wr-146-pages-deployment-identity-evidence exact current main 0/0. Work Helper establishes read-only Pages deployment/served identity and rollback preconditions, publishes exact two files/Governance, and returns one classification + one next recommendation. No deploy/rollback/Pages mutation."
+      "next_gate": "WR-D072 activation exact-head Governance -> guarded merge -> genuine canonical-main PUSH Governance -> bootstrap wr-147-rollback-restore-rehearsal-qualification exact current main 0/0. Work Helper qualifies one materially distinct rollback target or determines none safe; defines one reversible no-force-push mechanism, Pages/CDN/service-worker checks, smoke/restore/abort contract; publishes exactly two docs-only files and exact-head Governance. No production mutation."
     }
   ]
 }
