@@ -1,20 +1,20 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-23T18:53:00Z",
+  "updated_at_utc": "2026-09-23T19:05:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
   "tasks": [
     {
-      "task_id": "WR-149",
+      "task_id": "WR-150",
       "owner": "Work Helper",
-      "worker_slot": "work-helper-wr149-local-recovery-evidence-execution",
+      "worker_slot": "work-helper-wr150-runner-security-qualification",
       "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-149.md",
+      "task_file": ".ai/manager/WR-150.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "f6fe0c002219c9729d92003a520398135c7a4e13",
+      "assignment_main_sha": "7cfda9affebe7ba0c6324b4ea5a600cf3f3b2f43",
       "worker_checkpoint_sha": null,
-      "branch": "wr-149-isolated-local-recovery-evidence-execution",
+      "branch": "wr-150-hosted-runner-isolation-qualification",
       "pr": null,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
@@ -27,7 +27,7 @@
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
-        ".ai/work_helper/WR149_ISOLATED_LOCAL_RECOVERY_EXECUTION_EVIDENCE.md",
+        ".ai/work_helper/WR150_HOSTED_RUNNER_ISOLATION_QUALIFICATION.md",
         ".ai/work_helper/HANDOFF.md"
       ],
       "forbidden_path_prefixes": [
@@ -52,7 +52,7 @@
         "service-worker.js",
         "war-room-config.js"
       ],
-      "next_gate": "WR-D075 exact-head Governance -> guarded merge -> genuine main PUSH Governance -> fresh wr-149-isolated-local-recovery-evidence-execution exact current main 0/0. Execute only isolated loopback local scratch A→benign B→immutable A test after proven OS/container-level outbound denial and browser provisioning, or stop with a BLOCKED result. Publish exactly two Work Helper evidence docs, final-head Governance and product SKIP. Fresh separate independent QA thereafter; no production/Pages/site/repo mutation."
+      "next_gate": "WR-D076 exact-head Governance -> guarded merge -> genuine canonical-main PUSH Governance -> fresh wr-150-hosted-runner-isolation-qualification exact then-current main 0/0. ONE read-only runner/egress feasibility decision from actual hosted FULL CI/runner behavior, no browser/download/CI code/probe/app load. Publish two Worker docs and exact-head Governance. Return one narrow future audited pilot OR NO_QUALIFIED_RUNNER/defer; no endless rerun."
     }
   ]
 }

@@ -1,18 +1,16 @@
 # Manager / Architect Handoff
 
-STATUS: WR-D075 — WR-148 ACCEPTED/CLOSED; WR-149 BOUNDED ISOLATED LOCAL RECOVERY EVIDENCE EXECUTION ACTIVATION
+STATUS: WR-D076 — WR-149 ACCEPTED/CLOSED AS BLOCKED; WR-150 ONE-PASS HOSTED-RUNNER ISOLATION QUALIFICATION ASSIGNED
 WORKFLOW: V3.5 CANONICAL
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-WR-148 PR #416 exact Worker head ad4fb06d080398d019aa068b2d0ee4d81b1c04b0, exactly two Worker documentation paths, exact-head War Room CI #35904139101 SUCCESS / Governance #107327478967 SUCCESS / product #107327553260 SKIPPED. Manager acceptance comment 5800802273 accepts NONPRODUCTION_EXPERIMENT_PLAN_READY; evidence integrated canonical f6fe0c002219c9729d92003a520398135c7a4e13; genuine post-integration main War Room CI #35904602828 SUCCESS / Governance #107329064304 SUCCESS / product skipped.
+WR-149 PR #418 immutable Worker head e2434a2a18a38cb59172f95430b377b5ea8e53b4, exactly two Worker documentation paths; exact-head War Room CI #35905898379 SUCCESS / Governance #107333480397 SUCCESS / product #107333580831 SKIPPED. Manager acceptance PR #418 comment 5801117862: BLOCKED_BROWSER_OR_RUNNER, no app load and NO A→B→A checkpoints. Evidence integrated canonical 7cfda9affebe7ba0c6324b4ea5a600cf3f3b2f43; genuine post-integration main War Room CI #35906916148 SUCCESS / Governance #107336839235 SUCCESS / product skipped.
 
-Manager accepted local-fixture plan only and authorizes a distinct WR-149 LOCAL NONPRODUCTION execution lane subject to preflight gates. Its only allowed repository writes are .ai/work_helper/WR149_ISOLATED_LOCAL_RECOVERY_EXECUTION_EVIDENCE.md and .ai/work_helper/HANDOFF.md. Temporary A and benign B files plus ephemeral harness/browser resources may exist OUTSIDE repository only, in a disposable fully controlled scratch environment.
+WR-149 failed its PRE-LOAD RESOURCE GATE; no War Room content, fixture A/B, local A→B→A checkpoints or independent recoverability evidence exists. Genuine previous canonical-main FULL CI #35885632498 product job #107265099200 independently shows GitHub-hosted ubuntu-latest provisioned Chrome for Testing 153.0.8010.12 (Playwright revision 1243) and ran browser tests, but has NOT shown OS/container/proxy-safe browser+service-worker loopback-only egress.
 
-ABSOLUTE PRE-LOAD FAIL-CLOSED: Demonstrate OS/container-level loopback-only egress restriction encompassing browser/page AND service-worker requests before loading any War Room content. A Playwright page route or DNS-only block does not suffice. Provision Chromium safely, or return BLOCKED without running. Reuse no real user browser, account or saved drafts; no real provider request. Four explicit A/B/A/stability checkpoints, entire source/fixture manifest, controlled existing and fresh tabs, online/offline worker/cache and cleanup; no Pages/CDN/build claims.
+SOLO NEXT ASSIGNMENT: WR-150, Work Helper DIAGNOSIS ONLY, branch wr-150-hosted-runner-isolation-qualification. Precisely assess a one-time narrowly implementable CI-hosted runner security preflight without running or editing CI. Select ONE bounded future separately audited probe path or conclude NO_QUALIFIED_RUNNER and recommend deferring the low-fidelity local recovery surrogate. No recursive scratch Chromium retries, no promises of CI-hosted namespace availability or automatic workflow_dispatch of PR-only workflow.
 
-WR-D075 ACTIVATION SEQUENCE: exact-head Governance SUCCESS -> guarded merge -> genuine canonical-main PUSH Governance SUCCESS -> new WR-149 branch wr-149-isolated-local-recovery-evidence-execution at exact then-current main verified 0/0. No worker writes before these gates.
+ACTIVATION: WR-D076 exact-head Governance -> guarded merge -> genuine main PUSH Governance -> fresh WR-150 branch at exact then-current main 0 ahead/behind.
 
-AFTER EXECUTION: WR-149 reports evidence result, full exact-head Governance and exact two-file draft PR; FRESH distinct independent Auditor evaluates the immutable receipts, then Manager separately rules on transferability. Even independently accepted local success is NOT proof of production rollback or formal A6 release readiness.
-
-UNAUTHORIZED: public or second GitHub Pages, production rollback/restore, main/product/scripts/tests/workflow/dataset mutation, live ESPN/provider/source contact, new credentials/accounts, 2027 source import, Track B, release deployment or A6.
+WR-150 writes ONLY .ai/work_helper/WR150_HOSTED_RUNNER_ISOLATION_QUALIFICATION.md and .ai/work_helper/HANDOFF.md, draft PR with exact-head Governance. No app load/browser install/runner probe/CI or workflow modifications/new repository or Pages deployment, production rollback, ESPN/provider, 2027 source, Track B, A6 or release. Any later pilot needs new explicit Manager scope and independent Auditor for workflow/code changes. Nonproduction/local proof cannot be equated with actual Pages production recovery.
