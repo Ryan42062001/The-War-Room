@@ -1,18 +1,14 @@
 # Manager / Architect Handoff
 
-STATUS: WR-D073 — WR-147 ACCEPTED/CLOSED; CURRENT ROADMAP RECONCILED; NO WORKER ASSIGNED
+STATUS: WR-D074 — ACTIVATE WR-148 NONPRODUCTION RECOVERY EVIDENCE FEASIBILITY (DESIGN ONLY)
 WORKFLOW: V3.5 CANONICAL
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-WR-147 PR #413 exact Worker head b132cba0bf60d631bffc3570167c6bd1e898b15d; exact-two-file evidence; final-head War Room CI #35900428974 SUCCESS, Governance #107314975248 SUCCESS, product #107315066501 SKIPPED. Manager acceptance comment 5800335740. Worker diagnosis REHEARSAL_NOT_SAFE; recommendation DO_NOT_RUN_PRODUCTION_ROLLBACK_USE_NONPRODUCTION_EVIDENCE. Evidence integrated canonical cc76aa9f1b865d54f58ac40bbed3b8fd4c37f186; genuine post-integration main War Room CI #35900984817 SUCCESS incl Governance #107316905710 SUCCESS, product skipped.
+CANONICAL CHECKPOINT PRIOR TO ACTIVATION: 854eedea5a6d1b853f5fd79074778d3d14b2ad66. WR-D073 closes WR-147 after accepting REHEARSAL_NOT_SAFE; production rollback/restore is NOT authorized. PR #413 evidence exact head b132cba0bf60d631bffc3570167c6bd1e898b15d, exact-head CI #35900428974 SUCCESS, Governance #107314975248 SUCCESS; integrated cc76aa9f1b865d54f58ac40bbed3b8fd4c37f186 with main Governance #35900984817 SUCCESS. WR-D073 roadmap reconciliation PR #414 integrated 854eedea5a6d1b853f5fd79074778d3d14b2ad66; main CI #35901458663 SUCCESS, Governance #107318509822 SUCCESS; 2027 remains CONDITIONAL next draft cycle, no fixed release date.
 
-MANAGER DISPOSITION: No production rollback/restore rehearsal. Historical materially distinct canonical product targets have known user-misleading manual completion/terminal behavior and current FULL regression conflict; documentation-only SHAs are product-byte-identical and cannot prove material rollback. The accepted worker's time-bound 29-file served manifest plus independently verified Pages build/deploy is deployment identity evidence, NOT a passed restoration test.
+SOLE ASSIGNED TASK AFTER THIS ACTIVATION GATES: WR-148, Work Helper, DIAGNOSIS ONLY, branch wr-148-nonproduction-recovery-evidence-feasibility. Write only .ai/work_helper/WR148_NONPRODUCTION_RECOVERY_EVIDENCE_FEASIBILITY.md and .ai/work_helper/HANDOFF.md; classify safe isolated nonproduction deployment/change/restore experiment feasibility, choose one bounded architecture or NONE, define fidelity gaps and future independent Auditor/admissibility contract.
 
-NEXT MANAGER PLANNING GATE (not yet assigned): define a fresh bounded, isolated nonproduction Pages-equivalent deployment/restore evidence task with a materially distinct safe fixture/candidate, same-source/artifact/served-byte checks, CDN/client/service-worker behaviors and independent evidence/admissibility review. Nonproduction evidence does not establish an actual production rollback; later A6 must separately accept its relevance or document the outstanding operational limitation and decide how it affects the intended supported release. Do not silently waive the recovery gate.
+SEQUENCE: WR-D074 exact-head Governance SUCCESS -> guarded Manager merge -> genuine post-merge canonical-main PUSH Governance SUCCESS -> fresh WR-148 branch from exact then-current main with verified 0 ahead / 0 behind. No worker writes before gates.
 
-ROADMAP: Current executive status and A2/A4/A6 milestones reconciled; historical entries remain archive. Planned next public draft-cycle target is 2027 conditional on lawful fresh next-cycle ECR/ESPN availability, exact-version fallback evidence and independent A6; no fixed launch date or current ranking authority change.
-
-SOLE ACTIVE TASK: NONE. Before a new worker task, Manager must scope and activate it via canonical V3.5 Manager controls and genuine exact-head PR Governance/main PUSH Governance/new exact-main 0/0 branch as applicable.
-
-UNCHANGED HOLDS: No production rollback, deployment/Pages mutation, live ESPN/account/provider, formal A6, 2027 source intake, Track B/model/ranking-policy substitution, draft-ready or release authorization.
+NO OPERATIONAL AUTHORITY: Do not perform even nonproduction experiment, create repo/site/resource, deploy, roll back, restore, change product/tests/workflows/main or Pages, use live ESPN/provider, import 2027 sources, work Track B or declare release/A6. Nonproduction evidence, even if later executed, is not production rollback proof. Manager must independently accept WR-148 proposal before separately authorizing any operational task.
