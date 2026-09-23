@@ -1,11 +1,11 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-23 — WR-D070 assigns WR-145 A6 current release-evidence reconciliation after WR-D069 clean closure; formal A6 remains unissued
+Last Manager gate: 2026-09-23 — WR-D071 accepts/closes WR-145 and assigns WR-146 read-only Pages deployment identity / rollback-preconditions evidence
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current Track A gate — WR-D070 / WR-145 A6 evidence reconciliation assigned after activation gates
+## Current Track A gate — WR-D071 / WR-146 deployment identity evidence assigned after activation gates
 
 Manager verified NEW R2 branch `manager/wr-139-r2-premerge-force-full-docs-guard` from initial R2 base `4e38ec3c9298ee37493a5ceadf7f89b2fc41b6f9`, current canonical main `0f33e65a7964bfba7f122b75b0bd75f25d657264` advanced two nonoverlapping Manager/control-plane-only commits; canonical WORKFLOW blob unchanged. NEW R2 DRAFT PR #399 OPEN/UNMERGED exact frozen `c501def8016632e053ecffded2ad3005fc586848` changes ONE `.ai/shared/WORKFLOW.md` path only (+35/-0). Genuine exact-final-head PR CI #35800899097 SUCCESS, classify #106990758023 and Governance #106990803654 SUCCESS, product correctly SKIPPED; decoded exact PR-head logs show GOVERNANCE_ONLY unforced docs scope, workflow regressions PASS and state errors []. This is Manager audit-READINESS, not independent verdict, canonical workflow adoption, actual runtime preforced-FULL mechanism or GitHub branch protection.
 
@@ -806,3 +806,12 @@ No new employee or unrelated task is authorized by this closure. Live ESPN/provi
 After WR-D069, canonical main 9de14670618f7ed19a814c3b43cebce01bd05d61 is clean with an empty active-only registry. Manager does not launch formal A6, live ESPN validation, deployment/rollback, A4/2027 or release directly because the accepted WR-132 release-evidence matrix predates material later evidence. WR-133/134 added deterministic synthetic Companion-to-bridge-to-real-app E2E; WR-135 R1/138 added strict app-side 2x5/10 and 20x30/600 full-draft envelope evidence; WR-143/144 resolved command-bar completion truth; landed WR-143 SHA 45cab0c189c284b4a3011b78ce953b99dd857194 passed genuine canonical-main FULL CI #35885632498 including product #107265099200.
 
 WR-145 is the sole assigned Work Helper DIAGNOSIS-ONLY task after this Manager activation PR exact-head Governance SUCCESS -> guarded merge -> genuine canonical-main PUSH Governance SUCCESS -> create fresh wr-145-a6-current-release-evidence-reconciliation from exact THEN-CURRENT main and verify 0 ahead / 0 behind. WR-145 may write only .ai/work_helper/WR145_A6_CURRENT_RELEASE_EVIDENCE_RECONCILIATION.md and .ai/work_helper/HANDOFF.md. It must refresh WR-132's A6 dimensions/blockers against current accepted evidence, distinguish resolved synthetic/envelope evidence from still-unverified live/deployment/future-season evidence, and return exactly one next Manager recommendation. No A6 go/no-go, live ESPN/account/provider action, deployment/rollback, source/ranking change or release is authorized.
+
+
+## WR-D071 — WR-145 ACCEPTED / CLOSED; WR-146 deployment identity evidence assigned (2026-09-23)
+
+Manager independently accepted WR-145 PR #409 at exact head `8e4724dd70fbd9c563d4c7fdf89cc28b324e1e31`, exactly two Work Helper files, and exact-head War Room CI #35895259246 SUCCESS (classify #107297479020, Governance #107297541786, product #107297604876 correctly SKIPPED). Acceptance comment: `5799689071`. WR-145 reconciliation closes WR-132's nominal synthetic Companion→app gap and app-side supported-envelope gap; exact-current live fallback and deployment/served-SHA/rollback remain blocking evidence gaps; 2027 A4 is FUTURE_ONLY for future 2027 claims. WR-145 evidence integrated canonical as `82d4add25aab57efe1fa05d1f79e652d7d48a1cd`; post-integration canonical-main Governance #35896356641 SUCCESS including Governance #107301183004.
+
+Manager accepts WR-145's single recommendation `DEPLOYMENT_IDENTITY_ROLLBACK_EVIDENCE_NEXT` but stages it safely. WR-146 is DIAGNOSIS ONLY: establish the current Pages deployment mechanism, immutable served app identity or byte-manifest, and rollback/restore preconditions. **WR-146 does not authorize or perform rollback, deploy, redeploy or Pages mutation.** Any rollback/restore rehearsal requires a separate prospective Manager authorization after current identity, prior known-good target, mechanism, cache/propagation behavior, validation and restore plan are established.
+
+WR-145 CLOSED. WR-146 is the sole assigned worker after WR-D071 activation exact-head Governance -> guarded merge -> genuine canonical-main PUSH Governance -> fresh Work Helper branch exact-current-main 0/0. Formal A6, exact-current live fallback, deployment mutation, release, A4/2027 and Track B remain unissued.

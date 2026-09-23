@@ -1,18 +1,18 @@
 # Manager / Architect Handoff
 
-STATUS: WR-D070 — WR-145 A6 CURRENT RELEASE-EVIDENCE RECONCILIATION ACTIVATION
+STATUS: WR-D071 — WR-145 ACCEPTED/CLOSED; WR-146 DEPLOYMENT IDENTITY EVIDENCE ACTIVATION
 WORKFLOW: V3.5 CANONICAL
 EXECUTION MODE: STANDARD_CHAT_HIGH
 REFRESH MODE: FAST_REFRESH
 
-BASELINE: canonical main 9de14670618f7ed19a814c3b43cebce01bd05d61; WR-D069 closed WR-143/WR-144 and ACTIVE_TASKS is empty.
+WR-145: accepted exact PR #409 head 8e4724dd70fbd9c563d4c7fdf89cc28b324e1e31, exactly two files; exact-head War Room CI #35895259246 SUCCESS, Governance #107297541786; Manager acceptance comment 5799689071. Evidence integrated as 82d4add25aab57efe1fa05d1f79e652d7d48a1cd; canonical-main Governance #35896356641 SUCCESS / Governance #107301183004. WR-145 CLOSED.
 
-WHY WR-145 NOW: accepted WR-132 A6 matrix is stale as routing truth. Later accepted evidence closed or materially changed two major gaps: WR-133/134 synthetic Companion-to-bridge-to-real-app E2E; WR-135 R1/138 strict app-side 2x5/10 + 20x30/600 envelope. WR-143/144 also resolved command-bar completion truth and the exact landed production SHA passed FULL CI #35885632498.
+ACCEPTED ROUTING: DEPLOYMENT_IDENTITY_ROLLBACK_EVIDENCE_NEXT.
 
-SOLE NEXT TASK: WR-145 Work Helper / DIAGNOSIS ONLY on wr-145-a6-current-release-evidence-reconciliation, STANDARD_CHAT_HIGH / FAST_REFRESH. Exact writes only .ai/work_helper/WR145_A6_CURRENT_RELEASE_EVIDENCE_RECONCILIATION.md and .ai/work_helper/HANDOFF.md.
+SOLE NEXT TASK: WR-146 Work Helper / DIAGNOSIS ONLY on wr-146-pages-deployment-identity-evidence. Establish GitHub Pages source/deployment mechanism, immutable served app identity or exact served-byte/product-tree binding, and rollback/restore preconditions.
 
-MISSION: refresh all WR-132 A6 dimensions/blockers using current accepted evidence, distinguish synthetic vs live ESPN vs deployment/served-SHA/rollback vs 2026/future-2027 source freshness, and return exactly ONE next Manager recommendation. No final A6 go/no-go.
+IMPORTANT: NO ROLLBACK AUTHORITY. WR-146 may inspect only. Any rollback/restore is a future separate Manager prospective authorization after identity and safe rollback/restore plan are established.
 
-ACTIVATION GATE: this WR-D070 Manager PR exact-head Governance SUCCESS -> guarded merge -> genuine canonical-main PUSH Governance SUCCESS -> create fresh Work Helper branch from exact THEN-CURRENT main and verify 0 ahead/0 behind.
+ACTIVATION: this WR-D071 PR exact-head Governance SUCCESS -> guarded merge -> genuine canonical-main PUSH Governance SUCCESS -> create fresh Work Helper branch from exact current main 0/0.
 
-PROHIBITED: live ESPN/account interaction, provider contact, deployment/rollback/Pages mutation, product/test/workflow/source/ranking edits, A4/2027 acquisition, Track B, release or draft-ready declaration.
+UNCHANGED HOLDS: formal A6, exact-current live fallback, structured Direct, deployment mutation, release/draft-ready, A4/2027 and Track B remain separate/unissued.
