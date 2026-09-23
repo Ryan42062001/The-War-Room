@@ -1,11 +1,11 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-23 — WR-D071 accepts/closes WR-145 and assigns WR-146 read-only Pages deployment identity / rollback-preconditions evidence
+Last Manager gate: 2026-09-23 — WR-D072 accepts/closes WR-146 and assigns WR-147 rollback/restore rehearsal target qualification preflight
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current Track A gate — WR-D071 / WR-146 deployment identity evidence assigned after activation gates
+## Current Track A gate — WR-D072 / WR-147 rollback/restore preflight assigned after activation gates
 
 Manager verified NEW R2 branch `manager/wr-139-r2-premerge-force-full-docs-guard` from initial R2 base `4e38ec3c9298ee37493a5ceadf7f89b2fc41b6f9`, current canonical main `0f33e65a7964bfba7f122b75b0bd75f25d657264` advanced two nonoverlapping Manager/control-plane-only commits; canonical WORKFLOW blob unchanged. NEW R2 DRAFT PR #399 OPEN/UNMERGED exact frozen `c501def8016632e053ecffded2ad3005fc586848` changes ONE `.ai/shared/WORKFLOW.md` path only (+35/-0). Genuine exact-final-head PR CI #35800899097 SUCCESS, classify #106990758023 and Governance #106990803654 SUCCESS, product correctly SKIPPED; decoded exact PR-head logs show GOVERNANCE_ONLY unforced docs scope, workflow regressions PASS and state errors []. This is Manager audit-READINESS, not independent verdict, canonical workflow adoption, actual runtime preforced-FULL mechanism or GitHub branch protection.
 
@@ -815,3 +815,14 @@ Manager independently accepted WR-145 PR #409 at exact head `8e4724dd70fbd9c563d
 Manager accepts WR-145's single recommendation `DEPLOYMENT_IDENTITY_ROLLBACK_EVIDENCE_NEXT` but stages it safely. WR-146 is DIAGNOSIS ONLY: establish the current Pages deployment mechanism, immutable served app identity or byte-manifest, and rollback/restore preconditions. **WR-146 does not authorize or perform rollback, deploy, redeploy or Pages mutation.** Any rollback/restore rehearsal requires a separate prospective Manager authorization after current identity, prior known-good target, mechanism, cache/propagation behavior, validation and restore plan are established.
 
 WR-145 CLOSED. WR-146 is the sole assigned worker after WR-D071 activation exact-head Governance -> guarded merge -> genuine canonical-main PUSH Governance -> fresh Work Helper branch exact-current-main 0/0. Formal A6, exact-current live fallback, deployment mutation, release, A4/2027 and Track B remain unissued.
+
+
+## WR-D072 — WR-146 ACCEPTED/CLOSED; WR-147 rollback/restore preflight assigned (2026-09-23)
+
+Manager independently accepted WR-146 PR #411 exact head `afce7bcd50d181908cc0e248e141c294ca9d9813`, exact two Work Helper files, exact-head War Room CI #35898079375 SUCCESS / Governance #107306983909, and independently inspected the actual Pages dynamic build/deploy run #35896736306 at `bcb2e89d0da0e1768b8f8688c95f45c53cc49a85`: build #107302424025 checked out `ref: main`, Jekyll `source: .`, `build_revision: bcb2e89d...`; deploy #107302562693 created the Pages deployment from that artifact and reported success to the production URL. Manager acceptance comment: `5800036567`.
+
+WR-146 evidence integrated canonical as `72c888e426a44155f928c71dfcfe58bdfcddd515`; post-integration canonical-main War Room CI #35898669523 SUCCESS / Governance #107308989302. WR-146 CLOSED with `DEPLOYMENT_IDENTITY_ESTABLISHED`.
+
+Manager accepts WR-146's recommendation only as permission to perform a new **preflight**, not a production rollback. WR-147 must qualify a materially distinct target and exact rollback/restore execution contract. Historical pre-WR-143 candidates carry known WR137-F01 early completion behavior and are not automatically known-good; docs-only candidates are byte-identical and do not prove a material rollback. WR-147 classifies candidates as release-safe, transport-only-with-known-limitations, or rejected; defines one reversible no-force-push mechanism, cache/service-worker verification, smoke checks, restoration identity and abort conditions; then returns whether a real rehearsal should be separately authorized.
+
+No rollback, deploy/redeploy, Pages mutation, live ESPN, provider contact, formal A6, release, A4/2027 or Track B is authorized by WR-D072.
