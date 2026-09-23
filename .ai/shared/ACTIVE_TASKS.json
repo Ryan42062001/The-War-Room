@@ -1,20 +1,20 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-23T18:21:00Z",
+  "updated_at_utc": "2026-09-23T18:53:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
   "tasks": [
     {
-      "task_id": "WR-148",
+      "task_id": "WR-149",
       "owner": "Work Helper",
-      "worker_slot": "work-helper-wr148-nonproduction-recovery-feasibility",
+      "worker_slot": "work-helper-wr149-local-recovery-evidence-execution",
       "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-148.md",
+      "task_file": ".ai/manager/WR-149.md",
       "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "854eedea5a6d1b853f5fd79074778d3d14b2ad66",
+      "assignment_main_sha": "f6fe0c002219c9729d92003a520398135c7a4e13",
       "worker_checkpoint_sha": null,
-      "branch": "wr-148-nonproduction-recovery-evidence-feasibility",
+      "branch": "wr-149-isolated-local-recovery-evidence-execution",
       "pr": null,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
@@ -27,7 +27,7 @@
       "external_authority_evidence_required": false,
       "post_merge_canary_required": false,
       "allowed_path_prefixes": [
-        ".ai/work_helper/WR148_NONPRODUCTION_RECOVERY_EVIDENCE_FEASIBILITY.md",
+        ".ai/work_helper/WR149_ISOLATED_LOCAL_RECOVERY_EXECUTION_EVIDENCE.md",
         ".ai/work_helper/HANDOFF.md"
       ],
       "forbidden_path_prefixes": [
@@ -45,12 +45,14 @@
       ],
       "forbidden_exact_paths": [
         "package.json",
+        "package-lock.json",
         "README.md",
         "index.html",
         "script.js",
+        "service-worker.js",
         "war-room-config.js"
       ],
-      "next_gate": "WR-D074 activation exact-head Governance -> guarded merge -> genuine canonical-main PUSH Governance -> create fresh wr-148-nonproduction-recovery-evidence-feasibility exact main 0/0; Work Helper only diagnoses bounded isolated NONPRODUCTION recovery experiment feasibility and writes exact two handoff/evidence files with exact-head Governance. No production or nonproduction execution, resource creation, Pages mutation, live ESPN or release."
+      "next_gate": "WR-D075 exact-head Governance -> guarded merge -> genuine main PUSH Governance -> fresh wr-149-isolated-local-recovery-evidence-execution exact current main 0/0. Execute only isolated loopback local scratch A→benign B→immutable A test after proven OS/container-level outbound denial and browser provisioning, or stop with a BLOCKED result. Publish exactly two Work Helper evidence docs, final-head Governance and product SKIP. Fresh separate independent QA thereafter; no production/Pages/site/repo mutation."
     }
   ]
 }
