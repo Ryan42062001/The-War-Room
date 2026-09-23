@@ -1,15 +1,15 @@
 # War Room Project State
 
 Status: ACTIVE DEVELOPMENT — WORKFLOW V3.5 CANONICAL
-Last Manager gate: 2026-09-23 — WR-D074 activates WR-148 design-only nonproduction recovery-evidence feasibility after WR-D073 roadmap reconciliation
+Last Manager gate: 2026-09-23 — WR-D075 accepts/closes WR-148 plan and assigns guarded WR-149 isolated local recovery execution
 Owner: Manager / Architect
 Workflow: V3.5 CANONICAL
 
-## Current Track A gate — WR-D074 / WR-148 nonproduction recovery feasibility (design only)
+## Current Track A gate — WR-D075 / WR-149 isolated local recovery execution
 
 WR-147 PR #413 exact Worker head b132cba0bf60d631bffc3570167c6bd1e898b15d; exact-two-file evidence; final-head War Room CI #35900428974 SUCCESS, Governance #107314975248 SUCCESS, product #107315066501 SKIPPED. Manager acceptance comment 5800335740. Worker diagnosis REHEARSAL_NOT_SAFE; recommendation DO_NOT_RUN_PRODUCTION_ROLLBACK_USE_NONPRODUCTION_EVIDENCE. Evidence integrated canonical cc76aa9f1b865d54f58ac40bbed3b8fd4c37f186; genuine post-integration main War Room CI #35900984817 SUCCESS incl Governance #107316905710 SUCCESS, product skipped.
 
-**Current active-only registry:** WR-148 sole assigned after WR-D074 activation gates. WR-147 CLOSED. WR-148 is documentation-only feasibility planning, not authorization to create, deploy or restore a nonproduction environment. The Manager requested roadmap reconciliation at this checkpoint; historical headings below are archival, not live assignments.
+**Current active-only registry:** WR-149 sole assigned after WR-D075 activation gates; WR-148 CLOSED as NONPRODUCTION_EXPERIMENT_PLAN_READY. WR-148 PR #416 exact Worker head ad4fb06d080398d019aa068b2d0ee4d81b1c04b0, exactly two Worker documentation paths, exact-head War Room CI #35904139101 SUCCESS / Governance #107327478967 SUCCESS / product #107327553260 SKIPPED. Manager acceptance comment 5800802273 accepts NONPRODUCTION_EXPERIMENT_PLAN_READY; evidence integrated canonical f6fe0c002219c9729d92003a520398135c7a4e13; genuine post-integration main War Room CI #35904602828 SUCCESS / Governance #107329064304 SUCCESS / product skipped. WR-149 may run ONLY loopback isolated scratch A→benign B→frozen A execution after proving OS/container-level no-external-egress incl service workers; if unavailable it must return BLOCKED without loading app. No repo product or public site mutation. Mandatory fresh independent evidence audit after execution; nonproduction results cannot prove GitHub Pages production recovery. The Manager requested roadmap reconciliation at this checkpoint; historical headings below are archival, not live assignments.
 
 **Recovery disposition:** Do NOT run a public/production rollback rehearsal using the rejected historical products. The older command bar produces premature manual DRAFT COMPLETE at 9/10 and conflicts with current FULL browser assertions; some earlier candidates also lack terminal-turn repair. A docs-only SHA cannot demonstrate a materially distinct product rollback. A future isolated nonproduction deployment/restore proof may be independently evaluated for its limited relevance, but no such proof yet exists and no production recovery check has been passed. Preserve this as an open A6 operational-evidence/admissibility decision.
 
@@ -17,7 +17,7 @@ WR-147 PR #413 exact Worker head b132cba0bf60d631bffc3570167c6bd1e898b15d; exact
 
 **Release posture:** Nominal 10×16 synthetic real Companion→bridge→app E2E accepted under WR-133/134, strict 2×5/20×30 app-side extremes under WR-135/138, and WR-143/144 command-bar terminal truth repaired/audited. Exact-current live ESPN Board/Pick History fallback completion is not established; structured Direct remains LIVE_DIRECT_UNVERIFIED. 2026 source integrity is accepted but current intended-date freshness adequacy is not independently decided; fresh lawful 2027 sources require separate season-gated A4 admission. Formal independent A6/release/production deployment remains unissued.
 
-**Planning:** WR-148 investigates one safe isolated nonproduction recovery experiment for future separate authorization. 2027 is the intended next draft-cycle public release target, conditional on actual data availability/rights, real-world fallback validation, bounded recovery evidence/admissibility and formal A6. No fixed launch date or guarantee. Track B and optional modes remain off the initial supported release critical path unless an independently documented gap requires them.
+**Planning:** WR-149 is the separately bounded execution of accepted WR-148 isolated local experiment; it is not a production Pages rollback, and local admissibility remains subject to fresh Independent Auditor and Manager disposition. 2027 is the intended next draft-cycle public release target, conditional on actual data availability/rights, real-world fallback validation, bounded recovery evidence/admissibility and formal A6. No fixed launch date or guarantee. Track B and optional modes remain off the initial supported release critical path unless an independently documented gap requires them.
 
 ## Historical workflow-control snapshot — WR-D065 / WR-142 (preserved, superseded by current gate above)
 
