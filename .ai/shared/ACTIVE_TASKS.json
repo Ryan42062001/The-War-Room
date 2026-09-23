@@ -1,8 +1,55 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-23T14:58:00Z",
+  "updated_at_utc": "2026-09-23T15:03:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": []
+  "tasks": [
+    {
+      "task_id": "WR-143",
+      "owner": "Builder",
+      "worker_slot": "builder-wr143-command-bar-completion-truth",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-143.md",
+      "role_handoff": ".ai/builder/HANDOFF.md",
+      "assignment_main_sha": "16fcb013195cee256d328ee84987f8a0737ad94a",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-143-command-bar-completion-truth-remediation",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": true,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": true,
+      "allowed_path_prefixes": [
+        "js/war-room-command-bar.js",
+        "scripts/test-browser.mjs",
+        ".ai/builder/WR143_COMMAND_BAR_COMPLETION_TRUTH_EVIDENCE.md",
+        ".ai/builder/WR143_COMMAND_BAR_COMPLETION_TRUTH_HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/auditor/",
+        ".ai/manager/",
+        ".ai/shared/",
+        ".github/",
+        "extensions/",
+        "data/"
+      ],
+      "forbidden_exact_paths": [
+        "js/war-room-draft-state.js",
+        "js/war-room-ui.js",
+        "package.json",
+        "README.md",
+        "index.html",
+        "script.js",
+        "war-room-config.js"
+      ],
+      "next_gate": "WR-D067 activation exact-head Governance -> guarded merge -> genuine main PUSH Governance -> bootstrap wr-143-command-bar-completion-truth-remediation from exact current main 0/0. Builder fixes retained LOW WR137-F01 only in exact four-file scope, runs browser/npm/full exact-head CI, freezes one head and stops. Manager then verifies and assigns fresh WR-144 independent audit. No Builder self-merge; PASS-family plus later guarded integration and genuine main FULL CI required."
+    }
+  ]
 }
