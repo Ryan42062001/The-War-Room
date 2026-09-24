@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-23T21:12:00-04:00",
+  "updated_at_utc": "2026-09-24T01:34:27Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
@@ -9,13 +9,13 @@
       "task_id": "WR-151",
       "owner": "Builder",
       "worker_slot": "builder-wr151-inert-hosted-loopback-preflight",
-      "status": "ASSIGNED",
+      "status": "AUDIT_READY",
       "task_file": ".ai/manager/WR-151.md",
       "role_handoff": ".ai/builder/HANDOFF.md",
       "assignment_main_sha": "2d91adb59f919a9d94db46047a03f2c3417f57b6",
-      "worker_checkpoint_sha": null,
+      "worker_checkpoint_sha": "fc6bbbf292462224dd108ebb8909daea149df44c",
       "branch": "builder/wr-151-inert-hosted-runner-loopback-preflight",
-      "pr": null,
+      "pr": 422,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
@@ -53,6 +53,57 @@
         "war-room-config.js"
       ],
       "next_gate": "WR-D077 exact-head Governance -> guarded merge -> genuine main PUSH Governance -> new builder/wr-151-inert-hosted-runner-loopback-preflight from exact then-current main 0/0. Builder publishes EXACT 5-file draft dormant-job implementation PR with exact-head FULL CI and pilot job SKIPPED. Fresh independent pre-execution security Auditor BEFORE Manager can label exact frozen target for ONE inert pilot. No A/B/A, public Pages, live provider or release."
+    },
+    {
+      "task_id": "WR-152",
+      "owner": "Auditor",
+      "worker_slot": "auditor-wr152-wr151-hosted-preflight-security",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-152.md",
+      "role_handoff": ".ai/auditor/HANDOFF.md",
+      "assignment_main_sha": "55e3de8068c974870cd245811302741d322ba4ae",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-152-wr151-inert-preflight-independent-security-audit",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": false,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": false,
+      "post_merge_canary_required": false,
+      "audit_target_task": "WR-151",
+      "audit_target_pr": 422,
+      "audit_target_branch": "builder/wr-151-inert-hosted-runner-loopback-preflight",
+      "audit_target_sha": "fc6bbbf292462224dd108ebb8909daea149df44c",
+      "allowed_path_prefixes": [
+        ".ai/auditor/WR152_WR151_INERT_HOSTED_PREFLIGHT_INDEPENDENT_SECURITY_AUDIT.md",
+        ".ai/auditor/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/shared/",
+        ".ai/manager/",
+        ".ai/builder/",
+        ".ai/work_helper/",
+        ".github/",
+        "js/",
+        "scripts/",
+        "extensions/",
+        "data/"
+      ],
+      "forbidden_exact_paths": [
+        "package.json",
+        "package-lock.json",
+        "README.md",
+        "index.html",
+        "script.js",
+        "service-worker.js",
+        "war-room-config.js"
+      ],
+      "next_gate": "WR-D078 Manager activation exact-head Governance -> guarded merge -> genuine main PUSH Governance -> fresh wr-152-wr151-inert-preflight-independent-security-audit exact current main 0 ahead/0 behind. Independently audit IMMUTABLE PR #422 head fc6bbbf292462224dd108ebb8909daea149df44c, exact FIVE file scope/FULL CI #35943519728 incl product #107456432505 and PILOT SKIPPED #107456374579, initial PR opened pilot SKIPPED #107455664008. Publish exactly two Auditor-only docs in separate PR with actual exact-head Governance, one PASS-family/FAIL. DO NOT apply label/run pilot/merge target."
     }
   ]
 }
