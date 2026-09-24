@@ -184,6 +184,23 @@ function startFixture() {
   });
 }
 
+function browserOsPid() {
+  // Playwright Browser has no public process() API. Derive the *actual* OS
+  // Chromium parent from /proc PPid and an executable identity check instead.
+  const candidates=[];
+  for (const pid of listPids()) {
+    try {
+      const status=procStatus(pid);
+      if (Number(procField(status,'PPid'))!==process.pid) continue;
+      const cmdline=fs.readFileSync('/proc/'+pid+'/cmdline','utf8');
+      if (/(?:chrome-headless-shell|chrome|chromium)/i.test(cmdline))
+        candidates.push(pid);
+    } catch { /* short-lived child */ }
+  }
+  assert.equal(candidates.length,1,'UNVERIFIED: unique Playwright Chromium parent OS PID');
+  return candidates[0];
+}
+
 async function browserScenario({url, inode, proxyMode}) {
   verifyNamespace(proxyMode ? 'proxy-before-launch' : 'direct-before-launch');
   const browserOptions={headless:true};
@@ -193,7 +210,7 @@ async function browserScenario({url, inode, proxyMode}) {
     browserOptions.proxy={server:'http://198.51.100.1:443',bypass:'127.0.0.1,localhost'};
   }
   const browser=await chromium.launch(browserOptions);
-  const browserPid=browser.process()?.pid;
+  const browserPid=browserOsPid();
   let context;
   const failures=[];
   try {
