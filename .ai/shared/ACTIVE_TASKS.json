@@ -1,47 +1,47 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-23T19:05:00Z",
+  "updated_at_utc": "2026-09-23T21:12:00-04:00",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
   "tasks": [
     {
-      "task_id": "WR-150",
-      "owner": "Work Helper",
-      "worker_slot": "work-helper-wr150-runner-security-qualification",
+      "task_id": "WR-151",
+      "owner": "Builder",
+      "worker_slot": "builder-wr151-inert-hosted-loopback-preflight",
       "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-150.md",
-      "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "7cfda9affebe7ba0c6324b4ea5a600cf3f3b2f43",
+      "task_file": ".ai/manager/WR-151.md",
+      "role_handoff": ".ai/builder/HANDOFF.md",
+      "assignment_main_sha": "2d91adb59f919a9d94db46047a03f2c3417f57b6",
       "worker_checkpoint_sha": null,
-      "branch": "wr-150-hosted-runner-isolation-qualification",
+      "branch": "builder/wr-151-inert-hosted-runner-loopback-preflight",
       "pr": null,
       "dependency": "INDEPENDENT",
       "execution_mode": "STANDARD_CHAT_HIGH",
       "refresh_mode": "FAST_REFRESH",
-      "audit_required": false,
+      "audit_required": true,
       "blocker_type": "NONE",
       "user_action_required": false,
       "blocked_on_tasks": [],
       "blocked_on": [],
       "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
+      "post_merge_canary_required": true,
       "allowed_path_prefixes": [
-        ".ai/work_helper/WR150_HOSTED_RUNNER_ISOLATION_QUALIFICATION.md",
-        ".ai/work_helper/HANDOFF.md"
+        ".github/workflows/ci.yml",
+        "scripts/wr150-loopback-netns.sh",
+        "scripts/wr150-loopback-preflight.mjs",
+        ".ai/builder/WR151_INERT_HOSTED_RUNNER_PREFLIGHT_IMPLEMENTATION.md",
+        ".ai/builder/HANDOFF.md"
       ],
       "forbidden_path_prefixes": [
         ".ai/auditor/",
         ".ai/manager/",
         ".ai/shared/",
-        ".ai/builder/",
         ".ai/research/",
         ".ai/strategy/",
-        ".github/",
-        "js/",
-        "scripts/",
         "extensions/",
-        "data/"
+        "data/",
+        "js/"
       ],
       "forbidden_exact_paths": [
         "package.json",
@@ -52,7 +52,7 @@
         "service-worker.js",
         "war-room-config.js"
       ],
-      "next_gate": "WR-D076 exact-head Governance -> guarded merge -> genuine canonical-main PUSH Governance -> fresh wr-150-hosted-runner-isolation-qualification exact then-current main 0/0. ONE read-only runner/egress feasibility decision from actual hosted FULL CI/runner behavior, no browser/download/CI code/probe/app load. Publish two Worker docs and exact-head Governance. Return one narrow future audited pilot OR NO_QUALIFIED_RUNNER/defer; no endless rerun."
+      "next_gate": "WR-D077 exact-head Governance -> guarded merge -> genuine main PUSH Governance -> new builder/wr-151-inert-hosted-runner-loopback-preflight from exact then-current main 0/0. Builder publishes EXACT 5-file draft dormant-job implementation PR with exact-head FULL CI and pilot job SKIPPED. Fresh independent pre-execution security Auditor BEFORE Manager can label exact frozen target for ONE inert pilot. No A/B/A, public Pages, live provider or release."
     }
   ]
 }
