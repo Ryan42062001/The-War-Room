@@ -18,6 +18,10 @@ echo "WR151_PACKAGE_LOCK_SHA256 $(sha256sum package-lock.json | cut -d' ' -f1)"
 
 runner_uid="$(id -u)"
 runner_gid="$(id -g)"
+parent_netns="$(readlink /proc/self/ns/net)"
+node_binary="$(command -v node)"
+browser_cache="${HOME}/.cache/ms-playwright"
+[[ "$node_binary" == /* && -d "$browser_cache" ]] || fail "pinned browser or Node binary inaccessible"
 namespace="wr151-${GITHUB_RUN_ID:?}-${GITHUB_RUN_ATTEMPT:-1}-$$"
 [[ "$namespace" =~ ^wr151-[0-9]+-[0-9]+-[0-9]+$ ]] || fail "invalid namespace name"
 workdir="$(mktemp -d "${RUNNER_TEMP:-/tmp}/wr151-inert.XXXXXXXX")" || fail "private workdir creation"
@@ -93,7 +97,9 @@ sudo -n ip netns exec "$namespace" unshare --mount --propagation private -- \
       --bounding-set=-all --inh-caps=-all --ambient-caps=-all --no-new-privs \
       env -i PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin HOME="$3" \
       TMPDIR=/tmp WR151_NETNS_NAME="$4" WR151_EXPECTED_HEAD="$5" \
-      NODE_ENV=test /usr/bin/node "$6"
+      WR151_PARENT_NETNS_INODE="$7" PLAYWRIGHT_BROWSERS_PATH="$8" \
+      NODE_ENV=test "$9" "$6"
   ' _ "$runner_uid" "$runner_gid" "$workdir/home" "$namespace" \
-  "$WR151_EXPECTED_HEAD" "$PWD/scripts/wr150-loopback-preflight.mjs"
+  "$WR151_EXPECTED_HEAD" "$PWD/scripts/wr150-loopback-preflight.mjs" \
+  "$parent_netns" "$browser_cache" "$node_binary"
 # The EXIT trap owns all cleanup and its audited result.
