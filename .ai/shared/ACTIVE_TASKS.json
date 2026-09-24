@@ -1,58 +1,8 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-24T02:24:00Z",
+  "updated_at_utc": "2026-09-24T03:45:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": [
-    {
-      "task_id": "WR-153",
-      "owner": "Work Helper",
-      "worker_slot": "work-helper-wr153-exact-current-live-fallback-readiness",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-153.md",
-      "role_handoff": ".ai/work_helper/HANDOFF.md",
-      "assignment_main_sha": "1dc14f035c1af249aafff001193a350dae88ac13",
-      "worker_checkpoint_sha": null,
-      "branch": "wr-153-exact-current-live-fallback-readiness",
-      "pr": null,
-      "dependency": "INDEPENDENT",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_required": false,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": false,
-      "allowed_path_prefixes": [
-        ".ai/work_helper/WR153_EXACT_CURRENT_LIVE_FALLBACK_READINESS.md",
-        ".ai/work_helper/HANDOFF.md"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/auditor/",
-        ".ai/manager/",
-        ".ai/shared/",
-        ".ai/builder/",
-        ".ai/research/",
-        ".ai/strategy/",
-        ".github/",
-        "js/",
-        "scripts/",
-        "extensions/",
-        "data/"
-      ],
-      "forbidden_exact_paths": [
-        "package.json",
-        "package-lock.json",
-        "README.md",
-        "index.html",
-        "script.js",
-        "service-worker.js",
-        "war-room-config.js"
-      ],
-      "next_gate": "WR-D081 Manager exact-head Governance -> guarded merge -> genuine canonical-main PUSH Governance -> fresh wr-153-exact-current-live-fallback-readiness from exact then-current canonical main verified 0/0. Read-only version/Pages/Companion identity and privacy-safe disposable ESPN Board/Pick History owner-assisted MOCK plan only; NO provider/account login, browser interaction, test execution, public site mutation, A→B→A or A6. Publish exact two Work Helper documents one DRAFT PR/final-head Governance and return one readiness result/owner-action recommendation."
-    }
-  ]
+  "tasks": []
 }
