@@ -1,58 +1,8 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-24T02:09:00Z",
+  "updated_at_utc": "2026-09-24T02:14:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": [
-    {
-      "task_id": "WR-151",
-      "owner": "Builder",
-      "worker_slot": "builder-wr151-inert-hosted-loopback-preflight",
-      "status": "ASSIGNED",
-      "task_file": ".ai/manager/WR-151.md",
-      "role_handoff": ".ai/builder/HANDOFF.md",
-      "assignment_main_sha": "2d91adb59f919a9d94db46047a03f2c3417f57b6",
-      "worker_checkpoint_sha": null,
-      "branch": "builder/wr-151-inert-hosted-runner-loopback-preflight",
-      "pr": 422,
-      "dependency": "INDEPENDENT",
-      "execution_mode": "STANDARD_CHAT_HIGH",
-      "refresh_mode": "FAST_REFRESH",
-      "audit_required": true,
-      "blocker_type": "NONE",
-      "user_action_required": false,
-      "blocked_on_tasks": [],
-      "blocked_on": [],
-      "external_authority_evidence_required": false,
-      "post_merge_canary_required": true,
-      "allowed_path_prefixes": [
-        ".github/workflows/ci.yml",
-        "scripts/wr150-loopback-netns.sh",
-        "scripts/wr150-loopback-preflight.mjs",
-        ".ai/builder/WR151_INERT_HOSTED_RUNNER_PREFLIGHT_IMPLEMENTATION.md",
-        ".ai/builder/HANDOFF.md"
-      ],
-      "forbidden_path_prefixes": [
-        ".ai/auditor/",
-        ".ai/manager/",
-        ".ai/shared/",
-        ".ai/research/",
-        ".ai/strategy/",
-        "extensions/",
-        "data/",
-        "js/"
-      ],
-      "forbidden_exact_paths": [
-        "package.json",
-        "package-lock.json",
-        "README.md",
-        "index.html",
-        "script.js",
-        "service-worker.js",
-        "war-room-config.js"
-      ],
-      "next_gate": "WR-D079 remediation control-plane PR exact-head Governance -> guarded Manager merge -> genuine post-merge canonical-main PUSH Governance. Reverify existing DRAFT Builder PR #422 frozen failed source fc6bbbf292462224dd108ebb8909daea149df44c, label ABSENT; authorize ONLY SAME-TASK 5-file H01/H02/M01/M02 source correction/negative controls or return NO_QUALIFIED_RUNNER if reliable external immutable reviewed-head gate or host IPC isolation unavailable. Original Builder base 55e3de... preserved, no silent rebase/main merge. NEW exact-head FULL/Governance/product SUCCESS, pilot SKIPPED, NEW Manager freeze and fresh separate security re-audit; no pilot/label/PR merge."
-    }
-  ]
+  "tasks": []
 }
