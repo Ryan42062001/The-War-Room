@@ -1,8 +1,58 @@
 {
   "schema_version": 3,
-  "updated_at_utc": "2026-09-24T03:45:00Z",
+  "updated_at_utc": "2026-09-24T04:00:00Z",
   "canonical_branch": "main",
   "manager_owned": true,
   "active_only": true,
-  "tasks": []
+  "tasks": [
+    {
+      "task_id": "WR-154",
+      "owner": "Work Helper",
+      "worker_slot": "work-helper-wr154-owner-operated-live-board-fallback",
+      "status": "ASSIGNED",
+      "task_file": ".ai/manager/WR-154.md",
+      "role_handoff": ".ai/work_helper/HANDOFF.md",
+      "assignment_main_sha": "104f9db4fff2cec62713bf64cecb327c3a5e6f7c",
+      "worker_checkpoint_sha": null,
+      "branch": "wr-154-owner-operated-live-board-fallback",
+      "pr": null,
+      "dependency": "INDEPENDENT",
+      "execution_mode": "STANDARD_CHAT_HIGH",
+      "refresh_mode": "FAST_REFRESH",
+      "audit_required": true,
+      "blocker_type": "NONE",
+      "user_action_required": false,
+      "blocked_on_tasks": [],
+      "blocked_on": [],
+      "external_authority_evidence_required": true,
+      "post_merge_canary_required": false,
+      "allowed_path_prefixes": [
+        ".ai/work_helper/WR154_OWNER_OPERATED_LIVE_FALLBACK_EVIDENCE.md",
+        ".ai/work_helper/HANDOFF.md"
+      ],
+      "forbidden_path_prefixes": [
+        ".ai/auditor/",
+        ".ai/manager/",
+        ".ai/shared/",
+        ".ai/builder/",
+        ".ai/research/",
+        ".ai/strategy/",
+        ".github/",
+        "js/",
+        "scripts/",
+        "extensions/",
+        "data/"
+      ],
+      "forbidden_exact_paths": [
+        "package.json",
+        "package-lock.json",
+        "README.md",
+        "index.html",
+        "script.js",
+        "service-worker.js",
+        "war-room-config.js"
+      ],
+      "next_gate": "WR-D083 Manager exact-head Governance -> guarded merge -> genuine canonical-main PUSH Governance -> fresh Work Helper branch exact then-current main 0/0. P0 public no-cookie read-only version and OWNER-ONLY installed/browser/cache/format preflight; STOP for distinct Manager GO before user starts ONE new disposable 10x16 Full-PPR snake slot-5 ESPN mock. Worker never accesses ESPN/account. After GO, owner alone operates and worker records sanitized numbered Board/Pick History fallback receipts; separate independent Auditor after frozen evidence; no A6/release/rollback."
+    }
+  ]
 }
