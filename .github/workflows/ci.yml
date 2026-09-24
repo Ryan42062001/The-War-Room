@@ -199,6 +199,11 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
           fetch-depth: 0
+      - name: Set up pinned Node for inert preflight provisioning
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
       - name: Verify immutable head, package custody and record merge identity
         env:
           EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
