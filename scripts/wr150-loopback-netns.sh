@@ -92,7 +92,11 @@ sudo -n ip netns exec "$namespace" unshare --mount --propagation private -- \
     # These are filesystem broker paths that a network namespace alone does
     # not isolate. Reject any surviving path socket in the accessible runner
     # source/cache tree rather than assuming AF_UNIX is namespace-confined.
-    if find /home/runner/work /home/runner/.cache -type s -print -quit 2>/dev/null | grep -q .; then
+    socket_scan="$(find /home/runner/work /home/runner/.cache -type s -print -quit 2>/dev/null)" || {
+      echo "WR151_FAIL_CLOSED: cannot fully inspect exposed runner socket paths" >&2
+      exit 1
+    }
+    if [[ -n "$socket_scan" ]]; then
       echo "WR151_FAIL_CLOSED: host filesystem broker socket path remains" >&2
       exit 1
     fi
