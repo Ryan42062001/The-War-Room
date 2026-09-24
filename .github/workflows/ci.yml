@@ -1,6 +1,9 @@
 name: War Room CI
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled]
 
 jobs:
   classify:
@@ -171,3 +174,67 @@ jobs:
             echo "Resilience lifecycle iteration ${iteration}/3"
             node scripts/test-resilience.mjs
           done
+
+  wr151-inert-hosted-loopback-preflight:
+    # Dormant on every push, PR opened/reopened/synchronize, and unrelated label.
+    # A label on an old PR head is NOT enough: only a fresh labeled action
+    # after separate Manager approval may reach this dedicated inert job.
+    if: >-
+      ${{ github.event_name == 'pull_request' &&
+          github.event.action == 'labeled' &&
+          github.event.label.name == 'wr151-inert-preflight-reviewed' &&
+          github.event.pull_request.state == 'open' &&
+          github.event.pull_request.draft == true &&
+          github.event.pull_request.base.ref == 'main' &&
+          github.event.pull_request.head.repo.full_name == github.repository &&
+          github.event.pull_request.head.ref == 'builder/wr-151-inert-hosted-runner-loopback-preflight' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout exact PR head without persisted credentials
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Verify immutable head, package custody and record merge identity
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+          EXPECTED_BASE: ${{ github.event.pull_request.base.sha }}
+          SYNTHETIC_MERGE_SHA: ${{ github.sha }}
+          EXPECTED_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          EXPECTED_BRANCH: ${{ github.event.pull_request.head.ref }}
+          EXPECTED_PR: ${{ github.event.pull_request.number }}
+          EXPECTED_LABEL: ${{ github.event.label.name }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          actual_head="$(git rev-parse HEAD)"
+          echo "WR151_CUSTODY head=$actual_head merge=$SYNTHETIC_MERGE_SHA base=$EXPECTED_BASE pr=$EXPECTED_PR"
+          test "$actual_head" = "$EXPECTED_HEAD"
+          test "$EXPECTED_HEAD_REPO" = "$GITHUB_REPOSITORY"
+          test "$EXPECTED_BRANCH" = 'builder/wr-151-inert-hosted-runner-loopback-preflight'
+          test "$EXPECTED_LABEL" = 'wr151-inert-preflight-reviewed'
+          git cat-file -e "$EXPECTED_BASE^{commit}"
+          git diff --quiet "$EXPECTED_BASE" "$EXPECTED_HEAD" -- package.json package-lock.json
+          echo "WR151_PACKAGE_LOCK_SHA256 $(sha256sum package-lock.json | cut -d' ' -f1)"
+          echo "WR151_CUSTODY_OK"
+      - name: Provision locked dependencies and Chromium before isolation
+        run: |
+          set -Eeuo pipefail
+          npm ci --ignore-scripts
+          npx --no-install playwright install --with-deps chromium
+          node --version
+          npm --version
+          npx --no-install playwright --version
+          node --check scripts/wr150-loopback-preflight.mjs
+          bash -n scripts/wr150-loopback-netns.sh
+      - name: ONE inert namespace and service-worker preflight only
+        env:
+          WR151_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -Eeuo pipefail
+          test "$(git rev-parse HEAD)" = "$WR151_EXPECTED_HEAD"
+          bash scripts/wr150-loopback-netns.sh
