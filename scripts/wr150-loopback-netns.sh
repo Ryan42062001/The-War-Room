@@ -87,6 +87,15 @@ sudo -n ip netns exec "$namespace" unshare --mount --propagation private -- \
   bash -Eeuo pipefail -c '
     mount -t tmpfs -o mode=0700,nosuid,nodev,noexec,size=16m tmpfs /run
     mount -t tmpfs -o mode=1777,nosuid,nodev,size=128m tmpfs /tmp
+    mount -t tmpfs -o mode=1777,nosuid,nodev,size=16m tmpfs /var/tmp
+    mount -t tmpfs -o mode=1777,nosuid,nodev,size=64m tmpfs /dev/shm
+    # These are filesystem broker paths that a network namespace alone does
+    # not isolate. Reject any surviving path socket in the accessible runner
+    # source/cache tree rather than assuming AF_UNIX is namespace-confined.
+    if find /home/runner/work /home/runner/.cache -type s -print -quit 2>/dev/null | grep -q .; then
+      echo "WR151_FAIL_CLOSED: host filesystem broker socket path remains" >&2
+      exit 1
+    fi
     for file in /proc/self/fd/*; do
       fd="${file##*/}"
       if [[ "$fd" =~ ^[0-9]+$ ]] && (( fd > 2 )); then
