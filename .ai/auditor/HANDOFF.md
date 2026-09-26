@@ -1,26 +1,27 @@
-# WR-144 Auditor Handoff
+# WR-152 — Independent Pre-Execution Security / Workflow Auditor Handoff
 
-**STATUS:** COMPLETE — independent audit published; branch freezes after the single publication commit.  
-**TASK:** WR-144 — Fresh Independent Audit of WR-143 Command-Bar Completion Truth Remediation  
-**ROLE:** Independent Auditor / QA  
-**BRANCH:** `wr-144-wr143-command-bar-completion-truth-independent-audit`  
-**BASE:** `c8c03bdb0b0880ce8dc6d1fa2d6acf19b498fb91`  
-**AUDITED PR / HEAD:** Builder PR #404 / `8dc7a05f645c8a5f59b700440a0977c006efcd72`  
-**VERDICT:** **PASS**  
-**FINDINGS:** No CRITICAL, HIGH, MEDIUM, or LOW findings.
+STATUS | TASK | ROLE | BRANCH | HEAD | BASE | PR | DONE | CHANGED | TESTS | CI | BLOCKERS | DECISIONS CONSUMED | NEXT ACTION | FILES / ARTIFACTS THAT MATTER | DO NOT REPEAT
 
-**DONE:** Independently refreshed Workflow V3.5/control-plane state; reverified immutable Builder custody and exact four-file / 3-ahead-0-behind target; inspected base/target command-bar and browser-test source; inspected unchanged canonical completion/draft-state authority; challenged missing/throwing completion authority, no-future-owned-pick, waiting, on-clock, authoritative complete, accepted provisional semantics, stale terminal-copy suppression and browser-oracle vacuity; decoded exact-final-head Builder CI and both historical failed candidate logs.
+**STATUS / VERDICT:** FAIL — REMEDIATION REQUIRED. Independent STATIC source, event-gate and genuine GitHub CI audit complete as analysis; publication requires separate DRAFT Auditor PR and final exact-head Governance SUCCESS. No pilot run or network isolation PASS.
 
-**CHANGED:** Exactly two Auditor-authorized publication files only:
-1. `.ai/auditor/WR144_WR143_COMMAND_BAR_COMPLETION_TRUTH_INDEPENDENT_AUDIT.md`
-2. `.ai/auditor/HANDOFF.md`
+**TASK / ROLE:** WR-152 / Independent Auditor / QA, fresh separate lane, V3.5 STANDARD_CHAT_HIGH / FAST_REFRESH.
 
-**BUILDER CI VERIFIED:** War Room CI #35881318950 SUCCESS on exact `8dc7a05f645c8a5f59b700440a0977c006efcd72`; classify #107250199737 SUCCESS; Governance #107250266022 SUCCESS; product #107250355527 SUCCESS; bootstrap #107250267577 SKIPPED. Product logs prove real slot1 9/10 WAITING with authoritative false / next null, slot2 9/10 ON THE CLOCK, both 10/10 COMPLETE, terminal reload, slot1 undo back to truthful WAITING, recompletion, 8 checkpoints per ownership case, zero focused external requests and browser errors. Historical CI #35880594349 and #35880998233 remain FAILURE.
+**BRANCH / BASE:** `wr-152-wr151-inert-preflight-independent-security-audit` created from exact canonical main `a79d245b3368821c2f5d80404361bd319e86ea9b`, initially 0 ahead / 0 behind. Final Auditor SHA and Auditor PR identifier to be recorded in the separately published PR, not guessed in this pre-commit handoff.
 
-**LIMITATIONS:** No live ESPN/provider proof, no physical-device certification, no new ranking/source rights, no deployment readiness, no formal A6, no draft-ready/release claim. Existing 20×30/600 harness is retained passing regression coverage only, not new WR-143 scope.
+**AUDITED IMMUTABLE BUILDER PR / HEAD:** DRAFT / OPEN / UNMERGED PR #422, `fc6bbbf292462224dd108ebb8909daea149df44c`, Builder base `55e3de8068c974870cd245811302741d322ba4ae`, 10 ahead/0 behind, exactly five authorized paths; label `wr151-inert-preflight-reviewed` absent at audit and recheck. Manager freeze comment #5806008717 independently inspected.
 
-**PUBLICATION HEAD / AUDITOR GOVERNANCE:** A Git commit cannot truthfully contain its own SHA or its future CI IDs. Therefore the immutable final Auditor SHA plus the exact-head applicable Governance run/job/log identifiers are recorded in the associated OPEN/UNMERGED Auditor PR metadata after this one publication commit is frozen, without another branch write.
+**DONE:** Independently inspected actual frozen executable workflow, both inert scripts, both Builder docs, canonical WR-152/WR-151/WR-150/Workflow/registry/role sources, real PR event semantics, exact-head checkout, runner/permission/provisioning, namespace/mount/IPC/FD/proxy boundary, Chromium/SW/process assertions, IPv4/IPv6 negative controls, cleanup and fail-closed claims. No task-target write, label, pilot or service interaction.
 
-**BLOCKERS:** None for the scoped audit publication. Auditor does not merge either PR.
+**CHANGED:** Auditor report `.ai/auditor/WR152_WR151_INERT_HOSTED_PREFLIGHT_INDEPENDENT_SECURITY_AUDIT.md` and this `.ai/auditor/HANDOFF.md` ONLY. Never change Builder files, Manager/shared controls or workflow.
 
-**NEXT ACTION:** Manager independently reviews the WR-144 report and exact-head Auditor Governance receipt, then independently reverifies Builder PR #404 remains exactly `8dc7a05f645c8a5f59b700440a0977c006efcd72`. Only Manager acceptance of this PASS on that unchanged target may permit a separate guarded exact-head integration decision. Any production integration still requires a genuine canonical-main FULL War Room CI SUCCESS on the landed SHA before WR-143 / WR-144 closure.
+**BUILDER CI VERIFIED:** Final exact-head genuine PR run #35943519728 SUCCESS on `fc6bbbf292462224dd108ebb8909daea149df44c`; classify #107456373576 FULL SUCCESS, Governance #107456399595 SUCCESS, FULL product #107456432505 SUCCESS with real browser/npm test and WR136 terminal PASS, dedicated pilot #107456374579 SKIPPED, bootstrap #107456400259 SKIPPED. Earlier initial opened-run #35943280524 is historical head `aa8aa29fd24b939b5081c054a32919e84f820e86`; product #107455735145 SUCCESS and dedicated pilot #107455664008 SKIPPED. Genuine WR-D078 main push #35944843152 on `a79d245b3368821c2f5d80404361bd319e86ea9b` SUCCESS, Governance #107460439958 SUCCESS. None executes/qualifies inert isolation.
+
+**BLOCKING FINDINGS:** H01 HIGH — labeled privileged job compares checkout only to event-derived (not trusted frozen-reviewed) head; an unreviewed same-branch commit can satisfy its own custody checks and label gate. H02 HIGH — limited two-root socket scan and nonisolated host PID/proc access do not prove absence of all host-side Unix/broker IPC paths. M01 MEDIUM — cleanup masks `ip netns pids` failures as empty and can report unverified descendant termination as PASS. M02 MEDIUM — unique Chromium kernel thread name is not independently linked to the controlling CDP SW target/PID or complete descendant lifetime. Evidence/impact/remediation/validation and scoped source observations are in the task-specific report.
+
+**DECISIONS CONSUMED:** WR-D078 immutable Builder freeze/auditor activation, WR-D077 dormant implementation limits, accepted WR-150 diagnostic-only implementation scope. No audit acceptance, Manager pilot approval, runner isolation or recovery has been inferred.
+
+**NEXT MANAGER ACTION:** Review this independent FAIL with the exact auditor PR/head and its genuine exact-head Governance. Reverify Builder #422 remains frozen at `fc6bbbf292462224dd108ebb8909daea149df44c` and unlabeled. Keep DRAFT/unmerged/unlabeled; no inert pilot. If Manager accepts, route bounded WR-151 same-task Builder correction of H01/H02/M01/M02 under exact existing five-file scope (or separately authorize any truly required scope change), obtain NEW exact-final-head FULL/Governance/product CI with pilot SKIPPED, re-freeze NEW head and appoint a fresh independent re-audit. If safe trigger/IPC exclusion cannot be established, `NO_QUALIFIED_RUNNER`; defer surrogate.
+
+**FILES / ARTIFACTS THAT MATTER:** The WR-152 report, this handoff, Builder PR #422 frozen five-file diff, Manager freeze comment #5806008717, actual CI run/jobs above, WR-151/WR-152 task specifications.
+
+**DO NOT REPEAT:** No Builder self-audit/merge, Auditor self-merge, label, pilot, WSL/self-hosted runner, War Room app, A→B→A, public Pages, ESPN/provider, private data, A6 or release. Normal FULL CI is NOT an inert pilot or egress proof.
