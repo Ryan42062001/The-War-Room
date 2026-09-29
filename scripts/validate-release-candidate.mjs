@@ -12,18 +12,12 @@ assert.equal(tracked.some(file => file === 'node_modules' || file.startsWith('no
 const workflows = tracked.filter(file => file.startsWith('.github/workflows/')).sort();
 const approvedWorkflows = [
   '.github/workflows/ci.yml',
-  '.github/workflows/wr042-source-custody.yml',
-  '.github/workflows/wr046-custody-fixture.yml',
-  '.github/workflows/wr063-retained-version-read.yml',
-  '.github/workflows/wr069-retained-safe-consumer-parser.yml',
-  '.github/workflows/wr074-self-hosted-heavy-ci-pilot.yml',
-  '.github/workflows/wr083-protected-historical-scoring-bridge.yml',
-  '.github/workflows/wr097-v21-protected-scoring-bridge.yml',
+  '.github/workflows/deploy-pages.yml',
 ].sort();
 assert.deepEqual(
   workflows,
   approvedWorkflows,
-  'Only the permanent CI workflow and Manager-approved custody workflows should be tracked.',
+  'Only the canonical Speed Workflow V2.1 CI and explicit production deployment workflows should be tracked.',
 );
 
 const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));

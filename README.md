@@ -6,6 +6,14 @@ It is built for redraft PPR leagues. FantasyPros expert consensus rankings estab
 
 [Open The War Room](https://ryan42062001.github.io/The-War-Room/)
 
+## Development workflow
+
+Active development uses [Speed Workflow V2.1](docs/WORKFLOW.md): one coherent phase branch/PR, push-based FAST CI, whole-phase preview, deliberate exact-head FULL CI, risk-based independent audit, explicit merge authorization, and separate production deployment.
+
+Retired Workflow V3/V3.5 task/control-plane material is preserved under `.history/workflow-v3-5/` and is no longer active governance.
+
+The next planned phase is **WR-P01 — ESPN Board-Fallback Reliability Gate**, carrying forward the useful exact-current WR-153/154 requirements without continuing the old Work Helper/Manager task chain.
+
 ## What it does
 
 - Tracks every player as available, taken, or mine

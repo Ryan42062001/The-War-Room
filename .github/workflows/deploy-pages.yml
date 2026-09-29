@@ -1,0 +1,102 @@
+name: Deploy War Room Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: Type DEPLOY to publish canonical main to GitHub Pages
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: war-room-production
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    if: inputs.confirm == 'DEPLOY'
+    runs-on: ubuntu-latest
+    outputs:
+      main_sha: ${{ steps.sha.outputs.value }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - id: sha
+        name: Record exact canonical main
+        run: echo "value=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - run: python3 .github/scripts/validate_phase_workflow.py
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - run: npm audit --audit-level=high
+      - name: Prepare production artifact
+        run: |
+          rm -rf _site
+          mkdir _site
+          cp index.html favicon.ico *.css *.js _site/
+          cp -R assets data js _site/
+
+  deploy:
+    if: inputs.confirm == 'DEPLOY'
+    needs: validate
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.validate.outputs.main_sha }}
+      - name: Recreate validated artifact
+        run: |
+          rm -rf _site
+          mkdir _site
+          cp index.html favicon.ico *.css *.js _site/
+          cp -R assets data js _site/
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+      - id: deployment
+        name: Deploy GitHub Pages
+        uses: actions/deploy-pages@v5
+
+  verify-production:
+    if: inputs.confirm == 'DEPLOY'
+    needs: [validate, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.validate.outputs.main_sha }}
+      - name: Verify critical served files
+        shell: bash
+        env:
+          BASE_URL: https://ryan42062001.github.io/The-War-Room
+          DEPLOYED_SHA: ${{ needs.validate.outputs.main_sha }}
+        run: |
+          set -euo pipefail
+          for file in index.html script.js war-room-config.js service-worker.js; do
+            expected="$(sha256sum "$file" | awk '{print $1}')"
+            matched=false
+            for attempt in $(seq 1 24); do
+              actual="$(curl -fsSL "$BASE_URL/$file?sha=$DEPLOYED_SHA&attempt=$attempt" | sha256sum | awk '{print $1}')" || actual=""
+              if [ "$actual" = "$expected" ]; then
+                matched=true
+                break
+              fi
+              sleep 5
+            done
+            test "$matched" = "true"
+          done
