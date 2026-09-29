@@ -6,10 +6,11 @@ import {execFileSync} from 'node:child_process';
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(.:)/, '$1')), '..');
 const tracked = execFileSync('git', ['ls-files'], {cwd:root, encoding:'utf8'})
   .split(/\r?\n/).filter(Boolean);
+const activeTracked = tracked.filter(file => !file.startsWith('.history/'));
 
 assert.equal(tracked.includes('README.txt'), false, 'Obsolete README.txt scaffold must not be tracked.');
 assert.equal(tracked.some(file => file === 'node_modules' || file.startsWith('node_modules/')), false, 'node_modules must never be tracked.');
-const workflows = tracked.filter(file => file.startsWith('.github/workflows/')).sort();
+const workflows = activeTracked.filter(file => file.startsWith('.github/workflows/')).sort();
 const approvedWorkflows = [
   '.github/workflows/ci.yml',
   '.github/workflows/deploy-pages.yml',
@@ -43,7 +44,7 @@ assert.equal(minVersion, manifest.version, 'Website and packaged companion versi
 
 const forbiddenSlugs = ['Fantasy-Draft-' + 'Cheat-Sheet-2026', 'fantasy-draft-' + 'cheat-sheet-2026'];
 const textExtensions = new Set(['.js','.mjs','.cjs','.json','.md','.html','.css','.yml','.yaml','.txt']);
-for (const relative of tracked) {
+for (const relative of activeTracked) {
   if (!textExtensions.has(path.extname(relative).toLowerCase())) continue;
   const absolute = path.join(root, relative);
   const contents = fs.readFileSync(absolute, 'utf8');
@@ -52,4 +53,4 @@ for (const relative of tracked) {
   }
 }
 
-console.log(`Release-candidate repository guard valid: ${tracked.length} tracked files, permissions and identity clean.`);
+console.log(`Release-candidate repository guard valid: ${activeTracked.length} active tracked files (${tracked.length - activeTracked.length} archived history files excluded), permissions and identity clean.`);

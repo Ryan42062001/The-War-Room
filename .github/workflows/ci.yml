@@ -17,9 +17,14 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: war-room-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   governance:
     name: governance
+    timeout-minutes: 10
     if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'fast')
     runs-on: ubuntu-latest
     steps:
@@ -46,6 +51,7 @@ jobs:
 
   test:
     name: test
+    timeout-minutes: 30
     if: >-
       (github.event_name == 'pull_request' &&
        github.event.action == 'labeled' &&
