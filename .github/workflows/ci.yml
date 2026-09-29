@@ -49,8 +49,14 @@ jobs:
         run: timeout 120s npm run test:syntax
       - name: Validate dataset baseline
         run: timeout 120s npm run test:dataset
-      - name: Validate companion extension
-        run: timeout 120s npm run test:extension
+      - name: Validate browser-free companion tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t files < <(find extensions/espn-companion/test -maxdepth 1 -name '*.test.cjs' ! -name 'click-provenance-v2.test.cjs' | sort)
+          timeout 120s node --test "${files[@]}"
+      - name: Note browser-backed companion coverage
+        run: echo "click-provenance-v2.test.cjs requires Playwright Chromium and remains in deliberate FULL PHASE CI."
 
   test:
     name: test
