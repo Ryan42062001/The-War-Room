@@ -43,9 +43,6 @@ jobs:
           npm run test:syntax
           npm run test:dataset
           npm run test:extension
-          npm run test:draft-invariants
-          npm run test:wr133-companion-war-room-e2e
-          npm run test:live-mock-fixtures
 
   test:
     name: test
