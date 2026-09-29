@@ -68,7 +68,7 @@ Establish exact-current, privacy-safe evidence that the read-only ESPN Board/Pic
 
 ## Required automated validation
 
-- FAST CI: V2.1 contract validation, dependency install, release/module/syntax/dataset/extension checks, draft-invariant tests, companion↔War Room E2E fixture, and live-mock regression fixture.
+- FAST CI: V2.1 contract validation, dependency install, and release/module/syntax/dataset/extension checks that do not require a browser install.
 - FULL PHASE CI: exact-head validation, full npm test suite with Chromium installed, bounded determinism repeats for critical browser/persistence paths, and dependency audit.
 - Any field-discovered bug requires a synthetic regression before remediation is accepted.
 
