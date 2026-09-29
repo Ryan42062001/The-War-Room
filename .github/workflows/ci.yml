@@ -41,13 +41,16 @@ jobs:
       - name: Validate Speed Workflow V2.1 contract
         run: python3 .github/scripts/validate_phase_workflow.py
       - run: npm ci
-      - name: FAST application validation
-        run: |
-          npm run test:release
-          npm run test:modules
-          npm run test:syntax
-          npm run test:dataset
-          npm run test:extension
+      - name: Validate release shape
+        run: timeout 120s npm run test:release
+      - name: Validate production modules
+        run: timeout 120s npm run test:modules
+      - name: Validate syntax
+        run: timeout 120s npm run test:syntax
+      - name: Validate dataset baseline
+        run: timeout 120s npm run test:dataset
+      - name: Validate companion extension
+        run: timeout 120s npm run test:extension
 
   test:
     name: test
