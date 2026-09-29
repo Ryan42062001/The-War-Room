@@ -1,5 +1,13 @@
 # Fantasy Draft Cheat Sheet 2026 — Codex Project Guide
 
+## Workflow governance
+
+Active repository governance is **Speed Workflow V2.1**. Before implementation, read `.ai/CURRENT_PHASE.md`, `.ai/PROJECT.md`, `.ai/ARCHITECTURE.md`, and `docs/WORKFLOW.md`.
+
+The old Manager/Builder/Auditor/Work Helper task system is archived under `.history/workflow-v3-5/` and must not be treated as active instructions. Use one Primary Builder per coherent phase, one phase PR, FAST CI while building, whole-phase preview, deliberate exact-head FULL CI, one risk-based phase audit, explicit Ryan merge authorization, and separate production deployment.
+
+Do not resume historical WR task lanes merely because their PRs or evidence still exist. Current authority is `.ai/CURRENT_PHASE.md`.
+
 ## Project purpose
 This repository is a 2026 fantasy football draft companion. It provides a ranked player board, live draft-state tracking, roster tracking, recommendation logic, VORP/scarcity calculations, next-pick survival logic, autosave/persistence, and regression/debug tooling.
 
