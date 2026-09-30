@@ -1,7 +1,6 @@
 # Current Decisions
 
 - Speed Workflow V2.1 supersedes Workflow V3.x/V3.5 as active repository governance.
-- The Speed Workflow V2.1 migration closed on canonical merge commit `5c4314902aaa38b9bddacfb35008fd5b93cefa8c` after targeted independent PASS of audited target `d9d85ef573af73ff47a33598db0541a898e1e0f3`.
 - Historical workflow/control-plane/research evidence is preserved under `.history/workflow-v3-5/` and is not active authority.
 - One coherent phase branch/PR and one Primary Builder are the default; task-per-branch manager/auditor/work-helper lanes are retired.
 - FAST CI runs on pushes without duplicate ordinary PR FAST runs.
@@ -11,9 +10,15 @@
 - The three-attempt budget applies to the same material implementation/security/data blocker, not bookkeeping or CI wiring.
 - FantasyPros Top-20 PPR ECR remains authoritative for player value; broader FantasyPros ECR is fallback depth; ESPN board rank/ADP remain timing signals.
 - The ESPN companion remains read-only. No provider write action is authorized.
-- Historical WR-154 is not continued as a task lane; its useful exact-current fallback requirements are carried into WR-P01.
-- Structured ESPN Direct mode remains unverified and is not required to establish a Board/Pick History fallback pass.
-- GitHub Pages source was owner-confirmed as GitHub Actions before the V2.1 migration merge. Production publication now remains behind the manual `Deploy War Room Production` workflow and requires separate Product Owner authorization.
+- WR-P01 — ESPN Board-Fallback Reliability Gate is CLOSED. Exact audited target `4fb685575972de4fbe4c25c68999f5ffb2cea860` merged as `82fd71395d5747b659d5ab5c52d5817da74b18e7`.
+- WR-P01 established Board/Pick History fallback as the supported ESPN synchronization path for now within the observed 10-team × 16-round Full-PPR snake slot-5 envelope.
+- Structured ESPN Direct mode remains unverified and is moved to backlog rather than occupying a roadmap phase.
+- Product Owner approved a roadmap reset after WR-P01 closure. The forward sequence is WR-P02 Draft-Day UX & Command Center → WR-P03 Recommendation Engine V2 → WR-P04 League & Roster Personalization → WR-P05 Pre-Draft Strategy & Planning → WR-P06 Data Freshness & Season Readiness → WR-P07 Draft Simulator & Regression Lab → WR-P08 Production Season Release.
+- The product north star is an on-the-clock decision that communicates the strongest available choice, the cost of waiting, and the reasoning in under five seconds.
+- Standard redraft remains the primary product envelope. Auction/dynasty/keeper and other materially different formats are not silently added.
+- Season-long fantasy features are outside the current roadmap until the draft product reaches a stable season baseline.
+- AI-assisted explanations are not a roadmap requirement; deterministic recommendation logic and canonical source authority remain primary.
+- GitHub Pages source is GitHub Actions. Production publication remains behind the manual `Deploy War Room Production` workflow and requires separate Product Owner authorization.
 - Residual LOW backlog: release validation does not explicitly reject a hypothetical non-deployment job using YAML shorthand `permissions: write-all`; that shorthand is absent from the audited production workflow.
-- WR-P01 — ESPN Board-Fallback Reliability Gate is the next planned phase and is not yet activated.
+- Residual LOW backlog from WR-P01: Companion diagnostics should distinguish unresolved structured observations from accepted-ledger unresolved state while preserving the real count.
 - No repository commit should exist solely to force an external redeploy or record transient evidence after Phase Sync.

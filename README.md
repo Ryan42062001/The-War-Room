@@ -12,7 +12,7 @@ Active development uses [Speed Workflow V2.1](docs/WORKFLOW.md): one coherent ph
 
 Retired Workflow V3/V3.5 task/control-plane material is preserved under `.history/workflow-v3-5/` and is no longer active governance.
 
-The next planned phase is **WR-P01 — ESPN Board-Fallback Reliability Gate**, carrying forward the useful exact-current WR-153/154 requirements without continuing the old Work Helper/Manager task chain.
+WR-P01 — ESPN Board-Fallback Reliability Gate is closed. The next planned phase is **WR-P02 — Draft-Day UX & Command Center**, beginning a product-value roadmap focused on faster on-the-clock decisions, smarter recommendations, league personalization, pre-draft planning, data freshness, synthetic simulation, and a production-season baseline. Structured Direct remains an optional unverified backlog item rather than a roadmap dependency.
 
 ## What it does
 

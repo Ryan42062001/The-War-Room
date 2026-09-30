@@ -10,10 +10,9 @@ State: CLOSED
 - Final immutable audited target: `4fb685575972de4fbe4c25c68999f5ffb2cea860`
 - Merge commit / canonical main at merge: `82fd71395d5747b659d5ab5c52d5817da74b18e7`
 - Post-merge FAST CI: run `36656274639` — SUCCESS
-- Closure Sync FAST CI: pending on the final docs-only Closure Sync bookkeeping head; exact successful run ID is recorded in the final Manager closure note
+- Closure Sync FAST CI: run `36656476214` — SUCCESS
 - Final audit disposition: PASS WITH NON-BLOCKING FINDINGS
-- Next planned phase: WR-P03 — Draft-Day Reliability & UX Hardening
-- WR-P02 status: CONDITIONAL BACKLOG / DEFERRED
+- Next planned phase: WR-P02 — Draft-Day UX & Command Center
 - Production deployment: NOT AUTHORIZED
 - ESPN write access: NOT AUTHORIZED
 - Private ESPN account/session data: PROHIBITED from repository, CI, and shared evidence
@@ -64,9 +63,11 @@ Disposition: RESOLVED by this Closure Sync documentation only; the audited targe
 
 WR-P01 demonstrated that Board/Pick History fallback is reliable enough within the observed envelope to serve as the supported ESPN synchronization path for now.
 
-WR-P02 remains conditional and is not activated. Structured Direct validation is deferred unless Ryan later determines it provides material value beyond the proven fallback path.
+After WR-P01 closure, Ryan approved a product-roadmap reset. The next planned phase is WR-P02 — Draft-Day UX & Command Center.
 
-WR-P03 is the next planned phase.
+The new forward sequence is WR-P02 Draft-Day UX & Command Center → WR-P03 Recommendation Engine V2 → WR-P04 League & Roster Personalization → WR-P05 Pre-Draft Strategy & Planning → WR-P06 Data Freshness & Season Readiness → WR-P07 Draft Simulator & Regression Lab → WR-P08 Production Season Release.
+
+Structured Direct remains unverified and is moved to backlog rather than occupying a roadmap phase.
 
 ## Persistent boundaries
 

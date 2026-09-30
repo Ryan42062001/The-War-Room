@@ -4,10 +4,17 @@ The War Room is a browser-first fantasy football draft companion for redraft PPR
 
 Current baseline:
 - The mature draft-day foundation is implemented: board/tiers, roster state, recommendation logic, persistence/recovery, mobile layouts, post-draft reporting, and ESPN fallback synchronization.
+- WR-P01 is CLOSED and established the visible Board/Pick History fallback as the supported ESPN synchronization path for now within its exact tested envelope.
 - FantasyPros Top-20 PPR ECR remains the primary value/ranking authority. Broader FantasyPros ECR provides deeper fallback; ESPN board rank/ADP are market-timing signals, not value authority.
 - The ESPN companion remains read-only. No ESPN lineup, waiver, trade, or draft write path is authorized.
+- Structured Direct remains unverified and is backlog only, not a roadmap dependency.
 - Historical Workflow V3.x/V3.5 roles, tasks, audits, research evidence, and control-plane machinery are preserved under `.history/workflow-v3-5/` and are not active governance.
-- Historical WR-154 owner-operated fallback planning is translated into the next coherent V2.1 phase rather than continued as a task lane.
+
+Product direction:
+- The north star is to make the strongest available draft decision and the opportunity cost of waiting understandable in under five seconds while Ryan is on the clock.
+- The next planned phase is WR-P02 — Draft-Day UX & Command Center.
+- The forward roadmap then moves through Recommendation Engine V2, league/roster personalization, pre-draft planning, data freshness, a draft simulator/regression lab, and a production-season release baseline.
+- Season-long fantasy features, unsupported draft formats, Structured Direct, and generic AI layers remain outside the critical-path roadmap unless separately justified.
 
 Active governance:
 - Speed Workflow V2.1 is canonical.
