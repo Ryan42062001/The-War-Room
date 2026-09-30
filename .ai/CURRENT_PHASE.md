@@ -76,6 +76,18 @@ WR-P03 is the next planned phase.
 - Historical V3/V3.5 task/control-plane machinery remains retired.
 - Production deployment remains a separate explicit Product Owner decision.
 
+## Stop conditions
+
+WR-P01 is CLOSED. Do not reopen or mutate the audited phase merely for historical bookkeeping.
+
+Future work must stop and return to Manager/Product Owner if it would:
+- reinterpret WR-P01 as validating Structured Direct;
+- expand ESPN integration beyond read-only behavior;
+- introduce private owner/session data into repository, CI, or shared evidence;
+- claim broader ESPN format/recovery coverage than the observed WR-P01 envelope;
+- trigger production deployment without separate explicit Product Owner authorization;
+- reactivate retired V3/V3.5 task/control-plane machinery.
+
 ## Phase metrics
 
 - Primary Builder product-code commits: 0
