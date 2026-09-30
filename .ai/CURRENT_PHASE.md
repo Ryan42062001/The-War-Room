@@ -1,111 +1,90 @@
 # Current Phase
 
-State: FREEZE_READY
+State: CLOSED
 
 ## Identity
 
 - Phase: WR-P01 — ESPN Board-Fallback Reliability Gate
 - Product owner: Ryan
-- Phase branch: `phase/wr-p01-board-fallback-reliability`
-- Activation baseline: `3a98e3109074c2296143d533e7407bde5f275de3`
-- Phase Sync parent / accepted live candidate: `7a9e65057b98c613ec764eca04c0bfbb1d087ca5`
-- Historical source context: WR-153/WR-154 planning and accepted exact-current fallback-readiness evidence preserved under `.history/workflow-v3-5/`
 - Risk: HIGH
+- Final immutable audited target: `4fb685575972de4fbe4c25c68999f5ffb2cea860`
+- Merge commit / canonical main at merge: `82fd71395d5747b659d5ab5c52d5817da74b18e7`
+- Post-merge FAST CI: run `36656274639` — SUCCESS
+- Final audit disposition: PASS WITH NON-BLOCKING FINDINGS
+- Next planned phase: WR-P03 — Draft-Day Reliability & UX Hardening
+- WR-P02 status: CONDITIONAL BACKLOG / DEFERRED
 - Production deployment: NOT AUTHORIZED
 - ESPN write access: NOT AUTHORIZED
 - Private ESPN account/session data: PROHIBITED from repository, CI, and shared evidence
 
-## Objective
+## Closure evidence
 
-Establish exact-current, privacy-safe evidence that the read-only ESPN Board/Pick History fallback and War Room synchronization remain reliable in one owner-operated disposable 10-team × 16-round Full-PPR snake mock at slot 5, repairing only bounded product defects if the field check exposes them.
+- PR #432 merged only after Ryan explicitly authorized exact independently audited target `4fb685575972de4fbe4c25c68999f5ffb2cea860`.
+- GitHub merged PR #432 as commit `82fd71395d5747b659d5ab5c52d5817da74b18e7`.
+- Phase Sync FAST run `36654744346` passed at the exact audited target.
+- Deliberate FULL PHASE CI run `36654777429` passed at the exact audited target, including exact checkout verification, complete application validation, bounded determinism repeat, and dependency audit.
+- Fresh independent HIGH-risk phase audit returned PASS WITH NON-BLOCKING FINDINGS at the unchanged audited target.
+- Post-merge FAST run `36656274639` passed on merge commit `82fd71395d5747b659d5ab5c52d5817da74b18e7`.
+- Closure Sync is this docs-only direct-to-main bookkeeping commit permitted by Speed Workflow V2.1. Its exact SHA and closure FAST run are recorded in the final Manager closure note after CI succeeds.
 
-## Scope
+## Accepted phase result
 
-- Verify current War Room runtime identity, service-worker/cache state, and installed companion version before the field check.
-- Use one new disposable ESPN mock only; Ryan operates ESPN manually and may stop at any time.
-- Require visible Board/Pick History fallback to be observed as the authoritative live source for this proof.
-- Verify monotonic numbered pick synchronization, ownership, final completion truth, and saved-reload persistence.
-- Permit bounded War Room/Companion repairs if the exact-current field check reveals a reproducible defect.
-- Preserve sanitized numerical/digest evidence sufficient for a fresh independent phase audit.
+WR-P01 establishes the exact-current Board/Pick History fallback claim only for the observed validation envelope:
 
-## Non-goals
+- one owner-operated disposable 10-team × 16-round Full-PPR snake mock at slot 5;
+- Companion terminal state of 160 captured / 160 applied / 160 acknowledged / 0 unmatched;
+- no missing numbered picks;
+- zero accepted-ledger conflicts;
+- exact Mine ownership at picks 5, 16, 25, 36, 45, 56, 65, 76, 85, 96, 105, 116, 125, 136, 145, 156;
+- War Room terminal state complete=true, authoritative=true, myRosterCount=16;
+- same-session reload preserved all 160 numbered picks, Mine ownership, completion truth, and the privacy-safe ledger digest.
 
-- Structured ESPN Direct-mode validation.
-- Any ESPN write action, automated drafting, lineup mutation, waiver/trade submission, or account operation by ChatGPT/Builder.
-- Real/private league testing.
-- Recovery/rollback experiments unrelated to a defect actually exposed by this phase.
-- New ranking providers, scoring models, or recommendation retuning.
-- Production deployment.
-- Reinstating historical V3/V3.5 task/control-plane machinery.
+Visible ESPN Board/Pick History supplied the accepted fallback ledger while structured/API acquisition remained behind.
 
-## Phase Sync disposition
+This phase does NOT validate Structured Direct mode, broader ESPN format coverage, production recovery readiness, ESPN write authority, or production deployment.
 
-- Owner-only live Board/Pick History fallback verification: COMPLETE / Manager accepted.
-- Product Owner whole-phase preview: APPROVED.
-- Bounded product remediation required: NO.
-- No product/runtime/Companion files changed in WR-P01 before Phase Sync.
-- Accepted fallback result: 160 captured / 160 applied / 160 acknowledged / 0 unmatched, no missing numbered picks, zero ledger conflicts, complete authoritative War Room state, and exactly 16 Mine picks at the expected slot-5 snake positions.
-- Same-session reload preserved all 160 numbered picks, Mine ownership, completion truth, and the privacy-safe ledger digest.
-- Structured Direct remains UNVERIFIED and outside WR-P01.
-- LOW / nonblocking finding: the Companion diagnostic label `Ledger confirmed/conflicts/unresolved IDs` can make structured-observation telemetry (`unresolvedPlayerIds`) look like unresolved accepted fallback picks. Preserve for independent audit / future UX hardening; do not falsify or suppress the counter merely to display zero.
-- Phase Sync updates authoritative docs only. Detailed transient receipts remain in PR #432 Manager comments.
+## Non-blocking findings
 
-## Ordered implementation objectives
+### WR-P01-L01 — LOW — diagnostics wording
 
-1. Verify the activated branch remains based on exact canonical baseline `3a98e3109074c2296143d533e7407bde5f275de3` and establish exact-current repository/runtime/companion identity. COMPLETE.
-2. Prepare privacy-safe owner-only preflight for one disposable 10×16 Full-PPR snake mock at slot 5 without entering or operating ESPN on Ryan's behalf. COMPLETE.
-3. Stop for explicit Manager GO after preflight before Ryan starts the single authorized mock. COMPLETE.
-4. Run the one owner-operated field check with visible Board/Pick History fallback and sanitized numbered milestone receipts. COMPLETE.
-5. If a bounded product defect appears, reproduce it synthetically, repair it on this same phase branch, and repeat only the affected verification. NOT REQUIRED.
-6. Reach PREVIEW_READY and complete Ryan's whole-phase review. COMPLETE / APPROVED.
-7. Phase Sync, exact-head FULL PHASE CI, immutable freeze, and one fresh HIGH-risk independent phase audit. PHASE SYNC COMPLETE; FULL / FREEZE / AUDIT PENDING.
-8. Remediate and obtain targeted re-audit if required. PENDING AUDIT ONLY.
-9. Merge only after Ryan explicitly authorizes the exact approved target; production publication remains separate.
+The Companion label `Ledger confirmed/conflicts/unresolved IDs` can make separately sampled structured-observation `unresolvedPlayerIds` telemetry appear to be unresolved accepted fallback picks.
 
-## Acceptance criteria
+Independent audit found no path by which this counter itself changes accepted picks, ownership, acknowledgments, completion, or persistence.
 
-- Exact-current War Room and companion runtime identities are known before the live check; stale, mixed, or ambiguous browser/cache state does not count as evidence.
-- Ryan uses one disposable 10-team, 16-round, Full-PPR snake mock at slot 5; no real/private league is involved.
-- Visible ESPN Board/Pick History fallback is actually observed; Direct telemetry, if present, is supporting only and is not claimed as validated.
-- Terminal ESPN history contains contiguous numbered picks 1..160 with no unexplained missing or duplicate numbers.
-- Companion terminal state is Captured = Applied = Acknowledged = 160, Unmatched = 0, with no unexplained accepted-ledger conflict state.
-- War Room terminal state contains 160 numbered applied picks and exactly 16 Mine picks at slot-5 snake positions: 5, 16, 25, 36, 45, 56, 65, 76, 85, 96, 105, 116, 125, 136, 145, 156.
-- Final completion/report state is truthful and survives same-session reload with unchanged numbered ledger/digest.
-- Any naturally occurring reconnect, rescan, correction, reorder, partial state, or duplicate remains monotonic and evidence-backed; do not manufacture these conditions solely for evidence.
-- Shared evidence contains no credentials, cookies, tokens, league/draft IDs, account/team names, private screenshots, raw network traces, local profile paths, or unredacted diagnostics.
-- Existing board, recommendation, persistence, companion, and responsive regression suites remain green.
-- Ryan approves the complete phase preview/owner check before freeze.
-- Exact-head FULL PHASE CI passes.
-- Fresh independent HIGH-risk phase audit passes.
+Disposition: BACKLOG. Preserve the real count. Future hardening should label this explicitly as unresolved structured observations and separate it visually/semantically from accepted-ledger diagnostics.
 
-## Required automated validation
+### WR-P01-N01 — NIT — stale freeze bookkeeping
 
-- FAST CI: V2.1 contract validation plus release/module/syntax/dataset/extension checks that do not require the FULL browser suite.
-- FULL PHASE CI: exact-head validation, complete application test suite with Chromium, bounded determinism repeats for critical browser/persistence paths, and dependency audit.
-- Any field-discovered product defect requires a synthetic regression before remediation is accepted.
+The immutable audited phase documents necessarily described FULL/freeze as pending at the frozen SHA because those gates completed after Phase Sync.
 
-## Human preview requirements
+Disposition: RESOLVED by this Closure Sync documentation only; the audited target was not moved.
 
-- War Room/Companion connection status and source mode remain understandable on laptop and phone.
-- Live pick progress, Mine ownership, completion state, and mismatch/conflict state are truthful and legible.
-- No UI or evidence claims Direct mode was validated when the accepted proof is Board fallback.
-- Existing draft-day board/recommendation flow remains usable after any remediation.
+## Roadmap decision
 
-## Owner-only verification
+WR-P01 demonstrated that Board/Pick History fallback is reliable enough within the observed envelope to serve as the supported ESPN synchronization path for now.
 
-COMPLETE. Ryan alone operated one new disposable 10×16 Full-PPR snake mock at slot 5 after Manager preflight acceptance and one-time GO. The accepted proof used sanitized counts, digests, state summaries, and results only. No second mock is authorized or required.
+WR-P02 remains conditional and is not activated. Structured Direct validation is deferred unless Ryan later determines it provides material value beyond the proven fallback path.
 
-## Exit criteria
+WR-P03 is the next planned phase.
 
-- Owner-only field verification and any affected repeat verification pass. COMPLETE.
-- Preview approved. COMPLETE.
-- Phase Sync complete. COMPLETE.
-- Exact candidate FULL PHASE CI passes. PENDING.
-- Fresh independent HIGH-risk phase audit/re-audit passes. PENDING.
-- Ryan separately authorizes merge. PENDING.
-- Post-merge FAST, Closure Sync, and closure FAST pass. PENDING.
-- Production remains undeployed unless Ryan separately authorizes manual Pages deployment.
+## Persistent boundaries
 
-## Stop conditions
+- FantasyPros ECR remains player-value authority; ESPN signals remain market timing.
+- ESPN integration remains read-only.
+- Missing/ambiguous identities and live-source conflicts fail closed.
+- Private owner data never enters GitHub/CI/shared evidence.
+- Historical V3/V3.5 task/control-plane machinery remains retired.
+- Production deployment remains a separate explicit Product Owner decision.
 
-Stop for wrong mock settings/slot, real/private league interaction, missing Manager GO, stale/mixed runtime identity, privacy/account-data risk, non-monotonic unexplained pick state, wrong ownership, unresolved duplicate/conflict, source-mode ambiguity, Ryan stop, ESPN write-path implication, production implications without authorization, or the same material implementation/security/data blocker after three total attempts.
+## Phase metrics
+
+- Primary Builder product-code commits: 0
+- Phase docs/control commits before merge: 3
+- Owner-operated disposable ESPN mocks consumed: 1
+- Bounded product remediation cycles: 0
+- Deliberate FULL PHASE CI runs: 1
+- Fresh independent phase audits: 1
+- Audit disposition: PASS WITH NON-BLOCKING FINDINGS
+- Blocking findings: 0
+- Nonblocking findings: 1 LOW + 1 NIT
+- Production deployments: 0
