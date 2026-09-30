@@ -4,19 +4,23 @@ This is the canonical forward-looking phase roadmap. Historical WR task/control-
 
 ## Current baseline
 
-The core draft-day product is mature and includes the FantasyPros-authoritative 717-player board, recommendation logic, persistence/recovery, responsive/mobile UX, final reports, and read-only ESPN companion synchronization. Historical live evidence established a successful Board/Pick History fallback on prior builds, while structured Direct mode remains unverified.
+The core draft-day product is mature and includes the FantasyPros-authoritative 717-player board, recommendation logic, persistence/recovery, responsive/mobile UX, final reports, and read-only ESPN companion synchronization. WR-P01 now has accepted exact-current owner-operated evidence for the Board/Pick History fallback path; structured Direct mode remains unverified.
 
 ## Phases
 
 | Phase | Capability | Risk | Status |
 | --- | --- | --- | --- |
-| WR-P01 | ESPN Board-Fallback Reliability Gate | HIGH | BUILDING |
+| WR-P01 | ESPN Board-Fallback Reliability Gate | HIGH | FREEZE_READY |
 | WR-P02 | Structured Direct Mode Validation | HIGH | CONDITIONAL BACKLOG |
 | WR-P03 | Draft-Day Reliability & UX Hardening | MEDIUM | FUTURE |
 
 ### WR-P01 — ESPN Board-Fallback Reliability Gate
 
-Translate useful WR-153/154 intent into one coherent phase: exact-current runtime/companion identity, one privacy-safe owner-operated disposable 10×16 Full-PPR snake mock at slot 5, numbered fallback parity, bounded repairs if required, full CI, and one fresh independent phase audit.
+The owner-only exact-current field check is complete and whole-phase preview is approved. Accepted evidence shows the Board/Pick History fallback can carry one disposable 10×16 Full-PPR snake mock at slot 5 through 160 numbered picks, correct Mine ownership, authoritative completion, and same-session reload without ledger drift.
+
+No bounded product defect requiring remediation was established. A LOW nonblocking diagnostics-clarity finding remains: structured-observation `unresolvedPlayerIds` telemetry is presented beside accepted ledger counts and can be misread as unresolved fallback picks. Preserve the finding for independent audit / future UX hardening.
+
+WR-P01 is now awaiting exact-head FULL PHASE CI, immutable freeze, and one fresh HIGH-risk independent phase audit.
 
 Passing WR-P01 establishes the exact-current Board/Pick History fallback claim only. It does not establish structured Direct mode, production recovery readiness, or ESPN write authority.
 
