@@ -10,6 +10,7 @@ State: CLOSED
 - Final immutable audited target: `4fb685575972de4fbe4c25c68999f5ffb2cea860`
 - Merge commit / canonical main at merge: `82fd71395d5747b659d5ab5c52d5817da74b18e7`
 - Post-merge FAST CI: run `36656274639` — SUCCESS
+- Closure Sync FAST CI: pending on the final docs-only Closure Sync bookkeeping head; exact successful run ID is recorded in the final Manager closure note
 - Final audit disposition: PASS WITH NON-BLOCKING FINDINGS
 - Next planned phase: WR-P03 — Draft-Day Reliability & UX Hardening
 - WR-P02 status: CONDITIONAL BACKLOG / DEFERRED
