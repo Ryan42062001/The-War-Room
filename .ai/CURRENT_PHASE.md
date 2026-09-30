@@ -1,104 +1,157 @@
 # Current Phase
 
-State: CLOSED
+State: BUILDING
 
 ## Identity
 
-- Phase: WR-P01 — ESPN Board-Fallback Reliability Gate
+- Phase: WR-P02 — Draft-Day UX & Command Center
 - Product owner: Ryan
-- Risk: HIGH
-- Final immutable audited target: `4fb685575972de4fbe4c25c68999f5ffb2cea860`
-- Merge commit / canonical main at merge: `82fd71395d5747b659d5ab5c52d5817da74b18e7`
-- Post-merge FAST CI: run `36656274639` — SUCCESS
-- Closure Sync FAST CI: run `36656476214` — SUCCESS
-- Final audit disposition: PASS WITH NON-BLOCKING FINDINGS
-- Next planned phase: WR-P02 — Draft-Day UX & Command Center
+- Phase branch: `phase/wr-p02-draft-day-ux-command-center`
+- Activation baseline: `38d9584273526c7d084e7552f7ebf1841ae74b1a`
+- Risk: MEDIUM
 - Production deployment: NOT AUTHORIZED
 - ESPN write access: NOT AUTHORIZED
+- Structured Direct validation: OUT OF SCOPE
 - Private ESPN account/session data: PROHIBITED from repository, CI, and shared evidence
 
-## Closure evidence
+## Objective
 
-- PR #432 merged only after Ryan explicitly authorized exact independently audited target `4fb685575972de4fbe4c25c68999f5ffb2cea860`.
-- GitHub merged PR #432 as commit `82fd71395d5747b659d5ab5c52d5817da74b18e7`.
-- Phase Sync FAST run `36654744346` passed at the exact audited target.
-- Deliberate FULL PHASE CI run `36654777429` passed at the exact audited target, including exact checkout verification, complete application validation, bounded determinism repeat, and dependency audit.
-- Fresh independent HIGH-risk phase audit returned PASS WITH NON-BLOCKING FINDINGS at the unchanged audited target.
-- Post-merge FAST run `36656274639` passed on merge commit `82fd71395d5747b659d5ab5c52d5817da74b18e7`.
-- Closure Sync is this docs-only direct-to-main bookkeeping commit permitted by Speed Workflow V2.1. Its exact SHA and closure FAST run are recorded in the final Manager closure note after CI succeeds.
+Make the supported draft-day experience faster and easier to understand under a live pick clock by turning the existing recommendation, turn context, roster need, tier pressure, and ESPN sync/trust signals into one coherent command-center experience without changing ranking authority or recommendation policy.
 
-## Accepted phase result
+The phase succeeds when Ryan can understand the current recommendation and its existing tradeoffs in under five seconds on laptop and phone, while degraded/stale/sync states remain truthful and correction/reopen workflows remain safe.
 
-WR-P01 establishes the exact-current Board/Pick History fallback claim only for the observed validation envelope:
+## Scope
 
-- one owner-operated disposable 10-team × 16-round Full-PPR snake mock at slot 5;
-- Companion terminal state of 160 captured / 160 applied / 160 acknowledged / 0 unmatched;
-- no missing numbered picks;
-- zero accepted-ledger conflicts;
-- exact Mine ownership at picks 5, 16, 25, 36, 45, 56, 65, 76, 85, 96, 105, 116, 125, 136, 145, 156;
-- War Room terminal state complete=true, authoritative=true, myRosterCount=16;
-- same-session reload preserved all 160 numbered picks, Mine ownership, completion truth, and the privacy-safe ledger digest.
+- Audit the exact-current draft-day information hierarchy and reuse existing proven command-bar, recommendation, Board Pressure, session, persistence, responsive, and ESPN trust/status behavior rather than rebuilding working systems.
+- Reorganize the primary on-the-clock decision surface around:
+  - current/next-pick context;
+  - recommended player from the existing engine;
+  - the engine's existing explanation/timing signals;
+  - current roster need;
+  - relevant tier/board pressure;
+  - ESPN connection/source/progress trust state.
+- Make the top actionable decision information immediately legible with progressive disclosure for secondary detail.
+- Clarify Board/Pick History fallback, structured/unknown source state, reconnect/lag/stale/degraded status using only evidence the product already has.
+- Resolve WR-P01-L01 by labeling `unresolvedPlayerIds` as unresolved structured-observation telemetry and separating it semantically from accepted-ledger conflict/unmatched state while preserving the real count.
+- Make Taken/Mine/correction controls and current marking mode obvious and low-friction without changing ownership semantics.
+- Preserve and harden user-visible continuity across normal refresh/reopen of the current browser-local saved session.
+- Improve truthful error/degraded-state UX directly affecting draft-day decisions.
+- Tighten laptop and phone layouts, keyboard behavior, focus/ARIA behavior, and overflow around the command-center experience.
+- Add or strengthen focused automated coverage for any changed presentation/state behavior.
 
-Visible ESPN Board/Pick History supplied the accepted fallback ledger while structured/API acquisition remained behind.
+## Non-goals
 
-This phase does NOT validate Structured Direct mode, broader ESPN format coverage, production recovery readiness, ESPN write authority, or production deployment.
+- Recommendation Engine V2, recommendation-weight changes, new scoring factors, new confidence/probability models, or policy retuning.
+- League/roster personalization beyond the already supported configuration.
+- Pre-draft strategy planning.
+- New ranking providers, ranking refresh policy changes, dataset replacement, projections, or player-value authority changes.
+- Draft simulator/regression-lab construction beyond focused tests needed for this phase.
+- Structured Direct validation or promotion.
+- ESPN parsing/transport/ledger-authority redesign.
+- New extension permissions, debugger access, ESPN writes, automated drafting, lineup mutation, waiver/trade actions, or account operations.
+- Season-long fantasy features.
+- Production deployment.
+- Reopening WR-P01 or repeating its live ESPN mock merely for UI evidence.
 
-## Non-blocking findings
+## Ordered implementation objectives
 
-### WR-P01-L01 — LOW — diagnostics wording
+1. Inventory the exact-current laptop and phone command-center behavior and identify only the concrete interaction/clarity gaps that prevent the five-second north-star outcome.
+2. Define the smallest coherent command-center information hierarchy using existing engine outputs and existing source/trust signals.
+3. Implement the primary decision surface so recommendation, pick/turn context, roster need, and material board/tier pressure are understandable without opening multiple secondary panels.
+4. Make ESPN sync/source/trust presentation truthful and concise, including Board/Pick History fallback, lag/reconnect/degraded states, and explicit separation of structured-observation telemetry from accepted-ledger health.
+5. Make Taken/Mine/correction state and recovery/reopen continuity clear without changing canonical pick ownership, persistence, or reconciliation semantics.
+6. Harden responsive laptop/phone layout, keyboard interactions, focus order, ARIA/live-region behavior, and overflow for the changed command-center surfaces.
+7. Add or strengthen focused regressions for every changed behavior and run the relevant existing draft UX, persistence, ESPN sync, and responsive suites.
+8. Reach PREVIEW_READY with a concise before/after summary, exact changed-path scope, known limitations, and a whole-phase laptop/phone preview checklist for Ryan.
 
-The Companion label `Ledger confirmed/conflicts/unresolved IDs` can make separately sampled structured-observation `unresolvedPlayerIds` telemetry appear to be unresolved accepted fallback picks.
+## Acceptance criteria
 
-Independent audit found no path by which this counter itself changes accepted picks, ownership, acknowledgments, completion, or persistence.
+- In an active-draft state, the primary command-center surface presents the current pick/next-turn context, existing-engine recommendation, concise existing-engine rationale/timing context, roster need, and material board/tier pressure as one coherent decision experience.
+- No UI wording or visual treatment implies that ESPN market timing is player-value authority or that Structured Direct has been validated.
+- Board/Pick History fallback is identifiable when it is the active supported source; unknown/degraded/stale/reconnecting states do not masquerade as current/healthy.
+- WR-P01-L01 is resolved in presentation: `unresolvedPlayerIds` is labeled as unresolved structured observations (or equally explicit wording), visually/semantically separated from accepted-ledger conflict/unmatched health, and its actual count is preserved.
+- Accepted-ledger health, unmatched/conflict state, captured/applied/acknowledged progress, and source mode are not conflated.
+- Taken/Mine/current marking mode and correction behavior remain understandable and preserve existing ownership semantics.
+- Normal refresh/reopen of a saved local draft preserves canonical draft state and restores a truthful command-center presentation without silently presenting stale sync as fresh.
+- Draft-complete mode remains truthful and retires active pressure/recommendation UI in favor of the existing completed-draft experience.
+- At representative laptop and phone viewports, the changed primary surfaces have no material horizontal overflow, clipped critical controls, overlapping text/actions, or inaccessible required interaction.
+- Existing keyboard behavior, including the safe `M` Taken/Mine shortcut, remains functional unless an explicitly better equivalent is implemented and tested.
+- FantasyPros ECR remains player-value authority. ESPN board/ADP remain market-timing inputs only.
+- No recommendation weights, ranking dataset, ESPN provider permissions, provider write paths, or Structured Direct authority change.
+- Existing board, recommendation, persistence/recovery, ESPN reconciliation, Companion, and responsive regressions remain green.
+- Ryan approves the whole-phase laptop/phone preview.
+- Exact-head FULL PHASE CI passes.
+- Fresh independent MEDIUM-risk phase audit passes before merge.
 
-Disposition: BACKLOG. Preserve the real count. Future hardening should label this explicitly as unresolved structured observations and separate it visually/semantically from accepted-ledger diagnostics.
+## Required automated validation
 
-### WR-P01-N01 — NIT — stale freeze bookkeeping
+- FAST CI on each pushed phase checkpoint.
+- Focused validation must cover the changed surfaces plus relevant existing suites, including as applicable:
+  - `npm run test:command-bar`
+  - `npm run test:draft-awareness`
+  - `npm run test:awareness-live-sync`
+  - `npm run test:draft-polish`
+  - `npm run test:espn-sync-ux`
+  - `npm run test:espn-popup-intrinsic`
+  - `npm run test:responsive-overflow`
+  - `npm run test:layout-efficiency`
+  - `npm run test:layout-efficiency-behavior`
+  - `npm run test:phone-decision-view`
+  - `npm run test:persistence-recovery`
+  - `npm run test:recovery-failures`
+  - `npm run test:wr133-companion-war-room-e2e`
+- Any changed state/trust behavior requires a deterministic synthetic regression; screenshots alone are not acceptance evidence.
+- FULL PHASE CI: exact-head complete `npm test` / browser suite, bounded determinism repeats required by V2.1, and dependency audit.
 
-The immutable audited phase documents necessarily described FULL/freeze as pending at the frozen SHA because those gates completed after Phase Sync.
+## Human preview requirements
 
-Disposition: RESOLVED by this Closure Sync documentation only; the audited target was not moved.
+Ryan reviews the complete phase, preferably against deterministic/local fixture states rather than a new live ESPN mock:
 
-## Roadmap decision
+- laptop command-center view during an active draft;
+- phone command-center view during an active draft;
+- recommendation/turn/need/tier-pressure readability;
+- Taken/Mine and correction discoverability;
+- Board/Pick History fallback/source wording;
+- degraded/stale/reconnecting presentation;
+- completed-draft transition;
+- refresh/reopen continuity;
+- no misleading Direct-mode or probability claims.
 
-WR-P01 demonstrated that Board/Pick History fallback is reliable enough within the observed envelope to serve as the supported ESPN synchronization path for now.
+The preview should answer the phase decision question: can Ryan understand the current recommendation and its tradeoffs in under five seconds?
 
-After WR-P01 closure, Ryan approved a product-roadmap reset. The next planned phase is WR-P02 — Draft-Day UX & Command Center.
+## Owner-only verification
 
-The new forward sequence is WR-P02 Draft-Day UX & Command Center → WR-P03 Recommendation Engine V2 → WR-P04 League & Roster Personalization → WR-P05 Pre-Draft Strategy & Planning → WR-P06 Data Freshness & Season Readiness → WR-P07 Draft Simulator & Regression Lab → WR-P08 Production Season Release.
+None required by default.
 
-Structured Direct remains unverified and is moved to backlog rather than occupying a roadmap phase.
+WR-P02 does not require a new ESPN mock or private-provider interaction. The phase should use local/synthetic/fixture states and the already accepted WR-P01 fallback boundary evidence.
 
-## Persistent boundaries
+If implementation appears to require changes to ESPN parsing/transport/ledger authority, extension permissions, or a new provider-side live validation, STOP and return to Manager before proceeding. That would exceed the activated MEDIUM-risk contract and may require a separate HIGH-risk phase/reclassification.
 
-- FantasyPros ECR remains player-value authority; ESPN signals remain market timing.
-- ESPN integration remains read-only.
-- Missing/ambiguous identities and live-source conflicts fail closed.
-- Private owner data never enters GitHub/CI/shared evidence.
-- Historical V3/V3.5 task/control-plane machinery remains retired.
-- Production deployment remains a separate explicit Product Owner decision.
+## Exit criteria
+
+- Builder reaches PREVIEW_READY with exact scope and evidence.
+- Ryan approves the whole-phase laptop/phone preview and any consolidated punch list is resolved or explicitly accepted.
+- Phase Sync completes after preview approval.
+- Exact candidate FULL PHASE CI passes.
+- Exact candidate is frozen.
+- Fresh independent MEDIUM-risk phase audit passes, with remediation/re-audit if required.
+- Ryan explicitly authorizes merge of the exact approved target.
+- Post-merge FAST passes.
+- Closure Sync + closure FAST complete.
+- Production remains undeployed unless Ryan separately authorizes deployment.
 
 ## Stop conditions
 
-WR-P01 is CLOSED. Do not reopen or mutate the audited phase merely for historical bookkeeping.
+Stop and return to Manager/Product Owner if any proposed work would:
 
-Future work must stop and return to Manager/Product Owner if it would:
-- reinterpret WR-P01 as validating Structured Direct;
-- expand ESPN integration beyond read-only behavior;
-- introduce private owner/session data into repository, CI, or shared evidence;
-- claim broader ESPN format/recovery coverage than the observed WR-P01 envelope;
-- trigger production deployment without separate explicit Product Owner authorization;
-- reactivate retired V3/V3.5 task/control-plane machinery.
-
-## Phase metrics
-
-- Primary Builder product-code commits: 0
-- Phase docs/control commits before merge: 3
-- Owner-operated disposable ESPN mocks consumed: 1
-- Bounded product remediation cycles: 0
-- Deliberate FULL PHASE CI runs: 1
-- Fresh independent phase audits: 1
-- Audit disposition: PASS WITH NON-BLOCKING FINDINGS
-- Blocking findings: 0
-- Nonblocking findings: 1 LOW + 1 NIT
-- Production deployments: 0
+- change FantasyPros/ESPN source authority or ranking datasets;
+- materially retune recommendation policy, scoring weights, caps, thresholds, or decision semantics;
+- add or validate Structured Direct;
+- change ESPN parser/transport/ledger authority rather than presentation of existing truth;
+- add extension permissions or any ESPN write/account operation;
+- require private ESPN credentials, cookies, tokens, league/draft IDs, account/team names, raw traces, or unredacted diagnostics in repository/shared evidence;
+- broaden into WR-P03 recommendation-engine work, WR-P04 personalization, WR-P05 planning, WR-P06 data refresh, or WR-P07 simulator work;
+- require a new live ESPN mock merely to prove presentation;
+- weaken fail-closed handling of missing/ambiguous identities, malformed picks, conflicts, or stale state;
+- require production deployment;
+- hit the same material implementation/security/data blocker after three total attempts.
