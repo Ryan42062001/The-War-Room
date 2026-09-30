@@ -29,7 +29,7 @@ That fallback path is the supported ESPN synchronization path for now within the
 | Phase | Capability | Expected risk | Status |
 | --- | --- | --- | --- |
 | WR-P01 | ESPN Board-Fallback Reliability Gate | HIGH | CLOSED |
-| WR-P02 | Draft-Day UX & Command Center | MEDIUM | PLANNED NEXT |
+| WR-P02 | Draft-Day UX & Command Center | MEDIUM | BUILDING |
 | WR-P03 | Recommendation Engine V2 | MEDIUM | FUTURE |
 | WR-P04 | League & Roster Personalization | MEDIUM | FUTURE |
 | WR-P05 | Pre-Draft Strategy & Planning | MEDIUM | FUTURE |
@@ -56,7 +56,7 @@ WR-P01 does not establish broader ESPN-format coverage, Structured Direct suppor
 
 ## WR-P02 — Draft-Day UX & Command Center
 
-**Status: PLANNED NEXT**
+**Status: BUILDING**
 
 Make the supported draft-day experience exceptionally fast and understandable under a live pick clock.
 
