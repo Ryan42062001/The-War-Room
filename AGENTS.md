@@ -1,5 +1,10 @@
 # Fantasy Draft Cheat Sheet 2026 — Codex Project Guide
 
+## Primary Builder execution mode
+
+**Default to regular ChatGPT Chat** for the Project Manager, Primary Builder and fresh Independent Auditor. Use ChatGPT Work mode (**Super Builder**) only for a specific unavoidable capability gap, after explaining the blocker and receiving Ryan's explicit approval. Never skip validation, change phase authority, reuse the Builder as its own independent Auditor, or bypass CI/audit/merge/deployment protections to avoid Work usage. For the controlling details, read `docs/WORKFLOW.md`.
+
+
 ## Workflow governance
 
 Active repository governance is **Speed Workflow V2.1**. Before implementation, read `.ai/CURRENT_PHASE.md`, `.ai/PROJECT.md`, `.ai/ARCHITECTURE.md`, and `docs/WORKFLOW.md`.
