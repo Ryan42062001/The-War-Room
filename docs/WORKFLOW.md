@@ -1,3 +1,5 @@
+> **Proposed Owner role amendment (2026-11-13; not active until approved merge):** [AI_COLLABORATION_WORKFLOW.md](AI_COLLABORATION_WORKFLOW.md) assigns Claude Code primary source implementation, Codex isolated fallback, Work Cloud Browser to approved synthetic/mock QA, ChatGPT independent risk-based audit and regular Chat project management. This overrides only the earlier regular-Chat Builder / Work-only-as-"Super Builder" execution defaults for these roles. Work coding/computer access remains exceptional and separately approved. Existing Speed V2.1, progress-first, ESPN privacy/read-only, current phase, CI, protected merge and production gates are unchanged.
+
 # Speed Workflow V2.1
 
 ## 2026-11-07 Owner sequencing amendment — focused phase audits, comprehensive final audit
