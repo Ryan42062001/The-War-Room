@@ -1,3 +1,5 @@
+> **Owner-requested AI roles proposal (2026-11-13):** [docs/AI_COLLABORATION_WORKFLOW.md](docs/AI_COLLABORATION_WORKFLOW.md) designates Claude Code as default Primary Builder, Work Cloud Browser as isolated synthetic/mock QA, and a fresh ChatGPT session as independent reviewer. Upon approved merge it supersedes only the old regular-Chat Builder and exception-only Work *role allocation*. Existing ESPN read-only/privacy, snapshot, CI, exact-SHA, protected-merge and explicit release/provider permission rules remain binding. This draft does not authorize live ESPN access or deployment.
+
 # Fantasy Draft Cheat Sheet 2026 — Codex Project Guide
 
 ## Owner progress-first override — 2026-11-07 (refined)
